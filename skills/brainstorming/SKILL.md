@@ -61,6 +61,13 @@ digraph brainstorming {
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
 - Focus on understanding: purpose, constraints, success criteria
 
+**Assessing scope:**
+- Once you understand the idea, assess whether it fits in a single design or needs to be broken into sub-projects
+- If the project has multiple independent subsystems — each needing its own design decisions, file structure, and test strategy — it's too large for a single spec
+- Help the user decompose: what are the independent pieces, how do they relate, what order should they be built?
+- Document the high-level decomposition, then brainstorm the first sub-project through the normal design flow
+- Each sub-project gets its own spec → plan → implementation cycle
+
 **Exploring approaches:**
 - Propose 2-3 different approaches with trade-offs
 - Present options conversationally with your recommendation and reasoning
