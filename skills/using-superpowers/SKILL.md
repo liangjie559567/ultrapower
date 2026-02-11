@@ -4,7 +4,7 @@ description: Use when starting any conversation - establishes how to find and us
 ---
 
 <SUBAGENT-STOP>
-If you were dispatched as a subagent to execute a specific task, STOP. This skill is not for you. Your dispatch prompt is your instructions. Do not invoke skills. Go execute your task.
+If you were dispatched as a subagent to execute a specific task, STOP. This skill is not for you. Your dispatch prompt is your instructions. Do not invoke superpowers skills. Go execute your task.
 </SUBAGENT-STOP>
 
 <EXTREMELY-IMPORTANT>
@@ -31,16 +31,9 @@ If CLAUDE.md says "don't use TDD" and a skill says "always use TDD," follow CLAU
 
 **In other environments:** Check your platform's documentation for how skills are loaded.
 
-## Dispatching Tasks
+## Platform Adaptation
 
-Skills that dispatch subagent tasks (like `dispatching-parallel-agents`, `subagent-driven-development`) use platform-specific mechanisms. Skill examples use Claude Code syntax — translate to your platform:
-
-| Concept | Claude Code | Codex (`[features] collab = true`) |
-|---------|------------|-----|
-| Dispatch a task | `Task` tool | `spawn_agent` |
-| Parallel tasks | Multiple `Task` calls in one response | Multiple `spawn_agent` calls |
-| Wait for result | Task returns inline | `wait` |
-| End subagent | Task completes automatically | `close_agent` |
+Skills use Claude Code tool names. Non-CC platforms: see `references/codex-tools.md` for tool equivalents.
 
 # Using Skills
 
