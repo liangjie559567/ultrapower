@@ -8,14 +8,9 @@ describe('Builtin Skills', () => {
   });
 
   describe('createBuiltinSkills()', () => {
-    it('should return correct number of skills (41)', () => {
+    it('should return correct number of skills (54)', () => {
       const skills = createBuiltinSkills();
-      // 41 skills: analyze, autopilot, build-fix, cancel, ccg, code-review, configure-discord, configure-telegram,
-      // deepinit, deepsearch, omc-doctor, external-context, frontend-ui-ux, git-master, omc-help, hud,
-      // learn-about-omc, learner, mcp-setup, note, omc-setup, pipeline, plan, project-session-manager,
-      // psm, ralph, ralph-init, ralplan, release, review, sciomc, security-review, skill, swarm, tdd,
-      // team, trace, ultrapilot, ultraqa, ultrawork, writer-memory
-      expect(skills).toHaveLength(41);
+      expect(skills).toHaveLength(54);
     });
 
     it('should return an array of BuiltinSkill objects', () => {
@@ -67,6 +62,7 @@ describe('Builtin Skills', () => {
       const expectedSkills = [
         'analyze',
         'autopilot',
+        'brainstorming',
         'build-fix',
         'cancel',
         'ccg',
@@ -75,37 +71,49 @@ describe('Builtin Skills', () => {
         'configure-telegram',
         'deepinit',
         'deepsearch',
-        'omc-doctor',
+        'dispatching-parallel-agents',
+        'executing-plans',
         'external-context',
+        'finishing-a-development-branch',
         'frontend-ui-ux',
         'git-master',
-        'omc-help',
         'hud',
         'learn-about-omc',
         'learner',
         'mcp-setup',
         'note',
+        'omc-doctor',
+        'omc-help',
+        'omc-plan',
+        'omc-review',
+        'omc-security-review',
         'omc-setup',
         'pipeline',
-        'omc-plan',
         'project-session-manager',
         'psm',
         'ralph',
         'ralph-init',
         'ralplan',
+        'receiving-code-review',
         'release',
-        'omc-review',
+        'requesting-code-review',
         'sciomc',
-        'omc-security-review',
         'skill',
+        'subagent-driven-development',
         'swarm',
-        'tdd',
+        'systematic-debugging',
         'team',
+        'test-driven-development',
         'trace',
         'ultrapilot',
         'ultraqa',
         'ultrawork',
+        'using-git-worktrees',
+        'using-superpowers',
+        'verification-before-completion',
         'writer-memory',
+        'writing-plans',
+        'writing-skills',
       ];
 
       const actualSkillNames = skills.map((s) => s.name);
@@ -150,7 +158,7 @@ describe('Builtin Skills', () => {
     it('should return all skill names', () => {
       const names = listBuiltinSkillNames();
 
-      expect(names).toHaveLength(41);
+      expect(names).toHaveLength(54);
       expect(names).toContain('autopilot');
       expect(names).toContain('cancel');
       expect(names).toContain('ccg');
@@ -170,6 +178,10 @@ describe('Builtin Skills', () => {
       expect(names).toContain('hud');
       expect(names).toContain('note');
       expect(names).toContain('omc-setup');
+      expect(names).toContain('brainstorming');
+      expect(names).toContain('test-driven-development');
+      expect(names).toContain('writing-plans');
+      expect(names).toContain('systematic-debugging');
     });
 
     it('should return an array of strings', () => {
