@@ -1,3 +1,9 @@
 .worktrees/
 .private-journal/
 .claude/
+node_modules/
+dist/
+package-lock.json
+.omc/state/
+.omc/logs/
+.omc/prompts/
