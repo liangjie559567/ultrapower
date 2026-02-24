@@ -244,7 +244,7 @@ export async function lookupPricingWithFallback(modelName: string): Promise<Mode
   if (adapter.isAvailable && adapter.lookupPricing) {
     try {
       const pricing = await adapter.lookupPricing(modelName);
-      if (pricing !== null) {
+      if (pricing !== null && pricing.inputPerMillion > 0 && pricing.outputPerMillion > 0) {
         return pricing;
       }
     } catch {
