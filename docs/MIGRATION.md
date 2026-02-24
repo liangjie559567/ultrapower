@@ -24,7 +24,7 @@ v5.0.2 将 Axiom 框架深度融合进 ultrapower，将 Agent 数量从 31 扩�
 
 ### 新增功能
 
-**39 个专业 Agent**（新增 8 个 Axiom agents）：
+**38 个专业 Agent**（新增 8 个 Axiom agents）：
 - `axiom-requirement-analyst`：需求分析三态门（PASS/CLARIFY/REJECT）
 - `axiom-product-designer`：Draft PRD 生成，含 Mermaid 流程图
 - `axiom-review-aggregator`：5 专家并行审查聚合与冲突仲裁
@@ -58,7 +58,7 @@ v5.0.2 将 Axiom 框架深度融合进 ultrapower，将 Agent 数量从 31 扩�
 ### 迁移步骤
 
 1. **无需操作** - 所有 v5.0 命令继续有效
-2. **重新运行 `/ultrapower:omc-setup`** 以获取包含 39 个 Agent 和 67 个 Skills 的最新配置
+2. **重新运行 `/ultrapower:omc-setup`** 以获取包含 38 个 Agent 和 67 个 Skills 的最新配置
 3. **可选**：使用 `/ultrapower:ax-status` 查看 Axiom 工作流状态
 
 ### 验证

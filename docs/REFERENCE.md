@@ -161,7 +161,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Agents（共 39 个）
+## Agents（共 38 个）
 
 通过 Task 工具调用时，始终使用 `ultrapower:` 前缀。
 

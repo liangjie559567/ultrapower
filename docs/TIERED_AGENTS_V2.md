@@ -1,6 +1,6 @@
 # 分层 Agent v2 架构设计
 
-## 当前 Agent 目录（共 39 个）
+## 当前 Agent 目录（共 38 个）
 
 ### Build/Analysis Lane（8 个）
 

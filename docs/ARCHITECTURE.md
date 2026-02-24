@@ -55,7 +55,7 @@ Skills: ultrawork + default + git-master
 
 ### Agents
 
-39 个专业化 agent，按复杂度层级组织：
+38 个专业化 agent，按复杂度层级组织：
 
 | 层级 | 模型 | 适用场景 |
 |------|-------|---------|
@@ -135,7 +135,7 @@ ultrapower 包含 4 个 MCP 服务器：
 
 ## Superpowers × ultrapower 集成
 
-ultrapower v5.0.0 深度集成了 superpowers skill 体系，通过 `next-step-router` 在关键节点串联工作流。
+ultrapower v5.0.2 深度集成了 superpowers skill 体系，通过 `next-step-router` 在关键节点串联工作流。
 
 ### next-step-router
 
@@ -191,7 +191,7 @@ notepad_write_working("full_context", {
 
 ## Hooks
 
-ultrapower 在 `src/hooks/` 中包含 34 个 hook，用于生命周期事件：
+ultrapower 在 `src/hooks/` 中包含 35 个 hook，用于生命周期事件：
 
 | 事件 | 用途 |
 |-------|---------|
