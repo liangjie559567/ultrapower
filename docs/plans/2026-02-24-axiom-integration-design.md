@@ -270,7 +270,7 @@ export interface ContextManager {
 
 **目标：** 增强现有 `src/hooks/learner/`
 
-**前置依赖：** Phase 3 Task 10（Context Manager）+ Phase 2 axiom-config.ts
+**前置依赖：** Task 13（Context Manager）+ Task 11（axiom-config.ts）
 
 **模块映射：**
 
@@ -372,7 +372,7 @@ export interface ContextManager {
 - 9 个 TypeScript evolution 模块
 - 4 个 TypeScript guards 模块（Claude Code hooks）
 - 3 个 Shell guards 脚本（Git hooks）
-- 1 个 TypeScript context manager 模块
+- 3 个 TypeScript context manager 文件（index.ts, types.ts, constants.ts）
 - 25+ 知识库条目
 
 ---
