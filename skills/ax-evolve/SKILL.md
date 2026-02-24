@@ -1,6 +1,7 @@
 ---
 name: ax-evolve
 description: "/ax-evolve — Axiom 进化工作流：处理学习队列 → 更新知识库 → 模式检测 → 生成进化报告"
+triggers: ["ax-evolve", "evolve", "反思总结", "进化", "ax-reflect"]
 ---
 
 # Axiom 进化工作流

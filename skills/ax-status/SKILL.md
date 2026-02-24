@@ -1,6 +1,7 @@
 ---
 name: ax-status
 description: "/ax-status — Axiom 状态仪表盘：显示当前任务状态、进度、记忆摘要和系统健康"
+triggers: ["ax-status", "axiom status", "查看状态", "系统状态", "status"]
 ---
 
 # Axiom 状态仪表盘

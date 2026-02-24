@@ -1,6 +1,7 @@
 ---
 name: ax-implement
 description: "/ax-implement — Axiom 实施交付工作流：按 Manifest 顺序执行原子任务，含 CI 门禁和自动修复"
+triggers: ["ax-implement", "implement feature", "开始开发", "交付流水线", "ax implement"]
 ---
 
 # Axiom 实施交付工作流 (Phase 3)

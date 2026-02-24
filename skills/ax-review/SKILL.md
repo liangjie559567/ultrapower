@@ -1,6 +1,7 @@
 ---
 name: ax-review
 description: "/ax-review — Axiom 专家评审工作流：5专家并行评审 → 冲突仲裁 → Rough PRD 生成"
+triggers: ["ax-review", "expert review", "需求评审", "专家审查", "ax review"]
 ---
 
 # Axiom 专家评审工作流 (Phase 1.5)
