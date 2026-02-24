@@ -114,3 +114,11 @@ git commit -m "feat: add specific feature"
 **如果选择并行 Session：**
 - 引导他们在 worktree 中打开新 session
 - **必需子 skill：** 新 session 使用 superpowers:executing-plans
+
+## 路由触发
+
+计划文档提交后调用 `next-step-router`：
+- current_skill: "writing-plans"
+- stage: "plan_committed"
+- output_summary: 计划中的任务数、涉及文件数、是否有架构变更
+- full_context: { doc_paths: [计划文档路径], key_decisions: [...] }

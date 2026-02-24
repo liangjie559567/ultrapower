@@ -240,3 +240,10 @@ Done!
 
 **替代工作流：**
 - **superpowers:executing-plans** - 用于并行 session 而非同 session 执行
+
+## 路由触发
+
+每个 subagent 任务完成后调用 `next-step-router`：
+- current_skill: "subagent-driven-development"
+- stage: "subagent_task_complete"
+- output_summary: 完成的任务描述、修改的文件列表

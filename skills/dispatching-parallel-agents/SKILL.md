@@ -178,3 +178,10 @@ Agent 返回后：
 - 所有排查并发完成
 - 所有修复成功整合
 - Agent 变更之间零冲突
+
+## 路由触发
+
+所有并行 agent 结果汇聚后调用 `next-step-router`：
+- current_skill: "dispatching-parallel-agents"
+- stage: "all_results_returned"
+- output_summary: agent 数量、成功/失败数、汇总结果

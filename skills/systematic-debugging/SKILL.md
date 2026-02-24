@@ -294,3 +294,10 @@ From debugging sessions:
 - Random fixes approach: 2-3 hours of thrashing
 - First-time fix rate: 95% vs 40%
 - New bugs introduced: Near zero vs common
+
+## 路由触发
+
+根因确认后调用 `next-step-router`：
+- current_skill: "systematic-debugging"
+- stage: "root_cause_confirmed"
+- output_summary: 根因描述、涉及文件、是否需要测试先行
