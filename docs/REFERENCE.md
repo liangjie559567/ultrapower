@@ -257,6 +257,7 @@ omc config-stop-callback discord --show
 
 | Skill | 说明 | 手动命令 |
 |-------|-------------|----------------|
+| `next-step-router` | 关键节点路由，推荐最优下一步 skill/agent | （内部调用） |
 | `deepinit` | 分层 AGENTS.md 代码库文档化 | `/ultrapower:deepinit` |
 | `deepsearch` | 多策略深度代码库搜索 | `/ultrapower:deepsearch` |
 | `analyze` | 深度分析与调查 | `/ultrapower:analyze` |
