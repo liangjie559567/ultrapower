@@ -292,6 +292,74 @@ export const tddGuideAgentAlias = testEngineerAgent;
  * Workflow: explore → analyst → planner → critic → executor → architect (verify)
  */
 
+// ============================================================
+// AXIOM AGENTS
+// ============================================================
+
+export const axiomRequirementAnalystAgent: AgentConfig = {
+  name: 'axiom-requirement-analyst',
+  description: 'Axiom requirement analysis with three-state gate (PASS/CLARIFY/REJECT) (Sonnet).',
+  prompt: loadAgentPrompt('axiom-requirement-analyst'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomProductDesignerAgent: AgentConfig = {
+  name: 'axiom-product-designer',
+  description: 'Axiom Draft PRD generation with Mermaid flowcharts (Sonnet).',
+  prompt: loadAgentPrompt('axiom-product-designer'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomReviewAggregatorAgent: AgentConfig = {
+  name: 'axiom-review-aggregator',
+  description: 'Axiom 5-expert parallel review aggregation with conflict arbitration (Sonnet).',
+  prompt: loadAgentPrompt('axiom-review-aggregator'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomPrdCrafterAgent: AgentConfig = {
+  name: 'axiom-prd-crafter',
+  description: 'Axiom engineering-grade PRD with gate validation (Sonnet).',
+  prompt: loadAgentPrompt('axiom-prd-crafter'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomSystemArchitectAgent: AgentConfig = {
+  name: 'axiom-system-architect',
+  description: 'Axiom atomic task DAG and Manifest generation (Sonnet).',
+  prompt: loadAgentPrompt('axiom-system-architect'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomEvolutionEngineAgent: AgentConfig = {
+  name: 'axiom-evolution-engine',
+  description: 'Axiom knowledge harvesting, pattern detection, workflow optimization (Sonnet).',
+  prompt: loadAgentPrompt('axiom-evolution-engine'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomContextManagerAgent: AgentConfig = {
+  name: 'axiom-context-manager',
+  description: 'Axiom 7-operation memory system (read/write/state/checkpoint) (Sonnet).',
+  prompt: loadAgentPrompt('axiom-context-manager'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomWorkerAgent: AgentConfig = {
+  name: 'axiom-worker',
+  description: 'Axiom PM→Worker protocol with three-state output (QUESTION/COMPLETE/BLOCKED) (Sonnet).',
+  prompt: loadAgentPrompt('axiom-worker'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
 /**
  * Get all agent definitions as a record for use with Claude Agent SDK
  */
@@ -352,6 +420,18 @@ export function getAgentDefinitions(overrides?: Partial<Record<string, Partial<A
     // ============================================================
     critic: criticAgent,
     vision: visionAgent,
+
+    // ============================================================
+    // AXIOM AGENTS
+    // ============================================================
+    'axiom-requirement-analyst': axiomRequirementAnalystAgent,
+    'axiom-product-designer': axiomProductDesignerAgent,
+    'axiom-review-aggregator': axiomReviewAggregatorAgent,
+    'axiom-prd-crafter': axiomPrdCrafterAgent,
+    'axiom-system-architect': axiomSystemArchitectAgent,
+    'axiom-evolution-engine': axiomEvolutionEngineAgent,
+    'axiom-context-manager': axiomContextManagerAgent,
+    'axiom-worker': axiomWorkerAgent,
 
     // ============================================================
     // BACKWARD COMPATIBILITY (Deprecated)

@@ -81,6 +81,18 @@ export {
   gitMasterAgent
 } from './definitions.js';
 
+// Axiom agents
+export {
+  axiomRequirementAnalystAgent,
+  axiomProductDesignerAgent,
+  axiomReviewAggregatorAgent,
+  axiomPrdCrafterAgent,
+  axiomSystemArchitectAgent,
+  axiomEvolutionEngineAgent,
+  axiomContextManagerAgent,
+  axiomWorkerAgent
+} from './definitions.js';
+
 // Core exports (getAgentDefinitions and omcSystemPrompt)
 export {
   getAgentDefinitions,

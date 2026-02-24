@@ -742,6 +742,81 @@ rm ~/.claude/commands/{analyze,autopilot,deepsearch,plan,review,ultrawork}.md
 
 ---
 
+## Axiom 系统（深度融合）
+
+ultrapower 深度融合了 Axiom 智能体编排框架，提供完整的需求→开发→进化工作流。
+
+### Axiom Agents（8 个）
+
+| 智能体 | 模型 | 用途 |
+|-------|-------|------|
+| axiom-requirement-analyst | sonnet | 需求三态门（PASS/CLARIFY/REJECT） |
+| axiom-product-designer | sonnet | Draft PRD + Mermaid 流程图生成 |
+| axiom-review-aggregator | sonnet | 5 专家并行评审 + 冲突仲裁 |
+| axiom-prd-crafter | sonnet | 工程级 PRD + 门禁验证 |
+| axiom-system-architect | sonnet | 原子任务 DAG + Manifest 生成 |
+| axiom-evolution-engine | sonnet | 知识收割 + 模式检测 + 工作流优化 |
+| axiom-context-manager | sonnet | 7 种记忆操作（读/写/状态/检查点） |
+| axiom-worker | sonnet | PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED） |
+
+### Axiom Skills（12 个）
+
+| Skill | 指令 | 用途 |
+|-------|------|------|
+| ax-draft | `/ax-draft` | 需求澄清 → Draft PRD → 用户确认 |
+| ax-review | `/ax-review` | 5 专家并行评审 → 聚合 → Rough PRD |
+| ax-decompose | `/ax-decompose` | Rough PRD → 系统架构 → 原子任务 DAG |
+| ax-implement | `/ax-implement` | 按 Manifest 执行任务，CI 门禁，自动修复 |
+| ax-analyze-error | `/ax-analyze-error` | 根因诊断 → 自动修复 → 知识队列 |
+| ax-reflect | `/ax-reflect` | 会话反思 → 经验提取 → Action Items |
+| ax-evolve | `/ax-evolve` | 处理学习队列 → 更新知识库 → 模式检测 |
+| ax-status | `/ax-status` | 完整系统状态仪表盘 |
+| ax-rollback | `/ax-rollback` | 回滚到最近检查点（需用户确认） |
+| ax-suspend | `/ax-suspend` | 保存会话状态，安全退出 |
+| ax-context | `/ax-context` | 直接操作 Axiom 记忆系统 |
+| ax-evolution | `/ax-evolution` | 进化引擎统一入口（evolve/reflect/knowledge/patterns） |
+
+### Axiom Hooks（2 个）
+
+| Hook | 位置 | 用途 |
+|------|------|------|
+| axiom-boot | `src/hooks/axiom-boot/` | 会话启动时注入记忆上下文 |
+| axiom-guards | `src/hooks/axiom-guards/` | 门禁规则执行（Expert/User/CI Gate） |
+
+### Axiom 记忆系统
+
+```
+.omc/axiom/
+├── active_context.md       # 当前任务状态（短期记忆）
+├── project_decisions.md    # 架构决策记录（长期记忆）
+├── user_preferences.md     # 用户偏好
+├── state_machine.md        # 状态机定义
+├── reflection_log.md       # 反思日志
+└── evolution/
+    ├── knowledge_base.md   # 知识图谱（置信度系统）
+    ├── pattern_library.md  # 代码模式库（出现次数 >= 3 提升）
+    ├── learning_queue.md   # 待处理学习素材（P0-P3 优先级）
+    └── workflow_metrics.md # 工作流执行指标
+```
+
+### Axiom 状态机
+
+`IDLE → PLANNING → CONFIRMING → EXECUTING → AUTO_FIX → BLOCKED → ARCHIVING → IDLE`
+
+### 适配器文件
+
+| 文件 | 目标工具 |
+|------|---------|
+| `.kiro/steering/axiom.md` | Kiro |
+| `.cursorrules` | Cursor |
+| `.gemini/GEMINI.md` | Gemini |
+| `.gemini/GEMINI-CLI.md` | Gemini CLI |
+| `.opencode/OPENCODE.md` | OpenCode CLI |
+| `.github/copilot-instructions.md` | GitHub Copilot |
+| `.codex/CODEX.md` | Codex CLI |
+
+---
+
 ## Changelog
 
 版本历史和发布说明请参阅 [CHANGELOG.md](../CHANGELOG.md)。
