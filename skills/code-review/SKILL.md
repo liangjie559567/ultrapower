@@ -1,47 +1,47 @@
 ---
 name: code-review
-description: Run a comprehensive code review
+description: 运行全面的代码审查
 ---
 
-# Code Review Skill
+# 代码审查 Skill
 
-Conduct a thorough code review for quality, security, and maintainability with severity-rated feedback.
+对代码质量、安全性和可维护性进行全面审查，并提供按严重程度分级的反馈。
 
-## When to Use
+## 使用时机
 
-This skill activates when:
-- User requests "review this code", "code review"
-- Before merging a pull request
-- After implementing a major feature
-- User wants quality assessment
+此 skill 在以下情况激活：
+- 用户请求 "review this code"、"code review"
+- 合并 pull request 之前
+- 实现主要功能之后
+- 用户需要质量评估
 
-## What It Does
+## 功能
 
-Delegates to the `code-reviewer` agent (Opus model) for deep analysis:
+委托给 `code-reviewer` agent（Opus 模型）进行深度分析：
 
-1. **Identify Changes**
-   - Run `git diff` to find changed files
-   - Determine scope of review (specific files or entire PR)
+1. **识别变更**
+   - 运行 `git diff` 查找已更改文件
+   - 确定审查范围（特定文件或整个 PR）
 
-2. **Review Categories**
-   - **Security** - Hardcoded secrets, injection risks, XSS, CSRF
-   - **Code Quality** - Function size, complexity, nesting depth
-   - **Performance** - Algorithm efficiency, N+1 queries, caching
-   - **Best Practices** - Naming, documentation, error handling
-   - **Maintainability** - Duplication, coupling, testability
+2. **审查类别**
+   - **安全** —— 硬编码密钥、注入风险、XSS、CSRF
+   - **代码质量** —— 函数大小、复杂度、嵌套深度
+   - **性能** —— 算法效率、N+1 查询、缓存
+   - **最佳实践** —— 命名、文档、错误处理
+   - **可维护性** —— 重复、耦合、可测试性
 
-3. **Severity Rating**
-   - **CRITICAL** - Security vulnerability (must fix before merge)
-   - **HIGH** - Bug or major code smell (should fix before merge)
-   - **MEDIUM** - Minor issue (fix when possible)
-   - **LOW** - Style/suggestion (consider fixing)
+3. **严重程度评级**
+   - **CRITICAL** —— 安全漏洞（合并前必须修复）
+   - **HIGH** —— Bug 或主要代码异味（合并前应修复）
+   - **MEDIUM** —— 次要问题（尽可能修复）
+   - **LOW** —— 样式/建议（考虑修复）
 
-4. **Specific Recommendations**
-   - File:line locations for each issue
-   - Concrete fix suggestions
-   - Code examples where applicable
+4. **具体建议**
+   - 每个问题的 file:line 位置
+   - 具体修复建议
+   - 适用时提供代码示例
 
-## Agent Delegation
+## Agent 委托
 
 ```
 Task(
@@ -69,34 +69,34 @@ Output: Code review report with:
 )
 ```
 
-## External Model Consultation (Preferred)
+## 外部模型咨询（推荐）
 
-The code-reviewer agent SHOULD consult Codex for cross-validation.
+code-reviewer agent 应咨询 Codex 进行交叉验证。
 
-### Protocol
-1. **Form your OWN review FIRST** - Complete the review independently
-2. **Consult for validation** - Cross-check findings with Codex
-3. **Critically evaluate** - Never blindly adopt external findings
-4. **Graceful fallback** - Never block if tools unavailable
+### 协议
+1. **先独立完成审查** —— 独立完成审查
+2. **咨询验证** —— 与 Codex 交叉核对结论
+3. **批判性评估** —— 永不盲目采纳外部结论
+4. **优雅回退** —— 工具不可用时永不阻塞
 
-### When to Consult
-- Security-sensitive code changes
-- Complex architectural patterns
-- Unfamiliar codebases or languages
-- High-stakes production code
+### 何时咨询
+- 安全敏感的代码变更
+- 复杂的架构模式
+- 不熟悉的代码库或语言
+- 高风险的生产代码
 
-### When to Skip
-- Simple refactoring
-- Well-understood patterns
-- Time-critical reviews
-- Small, isolated changes
+### 何时跳过
+- 简单重构
+- 熟悉的模式
+- 时间紧迫的审查
+- 小型、独立的变更
 
-### Tool Usage
-Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools.
-Use `mcp__x__ask_codex` with `agent_role: "code-reviewer"`.
-If ToolSearch finds no MCP tools, fall back to the `code-reviewer` Claude agent.
+### 工具使用
+首次使用 MCP 工具前，调用 `ToolSearch("mcp")` 发现延迟加载的 MCP 工具。
+使用 `mcp__x__ask_codex` 配合 `agent_role: "code-reviewer"`。
+若 ToolSearch 未找到 MCP 工具，回退到 `code-reviewer` Claude agent。
 
-**Note:** Codex calls can take up to 1 hour. Consider the review timeline before consulting.
+**注意：** Codex 调用最多需要 1 小时。咨询前请考虑审查时间线。
 
 ## Output Format
 
@@ -141,68 +141,68 @@ RECOMMENDATION: REQUEST CHANGES
 Critical security issues must be addressed before merge.
 ```
 
-## Review Checklist
+## 审查检查清单
 
-The code-reviewer agent checks:
+code-reviewer agent 检查：
 
-### Security
-- [ ] No hardcoded secrets (API keys, passwords, tokens)
-- [ ] All user inputs sanitized
-- [ ] SQL/NoSQL injection prevention
-- [ ] XSS prevention (escaped outputs)
-- [ ] CSRF protection on state-changing operations
-- [ ] Authentication/authorization properly enforced
+### 安全
+- [ ] 无硬编码密钥（API keys、密码、token）
+- [ ] 所有用户输入已净化
+- [ ] SQL/NoSQL 注入防护
+- [ ] XSS 防护（转义输出）
+- [ ] 状态变更操作的 CSRF 保护
+- [ ] 认证/授权正确执行
 
-### Code Quality
-- [ ] Functions < 50 lines (guideline)
-- [ ] Cyclomatic complexity < 10
-- [ ] No deeply nested code (> 4 levels)
-- [ ] No duplicate logic (DRY principle)
-- [ ] Clear, descriptive naming
+### 代码质量
+- [ ] 函数 < 50 行（指导原则）
+- [ ] 圈复杂度 < 10
+- [ ] 无深度嵌套代码（> 4 层）
+- [ ] 无重复逻辑（DRY 原则）
+- [ ] 清晰、描述性的命名
 
-### Performance
-- [ ] No N+1 query patterns
-- [ ] Appropriate caching where applicable
-- [ ] Efficient algorithms (avoid O(n²) when O(n) possible)
-- [ ] No unnecessary re-renders (React/Vue)
+### 性能
+- [ ] 无 N+1 查询模式
+- [ ] 适当的缓存
+- [ ] 高效算法（O(n) 可行时避免 O(n²)）
+- [ ] 无不必要的重渲染（React/Vue）
 
-### Best Practices
-- [ ] Error handling present and appropriate
-- [ ] Logging at appropriate levels
-- [ ] Documentation for public APIs
-- [ ] Tests for critical paths
-- [ ] No commented-out code
+### 最佳实践
+- [ ] 错误处理存在且适当
+- [ ] 适当级别的日志记录
+- [ ] 公共 API 的文档
+- [ ] 关键路径的测试
+- [ ] 无注释掉的代码
 
-## Approval Criteria
+## 批准标准
 
-**APPROVE** - No CRITICAL or HIGH issues, minor improvements only
-**REQUEST CHANGES** - CRITICAL or HIGH issues present
-**COMMENT** - Only LOW/MEDIUM issues, no blocking concerns
+**APPROVE** —— 无 CRITICAL 或 HIGH 问题，仅有次要改进
+**REQUEST CHANGES** —— 存在 CRITICAL 或 HIGH 问题
+**COMMENT** —— 仅有 LOW/MEDIUM 问题，无阻塞性关注点
 
-## Use with Other Skills
+## 与其他 Skill 配合使用
 
-**With Pipeline:**
+**与 Pipeline 配合：**
 ```
 /pipeline review "implement user authentication"
 ```
-Includes code review as part of implementation workflow.
+将代码审查作为实现工作流的一部分。
 
-**With Ralph:**
+**与 Ralph 配合：**
 ```
 /ralph code-review then fix all issues
 ```
-Review code, get feedback, fix until approved.
+审查代码，获取反馈，修复直到批准。
 
-**With Ultrawork:**
+**与 Ultrawork 配合：**
 ```
 /ultrawork review all files in src/
 ```
-Parallel code review across multiple files.
+跨多个文件并行代码审查。
 
-## Best Practices
+## 最佳实践
 
-- **Review early** - Catch issues before they compound
-- **Review often** - Small, frequent reviews better than huge ones
-- **Address CRITICAL/HIGH first** - Fix security and bugs immediately
-- **Consider context** - Some "issues" may be intentional trade-offs
-- **Learn from reviews** - Use feedback to improve coding practices
+- **尽早审查** —— 在问题积累前发现
+- **频繁审查** —— 小而频繁的审查优于大型审查
+- **优先处理 CRITICAL/HIGH** —— 立即修复安全和 bug
+- **考虑上下文** —— 某些"问题"可能是有意的权衡
+- **从审查中学习** —— 利用反馈改进编码实践

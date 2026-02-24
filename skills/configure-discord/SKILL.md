@@ -1,6 +1,6 @@
 ---
 name: configure-discord
-description: Configure Discord webhook/bot notifications via natural language
+description: 通过自然语言配置 Discord webhook/bot 通知
 triggers:
   - "configure discord"
   - "setup discord"
@@ -8,15 +8,15 @@ triggers:
   - "discord webhook"
 ---
 
-# Configure Discord Notifications
+# 配置 Discord 通知
 
-Set up Discord notifications so OMC can ping you when sessions end, need input, or complete background tasks.
+设置 Discord 通知，让 OMC 在会话结束、需要输入或完成后台任务时通知你。
 
-## How This Skill Works
+## 此 Skill 的工作方式
 
-This is an interactive, natural-language configuration skill. Walk the user through setup by asking questions with AskUserQuestion. Write the result to `~/.claude/.omc-config.json`.
+这是一个交互式自然语言配置 skill。通过 AskUserQuestion 引导用户完成设置。将结果写入 `~/.claude/.omc-config.json`。
 
-## Step 1: Detect Existing Configuration
+## 步骤 1：检测现有配置
 
 ```bash
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
@@ -42,92 +42,90 @@ else
 fi
 ```
 
-If existing config is found, show the user what's currently configured and ask if they want to update or reconfigure.
+若找到现有配置，向用户显示当前配置并询问是否要更新或重新配置。
 
-## Step 2: Choose Discord Method
+## 步骤 2：选择 Discord 方式
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "How would you like to send Discord notifications?"
+**问题：** "How would you like to send Discord notifications?"
 
-**Options:**
-1. **Webhook (Recommended)** - Create a webhook in your Discord channel. Simple, no bot needed. Just paste the URL.
-2. **Bot API** - Use a Discord bot token + channel ID. More flexible, requires a bot application.
+**选项：**
+1. **Webhook（推荐）** —— 在 Discord 频道中创建 webhook。简单，无需 bot。只需粘贴 URL。
+2. **Bot API** —— 使用 Discord bot token + 频道 ID。更灵活，需要 bot 应用程序。
 
-## Step 3A: Webhook Setup
+## 步骤 3A：Webhook 设置
 
-If user chose Webhook:
+若用户选择 Webhook：
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "Paste your Discord webhook URL. To create one: Server Settings > Integrations > Webhooks > New Webhook > Copy URL"
+**问题：** "Paste your Discord webhook URL. To create one: Server Settings > Integrations > Webhooks > New Webhook > Copy URL"
 
-The user will type their webhook URL in the "Other" field.
+用户将在 "Other" 字段中输入 webhook URL。
 
-**Validate** the URL:
-- Must start with `https://discord.com/api/webhooks/` or `https://discordapp.com/api/webhooks/`
-- If invalid, explain the format and ask again
+**验证** URL：
+- 必须以 `https://discord.com/api/webhooks/` 或 `https://discordapp.com/api/webhooks/` 开头
+- 若无效，解释格式并再次询问
 
-## Step 3B: Bot API Setup
+## 步骤 3B：Bot API 设置
 
-If user chose Bot API:
+若用户选择 Bot API：
 
-Ask two questions:
+询问两个问题：
 
-1. **"Paste your Discord bot token"** - From discord.com/developers > Your App > Bot > Token
-2. **"Paste the channel ID"** - Right-click channel > Copy Channel ID (requires Developer Mode)
+1. **"Paste your Discord bot token"** —— 来自 discord.com/developers > Your App > Bot > Token
+2. **"Paste the channel ID"** —— 右键点击频道 > Copy Channel ID（需要开发者模式）
 
-## Step 4: Configure Mention (User Ping)
+## 步骤 4：配置提及（用户 Ping）
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "Would you like notifications to mention (ping) someone?"
+**问题：** "Would you like notifications to mention (ping) someone?"
 
-**Options:**
-1. **Yes, mention a user** - Tag a specific user by their Discord user ID
-2. **Yes, mention a role** - Tag a role by its role ID
-3. **No mentions** - Just post the message without pinging anyone
+**选项：**
+1. **Yes, mention a user** —— 通过 Discord 用户 ID 标记特定用户
+2. **Yes, mention a role** —— 通过角色 ID 标记角色
+3. **No mentions** —— 仅发布消息而不 ping 任何人
 
-### If user wants to mention a user:
+### 若用户想提及用户：
 
-Ask: "What is the Discord user ID to mention? (Right-click user > Copy User ID, requires Developer Mode)"
+询问："What is the Discord user ID to mention? (Right-click user > Copy User ID, requires Developer Mode)"
 
 The mention format is: `<@USER_ID>` (e.g., `<@1465264645320474637>`)
 
-### If user wants to mention a role:
+### 若用户想提及角色：
 
-Ask: "What is the Discord role ID to mention? (Server Settings > Roles > right-click role > Copy Role ID)"
+询问："What is the Discord role ID to mention? (Server Settings > Roles > right-click role > Copy Role ID)"
 
-The mention format is: `<@&ROLE_ID>` (e.g., `<@&123456789>`)
+## 步骤 5：配置事件
 
-## Step 5: Configure Events
+使用带 multiSelect 的 AskUserQuestion：
 
-Use AskUserQuestion with multiSelect:
+**问题：** "Which events should trigger Discord notifications?"
 
-**Question:** "Which events should trigger Discord notifications?"
+**选项（multiSelect: true）：**
+1. **Session end（推荐）** —— Claude 会话结束时
+2. **Input needed** —— Claude 等待你回应时（适合长时间运行的任务）
+3. **Session start** —— 新会话开始时
+4. **Session continuing** —— 持久化模式保持会话活跃时
 
-**Options (multiSelect: true):**
-1. **Session end (Recommended)** - When a Claude session finishes
-2. **Input needed** - When Claude is waiting for your response (great for long-running tasks)
-3. **Session start** - When a new session begins
-4. **Session continuing** - When a persistent mode keeps the session alive
+默认选择：session-end + ask-user-question。
 
-Default selection: session-end + ask-user-question.
+## 步骤 6：可选用户名覆盖
 
-## Step 6: Optional Username Override
+使用 AskUserQuestion：
 
-Use AskUserQuestion:
+**问题：** "Custom bot display name? (Shows as the webhook sender name in Discord)"
 
-**Question:** "Custom bot display name? (Shows as the webhook sender name in Discord)"
+**选项：**
+1. **OMC（默认）** —— 显示为 "OMC"
+2. **Claude Code** —— 显示为 "Claude Code"
+3. **Custom** —— 输入自定义名称
 
-**Options:**
-1. **OMC (default)** - Display as "OMC"
-2. **Claude Code** - Display as "Claude Code"
-3. **Custom** - Enter a custom name
+## 步骤 7：写入配置
 
-## Step 7: Write Configuration
-
-Read the existing config, merge the new Discord settings, and write back:
+读取现有配置，合并新的 Discord 设置并写回：
 
 ```bash
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
@@ -190,33 +188,23 @@ echo "$(cat "$CONFIG_FILE")" | jq \
    .notifications.events["session-start"] = {enabled: false}' > "$CONFIG_FILE"
 ```
 
-## Step 8: Test the Configuration
+## 步骤 8：测试配置
 
-After writing config, offer to send a test notification:
+写入配置后，提供发送测试通知的选项：
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "Send a test notification to verify the setup?"
+**问题：** "Send a test notification to verify the setup?"
 
-**Options:**
-1. **Yes, test now (Recommended)** - Send a test message to your Discord channel
-2. **No, I'll test later** - Skip testing
+**选项：**
+1. **Yes, test now（推荐）** —— 向你的 Discord 频道发送测试消息
+2. **No, I'll test later** —— 跳过测试
 
-### If testing:
+报告成功或失败。若失败，帮助用户调试（检查 URL、权限等）。
 
-```bash
-# For webhook:
-curl -s -o /dev/null -w "%{http_code}" \
-  -H "Content-Type: application/json" \
-  -d "{\"content\": \"${MENTION:+$MENTION\\n}OMC test notification - Discord is configured!\"}" \
-  "$WEBHOOK_URL"
-```
+## 步骤 9：确认
 
-Report success or failure. If it fails, help the user debug (check URL, permissions, etc.).
-
-## Step 9: Confirm
-
-Display the final configuration summary:
+显示最终配置摘要：
 
 ```
 Discord Notifications Configured!
@@ -236,21 +224,21 @@ To reconfigure: /ultrapower:configure-discord
 To configure Telegram: /ultrapower:configure-telegram
 ```
 
-## Environment Variable Alternative
+## 环境变量替代方案
 
-Users can skip this wizard entirely by setting env vars in their shell profile:
+用户可以通过在 shell 配置文件中设置环境变量来完全跳过此向导：
 
-**Webhook method:**
+**Webhook 方式：**
 ```bash
 export OMC_DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
 export OMC_DISCORD_MENTION="<@1465264645320474637>"  # optional
 ```
 
-**Bot API method:**
+**Bot API 方式：**
 ```bash
 export OMC_DISCORD_NOTIFIER_BOT_TOKEN="your-bot-token"
 export OMC_DISCORD_NOTIFIER_CHANNEL="your-channel-id"
 export OMC_DISCORD_MENTION="<@1465264645320474637>"  # optional
 ```
 
-Env vars are auto-detected by the notification system without needing `.omc-config.json`.
+环境变量由通知系统自动检测，无需 `.omc-config.json`。

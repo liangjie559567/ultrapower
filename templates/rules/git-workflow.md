@@ -1,6 +1,6 @@
-# Git Workflow Rules
+# Git 工作流规则
 
-## Commit Message Format
+## 提交信息格式
 
 ```
 <type>: <description>
@@ -8,34 +8,34 @@
 <optional body>
 ```
 
-Types: feat, fix, refactor, docs, test, chore, perf, ci
+类型：feat, fix, refactor, docs, test, chore, perf, ci
 
-## Pull Request Workflow
+## Pull Request 工作流
 
-When creating PRs:
-1. Analyze full commit history (not just latest commit)
-2. Use `git diff [base-branch]...HEAD` to see all changes
-3. Draft comprehensive PR summary
-4. Include test plan with TODOs
-5. Push with `-u` flag if new branch
+创建 PR 时：
+1. 分析完整提交历史（不只是最新提交）
+2. 使用 `git diff [base-branch]...HEAD` 查看所有变更
+3. 起草全面的 PR 摘要
+4. 包含带 TODO 的测试计划
+5. 新分支使用 `-u` 标志推送
 
-## Feature Implementation Workflow
+## 功能实现工作流
 
-1. **Plan First** - Use `planner` agent
-2. **TDD Approach** - Use `tdd-guide` agent
-3. **Code Review** - Use `code-reviewer` agent after writing code
-4. **Commit** - Follow conventional commits format
+1. **先规划** - 使用 `planner` agent
+2. **TDD 方式** - 使用 `tdd-guide` agent
+3. **代码审查** - 编写代码后使用 `code-reviewer` agent
+4. **提交** - 遵循 conventional commits 格式
 
-## Branch Naming
+## 分支命名
 
-- `feature/` - New features
-- `fix/` - Bug fixes
-- `refactor/` - Code refactoring
-- `docs/` - Documentation changes
+- `feature/` - 新功能
+- `fix/` - Bug 修复
+- `refactor/` - 代码重构
+- `docs/` - 文档变更
 
-## [CUSTOMIZE] Project-Specific Git Rules
+## [自定义] 项目特定 Git 规则
 
-Add your project-specific git workflow here:
-- Branch protection rules
-- Required reviewers
-- CI/CD requirements
+在此添加项目特定的 git 工作流：
+- 分支保护规则
+- 必需的审查者
+- CI/CD 要求

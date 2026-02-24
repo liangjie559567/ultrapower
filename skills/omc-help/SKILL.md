@@ -1,80 +1,80 @@
 ---
 name: omc-help
-description: Guide on using ultrapower plugin
+description: ultrapower 插件使用指南
 ---
 
-# How OMC Works
+# OMC 工作原理
 
-**You don't need to learn any commands!** OMC enhances Claude Code with intelligent behaviors that activate automatically.
+**你不需要学习任何命令！** OMC 为 Claude Code 增加了智能行为，这些行为会自动激活。
 
-## What Happens Automatically
+## 自动发生的事情
 
-| When You... | I Automatically... |
+| 当你... | 我会自动... |
 |-------------|-------------------|
-| Give me a complex task | Parallelize and delegate to specialist agents |
-| Ask me to plan something | Start a planning interview |
-| Need something done completely | Persist until verified complete |
-| Work on UI/frontend | Activate design sensibility |
-| Say "stop" or "cancel" | Intelligently stop current operation |
+| 给我一个复杂任务 | 并行化并委托给专业 agent |
+| 让我规划某事 | 启动规划访谈 |
+| 需要彻底完成某事 | 持续执行直到验证完成 |
+| 处理 UI/前端工作 | 激活设计感知 |
+| 说"stop"或"cancel" | 智能停止当前操作 |
 
-## Magic Keywords (Optional Shortcuts)
+## 魔法关键词（可选快捷方式）
 
-You can include these words naturally in your request for explicit control:
+你可以在请求中自然地包含这些词来进行显式控制：
 
-| Keyword | Effect | Example |
+| 关键词 | 效果 | 示例 |
 |---------|--------|---------|
-| **ralph** | Persistence mode | "ralph: fix all the bugs" |
-| **ralplan** | Iterative planning | "ralplan this feature" |
-| **ulw** | Max parallelism | "ulw refactor the API" |
-| **plan** | Planning interview | "plan the new endpoints" |
+| **ralph** | 持久化模式 | "ralph: fix all the bugs" |
+| **ralplan** | 迭代规划 | "ralplan this feature" |
+| **ulw** | 最大并行度 | "ulw refactor the API" |
+| **plan** | 规划访谈 | "plan the new endpoints" |
 
-**ralph includes ultrawork:** When you activate ralph mode, it automatically includes ultrawork's parallel execution. No need to combine keywords.
+**ralph 包含 ultrawork：** 激活 ralph 模式时，它会自动包含 ultrawork 的并行执行。无需组合关键词。
 
-## Stopping Things
+## 停止操作
 
-Just say:
+直接说：
 - "stop"
 - "cancel"
 - "abort"
 
-I'll figure out what to stop based on context.
+我会根据上下文判断停止什么。
 
-## First Time Setup
+## 首次设置
 
-If you haven't configured OMC yet:
+如果你还没有配置 OMC：
 
 ```
 /ultrapower:omc-setup
 ```
 
-This is the **only command** you need to know. It downloads the configuration and you're done.
+这是**唯一需要记住的命令**。它会下载配置，然后就完成了。
 
-## For 2.x Users
+## 2.x 版本用户
 
-Your old commands still work! `/ralph`, `/ultrawork`, `/plan`, etc. all function exactly as before.
+你的旧命令仍然有效！`/ralph`、`/ultrawork`、`/plan` 等功能与之前完全相同。
 
-But now you don't NEED them - everything is automatic.
+但现在你不再**需要**它们——一切都是自动的。
 
 ---
 
-## Usage Analysis
+## 使用分析
 
-Analyze your ultrapower usage and get tailored recommendations to improve your workflow.
+分析你的 ultrapower 使用情况，获取个性化建议以改善工作流。
 
-> Note: This replaces the former `/ultrapower:learn-about-omc` skill.
+> 注意：此功能替代了原来的 `/ultrapower:learn-about-omc` skill。
 
-### What It Does
+### 功能说明
 
-1. Reads token tracking from `~/.omc/state/token-tracking.jsonl`
-2. Reads session history from `.omc/state/session-history.json`
-3. Analyzes agent usage patterns
-4. Identifies underutilized features
-5. Recommends configuration changes
+1. 从 `~/.omc/state/token-tracking.jsonl` 读取 token 追踪数据
+2. 从 `.omc/state/session-history.json` 读取会话历史
+3. 分析 agent 使用模式
+4. 识别未充分利用的功能
+5. 推荐配置更改
 
-### Step 1: Gather Data
+### 第一步：收集数据
 
 ```bash
-# Check for token tracking data
+# 检查 token 追踪数据
 TOKEN_FILE="$HOME/.omc/state/token-tracking.jsonl"
 SESSION_FILE=".omc/state/session-history.json"
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
@@ -82,7 +82,7 @@ CONFIG_FILE="$HOME/.claude/.omc-config.json"
 echo "Analyzing OMC Usage..."
 echo ""
 
-# Check what data is available
+# 检查可用数据
 HAS_TOKENS=false
 HAS_SESSIONS=false
 HAS_CONFIG=false
@@ -106,7 +106,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
 fi
 ```
 
-### Step 2: Analyze Agent Usage (if token data exists)
+### 第二步：分析 Agent 使用情况（如有 token 数据）
 
 ```bash
 if [[ "$HAS_TOKENS" == "true" ]]; then
@@ -120,73 +120,73 @@ if [[ "$HAS_TOKENS" == "true" ]]; then
 fi
 ```
 
-### Step 3: Generate Recommendations
+### 第三步：生成建议
 
-Based on patterns found, output recommendations:
+根据发现的模式输出建议：
 
-**If high Opus usage (>40%) and no :**
-- "Consider using  for routine tasks to save tokens"
+**如果 Opus 使用率高（>40%）且无相应配置：**
+- "考虑对常规任务使用更低级别模型以节省 token"
 
-**If no pipeline usage:**
-- "Try /pipeline for code review workflows"
+**如果未使用 pipeline：**
+- "尝试 /pipeline 用于代码审查工作流"
 
-**If no security-reviewer usage:**
-- "Use security-reviewer after auth/API changes"
+**如果未使用 security-reviewer：**
+- "在 auth/API 更改后使用 security-reviewer"
 
-**If defaultExecutionMode not set:**
-- "Set defaultExecutionMode in /omc-setup for consistent behavior"
+**如果未设置 defaultExecutionMode：**
+- "在 /omc-setup 中设置 defaultExecutionMode 以获得一致行为"
 
-### Step 4: Output Report
+### 第四步：输出报告
 
-Format a summary with:
-- Token summary (total, by model)
-- Top agents used
-- Underutilized features
-- Personalized recommendations
+格式化摘要，包含：
+- Token 摘要（总计、按模型分类）
+- 最常用的 agent
+- 未充分利用的功能
+- 个性化建议
 
-### Example Output
-
-```
-📊 Your OMC Usage Analysis
-
-TOKEN SUMMARY:
-- Total records: 1,234
-- By Model: opus 45%, sonnet 40%, haiku 15%
-
-TOP AGENTS:
-1. executor (234 uses)
-2. architect (89 uses)
-3. explore (67 uses)
-
-UNDERUTILIZED FEATURES:
-- : 0 uses (could save ~30% on routine tasks)
-- pipeline: 0 uses (great for review workflows)
-
-RECOMMENDATIONS:
-1. Set defaultExecutionMode: "" to save tokens
-2. Try /pipeline review for PR reviews
-3. Use explore agent before architect to save context
-```
-
-### Graceful Degradation
-
-If no data found:
+### 示例输出
 
 ```
-📊 Limited Usage Data Available
+📊 你的 OMC 使用分析
 
-No token tracking found. To enable tracking:
-1. Ensure ~/.omc/state/ directory exists
-2. Run any OMC command to start tracking
+TOKEN 摘要：
+- 总记录数：1,234
+- 按模型：opus 45%，sonnet 40%，haiku 15%
 
-Tip: Run /omc-setup to configure OMC properly.
+最常用 AGENT：
+1. executor（234 次）
+2. architect（89 次）
+3. explore（67 次）
+
+未充分利用的功能：
+- 低级别模型：0 次使用（可节省约 30% 常规任务费用）
+- pipeline：0 次使用（非常适合审查工作流）
+
+建议：
+1. 设置 defaultExecutionMode 以节省 token
+2. 尝试 /pipeline review 进行 PR 审查
+3. 在 architect 之前使用 explore agent 以节省上下文
 ```
 
-## Need More Help?
+### 优雅降级
 
-- **README**: https://github.com/Yeachan-Heo/ultrapower
-- **Issues**: https://github.com/Yeachan-Heo/ultrapower/issues
+如果未找到数据：
+
+```
+📊 可用使用数据有限
+
+未找到 token 追踪数据。要启用追踪：
+1. 确保 ~/.omc/state/ 目录存在
+2. 运行任意 OMC 命令开始追踪
+
+提示：运行 /omc-setup 正确配置 OMC。
+```
+
+## 需要更多帮助？
+
+- **README**：https://github.com/Yeachan-Heo/ultrapower
+- **Issues**：https://github.com/Yeachan-Heo/ultrapower/issues
 
 ---
 
-*Version: 4.2.3*
+*版本：4.2.3*

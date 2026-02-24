@@ -1,10 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { validateConfigPath } from '../bridge-entry.js';
 
+function resolveSourceFile(relPath: string): string {
+  const direct = join(__dirname, relPath);
+  if (existsSync(direct)) return direct;
+  // When running from dist/, fall back to src/
+  const srcPath = direct.replace(/[\\/]dist[\\/]/, '/src/');
+  return srcPath;
+}
+
 describe('bridge-entry security', () => {
-  const source = readFileSync(join(__dirname, '..', 'bridge-entry.ts'), 'utf-8');
+  const source = readFileSync(resolveSourceFile('../bridge-entry.ts'), 'utf-8');
 
   it('does NOT use process.cwd()', () => {
     expect(source).not.toContain('process.cwd()');

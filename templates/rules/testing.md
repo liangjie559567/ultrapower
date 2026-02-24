@@ -1,42 +1,42 @@
-# Testing Rules
+# 测试规则
 
-## Minimum Test Coverage: 80%
+## 最低测试覆盖率：80%
 
-Test Types (ALL required):
-1. **Unit Tests** - Individual functions, utilities, components
-2. **Integration Tests** - API endpoints, database operations
-3. **E2E Tests** - Critical user flows
+测试类型（全部必需）：
+1. **单元测试** - 独立函数、工具函数、组件
+2. **集成测试** - API 端点、数据库操作
+3. **E2E 测试** - 关键用户流程
 
-## Test-Driven Development
+## 测试驱动开发
 
-MANDATORY workflow:
-1. Write test first (RED)
-2. Run test - it should FAIL
-3. Write minimal implementation (GREEN)
-4. Run test - it should PASS
-5. Refactor (IMPROVE)
-6. Verify coverage (80%+)
+强制工作流：
+1. 先写测试（RED）
+2. 运行测试——应该失败
+3. 编写最小实现（GREEN）
+4. 运行测试——应该通过
+5. 重构（IMPROVE）
+6. 验证覆盖率（80%+）
 
-## Edge Cases to Test
+## 需要测试的边缘情况
 
-Every function must be tested with:
-- [ ] Null/undefined inputs
-- [ ] Empty arrays/strings
-- [ ] Invalid types
-- [ ] Boundary values (min/max)
-- [ ] Error conditions
+每个函数必须测试：
+- [ ] Null/undefined 输入
+- [ ] 空数组/字符串
+- [ ] 无效类型
+- [ ] 边界值（最小/最大）
+- [ ] 错误条件
 
-## Test Quality Checklist
+## 测试质量清单
 
-- [ ] Tests are independent (no shared state)
-- [ ] Test names describe behavior
-- [ ] Mocks used for external dependencies
-- [ ] Both happy path and error paths tested
-- [ ] No flaky tests
+- [ ] 测试相互独立（无共享状态）
+- [ ] 测试名称描述行为
+- [ ] 外部依赖使用 mock
+- [ ] 测试了正常路径和错误路径
+- [ ] 无不稳定测试
 
-## [CUSTOMIZE] Project-Specific Testing
+## [自定义] 项目特定测试
 
-Add your project-specific testing requirements here:
-- Test framework configuration
-- Mock setup patterns
-- E2E test scenarios
+在此添加项目特定的测试要求：
+- 测试框架配置
+- Mock 设置模式
+- E2E 测试场景

@@ -106,7 +106,8 @@ describe('interpolatePath', () => {
   it('replaces ~ with homedir', () => {
     const result = interpolatePath('~/logs/test.md', 'session-1');
     expect(result).not.toContain('~');
-    expect(result).toContain('/logs/test.md');
+    expect(result).toContain('logs');
+    expect(result).toContain('test.md');
   });
 
   it('replaces multiple placeholders', () => {

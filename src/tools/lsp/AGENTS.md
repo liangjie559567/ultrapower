@@ -3,31 +3,31 @@
 
 # lsp
 
-Language Server Protocol (LSP) client implementation providing IDE-like code intelligence.
+语言服务器协议（LSP）客户端实现，提供类 IDE 的代码智能能力。
 
-## Purpose
+## 用途
 
-This directory implements the LSP client that enables agents to:
-- Connect to language servers (TypeScript, Python, Rust, Go, etc.)
-- Get type information, documentation, and signatures
-- Find definitions, references, and symbols
-- Perform refactoring operations (rename, code actions)
-- Collect diagnostics (errors, warnings)
+此目录实现了 LSP 客户端，使 agent 能够：
+- 连接到语言服务器（TypeScript、Python、Rust、Go 等）
+- 获取类型信息、文档和签名
+- 查找定义、引用和符号
+- 执行重构操作（重命名、代码操作）
+- 收集诊断（错误、警告）
 
-## Key Files
+## 关键文件
 
-| File | Description |
-|------|-------------|
-| `index.ts` | Module exports - re-exports client, servers, utils |
-| `client.ts` | `LspClient` class - JSON-RPC 2.0 over stdio communication |
-| `servers.ts` | `LSP_SERVERS` config - 10 language server definitions |
-| `utils.ts` | Formatting utilities for LSP responses |
+| 文件 | 描述 |
+|------|------|
+| `index.ts` | 模块导出 - 重新导出客户端、服务器、工具函数 |
+| `client.ts` | `LspClient` 类 - 通过 stdio 的 JSON-RPC 2.0 通信 |
+| `servers.ts` | `LSP_SERVERS` 配置 - 10 个语言服务器定义 |
+| `utils.ts` | LSP 响应的格式化工具函数 |
 
-## For AI Agents
+## 面向 AI Agent
 
-### Working In This Directory
+### 在此目录中工作
 
-#### LSP Client Architecture
+#### LSP 客户端架构
 
 ```
 ┌─────────────────┐     JSON-RPC 2.0      ┌──────────────────┐
@@ -41,36 +41,36 @@ This directory implements the LSP client that enables agents to:
 └─────────────────┘                       └──────────────────┘
 ```
 
-#### Client Manager
+#### 客户端管理器
 
-`lspClientManager` is a singleton that pools connections:
+`lspClientManager` 是一个池化连接的单例：
 
 ```typescript
-// Get client for a file (auto-selects appropriate server)
+// 获取文件对应的客户端（自动选择合适的服务器）
 const client = await lspClientManager.getClientForFile('src/index.ts');
 
-// Client is reused for same workspace/server combo
+// 相同工作区/服务器组合复用客户端
 const key = `${workspaceRoot}:${serverConfig.command}`;
 ```
 
-#### Server Configuration
+#### 服务器配置
 
-Each server in `LSP_SERVERS` has:
+`LSP_SERVERS` 中每个服务器包含：
 ```typescript
 interface LspServerConfig {
-  name: string;           // Human-readable name
-  command: string;        // Executable command
-  args: string[];         // Command arguments
-  extensions: string[];   // File extensions handled
-  installHint: string;    // Installation instructions
+  name: string;           // 人类可读名称
+  command: string;        // 可执行命令
+  args: string[];         // 命令参数
+  extensions: string[];   // 处理的文件扩展名
+  installHint: string;    // 安装说明
 }
 ```
 
-### Common Patterns
+### 常见模式
 
-**Request/Response:**
+**请求/响应：**
 ```typescript
-// All requests use JSON-RPC 2.0 format
+// 所有请求使用 JSON-RPC 2.0 格式
 const request = {
   jsonrpc: '2.0',
   id: this.requestId++,
@@ -78,45 +78,45 @@ const request = {
   params: { textDocument: { uri }, position: { line, character } }
 };
 
-// Wrapped in Content-Length header
+// 包装在 Content-Length 头中
 const message = `Content-Length: ${content.length}\r\n\r\n${content}`;
 ```
 
-**Notification handling:**
+**通知处理：**
 ```typescript
-// Server pushes diagnostics via notifications
+// 服务器通过通知推送诊断
 if (notification.method === 'textDocument/publishDiagnostics') {
   this.diagnostics.set(params.uri, params.diagnostics);
 }
 ```
 
-### Testing Requirements
+### 测试要求
 
-LSP tests require language servers to be installed:
+LSP 测试需要安装语言服务器：
 ```bash
-# Install TypeScript server
+# 安装 TypeScript 服务器
 npm i -g typescript-language-server typescript
 
-# Run tests
+# 运行测试
 npm test -- --grep "lsp"
 ```
 
-## Dependencies
+## 依赖
 
-### Internal
-- None
+### 内部
+- 无
 
-### External
-| Package | Purpose |
-|---------|---------|
-| `vscode-languageserver-protocol` | LSP type definitions |
-| `child_process` | Spawning language servers |
-| `fs`, `path` | File operations |
+### 外部
+| 包 | 用途 |
+|----|------|
+| `vscode-languageserver-protocol` | LSP 类型定义 |
+| `child_process` | 生成语言服务器进程 |
+| `fs`, `path` | 文件操作 |
 
-## Supported Language Servers
+## 支持的语言服务器
 
-| Language | Server | Command | Extensions |
-|----------|--------|---------|------------|
+| 语言 | 服务器 | 命令 | 扩展名 |
+|------|--------|------|--------|
 | TypeScript/JS | typescript-language-server | `typescript-language-server` | .ts, .tsx, .js, .jsx |
 | Python | pylsp | `pylsp` | .py, .pyw |
 | Rust | rust-analyzer | `rust-analyzer` | .rs |

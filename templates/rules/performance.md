@@ -1,40 +1,40 @@
-# Performance Rules
+# 性能规则
 
-## Model Selection Strategy
+## 模型选择策略
 
-**Haiku** (90% of Sonnet capability, 3x cost savings):
-- Lightweight agents with frequent invocation
-- Code generation and exploration
-- Worker agents in multi-agent systems
+**Haiku**（Sonnet 90% 的能力，节省 3 倍成本）：
+- 频繁调用的轻量级 agent
+- 代码生成和探索
+- 多 agent 系统中的 worker agent
 
-**Sonnet** (Best coding model):
-- Main development work
-- Orchestrating multi-agent workflows
-- Complex coding tasks
+**Sonnet**（最佳编码模型）：
+- 主要开发工作
+- 编排多 agent 工作流
+- 复杂编码任务
 
-**Opus** (Deepest reasoning):
-- Complex architectural decisions
-- Maximum reasoning requirements
-- Research and analysis tasks
+**Opus**（最深推理）：
+- 复杂架构决策
+- 最高推理要求
+- 研究和分析任务
 
-## Context Window Management
+## Context Window 管理
 
-Avoid last 20% of context window for:
-- Large-scale refactoring
-- Feature implementation spanning multiple files
-- Debugging complex interactions
+避免在 context window 最后 20% 时进行：
+- 大规模重构
+- 跨多个文件的功能实现
+- 调试复杂交互
 
-## Algorithm Efficiency
+## 算法效率
 
-Before implementing:
-- [ ] Consider time complexity
-- [ ] Avoid O(n^2) when O(n log n) possible
-- [ ] Use appropriate data structures
-- [ ] Cache expensive computations
+实现前：
+- [ ] 考虑时间复杂度
+- [ ] 当 O(n log n) 可行时避免 O(n^2)
+- [ ] 使用适当的数据结构
+- [ ] 缓存昂贵的计算
 
-## [CUSTOMIZE] Project-Specific Performance
+## [自定义] 项目特定性能
 
-Add your project-specific performance requirements here:
-- Response time targets
-- Bundle size limits
-- Database query limits
+在此添加项目特定的性能要求：
+- 响应时间目标
+- Bundle 大小限制
+- 数据库查询限制

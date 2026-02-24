@@ -1,27 +1,27 @@
 ---
 name: ultrapilot
-description: Parallel autopilot with file ownership partitioning
+description: 带文件所有权分区的并行 autopilot
 ---
 
 # Ultrapilot Skill
 
-Parallel autopilot that spawns multiple workers with file ownership partitioning for maximum speed.
+并行 autopilot，通过文件所有权分区生成多个 worker 以实现最大速度。
 
-## Overview
+## 概述
 
-Ultrapilot is the parallel evolution of autopilot. It decomposes your task into independent parallelizable subtasks, assigns non-overlapping file sets to each worker, and runs them simultaneously.
+Ultrapilot 是 autopilot 的并行演进版本。它将任务分解为独立的可并行子任务，为每个 worker 分配不重叠的文件集，并同时运行它们。
 
-**Key Capabilities:**
-1. **Decomposes** task into parallel-safe components
-2. **Partitions** files with exclusive ownership (no conflicts)
-3. **Spawns** up to 20 parallel workers
-4. **Coordinates** progress via TaskOutput
-5. **Integrates** changes with sequential handling of shared files
-6. **Validates** full system integrity
+**核心能力：**
+1. **分解**任务为并行安全的组件
+2. **分区**文件，独占所有权（无冲突）
+3. **生成**最多 20 个并行 worker
+4. **协调**通过 TaskOutput 跟踪进度
+5. **集成**变更，顺序处理共享文件
+6. **验证**完整系统完整性
 
-**Speed Multiplier:** Up to 5x faster than sequential autopilot for suitable tasks.
+**速度倍增：** 适合的任务比顺序 autopilot 快最多 5 倍。
 
-## Usage
+## 用法
 
 ```
 /ultrapower:ultrapilot <your task>
@@ -29,30 +29,30 @@ Ultrapilot is the parallel evolution of autopilot. It decomposes your task into 
 /ultrapower:ultrapilot Refactor the entire backend
 ```
 
-## Magic Keywords
+## 魔法关键词
 
-These phrases auto-activate ultrapilot:
-- "ultrapilot", "ultra pilot"
-- "parallel build", "parallel autopilot"
-- "swarm build", "swarm mode"
-- "fast parallel", "ultra fast"
+这些短语自动激活 ultrapilot：
+- "ultrapilot"、"ultra pilot"
+- "parallel build"、"parallel autopilot"
+- "swarm build"、"swarm mode"
+- "fast parallel"、"ultra fast"
 
-## When to Use
+## 使用时机
 
-**Ultrapilot Excels At:**
-- Multi-component systems (frontend + backend + database)
-- Independent feature additions across different modules
-- Large refactorings with clear module boundaries
-- Parallel test file generation
-- Multi-service architectures
+**Ultrapilot 擅长：**
+- 多组件系统（前端 + 后端 + 数据库）
+- 跨不同模块的独立功能添加
+- 有清晰模块边界的大型重构
+- 并行测试文件生成
+- 多服务架构
 
-**Autopilot Better For:**
-- Single-threaded sequential tasks
-- Heavy interdependencies between components
-- Tasks requiring constant integration checks
-- Small focused features in a single module
+**Autopilot 更适合：**
+- 单线程顺序任务
+- 组件间高度相互依赖
+- 需要持续集成检查的任务
+- 单模块中的小型聚焦功能
 
-## Architecture
+## 架构
 
 ```
 User Input: "Build a full-stack todo app"
@@ -81,28 +81,28 @@ backend frontend database api-docs tests
   (full system test)
 ```
 
-## Phases
+## 阶段
 
-### Phase 0: Task Analysis
+### 阶段 0：任务分析
 
-**Goal:** Determine if task is parallelizable
+**目标：** 确定任务是否可并行化
 
-**Checks:**
-- Can task be split into 2+ independent subtasks?
-- Are file boundaries clear?
-- Are dependencies minimal?
+**检查：**
+- 任务能否拆分为 2 个以上独立子任务？
+- 文件边界是否清晰？
+- 依赖关系是否最小？
 
-**Output:** Go/No-Go decision (falls back to autopilot if unsuitable)
+**输出：** 通过/不通过决定（不适合时回退到 autopilot）
 
-### Phase 1: Decomposition
+### 阶段 1：分解
 
-**Goal:** Break task into parallel-safe subtasks
+**目标：** 将任务分解为并行安全的子任务
 
-**Agent:** Architect (Opus)
+**Agent：** Architect (Opus)
 
-**Method:** AI-Powered Task Decomposition
+**方法：** AI 驱动的任务分解
 
-Ultrapilot uses the `decomposer` module to generate intelligent task breakdowns:
+Ultrapilot 使用 `decomposer` 模块生成智能任务分解：
 
 ```typescript
 import {
@@ -135,15 +135,15 @@ const { isValid, conflicts } = validateFileOwnership(result.subtasks);
 const finalResult = extractSharedFiles(result);
 ```
 
-**Process:**
-1. Analyze task requirements via Architect agent
-2. Identify independent components with file boundaries
-3. Assign agent type (executor-low/executor/executor-high) per complexity
-4. Map dependencies between subtasks (blockedBy)
-5. Generate parallel execution groups
-6. Identify shared files (handled by coordinator)
+**流程：**
+1. 通过 Architect agent 分析任务需求
+2. 识别有文件边界的独立组件
+3. 按复杂度分配 agent 类型（executor-low/executor/executor-high）
+4. 映射子任务间的依赖关系（blockedBy）
+5. 生成并行执行组
+6. 识别共享文件（由协调者处理）
 
-**Output:** Structured `DecompositionResult`:
+**输出：** 结构化 `DecompositionResult`：
 
 ```json
 {
@@ -182,24 +182,24 @@ const finalResult = extractSharedFiles(result);
 }
 ```
 
-**Decomposition Types:**
+**分解类型：**
 
-| Type | Description | Use Case |
+| 类型 | 描述 | 用途 |
 |------|-------------|----------|
-| `DecomposedTask` | Full task with id, files, blockedBy, agentType, model | Intelligent worker spawning |
-| `DecompositionResult` | Complete result with subtasks, sharedFiles, parallelGroups | Full decomposition output |
-| `toSimpleSubtasks()` | Convert to string[] for legacy compatibility | Simple task lists |
+| `DecomposedTask` | 带 id、files、blockedBy、agentType、model 的完整任务 | 智能 worker 生成 |
+| `DecompositionResult` | 带 subtasks、sharedFiles、parallelGroups 的完整结果 | 完整分解输出 |
+| `toSimpleSubtasks()` | 转换为 string[] 以兼容旧版 | 简单任务列表 |
 
-### Phase 2: File Ownership Partitioning
+### 阶段 2：文件所有权分区
 
-**Goal:** Assign exclusive file sets to workers
+**目标：** 为 worker 分配独占文件集
 
-**Rules:**
-1. **Exclusive ownership** - No file in multiple worker sets
-2. **Shared files deferred** - Handled sequentially in integration
-3. **Boundary files tracked** - Files that import across boundaries
+**规则：**
+1. **独占所有权** - 没有文件在多个 worker 集中
+2. **共享文件延迟处理** - 在集成阶段顺序处理
+3. **边界文件跟踪** - 跨边界导入的文件
 
-**Data Structure:** `.omc/state/ultrapilot-ownership.json`
+**数据结构：** `.omc/state/ultrapilot-ownership.json`
 
 ```json
 {
@@ -221,11 +221,11 @@ const finalResult = extractSharedFiles(result);
 }
 ```
 
-### Phase 3: Parallel Execution
+### 阶段 3：并行执行
 
-**Goal:** Run all workers simultaneously
+**目标：** 同时运行所有 worker
 
-**Spawn Workers:**
+**生成 Worker：**
 ```javascript
 // Pseudocode
 workers = [];
@@ -253,380 +253,254 @@ Deliver: Code changes + list of boundary dependencies`,
 }
 ```
 
-**Monitoring:**
-- Poll TaskOutput for each worker
-- Track completion status
-- Detect conflicts early
-- Accumulate boundary dependencies
+**监控：**
+- 轮询每个 worker 的 TaskOutput
+- 跟踪完成状态
+- 尽早检测冲突
+- 累积边界依赖
 
-**Max Workers:** 5 (Claude Code limit)
+**最大 Worker 数：** 5（Claude Code 限制）
 
-### Phase 4: Integration
+### 阶段 4：集成
 
-**Goal:** Merge all worker changes and handle shared files
+**目标：** 合并所有 worker 变更并处理共享文件
 
-**Process:**
-1. **Collect outputs** - Gather all worker deliverables
-2. **Detect conflicts** - Check for unexpected overlaps
-3. **Handle shared files** - Sequential updates to package.json, etc.
-4. **Integrate boundary files** - Merge type definitions, shared utilities
-5. **Resolve imports** - Ensure cross-boundary imports are valid
+**流程：**
+1. **收集输出** - 汇总所有 worker 交付物
+2. **检测冲突** - 检查意外重叠
+3. **处理共享文件** - 顺序更新 package.json 等
+4. **集成边界文件** - 合并类型定义、共享工具
+5. **解析导入** - 确保跨边界导入有效
 
-**Agent:** Executor (Sonnet) - sequential processing
+**Agent：** Executor (Sonnet) - 顺序处理
 
-**Conflict Resolution:**
-- If workers unexpectedly touched same file → manual merge
-- If shared file needs multiple changes → sequential apply
-- If boundary file changed → validate all dependent workers
+**冲突解决：**
+- 如果 worker 意外触碰同一文件 → 手动合并
+- 如果共享文件需要多处变更 → 顺序应用
+- 如果边界文件变更 → 验证所有依赖 worker
 
-### Phase 5: Validation
+### 阶段 5：验证
 
-**Goal:** Verify integrated system works
+**目标：** 验证集成系统正常工作
 
-**Checks (parallel):**
-1. **Build** - Run the project's build command
-2. **Lint** - Run the project's lint command
-3. **Type check** - Run the project's type check command
-4. **Unit tests** - All tests pass
-5. **Integration tests** - Cross-component tests
+**检查（并行）：**
+1. **构建** - 运行项目构建命令
+2. **Lint** - 运行项目 lint 命令
+3. **类型检查** - 运行项目类型检查命令
+4. **单元测试** - 所有测试通过
+5. **集成测试** - 跨组件测试
 
-**Agents (parallel):**
-- Build-fixer (Sonnet) - Fix build errors
-- Architect (Opus) - Functional completeness
-- Security-reviewer (Opus) - Cross-component vulnerabilities
+**Agent（并行）：**
+- Build-fixer (Sonnet) - 修复构建错误
+- Architect (Opus) - 功能完整性
+- Security-reviewer (Opus) - 跨组件漏洞
 
-**Retry Policy:** Up to 3 validation rounds. If failures persist, detailed error report to user.
+**重试策略：** 最多 3 轮验证。如果失败持续，向用户提供详细错误报告。
 
-## State Management
+## 状态管理
 
-### Session State
-
-**Location:** `.omc/ultrapilot-state.json`
+### Session 状态
 
 ```json
 {
   "sessionId": "ultrapilot-20260123-1234",
-  "taskDescription": "Build a full-stack todo app",
-  "phase": "execution",
-  "startTime": "2026-01-23T10:30:00Z",
-  "decomposition": { /* from Phase 1 */ },
+  "status": "running",
+  "phase": "parallel-execution",
+  "startedAt": "2026-01-23T12:00:00Z",
+  "task": "Build a full-stack todo app",
   "workers": {
-    "worker-1": {
-      "status": "running",
-      "taskId": "task-abc123",
-      "startTime": "2026-01-23T10:31:00Z",
-      "estimatedDuration": "5m"
-    }
-  },
-  "conflicts": [],
-  "validationAttempts": 0
-}
-```
-
-### File Ownership Map
-
-**Location:** `.omc/state/ultrapilot-ownership.json`
-
-Tracks which worker owns which files (see Phase 2 example above).
-
-### Progress Tracking
-
-**Location:** `.omc/ultrapilot/progress.json`
-
-```json
-{
-  "totalWorkers": 5,
-  "completedWorkers": 3,
-  "activeWorkers": 2,
-  "failedWorkers": 0,
-  "estimatedTimeRemaining": "2m30s"
-}
-```
-
-## Configuration
-
-Optional settings in `.claude/settings.json`:
-
-```json
-{
-  "omc": {
-    "ultrapilot": {
-      "maxWorkers": 5,
-      "maxValidationRounds": 3,
-      "conflictPolicy": "coordinator-handles",
-      "fallbackToAutopilot": true,
-      "parallelThreshold": 2,
-      "pauseAfterDecomposition": false,
-      "verboseProgress": true
-    }
+    "worker-1": { "status": "completed", "subtask": "Backend API" },
+    "worker-2": { "status": "running", "subtask": "Frontend components" },
+    "worker-3": { "status": "pending", "subtask": "Database schema" }
   }
 }
 ```
 
-**Settings Explained:**
-- `maxWorkers` - Max parallel workers (5 is Claude Code limit)
-- `maxValidationRounds` - Validation retry attempts
-- `conflictPolicy` - "coordinator-handles" or "abort-on-conflict"
-- `fallbackToAutopilot` - Auto-switch if task not parallelizable
-- `parallelThreshold` - Min subtasks to use ultrapilot (else fallback)
-- `pauseAfterDecomposition` - Confirm with user before execution
-- `verboseProgress` - Show detailed worker progress
+### 文件所有权映射
 
-## Cancellation
+存储在 `.omc/state/ultrapilot-ownership.json`（见阶段 2）
 
-```
-/ultrapower:cancel
-```
+### 进度跟踪
 
-Or say: "stop", "cancel ultrapilot", "abort"
+- 每个 worker 完成时更新状态
+- 集成阶段跟踪共享文件变更
+- 验证阶段记录测试结果
 
-**Behavior:**
-- All active workers gracefully terminated
-- Partial progress saved to state file
-- Session can be resumed
+## 配置
 
-## Resume
-
-If ultrapilot was cancelled or a worker failed:
-
-```
-/ultrapower:ultrapilot resume
-```
-
-**Resume Logic:**
-- Restart failed workers only
-- Re-use completed worker outputs
-- Continue from last phase
-
-## Examples
-
-### Example 1: Full-Stack App
-
-```
-/ultrapower:ultrapilot Build a todo app with React frontend, Express backend, and PostgreSQL database
-```
-
-**Workers:**
-1. Frontend (src/client/)
-2. Backend (src/server/)
-3. Database (src/db/)
-4. Tests (tests/)
-5. Docs (docs/)
-
-**Shared Files:** package.json, docker-compose.yml, README.md
-
-**Duration:** ~15 minutes (vs ~75 minutes sequential)
-
-### Example 2: Multi-Service Refactor
-
-```
-/ultrapower:up Refactor all services to use dependency injection
-```
-
-**Workers:**
-1. Auth service
-2. User service
-3. Payment service
-4. Notification service
-
-**Shared Files:** src/types/services.ts, tsconfig.json
-
-**Duration:** ~8 minutes (vs ~32 minutes sequential)
-
-### Example 3: Test Coverage
-
-```
-/ultrapower:ultrapilot Generate tests for all untested modules
-```
-
-**Workers:**
-1. API tests
-2. UI component tests
-3. Database tests
-4. Utility tests
-5. Integration tests
-
-**Shared Files:** jest.config.js, test-utils.ts
-
-**Duration:** ~10 minutes (vs ~50 minutes sequential)
-
-## Best Practices
-
-1. **Clear module boundaries** - Works best with well-separated code
-2. **Minimal shared state** - Reduces integration complexity
-3. **Trust the decomposition** - Architect knows what's parallel-safe
-4. **Monitor progress** - Check `.omc/ultrapilot/progress.json`
-5. **Review conflicts early** - Don't wait until integration
-
-## File Ownership Strategy
-
-### Ownership Types
-
-**Exclusive Ownership:**
-- Worker has sole write access
-- No other worker can touch these files
-- Worker can create new files in owned directories
-
-**Shared Files:**
-- No worker has exclusive access
-- Handled sequentially in integration phase
-- Includes: package.json, tsconfig.json, config files, root README
-
-**Boundary Files:**
-- Can be read by all workers
-- Write access determined by usage analysis
-- Typically: type definitions, shared utilities, interfaces
-
-### Ownership Detection Algorithm
-
-```
-For each file in codebase:
-  If file in shared_patterns (package.json, *.config.js):
-    → sharedFiles
-
-  Else if file imported by 2+ subtask modules:
-    → boundaryFiles
-    → Assign to most relevant worker OR defer to shared
-
-  Else if file in subtask directory:
-    → Assign to subtask worker
-
-  Else:
-    → sharedFiles (safe default)
-```
-
-### Shared File Patterns
-
-Automatically classified as shared:
-- `package.json`, `package-lock.json`
-- `tsconfig.json`, `*.config.js`, `*.config.ts`
-- `.eslintrc.*`, `.prettierrc.*`
-- `README.md`, `CONTRIBUTING.md`, `LICENSE`
-- Docker files: `Dockerfile`, `docker-compose.yml`
-- CI files: `.github/**`, `.gitlab-ci.yml`
-
-## Conflict Handling
-
-### Conflict Types
-
-**Unexpected Overlap:**
-- Two workers modified the same file
-- **Resolution:** Coordinator merges with human confirmation
-
-**Shared File Contention:**
-- Multiple workers need to update package.json
-- **Resolution:** Sequential application in integration phase
-
-**Boundary File Conflict:**
-- Type definition needed by multiple workers
-- **Resolution:** First worker creates, others import
-
-### Conflict Policy
-
-**coordinator-handles (default):**
-- Coordinator attempts automatic merge
-- Falls back to user if complex
-
-**abort-on-conflict:**
-- Any conflict immediately cancels ultrapilot
-- User reviews conflict report
-- Can resume after manual fix
-
-## Troubleshooting
-
-**Decomposition fails?**
-- Task may be too coupled
-- Fallback to autopilot triggered automatically
-- Review `.omc/ultrapilot/decomposition.json` for details
-
-**Worker hangs?**
-- Check worker logs in `.omc/logs/ultrapilot-worker-N.log`
-- Cancel and restart that worker
-- May indicate file ownership issue
-
-**Integration conflicts?**
-- Review `.omc/ultrapilot-state.json` conflicts array
-- Check if shared files were unexpectedly modified
-- Adjust ownership rules if needed
-
-**Validation loops?**
-- Cross-component integration issue
-- Review boundary imports
-- May need sequential retry with full context
-
-**Too slow?**
-- Check if workers are truly independent
-- Review decomposition quality
-- Consider if autopilot would be faster (high interdependency)
-
-## Differences from Autopilot
-
-| Feature | Autopilot | Ultrapilot |
-|---------|-----------|------------|
-| Execution | Sequential | Parallel (up to 5x) |
-| Best For | Single-threaded tasks | Multi-component systems |
-| Complexity | Lower | Higher |
-| Speed | Standard | 3-5x faster (suitable tasks) |
-| File Conflicts | N/A | Ownership partitioning |
-| Fallback | N/A | Can fallback to autopilot |
-| Setup | Instant | Decomposition phase (~1-2 min) |
-
-**Rule of Thumb:** If task has 3+ independent components, use ultrapilot. Otherwise, use autopilot.
-
-## Advanced: Custom Decomposition
-
-You can provide a custom decomposition file to skip Phase 1:
-
-**Location:** `.omc/ultrapilot/custom-decomposition.json`
+通过 `.omc-config.json` 的可选设置：
 
 ```json
 {
-  "subtasks": [
-    {
-      "id": "worker-auth",
-      "description": "Add OAuth2 authentication",
-      "files": ["src/auth/**", "src/middleware/auth.ts"],
-      "dependencies": ["src/types/user.ts"]
-    },
-    {
-      "id": "worker-db",
-      "description": "Add user table and migrations",
-      "files": ["src/db/migrations/**", "src/db/models/user.ts"],
-      "dependencies": []
-    }
-  ],
-  "sharedFiles": ["package.json", "src/types/user.ts"]
+  "ultrapilot": {
+    "maxWorkers": 5,
+    "preferredModel": "sonnet",
+    "validationRounds": 3,
+    "fileOwnershipStrategy": "strict"
+  }
 }
 ```
 
-Then run:
+## 取消
+
+`/ultrapower:cancel` 处理 ultrapilot 清理：
+
+1. 读取 `.omc/state/ultrapilot-state.json` 获取活跃 worker
+2. 向所有运行中的 worker 发送停止信号
+3. 等待 worker 完成当前操作
+4. 清理所有权文件
+5. 报告部分完成状态
+
+## 恢复
+
+如果 ultrapilot 在运行中途中断：
+
+1. 检查 `.omc/state/ultrapilot-state.json` 中的现有状态
+2. 识别已完成的 worker 和待处理的 worker
+3. 从最后一个已知良好状态恢复
+4. 重新运行失败的 worker（如需要）
+
+## 示例
+
+### 示例 1：全栈应用
+
 ```
-/ultrapower:ultrapilot --custom-decomposition
+/ultrapower:ultrapilot Build a full-stack todo app with React frontend, Node.js backend, and PostgreSQL database
 ```
 
-## STATE CLEANUP ON COMPLETION
+**分解：**
+- Worker 1：后端 API（src/api/）
+- Worker 2：前端组件（src/ui/）
+- Worker 3：数据库 schema（src/db/）
+- Worker 4：API 文档（docs/）
+- Worker 5：测试套件（tests/）
 
-**IMPORTANT: Delete state files on completion - do NOT just set `active: false`**
+**并行组：** [1, 2, 3, 4] 然后 [5]
 
-When all workers complete successfully:
+### 示例 2：大型重构
+
+```
+/ultrapower:ultrapilot Refactor the entire backend to use async/await instead of callbacks
+```
+
+**分解：**
+- Worker 1：auth 模块（src/auth/）
+- Worker 2：API 路由（src/routes/）
+- Worker 3：数据库层（src/db/）
+- Worker 4：工具函数（src/utils/）
+
+### 示例 3：多服务架构
+
+```
+/ultrapower:up Add rate limiting to all microservices
+```
+
+**分解：**
+- Worker 1：用户服务（services/user/）
+- Worker 2：订单服务（services/order/）
+- Worker 3：通知服务（services/notification/）
+
+## 最佳实践
+
+1. **清晰的模块边界** - 任务在文件边界清晰时效果最佳
+2. **最小化共享文件** - 减少集成阶段的工作量
+3. **独立子任务** - 避免 worker 间的循环依赖
+4. **适当的 worker 数量** - 3-5 个 worker 通常最优
+5. **验证优先** - 始终运行完整验证套件
+
+## 文件所有权策略
+
+### 所有权类型
+
+| 类型 | 描述 | 处理方式 |
+|------|------|----------|
+| **独占** | 仅一个 worker 拥有 | Worker 可自由修改 |
+| **共享** | 多个 worker 需要 | 集成阶段顺序处理 |
+| **边界** | 跨边界导入 | 只读，变更需协调 |
+
+### 检测算法
+
+1. 分析每个子任务的文件列表
+2. 识别重叠（共享文件）
+3. 将重叠文件移至 `sharedFiles` 列表
+4. 为每个 worker 分配独占文件集
+
+### 共享文件模式
+
+常见共享文件（始终在集成阶段处理）：
+- `package.json`, `package-lock.json`
+- `tsconfig.json`, `.eslintrc`
+- `README.md`, `CHANGELOG.md`
+- 共享类型定义（`src/types/index.ts`）
+- 配置文件（`src/config/`）
+
+## 冲突处理
+
+### 冲突类型
+
+| 类型 | 原因 | 解决方案 |
+|------|------|----------|
+| **文件冲突** | Worker 修改了同一文件 | 手动合并，协调者处理 |
+| **导入冲突** | 边界文件被修改 | 验证所有依赖 worker |
+| **类型冲突** | 共享类型定义变更 | 集成阶段顺序应用 |
+
+### 冲突策略
+
+```json
+{
+  "conflictPolicy": "coordinator-handles",
+  "onConflict": "pause-and-report",
+  "maxConflicts": 3
+}
+```
+
+## 故障排除
+
+| 问题 | 原因 | 解决方案 |
+|------|------|----------|
+| Worker 超时 | 子任务太大 | 进一步分解任务 |
+| 文件冲突 | 边界不清晰 | 重新分区，增加共享文件 |
+| 集成失败 | 导入路径错误 | 检查边界文件依赖 |
+| 验证失败 | Worker 引入 bug | 运行 build-fixer agent |
+| 状态损坏 | 意外中断 | 使用 `/ultrapower:cancel --force` |
+
+## 与 Autopilot 的区别
+
+| 方面 | Autopilot | Ultrapilot |
+|------|-----------|------------|
+| **执行** | 顺序 | 并行（最多 5 个 worker） |
+| **速度** | 基准 | 最多 5 倍更快 |
+| **文件冲突** | 无风险 | 需要所有权分区 |
+| **适用场景** | 单线程任务 | 多组件系统 |
+| **复杂度** | 低 | 高（需要分解） |
+| **依赖处理** | 自然顺序 | 显式 blockedBy 图 |
+
+## 高级：自定义分解
+
+对于需要精确控制的高级用户：
+
+```
+/ultrapower:ultrapilot --decompose-only "Build a REST API"
+```
+
+这会输出分解计划供审查，然后再执行。
+
+```
+/ultrapower:ultrapilot --workers=3 "Build a REST API"
+```
+
+限制最大 worker 数量。
+
+## 完成时的状态清理
+
+**重要：完成时删除状态文件——不要只是设置 `active: false`**
+
+当 ultrapilot 完成（成功或失败）时：
 
 ```bash
-# Delete ultrapilot state files
+# 删除 ultrapilot 状态文件
 rm -f .omc/state/ultrapilot-state.json
 rm -f .omc/state/ultrapilot-ownership.json
 ```
 
-## Future Enhancements
-
-**Planned for v4.1:**
-- Dynamic worker scaling (start with 2, spawn more if needed)
-- Predictive conflict detection (pre-integration analysis)
-- Worker-to-worker communication (for rare dependencies)
-- Speculative execution (optimistic parallelism)
-- Resume from integration phase (if validation fails)
-
-**Planned for v4.2:**
-- Multi-machine distribution (if Claude Code supports)
-- Real-time progress dashboard
-- Worker performance analytics
-- Auto-tuning of decomposition strategy
+这确保未来 session 的干净状态。

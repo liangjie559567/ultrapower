@@ -1,83 +1,83 @@
-# Exploration Task Template
+# 探索任务模板
 
-Use this template when delegating exploration, research, or search tasks.
-
----
-
-## TASK
-
-[Clear, specific description of what needs to be explored or researched]
-
-Example:
-- Find all implementations of the `UserService` class
-- Research how authentication is handled in the codebase
-- Explore the database schema and migration history
+委派探索、研究或搜索任务时使用此模板。
 
 ---
 
-## EXPECTED OUTCOME
+## 任务
 
-[What the orchestrator expects to receive back]
+[需要探索或研究的内容的清晰、具体描述]
 
-Example:
-- List of file paths with line numbers
-- Summary of patterns found
-- Structured report of findings with code snippets
-- Recommendations based on findings
-
----
-
-## CONTEXT
-
-[Background information to guide the exploration]
-
-Example:
-- This is a TypeScript monorepo using pnpm workspaces
-- We're investigating a bug in user authentication
-- The team previously used class-based services but is migrating to functional patterns
-- Focus on files in the `src/auth` and `src/services` directories
+示例：
+- 查找 `UserService` 类的所有实现
+- 研究代码库中身份验证的处理方式
+- 探索数据库 schema 和迁移历史
 
 ---
 
-## MUST DO
+## 预期结果
 
-- Use appropriate search tools (Grep, Glob) efficiently
-- Return structured, actionable results
-- Include file paths and line numbers
-- Highlight any patterns or anomalies discovered
-- [Add task-specific requirements]
+[编排者期望收到的内容]
 
----
-
-## MUST NOT DO
-
-- Do not modify any files
-- Do not make assumptions without evidence
-- Do not search node_modules or build directories
-- Do not return raw dumps without analysis
-- [Add task-specific constraints]
+示例：
+- 带行号的文件路径列表
+- 发现的模式摘要
+- 带代码片段的结构化调查报告
+- 基于发现的建议
 
 ---
 
-## REQUIRED SKILLS
+## 背景
 
-- Efficient search and pattern matching
-- Code comprehension and analysis
-- Ability to identify architectural patterns
-- [Add task-specific skills]
+[指导探索的背景信息]
 
----
-
-## REQUIRED TOOLS
-
-- Grep for content search
-- Glob for file pattern matching
-- Read for examining specific files
-- [Add task-specific tools]
+示例：
+- 这是一个使用 pnpm workspaces 的 TypeScript monorepo
+- 我们正在调查用户身份验证中的一个 bug
+- 团队之前使用基于类的服务，正在迁移到函数式模式
+- 重点关注 `src/auth` 和 `src/services` 目录中的文件
 
 ---
 
-## USAGE EXAMPLE
+## 必须做
+
+- 高效使用适当的搜索工具（Grep、Glob）
+- 返回结构化、可操作的结果
+- 包含文件路径和行号
+- 突出显示发现的任何模式或异常
+- [添加任务特定要求]
+
+---
+
+## 不得做
+
+- 不得修改任何文件
+- 不得在没有证据的情况下做假设
+- 不得搜索 node_modules 或构建目录
+- 不得返回未经分析的原始数据
+- [添加任务特定约束]
+
+---
+
+## 所需技能
+
+- 高效搜索和模式匹配
+- 代码理解与分析
+- 识别架构模式的能力
+- [添加任务特定技能]
+
+---
+
+## 所需工具
+
+- Grep 用于内容搜索
+- Glob 用于文件模式匹配
+- Read 用于检查特定文件
+- [添加任务特定工具]
+
+---
+
+## 使用示例
 
 ```typescript
 import { createDelegationPrompt } from '@/features/model-routing/prompts';

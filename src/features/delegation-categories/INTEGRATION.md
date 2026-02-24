@@ -1,17 +1,17 @@
-# Integration Guide: Delegation Categories
+# 集成指南：委派分类
 
-How to integrate delegation categories into task delegation and orchestration.
+如何将委派分类集成到任务委派和编排中。
 
-## Quick Integration
+## 快速集成
 
-### 1. Basic Task Delegation with Category
+### 1. 带分类的基本任务委派
 
 ```typescript
 import { getCategoryForTask } from './features/delegation-categories';
 import { TIER_MODELS } from './features/model-routing';
 
 async function delegateTask(taskPrompt: string, category?: string) {
-  // Resolve category (with auto-detection fallback)
+  // 解析分类（带自动检测回退）
   const resolved = getCategoryForTask({
     taskPrompt,
     explicitCategory: category as any,
@@ -22,24 +22,24 @@ async function delegateTask(taskPrompt: string, category?: string) {
   console.log(`  Temperature: ${resolved.temperature}`);
   console.log(`  Thinking: ${resolved.thinkingBudget}`);
 
-  // Enhance prompt with category guidance
+  // 用分类指导增强提示词
   const finalPrompt = resolved.promptAppend
     ? `${taskPrompt}\n\n${resolved.promptAppend}`
     : taskPrompt;
 
-  // Delegate to agent with category configuration
+  // 用分类配置委派给 agent
   return await delegateToAgent({
     prompt: finalPrompt,
     model: TIER_MODELS[resolved.tier],
     temperature: resolved.temperature,
-    // Add thinking budget to API call config
+    // 在 API 调用配置中添加 thinking budget
   });
 }
 ```
 
-### 2. Integration with Existing Model Routing
+### 2. 与现有模型路由集成
 
-Categories work alongside existing tier-based routing:
+分类与现有基于 tier 的路由协同工作：
 
 ```typescript
 import { routeTask } from './features/model-routing';
@@ -52,7 +52,7 @@ async function smartDelegate(taskPrompt: string, options: {
   let tier;
 
   if (options.category) {
-    // Use category system
+    // 使用分类系统
     const resolved = getCategoryForTask({
       taskPrompt,
       explicitCategory: options.category as any,
@@ -60,7 +60,7 @@ async function smartDelegate(taskPrompt: string, options: {
     tier = resolved.tier;
     console.log(`Category ${resolved.category} -> Tier ${tier}`);
   } else {
-    // Use complexity-based routing
+    // 使用基于复杂度的路由
     const decision = routeTask({
       taskPrompt,
       agentType: options.agentType,
@@ -69,24 +69,24 @@ async function smartDelegate(taskPrompt: string, options: {
     console.log(`Auto-routed to tier ${tier}`);
   }
 
-  // Both paths converge to tier-based model selection
+  // 两条路径都汇聚到基于 tier 的模型选择
   return await delegateWithTier(taskPrompt, tier);
 }
 ```
 
-### 3. Orchestrator Integration
+### 3. 编排器集成
 
 ```typescript
 import { getCategoryForTask, DelegationCategory } from './features/delegation-categories';
 
 class Orchestrator {
   async analyzeAndDelegate(task: string): Promise<void> {
-    // Detect category
+    // 检测分类
     const detected = getCategoryForTask({ taskPrompt: task });
 
     console.log(`Detected category: ${detected.category}`);
 
-    // Route based on category
+    // 根据分类路由
     switch (detected.category) {
       case 'visual-engineering':
         return this.delegateToDesigner(task, detected);
@@ -113,13 +113,13 @@ class Orchestrator {
     });
   }
 
-  // ... other delegation methods
+  // ... 其他委派方法
 }
 ```
 
-## Advanced Usage
+## 高级用法
 
-### Category-Aware Agent Selection
+### 分类感知的 Agent 选择
 
 ```typescript
 import { DelegationCategory } from './features/delegation-categories';
@@ -127,7 +127,7 @@ import { DelegationCategory } from './features/delegation-categories';
 const CATEGORY_TO_AGENT: Record<DelegationCategory, string> = {
   'visual-engineering': 'designer',
   'ultrabrain': 'architect',
-  'artistry': 'designer', // High creativity
+  'artistry': 'designer', // 高创意
   'quick': 'explorer',
   'writing': 'writer',
   'unspecified-low': 'executor-low',
@@ -139,7 +139,7 @@ function selectAgentForCategory(category: DelegationCategory): string {
 }
 ```
 
-### Temperature Override
+### 温度覆盖
 
 ```typescript
 import { resolveCategory } from './features/delegation-categories';
@@ -160,7 +160,7 @@ function delegateWithTemperatureOverride(
 }
 ```
 
-### Thinking Budget Integration
+### Thinking Budget 集成
 
 ```typescript
 import { getCategoryThinkingBudgetTokens } from './features/delegation-categories';
@@ -171,7 +171,7 @@ async function delegateWithThinking(
 ) {
   const thinkingTokens = getCategoryThinkingBudgetTokens(category);
 
-  // Use thinking budget in API call
+  // 在 API 调用中使用 thinking budget
   const response = await claudeAPI.call({
     prompt: taskPrompt,
     thinking: {
@@ -184,7 +184,7 @@ async function delegateWithThinking(
 }
 ```
 
-## Testing Integration
+## 测试集成
 
 ```typescript
 import { getCategoryForTask } from './features/delegation-categories';
@@ -222,30 +222,30 @@ describe('Category Integration', () => {
 });
 ```
 
-## Migration Path
+## 迁移路径
 
-### From Direct Tier Specification
+### 从直接 Tier 指定迁移
 
-**Before:**
+**之前：**
 ```typescript
 const decision = routeTask({ taskPrompt, explicitModel: 'opus' });
 ```
 
-**After (backward compatible):**
+**之后（向后兼容）：**
 ```typescript
-// Old way still works
+// 旧方式仍然有效
 const decision = routeTask({ taskPrompt, explicitModel: 'opus' });
 
-// New way with categories
+// 带分类的新方式
 const config = getCategoryForTask({
   taskPrompt,
-  explicitCategory: 'ultrabrain'  // More semantic
+  explicitCategory: 'ultrabrain'  // 更具语义
 });
 ```
 
-### From Agent-Specific Routing
+### 从 Agent 特定路由迁移
 
-**Before:**
+**之前：**
 ```typescript
 if (taskPrompt.includes('design')) {
   delegateTo('designer', taskPrompt);
@@ -254,7 +254,7 @@ if (taskPrompt.includes('design')) {
 }
 ```
 
-**After:**
+**之后：**
 ```typescript
 const detected = getCategoryForTask({ taskPrompt });
 
@@ -268,47 +268,47 @@ const agent = agentMap[detected.category] || 'executor';
 delegateTo(agent, taskPrompt, detected);
 ```
 
-## Best Practices
+## 最佳实践
 
-1. **Use Categories for Semantics**: When you know the *type* of work (design, debugging, creative)
-2. **Use Tiers for Complexity**: When you know the *difficulty* level
-3. **Trust Auto-Detection**: The keyword matching is reliable for common patterns
-4. **Override When Needed**: Explicit category/tier always wins
-5. **Enhance Prompts**: Use `promptAppend` for category-specific guidance
-6. **Monitor Costs**: HIGH tier categories (ultrabrain, visual-engineering) use Opus
+1. **用分类表达语义**：当你知道工作的*类型*时（设计、调试、创意）
+2. **用 Tier 表达复杂度**：当你知道*难度*级别时
+3. **信任自动检测**：关键词匹配对常见模式是可靠的
+4. **需要时覆盖**：显式分类/tier 始终优先
+5. **增强提示词**：使用 `promptAppend` 提供分类特定指导
+6. **监控成本**：HIGH tier 分类（ultrabrain、visual-engineering）使用 Opus
 
-## Troubleshooting
+## 故障排除
 
-### Category Not Detected
+### 未检测到分类
 
-If auto-detection fails, the system defaults to `unspecified-high`. To fix:
+如果自动检测失败，系统默认为 `unspecified-high`。修复方法：
 
-1. Add more keywords to the task prompt
-2. Use explicit category specification
-3. Extend `CATEGORY_KEYWORDS` in `index.ts`
+1. 在任务提示词中添加更多关键词
+2. 使用显式分类指定
+3. 在 `index.ts` 中扩展 `CATEGORY_KEYWORDS`
 
-### Wrong Tier Selection
+### 错误的 Tier 选择
 
-If a category maps to the wrong tier:
+如果分类映射到错误的 tier：
 
-1. Check `CATEGORY_CONFIGS` definitions
-2. Verify backward compatibility with explicit tiers
-3. Consider if a new category is needed
+1. 检查 `CATEGORY_CONFIGS` 定义
+2. 验证与显式 tier 的向后兼容性
+3. 考虑是否需要新分类
 
-### Temperature Too High/Low
+### 温度过高/过低
 
-Override temperature if category default doesn't fit:
+如果分类默认值不合适，覆盖温度：
 
 ```typescript
 const config = resolveCategory('artistry');
-const customConfig = { ...config, temperature: 0.5 }; // Lower creativity
+const customConfig = { ...config, temperature: 0.5 }; // 降低创意度
 ```
 
-## Examples
+## 示例
 
-See `test-categories.ts` for comprehensive examples of:
-- Basic resolution
-- Auto-detection
-- Explicit control
-- Prompt enhancement
-- Backward compatibility
+参见 `test-categories.ts` 获取以下内容的完整示例：
+- 基本解析
+- 自动检测
+- 显式控制
+- 提示词增强
+- 向后兼容性

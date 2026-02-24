@@ -25,81 +25,52 @@ export interface WorkerPermissions {
  * Uses iterative character-by-character matching to avoid ReDoS risk from regex.
  */
 function matchGlob(pattern: string, path: string): boolean {
-  let pi = 0; // pattern index
-  let si = 0; // string (path) index
-  let starPi = -1; // pattern index after last '*' fallback point
-  let starSi = -1; // string index at last '*' fallback point
+  // Normalize Windows backslashes
+  const p = path.replace(/\\/g, '/');
+  return matchGlobRecursive(pattern, p, 0, 0);
+}
 
-  while (si < path.length) {
-    // Check for '**' (matches anything including '/')
-    if (pi < pattern.length - 1 && pattern[pi] === '*' && pattern[pi + 1] === '*') {
-      // Consume the '**'
-      pi += 2;
-      // Skip trailing '/' after '**' if present
-      if (pi < pattern.length && pattern[pi] === '/') pi++;
-      starPi = pi;
-      starSi = si;
-      continue;
-    }
-
-    // Check for single '*' (matches any non-/ chars)
-    if (pi < pattern.length && pattern[pi] === '*') {
-      pi++;
-      starPi = pi;
-      starSi = si;
-      continue;
-    }
-
-    // Check for '?' (matches single non-/ char)
-    if (pi < pattern.length && pattern[pi] === '?' && path[si] !== '/') {
-      pi++;
-      si++;
-      continue;
-    }
-
-    // Exact character match
-    if (pi < pattern.length && pattern[pi] === path[si]) {
-      pi++;
-      si++;
-      continue;
-    }
-
-    // Mismatch: backtrack to last star if possible
-    if (starPi !== -1) {
-      pi = starPi;
-      starSi++;
-      si = starSi;
-
-      // For single '*', don't match across '/'
-      // We detect this by checking if the star was a '**' or '*'
-      // If we got here from '**', slashes are OK; from '*', skip if slash
-      // Re-check: was the star a '**'?
-      const wasSingleStar =
-        starPi >= 2 && pattern[starPi - 2] === '*' && pattern[starPi - 1] === '*' ? false :
-        starPi >= 1 && pattern[starPi - 1] === '*' ? true : false;
-
-      if (wasSingleStar && si > 0 && path[si - 1] === '/') {
-        return false;
-      }
-      continue;
-    }
-
-    return false;
-  }
-
-  // Consume remaining pattern characters (trailing '*' or '**')
+function matchGlobRecursive(pattern: string, path: string, pi: number, si: number): boolean {
   while (pi < pattern.length) {
+    // '**' matches zero or more path segments
+    if (pattern[pi] === '*' && pattern[pi + 1] === '*') {
+      pi += 2;
+      if (pi < pattern.length && pattern[pi] === '/') pi++;
+      // Try matching from every position in the remaining path
+      for (let i = si; i <= path.length; i++) {
+        if (matchGlobRecursive(pattern, path, pi, i)) return true;
+        // Advance to next segment
+        if (i < path.length && path[i] !== '/') continue;
+        if (i < path.length) continue;
+        break;
+      }
+      return false;
+    }
+
+    // Single '*' matches any non-'/' sequence
     if (pattern[pi] === '*') {
       pi++;
-    } else if (pattern[pi] === '/') {
-      // Allow trailing slash in pattern after '**'
-      pi++;
-    } else {
-      break;
+      while (si <= path.length) {
+        if (matchGlobRecursive(pattern, path, pi, si)) return true;
+        if (si >= path.length || path[si] === '/') break;
+        si++;
+      }
+      return false;
     }
+
+    // '?' matches single non-'/' char
+    if (pattern[pi] === '?') {
+      if (si >= path.length || path[si] === '/') return false;
+      pi++; si++;
+      continue;
+    }
+
+    // Exact char match
+    if (si >= path.length || pattern[pi] !== path[si]) return false;
+    pi++; si++;
   }
 
-  return pi === pattern.length;
+  return si === path.length;
 }
 
 /**
@@ -268,7 +239,7 @@ export function findPermissionViolations(
         }
       }
 
-      violations.push({ path: relPath, reason });
+      violations.push({ path: relPath.replace(/\\/g, '/'), reason });
     }
   }
 

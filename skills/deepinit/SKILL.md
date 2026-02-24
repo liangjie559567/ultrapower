@@ -1,23 +1,23 @@
 ---
 name: deepinit
-description: Deep codebase initialization with hierarchical AGENTS.md documentation
+description: 深度代码库初始化，生成层级化 AGENTS.md 文档
 ---
 
 # Deep Init Skill
 
-Creates comprehensive, hierarchical AGENTS.md documentation across the entire codebase.
+在整个代码库中创建全面的层级化 AGENTS.md 文档。
 
-## Core Concept
+## 核心概念
 
-AGENTS.md files serve as **AI-readable documentation** that helps agents understand:
-- What each directory contains
-- How components relate to each other
-- Special instructions for working in that area
-- Dependencies and relationships
+AGENTS.md 文件作为 **AI 可读文档**，帮助 agent 理解：
+- 每个目录包含什么
+- 组件之间如何关联
+- 在该区域工作的特殊说明
+- 依赖关系
 
-## Hierarchical Tagging System
+## 层级标签系统
 
-Every AGENTS.md (except root) includes a parent reference tag:
+每个 AGENTS.md（根目录除外）都包含父级引用标签：
 
 ```markdown
 <!-- Parent: ../AGENTS.md -->
@@ -32,7 +32,7 @@ This creates a navigable hierarchy:
 └── docs/AGENTS.md                  ← <!-- Parent: ../AGENTS.md -->
 ```
 
-## AGENTS.md Template
+## AGENTS.md 模板
 
 ```markdown
 <!-- Parent: {relative_path_to_parent}/AGENTS.md -->
@@ -79,18 +79,18 @@ This creates a navigable hierarchy:
 <!-- MANUAL: Any manually added notes below this line are preserved on regeneration -->
 ```
 
-## Execution Workflow
+## 执行工作流
 
-### Step 1: Map Directory Structure
+### 步骤 1：映射目录结构
 
 ```
 Task(subagent_type="explore", model="haiku",
   prompt="List all directories recursively. Exclude: node_modules, .git, dist, build, __pycache__, .venv, coverage, .next, .nuxt")
 ```
 
-### Step 2: Create Work Plan
+### 步骤 2：创建工作计划
 
-Generate todo items for each directory, organized by depth level:
+为每个目录生成待办事项，按深度级别组织：
 
 ```
 Level 0: / (root)
@@ -99,45 +99,45 @@ Level 2: /src/components, /src/utils, /docs/api
 ...
 ```
 
-### Step 3: Generate Level by Level
+### 步骤 3：逐级生成
 
-**IMPORTANT**: Generate parent levels before child levels to ensure parent references are valid.
+**重要**：先生成父级，再生成子级，确保父级引用有效。
 
-For each directory:
-1. Read all files in the directory
-2. Analyze purpose and relationships
-3. Generate AGENTS.md content
-4. Write file with proper parent reference
+对每个目录：
+1. 读取目录中的所有文件
+2. 分析用途和关系
+3. 生成 AGENTS.md 内容
+4. 写入文件并附上正确的父级引用
 
-### Step 4: Compare and Update (if exists)
+### 步骤 4：比较并更新（若已存在）
 
-When AGENTS.md already exists:
+当 AGENTS.md 已存在时：
 
-1. **Read existing content**
-2. **Identify sections**:
-   - Auto-generated sections (can be updated)
-   - Manual sections (`<!-- MANUAL -->` preserved)
-3. **Compare**:
-   - New files added?
-   - Files removed?
-   - Structure changed?
-4. **Merge**:
-   - Update auto-generated content
-   - Preserve manual annotations
-   - Update timestamp
+1. **读取现有内容**
+2. **识别各节**：
+   - 自动生成的节（可更新）
+   - 手动节（`<!-- MANUAL -->` 保留）
+3. **比较**：
+   - 新增了文件？
+   - 删除了文件？
+   - 结构发生变化？
+4. **合并**：
+   - 更新自动生成的内容
+   - 保留手动注释
+   - 更新时间戳
 
-### Step 5: Validate Hierarchy
+### 步骤 5：验证层级
 
-After generation, run validation checks:
+生成后，运行验证检查：
 
-| Check | How to Verify | Corrective Action |
+| 检查项 | 验证方式 | 纠正措施 |
 |-------|--------------|-------------------|
-| Parent references resolve | Read each AGENTS.md, check `<!-- Parent: -->` path exists | Fix path or remove orphan |
-| No orphaned AGENTS.md | Compare AGENTS.md locations to directory structure | Delete orphaned files |
-| Completeness | List all directories, check for AGENTS.md | Generate missing files |
-| Timestamps current | Check `<!-- Generated: -->` dates | Regenerate outdated files |
+| 父级引用可解析 | 读取每个 AGENTS.md，检查 `<!-- Parent: -->` 路径是否存在 | 修复路径或删除孤立文件 |
+| 无孤立 AGENTS.md | 对比 AGENTS.md 位置与目录结构 | 删除孤立文件 |
+| 完整性 | 列出所有目录，检查是否有 AGENTS.md | 生成缺失文件 |
+| 时间戳最新 | 检查 `<!-- Generated: -->` 日期 | 重新生成过期文件 |
 
-Validation script pattern:
+验证脚本模式：
 ```bash
 # Find all AGENTS.md files
 find . -name "AGENTS.md" -type f
@@ -146,27 +146,27 @@ find . -name "AGENTS.md" -type f
 grep -r "<!-- Parent:" --include="AGENTS.md" .
 ```
 
-## Smart Delegation
+## 智能委托
 
-| Task | Agent |
+| 任务 | Agent |
 |------|-------|
-| Directory mapping | `explore` |
-| File analysis | `architect-low` |
-| Content generation | `writer` |
-| AGENTS.md writes | `writer` |
+| 目录映射 | `explore` |
+| 文件分析 | `architect-low` |
+| 内容生成 | `writer` |
+| AGENTS.md 写入 | `writer` |
 
-## Empty Directory Handling
+## 空目录处理
 
-When encountering empty or near-empty directories:
+遇到空目录或近空目录时：
 
-| Condition | Action |
+| 条件 | 操作 |
 |-----------|--------|
-| No files, no subdirectories | **Skip** - do not create AGENTS.md |
-| No files, has subdirectories | Create minimal AGENTS.md with subdirectory listing only |
-| Has only generated files (*.min.js, *.map) | Skip or minimal AGENTS.md |
-| Has only config files | Create AGENTS.md describing configuration purpose |
+| 无文件，无子目录 | **跳过** —— 不创建 AGENTS.md |
+| 无文件，有子目录 | 创建仅含子目录列表的最小 AGENTS.md |
+| 仅有生成文件（*.min.js、*.map） | 跳过或创建最小 AGENTS.md |
+| 仅有配置文件 | 创建描述配置用途的 AGENTS.md |
 
-Example minimal AGENTS.md for directory-only containers:
+仅含目录的容器的最小 AGENTS.md 示例：
 ```markdown
 <!-- Parent: ../AGENTS.md -->
 # {Directory Name}
@@ -180,30 +180,30 @@ Container directory for organizing related modules.
 | `subdir/` | Description (see `subdir/AGENTS.md`) |
 ```
 
-## Parallelization Rules
+## 并行化规则
 
-1. **Same-level directories**: Process in parallel
-2. **Different levels**: Sequential (parent first)
-3. **Large directories**: Spawn dedicated agent per directory
-4. **Small directories**: Batch multiple into one agent
+1. **同级目录**：并行处理
+2. **不同级别**：顺序处理（父级优先）
+3. **大型目录**：为每个目录派生专用 agent
+4. **小型目录**：将多个目录批量交给一个 agent
 
-## Quality Standards
+## 质量标准
 
-### Must Include
-- [ ] Accurate file descriptions
-- [ ] Correct parent references
-- [ ] Subdirectory links
-- [ ] AI agent instructions
+### 必须包含
+- [ ] 准确的文件描述
+- [ ] 正确的父级引用
+- [ ] 子目录链接
+- [ ] AI agent 说明
 
-### Must Avoid
-- [ ] Generic boilerplate
-- [ ] Incorrect file names
-- [ ] Broken parent references
-- [ ] Missing important files
+### 必须避免
+- [ ] 通用样板内容
+- [ ] 错误的文件名
+- [ ] 损坏的父级引用
+- [ ] 遗漏重要文件
 
-## Example Output
+## 示例输出
 
-### Root AGENTS.md
+### 根目录 AGENTS.md
 ```markdown
 <!-- Generated: 2024-01-15 | Updated: 2024-01-15 -->
 
@@ -251,7 +251,7 @@ A web application for managing user tasks with real-time collaboration features.
 <!-- MANUAL: Custom project notes can be added below -->
 ```
 
-### Nested AGENTS.md
+### 嵌套 AGENTS.md
 ```markdown
 <!-- Parent: ../AGENTS.md -->
 <!-- Generated: 2024-01-15 | Updated: 2024-01-15 -->
@@ -302,19 +302,19 @@ Reusable React components organized by feature and complexity.
 <!-- MANUAL: -->
 ```
 
-## Triggering Update Mode
+## 触发更新模式
 
-When running on an existing codebase with AGENTS.md files:
+在已有 AGENTS.md 文件的代码库上运行时：
 
-1. Detect existing files first
-2. Read and parse existing content
-3. Analyze current directory state
-4. Generate diff between existing and current
-5. Apply updates while preserving manual sections
+1. 先检测现有文件
+2. 读取并解析现有内容
+3. 分析当前目录状态
+4. 生成现有内容与当前状态的差异
+5. 应用更新，同时保留手动节
 
-## Performance Considerations
+## 性能注意事项
 
-- **Cache directory listings** - Don't re-scan same directories
-- **Batch small directories** - Process multiple at once
-- **Skip unchanged** - If directory hasn't changed, skip regeneration
-- **Parallel writes** - Multiple agents writing different files simultaneously
+- **缓存目录列表** —— 不重复扫描相同目录
+- **批量处理小目录** —— 一次处理多个
+- **跳过未变更的** —— 若目录未变化，跳过重新生成
+- **并行写入** —— 多个 agent 同时写入不同文件

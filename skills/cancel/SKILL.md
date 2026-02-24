@@ -1,61 +1,58 @@
 ---
 name: cancel
-description: Cancel any active OMC mode (autopilot, ralph, ultrawork, ultraqa, swarm, ultrapilot, pipeline, team)
+description: 取消任何活跃的 OMC 模式（autopilot、ralph、ultrawork、ultraqa、swarm、ultrapilot、pipeline、team）
 ---
 
 # Cancel Skill
 
-Intelligent cancellation that detects and cancels the active OMC mode.
+智能取消，自动检测并取消活跃的 OMC 模式。
 
-**The cancel skill is the standard way to complete and exit any OMC mode.**
-When the stop hook detects work is complete, it instructs the LLM to invoke
-this skill for proper state cleanup. If cancel fails or is interrupted,
-retry with `--force` flag, or wait for the 2-hour staleness timeout as
-a last resort.
+**cancel skill 是完成并退出任何 OMC 模式的标准方式。**
+当 stop hook 检测到工作完成时，它会指示 LLM 调用此 skill 进行正确的状态清理。若 cancel 失败或被中断，使用 `--force` 标志重试，或等待 2 小时过期超时作为最后手段。
 
-## What It Does
+## 功能
 
-Automatically detects which mode is active and cancels it:
-- **Autopilot**: Stops workflow, preserves progress for resume
-- **Ralph**: Stops persistence loop, clears linked ultrawork if applicable
-- **Ultrawork**: Stops parallel execution (standalone or linked)
-- **UltraQA**: Stops QA cycling workflow
-- **Swarm**: Stops coordinated agent swarm, releases claimed tasks
-- **Ultrapilot**: Stops parallel autopilot workers
-- **Pipeline**: Stops sequential agent pipeline
-- **Team**: Sends shutdown_request to all teammates, waits for responses, calls TeamDelete, clears linked ralph if present
-- **Team+Ralph (linked)**: Cancels team first (graceful shutdown), then clears ralph state. Cancelling ralph when linked also cancels team first.
+自动检测活跃模式并取消：
+- **Autopilot**：停止工作流，保留进度以便恢复
+- **Ralph**：停止持久化循环，如适用则清理关联的 ultrawork
+- **Ultrawork**：停止并行执行（独立或关联）
+- **UltraQA**：停止 QA 循环工作流
+- **Swarm**：停止协调 agent swarm，释放已认领的任务
+- **Ultrapilot**：停止并行 autopilot worker
+- **Pipeline**：停止顺序 agent pipeline
+- **Team**：向所有队友发送 shutdown_request，等待响应，调用 TeamDelete，清理关联的 ralph（如存在）
+- **Team+Ralph（关联）**：先取消 team（优雅关闭），再清理 ralph 状态。关联时取消 ralph 也会先取消 team。
 
-## Usage
+## 用法
 
 ```
 /ultrapower:cancel
 ```
 
-Or say: "cancelomc", "stopomc"
+或说："cancelomc"、"stopomc"
 
-## Auto-Detection
+## 自动检测
 
-`/ultrapower:cancel` follows the session-aware state contract:
-- By default the command inspects the current session via `state_list_active` and `state_get_status`, navigating `.omc/state/sessions/{sessionId}/…` to discover which mode is active.
-- When a session id is provided or already known, that session-scoped path is authoritative. Legacy files in `.omc/state/*.json` are consulted only as a compatibility fallback if the session id is missing or empty.
-- Swarm is a shared SQLite/marker mode (`.omc/state/swarm.db` / `.omc/state/swarm-active.marker`) and is not session-scoped.
-- The default cleanup flow calls `state_clear` with the session id to remove only the matching session files; modes stay bound to their originating session.
+`/ultrapower:cancel` 遵循会话感知状态契约：
+- 默认情况下，命令通过 `state_list_active` 和 `state_get_status` 检查当前会话，导航 `.omc/state/sessions/{sessionId}/…` 发现活跃模式。
+- 当提供或已知 session id 时，该会话范围路径具有权威性。仅当 session id 缺失或为空时，才将 `.omc/state/*.json` 中的旧版文件作为兼容性回退。
+- Swarm 是共享的 SQLite/marker 模式（`.omc/state/swarm.db` / `.omc/state/swarm-active.marker`），不在会话范围内。
+- 默认清理流程使用 session id 调用 `state_clear`，仅删除匹配的会话文件；模式保持绑定到其原始会话。
 
-Active modes are still cancelled in dependency order:
-1. Autopilot (includes linked ralph/ultraqa/ cleanup)
-2. Ralph (cleans its linked ultrawork or )
-3. Ultrawork (standalone)
-4. UltraQA (standalone)
-6. Swarm (standalone)
-7. Ultrapilot (standalone)
-8. Pipeline (standalone)
-9. Team (Claude Code native)
-10. Plan Consensus (standalone)
+活跃模式仍按依赖顺序取消：
+1. Autopilot（包含关联的 ralph/ultraqa/ 清理）
+2. Ralph（清理其关联的 ultrawork）
+3. Ultrawork（独立）
+4. UltraQA（独立）
+6. Swarm（独立）
+7. Ultrapilot（独立）
+8. Pipeline（独立）
+9. Team（Claude Code 原生）
+10. Plan Consensus（独立）
 
-## Force Clear All
+## 强制清除全部
 
-Use `--force` or `--all` when you need to erase every session plus legacy artifacts, e.g., to reset the workspace entirely.
+当需要清除每个会话及旧版产物时使用 `--force` 或 `--all`，例如完全重置工作区。
 
 ```
 /ultrapower:cancel --force
@@ -312,21 +309,22 @@ echo ""
 echo "Use --force to clear all state files anyway."
 ```
 
-## Implementation Notes
+## 实现说明
 
-The cancel skill runs as follows:
-1. Parse the `--force` / `--all` flags, tracking whether cleanup should span every session or stay scoped to the current session id.
-2. Use `state_list_active` to enumerate known session ids and `state_get_status` to learn the active mode (`autopilot`, `ralph`, `ultrawork`, etc.) for each session.
-3. When operating in default mode, call `state_clear` with that session_id to remove only the session’s files, then run mode-specific cleanup (autopilot → ralph → …) based on the state tool signals.
-4. In force mode, iterate every active session, call `state_clear` per session, then run a global `state_clear` without `session_id` to drop legacy files (`.omc/state/*.json`, compatibility artifacts) and report success. Swarm remains a shared SQLite/marker mode outside session scoping.
-5. Team artifacts (`~/.claude/teams/*/`, `~/.claude/tasks/*/`, `.omc/state/team-state.json`) remain best-effort cleanup items invoked during the legacy/global pass.
+cancel skill 运行如下：
+1. 解析 `--force` / `--all` 标志，跟踪清理是否应跨越每个会话或仅限于当前 session id。
+2. 使用 `state_list_active` 枚举已知 session id，使用 `state_get_status` 了解每个会话的活跃模式（`autopilot`、`ralph`、`ultrawork` 等）。
+3. 在默认模式下，使用该 session_id 调用 `state_clear` 仅删除会话文件，然后根据状态工具信号运行模式特定清理（autopilot → ralph → …）。
+4. 在强制模式下，迭代每个活跃会话，每个会话调用 `state_clear`，然后不带 `session_id` 运行全局 `state_clear` 删除旧版文件（`.omc/state/*.json`、兼容性产物）并报告成功。Swarm 仍是会话范围外的共享 SQLite/marker 模式。
+5. Team 产物（`~/.claude/teams/*/`、`~/.claude/tasks/*/`、`.omc/state/team-state.json`）在旧版/全局传递期间作为尽力清理项目。
 
-State tools always honor the `session_id` argument, so even force mode still clears the session-scoped paths before deleting compatibility-only legacy state.
+状态工具始终遵守 `session_id` 参数，因此即使强制模式也会在删除仅兼容性旧版状态之前先清理会话范围路径。
 
-Mode-specific subsections below describe what extra cleanup each handler performs after the state-wide operations finish.
-## Messages Reference
+以下模式特定子节描述每个处理程序在状态范围操作完成后执行的额外清理。
 
-| Mode | Success Message |
+## 消息参考
+
+| 模式 | 成功消息 |
 |------|-----------------|
 | Autopilot | "Autopilot cancelled at phase: {phase}. Progress preserved for resume." |
 | Ralph | "Ralph cancelled. Persistent mode deactivated." |
@@ -340,41 +338,41 @@ Mode-specific subsections below describe what extra cleanup each handler perform
 | Force | "All OMC modes cleared. You are free to start fresh." |
 | None | "No active OMC modes detected." |
 
-## What Gets Preserved
+## 保留内容
 
-| Mode | State Preserved | Resume Command |
+| 模式 | 状态是否保留 | 恢复命令 |
 |------|-----------------|----------------|
-| Autopilot | Yes (phase, files, spec, plan, verdicts) | `/ultrapower:autopilot` |
-| Ralph | No | N/A |
-| Ultrawork | No | N/A |
-| UltraQA | No | N/A |
-| Swarm | No | N/A |
-| Ultrapilot | No | N/A |
-| Pipeline | No | N/A |
-| Plan Consensus | Yes (plan file path preserved) | N/A |
+| Autopilot | 是（阶段、文件、规格说明、计划、裁决） | `/ultrapower:autopilot` |
+| Ralph | 否 | N/A |
+| Ultrawork | 否 | N/A |
+| UltraQA | 否 | N/A |
+| Swarm | 否 | N/A |
+| Ultrapilot | 否 | N/A |
+| Pipeline | 否 | N/A |
+| Plan Consensus | 是（计划文件路径保留） | N/A |
 
-## Notes
+## 说明
 
-- **Dependency-aware**: Autopilot cancellation cleans up Ralph and UltraQA
-- **Link-aware**: Ralph cancellation cleans up linked Ultrawork
-- **Safe**: Only clears linked Ultrawork, preserves standalone Ultrawork
-- **Local-only**: Clears state files in `.omc/state/` directory
-- **Resume-friendly**: Autopilot state is preserved for seamless resume
-- **Team-aware**: Detects native Claude Code teams and performs graceful shutdown
+- **依赖感知**：Autopilot 取消时清理 Ralph 和 UltraQA
+- **关联感知**：Ralph 取消时清理关联的 Ultrawork
+- **安全**：仅清理关联的 Ultrawork，保留独立的 Ultrawork
+- **仅本地**：清理 `.omc/state/` 目录中的状态文件
+- **恢复友好**：Autopilot 状态保留以便无缝恢复
+- **Team 感知**：检测原生 Claude Code team 并执行优雅关闭
 
-## MCP Worker Cleanup
+## MCP Worker 清理
 
-When cancelling modes that may have spawned MCP workers (team bridge daemons), the cancel skill should also:
+取消可能已生成 MCP worker（team bridge 守护进程）的模式时，cancel skill 还应：
 
-1. **Check for active MCP workers**: Look for heartbeat files at `.omc/state/team-bridge/{team}/*.heartbeat.json`
-2. **Send shutdown signals**: Write shutdown signal files for each active worker
-3. **Kill tmux sessions**: Run `tmux kill-session -t omc-team-{team}-{worker}` for each worker
-4. **Clean up heartbeat files**: Remove all heartbeat files for the team
-5. **Clean up shadow registry**: Remove `.omc/state/team-mcp-workers.json`
+1. **检查活跃 MCP worker**：在 `.omc/state/team-bridge/{team}/*.heartbeat.json` 查找心跳文件
+2. **发送关闭信号**：为每个活跃 worker 写入关闭信号文件
+3. **终止 tmux 会话**：为每个 worker 运行 `tmux kill-session -t omc-team-{team}-{worker}`
+4. **清理心跳文件**：删除 team 的所有心跳文件
+5. **清理影子注册表**：删除 `.omc/state/team-mcp-workers.json`
 
-### Force Clear Addition
+### 强制清除附加项
 
-When `--force` is used, also clean up:
+使用 `--force` 时，还需清理：
 ```bash
 rm -rf .omc/state/team-bridge/       # Heartbeat files
 rm -f .omc/state/team-mcp-workers.json  # Shadow registry

@@ -54,8 +54,11 @@ function isSecureRuntimeDir(dir: string): boolean {
   try {
     const stat = fs.lstatSync(dir);
     if (!stat.isDirectory() || stat.isSymbolicLink()) return false;
-    if (stat.uid !== process.getuid?.()) return false;
-    if ((stat.mode & 0o777) !== 0o700) return false;
+    // Skip uid/mode checks on Windows (not supported)
+    if (process.platform !== 'win32') {
+      if (stat.uid !== process.getuid?.()) return false;
+      if ((stat.mode & 0o777) !== 0o700) return false;
+    }
     return true;
   } catch {
     return false;

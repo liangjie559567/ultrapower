@@ -30,10 +30,14 @@ import { randomUUID } from 'crypto';
 // ============================================================================
 
 /** Global registry path (not worktree-scoped) */
-const REGISTRY_PATH = join(homedir(), '.omc', 'state', 'reply-session-registry.jsonl');
+function getRegistryPath(): string {
+  return process.env.OMC_SESSION_REGISTRY_PATH ?? join(homedir(), '.omc', 'state', 'reply-session-registry.jsonl');
+}
 
 /** Lock file path for cross-process synchronization */
-const REGISTRY_LOCK_PATH = join(homedir(), '.omc', 'state', 'reply-session-registry.lock');
+function getRegistryLockPath(): string {
+  return process.env.OMC_SESSION_REGISTRY_LOCK_PATH ?? join(homedir(), '.omc', 'state', 'reply-session-registry.lock');
+}
 
 /** Secure file permissions (owner read/write only) */
 const SECURE_FILE_MODE = 0o600;
@@ -83,7 +87,7 @@ export interface SessionMapping {
  * Ensure registry directory exists with secure permissions
  */
 function ensureRegistryDir(): void {
-  const registryDir = dirname(REGISTRY_PATH);
+  const registryDir = dirname(getRegistryPath());
   if (!existsSync(registryDir)) {
     mkdirSync(registryDir, { recursive: true, mode: 0o700 });
   }
@@ -122,7 +126,7 @@ function isPidAlive(pid: number): boolean {
  */
 function readLockSnapshot(): LockFileSnapshot | null {
   try {
-    const raw = readFileSync(REGISTRY_LOCK_PATH, 'utf-8');
+    const raw = readFileSync(getRegistryLockPath(), 'utf-8');
     const trimmed = raw.trim();
 
     if (!trimmed) {
@@ -153,7 +157,7 @@ function readLockSnapshot(): LockFileSnapshot | null {
  */
 function removeLockIfUnchanged(snapshot: LockFileSnapshot): boolean {
   try {
-    const currentRaw = readFileSync(REGISTRY_LOCK_PATH, 'utf-8');
+    const currentRaw = readFileSync(getRegistryLockPath(), 'utf-8');
     if (currentRaw !== snapshot.raw) {
       return false;
     }
@@ -162,7 +166,7 @@ function removeLockIfUnchanged(snapshot: LockFileSnapshot): boolean {
   }
 
   try {
-    unlinkSync(REGISTRY_LOCK_PATH);
+    unlinkSync(getRegistryLockPath());
     return true;
   } catch {
     return false;
@@ -181,7 +185,7 @@ function acquireRegistryLock(): RegistryLockHandle | null {
     try {
       const token = randomUUID();
       const fd = openSync(
-        REGISTRY_LOCK_PATH,
+        getRegistryLockPath(),
         constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY,
         SECURE_FILE_MODE,
       );
@@ -201,7 +205,7 @@ function acquireRegistryLock(): RegistryLockHandle | null {
 
       // Remove stale lock only if ownership checks indicate it's safe.
       try {
-        const lockAgeMs = Date.now() - statSync(REGISTRY_LOCK_PATH).mtimeMs;
+        const lockAgeMs = Date.now() - statSync(getRegistryLockPath()).mtimeMs;
         if (lockAgeMs > LOCK_STALE_MS) {
           const snapshot = readLockSnapshot();
           if (!snapshot) {
@@ -304,7 +308,7 @@ export function registerMessage(mapping: SessionMapping): void {
 
       const line = JSON.stringify(mapping) + '\n';
       const fd = openSync(
-        REGISTRY_PATH,
+        getRegistryPath(),
         constants.O_WRONLY | constants.O_APPEND | constants.O_CREAT,
         SECURE_FILE_MODE,
       );
@@ -331,12 +335,12 @@ export function loadAllMappings(): SessionMapping[] {
  * Caller must already hold lock (or accept race risk).
  */
 function readAllMappingsUnsafe(): SessionMapping[] {
-  if (!existsSync(REGISTRY_PATH)) {
+  if (!existsSync(getRegistryPath())) {
     return [];
   }
 
   try {
-    const content = readFileSync(REGISTRY_PATH, 'utf-8');
+    const content = readFileSync(getRegistryPath(), 'utf-8');
     return content
       .split('\n')
       .filter(line => line.trim())
@@ -451,10 +455,10 @@ function rewriteRegistryUnsafe(mappings: SessionMapping[]): void {
 
   if (mappings.length === 0) {
     // Empty registry - write empty file
-    writeFileSync(REGISTRY_PATH, '', { mode: SECURE_FILE_MODE });
+    writeFileSync(getRegistryPath(), '', { mode: SECURE_FILE_MODE });
     return;
   }
 
   const content = mappings.map(m => JSON.stringify(m)).join('\n') + '\n';
-  writeFileSync(REGISTRY_PATH, content, { mode: SECURE_FILE_MODE });
+  writeFileSync(getRegistryPath(), content, { mode: SECURE_FILE_MODE });
 }

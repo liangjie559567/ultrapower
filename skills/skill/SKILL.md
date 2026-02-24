@@ -1,24 +1,24 @@
 ---
 name: skill
-description: Manage local skills - list, add, remove, search, edit, setup wizard
+description: 管理本地 skill——列出、添加、删除、搜索、编辑、设置向导
 argument-hint: "<command> [args]"
 ---
 
-# Skill Management CLI
+# Skill 管理 CLI
 
-Meta-skill for managing ultrapower skills via CLI-like commands.
+通过类 CLI 命令管理 ultrapower skill 的元 skill。
 
-## Subcommands
+## 子命令
 
 ### /skill list
 
-Show all local skills organized by scope.
+显示按范围组织的所有本地 skill。
 
-**Behavior:**
-1. Scan user skills at `~/.claude/skills/omc-learned/`
-2. Scan project skills at `.omc/skills/`
-3. Parse YAML frontmatter for metadata
-4. Display in organized table format:
+**行为：**
+1. 扫描 `~/.claude/skills/omc-learned/` 中的用户 skill
+2. 扫描 `.omc/skills/` 中的项目 skill
+3. 解析 YAML frontmatter 获取元数据
+4. 以有组织的表格格式显示：
 
 ```
 USER SKILLS (~/.claude/skills/omc-learned/):
@@ -33,27 +33,27 @@ PROJECT SKILLS (.omc/skills/):
 | test-runner       | test, run          | 92%     | 15    | project |
 ```
 
-**Fallback:** If quality/usage stats not available, show "N/A"
+**降级：** 如果质量/使用统计不可用，显示"N/A"
 
 ---
 
 ### /skill add [name]
 
-Interactive wizard for creating a new skill.
+创建新 skill 的交互式向导。
 
-**Behavior:**
-1. **Ask for skill name** (if not provided in command)
-   - Validate: lowercase, hyphens only, no spaces
-2. **Ask for description**
-   - Clear, concise one-liner
-3. **Ask for triggers** (comma-separated keywords)
-   - Example: "error, fix, debug"
-4. **Ask for argument hint** (optional)
-   - Example: "<file> [options]"
-5. **Ask for scope:**
+**行为：**
+1. **询问 skill 名称**（如果命令中未提供）
+   - 验证：小写，仅连字符，无空格
+2. **询问描述**
+   - 清晰、简洁的一行说明
+3. **询问触发词**（逗号分隔）
+   - 示例："error, fix, debug"
+4. **询问参数提示**（可选）
+   - 示例："<file> [options]"
+5. **询问范围：**
    - `user` → `~/.claude/skills/omc-learned/<name>/SKILL.md`
    - `project` → `.omc/skills/<name>/SKILL.md`
-6. **Create skill file** with template:
+6. **创建 skill 文件**，使用模板：
 
 ```yaml
 ---
@@ -92,10 +92,10 @@ argument-hint: "<args>"
 [Additional context, edge cases, gotchas]
 ```
 
-7. **Report success** with file path
-8. **Suggest:** "Edit `/skill edit <name>` to customize content"
+7. **报告成功**，附文件路径
+8. **建议：** "Edit `/skill edit <name>` to customize content"
 
-**Example:**
+**示例：**
 ```
 User: /skill add custom-logger
 Assistant: Creating new skill 'custom-logger'...
@@ -113,24 +113,24 @@ Scope (user/project): user
 
 ### /skill remove <name>
 
-Remove a skill by name.
+按名称删除 skill。
 
-**Behavior:**
-1. **Search for skill** in both scopes:
+**行为：**
+1. **在两个范围中搜索 skill：**
    - `~/.claude/skills/omc-learned/<name>/SKILL.md`
    - `.omc/skills/<name>/SKILL.md`
-2. **If found:**
-   - Display skill info (name, description, scope)
-   - **Ask for confirmation:** "Delete '<name>' skill from <scope>? (yes/no)"
-3. **If confirmed:**
-   - Delete entire skill directory (e.g., `~/.claude/skills/omc-learned/<name>/`)
-   - Report: "✓ Removed skill '<name>' from <scope>"
-4. **If not found:**
-   - Report: "✗ Skill '<name>' not found in user or project scope"
+2. **如果找到：**
+   - 显示 skill 信息（名称、描述、范围）
+   - **请求确认：** "Delete '<name>' skill from <scope>? (yes/no)"
+3. **如果确认：**
+   - 删除整个 skill 目录（如 `~/.claude/skills/omc-learned/<name>/`）
+   - 报告："✓ Removed skill '<name>' from <scope>"
+4. **如果未找到：**
+   - 报告："✗ Skill '<name>' not found in user or project scope"
 
-**Safety:** Never delete without explicit user confirmation.
+**安全：** 未经用户明确确认绝不删除。
 
-**Example:**
+**示例：**
 ```
 User: /skill remove old-logger
 Assistant: Found skill 'old-logger' in user scope:
@@ -147,12 +147,12 @@ Assistant: ✓ Removed skill 'old-logger' from user scope
 
 ### /skill edit <name>
 
-Edit an existing skill interactively.
+交互式编辑现有 skill。
 
-**Behavior:**
-1. **Find skill** by name (search both scopes)
-2. **Read current content** via Read tool
-3. **Display current values:**
+**行为：**
+1. **按名称查找 skill**（搜索两个范围）
+2. **通过 Read 工具读取当前内容**
+3. **显示当前值：**
    ```
    Current skill 'custom-logger':
    - Description: Enhanced logging with structured output
@@ -160,21 +160,21 @@ Edit an existing skill interactively.
    - Argument hint: <level> [message]
    - Scope: user
    ```
-4. **Ask what to change:**
-   - `description` - Update description
-   - `triggers` - Update trigger keywords
-   - `argument-hint` - Update argument hint
-   - `content` - Edit full markdown content
-   - `rename` - Rename skill (move file)
-   - `cancel` - Exit without changes
-5. **For selected field:**
-   - Show current value
-   - Ask for new value
-   - Update YAML frontmatter or content
-   - Write back to file
-6. **Report success** with summary of changes
+4. **询问要修改什么：**
+   - `description` - 更新描述
+   - `triggers` - 更新触发关键词
+   - `argument-hint` - 更新参数提示
+   - `content` - 编辑完整 markdown 内容
+   - `rename` - 重命名 skill（移动文件）
+   - `cancel` - 不做更改退出
+5. **对选定字段：**
+   - 显示当前值
+   - 询问新值
+   - 更新 YAML frontmatter 或内容
+   - 写回文件
+6. **报告成功**，附更改摘要
 
-**Example:**
+**示例：**
 ```
 User: /skill edit custom-logger
 Assistant: Current skill 'custom-logger':
@@ -195,16 +195,16 @@ New triggers (comma-separated): log, logger, logging, trace
 
 ### /skill search <query>
 
-Search skills by content, triggers, name, or description.
+按内容、触发词、名称或描述搜索 skill。
 
-**Behavior:**
-1. **Scan all skills** in both scopes
-2. **Match query** (case-insensitive) against:
-   - Skill name
-   - Description
-   - Triggers
-   - Full markdown content
-3. **Display matches** with context:
+**行为：**
+1. **扫描两个范围中的所有 skill**
+2. **匹配查询**（不区分大小写）：
+   - Skill 名称
+   - 描述
+   - 触发词
+   - 完整 markdown 内容
+3. **显示匹配项**及上下文：
 
 ```
 Found 3 skills matching "typescript error":
@@ -222,32 +222,18 @@ Found 3 skills matching "typescript error":
    Match: "TypeScript ESLint error resolution"
 ```
 
-**Ranking:** Prioritize matches in name/triggers over content matches
-
-**Example:**
-```
-User: /skill search api endpoint
-Assistant: Found 2 skills matching "api endpoint":
-
-1. api-builder (user)
-   Description: Generate REST API endpoints
-   Triggers: api, endpoint, rest
-
-2. backend-scaffold (project)
-   Description: Scaffold backend services
-   Match: "Creates API endpoint boilerplate"
-```
+**排名：** 名称/触发词中的匹配优先于内容匹配
 
 ---
 
 ### /skill info <name>
 
-Show detailed information about a skill.
+显示 skill 的详细信息。
 
-**Behavior:**
-1. **Find skill** by name (search both scopes)
-2. **Parse YAML frontmatter** and content
-3. **Display complete details:**
+**行为：**
+1. **按名称查找 skill**（搜索两个范围）
+2. **解析 YAML frontmatter** 和内容
+3. **显示完整详情：**
 
 ```
 Skill: custom-logger
@@ -263,40 +249,23 @@ File Path: /home/user/.claude/skills/omc-learned/custom-logger/SKILL.md
 [entire markdown content]
 ```
 
-**If not found:** Report error with suggestion to use `/skill search`
-
-**Example:**
-```
-User: /skill info custom-logger
-Assistant: Skill: custom-logger
-Scope: user
-Description: Enhanced logging with structured output
-Triggers: log, logger, logging
-File: ~/.claude/skills/omc-learned/custom-logger/SKILL.md
-
---- CONTENT ---
-# Custom Logger Skill
-
-## Purpose
-Enhanced logging with structured JSON output...
-[rest of content]
-```
+**如果未找到：** 报告错误并建议使用 `/skill search`
 
 ---
 
 ### /skill sync
 
-Sync skills between user and project scopes.
+在用户和项目范围间同步 skill。
 
-**Behavior:**
-1. **Scan both scopes:**
-   - User skills: `~/.claude/skills/omc-learned/`
-   - Project skills: `.omc/skills/`
-2. **Compare and categorize:**
-   - User-only skills (not in project)
-   - Project-only skills (not in user)
-   - Common skills (in both)
-3. **Display sync opportunities:**
+**行为：**
+1. **扫描两个范围：**
+   - 用户 skill：`~/.claude/skills/omc-learned/`
+   - 项目 skill：`.omc/skills/`
+2. **比较并分类：**
+   - 仅用户 skill（不在项目中）
+   - 仅项目 skill（不在用户中）
+   - 公共 skill（两者都有）
+3. **显示同步机会：**
 
 ```
 SYNC REPORT:
@@ -324,39 +293,25 @@ Options:
   [4] Cancel
 ```
 
-4. **Handle user choice:**
-   - Option 1: Select skill(s) to copy to project
-   - Option 2: Select skill(s) to copy to user
-   - Option 3: Show side-by-side diff for common skills
-   - Option 4: Exit
+4. **处理用户选择：**
+   - 选项 1：选择要复制到项目的 skill
+   - 选项 2：选择要复制到用户的 skill
+   - 选项 3：显示公共 skill 的并排差异
+   - 选项 4：退出
 
-**Safety:** Never overwrite without confirmation
-
-**Example:**
-```
-User: /skill sync
-Assistant: Found 5 user-only skills and 2 project-only skills.
-
-Copy 'error-handler' from user to project? (yes/no/skip)
-User: yes
-Assistant: ✓ Copied 'error-handler' to .omc/skills/
-
-Copy 'api-builder' from user to project? (yes/no/skip)
-User: skip
-...
-```
+**安全：** 未经确认绝不覆盖
 
 ---
 
 ### /skill setup
 
-Interactive wizard for setting up and managing local skills (formerly local-skills-setup).
+设置和管理本地 skill 的交互式向导（原 local-skills-setup）。
 
-**Behavior:**
+**行为：**
 
-#### Step 1: Directory Check and Setup
+#### 第一步：目录检查和设置
 
-First, check if skill directories exist and create them if needed:
+首先检查 skill 目录是否存在，如需要则创建：
 
 ```bash
 # Check and create user-level skills directory
@@ -378,9 +333,9 @@ else
 fi
 ```
 
-#### Step 2: Skill Scan and Inventory
+#### 第二步：Skill 扫描和清单
 
-Scan both directories and show a comprehensive inventory:
+扫描两个目录并显示综合清单：
 
 ```bash
 # Scan user-level skills
@@ -388,106 +343,69 @@ echo "=== USER-LEVEL SKILLS (~/.claude/skills/omc-learned/) ==="
 if [ -d "$HOME/.claude/skills/omc-learned" ]; then
   USER_COUNT=$(find "$HOME/.claude/skills/omc-learned" -name "*.md" 2>/dev/null | wc -l)
   echo "Total skills: $USER_COUNT"
-
-  if [ $USER_COUNT -gt 0 ]; then
-    echo ""
-    echo "Skills found:"
-    find "$HOME/.claude/skills/omc-learned" -name "*.md" -type f -exec sh -c '
-      FILE="$1"
-      NAME=$(grep -m1 "^name:" "$FILE" 2>/dev/null | sed "s/name: //")
-      DESC=$(grep -m1 "^description:" "$FILE" 2>/dev/null | sed "s/description: //")
-      MODIFIED=$(stat -c "%y" "$FILE" 2>/dev/null || stat -f "%Sm" "$FILE" 2>/dev/null)
-      echo "  - $NAME"
-      [ -n "$DESC" ] && echo "    Description: $DESC"
-      echo "    Modified: $MODIFIED"
-      echo ""
-    ' sh {} \;
-  fi
-else
-  echo "Directory not found"
+  # ... (scan and display each skill)
 fi
 
 echo ""
 echo "=== PROJECT-LEVEL SKILLS (.omc/skills/) ==="
-if [ -d ".omc/skills" ]; then
-  PROJECT_COUNT=$(find ".omc/skills" -name "*.md" 2>/dev/null | wc -l)
-  echo "Total skills: $PROJECT_COUNT"
+# ... (similar scan)
 
-  if [ $PROJECT_COUNT -gt 0 ]; then
-    echo ""
-    echo "Skills found:"
-    find ".omc/skills" -name "*.md" -type f -exec sh -c '
-      FILE="$1"
-      NAME=$(grep -m1 "^name:" "$FILE" 2>/dev/null | sed "s/name: //")
-      DESC=$(grep -m1 "^description:" "$FILE" 2>/dev/null | sed "s/description: //")
-      MODIFIED=$(stat -c "%y" "$FILE" 2>/dev/null || stat -f "%Sm" "$FILE" 2>/dev/null)
-      echo "  - $NAME"
-      [ -n "$DESC" ] && echo "    Description: $DESC"
-      echo "    Modified: $MODIFIED"
-      echo ""
-    ' sh {} \;
-  fi
-else
-  echo "Directory not found"
-fi
-
-# Summary
 TOTAL=$((USER_COUNT + PROJECT_COUNT))
 echo "=== SUMMARY ==="
 echo "Total skills across all directories: $TOTAL"
 ```
 
-#### Step 3: Quick Actions Menu
+#### 第三步：快速操作菜单
 
-After scanning, use the AskUserQuestion tool to offer these options:
+扫描后，使用 AskUserQuestion 工具提供以下选项：
 
-**Question:** "What would you like to do with your local skills?"
+**问题：** "What would you like to do with your local skills?"
 
-**Options:**
-1. **Add new skill** - Start the skill creation wizard (invoke `/skill add`)
-2. **List all skills with details** - Show comprehensive skill inventory (invoke `/skill list`)
-3. **Scan conversation for patterns** - Analyze current conversation for skill-worthy patterns
-4. **Import skill** - Import a skill from URL or paste content
-5. **Done** - Exit the wizard
+**选项：**
+1. **添加新 skill** - 启动 skill 创建向导（调用 `/skill add`）
+2. **列出所有 skill 及详情** - 显示综合 skill 清单（调用 `/skill list`）
+3. **扫描对话中的模式** - 分析当前对话中值得提取为 skill 的模式
+4. **导入 skill** - 从 URL 导入或粘贴内容
+5. **完成** - 退出向导
 
-**Option 3: Scan Conversation for Patterns**
+**选项 3：扫描对话中的模式**
 
-Analyze the current conversation context to identify potential skill-worthy patterns. Look for:
-- Recent debugging sessions with non-obvious solutions
-- Tricky bugs that required investigation
-- Codebase-specific workarounds discovered
-- Error patterns that took time to resolve
+分析当前对话上下文以识别潜在的值得提取为 skill 的模式。查找：
+- 有非显而易见解决方案的近期调试 session
+- 需要调查的棘手 bug
+- 发现的代码库特定变通方法
+- 花费时间解决的错误模式
 
-Report findings and ask if user wants to extract any as skills (invoke `/learner` if yes).
+报告发现并询问用户是否要将其提取为 skill（如果是则调用 `/learner`）。
 
-**Option 4: Import Skill**
+**选项 4：导入 Skill**
 
-Ask user to provide either:
-- **URL**: Download skill from a URL (e.g., GitHub gist)
-- **Paste content**: Paste skill markdown content directly
+询问用户提供：
+- **URL**：从 URL 下载 skill（如 GitHub gist）
+- **粘贴内容**：直接粘贴 skill markdown 内容
 
-Then ask for scope:
-- **User-level** (~/.claude/skills/omc-learned/) - Available across all projects
-- **Project-level** (.omc/skills/) - Only for this project
+然后询问范围：
+- **用户级**（~/.claude/skills/omc-learned/）- 跨所有项目可用
+- **项目级**（.omc/skills/）- 仅用于此项目
 
-Validate the skill format and save to the chosen location.
+验证 skill 格式并保存到选定位置。
 
 ---
 
 ### /skill scan
 
-Quick command to scan both skill directories (subset of `/skill setup`).
+快速扫描两个 skill 目录（`/skill setup` 的子集）。
 
-**Behavior:**
-Run the scan from Step 2 of `/skill setup` without the interactive wizard.
+**行为：**
+运行 `/skill setup` 第二步的扫描，不带交互式向导。
 
 ---
 
-## Skill Templates
+## Skill 模板
 
-When creating skills via `/skill add` or `/skill setup`, offer quick templates for common skill types:
+通过 `/skill add` 或 `/skill setup` 创建 skill 时，提供常见 skill 类型的快速模板：
 
-### Error Solution Template
+### 错误解决方案模板
 
 ```markdown
 ---
@@ -508,28 +426,17 @@ What is the underlying cause of this error? What principle did you discover?
 What goes wrong if you don't know this? What symptom led here?
 
 ## Recognition Pattern
-How do you know when this applies? What are the signs?
 - Error message: "[exact error]"
 - File: [specific file path]
 - Context: [when does this occur]
 
 ## The Approach
-Step-by-step solution:
 1. [Specific action with file/line reference]
 2. [Specific action with file/line reference]
 3. [Verification step]
-
-## Example
-\`\`\`typescript
-// Before (broken)
-[problematic code]
-
-// After (fixed)
-[corrected code]
-\`\`\`
 ```
 
-### Workflow Skill Template
+### 工作流 Skill 模板
 
 ```markdown
 ---
@@ -546,14 +453,9 @@ quality: high
 ## The Insight
 What makes this workflow different from the obvious approach?
 
-## Why This Matters
-What fails if you don't follow this process?
-
 ## Recognition Pattern
-When should you use this workflow?
 - Task type: [specific task]
 - Files involved: [specific patterns]
-- Indicators: [how to recognize]
 
 ## The Approach
 1. [Step with specific commands/files]
@@ -562,101 +464,20 @@ When should you use this workflow?
 
 ## Gotchas
 - [Common mistake and how to avoid it]
-- [Edge case and how to handle it]
-```
-
-### Code Pattern Template
-
-```markdown
----
-id: pattern-[unique-id]
-name: [Pattern Name]
-description: Pattern for [specific use case in this codebase]
-source: conversation
-triggers: ["code pattern", "file type", "problem domain"]
-quality: high
----
-
-# [Pattern Name]
-
-## The Insight
-What's the key principle behind this pattern?
-
-## Why This Matters
-What problems does this pattern solve in THIS codebase?
-
-## Recognition Pattern
-When do you apply this pattern?
-- File types: [specific files]
-- Problem: [specific problem]
-- Context: [codebase-specific context]
-
-## The Approach
-Decision-making heuristic, not just code:
-1. [Principle-based step]
-2. [Principle-based step]
-
-## Example
-\`\`\`typescript
-[Illustrative example showing the principle]
-\`\`\`
-
-## Anti-Pattern
-What NOT to do and why:
-\`\`\`typescript
-[Common mistake to avoid]
-\`\`\`
-```
-
-### Integration Skill Template
-
-```markdown
----
-id: integration-[unique-id]
-name: [Integration Name]
-description: How [system A] integrates with [system B] in this codebase
-source: conversation
-triggers: ["system name", "integration point", "config file"]
-quality: high
----
-
-# [Integration Name]
-
-## The Insight
-What's non-obvious about how these systems connect?
-
-## Why This Matters
-What breaks if you don't understand this integration?
-
-## Recognition Pattern
-When are you working with this integration?
-- Files: [specific integration files]
-- Config: [specific config locations]
-- Symptoms: [what indicates integration issues]
-
-## The Approach
-How to work with this integration correctly:
-1. [Configuration step with file paths]
-2. [Setup step with specific details]
-3. [Verification step]
-
-## Gotchas
-- [Integration-specific pitfall #1]
-- [Integration-specific pitfall #2]
 ```
 
 ---
 
-## Error Handling
+## 错误处理
 
-**All commands must handle:**
-- File/directory doesn't exist
-- Permission errors
-- Invalid YAML frontmatter
-- Duplicate skill names
-- Invalid skill names (spaces, special chars)
+**所有命令必须处理：**
+- 文件/目录不存在
+- 权限错误
+- 无效的 YAML frontmatter
+- 重复的 skill 名称
+- 无效的 skill 名称（空格、特殊字符）
 
-**Error format:**
+**错误格式：**
 ```
 ✗ Error: <clear message>
 → Suggestion: <helpful next step>
@@ -664,174 +485,91 @@ How to work with this integration correctly:
 
 ---
 
-## Usage Examples
+## 用法示例
 
 ```bash
-# List all skills
+# 列出所有 skill
 /skill list
 
-# Create a new skill
+# 创建新 skill
 /skill add my-custom-skill
 
-# Remove a skill
+# 删除 skill
 /skill remove old-skill
 
-# Edit existing skill
+# 编辑现有 skill
 /skill edit error-handler
 
-# Search for skills
+# 搜索 skill
 /skill search typescript error
 
-# Get detailed info
+# 获取详细信息
 /skill info my-custom-skill
 
-# Sync between scopes
+# 在范围间同步
 /skill sync
 
-# Run setup wizard
+# 运行设置向导
 /skill setup
 
-# Quick scan
+# 快速扫描
 /skill scan
 ```
 
-## Usage Modes
+## 使用模式
 
-### Direct Command Mode
+### 直接命令模式
 
-When invoked with an argument, skip the interactive wizard:
+带参数调用时，跳过交互式向导：
 
-- `/ultrapower:skill list` - Show detailed skill inventory
-- `/ultrapower:skill add` - Start skill creation (invoke learner)
-- `/ultrapower:skill scan` - Scan both skill directories
+- `/ultrapower:skill list` - 显示详细 skill 清单
+- `/ultrapower:skill add` - 开始 skill 创建（调用 learner）
+- `/ultrapower:skill scan` - 扫描两个 skill 目录
 
-### Interactive Mode
+### 交互模式
 
-When invoked without arguments, run the full guided wizard.
-
----
-
-## Benefits of Local Skills
-
-**Automatic Application**: Claude detects triggers and applies skills automatically - no need to remember or search for solutions.
-
-**Version Control**: Project-level skills (.omc/skills/) are committed with your code, so the whole team benefits.
-
-**Evolving Knowledge**: Skills improve over time as you discover better approaches and refine triggers.
-
-**Reduced Token Usage**: Instead of re-solving the same problems, Claude applies known patterns efficiently.
-
-**Codebase Memory**: Preserves institutional knowledge that would otherwise be lost in conversation history.
+不带参数调用时，运行完整引导向导。
 
 ---
 
-## Skill Quality Guidelines
+## 本地 Skill 的优势
 
-Good skills are:
+**自动应用**：Claude 检测触发词并自动应用 skill——无需记忆或搜索解决方案。
 
-1. **Non-Googleable** - Can't easily find via search
-   - BAD: "How to read files in TypeScript"
-   - GOOD: "This codebase uses custom path resolution requiring fileURLToPath"
+**版本控制**：项目级 skill（.omc/skills/）随代码提交，整个团队受益。
 
-2. **Context-Specific** - References actual files/errors from THIS codebase
-   - BAD: "Use try/catch for error handling"
-   - GOOD: "The aiohttp proxy in server.py:42 crashes on ClientDisconnectedError"
+**知识演进**：随着发现更好方法和完善触发词，skill 随时间改进。
 
-3. **Actionable with Precision** - Tells exactly WHAT to do and WHERE
-   - BAD: "Handle edge cases"
-   - GOOD: "When seeing 'Cannot find module' in dist/, check tsconfig.json moduleResolution"
+**减少 token 使用**：无需重复解决相同问题，Claude 高效应用已知模式。
 
-4. **Hard-Won** - Required significant debugging effort
-   - BAD: Generic programming patterns
-   - GOOD: "Race condition in worker.ts - Promise.all at line 89 needs await"
+**代码库记忆**：保存否则会在对话历史中丢失的机构知识。
 
 ---
 
-## Related Skills
+## Skill 质量指南
 
-- `/ultrapower:learner` - Extract a skill from current conversation
-- `/ultrapower:note` - Save quick notes (less formal than skills)
-- `/ultrapower:deepinit` - Generate AGENTS.md codebase hierarchy
+好的 skill 具备：
 
----
+1. **不可 Google** - 无法通过搜索轻易找到
+   - 差：「如何在 TypeScript 中读取文件」
+   - 好：「此代码库使用需要 fileURLToPath 的自定义路径解析」
 
-## Example Session
+2. **上下文特定** - 引用此代码库的实际文件/错误
+   - 差：「使用 try/catch 进行错误处理」
+   - 好：「server.py:42 中的 aiohttp 代理在 ClientDisconnectedError 时崩溃」
 
-```
-> /ultrapower:skill list
+3. **精确可操作** - 准确告知做什么和在哪里做
+   - 差：「处理边界情况」
+   - 好：「在 dist/ 中看到 'Cannot find module' 时，检查 tsconfig.json moduleResolution」
 
-Checking skill directories...
-✓ User skills directory exists: ~/.claude/skills/omc-learned/
-✓ Project skills directory exists: .omc/skills/
-
-Scanning for skills...
-
-=== USER-LEVEL SKILLS ===
-Total skills: 3
-  - async-network-error-handling
-    Description: Pattern for handling independent I/O failures in async network code
-    Modified: 2026-01-20 14:32:15
-
-  - esm-path-resolution
-    Description: Custom path resolution in ESM requiring fileURLToPath
-    Modified: 2026-01-19 09:15:42
-
-=== PROJECT-LEVEL SKILLS ===
-Total skills: 5
-  - session-timeout-fix
-    Description: Fix for sessionId undefined after restart in session.ts
-    Modified: 2026-01-22 16:45:23
-
-  - build-cache-invalidation
-    Description: When to clear TypeScript build cache to fix phantom errors
-    Modified: 2026-01-21 11:28:37
-
-=== SUMMARY ===
-Total skills: 8
-
-What would you like to do?
-1. Add new skill
-2. List all skills with details
-3. Scan conversation for patterns
-4. Import skill
-5. Done
-```
+4. **来之不易** - 需要大量调试工作
+   - 差：通用编程模式
+   - 好：「worker.ts 中的竞态条件——第 89 行的 Promise.all 需要 await」
 
 ---
 
-## Tips for Users
+## 相关 Skill
 
-- Run `/ultrapower:skill list` periodically to review your skill library
-- After solving a tricky bug, immediately run learner to capture it
-- Use project-level skills for codebase-specific knowledge
-- Use user-level skills for general patterns that apply everywhere
-- Review and refine triggers over time to improve matching accuracy
-
----
-
-## Implementation Notes
-
-1. **YAML Parsing:** Use frontmatter extraction for metadata
-2. **File Operations:** Use Read/Write tools, never Edit for new files
-3. **User Confirmation:** Always confirm destructive operations
-4. **Clear Feedback:** Use checkmarks (✓), crosses (✗), arrows (→) for clarity
-5. **Scope Resolution:** Always check both user and project scopes
-6. **Validation:** Enforce naming conventions (lowercase, hyphens only)
-
----
-
-## Related Skills
-
-- `/ultrapower:learner` - Extract a skill from current conversation
-- `/ultrapower:note` - Save quick notes (less formal than skills)
-- `/ultrapower:deepinit` - Generate AGENTS.md codebase hierarchy
-
----
-
-## Future Enhancements
-
-- `/skill export <name>` - Export skill as shareable file
-- `/skill import <file>` - Import skill from file
-- `/skill stats` - Show usage statistics across all skills
-- `/skill validate` - Check all skills for format errors
-- `/skill template <type>` - Create from predefined templates
+- `/ultrapower:learner` - 从当前对话提取 skill
+- `/ultrapower:note` - 保存快速笔记（比 skill 更非正式）
+- `/ultrapower:deepinit` - 生成 AGENTS.md 代码库层次结构

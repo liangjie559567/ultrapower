@@ -1,41 +1,41 @@
 ---
 name: note
-description: Save notes to notepad.md for compaction resilience
+description: 将笔记保存到 notepad.md 以防对话压缩丢失
 ---
 
 # Note Skill
 
-Save important context to `.omc/notepad.md` that survives conversation compaction.
+将重要上下文保存到 `.omc/notepad.md`，在对话压缩后仍可保留。
 
-## Usage
+## 用法
 
-| Command | Action |
+| 命令 | 操作 |
 |---------|--------|
-| `/ultrapower:note <content>` | Add to Working Memory with timestamp |
-| `/ultrapower:note --priority <content>` | Add to Priority Context (always loaded) |
-| `/ultrapower:note --manual <content>` | Add to MANUAL section (never pruned) |
-| `/ultrapower:note --show` | Display current notepad contents |
-| `/ultrapower:note --prune` | Remove entries older than 7 days |
-| `/ultrapower:note --clear` | Clear Working Memory (keep Priority + MANUAL) |
+| `/ultrapower:note <内容>` | 带时间戳添加到工作记忆 |
+| `/ultrapower:note --priority <内容>` | 添加到优先上下文（始终加载） |
+| `/ultrapower:note --manual <内容>` | 添加到 MANUAL 区块（永不清除） |
+| `/ultrapower:note --show` | 显示当前笔记本内容 |
+| `/ultrapower:note --prune` | 删除 7 天前的条目 |
+| `/ultrapower:note --clear` | 清除工作记忆（保留优先上下文和 MANUAL） |
 
-## Sections
+## 区块说明
 
-### Priority Context (500 char limit)
-- **Always** injected on session start
-- Use for critical facts: "Project uses pnpm", "API in src/api/client.ts"
-- Keep it SHORT - this eats into your context budget
+### 优先上下文（500 字符限制）
+- **始终**在会话开始时注入
+- 用于关键事实：如"项目使用 pnpm"、"API 在 src/api/client.ts"
+- 保持简短——这会占用你的上下文预算
 
-### Working Memory
-- Timestamped session notes
-- Auto-pruned after 7 days
-- Good for: debugging breadcrumbs, temporary findings
+### 工作记忆
+- 带时间戳的会话笔记
+- 7 天后自动清除
+- 适合：调试线索、临时发现
 
 ### MANUAL
-- Never auto-pruned
-- User-controlled permanent notes
-- Good for: team contacts, deployment info
+- 永不自动清除
+- 用户控制的永久笔记
+- 适合：团队联系方式、部署信息
 
-## Examples
+## 示例
 
 ```
 /ultrapower:note Found auth bug in UserContext - missing useEffect dependency
@@ -45,18 +45,18 @@ Save important context to `.omc/notepad.md` that survives conversation compactio
 /ultrapower:note --prune
 ```
 
-## Behavior
+## 行为
 
-1. Creates `.omc/notepad.md` if it doesn't exist
-2. Parses the argument to determine section
-3. Appends content with timestamp (for Working Memory)
-4. Warns if Priority Context exceeds 500 chars
-5. Confirms what was saved
+1. 如果 `.omc/notepad.md` 不存在则创建
+2. 解析参数以确定目标区块
+3. 追加内容并附带时间戳（工作记忆）
+4. 如果优先上下文超过 500 字符则发出警告
+5. 确认已保存的内容
 
-## Integration
+## 集成
 
-Notepad content is automatically loaded on session start:
-- Priority Context: ALWAYS loaded
-- Working Memory: Loaded if recent entries exist
+笔记本内容在会话开始时自动加载：
+- 优先上下文：始终加载
+- 工作记忆：如有近期条目则加载
 
-This helps survive conversation compaction without losing critical context.
+这有助于在对话压缩后不丢失关键上下文。

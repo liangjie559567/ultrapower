@@ -1,41 +1,41 @@
-# Security Rules
+# 安全规则
 
-## Mandatory Security Checks
+## 强制安全检查
 
-Before ANY commit:
-- [ ] No hardcoded secrets (API keys, passwords, tokens)
-- [ ] All user inputs validated
-- [ ] SQL injection prevention (parameterized queries)
-- [ ] XSS prevention (sanitized HTML)
-- [ ] CSRF protection enabled
-- [ ] Authentication/authorization verified
-- [ ] Rate limiting on all endpoints
-- [ ] Error messages don't leak sensitive data
+任何提交前：
+- [ ] 无硬编码密钥（API keys、密码、token）
+- [ ] 所有用户输入已验证
+- [ ] SQL 注入防护（参数化查询）
+- [ ] XSS 防护（HTML 已净化）
+- [ ] CSRF 保护已启用
+- [ ] 身份验证/授权已验证
+- [ ] 所有端点有速率限制
+- [ ] 错误信息不泄露敏感数据
 
-## Secret Management
+## 密钥管理
 
 ```typescript
-// NEVER: Hardcoded secrets
+// 绝不：硬编码密钥
 const apiKey = "sk-proj-xxxxx"
 
-// ALWAYS: Environment variables
+// 始终：环境变量
 const apiKey = process.env.API_KEY
 if (!apiKey) throw new Error('API_KEY not configured')
 ```
 
-## Security Response Protocol
+## 安全响应协议
 
-If security issue found:
-1. STOP immediately
-2. Use `security-reviewer` agent
-3. Fix CRITICAL issues before continuing
-4. Rotate any exposed secrets
-5. Review entire codebase for similar issues
+发现安全问题时：
+1. 立即停止
+2. 使用 `security-reviewer` agent
+3. 继续前修复关键问题
+4. 轮换任何已暴露的密钥
+5. 检查整个代码库是否有类似问题
 
-## [CUSTOMIZE] Project-Specific Security
+## [自定义] 项目特定安全
 
-Add your project-specific security requirements here:
-- Authentication method
-- Authorization rules
-- Data encryption requirements
-- Compliance requirements (GDPR, HIPAA, etc.)
+在此添加项目特定的安全要求：
+- 身份验证方法
+- 授权规则
+- 数据加密要求
+- 合规要求（GDPR、HIPAA 等）

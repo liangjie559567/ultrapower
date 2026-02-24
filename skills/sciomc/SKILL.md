@@ -1,34 +1,34 @@
 ---
 name: sciomc
-description: Orchestrate parallel scientist agents for comprehensive analysis with AUTO mode
+description: 编排并行 scientist agent 进行综合分析，支持 AUTO 模式
 argument-hint: <research goal>
 ---
 
 # Research Skill
 
-Orchestrate parallel scientist agents for comprehensive research workflows with optional AUTO mode for fully autonomous execution.
+编排并行 scientist agent 进行综合研究工作流，支持可选的 AUTO 模式实现完全自主执行。
 
-## Overview
+## 概述
 
-Research is a multi-stage workflow that decomposes complex research goals into parallel investigations:
+Research 是一个多阶段工作流，将复杂研究目标分解为并行调查：
 
-1. **Decomposition** - Break research goal into independent stages/hypotheses
-2. **Execution** - Run parallel scientist agents on each stage
-3. **Verification** - Cross-validate findings, check consistency
-4. **Synthesis** - Aggregate results into comprehensive report
+1. **分解** - 将研究目标拆分为独立阶段/假设
+2. **执行** - 对每个阶段运行并行 scientist agent
+3. **验证** - 交叉验证发现，检查一致性
+4. **综合** - 将结果汇总为综合报告
 
-## Usage Examples
+## 用法示例
 
 ```
-/ultrapower:sciomc <goal>                    # Standard research with user checkpoints
-/ultrapower:sciomc AUTO: <goal>              # Fully autonomous until complete
-/ultrapower:sciomc status                    # Check current research session status
-/ultrapower:sciomc resume                    # Resume interrupted research session
-/ultrapower:sciomc list                      # List all research sessions
-/ultrapower:sciomc report <session-id>       # Generate report for session
+/ultrapower:sciomc <goal>                    # 带用户检查点的标准研究
+/ultrapower:sciomc AUTO: <goal>              # 完全自主直到完成
+/ultrapower:sciomc status                    # 检查当前研究 session 状态
+/ultrapower:sciomc resume                    # 恢复中断的研究 session
+/ultrapower:sciomc list                      # 列出所有研究 session
+/ultrapower:sciomc report <session-id>       # 为 session 生成报告
 ```
 
-### Quick Examples
+### 快速示例
 
 ```
 /ultrapower:sciomc What are the performance characteristics of different sorting algorithms?
@@ -36,11 +36,11 @@ Research is a multi-stage workflow that decomposes complex research goals into p
 /ultrapower:sciomc How does the error handling work across the API layer?
 ```
 
-## Research Protocol
+## 研究协议
 
-### Stage Decomposition Pattern
+### 阶段分解模式
 
-When given a research goal, decompose into 3-7 independent stages:
+给定研究目标时，分解为 3-7 个独立阶段：
 
 ```markdown
 ## Research Decomposition
@@ -57,9 +57,9 @@ When given a research goal, decompose into 3-7 independent stages:
 ...
 ```
 
-### Parallel Scientist Invocation
+### 并行 Scientist 调用
 
-Fire independent stages in parallel via Task tool:
+通过 Task 工具并行触发独立阶段：
 
 ```
 // Stage 1 - Simple data gathering
@@ -72,30 +72,30 @@ Task(subagent_type="ultrapower:scientist", model="sonnet", prompt="[RESEARCH_STA
 Task(subagent_type="ultrapower:scientist-high", model="opus", prompt="[RESEARCH_STAGE:3] Deep analysis of...")
 ```
 
-### Smart Model Routing
+### 智能模型路由
 
-**CRITICAL: Always pass `model` parameter explicitly!**
+**关键：始终明确传递 `model` 参数！**
 
-| Task Complexity | Agent | Model | Use For |
+| 任务复杂度 | Agent | Model | 用途 |
 |-----------------|-------|-------|---------|
-| Data gathering | `scientist` (model=haiku) | haiku | File enumeration, pattern counting, simple lookups |
-| Standard analysis | `scientist` | sonnet | Code analysis, pattern detection, documentation review |
-| Complex reasoning | `scientist-high` | opus | Architecture analysis, cross-cutting concerns, hypothesis validation |
+| 数据收集 | `scientist`（model=haiku） | haiku | 文件枚举、模式计数、简单查找 |
+| 标准分析 | `scientist` | sonnet | 代码分析、模式检测、文档审查 |
+| 复杂推理 | `scientist-high` | opus | 架构分析、横切关注点、假设验证 |
 
-### Routing Decision Guide
+### 路由决策指南
 
-| Research Task | Tier | Example Prompt |
+| 研究任务 | 层级 | 示例提示 |
 |---------------|------|----------------|
-| "Count occurrences of X" | LOW | "Count all usages of useState hook" |
-| "Find all files matching Y" | LOW | "List all test files in the project" |
-| "Analyze pattern Z" | MEDIUM | "Analyze error handling patterns in API routes" |
-| "Document how W works" | MEDIUM | "Document the authentication flow" |
-| "Explain why X happens" | HIGH | "Explain why race conditions occur in the cache layer" |
-| "Compare approaches A vs B" | HIGH | "Compare Redux vs Context for state management here" |
+| "统计 X 的出现次数" | LOW | "Count all usages of useState hook" |
+| "查找所有匹配 Y 的文件" | LOW | "List all test files in the project" |
+| "分析模式 Z" | MEDIUM | "Analyze error handling patterns in API routes" |
+| "记录 W 的工作方式" | MEDIUM | "Document the authentication flow" |
+| "解释为什么 X 发生" | HIGH | "Explain why race conditions occur in the cache layer" |
+| "比较方法 A 与 B" | HIGH | "Compare Redux vs Context for state management here" |
 
-### Verification Loop
+### 验证循环
 
-After parallel execution completes, verify findings:
+并行执行完成后，验证发现：
 
 ```
 // Cross-validation stage
@@ -117,11 +117,11 @@ Output: [VERIFIED] or [CONFLICTS:<list>]
 ")
 ```
 
-## AUTO Mode
+## AUTO 模式
 
-AUTO mode runs the complete research workflow autonomously with loop control.
+AUTO 模式通过循环控制自主运行完整研究工作流。
 
-### Loop Control Protocol
+### 循环控制协议
 
 ```
 [RESEARCH + AUTO - ITERATION {{ITERATION}}/{{MAX}}]
@@ -133,21 +133,21 @@ Completed stages: {{COMPLETED_STAGES}}
 Pending stages: {{PENDING_STAGES}}
 ```
 
-### Promise Tags
+### Promise 标签
 
-| Tag | Meaning | When to Use |
+| 标签 | 含义 | 使用时机 |
 |-----|---------|-------------|
-| `[PROMISE:RESEARCH_COMPLETE]` | Research finished successfully | All stages done, verified, report generated |
-| `[PROMISE:RESEARCH_BLOCKED]` | Cannot proceed | Missing data, access issues, circular dependency |
+| `[PROMISE:RESEARCH_COMPLETE]` | 研究成功完成 | 所有阶段完成、已验证、报告已生成 |
+| `[PROMISE:RESEARCH_BLOCKED]` | 无法继续 | 数据缺失、访问问题、循环依赖 |
 
-### AUTO Mode Rules
+### AUTO 模式规则
 
-1. **Max Iterations:** 10 (configurable)
-2. **Continue until:** Promise tag emitted OR max iterations
-3. **State tracking:** Persist after each stage completion
-4. **Cancellation:** `/ultrapower:cancel` or "stop", "cancel"
+1. **最大迭代次数：** 10（可配置）
+2. **继续直到：** 发出 Promise 标签或达到最大迭代次数
+3. **状态追踪：** 每个阶段完成后持久化
+4. **取消：** `/ultrapower:cancel` 或"stop"、"cancel"
 
-### AUTO Mode Example
+### AUTO 模式示例
 
 ```
 /ultrapower:sciomc AUTO: Comprehensive security analysis of the authentication system
@@ -172,11 +172,11 @@ Generating report...
 [PROMISE:RESEARCH_COMPLETE]
 ```
 
-## Parallel Execution Patterns
+## 并行执行模式
 
-### Independent Dataset Analysis (Parallel)
+### 独立数据集分析（并行）
 
-When stages analyze different data sources:
+当阶段分析不同数据源时：
 
 ```
 // All fire simultaneously
@@ -185,9 +185,9 @@ Task(subagent_type="ultrapower:scientist", model="haiku", prompt="[STAGE:2] Anal
 Task(subagent_type="ultrapower:scientist", model="haiku", prompt="[STAGE:3] Analyze src/components/...")
 ```
 
-### Hypothesis Battery (Parallel)
+### 假设组合（并行）
 
-When testing multiple hypotheses:
+测试多个假设时：
 
 ```
 // Test hypotheses simultaneously
@@ -196,9 +196,9 @@ Task(subagent_type="ultrapower:scientist", model="sonnet", prompt="[HYPOTHESIS:B
 Task(subagent_type="ultrapower:scientist", model="sonnet", prompt="[HYPOTHESIS:C] Test if lazy loading helps...")
 ```
 
-### Cross-Validation (Sequential)
+### 交叉验证（顺序）
 
-When verification depends on all findings:
+当验证依赖所有发现时：
 
 ```
 // Wait for all parallel stages
@@ -214,38 +214,38 @@ Validate consistency across all findings:
 ")
 ```
 
-### Concurrency Limit
+### 并发限制
 
-**Maximum 20 concurrent scientist agents** to prevent resource exhaustion.
+**最多 20 个并发 scientist agent** 以防止资源耗尽。
 
-If more than 20 stages, batch them:
+超过 20 个阶段时，分批处理：
 ```
 Batch 1: Stages 1-5 (parallel)
 [wait for completion]
 Batch 2: Stages 6-7 (parallel)
 ```
 
-## Session Management
+## Session 管理
 
-### Directory Structure
+### 目录结构
 
 ```
 .omc/research/{session-id}/
-  state.json              # Session state and progress
+  state.json              # Session 状态和进度
   stages/
-    stage-1.md            # Stage 1 findings
-    stage-2.md            # Stage 2 findings
+    stage-1.md            # 阶段 1 发现
+    stage-2.md            # 阶段 2 发现
     ...
   findings/
-    raw/                  # Raw findings from scientists
-    verified/             # Post-verification findings
+    raw/                  # scientist 的原始发现
+    verified/             # 验证后的发现
   figures/
-    figure-1.png          # Generated visualizations
+    figure-1.png          # 生成的可视化
     ...
-  report.md               # Final synthesized report
+  report.md               # 最终综合报告
 ```
 
-### State File Format
+### 状态文件格式
 
 ```json
 {
@@ -276,22 +276,22 @@ Batch 2: Stages 6-7 (parallel)
 }
 ```
 
-### Session Commands
+### Session 命令
 
-| Command | Action |
+| 命令 | 操作 |
 |---------|--------|
-| `/ultrapower:sciomc status` | Show current session progress |
-| `/ultrapower:sciomc resume` | Resume most recent interrupted session |
-| `/ultrapower:sciomc resume <session-id>` | Resume specific session |
-| `/ultrapower:sciomc list` | List all sessions with status |
-| `/ultrapower:sciomc report <session-id>` | Generate/regenerate report |
-| `/ultrapower:sciomc cancel` | Cancel current session (preserves state) |
+| `/ultrapower:sciomc status` | 显示当前 session 进度 |
+| `/ultrapower:sciomc resume` | 恢复最近中断的 session |
+| `/ultrapower:sciomc resume <session-id>` | 恢复指定 session |
+| `/ultrapower:sciomc list` | 列出所有 session 及状态 |
+| `/ultrapower:sciomc report <session-id>` | 生成/重新生成报告 |
+| `/ultrapower:sciomc cancel` | 取消当前 session（保留状态） |
 
-## Tag Extraction
+## 标签提取
 
-Scientists use structured tags for findings. Extract them with these patterns:
+Scientist 使用结构化标签记录发现。使用以下模式提取：
 
-### Finding Tags
+### 发现标签
 
 ```
 [FINDING:<id>] <title>
@@ -308,7 +308,7 @@ Scientists use structured tags for findings. Extract them with these patterns:
 <reasoning for confidence level>
 ```
 
-### Extraction Regex Patterns
+### 提取正则模式
 
 ```javascript
 // Finding extraction
@@ -327,9 +327,9 @@ const stageCompletePattern = /\[STAGE_COMPLETE:(\d+)\]/;
 const verificationPattern = /\[(VERIFIED|CONFLICTS):?(.*?)\]/;
 ```
 
-### Evidence Window
+### 证据窗口
 
-When extracting evidence, include context window:
+提取证据时包含上下文窗口：
 
 ```
 [EVIDENCE:F1]
@@ -342,20 +342,20 @@ When extracting evidence, include context window:
 [/EVIDENCE]
 ```
 
-### Quality Validation
+### 质量验证
 
-Findings must meet quality threshold:
+发现必须满足质量阈值：
 
-| Quality Check | Requirement |
+| 质量检查 | 要求 |
 |---------------|-------------|
-| Evidence present | At least 1 [EVIDENCE] per [FINDING] |
-| Confidence stated | Each finding has [CONFIDENCE] |
-| Source cited | File paths are absolute and valid |
-| Reproducible | Another agent could verify |
+| 存在证据 | 每个 [FINDING] 至少 1 个 [EVIDENCE] |
+| 已说明置信度 | 每个发现有 [CONFIDENCE] |
+| 已引用来源 | 文件路径为绝对路径且有效 |
+| 可重现 | 另一个 agent 可以验证 |
 
-## Report Generation
+## 报告生成
 
-### Report Template
+### 报告模板
 
 ```markdown
 # Research Report: {{GOAL}}
@@ -425,9 +425,9 @@ Findings must meet quality threshold:
 {{Link to state.json}}
 ```
 
-### Figure Embedding Protocol
+### 图表嵌入协议
 
-Scientists generate visualizations using this marker:
+Scientist 使用此标记生成可视化：
 
 ```
 [FIGURE:path/to/figure.png]
@@ -436,7 +436,7 @@ Alt: Accessibility description
 [/FIGURE]
 ```
 
-Report generator embeds figures:
+报告生成器嵌入图表：
 
 ```markdown
 ## Visualizations
@@ -448,19 +448,19 @@ Report generator embeds figures:
 *Caption: Description of what the figure shows*
 ```
 
-### Figure Types
+### 图表类型
 
-| Type | Use For | Generated By |
+| 类型 | 用途 | 生成者 |
 |------|---------|--------------|
-| Architecture diagram | System structure | scientist-high |
-| Flow chart | Process flows | scientist |
-| Dependency graph | Module relationships | scientist |
-| Timeline | Sequence of events | scientist |
-| Comparison table | A vs B analysis | scientist |
+| 架构图 | 系统结构 | scientist-high |
+| 流程图 | 流程流向 | scientist |
+| 依赖图 | 模块关系 | scientist |
+| 时间线 | 事件序列 | scientist |
+| 对比表 | A vs B 分析 | scientist |
 
-## Configuration
+## 配置
 
-Optional settings in `.claude/settings.json`:
+`.claude/settings.json` 中的可选设置：
 
 ```json
 {
@@ -477,34 +477,34 @@ Optional settings in `.claude/settings.json`:
 }
 ```
 
-## Cancellation
+## 取消
 
 ```
 /ultrapower:cancel
 ```
 
-Or say: "stop research", "cancel research", "abort"
+或说："stop research"、"cancel research"、"abort"
 
-Progress is preserved in `.omc/research/{session-id}/` for resume.
+进度保存在 `.omc/research/{session-id}/` 中以供恢复。
 
-## Troubleshooting
+## 故障排除
 
-**Stuck in verification loop?**
-- Check for conflicting findings between stages
-- Review state.json for specific conflicts
-- May need to re-run specific stages with different approach
+**卡在验证循环中？**
+- 检查阶段间是否有冲突发现
+- 查看 state.json 中的具体冲突
+- 可能需要用不同方法重新运行特定阶段
 
-**Scientists returning low-quality findings?**
-- Check tier assignment - complex analysis needs HIGH tier
-- Ensure prompts include clear scope and expected output format
-- Review if research goal is too broad
+**Scientist 返回低质量发现？**
+- 检查层级分配——复杂分析需要 HIGH 层
+- 确保提示包含清晰的范围和预期输出格式
+- 检查研究目标是否过于宽泛
 
-**AUTO mode exhausted iterations?**
-- Review state to see where it's stuck
-- Check if goal is achievable with available data
-- Consider breaking into smaller research sessions
+**AUTO 模式耗尽迭代次数？**
+- 查看状态以了解卡在哪里
+- 检查目标是否可以用现有数据实现
+- 考虑拆分为更小的研究 session
 
-**Missing figures in report?**
-- Verify figures/ directory exists
-- Check [FIGURE:] tags in findings
-- Ensure paths are relative to session directory
+**报告中缺少图表？**
+- 验证 figures/ 目录是否存在
+- 检查发现中的 [FIGURE:] 标签
+- 确保路径相对于 session 目录

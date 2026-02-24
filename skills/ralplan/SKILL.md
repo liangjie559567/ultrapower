@@ -1,34 +1,34 @@
 ---
 name: ralplan
-description: Alias for /plan --consensus
+description: /plan --consensus 的别名
 ---
 
-# Ralplan (Consensus Planning Alias)
+# Ralplan（共识规划别名）
 
-Ralplan is a shorthand alias for `/ultrapower:plan --consensus`. It triggers iterative planning with Planner, Architect, and Critic agents until consensus is reached.
+Ralplan 是 `/ultrapower:plan --consensus` 的简写别名。它触发 Planner、Architect 和 Critic agent 的迭代规划，直到达成共识。
 
-## Usage
+## 用法
 
 ```
 /ultrapower:ralplan "task description"
 ```
 
-## Behavior
+## 行为
 
-This skill invokes the Plan skill in consensus mode:
+此 skill 以共识模式调用 Plan skill：
 
 ```
 /ultrapower:plan --consensus <arguments>
 ```
 
-The consensus workflow:
+共识工作流：
 1. **Planner** creates initial plan
-2. **User feedback**: **MUST** use `AskUserQuestion` to present the draft plan before review (Proceed to review / Request changes / Skip review)
-3. **Architect** reviews for architectural soundness
-4. **Critic** evaluates against quality criteria
-5. If Critic rejects: iterate with feedback (max 5 iterations)
-6. On Critic approval: **MUST** use `AskUserQuestion` to present the plan with approval options
-7. User chooses: Approve, Request changes, or Reject
-8. On approval: **MUST** invoke `Skill("ultrapower:ralph")` for execution -- never implement directly
+2. **User feedback**：**MUST** use `AskUserQuestion` to present draft plan before review（Proceed to review / Request changes / Skip review）
+3. **Architect** reviews architectural soundness
+4. **Critic** evaluates against quality standards
+5. 如果 Critic 拒绝：结合反馈迭代（最多 5 次）
+6. Critic 批准后：**必须**使用 `AskUserQuestion` 展示计划并提供批准选项
+7. 用户选择：批准、请求修改或拒绝
+8. 批准后：**必须**调用 `Skill("ultrapower:ralph")` 执行——绝不直接实施
 
-Follow the Plan skill's full documentation for consensus mode details.
+共识模式详情请参阅 Plan skill 的完整文档。

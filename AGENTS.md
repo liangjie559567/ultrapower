@@ -1,0 +1,385 @@
+<!-- Generated: 2026-01-28 | Updated: 2026-02-24 -->
+
+# ultrapower
+
+严格的多智能体编排：工作流强制执行 + 并行执行
+
+**版本：** 5.0.0
+**用途：** 将 Claude Code 转变为专业 AI 智能体的指挥者
+**灵感来源：** oh-my-zsh / oh-my-opencode
+
+## 用途
+
+ultrapower 为 Claude Code 提供以下增强功能：
+
+- **30 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
+- **54 个 skills**，用于工作流自动化和专业行为
+- **34 个 hooks**，用于事件驱动的执行模式和增强功能
+- **15 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
+- **执行模式**：autopilot、ultrawork、ralph、ultrapilot、swarm、pipeline
+- **MCP 集成**，支持插件范围的工具发现和 skill 加载
+
+## 关键文件
+
+| 文件 | 描述 |
+|------|-------------|
+| `package.json` | 项目依赖和 npm 脚本 |
+| `tsconfig.json` | TypeScript 配置 |
+| `CHANGELOG.md` | 版本历史和发布说明 |
+| `docs/CLAUDE.md` | 终端用户编排说明（安装到用户项目） |
+| `src/index.ts` | 主入口点 - 导出 `createSisyphusSession()` |
+| `.mcp.json` | 用于插件发现的 MCP 服务器配置 |
+| `.claude-plugin/plugin.json` | Claude Code 插件清单 |
+
+## 子目录
+
+| 目录 | 用途 | 相关 AGENTS.md |
+|-----------|---------|-------------------|
+| `src/` | TypeScript 源代码 - 核心库 | `src/AGENTS.md` |
+| `agents/` | 30 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
+| `skills/` | 54 个工作流 skill 定义 | `skills/AGENTS.md` |
+| `commands/` | 54 个斜杠命令定义（与 skills 对应） | - |
+| `scripts/` | 构建脚本、工具和自动化 | - |
+| `docs/` | 用户文档和指南 | `docs/AGENTS.md` |
+| `templates/` | Hook 和规则模板（coding-style、testing、security、performance、git-workflow） | - |
+| `benchmark/` | 性能测试框架 | - |
+| `bridge/` | 用于插件分发的预打包 MCP 服务器 | - |
+
+## 面向 AI 智能体
+
+### 在此目录中工作
+
+1. **委托优先协议**：你是指挥者，而非执行者。将实质性工作委托出去：
+
+   | 工作类型 | 委托给 | 模型 |
+   |-----------|-------------|-------|
+   | 代码变更 | `executor` / `executor-low` / `executor-high` | sonnet/haiku/opus |
+   | 分析 | `architect` / `architect-medium` / `architect-low` | opus/sonnet/haiku |
+   | 搜索 | `explore` / `explore-high` | haiku/opus |
+   | UI/UX | `designer` / `designer-low` / `designer-high` | sonnet/haiku/opus |
+   | 文档 | `writer` | haiku |
+   | 安全 | `security-reviewer` / `security-reviewer-low` | opus/haiku |
+   | 构建错误 | `build-fixer` | sonnet |
+   | 测试 | `qa-tester` | sonnet |
+   | 代码审查 | `code-reviewer` | opus |
+   | TDD | `test-engineer` | sonnet |
+   | 数据分析 | `scientist` / `scientist-high` | sonnet/opus |
+
+2. **LSP/AST 工具**：使用类 IDE 工具进行代码智能分析：
+   - `lsp_hover` - 指定位置的类型信息和文档
+   - `lsp_goto_definition` - 跳转到符号定义
+   - `lsp_find_references` - 查找代码库中的所有用法
+   - `lsp_document_symbols` - 获取文件大纲
+   - `lsp_workspace_symbols` - 跨工作区搜索符号
+   - `lsp_diagnostics` - 获取单个文件的错误/警告
+   - `lsp_diagnostics_directory` - 项目级类型检查（使用 tsc 或 LSP）
+   - `lsp_rename` - 预览跨文件重构
+   - `lsp_code_actions` - 获取可用的快速修复
+   - `ast_grep_search` - 使用模式进行结构化代码搜索
+   - `ast_grep_replace` - AST 感知的代码转换
+   - `python_repl` - 执行 Python 代码进行数据分析
+
+3. **模型路由**：根据任务复杂度匹配模型层级：
+   - **Haiku**（低）：简单查找、简单修复、快速搜索
+   - **Sonnet**（中）：标准实现、中等推理
+   - **Opus**（高）：复杂推理、架构设计、调试
+
+### 修改检查清单
+
+#### 跨文件依赖
+
+| 如果你修改了... | 还需检查/更新... |
+|------------------|---------------------|
+| `agents/*.md` | `src/agents/definitions.ts`、`src/agents/index.ts`、`docs/REFERENCE.md` |
+| `skills/*/SKILL.md` | `commands/*.md`（镜像）、`scripts/build-skill-bridge.mjs` |
+| `commands/*.md` | `skills/*/SKILL.md`（镜像） |
+| `src/hooks/*` | `src/hooks/index.ts`、`src/hooks/bridge.ts`、相关 skill/command |
+| 智能体提示 | 分层变体（`-low`、`-medium`、`-high`） |
+| 工具定义 | `src/tools/index.ts`、`src/mcp/omc-tools-server.ts`、`docs/REFERENCE.md` |
+| `src/hud/*` | `commands/hud.md`、`skills/hud/SKILL.md` |
+| `src/mcp/*` | `docs/REFERENCE.md`（MCP 工具部分） |
+| 智能体工具分配 | `docs/CLAUDE.md`（智能体工具矩阵） |
+| `templates/rules/*` | `src/hooks/rules-injector/`（如果模式发生变化） |
+| 新执行模式 | `src/hooks/*/`、`skills/*/SKILL.md`、`commands/*.md`（三者都需更新） |
+
+#### 文档更新（docs/）
+
+| 如果你修改了... | 更新此 docs/ 文件 |
+|------------------|----------------------|
+| 智能体数量或列表 | `docs/REFERENCE.md`（智能体部分） |
+| skill 数量或列表 | `docs/REFERENCE.md`（Skills 部分） |
+| hook 数量或列表 | `docs/REFERENCE.md`（Hooks 系统部分） |
+| 魔法关键词 | `docs/REFERENCE.md`（魔法关键词部分） |
+| 架构或 skill 组合 | `docs/ARCHITECTURE.md` |
+| 内部 API 或功能 | `docs/FEATURES.md` |
+| 破坏性变更 | `docs/MIGRATION.md` |
+| 分层智能体设计 | `docs/TIERED_AGENTS_V2.md` |
+| 兼容性要求 | `docs/COMPATIBILITY.md` |
+| CLAUDE.md 内容 | `docs/CLAUDE.md`（终端用户说明） |
+
+#### Skills ↔ Commands 关系
+
+- `skills/` 包含带有完整提示的 skill 实现
+- `commands/` 包含调用 skills 的斜杠命令定义
+- 两者应保持同步以实现相同功能
+
+#### AGENTS.md 更新要求
+
+当你修改以下位置的文件时，更新对应的 AGENTS.md：
+
+| 如果你修改了... | 更新此 AGENTS.md |
+|------------------|----------------------|
+| 根项目结构、新功能 | `/AGENTS.md`（本文件） |
+| `src/**/*.ts` 结构或新模块 | `src/AGENTS.md` |
+| `agents/*.md` 文件 | `src/agents/AGENTS.md`（实现细节） |
+| `skills/*/` 目录 | `skills/AGENTS.md` |
+| `src/hooks/*/` 目录 | `src/hooks/AGENTS.md` |
+| `src/tools/**/*.ts` | `src/tools/AGENTS.md` |
+| `src/features/*/` 模块 | `src/features/AGENTS.md` |
+| `src/tools/lsp/` | `src/tools/lsp/AGENTS.md` |
+| `src/tools/diagnostics/` | `src/tools/diagnostics/AGENTS.md` |
+| `src/agents/*.ts` | `src/agents/AGENTS.md` |
+
+#### 需要更新的内容
+
+- 发布时更新版本号
+- 功能变更时更新功能描述
+- 结构变更时更新文件/目录表格
+- 保留"Generated"日期不变，更新"Updated"日期
+
+### 测试要求
+
+```bash
+npm test              # 运行 Vitest 测试套件
+npm run build         # TypeScript 编译
+npm run lint          # ESLint 检查
+npm run test:coverage # 覆盖率报告
+```
+
+### 常见模式
+
+```typescript
+// 入口点
+import { createSisyphusSession } from 'ultrapower';
+const session = createSisyphusSession();
+
+// 智能体注册
+import { getAgentDefinitions } from './agents/definitions';
+const agents = getAgentDefinitions();
+
+// 工具访问
+import { allCustomTools, lspTools, astTools } from './tools';
+```
+
+## 架构概览
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Claude Code CLI                          │
+├─────────────────────────────────────────────────────────────┤
+│                  ultrapower                                 │
+│  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
+│  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
+│  │ (54 skills) │ (30 agents) │(LSP/AST/REPL)│ (34 hooks)  │  │
+│  └─────────────┴─────────────┴─────────────┴─────────────┘  │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │              Features Layer                             ││
+│  │ model-routing | boulder-state | verification | notepad  ││
+│  │ delegation-categories | task-decomposer | state-manager ││
+│  └─────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 智能体概览（共 30 个）
+
+### 基础智能体（12 个）
+
+| 智能体 | 模型 | 用途 |
+|-------|-------|---------|
+| architect | opus | 架构设计、调试、根因分析 |
+| document-specialist | sonnet | 文档、外部 API 研究 |
+| explore | haiku | 快速代码库模式搜索 |
+| executor | sonnet | 专注任务实现 |
+| designer | sonnet | UI/UX、组件设计 |
+| writer | haiku | 技术文档编写 |
+| vision | sonnet | 图像/截图分析 |
+| critic | opus | 批判性计划审查 |
+| analyst | opus | 规划前需求分析 |
+| planner | opus | 带访谈的战略规划 |
+| qa-tester | sonnet | 交互式 CLI/服务测试 |
+| scientist | sonnet | 数据分析、假设验证 |
+
+### 专业智能体（18 个）
+
+| 智能体 | 模型 | 用途 |
+|-------|-------|---------|
+| security-reviewer | opus | 安全漏洞检测和审计 |
+| build-fixer | sonnet | 构建/类型错误修复（多语言） |
+| test-engineer | sonnet | 测试驱动开发工作流 |
+| code-reviewer | opus | 专家代码审查和质量评估 |
+| api-reviewer | sonnet | API 契约、版本控制、向后兼容性 |
+| debugger | sonnet | 根因分析、回归隔离 |
+| deep-executor | opus | 复杂的自主目标导向任务 |
+| dependency-expert | sonnet | 外部 SDK/API/包评估 |
+| information-architect | sonnet | 分类法、导航、可发现性 |
+| performance-reviewer | sonnet | 热点、复杂度、内存/延迟优化 |
+| product-analyst | sonnet | 产品指标、漏斗分析、实验 |
+| product-manager | sonnet | 问题框架、用户画像/JTBD、PRD |
+| quality-reviewer | sonnet | 逻辑缺陷、可维护性、反模式 |
+| quality-strategist | sonnet | 质量策略、发布就绪性、风险评估 |
+| style-reviewer | haiku | 格式化、命名、惯用法、lint 规范 |
+| ux-researcher | sonnet | 启发式审计、可用性、无障碍性 |
+| verifier | sonnet | 完成证据、声明验证、测试充分性 |
+| git-master | sonnet | 提交策略、历史整洁度 |
+
+### 分层变体（无独立文件——通过 `model` 参数传递模型）
+
+所有智能体均支持通过 Task 调用中的 `model` 参数进行模型路由：
+- `haiku`：快速查找、轻量扫描
+- `sonnet`：标准实现、调试、审查
+- `opus`：架构设计、深度分析、复杂重构
+
+## 执行模式
+
+| 模式 | 触发词 | 用途 |
+|------|---------|---------|
+| autopilot | "autopilot"、"build me"、"I want a" | 完全自主执行 |
+| ultrawork | "ulw"、"ultrawork" | 最大并行智能体执行 |
+| ralph | "ralph"、"don't stop until" | 持续执行直到 architect 验证通过 |
+| ultrapilot | "ultrapilot"、"parallel build" | 带文件所有权的并行 autopilot |
+| swarm | "swarm N agents" | N 个协调智能体，使用 SQLite 任务认领 |
+| pipeline | "pipeline" | 带数据传递的顺序智能体链 |
+
+## Skills（54 个）
+
+关键 skills：`autopilot`、`ultrawork`、`ralph`、`ultrapilot`、`plan`、`ralplan`、`deepsearch`、`deepinit`、`frontend-ui-ux`、`git-master`、`tdd`、`security-review`、`code-review`、`sciomc`、`external-context`、`analyze`、`swarm`、`pipeline`、`cancel`、`learner`、`note`、`hud`、`doctor`、`omc-setup`、`mcp-setup`、`build-fix`、`ultraqa`、`team`、`writer-memory`、`ralph-init`、`learn-about-omc`、`skill`、`trace`、`release`、`project-session-manager`
+
+### Superpowers Skill 系统
+
+`superpowers/` skill 集合为高级工作流提供结构化指导：
+
+| Skill | 用途 |
+|-------|---------|
+| `brainstorming` | 结构化创意探索 |
+| `systematic-debugging` | 逐步根因分析 |
+| `test-driven-development` | 红-绿-重构工作流 |
+| `writing-plans` | 计划编写最佳实践 |
+| `writing-skills` | Skill 定义编写 |
+| `using-superpowers` | superpowers 系统概览 |
+| `using-git-worktrees` | 使用 git worktrees 并行工作 |
+| `verification-before-completion` | 基于证据的完成检查 |
+| `requesting-code-review` | 如何请求有效的代码审查 |
+| `receiving-code-review` | 如何处理审查反馈 |
+| `dispatching-parallel-agents` | 并行智能体编排模式 |
+| `executing-plans` | 计划执行纪律 |
+| `finishing-a-development-branch` | 分支完成检查清单 |
+| `subagent-driven-development` | 委托优先的开发工作流 |
+
+## LSP/AST 工具
+
+### LSP 工具
+
+```typescript
+// 通过语言服务器协议实现类 IDE 代码智能
+lsp_hover              // 指定位置的类型信息
+lsp_goto_definition    // 跳转到定义
+lsp_find_references    // 查找所有用法
+lsp_document_symbols   // 文件大纲
+lsp_workspace_symbols  // 跨工作区符号搜索
+lsp_diagnostics        // 单文件错误/警告
+lsp_diagnostics_directory  // 项目级类型检查
+lsp_servers            // 列出可用语言服务器
+lsp_prepare_rename     // 检查重命名是否有效
+lsp_rename             // 预览多文件重命名
+lsp_code_actions       // 可用的重构/修复
+lsp_code_action_resolve // 获取操作详情
+```
+
+#### 支持的语言
+
+TypeScript、Python、Rust、Go、C/C++、Java、JSON、HTML、CSS、YAML
+
+### AST 工具
+
+```typescript
+// 通过 ast-grep 进行结构化代码搜索/转换
+ast_grep_search   // 使用元变量（$NAME、$$$ARGS）进行模式匹配
+ast_grep_replace  // AST 感知的代码转换（默认为 dry-run）
+```
+
+#### 支持的语言
+
+JavaScript、TypeScript、TSX、Python、Ruby、Go、Rust、Java、Kotlin、Swift、C、C++、C#、HTML、CSS、JSON、YAML
+
+## 状态文件
+
+| 路径 | 用途 |
+|------|---------|
+| `.omc/state/*.json` | 执行模式状态（autopilot、swarm 等） |
+| `.omc/notepads/` | 计划范围的经验（学习、决策、问题） |
+| `~/.omc/state/` | 全局状态 |
+| `~/.claude/.omc/` | 旧版状态（自动迁移） |
+
+## 依赖
+
+### 运行时
+
+| 包 | 用途 |
+|---------|---------|
+| `@anthropic-ai/claude-agent-sdk` | Claude Code 集成 |
+| `@ast-grep/napi` | 基于 AST 的代码搜索/替换 |
+| `vscode-languageserver-protocol` | LSP 类型 |
+| `zod` | 运行时 schema 验证 |
+| `better-sqlite3` | Swarm 任务协调 |
+| `chalk` | 终端样式 |
+| `commander` | CLI 解析 |
+
+### 开发
+
+| 包 | 用途 |
+|---------|---------|
+| `typescript` | 类型系统 |
+| `vitest` | 测试框架 |
+| `eslint` | 代码检查 |
+| `prettier` | 代码格式化 |
+
+## 命令
+
+```bash
+npm run build           # 构建 TypeScript + skill bridge
+npm run dev             # 监听模式
+npm test                # 运行测试
+npm run test:coverage   # 覆盖率报告
+npm run lint            # ESLint
+npm run sync-metadata   # 同步智能体/skill 元数据
+```
+
+## Hook 系统（34 个）
+
+`src/hooks/` 中的关键 hooks：
+
+- `autopilot/` - 完全自主执行
+- `ralph/` - 持续执行直到验证通过
+- `ultrawork/` - 并行执行
+- `ultrapilot/` - 带所有权的并行 autopilot
+- `swarm/` - 协调多智能体
+- `learner/` - Skill 提取
+- `recovery/` - 错误恢复
+- `rules-injector/` - 规则文件注入
+- `think-mode/` - 增强推理
+
+## 配置
+
+`~/.claude/.omc-config.json` 中的设置：
+
+```json
+{
+  "defaultExecutionMode": "ultrawork",
+  "mcpServers": {
+    "context7": { "enabled": true },
+    "exa": { "enabled": true, "apiKey": "..." }
+  }
+}
+```
+
+<!-- MANUAL: Project-specific notes below this line are preserved on regeneration -->

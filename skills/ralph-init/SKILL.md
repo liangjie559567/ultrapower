@@ -1,38 +1,38 @@
 ---
 name: ralph-init
-description: Initialize a PRD (Product Requirements Document) for structured ralph-loop execution
+description: 初始化 PRD（产品需求文档）以进行结构化 ralph 循环执行
 ---
 
 # Ralph Init
 
-Initialize a PRD (Product Requirements Document) for structured ralph-loop execution. Creates a structured requirements document that Ralph can use for goal-driven iteration.
+初始化 PRD（产品需求文档）以进行结构化 ralph 循环执行。创建结构化需求文档，供 Ralph 用于目标驱动的迭代。
 
-## Usage
+## 用法
 
 ```
 /ultrapower:ralph-init "project or feature description"
 ```
 
-## Behavior
+## 行为
 
-1. **Gather requirements** via interactive interview or from the provided description
-2. **Create PRD** at `.omc/plans/prd-{slug}.md` with:
-   - Problem statement
-   - Goals and non-goals
-   - Acceptance criteria (testable)
-   - Technical constraints
-   - Implementation phases
-3. **Link to Ralph** so that `/ultrapower:ralph` can use the PRD as its completion criteria
+1. **收集需求**：通过交互式访谈或从提供的描述中获取
+2. **创建 PRD**，保存到 `.omc/plans/prd-{slug}.md`，包含：
+   - 问题陈述
+   - 目标与非目标
+   - 验收标准（可测试）
+   - 技术约束
+   - 实施阶段
+3. **关联到 Ralph**，使 `/ultrapower:ralph` 可以将 PRD 作为完成标准
 
-## Output
+## 输出
 
-A structured PRD file saved to `.omc/plans/` that serves as the definition of done for Ralph execution.
+保存到 `.omc/plans/` 的结构化 PRD 文件，作为 Ralph 执行的完成定义。
 
-## Next Steps
+## 后续步骤
 
-After creating the PRD, start execution with:
+创建 PRD 后，使用以下命令开始执行：
 ```
 /ultrapower:ralph "implement the PRD"
 ```
 
-Ralph will iterate until all acceptance criteria in the PRD are met and architect-verified.
+Ralph 将持续迭代，直到 PRD 中的所有验收标准均已满足并经过 architect 验证。

@@ -38,7 +38,8 @@ describe('Agent Registry Validation', () => {
   test('no hardcoded prompts in base agent .ts files', () => {
     const baseAgents = ['architect', 'executor', 'explore', 'designer', 'document-specialist',
                         'writer', 'vision', 'planner', 'critic', 'analyst', 'scientist', 'qa-tester'];
-    const agentsDir = path.join(__dirname, '../agents');
+    const agentsDirDirect = path.join(__dirname, '../agents');
+    const agentsDir = fs.existsSync(path.join(agentsDirDirect, 'architect.ts')) ? agentsDirDirect : agentsDirDirect.replace(/[\\/]dist[\\/]/, '/src/');
     for (const name of baseAgents) {
       const content = fs.readFileSync(path.join(agentsDir, `${name}.ts`), 'utf-8');
       expect(content, `Hardcoded prompt found in ${name}.ts`).not.toMatch(/const\s+\w+_PROMPT\s*=\s*`/);

@@ -1,20 +1,20 @@
 ---
 name: psm
-description: Project Session Manager - isolated dev environments with git worktrees and tmux
+description: Project Session Manager - 使用 git worktree 和 tmux 管理隔离开发环境
 ---
 
-# PSM (Project Session Manager Alias)
+# PSM（Project Session Manager 别名）
 
-PSM is a shorthand alias for `/ultrapower:project-session-manager`.
+PSM 是 `/ultrapower:project-session-manager` 的简写别名。
 
-## Usage
+## 用法
 
 ```
 /ultrapower:psm <arguments>
 ```
 
-## Behavior
+## 行为
 
-This skill is identical to `/ultrapower:project-session-manager`. Invoke the Project Session Manager skill with the same arguments.
+此 skill 与 `/ultrapower:project-session-manager` 完全相同。使用相同的参数调用 Project Session Manager skill。
 
-Follow the Project Session Manager skill's full documentation for worktree management, tmux session handling, and template usage.
+请参阅 Project Session Manager skill 的完整文档，了解 worktree 管理、tmux 会话处理和模板使用。
