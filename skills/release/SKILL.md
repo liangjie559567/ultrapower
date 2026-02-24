@@ -81,3 +81,10 @@ gh release create v<version> --title "v<version> - <title>" --notes "<release no
 - 发布前始终运行测试
 - 创建总结变更的发布说明
 - 插件市场从 GitHub releases 自动同步
+
+## 路由触发
+
+发布流程完成后调用 `next-step-router`：
+- current_skill: "release"
+- stage: "release_complete"
+- output_summary: 发布版本号、发布渠道、是否有回滚计划
