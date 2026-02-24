@@ -12,9 +12,9 @@
 
 ultrapower 为 Claude Code 提供以下增强功能：
 
-- **38 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
-- **67 个 skills**，用于工作流自动化和专业行为
-- **35 个 hooks**，用于事件驱动的执行模式和增强功能
+- **44 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
+- **69 个 skills**，用于工作流自动化和专业行为
+- **38 个 hooks**，用于事件驱动的执行模式和增强功能
 - **15 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
 - **执行模式**：autopilot、ultrawork、ralph、ultrapilot、swarm、pipeline
 - **MCP 集成**，支持插件范围的工具发现和 skill 加载
@@ -36,9 +36,9 @@ ultrapower 为 Claude Code 提供以下增强功能：
 | 目录 | 用途 | 相关 AGENTS.md |
 |-----------|---------|-------------------|
 | `src/` | TypeScript 源代码 - 核心库 | `src/AGENTS.md` |
-| `agents/` | 38 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
-| `skills/` | 67 个工作流 skill 定义 | `skills/AGENTS.md` |
-| `commands/` | 67 个斜杠命令定义（与 skills 对应） | - |
+| `agents/` | 44 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
+| `skills/` | 69 个工作流 skill 定义 | `skills/AGENTS.md` |
+| `commands/` | 69 个斜杠命令定义（与 skills 对应） | - |
 | `scripts/` | 构建脚本、工具和自动化 | - |
 | `docs/` | 用户文档和指南 | `docs/AGENTS.md` |
 | `templates/` | Hook 和规则模板（coding-style、testing、security、performance、git-workflow） | - |
@@ -179,7 +179,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 │                  ultrapower                                 │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
 │  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
-│  │ (67 skills) │ (38 agents) │(LSP/AST/REPL)│ (35 hooks)  │  │
+│  │ (69 skills) │ (44 agents) │(LSP/AST/REPL)│ (38 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │              Features Layer                             ││
@@ -189,7 +189,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 智能体概览（共 38 个）
+## 智能体概览（共 44 个）
 
 ### Build/Analysis Lane（8 个）
 
@@ -251,6 +251,25 @@ import { allCustomTools, lspTools, astTools } from './tools';
 - `researcher` -> `document-specialist`
 - `tdd-guide` -> `test-engineer`
 
+### Axiom Lane（14 个）
+
+| 智能体 | 模型 | 用途 |
+|-------|-------|---------|
+| axiom-requirement-analyst | sonnet | 需求分析三态门（PASS/CLARIFY/REJECT） |
+| axiom-product-designer | sonnet | Draft PRD 生成，含 Mermaid 流程图 |
+| axiom-review-aggregator | sonnet | 5 专家并行审查聚合与冲突仲裁 |
+| axiom-prd-crafter | sonnet | 工程级 PRD，含门控验证 |
+| axiom-system-architect | sonnet | 原子任务 DAG 与 Manifest 生成 |
+| axiom-evolution-engine | sonnet | 知识收割、模式检测、工作流优化 |
+| axiom-context-manager | sonnet | 7 操作记忆系统（读/写/状态/检查点） |
+| axiom-worker | sonnet | PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED） |
+| axiom-ux-director | sonnet | UX/体验专家评审，输出 review_ux.md |
+| axiom-product-director | sonnet | 产品战略专家评审，输出 review_product.md |
+| axiom-domain-expert | sonnet | 领域知识专家评审，输出 review_domain.md |
+| axiom-tech-lead | sonnet | 技术可行性评审，输出 review_tech.md |
+| axiom-critic | sonnet | 安全/质量/逻辑评审，输出 review_critic.md |
+| axiom-sub-prd-writer | sonnet | 将 Manifest 任务拆解为可执行 Sub-PRD |
+
 
 ## 执行模式
 
@@ -263,9 +282,9 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | swarm | "swarm N agents" | N 个协调智能体，使用 SQLite 任务认领 |
 | pipeline | "pipeline" | 带数据传递的顺序智能体链 |
 
-## Skills（67 个）
+## Skills（69 个）
 
-关键 skills：`autopilot`、`ultrawork`、`ralph`、`ultrapilot`、`plan`、`ralplan`、`deepsearch`、`deepinit`、`frontend-ui-ux`、`git-master`、`tdd`、`security-review`、`code-review`、`sciomc`、`external-context`、`analyze`、`swarm`、`pipeline`、`cancel`、`learner`、`note`、`hud`、`doctor`、`omc-setup`、`mcp-setup`、`build-fix`、`ultraqa`、`team`、`writer-memory`、`ralph-init`、`learn-about-omc`、`skill`、`trace`、`release`、`project-session-manager`
+关键 skills：`autopilot`、`ultrawork`、`ralph`、`ultrapilot`、`plan`、`ralplan`、`deepsearch`、`deepinit`、`frontend-ui-ux`、`git-master`、`tdd`、`security-review`、`code-review`、`sciomc`、`external-context`、`analyze`、`swarm`、`pipeline`、`cancel`、`learner`、`note`、`hud`、`doctor`、`omc-setup`、`mcp-setup`、`build-fix`、`ultraqa`、`team`、`writer-memory`、`ralph-init`、`learn-about-omc`、`skill`、`trace`、`release`、`project-session-manager`、`next-step-router`、`ax-draft`、`ax-review`、`ax-decompose`、`ax-implement`、`ax-reflect`、`ax-rollback`、`ax-status`、`ax-suspend`、`ax-knowledge`、`ax-export`
 
 ### Superpowers Skill 系统
 
@@ -287,6 +306,26 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | `executing-plans` | 计划执行纪律 |
 | `finishing-a-development-branch` | 分支完成检查清单 |
 | `subagent-driven-development` | 委托优先的开发工作流 |
+| `next-step-router` | 关键节点路由，推荐最优下一步 skill/agent |
+
+### Axiom Skill 系统
+
+| Skill | 用途 |
+|-------|---------|
+| `ax-draft` | 生成 Draft PRD（需求起草） |
+| `ax-review` | 5 专家并行评审 + 冲突仲裁 |
+| `ax-decompose` | 将需求分解为原子任务 DAG |
+| `ax-implement` | 执行 Axiom 任务实现流水线 |
+| `ax-analyze-error` | 分析错误并生成修复方案 |
+| `ax-reflect` | 任务完成后反思与知识收割 |
+| `ax-rollback` | 回滚到上一个检查点 |
+| `ax-status` | 查看 Axiom 工作流状态 |
+| `ax-suspend` | 挂起当前工作流并保存状态 |
+| `ax-knowledge` | 查询 Axiom 知识库 |
+| `ax-export` | 导出 Axiom 工作流产物 |
+| `ax-context` | 加载/保存 Axiom 上下文快照 |
+| `ax-evolution` | 查看知识演化历史 |
+| `ax-evolve` | 触发知识收割与工作流优化 |
 
 ## LSP/AST 工具
 
@@ -367,7 +406,7 @@ npm run lint            # ESLint
 npm run sync-metadata   # 同步智能体/skill 元数据
 ```
 
-## Hook 系统（35 个）
+## Hook 系统（38 个）
 
 `src/hooks/` 中的关键 hooks：
 

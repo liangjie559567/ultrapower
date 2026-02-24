@@ -1,6 +1,6 @@
 # ultrapower
 
-ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **38 个专业 agents**、**67 个 skills** 和完整的 TypeScript hooks 系统。
+ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **44 个专业 agents**、**69 个 skills** 和完整的 TypeScript hooks 系统。
 
 ## 核心能力
 
@@ -45,7 +45,7 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 ---
 
-## Agents（38 个）
+## Agents（44 个）
 
 ### 构建/分析通道
 
@@ -106,18 +106,24 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 | Agent | 模型 | 用途 |
 |-------|------|------|
-| `ultrapower:analyst` | opus | 规划前顾问，需求分析 |
-| `ultrapower:architect` | opus | 战略架构与调试顾问（只读） |
-| `ultrapower:critic` | opus | 工作计划审查专家 |
-| `ultrapower:deep-executor` | opus | 复杂目标任务自主执行 |
-| `ultrapower:planner` | opus | 带访谈工作流的战略规划 |
-| `ultrapower:designer` | sonnet | UI/UX 设计开发者 |
-| `ultrapower:scientist` | sonnet | 数据分析和研究执行 |
-| `ultrapower:vision` | sonnet | 图像/PDF/图表视觉分析 |
+| `axiom-requirement-analyst` | sonnet | 需求分析三态门（PASS/CLARIFY/REJECT） |
+| `axiom-product-designer` | sonnet | Draft PRD 生成，含 Mermaid 流程图 |
+| `axiom-review-aggregator` | sonnet | 5 专家并行审查聚合与冲突仲裁 |
+| `axiom-prd-crafter` | sonnet | 工程级 PRD，含门控验证 |
+| `axiom-system-architect` | sonnet | 原子任务 DAG 与 Manifest 生成 |
+| `axiom-evolution-engine` | sonnet | 知识收割、模式检测、工作流优化 |
+| `axiom-context-manager` | sonnet | 7 操作记忆系统（读/写/状态/检查点） |
+| `axiom-worker` | sonnet | PM→Worker 协议，三态输出 |
+| `axiom-ux-director` | sonnet | UX/体验专家评审 |
+| `axiom-product-director` | sonnet | 产品战略专家评审 |
+| `axiom-domain-expert` | sonnet | 领域知识专家评审 |
+| `axiom-tech-lead` | sonnet | 技术可行性评审 |
+| `axiom-critic` | sonnet | 安全/质量/逻辑评审 |
+| `axiom-sub-prd-writer` | sonnet | 将 Manifest 任务拆解为可执行 Sub-PRD |
 
 ---
 
-## Skills（67 个）
+## Skills（69 个）
 
 ### 工作流 Skills
 
@@ -155,18 +161,20 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 | Skill | 用途 |
 |-------|------|
-| `deepinit` | 深度代码库初始化，生成层级化 AGENTS.md |
-| `sciomc` | 并行 scientist agents 综合分析 |
-| `external-context` | 并行 document-specialist 网络搜索 |
-| `ccg` | Claude-Codex-Gemini 三模型编排 |
-| `trace` | Agent 流程追踪时间线 |
-| `hud` | 配置 HUD 显示选项 |
-| `omc-doctor` | 诊断并修复安装问题 |
-| `project-session-manager` | git worktree + tmux 隔离环境 |
-| `writer-memory` | 面向作家的智能记忆系统 |
-| `ralph-init` | 初始化 PRD 进行结构化 ralph 执行 |
-| `learn-about-omc` | 了解使用模式，获取个性化建议 |
-| `skill` | 管理本地 skill：列出、添加、删除、编辑 |
+| `ax-draft` | 需求澄清 → Draft PRD → 用户确认 |
+| `ax-review` | 5 专家并行评审 → 聚合 → Rough PRD |
+| `ax-decompose` | Rough PRD → 系统架构 → 原子任务 DAG |
+| `ax-implement` | 按 Manifest 执行任务，CI 门禁，自动修复 |
+| `ax-analyze-error` | 根因诊断 → 自动修复 → 知识队列 |
+| `ax-reflect` | 会话反思 → 经验提取 → Action Items |
+| `ax-evolve` | 处理学习队列 → 更新知识库 → 模式检测 |
+| `ax-status` | 完整系统状态仪表盘 |
+| `ax-rollback` | 回滚到最近检查点（需用户确认） |
+| `ax-suspend` | 保存会话状态，安全退出 |
+| `ax-context` | 直接操作 Axiom 记忆系统 |
+| `ax-evolution` | 进化引擎统一入口（evolve/reflect/knowledge/patterns） |
+| `ax-knowledge` | 查询 Axiom 知识库 |
+| `ax-export` | 导出 Axiom 工作流产物 |
 
 ### 工具类 Skills
 

@@ -8,8 +8,8 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Agents (39 Total)](#agents-39-total)
-- [Skills (67 Total)](#skills-67-total)
+- [Agents (44 Total)](#agents-44-total)
+- [Skills (69 Total)](#skills-69-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
 - [Magic Keywords](#magic-keywords)
@@ -161,7 +161,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Agents（共 38 个）
+## Agents（共 44 个）
 
 通过 Task 工具调用时，始终使用 `ultrapower:` 前缀。
 
@@ -209,6 +209,12 @@ omc config-stop-callback discord --show
 | **Axiom** | `axiom-evolution-engine` | sonnet | 知识收割、模式检测、工作流优化 |
 | **Axiom** | `axiom-context-manager` | sonnet | 7 操作记忆系统（读/写/状态/检查点） |
 | **Axiom** | `axiom-worker` | sonnet | PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED） |
+| **Axiom 专家** | `axiom-ux-director` | sonnet | UX/体验专家评审，输出 review_ux.md |
+| **Axiom 专家** | `axiom-product-director` | sonnet | 产品战略专家评审，输出 review_product.md |
+| **Axiom 专家** | `axiom-domain-expert` | sonnet | 领域知识专家评审，输出 review_domain.md |
+| **Axiom 专家** | `axiom-tech-lead` | sonnet | 技术可行性评审，输出 review_tech.md |
+| **Axiom 专家** | `axiom-critic` | sonnet | 安全/质量/逻辑评审，输出 review_critic.md |
+| **Axiom 专家** | `axiom-sub-prd-writer` | sonnet | 将 Manifest 任务拆解为可执行 Sub-PRD |
 
 ### Agent 选择指南
 
@@ -242,7 +248,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Skills（共 67 个）
+## Skills（共 69 个）
 
 ### 核心 Skills
 
@@ -311,6 +317,8 @@ omc config-stop-callback discord --show
 | `ax-rollback` | 回滚到上一个检查点 | `/ultrapower:ax-rollback` |
 | `ax-status` | 查看 Axiom 工作流状态 | `/ultrapower:ax-status` |
 | `ax-suspend` | 挂起当前工作流并保存状态 | `/ultrapower:ax-suspend` |
+| `ax-knowledge` | 查询 Axiom 知识库 | `/ultrapower:ax-knowledge` |
+| `ax-export` | 导出 Axiom 工作流产物 | `/ultrapower:ax-export` |
 
 ---
 
