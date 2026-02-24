@@ -1,29 +1,39 @@
-# Axiom 架构决策记录
+﻿---
+project_name: Axiom v4.2
+last_updated: 2026-02-13
+---
 
-## 决策格式
-每条决策包含：类型、内容、时间、原因
+# Project Decisions (长期记忆 - 架构决策)
 
-## 架构决策
+## 1. 技术栈 (Framework Core)
+- **Language**: Dart (Flutter) for Core Logic & UI.
+- **Backend/Scripting**: Python (Evolution Engine) / PowerShell (Guards).
+- **Architecture**: Manifest-Driven Agentic Pipeline.
 
-### ADR-001: 技术栈选择
-- 类型: Architecture
-- 时间: 2026-02-24
-- 内容: 使用 TypeScript/Node.js 作为主要技术栈
-- 原因: ultrapower 项目基于 TypeScript，保持一致性
-- 验证命令: `tsc --noEmit && npm run build && npm test`
+## 2. 架构设计原则
+- **Stateless Skills**: 技能必须是纯函数，无副作用。
+- **Controller Workflows**: 状态管理和门禁逻辑必须在 Workflow 层实现。
+- **Evidence-Based Gates**: 所有门禁必须基于可验证的产物 (Artifacts/Logs)。
 
-### ADR-002: 状态存储位置
-- 类型: Architecture
-- 时间: 2026-02-24
-- 内容: Axiom 状态文件存储在 `.omc/axiom/` 目录
-- 原因: 与 ultrapower OMC 状态目录 `.omc/state/` 保持一致的命名空间
+## 3. 编码规范
+- **Lint**: flutter_lints
+- **Formatting**: dart format
+- **Naming**: `snake_case` for docs/scripts, `PascalCase` for classes.
 
-### ADR-003: 命令前缀规范
-- 类型: Rule
-- 时间: 2026-02-24
-- 内容: 所有 Axiom 命令使用 `/ax-` 前缀
-- 原因: 避免与 ultrapower 原生命令冲突，保持简洁
+## 4. 核心依赖
+| 库名 | 用途 |
+|------|------|
+| Lucide | 标准图标库 |
+| Mermaid | 流程图标准 |
 
-## 库选择决策
+## 5. 已知问题 (错误模式学习)
+| 日期 | 错误类型 | 根因分析 | 修复方案 |
+|------|---------|---------|---------|
+| 2026-02-12 | Race Condition | 并行读写同一临时文件 | 实施 Unique Artifact Injection (k-028) |
 
-## 规则决策
+## 6. Deprecated (废弃决策归档)
+- [Archived] "Test Flutter App" MVVM specific rules (Replaced by Generic Axiom rules).
+
+## 7. 🎨 UI/UX Standards (Mandatory)
+- **Design Philosophy**: Minimalist, Terminal-inspired, Cyberpunk (optional).
+- **Interactive**: CLI interactions must be clear and structured.

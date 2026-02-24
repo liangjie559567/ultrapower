@@ -1,48 +1,83 @@
-# Axiom 状态机定义
+# Agent State Machine (v4.2 Manifest Driven)
 
-## 状态列表
+本文件定义 Agent 的完整生命周期状态及其转换规则，严格对齐 v4.2 四阶段流水线。
 
-| 状态 | 描述 | 允许转换到 |
-|------|------|-----------|
-| IDLE | 空闲，等待新任务 | PLANNING |
-| PLANNING | 需求分析和规划中 | CONFIRMING, IDLE |
-| CONFIRMING | 等待用户确认 | EXECUTING, PLANNING, IDLE |
-| EXECUTING | 任务执行中 | AUTO_FIX, ARCHIVING, BLOCKED |
-| AUTO_FIX | 自动修复错误中（最多3次） | EXECUTING, BLOCKED |
-| BLOCKED | 阻塞，需要人工介入 | EXECUTING, IDLE |
-| ARCHIVING | 归档任务结果 | IDLE |
+## 1. 状态定义 (States)
 
-## 当前状态
-- 状态: IDLE
-- 进入时间: 2026-02-24
-- 前一状态: -
+| 状态 | 代码 | 对应阶段 | 描述 |
+|-----|------|---------|-----|
+| **空闲** | `IDLE` | - | 无活跃任务，等待用户输入 |
+| **起草中** | `DRAFTING` | Phase 1 | 正在澄清需求或生成 PRD 初稿 |
+| **评审中** | `REVIEWING` | Phase 1.5 | 专家评审团并行工作或正在仲裁 |
+| **待确认** | `CONFIRMING` | Gates | 等待用户通过门禁 (Draft/Review/Manifest) |
+| **拆解中** | `DECOMPOSING` | Phase 2 | 正在生成 Manifest 或串行撰写 Sub-PRDs |
+| **开发中** | `IMPLEMENTING` | Phase 3 | 正在基于 Manifest 并行开发或编译 |
+| **阻塞** | `BLOCKED` | - | 熔断/错误/门禁拒绝，需要人工介入 |
 
-## 状态转换规则
+## 2. 状态转换规则 (Transitions)
 
-### IDLE → PLANNING
-- 触发: 用户提交新需求
-- 动作: 调用 axiom-requirement-analyst
+```mermaid
+stateDiagram-v2
+    [*] --> IDLE
+    
+    IDLE --> DRAFTING: 用户提出需求
+    
+    state "Phase 1: Drafting" as P1 {
+        DRAFTING
+    }
+    
+    P1 --> CONFIRMING: 初稿完成 (Gate 1)
+    
+    CONFIRMING --> REVIEWING: 用户确认进入评审
+    CONFIRMING --> IDLE: 用户取消
+    
+    state "Phase 1.5: Reviewing" as P1_5 {
+        REVIEWING
+    }
+    
+    P1_5 --> CONFIRMING: 评审完成 (Gate 2)
+    
+    CONFIRMING --> DECOMPOSING: 用户确认进入拆解
+    
+    state "Phase 2: Decomposition" as P2 {
+        DECOMPOSING
+    }
+    
+    P2 --> CONFIRMING: Manifest 完成 (Gate 3)
+    
+    CONFIRMING --> IMPLEMENTING: 用户确认开发
+    
+    state "Phase 3: Implementation" as P3 {
+        IMPLEMENTING --> BLOCKED: 编译/测试失败
+        BLOCKED --> IMPLEMENTING: 自动修复/人工干预
+    }
+    
+    IMPLEMENTING --> IDLE: 交付完成 (Report Generated)
+```
 
-### PLANNING → CONFIRMING
-- 触发: 需求分析通过（PASS）
-- 动作: 展示 Draft PRD，等待用户确认
+## 3. 转换触发器 (Triggers)
 
-### CONFIRMING → EXECUTING
-- 触发: 用户确认 PRD
-- 动作: 调用 axiom-system-architect 生成任务 DAG
+| 触发器 | 源状态 | 目标状态 | 触发条件 |
+|-------|-------|---------|---------|
+| `START_DRAFT` | IDLE | DRAFTING | `/draft` 或 自然语言需求 |
+| `DRAFT_DONE` | DRAFTING | CONFIRMING | 初稿生成完毕，等待 Review |
+| `START_REVIEW` | CONFIRMING | REVIEWING | `/review` 或 用户确认 Review |
+| `REVIEW_DONE` | REVIEWING | CONFIRMING | 评审汇总完毕，等待 Decompose |
+| `START_DECOMPOSE` | CONFIRMING | DECOMPOSING | `/decompose` 或 用户确认 Manifest |
+| `MANIFEST_DONE` | DECOMPOSING | CONFIRMING | 拆解完毕，等待 Implement |
+| `START_IMPLEMENT` | CONFIRMING | IMPLEMENTING | `/feature-flow` 或 用户确认开发 |
+| `COMPILATION_FAIL`| IMPLEMENTING | BLOCKED | 编译门禁失败 |
+| `ALL_DONE` | IMPLEMENTING | IDLE | 研发报告生成完毕 |
 
-### EXECUTING → AUTO_FIX
-- 触发: CI 检查失败
-- 动作: 调用 axiom-worker 自动修复（计数器 +1）
+## 4. 状态持久化
 
-### AUTO_FIX → BLOCKED
-- 触发: 修复次数 >= 3
-- 动作: 记录错误，通知用户
+当前状态存储在 `active_context.md` 的 YAML Frontmatter 中：
 
-### EXECUTING → ARCHIVING
-- 触发: 所有任务完成，CI 通过
-- 动作: 归档任务，更新知识库
-
-### ARCHIVING → IDLE
-- 触发: 归档完成
-- 动作: 触发进化引擎（可选）
+```yaml
+---
+session_id: "..."
+task_status: DRAFTING
+current_phase: "Phase 1"
+last_gate: "Gate 1 Pass"
+---
+```

@@ -1,102 +1,91 @@
-# Axiom 代码模式库
+---
+description: 代码模式库 - 存储可复用的代码模式和模板
+version: 1.0
+last_updated: 2026-02-08
+---
 
-## 模式格式
-```
-### P-[ID]: [模式名称]
-- 状态: [active/candidate/deprecated]
-- 出现次数: [N]
-- 置信度: [0.0-1.0]
-- 分类: [structural/behavioral/creational]
-- 创建时间: [YYYY-MM-DD]
-- 描述: [模式描述]
-- 模板: [代码模板]
-- 应用场景: [何时使用]
-```
+# Pattern Library (代码模式库)
 
-## 活跃模式
+本文件存储从项目中识别出的可复用代码模式。
 
-### P-001: ultrapower Agent 定义模式
-- 状态: active
-- 出现次数: 8
-- 置信度: 0.95
-- 分类: structural
-- 创建时间: 2026-02-24
-- 描述: ultrapower agent 文件的标准结构
-- 模板:
+## 1. 模式索引 (Pattern Index)
+
+| ID | Name | Category | Occurrences | Confidence | Status |
+|----|------|----------|-------------|------------|--------|
+| P-001 | Markdown Workflow Pattern | workflow-def | 5 | 0.9 | active |
+
+## 2. 模式分类 (Categories)
+
+| Category | Description | Count |
+|----------|-------------|-------|
+| workflow-def | 工作流定义模式 | 1 |
+| data-layer | 数据层模式 | 0 |
+| ui-layer | UI 层模式 | 0 |
+| business-logic | 业务逻辑模式 | 0 |
+| common | 通用模式 | 0 |
+
+---
+
+## 3. 模式详情 (Pattern Details)
+
+### P-001: Markdown Workflow Pattern
+
+**Category**: workflow-def  
+**Occurrences**: 5 (start.md, feature-flow.md, analyze-error.md, evolve.md, reflect.md)  
+**Confidence**: 0.9  
+**First Seen**: 2026-02-08  
+**Files**: `.agent/workflows/*.md`
+
+**Description**:
+> 使用 Markdown 定义原子工作流，包含 Trigger, Steps 和 Output Format 三要素。
+
+**Template**:
 ```markdown
 ---
-name: [agent-name]
-description: "[描述]"
-model: sonnet
+description: [Short Description]
 ---
 
-<Agent_Prompt>
+# /command - [Workflow Name]
 
-## Role
-[角色定义]
+## Trigger
+- 用户输入 `/command`
 
-## Input
-[输入格式]
+## Steps
+// turbo (if auto-run)
+1. Step 1...
+2. Step 2...
 
-## Actions
-[执行步骤]
-
-## Output_Format
-[输出格式]
-
-## Constraints
-[约束条件]
-
-</Agent_Prompt>
+## Output Format
+(Template)
 ```
-- 应用场景: 创建新 ultrapower agent 时
 
-### P-002: ultrapower Skill 定义模式
-- 状态: active
-- 出现次数: 12
-- 置信度: 0.95
-- 分类: structural
-- 创建时间: 2026-02-24
-- 描述: ultrapower skill 文件的标准结构
-- 模板:
-```markdown
----
-name: [skill-name]
-description: "/[command] — [描述]"
+
+**Usage**:
+```dart
+final data = await repository.getWithCache('user_profile', () => api.fetchProfile());
+```
+
 ---
 
-# [Skill 标题]
+## 4. 模式匹配规则 (Detection Rules)
 
-**开始时宣告：** "I'm using the [skill-name] skill to [purpose]."
+> 定义如何自动检测代码中的模式
 
-## 执行步骤
-
-### Step 1: [步骤名称]
-[步骤描述]
-
-### Step 2: [步骤名称]
-[步骤描述]
+### 规则格式
+```yaml
+pattern_id: P-xxx
+triggers:
+  - keyword: "getWithCache"
+  - structure: "class.*Repository.*_cache"
+min_occurrences: 3
 ```
-- 应用场景: 创建新 ultrapower skill 时
 
-### P-003: Axiom 三态门模式
-- 状态: active
-- 出现次数: 3
-- 置信度: 0.85
-- 分类: behavioral
-- 创建时间: 2026-02-24
-- 描述: 需求分析的三态输出（PASS/CLARIFY/REJECT）
-- 模板:
-```
-输出格式:
-- PASS: 需求清晰可行 → 继续下一步
-- CLARIFY: 需要澄清 → 提出具体问题
-- REJECT: 需求不可行 → 说明原因
-```
-- 应用场景: 需求分析阶段
+---
 
-## 候选模式
-<!-- 出现次数 >= 2 但 < 3，或置信度 < 0.7 的模式 -->
+## 5. 待验证模式 (Pending Patterns)
 
-## 废弃模式
-<!-- 不再适用的模式 -->
+> 出现次数不足，暂未提升为正式模式
+
+| ID | Name | Occurrences | Notes |
+|----|------|-------------|-------|
+| - | - | - | 暂无 |

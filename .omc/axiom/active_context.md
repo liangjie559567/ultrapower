@@ -1,21 +1,26 @@
-# Axiom 活跃上下文
+# Active Context
 
-## 系统状态
-- 当前状态: IDLE
-- 上次更新: 2026-02-24
-- 上次检查点: 无
+<!-- Template file - populate when starting a new session -->
+<!-- Created: 2026-02-24 -->
 
-## 当前任务
-- 活跃任务: 无
-- 任务队列: 空
+## Status: IDLE
 
-## 暂停记录
-- 暂停时间: -
-- 暂停原因: -
-- 当前任务: -
-- 下次恢复提示: 运行 /ax-status 查看系统状态
+## Current Goal
+[填写当前目标]
 
-## 任务历史
-| 任务ID | 描述 | 状态 | 完成时间 |
-|--------|------|------|----------|
-| - | - | - | - |
+## Task Queues
+
+### In Progress
+- (none)
+
+### Pending
+- (none)
+
+### Completed
+- (none)
+
+## Last Checkpoint
+[checkpoint-tag]
+
+## Suspension Note
+[暂停时填写]
