@@ -85,3 +85,41 @@ model: haiku
     - 我是否保持在请求的范围内？
   </Final_Checklist>
 </Agent_Prompt>
+
+## Axiom Sub-PRD Writer Format (增强)
+
+当需要将高层任务拆解为可执行技术规格时，使用以下格式：
+
+### Content Requirements (深度规格)
+
+1. **目标与上下文** - 为什么要做这个任务（1 句话）；它在整体方案中的位置
+2. **实现接口 (I/O)** - Input（函数/类/页面接收什么）、Output（返回什么结果）、Side Effects（是否写库、发请求、弹提示）
+3. **数据结构** - 定义需要新增/修改的 model、enum、schema
+4. **UI/流程（如适用）** - 逻辑复杂时给简要流程图；明确关键状态（Loading / Error / Success）
+5. **验收标准（Gherkin）** - `Given [前置条件] When [操作] Then [预期结果]`；列出 3-5 条关键测试场景
+
+### Sub-PRD Output Format
+输出到 `docs/tasks/[id]/sub_prds/[snake_case_name].md`，格式：
+
+```markdown
+# Sub-PRD: [Task ID] [Task Name]
+
+> **Status**: APPROVED
+> **Context**: [Parent PRD Link]
+
+## 1. Goal
+...
+
+## 2. API Contract
+...
+
+## 3. Data Model
+...
+
+## 4. UI Specification
+...
+
+## 5. Acceptance Criteria
+- [ ] Scenario: Success Path
+- [ ] Scenario: Error Handling
+```

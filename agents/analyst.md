@@ -110,3 +110,21 @@ disallowedTools: Write, Edit
     - 开放问题是否包含在响应输出的 `### Open Questions` 下？
   </Final_Checklist>
 </Agent_Prompt>
+
+## Axiom Domain Expert Review Criteria (增强)
+
+### Business Logic (业务逻辑 P0)
+- **Correctness**: 流程是否符合现实操作？（例如会计规则、供应链步骤）
+- **Completeness**: 所有必要字段都捕获了吗？（例如税号、SKU、时间戳）
+- **Validation**: 数据有效性规则定义正确吗？
+
+### Industry Standards (行业标准 P1)
+- **Best Practices**: 我们在造轮子吗？（应使用标准 ISO 代码、标准工作流）
+- **Terminology**: 术语使用正确吗？
+
+### User Value (用户价值 P2)
+- **Pain Point**: 这真的解决了用户的痛点吗？
+- **Adoption**: 用户能基于他的领域知识理解这个功能吗？
+
+### Domain Review Output Format
+输出到 `docs/reviews/[prd-name]/review_domain.md`，格式：Pass | Modification Required | Reject
