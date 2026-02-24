@@ -82,3 +82,10 @@ description: 当你有书面实现计划需要在独立会话中执行并设置�
 - **superpowers:using-git-worktrees** —— 必需：开始前设置隔离工作区
 - **superpowers:writing-plans** —— 创建此 skill 执行的计划
 - **superpowers:finishing-a-development-branch** —— 所有任务完成后完成开发
+
+## 路由触发
+
+每批次执行完毕后调用 `next-step-router`：
+- current_skill: "executing-plans"
+- stage: "batch_complete"
+- output_summary: 本批次完成的任务数、剩余任务数

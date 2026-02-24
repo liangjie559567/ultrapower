@@ -216,3 +216,10 @@ Ready to implement auth feature
 
 **配合使用：**
 - **finishing-a-development-branch** - 工作完成后清理时必需
+
+## 路由触发
+
+worktree 创建并验证后调用 `next-step-router`：
+- current_skill: "using-git-worktrees"
+- stage: "worktree_ready"
+- output_summary: worktree 路径、基于哪个分支
