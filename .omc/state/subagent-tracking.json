@@ -213,11 +213,13 @@
       "agent_type": "smart-dev-flow:executor",
       "started_at": "2026-02-24T05:12:36.902Z",
       "parent_mode": "none",
-      "status": "running",
+      "status": "completed",
       "endTime": 1771911176962,
       "durationMs": null,
       "toolUses": 0,
-      "tokens": 0
+      "tokens": 0,
+      "completed_at": "2026-02-24T06:20:32.739Z",
+      "duration_ms": 4075837
     },
     {
       "agent_id": "a7e4594af84cafc52",
@@ -257,10 +259,84 @@
       "tokens": 0,
       "completed_at": "2026-02-24T06:17:19.621Z",
       "duration_ms": 2116315
+    },
+    {
+      "agent_id": "a2b74d95605c24931",
+      "agent_type": "smart-dev-flow:explore",
+      "started_at": "2026-02-24T06:20:23.555Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "endTime": 1771914032707,
+      "durationMs": null,
+      "toolUses": 0,
+      "tokens": 0,
+      "completed_at": "2026-02-24T06:25:10.383Z",
+      "duration_ms": 286828
+    },
+    {
+      "id": "1771914373370",
+      "type": "unknown",
+      "startTime": 1771914373370,
+      "endTime": null,
+      "durationMs": null,
+      "toolUses": 0,
+      "tokens": 0
+    },
+    {
+      "agent_id": "a9827e0a472a6596f",
+      "agent_type": "smart-dev-flow:executor",
+      "started_at": "2026-02-24T06:25:36.216Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "endTime": 1771914459747,
+      "durationMs": null,
+      "toolUses": 0,
+      "tokens": 0,
+      "completed_at": "2026-02-24T06:29:59.027Z",
+      "duration_ms": 262811
+    },
+    {
+      "agent_id": "aa97bc46d337375f1",
+      "agent_type": "smart-dev-flow:executor",
+      "started_at": "2026-02-24T06:25:53.196Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "endTime": 1771914519018,
+      "durationMs": null,
+      "toolUses": 0,
+      "tokens": 0,
+      "completed_at": "2026-02-24T06:28:59.966Z",
+      "duration_ms": 186770
+    },
+    {
+      "agent_id": "abd20260fb1c08aa7",
+      "agent_type": "smart-dev-flow:executor",
+      "started_at": "2026-02-24T06:26:03.660Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "endTime": 1771914539946,
+      "durationMs": null,
+      "toolUses": 0,
+      "tokens": 0,
+      "completed_at": "2026-02-24T06:29:18.118Z",
+      "duration_ms": 194458
+    },
+    {
+      "agent_id": "aa915bbcc31b5f30d",
+      "agent_type": "smart-dev-flow:executor",
+      "started_at": "2026-02-24T06:26:13.441Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-02-24T06:28:39.043Z",
+      "duration_ms": 145602,
+      "endTime": 1771914599010,
+      "durationMs": null,
+      "toolUses": 0,
+      "tokens": 0
     }
   ],
-  "total_spawned": 19,
-  "total_completed": 19,
+  "total_spawned": 24,
+  "total_completed": 25,
   "total_failed": 0,
-  "last_updated": "2026-02-24T06:17:19.736Z"
+  "last_updated": "2026-02-24T06:31:12.560Z"
 }

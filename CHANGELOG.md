@@ -2,7 +2,7 @@
 
 ### 新增
 
-- **ultrapower 集成**：集成了 superpowers skill 系统，内置 54 个 skills、30 个专业智能体和 34 个 hooks。项目从 ultrapower 品牌重命名，npm 包名为 `ultrapower`。
+- **ultrapower 集成**：集成了 superpowers skill 系统，内置 54 个 skills、31 个专业智能体和 34 个 hooks。项目从 ultrapower 品牌重命名，npm 包名为 `ultrapower`。新增功能包括：superpowers skill 系统（brainstorming、systematic-debugging、test-driven-development、writing-plans、executing-plans、dispatching-parallel-agents、verification-before-completion、requesting-code-review、receiving-code-review、finishing-a-development-branch、using-git-worktrees、using-superpowers、subagent-driven-development、writer-memory、writing-skills）、project-session-manager (psm) skill（支持 GitHub/GitLab/Bitbucket/Jira/Gitea/Azure DevOps）、Team 模式作为默认多 Agent 编排器（分阶段 pipeline：team-plan->team-prd->team-exec->team-verify->team-fix）、MCP 后台任务管理（SQLite 持久化）、LSP 工具集成（12 个工具）、AST 工具（ast_grep_search/replace）、Python REPL 工具、速率限制等待守护进程、自动更新系统、分析/成本追踪系统。
 - **test-engineer agent**：从 `tdd-guide` 重命名，更加清晰。
 - **document-specialist agent**：从 `researcher` 重命名，更加清晰。
 

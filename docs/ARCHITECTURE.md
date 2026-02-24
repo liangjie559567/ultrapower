@@ -55,7 +55,7 @@ Skills: ultrawork + default + git-master
 
 ### Agents
 
-30 个专业化 agent，按复杂度层级组织：
+31 个专业化 agent，按复杂度层级组织：
 
 | 层级 | 模型 | 适用场景 |
 |------|-------|---------|
@@ -106,16 +106,32 @@ Skills 按层级组合：
 
 ## 状态管理
 
-状态文件遵循标准化路径：
+状态文件遵循标准化路径，支持 7 种模式：
+
+**支持的模式：** `autopilot`、`ultrapilot`、`team`、`pipeline`、`ralph`、`ultrawork`、`ultraqa`
 
 **本地项目状态：**
-- `.omc/state/{name}.json` - 会话状态（ultrapilot、swarm、pipeline）
+- `.omc/state/{mode}-state.json` - 会话状态
+- `.omc/state/sessions/{sessionId}/` - 会话范围状态
 - `.omc/notepads/{plan-name}/` - 计划范围的知识捕获
 
 **全局状态：**
 - `~/.omc/state/{name}.json` - 用户偏好和全局配置
 
 旧版路径在读取时自动迁移。
+
+## MCP 集成
+
+ultrapower 包含 4 个 MCP 服务器：
+
+| 服务器 | 模型 | 用途 |
+|--------|------|------|
+| `codex-server` | gpt-5.3-codex | 代码分析、规划验证、代码审查 |
+| `gemini-server` | gemini-3-pro-preview | 大上下文任务（1M tokens）、UI/UX 设计审查 |
+| `mcp-server` | - | 通用 MCP 工具服务 |
+| `team-bridge` | - | 团队协调桥接 |
+
+调用方式：`mcp__plugin_smart-dev-flow_x__ask_codex`（Codex）、`mcp__plugin_smart-dev-flow_g__ask_gemini`（Gemini）。
 
 ## Hooks
 
