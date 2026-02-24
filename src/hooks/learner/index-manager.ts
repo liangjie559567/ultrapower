@@ -23,7 +23,8 @@ export class KnowledgeIndexManager {
   constructor(baseDir?: string) {
     const base = baseDir ?? process.cwd();
     this.knowledgeDir = path.join(base, '.omc', 'knowledge');
-    this.indexFile = path.join(this.knowledgeDir, 'index.md');
+    // 与 Python 源码对齐：使用 knowledge_base.md 作为索引文件
+    this.indexFile = path.join(base, '.omc', 'axiom', 'evolution', 'knowledge_base.md');
   }
 
   async rebuildIndex(): Promise<IndexEntry[]> {
@@ -67,6 +68,25 @@ export class KnowledgeIndexManager {
     await this.writeIndex(entries);
   }
 
+  /** 从索引中移除指定条目（对齐 Python remove_from_index） */
+  async removeFromIndex(id: string): Promise<void> {
+    const entries = await this.loadIndex();
+    const filtered = entries.filter(e => e.id !== id);
+    if (filtered.length !== entries.length) {
+      await this.writeIndex(filtered);
+    }
+  }
+
+  /** 更新指定条目的置信度（对齐 Python update_confidence） */
+  async updateConfidence(id: string, newConfidence: number): Promise<void> {
+    const entries = await this.loadIndex();
+    const entry = entries.find(e => e.id === id);
+    if (entry) {
+      entry.confidence = newConfidence;
+      await this.writeIndex(entries);
+    }
+  }
+
   async loadIndex(): Promise<IndexEntry[]> {
     let text: string;
     try {
@@ -100,17 +120,58 @@ export class KnowledgeIndexManager {
   }
 
   private async writeIndex(entries: IndexEntry[]): Promise<void> {
-    await fs.mkdir(this.knowledgeDir, { recursive: true });
+    await fs.mkdir(path.dirname(this.indexFile), { recursive: true });
+
+    // 分类统计（对齐 Python _generate_index）
+    const categoryCount: Record<string, number> = {};
+    for (const e of entries) {
+      categoryCount[e.category] = (categoryCount[e.category] ?? 0) + 1;
+    }
+    const categoryLines = Object.entries(categoryCount)
+      .sort((a, b) => b[1] - a[1])
+      .map(([cat, cnt]) => `| ${cat} | ${cnt} |`);
+
+    // 标签云（从 title 提取关键词）
+    const wordFreq: Record<string, number> = {};
+    for (const e of entries) {
+      for (const word of e.title.toLowerCase().split(/\W+/).filter(w => w.length > 3)) {
+        wordFreq[word] = (wordFreq[word] ?? 0) + 1;
+      }
+    }
+    const tagCloud = Object.entries(wordFreq)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 20)
+      .map(([w, c]) => `${w}(${c})`)
+      .join(' ');
+
     const lines = [
-      '# Knowledge Index',
+      '# Knowledge Base Index',
       '',
       `> Last updated: ${new Date().toISOString().slice(0, 10)} | Total: ${entries.length} entries`,
       '',
-      '| ID | Title | Category | Confidence | Created |',
-      '|---|---|---|---|---|',
+      '## Knowledge Index',
+      '',
+      '| ID | Title | Category | Confidence | Created | Status |',
+      '|---|---|---|---|---|---|',
       ...entries.map(e =>
-        `| ${e.id} | ${e.title} | ${e.category} | ${e.confidence} | ${e.created} |`
+        `| ${e.id} | ${e.title} | ${e.category} | ${e.confidence.toFixed(2)} | ${e.created} | active |`
       ),
+      '',
+      '## Category Statistics',
+      '',
+      '| Category | Count |',
+      '|---|---|',
+      ...categoryLines,
+      '',
+      '## Tag Cloud',
+      '',
+      tagCloud || '(empty)',
+      '',
+      '## Quality Management',
+      '',
+      `- High confidence (≥0.8): ${entries.filter(e => e.confidence >= 0.8).length}`,
+      `- Medium confidence (0.5-0.8): ${entries.filter(e => e.confidence >= 0.5 && e.confidence < 0.8).length}`,
+      `- Low confidence (<0.5): ${entries.filter(e => e.confidence < 0.5).length}`,
       '',
     ];
     await fs.writeFile(this.indexFile, lines.join('\n'), 'utf-8');

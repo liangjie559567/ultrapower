@@ -6,9 +6,9 @@
 
 import type { AxiomConfig } from '../../config/axiom-config.js';
 import { KnowledgeHarvester } from './harvester.js';
-import { PatternDetector } from './pattern-detector.js';
+import { PatternDetector, type PatternEntry } from './pattern-detector.js';
 import { ConfidenceEngine } from './confidence.js';
-import { WorkflowMetrics } from './metrics.js';
+import { WorkflowMetrics, type WorkflowInsight } from './metrics.js';
 import { LearningQueue } from './learning-queue.js';
 import { ReflectionEngine } from './reflection.js';
 import { KnowledgeIndexManager } from './index-manager.js';
@@ -129,5 +129,50 @@ export class EvolutionOrchestrator {
   /** 获取工作流洞察 */
   async getInsights(workflow: Parameters<WorkflowMetrics['getInsights']>[0]) {
     return this.metrics.getInsights(workflow);
+  }
+
+  /** 任务完成时触发（对齐 Python on_task_completed） */
+  async onTaskCompleted(taskId: string, description: string): Promise<void> {
+    await this.learningQueue.addItem('task_completion', taskId, 'P2', description);
+  }
+
+  /** 错误修复成功时触发（对齐 Python on_error_fixed） */
+  async onErrorFixed(errorType: string, rootCause: string, solution: string): Promise<void> {
+    await this.learningQueue.addItem(
+      'error_fix',
+      errorType,
+      'P1',
+      `Root cause: ${rootCause} | Solution: ${solution}`
+    );
+  }
+
+  /** 工作流完成时触发（对齐 Python on_workflow_completed） */
+  async onWorkflowCompleted(
+    workflow: Parameters<WorkflowMetrics['endTracking']>[0],
+    durationMin: number,
+    success: boolean,
+    notes = ''
+  ): Promise<void> {
+    await this.metrics.endTracking(workflow, { success, notes, durationOverride: durationMin });
+    await this.learningQueue.addItem(
+      'workflow_completion',
+      workflow,
+      'P2',
+      `duration=${durationMin}min success=${success} ${notes}`.trim()
+    );
+  }
+
+  /** 搜索知识库（对齐 Python search_knowledge） */
+  async searchKnowledge(query: string): Promise<Array<Record<string, string>>> {
+    return this.harvester.search(query);
+  }
+
+  /** 搜索模式库（对齐 Python search_patterns） */
+  async searchPatterns(query: string): Promise<PatternEntry[]> {
+    const patterns = await this.patternDetector.loadPatterns();
+    const q = query.toLowerCase();
+    return patterns.filter(
+      p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+    );
   }
 }
