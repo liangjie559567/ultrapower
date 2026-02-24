@@ -9,9 +9,9 @@ ultrapower 的 TypeScript 源代码 - 驱动多 agent 编排的核心库。
 
 此目录包含按模块组织的所有 TypeScript 源代码：
 
-- **agents/** - 32 个专业 AI agent 定义，含分级变体
+- **agents/** - 39 个专业 AI agent 定义，含分级变体
 - **tools/** - 15 个 LSP/AST/REPL 工具，提供类 IDE 能力
-- **hooks/** - 31 个事件驱动行为，用于执行模式
+- **hooks/** - 34 个事件驱动行为，用于执行模式
 - **features/** - 核心功能（模型路由、状态管理、验证）
 - **config/** - 配置加载与验证
 - **commands/** - 命令扩展工具

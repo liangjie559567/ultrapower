@@ -4,7 +4,7 @@
 
 严格的多智能体编排：工作流强制执行 + 并行执行
 
-**版本：** 5.0.0
+**版本：** 5.0.2
 **用途：** 将 Claude Code 转变为专业 AI 智能体的指挥者
 **灵感来源：** oh-my-zsh / oh-my-opencode
 
@@ -12,8 +12,8 @@
 
 ultrapower 为 Claude Code 提供以下增强功能：
 
-- **31 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
-- **54 个 skills**，用于工作流自动化和专业行为
+- **39 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
+- **67 个 skills**，用于工作流自动化和专业行为
 - **34 个 hooks**，用于事件驱动的执行模式和增强功能
 - **15 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
 - **执行模式**：autopilot、ultrawork、ralph、ultrapilot、swarm、pipeline
@@ -36,9 +36,9 @@ ultrapower 为 Claude Code 提供以下增强功能：
 | 目录 | 用途 | 相关 AGENTS.md |
 |-----------|---------|-------------------|
 | `src/` | TypeScript 源代码 - 核心库 | `src/AGENTS.md` |
-| `agents/` | 30 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
-| `skills/` | 54 个工作流 skill 定义 | `skills/AGENTS.md` |
-| `commands/` | 54 个斜杠命令定义（与 skills 对应） | - |
+| `agents/` | 39 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
+| `skills/` | 67 个工作流 skill 定义 | `skills/AGENTS.md` |
+| `commands/` | 67 个斜杠命令定义（与 skills 对应） | - |
 | `scripts/` | 构建脚本、工具和自动化 | - |
 | `docs/` | 用户文档和指南 | `docs/AGENTS.md` |
 | `templates/` | Hook 和规则模板（coding-style、testing、security、performance、git-workflow） | - |
@@ -179,7 +179,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 │                  ultrapower                                 │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
 │  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
-│  │ (54 skills) │ (31 agents) │(LSP/AST/REPL)│ (34 hooks)  │  │
+│  │ (67 skills) │ (39 agents) │(LSP/AST/REPL)│ (34 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │              Features Layer                             ││
@@ -189,7 +189,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 智能体概览（共 31 个）
+## 智能体概览（共 39 个）
 
 ### Build/Analysis Lane（8 个）
 
@@ -263,7 +263,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | swarm | "swarm N agents" | N 个协调智能体，使用 SQLite 任务认领 |
 | pipeline | "pipeline" | 带数据传递的顺序智能体链 |
 
-## Skills（54 个）
+## Skills（67 个）
 
 关键 skills：`autopilot`、`ultrawork`、`ralph`、`ultrapilot`、`plan`、`ralplan`、`deepsearch`、`deepinit`、`frontend-ui-ux`、`git-master`、`tdd`、`security-review`、`code-review`、`sciomc`、`external-context`、`analyze`、`swarm`、`pipeline`、`cancel`、`learner`、`note`、`hud`、`doctor`、`omc-setup`、`mcp-setup`、`build-fix`、`ultraqa`、`team`、`writer-memory`、`ralph-init`、`learn-about-omc`、`skill`、`trace`、`release`、`project-session-manager`
 

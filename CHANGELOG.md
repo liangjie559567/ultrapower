@@ -18,7 +18,7 @@
 ### 文档
 
 - 更新 README.md、docs/CLAUDE.md、docs/OMC-CLAUDE.md、docs/REFERENCE.md 添加 next-step-router 条目
-- 新增 docs/ARCHITECTURE.md "Superpowers × Ultrapower 集成" 章节
+- 新增 docs/ARCHITECTURE.md "Superpowers × ultrapower 集成" 章节
 
 ---
 
