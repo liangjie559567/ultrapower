@@ -8,11 +8,11 @@
     {
       "name": "ultrapower",
       "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
-      "version": "5.0.2",
+      "version": "5.0.3",
       "source": {
         "source": "github",
         "repo": "liangjie559567/ultrapower",
-        "ref": "v5.0.2"
+        "ref": "v5.0.3"
       },
       "author": {
         "name": "liangjie559567"
