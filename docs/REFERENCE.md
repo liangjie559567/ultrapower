@@ -9,7 +9,7 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Agents (31 Total)](#agents-31-total)
-- [Skills (54 Total)](#skills-54-total)
+- [Skills (55 Total)](#skills-55-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
 - [Magic Keywords](#magic-keywords)
@@ -233,7 +233,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Skills（共 54 个）
+## Skills（共 55 个）
 
 ### 核心 Skills
 
