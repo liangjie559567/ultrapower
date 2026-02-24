@@ -22,11 +22,11 @@ triggers: ["ax-review", "expert review", "需求评审", "专家审查", "ax rev
 
 ```
 # 并行执行以下 5 个 agent
-Task(subagent_type="ultrapower:critic", model="sonnet", prompt="以 UX Director 角色评审 PRD：[draft内容]")
-Task(subagent_type="ultrapower:critic", model="sonnet", prompt="以 Product Director 角色评审 PRD：[draft内容]")
-Task(subagent_type="ultrapower:critic", model="sonnet", prompt="以 Domain Expert 角色评审 PRD：[draft内容]")
-Task(subagent_type="ultrapower:critic", model="sonnet", prompt="以 Tech Lead 角色评审 PRD：[draft内容]")
-Task(subagent_type="ultrapower:critic", model="opus", prompt="以 Critic 角色评审 PRD（安全/质量）：[draft内容]")
+Task(subagent_type="ultrapower:axiom-ux-director", model="sonnet", prompt="评审 PRD 初稿：[draft内容]，输出到 docs/reviews/[name]/review_ux.md")
+Task(subagent_type="ultrapower:axiom-product-director", model="sonnet", prompt="评审 PRD 初稿：[draft内容]，输出到 docs/reviews/[name]/review_product.md")
+Task(subagent_type="ultrapower:axiom-domain-expert", model="sonnet", prompt="评审 PRD 初稿：[draft内容]，输出到 docs/reviews/[name]/review_domain.md")
+Task(subagent_type="ultrapower:axiom-tech-lead", model="sonnet", prompt="评审 PRD 初稿：[draft内容]，输出到 docs/reviews/[name]/review_tech.md")
+Task(subagent_type="ultrapower:axiom-critic", model="sonnet", prompt="评审 PRD 初稿（安全/质量）：[draft内容]，输出到 docs/reviews/[name]/review_critic.md")
 ```
 
 等待所有 5 份评审报告生成于 `docs/reviews/[name]/`
