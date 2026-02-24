@@ -211,3 +211,10 @@ You understand 1,2,3,6. Unclear on 4,5.
 验证。质疑。然后实施。
 
 不要表演性认同。始终保持技术严谨性。
+
+## 路由触发
+
+所有审查意见处理完毕后调用 `next-step-router`：
+- current_skill: "receiving-code-review"
+- stage: "review_addressed"
+- output_summary: 处理的意见数、修改的文件列表

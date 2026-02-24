@@ -103,3 +103,10 @@ You: [Fix progress indicators]
 - 请求澄清
 
 模板见：requesting-code-review/code-reviewer.md
+
+## 路由触发
+
+审查报告返回后调用 `next-step-router`：
+- current_skill: "requesting-code-review"
+- stage: "review_returned"
+- output_summary: 审查意见数量、严重程度分布

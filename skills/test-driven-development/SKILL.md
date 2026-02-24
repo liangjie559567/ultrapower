@@ -369,3 +369,10 @@ Otherwise → not TDD
 ```
 
 未经人类伙伴许可，无例外。
+
+## 路由触发
+
+GREEN 阶段完成后调用 `next-step-router`：
+- current_skill: "test-driven-development"
+- stage: "green_complete"
+- output_summary: 通过的测试数、修改的文件列表
