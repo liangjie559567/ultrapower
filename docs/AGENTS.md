@@ -72,7 +72,7 @@ ultrapower 的用户文档和技术指南。
 
 使用原始 GitHub URL 以确保外部可访问：
 
-[Migration Guide](https://raw.githubusercontent.com/Yeachan-Heo/ultrapower/main/docs/MIGRATION.md)
+[Migration Guide](https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/MIGRATION.md)
 
 #### 版本引用
 

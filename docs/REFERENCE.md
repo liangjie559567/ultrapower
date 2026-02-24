@@ -8,8 +8,8 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Agents (31 Total)](#agents-31-total)
-- [Skills (55 Total)](#skills-55-total)
+- [Agents (39 Total)](#agents-39-total)
+- [Skills (67 Total)](#skills-67-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
 - [Magic Keywords](#magic-keywords)
@@ -29,7 +29,7 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 
 ```bash
 # 第一步：添加插件市场
-/plugin marketplace add https://github.com/Yeachan-Heo/ultrapower
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
 
 # 第二步：安装插件
 /plugin install ultrapower
@@ -161,7 +161,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Agents（共 31 个）
+## Agents（共 39 个）
 
 通过 Task 工具调用时，始终使用 `ultrapower:` 前缀。
 
@@ -200,6 +200,15 @@ omc config-stop-callback discord --show
 | **产品** | `information-architect` | sonnet | 分类、导航、可发现性 |
 | **产品** | `product-analyst` | sonnet | 产品指标、漏斗分析、实验 |
 | **废弃别名** | `researcher` | - | 已废弃，映射到 `document-specialist` |
+| **废弃别名** | `tdd-guide` | - | 已废弃，映射到 `test-engineer` |
+| **Axiom** | `axiom-requirement-analyst` | sonnet | 需求分析三态门（PASS/CLARIFY/REJECT） |
+| **Axiom** | `axiom-product-designer` | sonnet | Draft PRD 生成，含 Mermaid 流程图 |
+| **Axiom** | `axiom-review-aggregator` | sonnet | 5 专家并行审查聚合与冲突仲裁 |
+| **Axiom** | `axiom-prd-crafter` | sonnet | 工程级 PRD，含门控验证 |
+| **Axiom** | `axiom-system-architect` | sonnet | 原子任务 DAG 与 Manifest 生成 |
+| **Axiom** | `axiom-evolution-engine` | sonnet | 知识收割、模式检测、工作流优化 |
+| **Axiom** | `axiom-context-manager` | sonnet | 7 操作记忆系统（读/写/状态/检查点） |
+| **Axiom** | `axiom-worker` | sonnet | PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED） |
 
 ### Agent 选择指南
 
@@ -233,7 +242,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Skills（共 55 个）
+## Skills（共 67 个）
 
 ### 核心 Skills
 
@@ -285,6 +294,23 @@ omc config-stop-callback discord --show
 | `writer-memory` | 面向写作者的 agent 记忆系统 | `/ultrapower:writer-memory` |
 | `project-session-manager` | 管理隔离开发环境（git worktrees + tmux） | `/ultrapower:project-session-manager` |
 | `skill` | 管理本地 skills（列出、添加、删除、搜索、编辑） | `/ultrapower:skill` |
+
+### Axiom Skills
+
+| Skill | 说明 | 手动命令 |
+|-------|-------------|----------------|
+| `ax-analyze-error` | 分析错误并生成修复方案 | `/ultrapower:ax-analyze-error` |
+| `ax-context` | 加载/保存 Axiom 上下文快照 | `/ultrapower:ax-context` |
+| `ax-decompose` | 将需求分解为原子任务 DAG | `/ultrapower:ax-decompose` |
+| `ax-draft` | 生成 Draft PRD | `/ultrapower:ax-draft` |
+| `ax-evolution` | 查看知识演化历史 | `/ultrapower:ax-evolution` |
+| `ax-evolve` | 触发知识收割与工作流优化 | `/ultrapower:ax-evolve` |
+| `ax-implement` | 执行 Axiom 任务实现 | `/ultrapower:ax-implement` |
+| `ax-reflect` | 任务完成后反思与学习 | `/ultrapower:ax-reflect` |
+| `ax-review` | 5 专家并行审查聚合 | `/ultrapower:ax-review` |
+| `ax-rollback` | 回滚到上一个检查点 | `/ultrapower:ax-rollback` |
+| `ax-status` | 查看 Axiom 工作流状态 | `/ultrapower:ax-status` |
+| `ax-suspend` | 挂起当前工作流并保存状态 | `/ultrapower:ax-suspend` |
 
 ---
 
@@ -730,7 +756,7 @@ Oh-my-claudecode 包含一个静默自动更新系统，在后台检查更新。
 ### 卸载
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Yeachan-Heo/ultrapower/main/scripts/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/liangjie559567/ultrapower/main/scripts/uninstall.sh | bash
 ```
 
 Or manually:
