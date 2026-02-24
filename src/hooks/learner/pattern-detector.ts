@@ -131,14 +131,48 @@ export class PatternDetector {
     for (const [pname, files] of patternFiles) {
       const existing = current.find(p => p.name === pname);
       if (existing) {
-        const newCount = existing.occurrences + files.size;
-        if (newCount >= this.promoteThreshold && existing.status === 'pending') {
+        existing.occurrences += files.size;
+        if (existing.occurrences >= this.promoteThreshold && existing.status === 'pending') {
+          existing.status = 'active';
           result.promoted.push(pname);
         }
       } else {
+        const newEntry: PatternEntry = {
+          id: `P-${String(current.length + result.newPatterns.length + 1).padStart(3, '0')}`,
+          name: pname,
+          category: BUILTIN_PATTERNS.find(p => p.name === pname)?.category ?? 'common',
+          occurrences: files.size,
+          confidence: 0.7,
+          status: 'pending',
+          firstSeen: new Date().toISOString().slice(0, 10),
+        };
+        current.push(newEntry);
         result.newPatterns.push(pname);
       }
     }
+
+    // 写回 pattern_library.md（对齐 Python detect_and_update）
+    if (matches.length > 0) {
+      await this.writePatterns(current);
+    }
+
     return result;
+  }
+
+  private async writePatterns(patterns: PatternEntry[]): Promise<void> {
+    await fs.mkdir(path.dirname(this.patternFile), { recursive: true });
+    const lines = [
+      '# Pattern Library',
+      '',
+      `> Last updated: ${new Date().toISOString().slice(0, 10)} | Total: ${patterns.length}`,
+      '',
+      '| ID | Name | Category | Occurrences | Confidence | Status |',
+      '|---|---|---|---|---|---|',
+      ...patterns.map(p =>
+        `| ${p.id} | ${p.name} | ${p.category} | ${p.occurrences} | ${p.confidence.toFixed(2)} | ${p.status} |`
+      ),
+      '',
+    ];
+    await fs.writeFile(this.patternFile, lines.join('\n'), 'utf-8');
   }
 }

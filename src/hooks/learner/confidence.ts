@@ -43,9 +43,9 @@ export class ConfidenceEngine {
     return this.adjust(kid, ConfidenceEngine.MISLEADING_PENALTY);
   }
 
-  async decayUnused(): Promise<ConfidenceAdjustment[]> {
+  async decayUnused(days?: number): Promise<ConfidenceAdjustment[]> {
     const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - this.config.decayDays);
+    cutoff.setDate(cutoff.getDate() - (days ?? this.config.decayDays));
 
     const decayed: ConfidenceAdjustment[] = [];
     let files: string[];
@@ -77,6 +77,33 @@ export class ConfidenceEngine {
       });
     }
     return decayed;
+  }
+
+  /** 获取置信度低于阈值的条目（对齐 Python get_deprecated） */
+  async getDeprecated(): Promise<ConfidenceAdjustment[]> {
+    let files: string[];
+    try {
+      files = await fs.readdir(this.knowledgeDir);
+    } catch {
+      return [];
+    }
+    const deprecated: ConfidenceAdjustment[] = [];
+    for (const file of files.filter(f => /^k-\d+.*\.md$/.test(f))) {
+      const filePath = path.join(this.knowledgeDir, file);
+      const content = await fs.readFile(filePath, 'utf-8').catch(() => '');
+      const meta = parseFrontmatter(content);
+      if (!meta) continue;
+      const conf = parseFloat(meta['confidence'] ?? '0.7') || 0.7;
+      if (conf < this.config.minConfidence) {
+        deprecated.push({
+          id: meta['id'] ?? file,
+          oldConfidence: conf,
+          newConfidence: conf,
+          deprecated: true,
+        });
+      }
+    }
+    return deprecated;
   }
 
   async getConfidence(kid: string): Promise<number | null> {

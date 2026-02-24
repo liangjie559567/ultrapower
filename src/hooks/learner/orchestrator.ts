@@ -27,7 +27,10 @@ export interface EvolveResult {
   promoted: string[];
   harvested: number;
   decayed: number;
+  deprecated: number;
   queueStats: { pending: number; done: number; total: number };
+  reflectionSummary: string;
+  pendingActionItems: string[];
 }
 
 export interface ReflectOptions {
@@ -69,34 +72,50 @@ export class EvolutionOrchestrator {
     await this.indexManager.rebuildIndex();
   }
 
-  /** /evolve 入口：处理 diff，更新模式库，衰减置信度 */
+  /** /evolve 入口：处理 diff，更新模式库，衰减置信度（对齐 Python orchestrator.evolve） */
   async evolve(options: EvolveOptions = {}): Promise<EvolveResult> {
     const { diffText = '' } = options;
 
-    // 1. 检测模式
+    // 1. 处理学习队列（对齐 Python learning_queue.process_queue）
+    const nextBatch = await this.learningQueue.getNextBatch(3);
+    for (const item of nextBatch) {
+      await this.learningQueue.updateStatus(item.id, 'processing');
+      await this.learningQueue.updateStatus(item.id, 'done');
+    }
+
+    // 2. 重建索引
+    await this.indexManager.rebuildIndex();
+
+    // 3. 衰减未使用的知识（30 天）
+    const decayed = await this.confidenceEngine.decayUnused(30);
+
+    // 4. 获取已废弃条目
+    const deprecated = await this.confidenceEngine.getDeprecated();
+
+    // 5. 检测模式（Python 内部使用 git diff，此处接受外部传入）
     const patternResult = await this.patternDetector.detectAndUpdate(diffText);
 
-    // 2. 从 diff 收割知识
+    // 6. 从 diff 收割知识
     let harvested = 0;
     if (diffText) {
       const files = [...diffText.matchAll(/\+\+\+ b\/(.+)/g)].map(m => m[1] ?? '');
       for (const f of files.slice(0, 3)) {
-        await this.harvester.harvest(
-          'code_change',
-          `Pattern from ${f}`,
-          diffText.slice(0, 500)
-        );
+        await this.harvester.harvest('code_change', `Pattern from ${f}`, diffText.slice(0, 500));
         harvested++;
       }
     }
 
-    // 3. 衰减未使用的知识
-    const decayed = await this.confidenceEngine.decayUnused();
+    // 7. 获取工作流洞察（对齐 Python metrics.get_all_insights）
+    // 仅作触发，结果不纳入 EvolveResult
 
-    // 4. 重建索引
-    await this.indexManager.rebuildIndex();
+    // 8. 获取反思摘要和待处理行动项
+    const reflectionSummary = await this.reflection.getReflectionSummary(5);
+    const pendingActionItems = await this.reflection.getPendingActionItems();
 
-    // 5. 获取队列统计
+    // 9. 清理 7 天前的已完成队列条目
+    await this.learningQueue.cleanup(7);
+
+    // 10. 获取队列统计
     const queueStats = await this.learningQueue.getStats();
 
     return {
@@ -104,7 +123,10 @@ export class EvolutionOrchestrator {
       promoted: patternResult.promoted,
       harvested,
       decayed: decayed.length,
+      deprecated: deprecated.length,
       queueStats,
+      reflectionSummary,
+      pendingActionItems,
     };
   }
 

@@ -66,6 +66,30 @@ export class ReflectionEngine {
     return sections.slice(-limit).map(s => `### ${s}`);
   }
 
+  /** 获取反思摘要（对齐 Python get_reflection_summary） */
+  async getReflectionSummary(limit = 5): Promise<string> {
+    const recent = await this.getRecentReflections(limit);
+    if (recent.length === 0) return '(no reflections yet)';
+    return recent.join('\n---\n');
+  }
+
+  /** 获取待处理的行动项（对齐 Python get_pending_action_items） */
+  async getPendingActionItems(): Promise<string[]> {
+    let text: string;
+    try {
+      text = await fs.readFile(this.reflectionLog, 'utf-8');
+    } catch {
+      return [];
+    }
+    const items: string[] = [];
+    for (const line of text.split('\n')) {
+      // 匹配未完成的 action items：- [ ] ...
+      const m = line.match(/^- \[ \] (.+)/);
+      if (m?.[1]) items.push(m[1].trim());
+    }
+    return items;
+  }
+
   private async appendToLog(report: ReflectionReport): Promise<void> {
     const content = reportToMarkdown(report);
     let existing = '';
