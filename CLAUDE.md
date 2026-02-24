@@ -62,6 +62,11 @@ gh pr create --base dev ...
 - 动作：必须执行 `tsc --noEmit && npm run build && npm test`。
 - 通过条件：无错误时才允许宣告完成。
 
+### Scope Gate（范围门禁）
+- 触发：修改文件时。
+- 检查：是否在 `manifest.md` 定义的 `Impact Scope` 内。
+- 动作：越界修改触发警告，需用户确认后才能继续。
+
 ## Axiom 进化引擎自动行为
 
 | 触发事件 | 自动行为 |
