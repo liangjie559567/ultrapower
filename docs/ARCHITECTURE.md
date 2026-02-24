@@ -133,6 +133,62 @@ ultrapower 包含 4 个 MCP 服务器：
 
 调用方式：`mcp__plugin_smart-dev-flow_x__ask_codex`（Codex）、`mcp__plugin_smart-dev-flow_g__ask_gemini`（Gemini）。
 
+## Superpowers × Ultrapower 集成
+
+ultrapower v5.0.0 深度集成了 superpowers skill 体系，通过 `next-step-router` 在关键节点串联工作流。
+
+### next-step-router
+
+`next-step-router` 是一个路由层 skill，在每个 superpowers skill 完成后被调用，分析产出内容并用 `AskUserQuestion` 向用户推荐最优下一步。
+
+```
+Skill 完成
+    │
+    ▼
+next-step-router
+    │  分析 current_skill + stage + output_summary
+    ▼
+AskUserQuestion（最多4个选项，带置信度）
+    │
+    ▼
+用户选择 → 下一个 skill/agent 启动
+```
+
+### 路由阶段映射
+
+| 阶段 | 触发 Skill | 典型下一步 |
+|------|-----------|-----------|
+| 0 | using-superpowers（新功能检测） | brainstorming |
+| 1 | brainstorming（设计批准） | writing-plans |
+| 2 | writing-plans（计划提交） | using-git-worktrees |
+| 3 | using-git-worktrees（worktree 就绪） | executing-plans / subagent-driven-development |
+| 4 | executing-plans / subagent-driven-development（批次完成） | verification-before-completion |
+| 5 | systematic-debugging（根因确认） | test-driven-development |
+| 6 | test-driven-development（绿灯完成） | requesting-code-review |
+| 7 | requesting-code-review / receiving-code-review（审查完成） | finishing-a-development-branch |
+| 8 | finishing-a-development-branch（合并策略确认） | release |
+
+### 上下文持久化
+
+跨 skill 的上下文通过 notepad 持久化：
+
+```
+notepad_write_working("full_context", {
+  current_skill, stage, output_summary,
+  history: [...previous stages]
+})
+```
+
+每次 next-step-router 调用时读取并追加，确保完整上下文在整个工作流中传递。
+
+### 集成的 Skills
+
+以下 18 个 superpowers skills 末尾均包含 `## 路由触发` 块：
+
+`writing-plans`、`using-git-worktrees`、`subagent-driven-development`、`executing-plans`、`dispatching-parallel-agents`、`systematic-debugging`、`test-driven-development`、`requesting-code-review`、`receiving-code-review`、`verification-before-completion`、`finishing-a-development-branch`、`writing-skills`、`deepinit`、`sciomc`、`external-context`、`frontend-ui-ux`、`release`
+
+---
+
 ## Hooks
 
 ultrapower 在 `src/hooks/` 中包含 34 个 hook，用于生命周期事件：
