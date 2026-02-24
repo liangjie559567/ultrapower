@@ -136,3 +136,33 @@ CCG 可与其他 OMC 模式组合：
 ## 状态
 
 CCG 不维护持久状态文件。每次调用都是无状态的 —— Claude 在会话中内联管理工作流。MCP 任务 ID 在会话期间在上下文中跟踪。
+
+## Axiom Codex 分发协议（增强）
+
+此 skill 是 Axiom `codex-dispatch.md` 的兼容性入口点。
+
+### Codex 分发优先级规则
+
+当任务同时涉及后端和前端时，按以下优先级分配：
+
+| 任务类型 | 分发目标 | 优先级 |
+|---------|---------|--------|
+| API 设计、数据模型、业务逻辑 | Codex | P0 |
+| 安全审计、架构审查 | Codex | P0 |
+| React/Vue 组件、CSS 样式 | Gemini | P1 |
+| 大上下文文档分析（>100K tokens） | Gemini | P1 |
+| 集成胶水代码、横切关注点 | Claude 直接处理 | P2 |
+
+### 与 DAG 执行集成
+
+CCG 可与 Axiom 任务队列集成：
+1. 读取任务队列中的并行组（Parallel Group）
+2. 将后端任务 → Codex，前端任务 → Gemini，同时分发
+3. 等待两者完成后，Claude 综合结果并提交
+4. 执行编译门控：`tsc --noEmit && npm run build`
+
+### 输出文件约定
+
+- Codex 输出：`.omc/prompts/codex-[task-id]-output.md`
+- Gemini 输出：`.omc/prompts/gemini-[task-id]-output.md`
+- 综合结果：直接写入目标源文件

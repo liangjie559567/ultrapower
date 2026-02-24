@@ -89,3 +89,47 @@ description: 当你有书面实现计划需要在独立会话中执行并设置�
 - current_skill: "executing-plans"
 - stage: "batch_complete"
 - output_summary: 本批次完成的任务数、剩余任务数
+
+## Axiom PM→Worker 实现协议（增强）
+
+### DAG 分析与任务分发
+
+执行前，读取任务队列并分析依赖图：
+
+1. **读取任务队列**：从计划文件中提取 DAG 任务表
+2. **识别可并行组**：找出同一并行组（Parallel Group）中的任务
+3. **最大并行度**：同时分发不超过 **3 个** Worker
+
+### Worker 分发协议
+
+```
+PM（你）→ Worker（subagent）
+  输入：Sub-PRD 路径 + 上下文文件列表
+  输出：QUESTION | BLOCKED | COMPLETE
+```
+
+**三态输出处理：**
+- `QUESTION`：Worker 需要澄清 → PM 回答后重新分发
+- `BLOCKED`：依赖未就绪 → 将任务移入等待队列
+- `COMPLETE`：任务完成 → 标记完成，解锁下游任务
+
+### 编译门控
+
+每批次完成后执行：
+```bash
+tsc --noEmit && npm run build && npm test
+```
+- 全部通过 → 继续下一批次
+- 有失败 → 调用 `build-fixer` agent 修复后重新验证
+
+### 报告与交接
+
+所有任务完成后，生成报告到 `docs/reports/rd_report_[date].md`：
+```markdown
+## 实现报告
+
+- 完成任务数：X / Y
+- 修改文件：[列表]
+- 测试覆盖率：X%
+- 遗留问题：[列表]
+```

@@ -325,3 +325,39 @@ Reusable React components organized by feature and complexity.
 - current_skill: "deepinit"
 - stage: "agents_md_generated"
 - output_summary: 生成的 AGENTS.md 文件数、覆盖的目录层级数
+
+## Axiom 环境初始化流程（增强）
+
+当需要为新项目或新环境初始化 AI 工具配置时，执行以下步骤：
+
+### 环境检测
+
+读取 `.omc/axiom/active_context.md`（若存在）：
+- **IF PENDING tasks**：输出 "检测到未完成任务 [Task-ID]。是否恢复？"
+- **IF IDLE**：输出 "系统就绪。请告知下一步。"
+
+### 5 AI 工具配置安装
+
+按顺序为以下工具生成配置文件：
+
+| 工具 | 配置路径 | 内容 |
+|------|---------|------|
+| Claude Code | `.claude/CLAUDE.md` | 项目规范、分支策略 |
+| Codex | `.codex/AGENTS.md` | 后端任务指引 |
+| Gemini | `.gemini/GEMINI.md` | 前端/设计任务指引 |
+| Kiro | `.kiro/steering/project.md` | 项目上下文 |
+| OpenCode | `.opencode/AGENTS.md` | 通用 agent 指引 |
+
+### 备份与安装
+
+1. **备份现有配置**：将现有文件移至 `[path].backup.[timestamp]`
+2. **生成新配置**：基于项目结构和 AGENTS.md 内容生成
+3. **验证安装**：检查所有配置文件是否存在且格式正确
+
+### Silent Boot 协议
+
+Agent 启动时自动执行：
+1. 读取 `.omc/axiom/active_context.md` 检查待处理任务
+2. 若有 PENDING 任务 → 提示恢复
+3. 若 IDLE → 等待用户指令
+4. 环境检查（如 `tsc --noEmit` 验证构建状态）

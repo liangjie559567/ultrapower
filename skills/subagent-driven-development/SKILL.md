@@ -247,3 +247,32 @@ Done!
 - current_skill: "subagent-driven-development"
 - stage: "subagent_task_complete"
 - output_summary: 完成的任务描述、修改的文件列表
+
+## Axiom 完整功能流程（增强）
+
+此 skill 是 Axiom `4-implementing.md` 的兼容性入口点。
+
+当用户触发功能开发流程时，执行以下完整流程：
+
+### 流程入口
+
+1. **检查前置条件**：确认已有 PRD（`docs/prd/[name].md`）和任务队列
+2. **若无 PRD**：先调用 `ultrapower:brainstorming` 生成 PRD
+3. **若无任务队列**：先调用 `ultrapower:writing-plans` 进行 DAG 拆解
+
+### 执行阶段
+
+按 DAG 顺序执行任务，每个任务：
+1. 派发 implementer subagent（附带 Sub-PRD 路径）
+2. 等待三态输出：QUESTION / BLOCKED / COMPLETE
+3. 规格合规性审查 → 代码质量审查
+4. 通过后标记完成，解锁下游任务
+
+### 与 executing-plans 的区别
+
+| 维度 | subagent-driven-development | executing-plans |
+|------|---------------------------|-----------------|
+| 执行位置 | 当前 session | 独立 session |
+| 并行度 | 顺序（防冲突） | 批次（3个/批） |
+| 审查 | 每任务双阶段审查 | 批次间人工审查 |
+| 适用场景 | 独立任务、快速迭代 | 复杂计划、检查点驱动 |

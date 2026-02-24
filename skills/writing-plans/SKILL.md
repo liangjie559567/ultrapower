@@ -122,3 +122,39 @@ git commit -m "feat: add specific feature"
 - stage: "plan_committed"
 - output_summary: 计划中的任务数、涉及文件数、是否有架构变更
 - full_context: { doc_paths: [计划文档路径], key_decisions: [...] }
+
+## Axiom DAG 任务拆解流程（增强）
+
+当需要将 PRD 拆解为可执行任务时，执行以下步骤：
+
+### 工作量门控
+
+- **< 1 天工作量**：直接生成单一任务，跳过完整拆解流程
+- **> 1 天工作量**：执行完整 DAG 拆解
+
+### DAG 分析步骤
+
+1. **读取 PRD**：从 `docs/prd/[name].md` 加载需求
+2. **识别依赖关系**：分析任务间的前置条件，构建有向无环图
+3. **生成 Sub-PRD**：为每个任务调用 `writer` agent 生成 `docs/tasks/[id]/sub_prds/[name].md`
+4. **PM 审计**：调用 `analyst` agent 验证任务覆盖度（无遗漏、无重复）
+5. **输出任务队列**：按 DAG 拓扑排序，标注并行可执行的任务组
+
+### 任务队列格式
+
+```markdown
+## Task Queue
+
+| ID | Name | Dependencies | Parallel Group | Estimated |
+|----|------|-------------|----------------|-----------|
+| T1 | ... | none | G1 | 2h |
+| T2 | ... | T1 | G2 | 3h |
+| T3 | ... | T1 | G2 | 2h |
+```
+
+### 系统架构师技能调用
+
+当任务涉及架构决策时，调用 `ultrapower:architect` agent 进行：
+- 接口定义（函数签名、数据结构）
+- 模块边界划分
+- 技术选型建议
