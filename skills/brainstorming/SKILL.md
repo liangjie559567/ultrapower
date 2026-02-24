@@ -19,6 +19,29 @@ description: "在任何创意工作之前必须使用此 skill —— 创建功�
 
 每个项目都要经历这个过程。待办事项列表、单函数工具、配置变更 —— 全部如此。"简单"项目恰恰是未经审视的假设造成最多浪费工作的地方。设计可以很短（对于真正简单的项目只需几句话），但必须呈现并获得批准。
 
+## 强制前置：代码库探索
+
+<HARD-GATE>
+在开始任何设计对话之前，必须先完成代码库探索。不允许跳过此步骤。
+</HARD-GATE>
+
+### 触发时立即执行
+
+1. 调用 `notepad_read` 检查是否已有 `codebase_summary`
+   - 若已有：直接使用，不重复调用 explore
+   - 若无：调用 `explore` agent（model: haiku）扫描代码库
+
+2. explore 扫描内容：项目结构、相关文件、近期5个 commit、现有约定
+
+3. 将探索结果写入 notepad（`notepad_write_working`，key: codebase_summary）
+
+4. 探索完成后，才进入"理解想法"阶段
+
+### 探索完成标准
+- [ ] 已识别与任务相关的主要文件（≥3个）
+- [ ] 已了解现有架构模式
+- [ ] 已检查近期相关提交
+
 ## 检查清单
 
 必须为以下每个项目创建任务并按顺序完成：
@@ -94,3 +117,11 @@ digraph brainstorming {
 - **探索替代方案** —— 在确定方案前始终提出 2-3 种方法
 - **增量验证** —— 呈现设计，在继续前获得批准
 - **保持灵活** —— 当某些内容不清晰时回头澄清
+
+## 路由触发（设计批准后）
+
+设计文档提交到 git 后，调用 `next-step-router`：
+- current_skill: "brainstorming"
+- stage: "design_approved"
+- output_summary: 设计涉及的文件数、模块数、是否有架构/安全/性能变更
+- full_context: { doc_paths: [设计文档路径], key_decisions: [...], codebase_summary: [...] }
