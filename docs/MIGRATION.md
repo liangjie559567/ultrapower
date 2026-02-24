@@ -19,7 +19,7 @@
 
 ### TL;DR
 
-v5.0 集成了 superpowers skill 系统，将 Agent 数量从 28 扩展至 31，Skills 从 34 扩展至 54，并引入 Team 模式作为默认多 Agent 编排器。
+v5.0 集成了 superpowers skill 系统，将 Agent 数量从 28 扩展至 31，Skills 从 34 扩展至 55，并引入 Team 模式作为默认多 Agent 编排器。
 
 ### 破坏性变更
 
@@ -44,7 +44,7 @@ v5.0 集成了 superpowers skill 系统，将 Agent 数量从 28 扩展至 31，
 - `qa-tester`：交互式 CLI/服务运行时验证
 - `scientist`：数据/统计分析
 
-**54 个 Skills**（新增 20 个），包括 superpowers skill 系统：
+**55 个 Skills**（新增 21 个），包括 superpowers skill 系统：
 - `brainstorming`、`systematic-debugging`、`test-driven-development`
 - `writing-plans`、`executing-plans`、`dispatching-parallel-agents`
 - `verification-before-completion`、`requesting-code-review`、`receiving-code-review`
@@ -75,7 +75,7 @@ v5.0 集成了 superpowers skill 系统，将 Agent 数量从 28 扩展至 31，
 2. **更新脚本中的 Agent 引用**（可选，推荐）：
    - `tdd-guide` → `test-engineer`
    - `researcher` → `document-specialist`
-3. **重新运行 `/omc-setup`** 以获取新的 CLAUDE.md 配置（包含 31 个 Agent 和 54 个 Skills）
+3. **重新运行 `/omc-setup`** 以获取新的 CLAUDE.md 配置（包含 31 个 Agent 和 55 个 Skills）
 
 ### 验证
 
