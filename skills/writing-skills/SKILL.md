@@ -649,3 +649,10 @@ helper1、helper2、step3、pattern4
 同样的好处：更高质量、更少意外、无懈可击的结果。
 
 如果你为代码遵循 TDD，就为 skill 遵循它。这是应用于文档的同一纪律。
+
+## 路由触发
+
+skill 压力测试通过后调用 `next-step-router`：
+- current_skill: "writing-skills"
+- stage: "stress_test_passed"
+- output_summary: 测试的 skill 名称、通过的测试场景数

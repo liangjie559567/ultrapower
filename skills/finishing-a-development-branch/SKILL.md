@@ -198,3 +198,10 @@ git worktree remove <worktree-path>
 
 **配合使用：**
 - **using-git-worktrees** —— 清理该 skill 创建的 worktree
+
+## 路由触发
+
+用户选择整合方式后调用 `next-step-router`：
+- current_skill: "finishing-a-development-branch"
+- stage: "merge_strategy_confirmed"
+- output_summary: 选择的整合方式（merge/squash/rebase）

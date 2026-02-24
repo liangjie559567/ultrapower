@@ -137,3 +137,10 @@ NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 运行命令。阅读输出。然后声明结果。
 
 这不可协商。
+
+## 路由触发
+
+验证通过后调用 `next-step-router`：
+- current_skill: "verification-before-completion"
+- stage: "verification_passed"
+- output_summary: 验证项目数、通过率、是否有构建错误
