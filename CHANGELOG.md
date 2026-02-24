@@ -1,3 +1,11 @@
+# ultrapower v5.0.2
+
+### 修复
+
+- **hooks.json**：修复 `StopContinuation` 为 `Stop`，解决插件安装验证失败导致所有 skills 无法加载的问题
+
+---
+
 # ultrapower v5.0.1
 
 ### 新增

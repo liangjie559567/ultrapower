@@ -1,6 +1,6 @@
 {
   "name": "ultrapower",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
   "type": "module",
   "main": "dist/index.js",

@@ -48,7 +48,7 @@
         ]
       }
     ],
-    "StopContinuation": [
+    "Stop": [
       {
         "matcher": "",
         "hooks": [
