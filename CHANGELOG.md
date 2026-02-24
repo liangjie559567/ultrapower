@@ -1,3 +1,19 @@
+# ultrapower v5.0.1
+
+### 新增
+
+- **next-step-router skill**：在关键节点分析产出，用 AskUserQuestion 推荐最优下一步 agent/skill，并完整传递上下文（通过 notepad 持久化）
+- **superpowers × ultrapower 深度集成**：为 18 个 superpowers skills 添加路由触发点，覆盖完整开发生命周期（阶段 0-8）
+- **新功能路由规则**：using-superpowers skill 新增自动检测新功能/bug修复/重构的路由逻辑
+- **brainstorming HARD-GATE**：强制前置 explore 探索门控，确保设计前充分理解代码库
+
+### 文档
+
+- 更新 README.md、docs/CLAUDE.md、docs/OMC-CLAUDE.md、docs/REFERENCE.md 添加 next-step-router 条目
+- 新增 docs/ARCHITECTURE.md "Superpowers × Ultrapower 集成" 章节
+
+---
+
 # ultrapower v5.0.0
 
 ### 新增
