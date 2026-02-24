@@ -125,3 +125,22 @@ digraph brainstorming {
 - stage: "design_approved"
 - output_summary: 设计涉及的文件数、模块数、是否有架构/安全/性能变更
 - full_context: { doc_paths: [设计文档路径], key_decisions: [...], codebase_summary: [...] }
+
+## Axiom PRD 起草流程（增强）
+
+当需要生成结构化 PRD 时，执行以下步骤：
+
+1. **需求澄清循环**
+   - 对用户输入运行需求分析
+   - 若置信度 < 90%：向用户询问澄清问题，等待回复后重复
+   - 若置信度 > 90%：进入下一步
+
+2. **生成 PRD 初稿**
+   - 使用通过验证的需求上下文生成 PRD
+   - 输出到 `docs/prd/[name]-draft.md`
+
+3. **用户评审门禁**
+   - 向用户展示 PRD 初稿路径
+   - 询问："PRD 初稿已就绪。是否进入专家评审阶段？"
+   - 是 → 触发 5 专家并行评审（ux_director、product_director、domain_expert、tech_lead、critic）
+   - 否 → 停止

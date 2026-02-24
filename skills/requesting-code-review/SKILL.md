@@ -110,3 +110,26 @@ You: [Fix progress indicators]
 - current_skill: "requesting-code-review"
 - stage: "review_returned"
 - output_summary: 审查意见数量、严重程度分布
+
+## Axiom 专家评审流程（增强）
+
+当需要对 PRD 或重要功能进行全面评审时，执行并行专家评审：
+
+### 并行专家评审（5 角色）
+
+按优先级并行运行以下评审角色：
+1. `ux-researcher`（UX Director）→ 输出 `docs/reviews/[name]/review_ux.md`
+2. `product-manager`（Product Director）→ 输出 `docs/reviews/[name]/review_product.md`
+3. `analyst`（Domain Expert）→ 输出 `docs/reviews/[name]/review_domain.md`
+4. `architect`（Tech Lead）→ 输出 `docs/reviews/[name]/review_tech.md`
+5. `critic`（Critic）→ 输出 `docs/reviews/[name]/review_critic.md`
+
+### 汇总与冲突解决
+
+优先级顺序：安全 > 技术 > 战略 > 逻辑 > 体验
+
+基于优先级解决冲突，将初稿重写为最终版本。
+
+### 用户确认门禁
+
+展示所有评审报告路径，询问："专家评审已完成。是否进入任务拆解阶段？"
