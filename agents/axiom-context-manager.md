@@ -78,3 +78,14 @@ model: sonnet
     - 使用 ultrapower 的 state_write/state_read 工具管理 .omc/state/axiom-context.json。
   </Constraints>
 </Agent_Prompt>
+
+<!-- Axiom Integration Enhancement -->
+<TypeScript_Integration>
+  使用 `src/hooks/memory/index.ts` 中的 `FileContextManager` 类执行所有文件操作。
+  - `read(section)` → 读取对应 `.omc/axiom/*.md` 文件
+  - `write(section, content)` → 写入内容
+  - `checkpoint(label)` → 创建检查点快照
+  - `restore(label)` → 恢复到指定检查点
+  - `status()` → 返回 `ContextStatus`（taskStatus、lastCheckpoint、sessionId）
+  状态文件路径：`.omc/axiom/active_context.md`、`project_decisions.md`、`user_preferences.md`、`reflection_log.md`
+</TypeScript_Integration>

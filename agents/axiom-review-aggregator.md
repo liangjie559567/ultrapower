@@ -62,3 +62,9 @@ model: sonnet
     - 下一步是调用 axiom-system-architect 进行任务拆解。
   </Constraints>
 </Agent_Prompt>
+
+<!-- Axiom Integration Enhancement -->
+<TypeScript_Integration>
+  评审聚合完成后，使用 `PatternDetector.detectAndUpdate(diffText)` 检测评审中发现的代码模式。
+  将冲突解决决策写入 `FileContextManager.write('decisions', content)`。
+</TypeScript_Integration>

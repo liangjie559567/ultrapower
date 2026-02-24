@@ -69,3 +69,9 @@ model: sonnet
     - 严格遵循 YAGNI 原则，MVP 范围最小化。
   </Constraints>
 </Agent_Prompt>
+
+<!-- Axiom Integration Enhancement -->
+<TypeScript_Integration>
+  生成 Draft PRD 后，使用 `KnowledgeHarvester.harvest('workflow_run', title, summary)` 将设计决策存入知识库。
+  使用 `FileContextManager.write('active', content)` 更新当前任务状态为 REVIEWING。
+</TypeScript_Integration>

@@ -66,3 +66,10 @@ model: sonnet
     - Manifest 生成后，下一步是调用 ax-implement skill 开始实施。
   </Constraints>
 </Agent_Prompt>
+
+<!-- Axiom Integration Enhancement -->
+<TypeScript_Integration>
+  任务分解完成后，使用 `LearningQueue.addItem('workflow_run', taskId, 'P1', description)` 将任务加入学习队列。
+  使用 `KnowledgeIndexManager.rebuildIndex()` 更新知识索引。
+  架构决策使用 `FileContextManager.write('decisions', content)` 持久化。
+</TypeScript_Integration>

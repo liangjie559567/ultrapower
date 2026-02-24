@@ -108,3 +108,14 @@ model: sonnet
     - 使用 project_memory_add_note 和 project_memory_add_directive 持久化高置信知识。
   </Constraints>
 </Agent_Prompt>
+
+<!-- Axiom Integration Enhancement -->
+<TypeScript_Integration>
+  使用 `src/hooks/learner/orchestrator.ts` 中的 `EvolutionOrchestrator` 类：
+  - `initialize()` → 加载种子知识，重建索引
+  - `evolve({ diffText })` → 检测模式、收割知识、衰减置信度
+  - `reflect({ sessionName, ... })` → 生成反思报告
+  - `getInsights(workflow)` → 获取工作流洞察
+  子模块：`KnowledgeHarvester`、`PatternDetector`、`ConfidenceEngine`、`WorkflowMetrics`、`LearningQueue`
+  知识文件存储于 `.omc/knowledge/k-NNN-*.md`（YAML frontmatter 格式）
+</TypeScript_Integration>

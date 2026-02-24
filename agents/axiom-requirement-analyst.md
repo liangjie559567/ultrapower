@@ -67,3 +67,9 @@ model: sonnet
     - 读取 .omc/axiom/project_decisions.md 获取架构约束。
   </Constraints>
 </Agent_Prompt>
+
+<!-- Axiom Integration Enhancement -->
+<TypeScript_Integration>
+  分析完成后，使用 `FileContextManager.write('decisions', content)` 将架构约束写入 `project_decisions.md`。
+  输出 CLARIFY 状态时，将澄清问题追加到 `active_context.md` 的 Current Task 节。
+</TypeScript_Integration>

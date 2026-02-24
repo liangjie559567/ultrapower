@@ -65,3 +65,9 @@ model: sonnet
     - PRD 确认后，下一步是调用 axiom-system-architect 进行任务拆解。
   </Constraints>
 </Agent_Prompt>
+
+<!-- Axiom Integration Enhancement -->
+<TypeScript_Integration>
+  生成 PRD 前，调用 `FileContextManager.read('decisions')` 读取架构约束。
+  PRD 生成完成后，调用 `WorkflowMetrics.endTracking('feature-flow', { success: true })` 记录工作流指标。
+</TypeScript_Integration>
