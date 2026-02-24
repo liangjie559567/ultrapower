@@ -1,11 +1,15 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs';
 import { join } from 'path';
+import { tmpdir } from 'os';
 import { parseTranscript, loadTranscript } from '../../analytics/transcript-parser.js';
 import type { TranscriptEntry } from '../../analytics/types.js';
 
 describe('transcript-parser', () => {
-  const fixturesDir = join(__dirname, '..', 'fixtures');
+  const fixturesDirDirect = join(__dirname, '..', 'fixtures');
+  const fixturesDir = fs.existsSync(fixturesDirDirect)
+    ? fixturesDirDirect
+    : fixturesDirDirect.replace(/[\\/]dist[\\/]/, '/src/');
   const sampleTranscriptPath = join(fixturesDir, 'sample-transcript.jsonl');
 
   describe('parseTranscript()', () => {
@@ -63,7 +67,7 @@ describe('transcript-parser', () => {
     });
 
     it('handles malformed JSON lines gracefully with default warning', async () => {
-      const tempPath = join(fixturesDir, 'malformed-test.jsonl');
+      const tempPath = join(tmpdir(), 'malformed-test-' + process.pid + '.jsonl');
       const content = [
         '{"type":"assistant","sessionId":"test","timestamp":"2026-01-24T00:00:00.000Z","message":{"model":"claude-sonnet-4-6-20260217","role":"assistant","usage":{"input_tokens":10,"output_tokens":5,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}}}',
         'INVALID JSON LINE',
@@ -92,7 +96,7 @@ describe('transcript-parser', () => {
     });
 
     it('handles malformed JSON lines gracefully with custom error handler', async () => {
-      const tempPath = join(fixturesDir, 'malformed-custom-test.jsonl');
+      const tempPath = join(tmpdir(), 'malformed-custom-test-' + process.pid + '.jsonl');
       const content = [
         '{"type":"assistant","sessionId":"test","timestamp":"2026-01-24T00:00:00.000Z","message":{"model":"claude-sonnet-4-6-20260217","role":"assistant","usage":{"input_tokens":10,"output_tokens":5,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}}}',
         'INVALID JSON LINE',
@@ -143,7 +147,7 @@ describe('transcript-parser', () => {
     });
 
     it('handles empty files', async () => {
-      const tempPath = join(fixturesDir, 'empty-test.jsonl');
+      const tempPath = join(tmpdir(), 'empty-test-' + process.pid + '.jsonl');
       fs.writeFileSync(tempPath, '');
 
       try {
@@ -160,7 +164,7 @@ describe('transcript-parser', () => {
     });
 
     it('handles files with only empty lines', async () => {
-      const tempPath = join(fixturesDir, 'empty-lines-test.jsonl');
+      const tempPath = join(tmpdir(), 'empty-lines-test-' + process.pid + '.jsonl');
       fs.writeFileSync(tempPath, '\n\n\n\n');
 
       try {
@@ -188,7 +192,7 @@ describe('transcript-parser', () => {
     });
 
     it('handles files with whitespace lines', async () => {
-      const tempPath = join(fixturesDir, 'whitespace-test.jsonl');
+      const tempPath = join(tmpdir(), 'whitespace-test-' + process.pid + '.jsonl');
       const content = [
         '{"type":"assistant","sessionId":"test","timestamp":"2026-01-24T00:00:00.000Z","message":{"model":"claude-sonnet-4-6-20260217","role":"assistant","usage":{"input_tokens":10,"output_tokens":5,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}}}',
         '   ',
@@ -213,7 +217,7 @@ describe('transcript-parser', () => {
 
     it('streams large files efficiently without loading all into memory', async () => {
       // Create a large file with many entries
-      const tempPath = join(fixturesDir, 'large-test.jsonl');
+      const tempPath = join(tmpdir(), 'large-test-' + process.pid + '.jsonl');
       const entryTemplate = {
         type: 'assistant',
         sessionId: 'large-test',
@@ -306,7 +310,7 @@ describe('transcript-parser', () => {
     });
 
     it('handles custom error handler', async () => {
-      const tempPath = join(fixturesDir, 'malformed-load-test.jsonl');
+      const tempPath = join(tmpdir(), 'malformed-load-test-' + process.pid + '.jsonl');
       const content = [
         '{"type":"assistant","sessionId":"test","timestamp":"2026-01-24T00:00:00.000Z","message":{"model":"claude-sonnet-4-6-20260217","role":"assistant","usage":{"input_tokens":10,"output_tokens":5,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}}}',
         'INVALID',
@@ -332,7 +336,7 @@ describe('transcript-parser', () => {
     });
 
     it('returns empty array for empty file', async () => {
-      const tempPath = join(fixturesDir, 'empty-load-test.jsonl');
+      const tempPath = join(tmpdir(), 'empty-load-test-' + process.pid + '.jsonl');
       fs.writeFileSync(tempPath, '');
 
       try {
