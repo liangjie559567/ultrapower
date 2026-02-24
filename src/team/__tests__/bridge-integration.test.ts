@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync, statSync, realpathSync } from 'fs';
+import { mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync, statSync, realpathSync } from 'fs';
 import { join, resolve } from 'path';
 import { homedir, tmpdir } from 'os';
 import type { BridgeConfig, TaskFile, OutboxMessage } from '../types.js';
@@ -10,9 +10,15 @@ import { sanitizeName } from '../tmux-session.js';
 import { logAuditEvent, readAuditLog } from '../audit-log.js';
 
 const TEST_TEAM = 'test-bridge-int';
-const TASKS_DIR = join(homedir(), '.claude', 'tasks', TEST_TEAM);
-const TEAMS_DIR = join(homedir(), '.claude', 'teams', TEST_TEAM);
-const WORK_DIR = join(tmpdir(), '__test_bridge_work__');
+let TEST_BASE_DIR: string;
+let TASKS_DIR: string;
+let TEAMS_DIR: string;
+let WORK_DIR: string;
+
+vi.mock('../../utils/paths.js', async () => {
+  const actual = await vi.importActual('../../utils/paths.js') as Record<string, unknown>;
+  return { ...actual, getClaudeConfigDir: () => TEST_BASE_DIR };
+});
 
 function writeTask(task: TaskFile): void {
   mkdirSync(TASKS_DIR, { recursive: true });
@@ -44,6 +50,10 @@ function makeConfig(overrides?: Partial<BridgeConfig>): BridgeConfig {
 }
 
 beforeEach(() => {
+  TEST_BASE_DIR = mkdtempSync(join(tmpdir(), 'bridge-int-test-'));
+  TASKS_DIR = join(TEST_BASE_DIR, 'tasks', TEST_TEAM);
+  TEAMS_DIR = join(TEST_BASE_DIR, 'teams', TEST_TEAM);
+  WORK_DIR = join(TEST_BASE_DIR, 'work');
   mkdirSync(TASKS_DIR, { recursive: true });
   mkdirSync(join(TEAMS_DIR, 'inbox'), { recursive: true });
   mkdirSync(join(TEAMS_DIR, 'outbox'), { recursive: true });
@@ -53,9 +63,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  rmSync(TASKS_DIR, { recursive: true, force: true });
-  rmSync(TEAMS_DIR, { recursive: true, force: true });
-  rmSync(WORK_DIR, { recursive: true, force: true });
+  rmSync(TEST_BASE_DIR, { recursive: true, force: true });
 });
 
 describe('Bridge Integration', () => {
@@ -303,13 +311,19 @@ describe('validateBridgeWorkingDirectory logic', () => {
     }
     const resolved = realpathSync(workingDirectory);
     const home = homedir();
-    if (!resolved.startsWith(home + '/') && resolved !== home) {
+    const sep = process.platform === 'win32' ? '\\' : '/';
+    if (!resolved.startsWith(home + sep) && resolved !== home) {
       throw new Error(`workingDirectory is outside home directory: ${resolved}`);
     }
   }
 
   it('rejects /etc as working directory', () => {
-    expect(() => validateBridgeWorkingDirectory('/etc')).toThrow('outside home directory');
+    if (process.platform === 'win32') {
+      // /etc doesn't exist on Windows; test with a Windows path outside home
+      expect(() => validateBridgeWorkingDirectory('C:\\Windows\\System32')).toThrow();
+    } else {
+      expect(() => validateBridgeWorkingDirectory('/etc')).toThrow('outside home directory');
+    }
   });
 
   it('rejects /tmp as working directory (outside home)', () => {

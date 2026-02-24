@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, rmSync, existsSync, mkdtempSync } from 'fs';
 import { execSync } from 'child_process';
 import { join } from 'path';
+import { tmpdir } from 'os';
 import {
   validatePath,
   resolveOmcPath,
@@ -25,12 +26,12 @@ import {
   getWorktreeRoot,
 } from '../worktree-paths.js';
 
-const TEST_DIR = '/tmp/worktree-paths-test';
+let TEST_DIR: string;
 
 describe('worktree-paths', () => {
   beforeEach(() => {
+    TEST_DIR = mkdtempSync(join(tmpdir(), 'worktree-paths-test-'));
     clearWorktreeCache();
-    mkdirSync(TEST_DIR, { recursive: true });
   });
 
   afterEach(() => {
@@ -45,7 +46,8 @@ describe('worktree-paths', () => {
     });
 
     it('should reject absolute paths', () => {
-      expect(() => validatePath('/etc/passwd')).toThrow('absolute paths');
+      const absPath = process.platform === 'win32' ? 'C:\\Windows\\System32' : '/etc/passwd';
+      expect(() => validatePath(absPath)).toThrow('absolute paths');
       expect(() => validatePath('~/secret')).toThrow('absolute paths');
     });
 
@@ -137,7 +139,8 @@ describe('worktree-paths', () => {
 
     it('should return false for paths outside .omc', () => {
       expect(isPathUnderOmc(join(TEST_DIR, 'src', 'file.ts'), TEST_DIR)).toBe(false);
-      expect(isPathUnderOmc('/etc/passwd', TEST_DIR)).toBe(false);
+      const outsidePath = process.platform === 'win32' ? 'C:\\Windows\\System32\\file.txt' : '/etc/passwd';
+      expect(isPathUnderOmc(outsidePath, TEST_DIR)).toBe(false);
     });
   });
 
@@ -174,7 +177,7 @@ describe('worktree-paths', () => {
 
     it('should fall back and log for non-git directories', () => {
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-      const nonGitDir = mkdtempSync('/tmp/worktree-paths-nongit-');
+      const nonGitDir = mkdtempSync(join(tmpdir(), 'worktree-paths-nongit-'));
 
       const result = resolveToWorktreeRoot(nonGitDir);
 
@@ -192,7 +195,7 @@ describe('worktree-paths', () => {
 
     it('should handle bare repositories by falling back and logging', () => {
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-      const bareRepoDir = mkdtempSync('/tmp/worktree-paths-bare-');
+      const bareRepoDir = mkdtempSync(join(tmpdir(), 'worktree-paths-bare-'));
       execSync('git init --bare', { cwd: bareRepoDir, stdio: 'pipe' });
 
       const result = resolveToWorktreeRoot(bareRepoDir);
@@ -226,12 +229,12 @@ describe('worktree-paths', () => {
     });
 
     it('should throw for directories outside the trusted root', () => {
-      // /etc is outside any repo worktree root
-      expect(() => validateWorkingDirectory('/etc')).toThrow('outside the trusted worktree root');
+      const outsideDir = process.platform === 'win32' ? 'C:\\Windows\\System32' : '/etc';
+      expect(() => validateWorkingDirectory(outsideDir)).toThrow('outside the trusted worktree root');
     });
 
     it('should reject a workingDirectory that resolves to a different git root', () => {
-      const nestedRepoDir = mkdtempSync('/tmp/worktree-paths-nested-');
+      const nestedRepoDir = mkdtempSync(join(tmpdir(), 'worktree-paths-nested-'));
       execSync('git init', { cwd: nestedRepoDir, stdio: 'pipe' });
 
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);

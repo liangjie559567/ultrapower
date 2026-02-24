@@ -13,13 +13,20 @@
  * - Sanitization edge cases (unicode, empty, path traversal)
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
-  mkdirSync, writeFileSync, rmSync, existsSync,
+  mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync,
   readFileSync, appendFileSync
 } from 'fs';
 import { join } from 'path';
-import { homedir, tmpdir } from 'os';
+import { tmpdir } from 'os';
+
+let TEST_BASE_DIR: string;
+
+vi.mock('../../utils/paths.js', async () => {
+  const actual = await vi.importActual('../../utils/paths.js') as Record<string, unknown>;
+  return { ...actual, getClaudeConfigDir: () => TEST_BASE_DIR };
+});
 
 // --- task-file-ops imports ---
 import {
@@ -59,12 +66,25 @@ import {
 
 const EDGE_TEAM_TASKS = 'test-edge-tasks';
 const EDGE_TEAM_IO = 'test-edge-io';
-const TASKS_DIR = join(homedir(), '.claude', 'tasks', EDGE_TEAM_TASKS);
-const TEAMS_IO_DIR = join(homedir(), '.claude', 'teams', EDGE_TEAM_IO);
-const HB_DIR = join(tmpdir(), 'test-edge-hb');
-const REG_DIR = join(tmpdir(), 'test-edge-reg');
 const REG_TEAM = 'test-edge-reg-team';
-const CONFIG_DIR = join(homedir(), '.claude', 'teams', REG_TEAM);
+let TASKS_DIR: string;
+let TEAMS_IO_DIR: string;
+let HB_DIR: string;
+let REG_DIR: string;
+let CONFIG_DIR: string;
+
+beforeEach(() => {
+  TEST_BASE_DIR = mkdtempSync(join(tmpdir(), 'edge-cases-test-'));
+  TASKS_DIR = join(TEST_BASE_DIR, 'tasks', EDGE_TEAM_TASKS);
+  TEAMS_IO_DIR = join(TEST_BASE_DIR, 'teams', EDGE_TEAM_IO);
+  HB_DIR = join(TEST_BASE_DIR, 'hb');
+  REG_DIR = join(TEST_BASE_DIR, 'reg');
+  CONFIG_DIR = join(TEST_BASE_DIR, 'teams', REG_TEAM);
+});
+
+afterEach(() => {
+  rmSync(TEST_BASE_DIR, { recursive: true, force: true });
+});
 
 function writeTaskHelper(task: TaskFile): void {
   mkdirSync(TASKS_DIR, { recursive: true });
@@ -92,10 +112,6 @@ function makeHeartbeat(overrides?: Partial<HeartbeatData>): HeartbeatData {
 describe('task-file-ops edge cases', () => {
   beforeEach(() => {
     mkdirSync(TASKS_DIR, { recursive: true });
-  });
-
-  afterEach(() => {
-    rmSync(TASKS_DIR, { recursive: true, force: true });
   });
 
   describe('updateTask on non-existent file', () => {
@@ -293,10 +309,6 @@ describe('inbox-outbox edge cases', () => {
     mkdirSync(join(TEAMS_IO_DIR, 'inbox'), { recursive: true });
     mkdirSync(join(TEAMS_IO_DIR, 'outbox'), { recursive: true });
     mkdirSync(join(TEAMS_IO_DIR, 'signals'), { recursive: true });
-  });
-
-  afterEach(() => {
-    rmSync(TEAMS_IO_DIR, { recursive: true, force: true });
   });
 
   describe('readNewInboxMessages with malformed JSONL mixed with valid', () => {
@@ -535,10 +547,6 @@ describe('heartbeat edge cases', () => {
     mkdirSync(HB_DIR, { recursive: true });
   });
 
-  afterEach(() => {
-    rmSync(HB_DIR, { recursive: true, force: true });
-  });
-
   describe('isWorkerAlive with maxAgeMs of 0', () => {
     it('returns false because any age >= 0 fails the < 0 check', () => {
       writeHeartbeat(HB_DIR, makeHeartbeat());
@@ -716,11 +724,6 @@ describe('team-registration edge cases', () => {
     mkdirSync(REG_DIR, { recursive: true });
     mkdirSync(join(REG_DIR, '.omc', 'state'), { recursive: true });
     mkdirSync(CONFIG_DIR, { recursive: true });
-  });
-
-  afterEach(() => {
-    rmSync(REG_DIR, { recursive: true, force: true });
-    rmSync(CONFIG_DIR, { recursive: true, force: true });
   });
 
   describe('readProbeResult with corrupt JSON', () => {

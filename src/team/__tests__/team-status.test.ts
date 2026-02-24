@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { mkdirSync, writeFileSync, rmSync } from 'fs';
+import { mkdirSync, mkdtempSync, rmSync } from 'fs';
 import { join } from 'path';
-import { homedir } from 'os';
 import { tmpdir } from 'os';
 import { getTeamStatus } from '../team-status.js';
 import { atomicWriteJson } from '../fs-utils.js';
@@ -9,12 +8,21 @@ import { appendOutbox } from '../inbox-outbox.js';
 import type { HeartbeatData, TaskFile, OutboxMessage, McpWorkerMember } from '../types.js';
 
 const TEST_TEAM = 'test-team-status';
-const TEAMS_DIR = join(homedir(), '.claude', 'teams', TEST_TEAM);
-const TASKS_DIR = join(homedir(), '.claude', 'tasks', TEST_TEAM);
+let TEST_BASE_DIR: string;
+let TEAMS_DIR: string;
+let TASKS_DIR: string;
 let WORK_DIR: string;
 
+vi.mock('../../utils/paths.js', async () => {
+  const actual = await vi.importActual('../../utils/paths.js') as Record<string, unknown>;
+  return { ...actual, getClaudeConfigDir: () => TEST_BASE_DIR };
+});
+
 beforeEach(() => {
-  WORK_DIR = join(tmpdir(), `omc-team-status-test-${Date.now()}`);
+  TEST_BASE_DIR = mkdtempSync(join(tmpdir(), 'team-status-test-'));
+  TEAMS_DIR = join(TEST_BASE_DIR, 'teams', TEST_TEAM);
+  TASKS_DIR = join(TEST_BASE_DIR, 'tasks', TEST_TEAM);
+  WORK_DIR = mkdtempSync(join(tmpdir(), 'team-status-work-'));
   mkdirSync(join(TEAMS_DIR, 'outbox'), { recursive: true });
   mkdirSync(TASKS_DIR, { recursive: true });
   mkdirSync(join(WORK_DIR, '.omc', 'state', 'team-bridge', TEST_TEAM), { recursive: true });
@@ -22,8 +30,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  rmSync(TEAMS_DIR, { recursive: true, force: true });
-  rmSync(TASKS_DIR, { recursive: true, force: true });
+  rmSync(TEST_BASE_DIR, { recursive: true, force: true });
   rmSync(WORK_DIR, { recursive: true, force: true });
 });
 

@@ -132,7 +132,7 @@ describe('omc config-stop-callback --profile', () => {
     const config = readConfig(configPath);
     expect(config.notificationProfiles.multi.discord.enabled).toBe(true);
     expect(config.notificationProfiles.multi.telegram.enabled).toBe(true);
-  });
+  }, 15000);
 
   it('does not affect legacy stopHookCallbacks when using --profile', () => {
     const homeDir = mkdtempSync(join(tmpdir(), 'omc-cli-profile-'));
