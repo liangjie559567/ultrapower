@@ -1,6 +1,6 @@
 ---
 name: configure-telegram
-description: Configure Telegram bot notifications via natural language
+description: 通过自然语言配置 Telegram bot 通知
 triggers:
   - "configure telegram"
   - "setup telegram"
@@ -8,15 +8,15 @@ triggers:
   - "telegram bot"
 ---
 
-# Configure Telegram Notifications
+# 配置 Telegram 通知
 
-Set up Telegram notifications so OMC can message you when sessions end, need input, or complete background tasks.
+设置 Telegram 通知，让 OMC 在会话结束、需要输入或完成后台任务时向你发送消息。
 
-## How This Skill Works
+## 此 Skill 的工作方式
 
-This is an interactive, natural-language configuration skill. Walk the user through setup by asking questions with AskUserQuestion. Write the result to `~/.claude/.omc-config.json`.
+这是一个交互式自然语言配置 skill。通过 AskUserQuestion 引导用户完成设置。将结果写入 `~/.claude/.omc-config.json`。
 
-## Step 1: Detect Existing Configuration
+## 步骤 1：检测现有配置
 
 ```bash
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
@@ -38,11 +38,11 @@ else
 fi
 ```
 
-If existing config is found, show the user what's currently configured and ask if they want to update or reconfigure.
+若找到现有配置，向用户显示当前配置并询问是否要更新或重新配置。
 
-## Step 2: Create a Telegram Bot
+## 步骤 2：创建 Telegram Bot
 
-Guide the user through creating a bot if they don't have one:
+若用户没有 bot，引导其创建：
 
 ```
 To set up Telegram notifications, you need a Telegram bot token and your chat ID.
@@ -62,29 +62,29 @@ GET YOUR CHAT ID:
    - Group chat IDs are negative numbers (e.g., -1001234567890)
 ```
 
-## Step 3: Collect Bot Token
+## 步骤 3：收集 Bot Token
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "Paste your Telegram bot token (from @BotFather)"
+**问题：** "Paste your Telegram bot token (from @BotFather)"
 
-The user will type their token in the "Other" field.
+用户将在 "Other" 字段中输入 token。
 
-**Validate** the token:
-- Must match pattern: `digits:alphanumeric` (e.g., `123456789:ABCdefGHI...`)
-- If invalid, explain the format and ask again
+**验证** token：
+- 必须匹配模式：`digits:alphanumeric`（如 `123456789:ABCdefGHI...`）
+- 若无效，解释格式并再次询问
 
-## Step 4: Collect Chat ID
+## 步骤 4：收集 Chat ID
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "Paste your Telegram chat ID (the number from getUpdates API)"
+**问题：** "Paste your Telegram chat ID (the number from getUpdates API)"
 
-The user will type their chat ID in the "Other" field.
+用户将在 "Other" 字段中输入 chat ID。
 
-**Validate** the chat ID:
-- Must be a number (positive for personal, negative for groups)
-- If invalid, offer to help them find it:
+**验证** chat ID：
+- 必须是数字（个人为正数，群组为负数）
+- 若无效，提供帮助查找：
 
 ```bash
 # Help user find their chat ID
@@ -93,33 +93,33 @@ echo "Fetching recent messages to find your chat ID..."
 curl -s "https://api.telegram.org/bot${BOT_TOKEN}/getUpdates" | jq '.result[-1].message.chat.id // .result[-1].message.from.id // "No messages found - send /start to your bot first"'
 ```
 
-## Step 5: Choose Parse Mode
+## 步骤 5：选择解析模式
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "Which message format do you prefer?"
+**问题：** "Which message format do you prefer?"
 
-**Options:**
-1. **Markdown (Recommended)** - Bold, italic, code blocks with Markdown syntax
-2. **HTML** - Bold, italic, code with HTML tags
+**选项：**
+1. **Markdown（推荐）** —— 使用 Markdown 语法的粗体、斜体、代码块
+2. **HTML** —— 使用 HTML 标签的粗体、斜体、代码
 
-## Step 6: Configure Events
+## 步骤 6：配置事件
 
-Use AskUserQuestion with multiSelect:
+使用带 multiSelect 的 AskUserQuestion：
 
-**Question:** "Which events should trigger Telegram notifications?"
+**问题：** "Which events should trigger Telegram notifications?"
 
-**Options (multiSelect: true):**
-1. **Session end (Recommended)** - When a Claude session finishes
-2. **Input needed** - When Claude is waiting for your response (great for long-running tasks)
-3. **Session start** - When a new session begins
-4. **Session continuing** - When a persistent mode keeps the session alive
+**选项（multiSelect: true）：**
+1. **Session end（推荐）** —— Claude 会话结束时
+2. **Input needed** —— Claude 等待你回应时（适合长时间运行的任务）
+3. **Session start** —— 新会话开始时
+4. **Session continuing** —— 持久化模式保持会话活跃时
 
-Default selection: session-end + ask-user-question.
+默认选择：session-end + ask-user-question。
 
-## Step 7: Write Configuration
+## 步骤 7：写入配置
 
-Read the existing config, merge the new Telegram settings, and write back:
+读取现有配置，合并新的 Telegram 设置并写回：
 
 ```bash
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
@@ -146,9 +146,9 @@ echo "$EXISTING" | jq \
    }' > "$CONFIG_FILE"
 ```
 
-### Add event-specific config if user didn't select all events:
+### 若用户未选择所有事件，添加事件特定配置：
 
-For each event NOT selected, disable it:
+对每个未选择的事件，禁用它：
 
 ```bash
 # Example: disable session-start if not selected
@@ -157,19 +157,19 @@ echo "$(cat "$CONFIG_FILE")" | jq \
    .notifications.events["session-start"] = {enabled: false}' > "$CONFIG_FILE"
 ```
 
-## Step 8: Test the Configuration
+## 步骤 8：测试配置
 
-After writing config, offer to send a test notification:
+写入配置后，提供发送测试通知的选项：
 
-Use AskUserQuestion:
+使用 AskUserQuestion：
 
-**Question:** "Send a test notification to verify the setup?"
+**问题：** "Send a test notification to verify the setup?"
 
-**Options:**
-1. **Yes, test now (Recommended)** - Send a test message to your Telegram chat
-2. **No, I'll test later** - Skip testing
+**选项：**
+1. **Yes, test now (Recommended)** - 向你的 Telegram 聊天发送测试消息
+2. **No, I'll test later** - 跳过测试
 
-### If testing:
+### 若测试：
 
 ```bash
 BOT_TOKEN="USER_PROVIDED_TOKEN"
@@ -193,14 +193,14 @@ else
 fi
 ```
 
-Report success or failure. Common issues:
-- **401 Unauthorized**: Bot token is invalid
-- **400 Bad Request: chat not found**: Chat ID is wrong, or user hasn't sent `/start` to the bot
-- **Network error**: Check connectivity to api.telegram.org
+报告成功或失败。常见问题：
+- **401 Unauthorized**：Bot token 无效
+- **400 Bad Request: chat not found**：Chat ID 错误，或用户未向 bot 发送 `/start`
+- **Network error**：检查与 api.telegram.org 的连接
 
-## Step 9: Confirm
+## 步骤 9：确认
 
-Display the final configuration summary:
+显示最终配置摘要：
 
 ```
 Telegram Notifications Configured!
@@ -220,13 +220,13 @@ To reconfigure: /ultrapower:configure-telegram
 To configure Discord: /ultrapower:configure-discord
 ```
 
-## Environment Variable Alternative
+## 环境变量替代方案
 
-Users can skip this wizard entirely by setting env vars in their shell profile:
+用户可以通过在 shell 配置文件中设置环境变量来完全跳过此向导：
 
 ```bash
 export OMC_TELEGRAM_BOT_TOKEN="123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
 export OMC_TELEGRAM_CHAT_ID="123456789"
 ```
 
-Env vars are auto-detected by the notification system without needing `.omc-config.json`.
+环境变量由通知系统自动检测，无需 `.omc-config.json`。

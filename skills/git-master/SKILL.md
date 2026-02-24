@@ -1,29 +1,29 @@
 ---
 name: git-master
-description: Git expert for atomic commits, rebasing, and history management
+description: Git 专家，负责原子提交、变基和历史管理
 ---
 
-# Git Master Command
+# Git Master 命令
 
-Routes to the git-master agent for git operations.
+路由到 git-master agent 执行 git 操作。
 
-## Usage
+## 用法
 
 ```
-/ultrapower:git-master <git task>
+/ultrapower:git-master <git 任务>
 ```
 
-## Routing
+## 路由
 
 ```
 Task(subagent_type="ultrapower:git-master", model="sonnet", prompt="{{ARGUMENTS}}")
 ```
 
-## Capabilities
-- Atomic commits with conventional format
-- Interactive rebasing
-- Branch management
-- History cleanup
-- Style detection from repo history
+## 能力
+- 符合 conventional format 的原子提交
+- 交互式变基
+- 分支管理
+- 历史清理
+- 从仓库历史检测提交风格
 
 Task: {{ARGUMENTS}}

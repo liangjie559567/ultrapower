@@ -8,9 +8,12 @@ import {
   utimesSync,
   openSync,
   closeSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
 } from "fs";
 import { join } from "path";
-import { homedir } from "os";
+import { tmpdir } from "os";
 import { spawn } from "child_process";
 import {
   registerMessage,
@@ -22,14 +25,16 @@ import {
   type SessionMapping,
 } from "../session-registry.js";
 
-const REGISTRY_PATH = join(homedir(), ".omc", "state", "reply-session-registry.jsonl");
-const LOCK_PATH = join(homedir(), ".omc", "state", "reply-session-registry.lock");
+let TEST_DIR: string;
+let REGISTRY_PATH: string;
+let LOCK_PATH: string;
 const SESSION_REGISTRY_MODULE_PATH = join(process.cwd(), "src", "notifications", "session-registry.ts");
+const SESSION_REGISTRY_MODULE_URL = new URL(`file:///${SESSION_REGISTRY_MODULE_PATH.replace(/\\/g, '/')}`).href;
 
 function registerMessageInChildProcess(mapping: SessionMapping): Promise<void> {
   return new Promise((resolve, reject) => {
     const script = `
-import { registerMessage } from ${JSON.stringify(SESSION_REGISTRY_MODULE_PATH)};
+import { registerMessage } from ${JSON.stringify(SESSION_REGISTRY_MODULE_URL)};
 const mapping = JSON.parse(process.env.TEST_MAPPING_JSON ?? "{}");
 registerMessage(mapping);
 `;
@@ -38,6 +43,8 @@ registerMessage(mapping);
       env: {
         ...process.env,
         TEST_MAPPING_JSON: JSON.stringify(mapping),
+        OMC_SESSION_REGISTRY_PATH: REGISTRY_PATH,
+        OMC_SESSION_REGISTRY_LOCK_PATH: LOCK_PATH,
       },
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -60,23 +67,18 @@ registerMessage(mapping);
 
 describe("session-registry", () => {
   beforeEach(() => {
-    // Clean up registry before each test
-    if (existsSync(REGISTRY_PATH)) {
-      unlinkSync(REGISTRY_PATH);
-    }
-    if (existsSync(LOCK_PATH)) {
-      unlinkSync(LOCK_PATH);
-    }
+    TEST_DIR = mkdtempSync(join(tmpdir(), 'session-registry-test-'));
+    mkdirSync(join(TEST_DIR, '.omc', 'state'), { recursive: true });
+    REGISTRY_PATH = join(TEST_DIR, '.omc', 'state', 'reply-session-registry.jsonl');
+    LOCK_PATH = join(TEST_DIR, '.omc', 'state', 'reply-session-registry.lock');
+    process.env.OMC_SESSION_REGISTRY_PATH = REGISTRY_PATH;
+    process.env.OMC_SESSION_REGISTRY_LOCK_PATH = LOCK_PATH;
   });
 
   afterEach(() => {
-    // Clean up registry after each test
-    if (existsSync(REGISTRY_PATH)) {
-      unlinkSync(REGISTRY_PATH);
-    }
-    if (existsSync(LOCK_PATH)) {
-      unlinkSync(LOCK_PATH);
-    }
+    delete process.env.OMC_SESSION_REGISTRY_PATH;
+    delete process.env.OMC_SESSION_REGISTRY_LOCK_PATH;
+    rmSync(TEST_DIR, { recursive: true, force: true });
   });
 
   describe("registerMessage", () => {

@@ -1,5 +1,5 @@
 ---
-description: Execute plan in batches with review checkpoints
+description: 分批执行计划并设置审查检查点
 disable-model-invocation: true
 ---
 

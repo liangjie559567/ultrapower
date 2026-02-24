@@ -135,6 +135,7 @@ describe('Windows HUD Platform Fixes (#739)', () => {
     });
 
     it('should use emoji icons on macOS/Linux (current platform)', async () => {
+      if (process.platform === 'win32') return; // skip on Windows - this platform uses ASCII
       const { renderCallCounts } = await import('../../hud/elements/call-counts.js');
       const result = renderCallCounts(42, 7, 3);
       expect(result).toContain('\u{1F527}'); // wrench

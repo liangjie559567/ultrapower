@@ -19,9 +19,10 @@ describe('atomicWriteJson', () => {
     mkdirSync(TEST_DIR, { recursive: true });
     const filePath = join(TEST_DIR, 'test.json');
     atomicWriteJson(filePath, { key: 'value' });
-    const stat = statSync(filePath);
-    // Check owner-only read/write (0o600)
-    expect(stat.mode & 0o777).toBe(0o600);
+    if (process.platform !== 'win32') {
+      const stat = statSync(filePath);
+      expect(stat.mode & 0o777).toBe(0o600);
+    }
   });
 
   it('temp file names contain both PID and timestamp pattern', () => {
@@ -51,8 +52,10 @@ describe('writeFileWithMode', () => {
     mkdirSync(TEST_DIR, { recursive: true });
     const filePath = join(TEST_DIR, 'write-test.txt');
     writeFileWithMode(filePath, 'hello');
-    const stat = statSync(filePath);
-    expect(stat.mode & 0o777).toBe(0o600);
+    if (process.platform !== 'win32') {
+      const stat = statSync(filePath);
+      expect(stat.mode & 0o777).toBe(0o600);
+    }
   });
 });
 
@@ -60,8 +63,10 @@ describe('ensureDirWithMode', () => {
   it('creates directories with 0o700 permissions', () => {
     const dirPath = join(TEST_DIR, 'secure-dir');
     ensureDirWithMode(dirPath);
-    const stat = statSync(dirPath);
-    expect(stat.mode & 0o777).toBe(0o700);
+    if (process.platform !== 'win32') {
+      const stat = statSync(dirPath);
+      expect(stat.mode & 0o777).toBe(0o700);
+    }
   });
 });
 

@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from 'fs';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { homedir } from 'os';
+import { tmpdir } from 'os';
 import {
   readNewOutboxMessages,
   readAllTeamOutboxMessages,
@@ -10,14 +10,25 @@ import {
 import type { OutboxMessage } from '../types.js';
 
 const TEST_TEAM = 'test-team-outbox-reader';
-const TEAMS_DIR = join(homedir(), '.claude', 'teams', TEST_TEAM);
+let TEST_BASE_DIR: string;
+let TEAMS_DIR: string;
+
+vi.mock('../../utils/paths.js', async () => {
+  const actual = await vi.importActual('../../utils/paths.js') as Record<string, unknown>;
+  return {
+    ...actual,
+    getClaudeConfigDir: () => TEST_BASE_DIR,
+  };
+});
 
 beforeEach(() => {
+  TEST_BASE_DIR = mkdtempSync(join(tmpdir(), 'outbox-reader-test-'));
+  TEAMS_DIR = join(TEST_BASE_DIR, 'teams', TEST_TEAM);
   mkdirSync(join(TEAMS_DIR, 'outbox'), { recursive: true });
 });
 
 afterEach(() => {
-  rmSync(TEAMS_DIR, { recursive: true, force: true });
+  rmSync(TEST_BASE_DIR, { recursive: true, force: true });
 });
 
 describe('readNewOutboxMessages', () => {

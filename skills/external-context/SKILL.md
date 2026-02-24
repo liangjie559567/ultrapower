@@ -1,28 +1,28 @@
 ---
 name: external-context
-description: Invoke parallel document-specialist agents for external web searches and documentation lookup
-argument-hint: <search query or topic>
+description: 调用并行 document-specialist agent 进行外部网络搜索和文档查询
+argument-hint: <搜索查询或主题>
 ---
 
 # External Context Skill
 
-Invoke parallel document-specialist agents to search the web for external documentation, references, and context.
+调用并行 document-specialist agent 搜索外部文档、参考资料和上下文。
 
-## Overview
+## 概述
 
-External Context decomposes a query into parallel web search facets, each handled by an independent document-specialist agent:
+External Context 将查询分解为并行网络搜索切面，每个切面由独立的 document-specialist agent 处理：
 
-1. **Decomposition** - Break query into 2-5 independent search facets
-2. **Parallel Search** - Spawn document-specialist agents for each facet
-3. **Synthesis** - Aggregate findings into structured context
+1. **分解** —— 将查询拆分为 2-5 个独立搜索切面
+2. **并行搜索** —— 为每个切面派生 document-specialist agent
+3. **综合** —— 将发现汇总为结构化上下文
 
-## Usage
+## 用法
 
 ```
-/ultrapower:external-context <topic or question>
+/ultrapower:external-context <主题或问题>
 ```
 
-### Examples
+### 示例
 
 ```
 /ultrapower:external-context What are the best practices for JWT token rotation in Node.js?
@@ -30,28 +30,28 @@ External Context decomposes a query into parallel web search facets, each handle
 /ultrapower:external-context Latest React Server Components patterns and conventions
 ```
 
-## Protocol
+## 协议
 
-### Facet Decomposition
+### 切面分解
 
-Given a query, decompose into 2-5 independent search facets:
+给定查询，分解为 2-5 个独立搜索切面：
 
 ```markdown
 ## Search Decomposition
 
-**Query:** <original query>
+**Query:** <原始查询>
 
-### Facet 1: <facet-name>
-- **Search focus:** What to search for
-- **Sources:** Official docs, GitHub, blogs, etc.
+### Facet 1: <切面名称>
+- **Search focus:** 搜索内容
+- **Sources:** 官方文档、GitHub、博客等
 
-### Facet 2: <facet-name>
+### Facet 2: <切面名称>
 ...
 ```
 
-### Parallel Agent Invocation
+### 并行 Agent 调用
 
-Fire independent facets in parallel via Task tool:
+通过 Task 工具并行触发独立切面：
 
 ```
 Task(subagent_type="ultrapower:document-specialist", model="sonnet", prompt="Search for: <facet 1 description>. Use WebSearch and WebFetch to find official documentation and examples. Cite all sources with URLs.")
@@ -59,32 +59,32 @@ Task(subagent_type="ultrapower:document-specialist", model="sonnet", prompt="Sea
 Task(subagent_type="ultrapower:document-specialist", model="sonnet", prompt="Search for: <facet 2 description>. Use WebSearch and WebFetch to find official documentation and examples. Cite all sources with URLs.")
 ```
 
-### Synthesis
+### 综合
 
-After all agents complete, synthesize findings:
+所有 agent 完成后，综合发现：
 
 ```markdown
-## External Context: <query>
+## External Context: <查询>
 
 ### Key Findings
-1. **<finding>** - Source: [title](url)
-2. **<finding>** - Source: [title](url)
+1. **<发现>** - Source: [title](url)
+2. **<发现>** - Source: [title](url)
 
 ### Detailed Results
 
-#### Facet 1: <name>
-<aggregated findings with citations>
+#### Facet 1: <名称>
+<汇总发现及引用>
 
-#### Facet 2: <name>
-<aggregated findings with citations>
+#### Facet 2: <名称>
+<汇总发现及引用>
 
 ### Sources
 - [Source 1](url)
 - [Source 2](url)
 ```
 
-## Configuration
+## 配置
 
-- Maximum 5 parallel document-specialist agents
-- Each agent uses WebSearch and WebFetch tools
-- No magic keyword trigger - explicit invocation only
+- 最多 5 个并行 document-specialist agent
+- 每个 agent 使用 WebSearch 和 WebFetch 工具
+- 无魔法关键词触发 —— 仅支持显式调用

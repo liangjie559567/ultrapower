@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync, readdirSync, utimesSync } from 'fs';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync, readdirSync, utimesSync } from 'fs';
 import { join } from 'path';
-import { homedir } from 'os';
+import { tmpdir } from 'os';
 import {
   readTask, updateTask, findNextTask, areBlockersResolved,
   writeTaskFailure, readTaskFailure, listTaskIds, isTaskRetryExhausted,
@@ -11,7 +11,16 @@ import type { TaskFile } from '../types.js';
 import type { LockHandle } from '../task-file-ops.js';
 
 const TEST_TEAM = 'test-team-ops';
-const TASKS_DIR = join(homedir(), '.claude', 'tasks', TEST_TEAM);
+let TEST_BASE_DIR: string;
+let TASKS_DIR: string;
+
+vi.mock('../../utils/paths.js', async () => {
+  const actual = await vi.importActual('../../utils/paths.js') as Record<string, unknown>;
+  return {
+    ...actual,
+    getClaudeConfigDir: () => TEST_BASE_DIR,
+  };
+});
 
 function writeTask(task: TaskFile): void {
   mkdirSync(TASKS_DIR, { recursive: true });
@@ -29,12 +38,14 @@ function cleanupLocks(): void {
 }
 
 beforeEach(() => {
+  TEST_BASE_DIR = mkdtempSync(join(tmpdir(), 'task-file-ops-test-'));
+  TASKS_DIR = join(TEST_BASE_DIR, 'tasks', TEST_TEAM);
   mkdirSync(TASKS_DIR, { recursive: true });
 });
 
 afterEach(() => {
   cleanupLocks();
-  rmSync(TASKS_DIR, { recursive: true, force: true });
+  rmSync(TEST_BASE_DIR, { recursive: true, force: true });
 });
 
 describe('readTask', () => {

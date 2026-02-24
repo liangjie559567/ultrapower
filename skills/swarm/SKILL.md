@@ -1,25 +1,25 @@
 ---
 name: swarm
-description: N coordinated agents on shared task list (compatibility facade over team)
+description: N 个协调 agent 共享任务列表（team 的兼容性外观）
 ---
 
-# Swarm (Compatibility Facade)
+# Swarm（兼容性外观）
 
-Swarm is a compatibility alias for the `/ultrapower:team` skill. All swarm invocations are routed to the Team skill's staged pipeline.
+Swarm 是 `/ultrapower:team` skill 的兼容性别名。所有 swarm 调用都路由到 Team skill 的分阶段 pipeline。
 
-## Usage
+## 用法
 
 ```
 /ultrapower:swarm N:agent-type "task description"
 /ultrapower:swarm "task description"
 ```
 
-## Behavior
+## 行为
 
-This skill is identical to `/ultrapower:team`. Invoke the Team skill with the same arguments:
+此 skill 与 `/ultrapower:team` 完全相同。使用相同参数调用 Team skill：
 
 ```
 /ultrapower:team <arguments>
 ```
 
-Follow the Team skill's full documentation for staged pipeline, agent routing, and coordination semantics.
+遵循 Team skill 的完整文档，了解分阶段 pipeline、agent 路由和协调语义。

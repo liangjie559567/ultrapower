@@ -1,38 +1,38 @@
 ---
 name: deepsearch
-description: Thorough codebase search
+description: 全面的代码库搜索
 ---
 
-# Deep Search Mode
+# 深度搜索模式
 
-[DEEPSEARCH MODE ACTIVATED]
+[深度搜索模式已激活]
 
-## Objective
+## 目标
 
-Perform thorough search of the codebase for the specified query, pattern, or concept.
+对代码库中指定的查询、模式或概念进行全面搜索。
 
-## Search Strategy
+## 搜索策略
 
-1. **Broad Search**
-   - Search for exact matches
-   - Search for related terms and variations
-   - Check common locations (components, utils, services, hooks)
+1. **广泛搜索**
+   - 搜索精确匹配
+   - 搜索相关术语和变体
+   - 检查常见位置（components、utils、services、hooks）
 
-2. **Deep Dive**
-   - Read files with matches
-   - Check imports/exports to find connections
-   - Follow the trail (what imports this? what does this import?)
+2. **深入挖掘**
+   - 读取有匹配的文件
+   - 检查 imports/exports 以找到关联
+   - 追踪线索（谁导入了这个？这个导入了什么？）
 
-3. **Synthesize**
-   - Map out where the concept is used
-   - Identify the main implementation
-   - Note related functionality
+3. **综合分析**
+   - 梳理概念的使用位置
+   - 识别主要实现
+   - 记录相关功能
 
-## Output Format
+## 输出格式
 
-- **Primary Locations** (main implementations)
-- **Related Files** (dependencies, consumers)
-- **Usage Patterns** (how it's used across the codebase)
-- **Key Insights** (patterns, conventions, gotchas)
+- **主要位置**（主要实现）
+- **相关文件**（依赖项、消费者）
+- **使用模式**（在代码库中的使用方式）
+- **关键洞察**（模式、约定、注意事项）
 
-Focus on being comprehensive but concise. Cite file paths and line numbers.
+力求全面而简洁。引用文件路径和行号。

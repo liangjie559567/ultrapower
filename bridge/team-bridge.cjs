@@ -596,56 +596,42 @@ function logAuditEvent(workingDirectory, event) {
 // src/team/permissions.ts
 var import_node_path3 = require("node:path");
 function matchGlob(pattern, path) {
-  let pi = 0;
-  let si = 0;
-  let starPi = -1;
-  let starSi = -1;
-  while (si < path.length) {
-    if (pi < pattern.length - 1 && pattern[pi] === "*" && pattern[pi + 1] === "*") {
+  const p = path.replace(/\\/g, "/");
+  return matchGlobRecursive(pattern, p, 0, 0);
+}
+function matchGlobRecursive(pattern, path, pi, si) {
+  while (pi < pattern.length) {
+    if (pattern[pi] === "*" && pattern[pi + 1] === "*") {
       pi += 2;
       if (pi < pattern.length && pattern[pi] === "/") pi++;
-      starPi = pi;
-      starSi = si;
-      continue;
-    }
-    if (pi < pattern.length && pattern[pi] === "*") {
-      pi++;
-      starPi = pi;
-      starSi = si;
-      continue;
-    }
-    if (pi < pattern.length && pattern[pi] === "?" && path[si] !== "/") {
-      pi++;
-      si++;
-      continue;
-    }
-    if (pi < pattern.length && pattern[pi] === path[si]) {
-      pi++;
-      si++;
-      continue;
-    }
-    if (starPi !== -1) {
-      pi = starPi;
-      starSi++;
-      si = starSi;
-      const wasSingleStar = starPi >= 2 && pattern[starPi - 2] === "*" && pattern[starPi - 1] === "*" ? false : starPi >= 1 && pattern[starPi - 1] === "*" ? true : false;
-      if (wasSingleStar && si > 0 && path[si - 1] === "/") {
-        return false;
+      for (let i = si; i <= path.length; i++) {
+        if (matchGlobRecursive(pattern, path, pi, i)) return true;
+        if (i < path.length && path[i] !== "/") continue;
+        if (i < path.length) continue;
+        break;
       }
-      continue;
+      return false;
     }
-    return false;
-  }
-  while (pi < pattern.length) {
     if (pattern[pi] === "*") {
       pi++;
-    } else if (pattern[pi] === "/") {
-      pi++;
-    } else {
-      break;
+      while (si <= path.length) {
+        if (matchGlobRecursive(pattern, path, pi, si)) return true;
+        if (si >= path.length || path[si] === "/") break;
+        si++;
+      }
+      return false;
     }
+    if (pattern[pi] === "?") {
+      if (si >= path.length || path[si] === "/") return false;
+      pi++;
+      si++;
+      continue;
+    }
+    if (si >= path.length || pattern[pi] !== path[si]) return false;
+    pi++;
+    si++;
   }
-  return pi === pattern.length;
+  return si === path.length;
 }
 function isPathAllowed(permissions, filePath, workingDirectory) {
   const absPath = (0, import_node_path3.resolve)(workingDirectory, filePath);
@@ -706,7 +692,7 @@ function findPermissionViolations(changedPaths, permissions, cwd) {
           reason = `Not in allowed paths: ${permissions.allowedPaths.join(", ") || "(none configured)"}`;
         }
       }
-      violations.push({ path: relPath, reason });
+      violations.push({ path: relPath.replace(/\\/g, "/"), reason });
     }
   }
   return violations;
@@ -1294,17 +1280,19 @@ function getWorktreeRoot(cwd) {
 
 // src/team/bridge-entry.ts
 function validateConfigPath(configPath2, homeDir, claudeConfigDir) {
-  const resolved = (0, import_path9.resolve)(configPath2);
-  const isUnderHome = resolved.startsWith(homeDir + "/") || resolved === homeDir;
-  const normalizedConfigDir = (0, import_path9.resolve)(claudeConfigDir);
-  const normalizedOmcDir = (0, import_path9.resolve)(homeDir, ".omc");
+  const norm = (p) => (0, import_path9.resolve)(p).replace(/\\/g, "/");
+  const resolved = norm(configPath2);
+  const normalizedHome = norm(homeDir);
+  const normalizedConfigDir = norm(claudeConfigDir);
+  const normalizedOmcDir = norm(homeDir + "/.omc");
+  const isUnderHome = resolved.startsWith(normalizedHome + "/") || resolved === normalizedHome;
   const hasOmcComponent = resolved.includes("/.omc/") || resolved.endsWith("/.omc");
   const isTrustedSubpath = resolved === normalizedConfigDir || resolved.startsWith(normalizedConfigDir + "/") || resolved === normalizedOmcDir || resolved.startsWith(normalizedOmcDir + "/") || hasOmcComponent;
   if (!isUnderHome || !isTrustedSubpath) return false;
   try {
     const parentDir = (0, import_path9.resolve)(resolved, "..");
-    const realParent = (0, import_fs9.realpathSync)(parentDir);
-    if (!realParent.startsWith(homeDir + "/") && realParent !== homeDir) {
+    const realParent = (0, import_fs9.realpathSync)(parentDir).replace(/\\/g, "/");
+    if (!realParent.startsWith(normalizedHome + "/") && realParent !== normalizedHome) {
       return false;
     }
   } catch {

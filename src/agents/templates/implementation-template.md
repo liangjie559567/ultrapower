@@ -1,91 +1,91 @@
-# Implementation Task Template
+# 实现任务模板
 
-Use this template when delegating code implementation, refactoring, or modification tasks.
-
----
-
-## TASK
-
-[Clear, specific description of what needs to be implemented]
-
-Example:
-- Add error handling to the payment processing service
-- Refactor UserController to use dependency injection
-- Implement pagination for the blog posts API endpoint
-- Add TypeScript type definitions for the configuration module
+委派代码实现、重构或修改任务时使用此模板。
 
 ---
 
-## EXPECTED OUTCOME
+## 任务
 
-[What the orchestrator expects to receive back]
+[需要实现的内容的清晰、具体描述]
 
-Example:
-- Working implementation with tests
-- Refactored code following project patterns
-- Updated files with proper error handling
-- Documentation for new features
-- Summary of changes made
-
----
-
-## CONTEXT
-
-[Background information to guide the implementation]
-
-Example:
-- This project uses Express.js with TypeScript
-- Follow the existing repository pattern in `src/repositories`
-- Error handling should use the custom `AppError` class
-- All public APIs should have JSDoc comments
-- The team prefers functional programming style over classes
+示例：
+- 为支付处理服务添加错误处理
+- 重构 UserController 以使用依赖注入
+- 为博客文章 API 端点实现分页
+- 为配置模块添加 TypeScript 类型定义
 
 ---
 
-## MUST DO
+## 预期结果
 
-- Follow existing code patterns and conventions
-- Add appropriate error handling
-- Include TypeScript types for all new code
-- Write or update tests for modified functionality
-- Ensure backward compatibility
-- Run linter and fix any warnings
-- [Add task-specific requirements]
+[编排者期望收到的内容]
 
----
-
-## MUST NOT DO
-
-- Do not modify unrelated files
-- Do not introduce breaking changes without approval
-- Do not skip type definitions
-- Do not commit commented-out code
-- Do not remove existing tests
-- [Add task-specific constraints]
+示例：
+- 带测试的可工作实现
+- 遵循项目模式的重构代码
+- 带适当错误处理的更新文件
+- 新功能的文档
+- 所做更改的摘要
 
 ---
 
-## REQUIRED SKILLS
+## 背景
 
-- TypeScript/JavaScript proficiency
-- Understanding of project architecture
-- Ability to follow existing patterns
-- Test-driven development mindset
-- [Add task-specific skills]
+[指导实现的背景信息]
 
----
-
-## REQUIRED TOOLS
-
-- Read for examining existing code
-- Edit for making changes
-- Write for creating new files
-- Bash for running tests and builds
-- [Add task-specific tools]
+示例：
+- 此项目使用带 TypeScript 的 Express.js
+- 遵循 `src/repositories` 中现有的 repository 模式
+- 错误处理应使用自定义 `AppError` 类
+- 所有公共 API 应有 JSDoc 注释
+- 团队偏好函数式编程风格而非类
 
 ---
 
-## USAGE EXAMPLE
+## 必须做
+
+- 遵循现有代码模式和规范
+- 添加适当的错误处理
+- 为所有新代码包含 TypeScript 类型
+- 为修改的功能编写或更新测试
+- 确保向后兼容性
+- 运行 linter 并修复所有警告
+- [添加任务特定要求]
+
+---
+
+## 不得做
+
+- 不得修改无关文件
+- 未经批准不得引入破坏性更改
+- 不得跳过类型定义
+- 不得提交注释掉的代码
+- 不得删除现有测试
+- [添加任务特定约束]
+
+---
+
+## 所需技能
+
+- TypeScript/JavaScript 熟练度
+- 理解项目架构
+- 遵循现有模式的能力
+- 测试驱动开发思维
+- [添加任务特定技能]
+
+---
+
+## 所需工具
+
+- Read 用于检查现有代码
+- Edit 用于进行更改
+- Write 用于创建新文件
+- Bash 用于运行测试和构建
+- [添加任务特定工具]
+
+---
+
+## 使用示例
 
 ```typescript
 import { createDelegationPrompt } from '@/features/model-routing/prompts';
@@ -130,15 +130,15 @@ const prompt = createDelegationPrompt('MEDIUM', 'Add rate limiting middleware', 
 
 ---
 
-## VERIFICATION CHECKLIST
+## 验证检查清单
 
-Before marking the task complete, ensure:
+标记任务完成前，请确认：
 
-- [ ] Code compiles without TypeScript errors
-- [ ] All tests pass (including existing tests)
-- [ ] Linter passes with no warnings
-- [ ] Code follows project conventions
-- [ ] All new code has appropriate types
-- [ ] Public APIs have documentation
-- [ ] No console.log or debugging code remains
-- [ ] Git diff reviewed for unintended changes
+- [ ] 代码编译无 TypeScript 错误
+- [ ] 所有测试通过（包括现有测试）
+- [ ] Linter 通过无警告
+- [ ] 代码遵循项目规范
+- [ ] 所有新代码有适当的类型
+- [ ] 公共 API 有文档
+- [ ] 无 console.log 或调试代码残留
+- [ ] 已审查 git diff 确认无意外更改

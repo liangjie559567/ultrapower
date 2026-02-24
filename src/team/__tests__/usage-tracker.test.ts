@@ -61,8 +61,10 @@ describe('usage-tracker', () => {
       recordTaskUsage(testDir, 'test-team', makeRecord('worker1', 'task1'));
 
       const logPath = join(testDir, '.omc', 'logs', 'team-usage-test-team.jsonl');
-      const stat = statSync(logPath);
-      expect(stat.mode & 0o777).toBe(0o600);
+      if (process.platform !== 'win32') {
+        const stat = statSync(logPath);
+        expect(stat.mode & 0o777).toBe(0o600);
+      }
     });
   });
 

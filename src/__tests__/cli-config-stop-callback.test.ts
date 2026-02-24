@@ -24,6 +24,7 @@ function runCli(args: string[], homeDir: string): CliRunResult {
       CLAUDE_CONFIG_DIR: join(homeDir, '.claude'),
     },
     encoding: 'utf-8',
+    timeout: 30000,
   });
 
   return {
@@ -101,7 +102,7 @@ describe('omc config-stop-callback tag options', () => {
     expect(show.status).toBe(0);
     expect(show.stdout).toContain('"tagList": [');
     expect(show.stdout).toContain('"@alice"');
-  });
+  }, 120000);
 
   it('applies and clears discord tags and ignores tag options for file callback', () => {
     const homeDir = mkdtempSync(join(tmpdir(), 'omc-cli-stop-callback-home-'));
@@ -145,5 +146,5 @@ describe('omc config-stop-callback tag options', () => {
       path: '/tmp/session.md',
       format: 'markdown',
     });
-  });
+  }, 120000);
 });

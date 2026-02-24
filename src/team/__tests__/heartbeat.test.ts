@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, rmSync } from 'fs';
+import { mkdirSync, mkdtempSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import {
@@ -8,7 +8,7 @@ import {
 } from '../heartbeat.js';
 import type { HeartbeatData } from '../types.js';
 
-const TEST_DIR = join(tmpdir(), '__test_heartbeat__');
+let TEST_DIR: string;
 const TEST_TEAM = 'test-team';
 
 function makeHeartbeat(overrides?: Partial<HeartbeatData>): HeartbeatData {
@@ -25,6 +25,7 @@ function makeHeartbeat(overrides?: Partial<HeartbeatData>): HeartbeatData {
 }
 
 beforeEach(() => {
+  TEST_DIR = mkdtempSync(join(tmpdir(), 'heartbeat-test-'));
   mkdirSync(TEST_DIR, { recursive: true });
 });
 

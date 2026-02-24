@@ -1,57 +1,57 @@
 ---
 name: hud
-description: Configure HUD display options (layout, presets, display elements)
-role: config-writer  # DOCUMENTATION ONLY - This skill writes to ~/.claude/ paths
-scope: ~/.claude/**  # DOCUMENTATION ONLY - Allowed write scope
+description: 配置 HUD 显示选项（布局、预设、显示元素）
+role: config-writer  # 仅文档说明 - 此 skill 写入 ~/.claude/ 路径
+scope: ~/.claude/**  # 仅文档说明 - 允许的写入范围
 ---
 
 # HUD Skill
 
-Configure the OMC HUD (Heads-Up Display) for the statusline.
+配置 OMC HUD（Heads-Up Display）状态栏。
 
-Note: All `~/.claude/...` paths in this guide respect `CLAUDE_CONFIG_DIR` when that environment variable is set.
+注意：本指南中所有 `~/.claude/...` 路径在设置了 `CLAUDE_CONFIG_DIR` 环境变量时均遵循该变量。
 
-## Quick Commands
+## 快速命令
 
-| Command | Description |
+| 命令 | 描述 |
 |---------|-------------|
-| `/ultrapower:hud` | Show current HUD status (auto-setup if needed) |
-| `/ultrapower:hud setup` | Install/repair HUD statusline |
-| `/ultrapower:hud minimal` | Switch to minimal display |
-| `/ultrapower:hud focused` | Switch to focused display (default) |
-| `/ultrapower:hud full` | Switch to full display |
-| `/ultrapower:hud status` | Show detailed HUD status |
+| `/ultrapower:hud` | 显示当前 HUD 状态（如需则自动设置） |
+| `/ultrapower:hud setup` | 安装/修复 HUD 状态栏 |
+| `/ultrapower:hud minimal` | 切换到最小显示 |
+| `/ultrapower:hud focused` | 切换到专注显示（默认） |
+| `/ultrapower:hud full` | 切换到完整显示 |
+| `/ultrapower:hud status` | 显示详细 HUD 状态 |
 
-## Auto-Setup
+## 自动设置
 
-When you run `/ultrapower:hud` or `/ultrapower:hud setup`, the system will automatically:
-1. Check if `~/.claude/hud/omc-hud.mjs` exists
-2. Check if `statusLine` is configured in `~/.claude/settings.json`
-3. If missing, create the HUD wrapper script and configure settings
-4. Report status and prompt to restart Claude Code if changes were made
+运行 `/ultrapower:hud` 或 `/ultrapower:hud setup` 时，系统将自动：
+1. 检查 `~/.claude/hud/omc-hud.mjs` 是否存在
+2. 检查 `~/.claude/settings.json` 中是否配置了 `statusLine`
+3. 若缺失，创建 HUD 包装脚本并配置设置
+4. 报告状态，若有变更则提示重启 Claude Code
 
-**IMPORTANT**: If the argument is `setup` OR if the HUD script doesn't exist at `~/.claude/hud/omc-hud.mjs`, you MUST create the HUD files directly using the instructions below.
+**重要**：若参数为 `setup` 或 HUD 脚本不存在于 `~/.claude/hud/omc-hud.mjs`，必须按以下说明直接创建 HUD 文件。
 
-### Setup Instructions (Run These Commands)
+### 设置说明（运行以下命令）
 
-**Step 1:** Check if setup is needed:
+**步骤 1：** 检查是否需要设置：
 ```bash
 node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude');console.log(f.existsSync(p.join(d,'hud','omc-hud.mjs'))?'EXISTS':'MISSING')"
 ```
 
-**Step 2:** Verify the plugin is installed:
+**步骤 2：** 验证插件已安装：
 ```bash
 node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length===0){console.log('Plugin not installed - run: /plugin install ultrapower');process.exit()}const l=v[v.length-1],h=p.join(b,l,'dist','hud','index.js');console.log('Version:',l);console.log(f.existsSync(h)?'READY':'NOT_FOUND - try reinstalling: /plugin install ultrapower')}catch{console.log('Plugin not installed - run: /plugin install ultrapower')}"
 ```
 
-**Step 3:** If omc-hud.mjs is MISSING or argument is `setup`, create the HUD directory and script:
+**步骤 3：** 若 omc-hud.mjs 缺失或参数为 `setup`，创建 HUD 目录和脚本：
 
-First, create the directory:
+首先，创建目录：
 ```bash
 node -e "require('fs').mkdirSync(require('path').join(process.env.CLAUDE_CONFIG_DIR||require('path').join(require('os').homedir(),'.claude'),'hud'),{recursive:true})"
 ```
 
-Then, use the Write tool to create `~/.claude/hud/omc-hud.mjs` with this exact content:
+然后，使用 Write 工具创建 `~/.claude/hud/omc-hud.mjs`，内容如下：
 
 ```javascript
 #!/usr/bin/env node
@@ -132,23 +132,23 @@ async function main() {
 main();
 ```
 
-**Step 3:** Make it executable (Unix only, skip on Windows):
+**步骤 3（续）：** 设置可执行权限（仅 Unix，Windows 跳过）：
 ```bash
 node -e "if(process.platform==='win32'){console.log('Skipped (Windows)')}else{require('fs').chmodSync(require('path').join(process.env.CLAUDE_CONFIG_DIR||require('path').join(require('os').homedir(),'.claude'),'hud','omc-hud.mjs'),0o755);console.log('Done')}"
 ```
 
-**Step 4:** Update settings.json to use the HUD:
+**步骤 4：** 更新 settings.json 以使用 HUD：
 
-Read `~/.claude/settings.json`, then update/add the `statusLine` field.
+读取 `~/.claude/settings.json`，然后更新/添加 `statusLine` 字段。
 
-**IMPORTANT:** The command must use an absolute path, not `~`, because Windows does not expand `~` in shell commands.
+**重要：** 命令必须使用绝对路径，而非 `~`，因为 Windows 不会在 shell 命令中展开 `~`。
 
-First, determine the correct path:
+首先，确定正确路径：
 ```bash
 node -e "const p=require('path').join(require('os').homedir(),'.claude','hud','omc-hud.mjs');console.log(JSON.stringify(p))"
 ```
 
-Then set the `statusLine` field using the resolved path. On Unix it will look like:
+然后使用解析后的路径设置 `statusLine` 字段。Unix 上如下所示：
 ```json
 {
   "statusLine": {
@@ -158,7 +158,7 @@ Then set the `statusLine` field using the resolved path. On Unix it will look li
 }
 ```
 
-On Windows it will look like:
+Windows 上如下所示：
 ```json
 {
   "statusLine": {
@@ -168,31 +168,28 @@ On Windows it will look like:
 }
 ```
 
-Use the Edit tool to add/update this field while preserving other settings.
+使用 Edit 工具添加/更新此字段，同时保留其他设置。
 
-**Step 5:** Clean up old HUD scripts (if any):
+**步骤 5：** 清理旧 HUD 脚本（如有）：
 ```bash
 node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude'),t=p.join(d,'hud','sisyphus-hud.mjs');try{if(f.existsSync(t)){f.unlinkSync(t);console.log('Removed legacy script')}else{console.log('No legacy script found')}}catch{}"
 ```
 
-**Step 6:** Tell the user to restart Claude Code for changes to take effect.
+**步骤 6：** 告知用户重启 Claude Code 以使变更生效。
 
-## Display Presets
+## 显示预设
 
-### Minimal
-Shows only the essentials:
-```
-[OMC] ralph | ultrawork | todos:2/5
-```
+### 最小（Minimal）
+仅显示必要信息：
 
-### Focused (Default)
-Shows all relevant elements:
+### 专注（Focused，默认）
+显示所有相关元素：
 ```
 [OMC] branch:main | ralph:3/10 | US-002 | ultrawork skill:planner | ctx:67% | agents:2 | bg:3/5 | todos:2/5
 ```
 
-### Full
-Shows everything including multi-line agent details:
+### 完整（Full）
+显示所有内容，包括多行 agent 详情：
 ```
 [OMC] repo:ultrapower branch:main | ralph:3/10 | US-002 (2/5) | ultrawork | ctx:[████░░]67% | agents:3 | bg:3/5 | todos:2/5
 ├─ O architect    2m   analyzing architecture patterns...
@@ -200,43 +197,43 @@ Shows everything including multi-line agent details:
 └─ s executor     1m   implementing validation logic
 ```
 
-## Multi-Line Agent Display
+## 多行 Agent 显示
 
-When agents are running, the HUD shows detailed information on separate lines:
-- **Tree characters** (`├─`, `└─`) show visual hierarchy
-- **Agent code** (O, e, s) indicates agent type with model tier color
-- **Duration** shows how long each agent has been running
-- **Description** shows what each agent is doing (up to 45 chars)
+Agent 运行时，HUD 在独立行显示详细信息：
+- **树形字符**（`├─`、`└─`）显示视觉层级
+- **Agent 代码**（O、e、s）表示 agent 类型及模型层级颜色
+- **持续时间** 显示每个 agent 已运行多长时间
+- **描述** 显示每个 agent 正在做什么（最多 45 个字符）
 
-## Display Elements
+## 显示元素
 
-| Element | Description |
+| 元素 | 描述 |
 |---------|-------------|
-| `[OMC]` | Mode identifier |
-| `repo:name` | Git repository name (cyan) |
-| `branch:name` | Git branch name (cyan) |
-| `ralph:3/10` | Ralph loop iteration/max |
-| `US-002` | Current PRD story ID |
-| `ultrawork` | Active mode badge |
-| `skill:name` | Last activated skill (cyan) |
-| `ctx:67%` | Context window usage |
-| `agents:2` | Running subagent count |
-| `bg:3/5` | Background task slots |
-| `todos:2/5` | Todo completion |
+| `[OMC]` | 模式标识符 |
+| `repo:name` | Git 仓库名称（青色） |
+| `branch:name` | Git 分支名称（青色） |
+| `ralph:3/10` | Ralph 循环迭代/最大次数 |
+| `US-002` | 当前 PRD story ID |
+| `ultrawork` | 活跃模式徽章 |
+| `skill:name` | 最后激活的 skill（青色） |
+| `ctx:67%` | 上下文窗口使用率 |
+| `agents:2` | 运行中的子 agent 数量 |
+| `bg:3/5` | 后台任务槽位 |
+| `todos:2/5` | 待办完成情况 |
 
-## Color Coding
+## 颜色编码
 
-- **Green**: Normal/healthy
-- **Yellow**: Warning (context >70%, ralph >7)
-- **Red**: Critical (context >85%, ralph at max)
+- **绿色**：正常/健康
+- **黄色**：警告（上下文 >70%，ralph >7）
+- **红色**：严重（上下文 >85%，ralph 达到最大值）
 
-## Configuration Location
+## 配置位置
 
-HUD config is stored at: `~/.claude/.omc/hud-config.json`
+HUD 配置存储于：`~/.claude/.omc/hud-config.json`
 
-## Manual Configuration
+## 手动配置
 
-You can manually edit the config file. Each option can be set individually - any unset values will use defaults.
+可手动编辑配置文件。每个选项可单独设置 —— 未设置的值将使用默认值。
 
 ```json
 {
@@ -263,17 +260,17 @@ You can manually edit the config file. Each option can be set individually - any
 }
 ```
 
-## Troubleshooting
+## 故障排除
 
-If the HUD is not showing:
-1. Run `/ultrapower:hud setup` to auto-install and configure
-2. Restart Claude Code after setup completes
-3. If still not working, run `/ultrapower:omc-doctor` for full diagnostics
+若 HUD 未显示：
+1. 运行 `/ultrapower:hud setup` 自动安装并配置
+2. 设置完成后重启 Claude Code
+3. 若仍不工作，运行 `/ultrapower:omc-doctor` 进行完整诊断
 
-Manual verification:
-- HUD script: `~/.claude/hud/omc-hud.mjs`
-- Settings: `~/.claude/settings.json` should have `statusLine` configured
+手动验证：
+- HUD 脚本：`~/.claude/hud/omc-hud.mjs`
+- 设置：`~/.claude/settings.json` 应已配置 `statusLine`
 
 ---
 
-*The HUD updates automatically every ~300ms during active sessions.*
+*HUD 在活跃会话期间每约 300ms 自动更新。*

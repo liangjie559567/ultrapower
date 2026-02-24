@@ -347,6 +347,8 @@ async function getActiveJobsSummary(directory: string): Promise<{
   } catch (error) {
     console.error('[PreCompact] Error reading job state DB:', error);
     return { activeJobs: [], recentJobs: [], stats: null };
+  } finally {
+    closeJobDb(directory);
   }
 }
 

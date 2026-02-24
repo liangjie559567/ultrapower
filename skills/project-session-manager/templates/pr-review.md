@@ -1,65 +1,65 @@
-# PR Review Context
+# PR 审查上下文
 
-You are reviewing PR #{{PR_NUMBER}}: **{{PR_TITLE}}**
+你正在审查 PR #{{PR_NUMBER}}：**{{PR_TITLE}}**
 
-## PR Details
+## PR 详情
 
-- **Author**: @{{PR_AUTHOR}}
-- **Branch**: `{{HEAD_BRANCH}}` → `{{BASE_BRANCH}}`
-- **URL**: {{PR_URL}}
+- **作者**：@{{PR_AUTHOR}}
+- **分支**：`{{HEAD_BRANCH}}` → `{{BASE_BRANCH}}`
+- **URL**：{{PR_URL}}
 
-## Description
+## 描述
 
 {{PR_BODY}}
 
-## Changed Files
+## 变更文件
 
 {{CHANGED_FILES}}
 
-## Review Focus
+## 审查重点
 
-1. **Code Quality**
-   - Follow existing patterns and conventions
-   - Clean, readable, maintainable code
-   - Appropriate abstractions
+1. **代码质量**
+   - 遵循现有模式和规范
+   - 代码简洁、可读、可维护
+   - 适当的抽象
 
-2. **Correctness**
-   - Does it do what it claims?
-   - Edge cases handled?
-   - Error handling appropriate?
+2. **正确性**
+   - 是否实现了其声称的功能？
+   - 边缘情况是否已处理？
+   - 错误处理是否适当？
 
-3. **Security**
-   - Input validation
-   - No hardcoded secrets
-   - Safe dependencies
+3. **安全性**
+   - 输入验证
+   - 无硬编码密钥
+   - 安全的依赖项
 
-4. **Testing**
-   - Adequate test coverage
-   - Tests are meaningful
-   - Edge cases tested
+4. **测试**
+   - 充分的测试覆盖率
+   - 测试有实际意义
+   - 边缘情况已测试
 
-5. **Documentation**
-   - Code is self-documenting
-   - Complex logic explained
-   - API changes documented
+5. **文档**
+   - 代码自文档化
+   - 复杂逻辑有说明
+   - API 变更已记录
 
-## Commands
+## 命令
 
 ```bash
-# View diff
+# 查看 diff
 git diff {{BASE_BRANCH}}...HEAD
 
-# Run tests
-npm test  # or appropriate test command
+# 运行测试
+npm test  # 或适当的测试命令
 
-# Check build
-npm run build  # or appropriate build command
+# 检查构建
+npm run build  # 或适当的构建命令
 ```
 
-## Review Checklist
+## 审查清单
 
-- [ ] Code follows project style
-- [ ] No obvious bugs or logic errors
-- [ ] Security concerns addressed
-- [ ] Tests pass and cover changes
-- [ ] Documentation updated if needed
+- [ ] 代码遵循项目风格
+- [ ] 无明显 bug 或逻辑错误
+- [ ] 安全问题已处理
+- [ ] 测试通过且覆盖变更
+- [ ] 如需要则文档已更新

@@ -310,7 +310,8 @@ describe('flush-race', () => {
       // (writing without lock when acquireLock fails) has been removed.
       // We verify by reading the source and checking it doesn't contain
       // the old pattern of calling writeTrackingStateImmediate outside a lock.
-      const sourcePath = join(__dirname, '..', 'index.ts');
+      const direct = join(__dirname, '..', 'index.ts');
+      const sourcePath = existsSync(direct) ? direct : direct.replace(/[\\/]dist[\\/]/, '/src/');
       const source = readFileSync(sourcePath, 'utf-8');
 
       // The old code had: "write without lock as best-effort fallback"

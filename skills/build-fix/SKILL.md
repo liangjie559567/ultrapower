@@ -3,46 +3,46 @@ name: build-fix
 description: Fix build and TypeScript errors with minimal changes
 ---
 
-# Build Fix Skill
+# 构建修复 Skill
 
-Fix build and compilation errors quickly with minimal code changes. Get the build green without refactoring.
+快速修复构建和编译错误，代码改动最小化。在不重构的情况下让构建变绿。
 
-## When to Use
+## 使用时机
 
-This skill activates when:
-- User says "fix the build", "build is broken"
-- TypeScript compilation fails
-- the build command or type checker reports errors
-- User requests "minimal fixes" for errors
+此 skill 在以下情况激活：
+- 用户说 "fix the build"、"build is broken"
+- TypeScript 编译失败
+- 构建命令或类型检查器报告错误
+- 用户请求对错误进行 "minimal fixes"
 
-## What It Does
+## 功能
 
-Delegates to the `build-fixer` agent (Sonnet model) to:
+委托给 `build-fixer` agent（Sonnet 模型）执行：
 
-1. **Collect Errors**
-   - Run the project's type check command (e.g., `tsc --noEmit`, `mypy`, `cargo check`, `go vet`)
-   - Or run the project's build command to get build failures
-   - Categorize errors by type and severity
+1. **收集错误**
+   - 运行项目的类型检查命令（如 `tsc --noEmit`、`mypy`、`cargo check`、`go vet`）
+   - 或运行项目构建命令获取构建失败信息
+   - 按类型和严重程度分类错误
 
-2. **Fix Strategically**
-   - Add type annotations where missing
-   - Add null checks where needed
-   - Fix import/export statements
-   - Resolve module resolution issues
-   - Fix linter errors blocking build
+2. **策略性修复**
+   - 在缺失处添加类型注解
+   - 在需要处添加 null 检查
+   - 修复 import/export 语句
+   - 解决模块解析问题
+   - 修复阻塞构建的 linter 错误
 
-3. **Minimal Diff Strategy**
-   - NO refactoring of unrelated code
-   - NO architectural changes
-   - NO performance optimizations
-   - ONLY what's needed to make build pass
+3. **最小差异策略**
+   - 不重构无关代码
+   - 不进行架构变更
+   - 不进行性能优化
+   - 仅做让构建通过所必需的修改
 
-4. **Verify**
-   - Run the project's type check command after each fix
-   - Ensure no new errors introduced
-   - Stop when build passes
+4. **验证**
+   - 每次修复后运行项目类型检查命令
+   - 确保未引入新错误
+   - 构建通过后停止
 
-## Agent Delegation
+## Agent 委托
 
 ```
 Task(
@@ -66,14 +66,14 @@ Output: Build error resolution report with:
 )
 ```
 
-## Stop Conditions
+## 停止条件
 
-The build-fixer agent stops when:
-- Type check command exits with code 0
-- Build command completes successfully
-- No new errors introduced
+build-fixer agent 在以下情况停止：
+- 类型检查命令以退出码 0 退出
+- 构建命令成功完成
+- 未引入新错误
 
-## Output Format
+## 输出格式
 
 ```
 BUILD FIX REPORT
@@ -93,31 +93,31 @@ Final Build Status: ✓ PASSING
 Verification: [type check command] (exit code 0)
 ```
 
-## Best Practices
+## 最佳实践
 
-- **One fix at a time** - Easier to verify and debug
-- **Minimal changes** - Don't refactor while fixing
-- **Document why** - Comment non-obvious fixes
-- **Test after** - Ensure tests still pass
+- **每次一个修复** —— 更易于验证和调试
+- **最小改动** —— 修复时不重构
+- **记录原因** —— 对不明显的修复添加注释
+- **之后测试** —— 确保测试仍然通过
 
-## Use with Other Skills
+## 与其他 Skill 配合使用
 
-Combine with other skills for comprehensive fixing:
+与其他 skill 组合进行全面修复：
 
-**With Ultrawork:**
+**与 Ultrawork 配合：**
 ```
 /ultrawork fix all build errors
 ```
-Spawns multiple build-fixer agents in parallel for different files.
+为不同文件并行生成多个 build-fixer agent。
 
-**With Ralph:**
+**与 Ralph 配合：**
 ```
 /ralph fix the build
 ```
-Keeps trying until build passes, even if it takes multiple iterations.
+持续尝试直到构建通过，即使需要多次迭代。
 
-**With Pipeline:**
+**与 Pipeline 配合：**
 ```
 /pipeline debug "build is failing"
 ```
-Uses: explore → architect → build-fixer workflow.
+使用：explore → architect → build-fixer 工作流。

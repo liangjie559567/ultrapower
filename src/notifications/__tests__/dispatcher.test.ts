@@ -51,10 +51,9 @@ describe("timeout constants invariant", () => {
   it("DISPATCH_TIMEOUT_MS >= SEND_TIMEOUT_MS in source", async () => {
     const fs = await import("fs");
     const path = await import("path");
-    const source = fs.readFileSync(
-      path.join(import.meta.dirname, "..", "dispatcher.ts"),
-      "utf-8",
-    );
+    const direct = path.join(import.meta.dirname, "..", "dispatcher.ts");
+    const srcPath = direct.replace(/[\\/]dist[\\/]/, '/src/');
+    const source = fs.readFileSync(fs.existsSync(direct) ? direct : srcPath, "utf-8");
     const sendMatch = source.match(/SEND_TIMEOUT_MS\s*=\s*([\d_]+)/);
     const dispatchMatch = source.match(/DISPATCH_TIMEOUT_MS\s*=\s*([\d_]+)/);
     expect(sendMatch).not.toBeNull();
@@ -1038,10 +1037,9 @@ describe("dispatcher mention separation", () => {
     // Read the dispatcher source to verify no process.env usage for mentions
     const fs = await import("fs");
     const path = await import("path");
-    const dispatcherSource = fs.readFileSync(
-      path.join(import.meta.dirname, "..", "dispatcher.ts"),
-      "utf-8",
-    );
+    const direct = path.join(import.meta.dirname, "..", "dispatcher.ts");
+    const srcPath = direct.replace(/[\\/]dist[\\/]/, '/src/');
+    const dispatcherSource = fs.readFileSync(fs.existsSync(direct) ? direct : srcPath, "utf-8");
     // Dispatcher should not reference process.env at all - mention resolution is in config layer
     expect(dispatcherSource).not.toContain("process.env");
   });

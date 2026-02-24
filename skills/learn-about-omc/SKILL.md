@@ -1,37 +1,37 @@
 ---
 name: learn-about-omc
-description: Learn about your OMC usage patterns and get personalized recommendations
+description: 了解你的 OMC 使用模式并获取个性化建议
 ---
 
-# Learn About OMC
+# 了解 OMC
 
-Analyze your OMC usage patterns and provide personalized recommendations for getting more out of ultrapower.
+分析你的 OMC 使用模式，提供个性化建议，帮助你更好地使用 ultrapower。
 
-## Usage
+## 用法
 
 ```
 /ultrapower:learn-about-omc
 ```
 
-## Behavior
+## 行为
 
-1. **Scan usage data** from:
-   - `.omc/sessions/` for session history
-   - `.omc/state/` for mode usage patterns
-   - `.omc/notepad.md` for working memory
-   - `.omc/project-memory.json` for project context
-   - Agent flow traces for tool and agent usage
-2. **Analyze patterns**:
-   - Most-used modes and skills
-   - Agent types spawned most frequently
-   - Common workflows and task types
-   - Session durations and completion rates
-3. **Generate recommendations**:
-   - Underused features that match your workflow
-   - More efficient skill combinations
-   - Configuration optimizations
-   - Tips based on your usage profile
+1. **扫描使用数据**，来源：
+   - `.omc/sessions/` —— 会话历史
+   - `.omc/state/` —— 模式使用模式
+   - `.omc/notepad.md` —— 工作记忆
+   - `.omc/project-memory.json` —— 项目上下文
+   - Agent 流程追踪 —— 工具和 agent 使用情况
+2. **分析模式**：
+   - 最常用的模式和 skill
+   - 最频繁派生的 agent 类型
+   - 常见工作流和任务类型
+   - 会话时长和完成率
+3. **生成建议**：
+   - 符合你工作流但未充分利用的功能
+   - 更高效的 skill 组合
+   - 配置优化
+   - 基于你使用情况的技巧
 
-## Output
+## 输出
 
-A personalized report with usage statistics and actionable recommendations for improving your OMC workflow.
+包含使用统计和可操作建议的个性化报告，帮助改善你的 OMC 工作流。

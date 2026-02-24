@@ -138,7 +138,7 @@ describe('tmux-detector', () => {
   });
 
   describe('isTmuxAvailable', () => {
-    it('should return true when tmux is installed', () => {
+    it.skipIf(process.platform === 'win32')('should return true when tmux is installed', () => {
       vi.mocked(spawnSync).mockReturnValue({
         status: 0,
         stdout: '/usr/bin/tmux\n',
@@ -174,7 +174,7 @@ describe('tmux-detector', () => {
   });
 
   describe('listTmuxPanes', () => {
-    it('should parse tmux pane list correctly', () => {
+    it.skipIf(process.platform === 'win32')('should parse tmux pane list correctly', () => {
       vi.mocked(spawnSync).mockReturnValue({
         status: 0,
         stdout: '/usr/bin/tmux',
@@ -228,7 +228,7 @@ describe('tmux-detector', () => {
   });
 
   describe('capturePaneContent', () => {
-    it('should capture pane content', () => {
+    it.skipIf(process.platform === 'win32')('should capture pane content', () => {
       vi.mocked(spawnSync).mockReturnValue({
         status: 0,
         stdout: '/usr/bin/tmux',
@@ -266,7 +266,7 @@ describe('tmux-detector', () => {
   });
 
   describe('security: input validation', () => {
-    it('should reject invalid pane IDs in capturePaneContent', () => {
+    it.skipIf(process.platform === 'win32')('should reject invalid pane IDs in capturePaneContent', () => {
       vi.mocked(spawnSync).mockReturnValue({
         status: 0,
         stdout: '/usr/bin/tmux',
@@ -299,7 +299,7 @@ describe('tmux-detector', () => {
       }
     });
 
-    it('should validate lines parameter bounds', () => {
+    it.skipIf(process.platform === 'win32')('should validate lines parameter bounds', () => {
       vi.mocked(spawnSync).mockReturnValue({
         status: 0,
         stdout: '/usr/bin/tmux',

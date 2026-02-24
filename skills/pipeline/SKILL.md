@@ -1,32 +1,32 @@
 ---
 name: pipeline
-description: Chain agents together in sequential or branching workflows with data passing
+description: 将 agent 串联成顺序或分支工作流，支持数据传递
 ---
 
 # Pipeline Skill
 
-## Overview
+## 概述
 
-The pipeline skill enables chaining multiple agents together in defined workflows where the output of one agent becomes the input to the next. This creates powerful agent pipelines similar to Unix pipes but designed for AI agent orchestration.
+pipeline skill 允许将多个 agent 串联成定义好的工作流，前一个 agent 的输出成为下一个 agent 的输入。这创建了强大的 agent 流水线，类似于 Unix 管道，但专为 AI agent 编排设计。
 
-## Core Concepts
+## 核心概念
 
-### 1. Sequential Pipelines
+### 1. 顺序流水线
 
-The simplest form: Agent A's output flows to Agent B, which flows to Agent C.
+最简单的形式：Agent A 的输出流向 Agent B，再流向 Agent C。
 
 ```
 explore -> architect -> executor
 ```
 
-**Flow:**
-1. Explore agent searches codebase and produces findings
-2. Architect receives findings and produces analysis/recommendations
-3. Executor receives recommendations and implements changes
+**流程：**
+1. explore agent 搜索代码库并产出发现
+2. architect 接收发现并产出分析/建议
+3. executor 接收建议并实施更改
 
-### 2. Branching Pipelines
+### 2. 分支流水线
 
-Route to different agents based on output conditions.
+根据输出条件路由到不同 agent。
 
 ```
 explore -> {
@@ -36,135 +36,135 @@ explore -> {
 }
 ```
 
-### 3. Parallel-Then-Merge Pipelines
+### 3. 并行后合并流水线
 
-Run multiple agents in parallel, merge their outputs.
+并行运行多个 agent，合并其输出。
 
 ```
 parallel(explore, document-specialist) -> architect -> executor
 ```
 
-## Built-in Pipeline Presets
+## 内置流水线预设
 
-### Review Pipeline
-**Purpose:** Comprehensive code review and implementation
+### Review 流水线
+**用途：** 全面代码审查和实施
 
 ```
 /pipeline review <task>
 ```
 
-**Stages:**
-1. `explore` - Find relevant code and patterns
-2. `architect` - Analyze architecture and design implications
-3. `critic` - Review and critique the analysis
-4. `executor` - Implement with full context
+**阶段：**
+1. `explore` - 查找相关代码和模式
+2. `architect` - 分析架构和设计影响
+3. `critic` - 审查和批评分析
+4. `executor` - 在完整上下文下实施
 
-**Use for:** Major features, refactorings, complex changes
+**适用于：** 主要功能、重构、复杂更改
 
 ---
 
-### Implement Pipeline
-**Purpose:** Planned implementation with testing
+### Implement 流水线
+**用途：** 带测试的计划实施
 
 ```
 /pipeline implement <task>
 ```
 
-**Stages:**
-1. `planner` - Create detailed implementation plan
-2. `executor` - Implement the plan
-3. `tdd-guide` - Add/verify tests
+**阶段：**
+1. `planner` - 创建详细实施计划
+2. `executor` - 执行计划
+3. `tdd-guide` - 添加/验证测试
 
-**Use for:** New features with clear requirements
+**适用于：** 需求明确的新功能
 
 ---
 
-### Debug Pipeline
-**Purpose:** Systematic debugging workflow
+### Debug 流水线
+**用途：** 系统化调试工作流
 
 ```
 /pipeline debug <issue>
 ```
 
-**Stages:**
-1. `explore` - Locate error locations and related code
-2. `architect` - Analyze root cause
-3. `build-fixer` - Apply fixes and verify
+**阶段：**
+1. `explore` - 定位错误位置和相关代码
+2. `architect` - 分析根本原因
+3. `build-fixer` - 应用修复并验证
 
-**Use for:** Bugs, build errors, test failures
+**适用于：** Bug、构建错误、测试失败
 
 ---
 
-### Research Pipeline
-**Purpose:** External research + internal analysis
+### Research 流水线
+**用途：** 外部研究 + 内部分析
 
 ```
 /pipeline research <topic>
 ```
 
-**Stages:**
-1. `parallel(document-specialist, explore)` - External docs + internal code
-2. `architect` - Synthesize findings
-3. `writer` - Document recommendations
+**阶段：**
+1. `parallel(document-specialist, explore)` - 外部文档 + 内部代码
+2. `architect` - 综合发现
+3. `writer` - 记录建议
 
-**Use for:** Technology decisions, API integrations
+**适用于：** 技术决策、API 集成
 
 ---
 
-### Refactor Pipeline
-**Purpose:** Safe, verified refactoring
+### Refactor 流水线
+**用途：** 安全、经过验证的重构
 
 ```
 /pipeline refactor <target>
 ```
 
-**Stages:**
-1. `explore` - Find all usages and dependencies
-2. `architect-medium` - Design refactoring strategy
-3. `executor-high` - Execute refactoring
-4. `qa-tester` - Verify no regressions
+**阶段：**
+1. `explore` - 查找所有用法和依赖
+2. `architect-medium` - 设计重构策略
+3. `executor-high` - 执行重构
+4. `qa-tester` - 验证无回归
 
-**Use for:** Architectural changes, API redesigns
+**适用于：** 架构更改、API 重新设计
 
 ---
 
-### Security Pipeline
-**Purpose:** Security audit and fixes
+### Security 流水线
+**用途：** 安全审计和修复
 
 ```
 /pipeline security <scope>
 ```
 
-**Stages:**
-1. `explore` - Find potential vulnerabilities
-2. `security-reviewer` - Audit and identify issues
-3. `executor` - Implement fixes
-4. `security-reviewer-low` - Re-verify
+**阶段：**
+1. `explore` - 查找潜在漏洞
+2. `security-reviewer` - 审计并识别问题
+3. `executor` - 实施修复
+4. `security-reviewer-low` - 重新验证
 
-**Use for:** Security reviews, vulnerability fixes
+**适用于：** 安全审查、漏洞修复
 
 ---
 
-## Custom Pipeline Syntax
+## 自定义流水线语法
 
-### Basic Sequential
+### 基本顺序
 
 ```
 /pipeline agent1 -> agent2 -> agent3 "task description"
 ```
 
-**Example:**
+**示例：**
 ```
 /pipeline explore -> architect -> executor "add authentication"
 ```
 
-### With Model Specification
+### 指定模型
 
 ```
 /pipeline explore:haiku -> architect:opus -> executor:sonnet "optimize performance"
 ```
 
-### With Branching
+### 带分支
 
 ```
 /pipeline explore -> (
@@ -174,20 +174,20 @@ parallel(explore, document-specialist) -> architect -> executor
 ) "fix reported issues"
 ```
 
-### With Parallel Stages
+### 带并行阶段
 
 ```
 /pipeline [explore, document-specialist] -> architect -> executor "implement OAuth"
 ```
 
-## Data Passing Protocol
+## 数据传递协议
 
-Each agent in the pipeline receives structured context from the previous stage:
+流水线中每个 agent 从上一阶段接收结构化上下文：
 
 ```json
 {
   "pipeline_context": {
-    "original_task": "user's original request",
+    "original_task": "用户的原始请求",
     "previous_stages": [
       {
         "agent": "explore",
@@ -199,47 +199,47 @@ Each agent in the pipeline receives structured context from the previous stage:
     "current_stage": "architect",
     "next_stage": "executor"
   },
-  "task": "specific task for this agent"
+  "task": "此 agent 的具体任务"
 }
 ```
 
-## Error Handling
+## 错误处理
 
-### Retry Logic
+### 重试逻辑
 
-When an agent fails, the pipeline can:
+当 agent 失败时，流水线可以：
 
-1. **Retry** - Re-run the same agent (up to 3 times)
-2. **Skip** - Continue to next stage with partial output
-3. **Abort** - Stop entire pipeline
-4. **Fallback** - Route to alternative agent
+1. **重试** - 重新运行同一 agent（最多 3 次）
+2. **跳过** - 以部分输出继续到下一阶段
+3. **中止** - 停止整个流水线
+4. **回退** - 路由到备用 agent
 
-**Configuration:**
+**配置：**
 
 ```
 /pipeline explore -> architect -> executor --retry=3 --on-error=abort
 ```
 
-### Error Recovery Patterns
+### 错误恢复模式
 
-**Pattern 1: Fallback to Higher Tier**
+**模式 1：回退到更高级别**
 ```
 executor-low -> on-error -> executor:sonnet
 ```
 
-**Pattern 2: Consult Architect**
+**模式 2：咨询 architect**
 ```
 executor -> on-error -> architect -> executor
 ```
 
-**Pattern 3: Human-in-the-Loop**
+**模式 3：人工介入**
 ```
 any-stage -> on-error -> pause-for-user-input
 ```
 
-## Pipeline State Management
+## 流水线状态管理
 
-Pipelines maintain state in `.omc/pipeline-state.json`:
+流水线在 `.omc/pipeline-state.json` 中维护状态：
 
 ```json
 {
@@ -269,26 +269,26 @@ Pipelines maintain state in `.omc/pipeline-state.json`:
       "status": "pending"
     }
   ],
-  "task": "original user task",
+  "task": "原始用户任务",
   "created_at": "2026-01-23T10:25:00Z"
 }
 ```
 
-## Verification Rules
+## 验证规则
 
-Before pipeline completion, verify:
+流水线完成前，验证：
 
-- [ ] All stages completed successfully
-- [ ] Output from final stage addresses original task
-- [ ] No unhandled errors in any stage
-- [ ] All files modified pass lsp_diagnostics
-- [ ] Tests pass (if applicable)
+- [ ] 所有阶段成功完成
+- [ ] 最终阶段的输出解决了原始任务
+- [ ] 所有阶段无未处理错误
+- [ ] 所有修改的文件通过 lsp_diagnostics
+- [ ] 测试通过（如适用）
 
-## Advanced Features
+## 高级功能
 
-### Conditional Branching
+### 条件分支
 
-Based on agent output, route to different paths:
+根据 agent 输出路由到不同路径：
 
 ```
 explore -> {
@@ -297,9 +297,9 @@ explore -> {
 }
 ```
 
-### Loop Constructs
+### 循环结构
 
-Repeat stages until condition met:
+重复阶段直到满足条件：
 
 ```
 repeat_until(tests_pass) {
@@ -307,124 +307,124 @@ repeat_until(tests_pass) {
 }
 ```
 
-### Merge Strategies
+### 合并策略
 
-When parallel agents complete:
+并行 agent 完成时：
 
-- **concat**: Concatenate all outputs
-- **summarize**: Use architect to summarize findings
-- **vote**: Use critic to choose best output
+- **concat**：连接所有输出
+- **summarize**：使用 architect 汇总发现
+- **vote**：使用 critic 选择最佳输出
 
-## Usage Examples
+## 使用示例
 
-### Example 1: Feature Implementation
+### 示例 1：功能实施
 ```
 /pipeline review "add rate limiting to API"
 ```
-→ Triggers: explore → architect → critic → executor
+→ 触发：explore → architect → critic → executor
 
-### Example 2: Bug Fix
+### 示例 2：Bug 修复
 ```
 /pipeline debug "login fails with OAuth"
 ```
-→ Triggers: explore → architect → build-fixer
+→ 触发：explore → architect → build-fixer
 
-### Example 3: Custom Chain
+### 示例 3：自定义链
 ```
 /pipeline explore:haiku -> architect:opus -> executor:sonnet -> tdd-guide:sonnet "refactor auth module"
 ```
 
-### Example 4: Research-Driven Implementation
+### 示例 4：研究驱动的实施
 ```
 /pipeline research "implement GraphQL subscriptions"
 ```
-→ Triggers: parallel(document-specialist, explore) → architect → writer
+→ 触发：parallel(document-specialist, explore) → architect → writer
 
-## Cancellation
+## 取消
 
-Stop active pipeline:
+停止活跃流水线：
 
 ```
 /pipeline cancel
 ```
 
-Or use the general cancel command which detects active pipeline.
+或使用通用取消命令，它会自动检测活跃流水线。
 
-## Integration with Other Skills
+## 与其他 Skill 集成
 
-Pipelines can be used within other skills:
+流水线可在其他 skill 中使用：
 
-- **Ralph**: Loop pipelines until verified complete
-- **Ultrawork**: Run multiple pipelines in parallel
-- **Autopilot**: Use pipelines as building blocks
+- **Ralph**：循环流水线直到验证完成
+- **Ultrawork**：并行运行多个流水线
+- **Autopilot**：将流水线作为构建块
 
-## Best Practices
+## 最佳实践
 
-1. **Start with presets** - Use built-in pipelines before creating custom ones
-2. **Match model to complexity** - Don't waste opus on simple tasks
-3. **Keep stages focused** - Each agent should have one clear responsibility
-4. **Use parallel stages** - Run independent work simultaneously
-5. **Verify at checkpoints** - Use architect or critic to verify progress
-6. **Document custom pipelines** - Save successful patterns for reuse
+1. **从预设开始** - 在创建自定义流水线之前使用内置流水线
+2. **模型与复杂度匹配** - 不要在简单任务上浪费 opus
+3. **保持阶段专注** - 每个 agent 应有一个明确的职责
+4. **使用并行阶段** - 同时运行独立工作
+5. **在检查点验证** - 使用 architect 或 critic 验证进度
+6. **记录自定义流水线** - 保存成功的模式以便复用
 
-## Troubleshooting
+## 故障排除
 
-### Pipeline Hangs
+### 流水线挂起
 
-**Check:** `.omc/pipeline-state.json` for current stage
-**Fix:** Resume with `/pipeline resume` or cancel and restart
+**检查：** `.omc/pipeline-state.json` 中的当前阶段
+**修复：** 使用 `/pipeline resume` 恢复或取消后重启
 
-### Agent Fails Repeatedly
+### Agent 反复失败
 
-**Check:** Retry count and error messages
-**Fix:** Route to higher-tier agent or add architect consultation
+**检查：** 重试次数和错误消息
+**修复：** 路由到更高级别 agent 或添加 architect 咨询
 
-### Output Not Flowing
+### 输出未传递
 
-**Check:** Data passing structure in agent prompts
-**Fix:** Ensure each agent is prompted with `pipeline_context`
+**检查：** agent 提示中的数据传递结构
+**修复：** 确保每个 agent 都收到 `pipeline_context`
 
-## Technical Implementation
+## 技术实现
 
-The pipeline orchestrator:
+流水线编排器：
 
-1. **Parses pipeline definition** - Validates syntax and agent names
-2. **Initializes state** - Creates pipeline-state.json
-3. **Executes stages sequentially** - Spawns agents with Task tool
-4. **Passes context between stages** - Structures output for next agent
-5. **Handles branching logic** - Evaluates conditions and routes
-6. **Manages parallel execution** - Spawns concurrent agents and merges
-7. **Persists state** - Updates state file after each stage
-8. **Enforces verification** - Runs checks before completion
+1. **解析流水线定义** - 验证语法和 agent 名称
+2. **初始化状态** - 创建 pipeline-state.json
+3. **顺序执行阶段** - 使用 Task 工具生成 agent
+4. **在阶段间传递上下文** - 为下一个 agent 结构化输出
+5. **处理分支逻辑** - 评估条件并路由
+6. **管理并行执行** - 生成并发 agent 并合并
+7. **持久化状态** - 每个阶段后更新状态文件
+8. **强制验证** - 完成前运行检查
 
-## STATE CLEANUP ON COMPLETION
+## 完成时清理状态
 
-**IMPORTANT: Delete state files on completion - do NOT just set `active: false`**
+**重要：完成时删除状态文件——不要只是设置 `active: false`**
 
-When pipeline completes (all stages done or cancelled):
+当流水线完成（所有阶段完成或已取消）时：
 
 ```bash
-# Delete pipeline state file
+# 删除流水线状态文件
 rm -f .omc/state/pipeline-state.json
 ```
 
-This ensures clean state for future sessions. Stale state files with `active: false` should not be left behind.
+这确保未来会话的状态干净。不应留下 `active: false` 的陈旧状态文件。
 
-## Skill Invocation
+## Skill 调用
 
-This skill activates when:
+此 skill 在以下情况激活：
 
-- User types `/pipeline` command
-- User mentions "agent chain", "workflow", "pipe agents"
-- Pattern detected: "X then Y then Z" with agent names
+- 用户输入 `/pipeline` 命令
+- 用户提到"agent chain"、"workflow"、"pipe agents"
+- 检测到模式："X then Y then Z"（包含 agent 名称）
 
-**Explicit invocation:**
+**显式调用：**
 ```
 /ultrapower:pipeline review "task"
 ```
 
-**Auto-detection:**
+**自动检测：**
 ```
 "First explore the codebase, then architect should analyze it, then executor implements"
 ```
-→ Automatically creates pipeline: explore → architect → executor
+→ 自动创建流水线：explore → architect → executor

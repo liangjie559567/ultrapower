@@ -22,12 +22,15 @@ import { sanitizeName } from './tmux-session.js';
  * Resolves the path first to defeat traversal attacks like ~/foo/.claude/../../evil.json.
  */
 export function validateConfigPath(configPath: string, homeDir: string, claudeConfigDir: string): boolean {
-  // Resolve to canonical absolute path to defeat ".." traversal
-  const resolved = resolve(configPath);
+  // Normalize to forward slashes for cross-platform comparison
+  const norm = (p: string) => resolve(p).replace(/\\/g, '/');
 
-  const isUnderHome = resolved.startsWith(homeDir + '/') || resolved === homeDir;
-  const normalizedConfigDir = resolve(claudeConfigDir);
-  const normalizedOmcDir = resolve(homeDir, '.omc');
+  const resolved = norm(configPath);
+  const normalizedHome = norm(homeDir);
+  const normalizedConfigDir = norm(claudeConfigDir);
+  const normalizedOmcDir = norm(homeDir + '/.omc');
+
+  const isUnderHome = resolved.startsWith(normalizedHome + '/') || resolved === normalizedHome;
   const hasOmcComponent = resolved.includes('/.omc/') || resolved.endsWith('/.omc');
   const isTrustedSubpath =
     resolved === normalizedConfigDir ||
@@ -41,8 +44,8 @@ export function validateConfigPath(configPath: string, homeDir: string, claudeCo
   // to defeat symlink attacks where the parent is a symlink outside home
   try {
     const parentDir = resolve(resolved, '..');
-    const realParent = realpathSync(parentDir);
-    if (!realParent.startsWith(homeDir + '/') && realParent !== homeDir) {
+    const realParent = realpathSync(parentDir).replace(/\\/g, '/');
+    if (!realParent.startsWith(normalizedHome + '/') && realParent !== normalizedHome) {
       return false;
     }
   } catch {

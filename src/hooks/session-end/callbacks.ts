@@ -97,11 +97,11 @@ export function interpolatePath(pathTemplate: string, sessionId: string): string
   // Sanitize session_id: remove path separators and traversal sequences
   const safeSessionId = sessionId.replace(/[/\\..]/g, '_');
 
-  return normalize(pathTemplate
+  return pathTemplate
     .replace(/~/g, homedir())
     .replace(/\{session_id\}/g, safeSessionId)
     .replace(/\{date\}/g, date)
-    .replace(/\{time\}/g, time));
+    .replace(/\{time\}/g, time);
 }
 
 /**

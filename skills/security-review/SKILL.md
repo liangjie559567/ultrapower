@@ -1,64 +1,64 @@
 ---
 name: security-review
-description: Run a comprehensive security review on code
+description: 对代码运行全面安全审查
 ---
 
 # Security Review Skill
 
-Conduct a thorough security audit checking for OWASP Top 10 vulnerabilities, hardcoded secrets, and unsafe patterns.
+进行彻底的安全审计，检查 OWASP Top 10 漏洞、硬编码密钥和不安全模式。
 
-## When to Use
+## 使用时机
 
-This skill activates when:
-- User requests "security review", "security audit"
-- After writing code that handles user input
-- After adding new API endpoints
-- After modifying authentication/authorization logic
-- Before deploying to production
-- After adding external dependencies
+此 skill 在以下情况激活：
+- 用户请求"security review"、"security audit"
+- 编写处理用户输入的代码后
+- 添加新 API 端点后
+- 修改认证/授权逻辑后
+- 部署到生产环境前
+- 添加外部依赖后
 
-## What It Does
+## 功能
 
-Delegates to the `security-reviewer` agent (Opus model) for deep security analysis:
+委托给 `security-reviewer` agent（Opus 模型）进行深度安全分析：
 
-1. **OWASP Top 10 Scan**
-   - A01: Broken Access Control
-   - A02: Cryptographic Failures
-   - A03: Injection (SQL, NoSQL, Command, XSS)
-   - A04: Insecure Design
-   - A05: Security Misconfiguration
-   - A06: Vulnerable and Outdated Components
-   - A07: Identification and Authentication Failures
-   - A08: Software and Data Integrity Failures
-   - A09: Security Logging and Monitoring Failures
-   - A10: Server-Side Request Forgery (SSRF)
+1. **OWASP Top 10 扫描**
+   - A01: 访问控制失效
+   - A02: 加密失败
+   - A03: 注入（SQL、NoSQL、命令、XSS）
+   - A04: 不安全设计
+   - A05: 安全配置错误
+   - A06: 易受攻击和过时的组件
+   - A07: 身份识别和认证失败
+   - A08: 软件和数据完整性失败
+   - A09: 安全日志和监控失败
+   - A10: 服务端请求伪造（SSRF）
 
-2. **Secrets Detection**
-   - Hardcoded API keys
-   - Passwords in source code
-   - Private keys in repo
-   - Tokens and credentials
-   - Connection strings with secrets
+2. **密钥检测**
+   - 硬编码 API 密钥
+   - 源代码中的密码
+   - 仓库中的私钥
+   - Token 和凭证
+   - 含密钥的连接字符串
 
-3. **Input Validation**
-   - All user inputs sanitized
-   - SQL/NoSQL injection prevention
-   - Command injection prevention
-   - XSS prevention (output escaping)
-   - Path traversal prevention
+3. **输入验证**
+   - 所有用户输入已净化
+   - SQL/NoSQL 注入防护
+   - 命令注入防护
+   - XSS 防护（输出转义）
+   - 路径遍历防护
 
-4. **Authentication/Authorization**
-   - Proper password hashing (bcrypt, argon2)
-   - Session management security
-   - Access control enforcement
-   - JWT implementation security
+4. **认证/授权**
+   - 正确的密码哈希（bcrypt、argon2）
+   - Session 管理安全
+   - 访问控制执行
+   - JWT 实现安全
 
-5. **Dependency Security**
-   - Run `npm audit` for known vulnerabilities
-   - Check for outdated dependencies
-   - Identify high-severity CVEs
+5. **依赖安全**
+   - 运行 `npm audit` 检查已知漏洞
+   - 检查过时依赖
+   - 识别高严重性 CVE
 
-## Agent Delegation
+## Agent 委托
 
 ```
 Task(
@@ -86,37 +86,37 @@ Output: Security review report with:
 )
 ```
 
-## External Model Consultation (Preferred)
+## 外部模型咨询（推荐）
 
-The security-reviewer agent SHOULD consult Codex for cross-validation.
+security-reviewer agent 应咨询 Codex 进行交叉验证。
 
-### Protocol
-1. **Form your OWN security analysis FIRST** - Complete the review independently
-2. **Consult for validation** - Cross-check findings with Codex
-3. **Critically evaluate** - Never blindly adopt external findings
-4. **Graceful fallback** - Never block if tools unavailable
+### 协议
+1. **先形成自己的安全分析** - 独立完成审查
+2. **咨询以验证** - 与 Codex 交叉检查发现
+3. **批判性评估** - 绝不盲目采纳外部发现
+4. **优雅降级** - 工具不可用时绝不阻塞
 
-### When to Consult
-- Authentication/authorization code
-- Cryptographic implementations
-- Input validation for untrusted data
-- High-risk vulnerability patterns
-- Production deployment code
+### 何时咨询
+- 认证/授权代码
+- 加密实现
+- 不可信数据的输入验证
+- 高风险漏洞模式
+- 生产部署代码
 
-### When to Skip
-- Low-risk utility code
-- Well-audited patterns
-- Time-critical security assessments
-- Code with existing security tests
+### 何时跳过
+- 低风险工具代码
+- 经过充分审计的模式
+- 时间紧迫的安全评估
+- 已有安全测试的代码
 
-### Tool Usage
-Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools.
-Use `mcp__x__ask_codex` with `agent_role: "security-reviewer"`.
-If ToolSearch finds no MCP tools, fall back to the `security-reviewer` Claude agent.
+### 工具使用
+首次使用 MCP 工具前，调用 `ToolSearch("mcp")` 发现延迟加载的 MCP 工具。
+使用 `mcp__x__ask_codex`，`agent_role: "security-reviewer"`。
+如果 ToolSearch 未找到 MCP 工具，回退到 `security-reviewer` Claude agent。
 
-**Note:** Security second opinions are high-value. Consider consulting for CRITICAL/HIGH findings.
+**注意：** 安全第二意见价值高。考虑对 CRITICAL/HIGH 发现进行咨询。
 
-## Output Format
+## 输出格式
 
 ```
 SECURITY REVIEW REPORT
@@ -196,89 +196,89 @@ Immediate Actions Required:
 Recommendation: DO NOT DEPLOY until CRITICAL and HIGH issues resolved.
 ```
 
-## Security Checklist
+## 安全清单
 
-The security-reviewer agent verifies:
+security-reviewer agent 验证：
 
-### Authentication & Authorization
-- [ ] Passwords hashed with strong algorithm (bcrypt/argon2)
-- [ ] Session tokens cryptographically random
-- [ ] JWT tokens properly signed and validated
-- [ ] Access control enforced on all protected resources
-- [ ] No authentication bypass vulnerabilities
+### 认证与授权
+- [ ] 密码使用强算法哈希（bcrypt/argon2）
+- [ ] Session token 加密随机
+- [ ] JWT token 正确签名和验证
+- [ ] 所有受保护资源强制执行访问控制
+- [ ] 无认证绕过漏洞
 
-### Input Validation
-- [ ] All user inputs validated and sanitized
-- [ ] SQL queries use parameterization (no string concatenation)
-- [ ] NoSQL queries prevent injection
-- [ ] File uploads validated (type, size, content)
-- [ ] URLs validated to prevent SSRF
+### 输入验证
+- [ ] 所有用户输入已验证和净化
+- [ ] SQL 查询使用参数化（无字符串拼接）
+- [ ] NoSQL 查询防止注入
+- [ ] 文件上传已验证（类型、大小、内容）
+- [ ] URL 已验证以防止 SSRF
 
-### Output Encoding
-- [ ] HTML output escaped to prevent XSS
-- [ ] JSON responses properly encoded
-- [ ] No user data in error messages
-- [ ] Content-Security-Policy headers set
+### 输出编码
+- [ ] HTML 输出已转义以防止 XSS
+- [ ] JSON 响应正确编码
+- [ ] 错误消息中无用户数据
+- [ ] 已设置 Content-Security-Policy 头
 
-### Secrets Management
-- [ ] No hardcoded API keys
-- [ ] No passwords in source code
-- [ ] No private keys in repo
-- [ ] Environment variables used for secrets
-- [ ] Secrets not logged or exposed in errors
+### 密钥管理
+- [ ] 无硬编码 API 密钥
+- [ ] 源代码中无密码
+- [ ] 仓库中无私钥
+- [ ] 密钥使用环境变量
+- [ ] 密钥未在日志或错误中暴露
 
-### Cryptography
-- [ ] Strong algorithms used (AES-256, RSA-2048+)
-- [ ] Proper key management
-- [ ] Random number generation cryptographically secure
-- [ ] TLS/HTTPS enforced for sensitive data
+### 加密
+- [ ] 使用强算法（AES-256、RSA-2048+）
+- [ ] 正确的密钥管理
+- [ ] 随机数生成加密安全
+- [ ] 敏感数据强制使用 TLS/HTTPS
 
-### Dependencies
-- [ ] No known vulnerabilities in dependencies
-- [ ] Dependencies up to date
-- [ ] No CRITICAL or HIGH CVEs
-- [ ] Dependency sources verified
+### 依赖
+- [ ] 依赖中无已知漏洞
+- [ ] 依赖已更新
+- [ ] 无 CRITICAL 或 HIGH CVE
+- [ ] 依赖来源已验证
 
-## Severity Definitions
+## 严重性定义
 
-**CRITICAL** - Exploitable vulnerability with severe impact (data breach, RCE, credential theft)
-**HIGH** - Vulnerability requiring specific conditions but serious impact
-**MEDIUM** - Security weakness with limited impact or difficult exploitation
-**LOW** - Best practice violation or minor security concern
+**CRITICAL** - 可利用的漏洞，影响严重（数据泄露、RCE、凭证盗窃）
+**HIGH** - 需要特定条件但影响严重的漏洞
+**MEDIUM** - 影响有限或难以利用的安全弱点
+**LOW** - 最佳实践违规或轻微安全问题
 
-## Remediation Priority
+## 修复优先级
 
-1. **Rotate exposed secrets** - Immediate (within 1 hour)
-2. **Fix CRITICAL** - Urgent (within 24 hours)
-3. **Fix HIGH** - Important (within 1 week)
-4. **Fix MEDIUM** - Planned (within 1 month)
-5. **Fix LOW** - Backlog (when convenient)
+1. **轮换暴露的密钥** - 立即（1 小时内）
+2. **修复 CRITICAL** - 紧急（24 小时内）
+3. **修复 HIGH** - 重要（1 周内）
+4. **修复 MEDIUM** - 计划（1 个月内）
+5. **修复 LOW** - 积压（方便时）
 
-## Use with Other Skills
+## 与其他 Skill 配合使用
 
-**With Pipeline:**
+**与 Pipeline：**
 ```
 /pipeline security "review authentication module"
 ```
-Uses: explore → security-reviewer → executor → security-reviewer-low (re-verify)
+使用：explore → security-reviewer → executor → security-reviewer-low（重新验证）
 
-**With Swarm:**
+**与 Swarm：**
 ```
 /swarm 4:security-reviewer "audit all API endpoints"
 ```
-Parallel security review across multiple endpoints.
+跨多个端点并行安全审查。
 
-**With Ralph:**
+**与 Ralph：**
 ```
 /ralph security-review then fix all issues
 ```
-Review, fix, re-review until all issues resolved.
+审查、修复、重新审查，直到所有问题解决。
 
-## Best Practices
+## 最佳实践
 
-- **Review early** - Security by design, not afterthought
-- **Review often** - Every major feature or API change
-- **Automate** - Run security scans in CI/CD pipeline
-- **Fix immediately** - Don't accumulate security debt
-- **Educate** - Learn from findings to prevent future issues
-- **Verify fixes** - Re-run security review after remediation
+- **尽早审查** - 安全设计，而非事后补救
+- **频繁审查** - 每次主要功能或 API 变更后
+- **自动化** - 在 CI/CD 流水线中运行安全扫描
+- **立即修复** - 不要积累安全债务
+- **学习** - 从发现中学习以防止未来问题
+- **验证修复** - 修复后重新运行安全审查

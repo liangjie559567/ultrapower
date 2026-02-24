@@ -1,34 +1,34 @@
 ---
 name: frontend-ui-ux
-description: Designer-developer for UI/UX work
+description: 负责 UI/UX 工作的设计开发者
 ---
 
-# Frontend UI/UX Command
+# Frontend UI/UX 命令
 
-Routes to the designer agent or Gemini MCP for frontend work.
+路由到 designer agent 或 Gemini MCP 处理前端工作。
 
-## Usage
+## 用法
 
 ```
-/ultrapower:frontend-ui-ux <design task>
+/ultrapower:frontend-ui-ux <设计任务>
 ```
 
-## Routing
+## 路由
 
-### Preferred: MCP Direct
-Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools.
-Use `mcp__g__ask_gemini` with `agent_role: "designer"` for design tasks.
-If ToolSearch finds no MCP tools, use the Claude agent fallback below.
+### 首选：MCP 直接调用
+首次使用 MCP 工具前，调用 `ToolSearch("mcp")` 发现延迟加载的 MCP 工具。
+使用 `mcp__g__ask_gemini` 配合 `agent_role: "designer"` 处理设计任务。
+若 ToolSearch 未找到 MCP 工具，使用下方的 Claude agent 回退。
 
-### Fallback: Claude Agent
+### 回退：Claude Agent
 ```
 Task(subagent_type="ultrapower:designer", model="sonnet", prompt="{{ARGUMENTS}}")
 ```
 
-## Capabilities
-- Component design and implementation
-- Responsive layouts
-- Design system consistency
-- Accessibility compliance
+## 能力
+- 组件设计与实现
+- 响应式布局
+- 设计系统一致性
+- 无障碍合规
 
 Task: {{ARGUMENTS}}

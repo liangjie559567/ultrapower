@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest";
+import { existsSync } from "fs";
+import { join } from "path";
 import { sanitizeReplyInput } from "../reply-listener.js";
+
+function resolveSourceFile(dir: string, relPath: string): string {
+  const direct = join(dir, relPath);
+  if (existsSync(direct)) return direct;
+  return direct.replace(/[\\/]dist[\\/]/, '/src/');
+}
 
 describe("reply-listener", () => {
   describe("sanitizeReplyInput", () => {
@@ -286,7 +294,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
       // Should use buildDaemonConfig, not readDaemonConfig
@@ -303,7 +311,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
       // Should forward OMC_* env vars for getNotificationConfig()
@@ -352,7 +360,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
@@ -377,7 +385,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
@@ -393,7 +401,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
@@ -410,7 +418,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
@@ -424,7 +432,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
@@ -483,7 +491,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
@@ -494,7 +502,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
@@ -507,7 +515,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const configSource = fs.readFileSync(
-        path.join(__dirname, "..", "config.ts"),
+        resolveSourceFile(__dirname, "../config.ts"),
         "utf-8",
       );
 
@@ -520,7 +528,7 @@ describe("reply-listener", () => {
       const fs = require("fs");
       const path = require("path");
       const source = fs.readFileSync(
-        path.join(__dirname, "..", "reply-listener.ts"),
+        resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
       );
 
