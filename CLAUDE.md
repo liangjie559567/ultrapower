@@ -44,6 +44,8 @@ gh pr create --base dev ...
 | 回滚 | `/ax-rollback` |
 | 查询知识库 | `/ax-evolution knowledge [query]` |
 | 查询模式库 | `/ax-evolution patterns [query]` |
+| 知识库管理 | `/ax-knowledge` |
+| 导出工作流 | `/ax-export` |
 
 ## Axiom 门禁规则
 
