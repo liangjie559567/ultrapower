@@ -2,7 +2,7 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use `ultrapower:writing-plans` to create the implementation plan after this design is approved.
 
-**目标：** 将 Axiom `.agent/` 配置体系完整集成到 ultrapower v5.0.2，包括 8 个 AI 适配器、6 个角色提示词、18 个工作流、规则引擎、知识库、记忆系统（TypeScript 重写）、进化引擎（TypeScript 重写）和守卫系统（TypeScript 重写）。
+**目标：** 将 Axiom `.agent/` 配置体系完整集成到 ultrapower v5.0.2，包括 9 个 AI 适配器、6 个角色提示词、20 个工作流、规则引擎、知识库、记忆系统（TypeScript 重写）、进化引擎（TypeScript 重写）和守卫系统（TypeScript 重写）。
 
 **架构方向：** 三阶段渐进式集成——Phase 1 直接迁移 Markdown 文件，Phase 2 内容组织与知识库及配置，Phase 3 Python→TypeScript 重写核心引擎。
 
@@ -14,10 +14,10 @@
 
 | 模块 | 来源 | 目标 | 策略 | 优先级 |
 |------|------|------|------|--------|
-| adapters/ (7 个 AI 工具) | `.agent/adapters/` | `.codex/`, `.gemini/`, `.kiro/` 等 | 直接迁移 | P1 |
+| adapters/ (9 个 AI 适配器，含 2 个合并到现有文件) | `.agent/adapters/` | `.codex/`, `.gemini/`, `.kiro/` 等 | 直接迁移/合并 | P1 |
 | adapters/claude | `.agent/adapters/claude/` | 项目根 `CLAUDE.md` | 合并追加 | P1 |
 | prompts/roles/ (6 个角色) | `.agent/prompts/roles/` | `agents/` Markdown 提示词 | 合并增强 | P1 |
-| workflows/ (18 个工作流) | `.agent/workflows/` | `skills/` SKILL.md | 合并/新建 | P1 |
+| workflows/ (20 个工作流) | `.agent/workflows/` | `skills/` SKILL.md | 合并/新建/归档 | P1 |
 | prompts/templates/ | `.agent/prompts/templates/` | `templates/axiom/` | 直接迁移 | P1 |
 | rules/ (.rule 文件) | `.agent/rules/` | `templates/rules/` | 直接迁移 | P1 |
 | knowledge/ (独立目录) | `.agent/knowledge/` | `.omc/knowledge/axiom-patterns/` | 直接迁移 | P2 |
@@ -41,10 +41,10 @@ Phase 1（Markdown 迁移）← 无依赖，可立即执行
 Phase 2（知识库 + 记忆文件 + config）← 依赖 Phase 1 完成
     ↓
 Phase 3（TypeScript 重写）← 依赖 Phase 2 完成
-    Task 10（Context Manager）← 依赖 .omc/axiom/ 目录（Phase 2 Task 9）
-    Task 11-12（Evolution Engine）← 依赖 Task 10 + axiom-config.ts（Phase 2）
-    Task 13（Guards）← 依赖 .omc/axiom/active_context.md（Phase 2 Task 9）
-    Task 14（Agents 增强）← 独立，仅依赖 Phase 1 完成
+    Task 13（Context Manager）← 依赖 .omc/axiom/ 目录（Task 10）
+    Task 14-15（Evolution Engine）← 依赖 Task 13 + axiom-config.ts（Task 11）
+    Task 16（Guards）← 依赖 .omc/axiom/active_context.md（Task 10）
+    Task 17（Agents 增强）← 独立，仅依赖 Phase 1 完成
 ```
 
 ---
@@ -233,7 +233,7 @@ export interface AxiomConfig {
 
 **目标：** `src/hooks/memory/`（新建目录）
 
-**前置依赖：** Phase 2 Task 9（`.omc/axiom/` 目录已创建）
+**前置依赖：** Task 10（`.omc/axiom/` 目录已创建）
 
 **核心功能（需重写）：**
 - 读取/写入 `active_context.md`
@@ -311,11 +311,11 @@ export interface ContextManager {
 | `src/hooks/guards/session-watchdog.ts` | `Stop` | 会话超时检测、状态清理 |
 | `src/hooks/guards/status-dashboard.ts` | 工具函数 | 输出 Axiom 系统状态 |
 
-**前置依赖：** Phase 2 Task 9（`.omc/axiom/active_context.md` 已创建）
+**前置依赖：** Task 10（`.omc/axiom/active_context.md` 已创建）
 
 ### 3.4 Axiom Agents 增强（非新建）
 
-**重要：** 以下 7 个 axiom-* agents 已存在于 `agents/` 目录，Task 14 为增强现有文件，而非新建。
+**重要：** 以下 7 个 axiom-* agents 已存在于 `agents/` 目录，Task 17 为增强现有文件，而非新建。
 
 | 现有 Agent 文件 | 对应 Axiom Skill | 增强内容 |
 |---------------|----------------|---------|
@@ -381,7 +381,7 @@ export interface ContextManager {
 
 - [ ] 9 个 AI 适配器文件就位（含 CLAUDE.md 合并到项目根）
 - [ ] 6 个 agent 提示词已合并增强
-- [ ] 18 个工作流已映射到对应 skill（15 合并增强 + 6 新建）
+- [ ] 20 个工作流文件已处理（10 个合并增强到现有 skills + 6 个新 skill 来自 9 个源文件 + 1 个归档）
 - [ ] 4 个规则文件已迁移到 templates/rules/
 - [ ] 2 个 prompts/templates 文件已迁移到 templates/axiom/
 - [ ] 25+ memory/knowledge 条目已迁移到 `.omc/knowledge/`

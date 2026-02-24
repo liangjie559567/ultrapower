@@ -879,7 +879,7 @@ git commit -m "docs: update CLAUDE.md with new Axiom ax-* skills"
 
 - [ ] 9 个 AI 适配器文件就位（含 CLAUDE.md 合并到项目根）
 - [ ] 6 个 agent 提示词已合并增强（critic/architect/product-manager/ux-researcher/analyst/writer）
-- [ ] 15 个工作流已合并增强到现有 skills
+- [ ] 10 个工作流已合并增强到现有 skills
 - [ ] 6 个新 ax-* skills 已创建（ax-reflect/rollback/status/suspend/knowledge/export）
 - [ ] 4 个规则文件已迁移到 templates/rules/
 - [ ] 2 个 prompts/templates 文件已迁移到 templates/axiom/
