@@ -14,7 +14,7 @@
 
 [快速开始](#快速开始) • [文档](https://yeachan-heo.github.io/ultrapower-website) • [迁移指南](docs/MIGRATION.md)
 
-**版本 5.0.2** | 38 个专业智能体 | 67 个技能 | 35 个 Hooks
+**版本 5.0.3** | 44 个专业智能体 | 69 个技能 | 38 个 Hooks
 
 ---
 

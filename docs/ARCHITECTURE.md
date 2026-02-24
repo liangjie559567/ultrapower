@@ -135,7 +135,7 @@ ultrapower 包含 4 个 MCP 服务器：
 
 ## Superpowers × ultrapower 集成
 
-ultrapower v5.0.2 深度集成了 superpowers skill 体系，通过 `next-step-router` 在关键节点串联工作流。
+ultrapower v5.0.3 深度集成了 superpowers skill 体系，通过 `next-step-router` 在关键节点串联工作流。
 
 ### next-step-router
 

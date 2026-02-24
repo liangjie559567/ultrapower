@@ -6,6 +6,7 @@
 
 ## 目录
 
+- [v5.0.2 → v5.0.3: Axiom 专家 Agent 扩展](#v502--v503-axiom-专家-agent-扩展)
 - [v5.0 → v5.0.2: Axiom 框架深度融合](#v50--v502-axiom-框架深度融合)
 - [v4.x → v5.0: ultrapower 集成与功能扩展](#v4x--v50-ultrapower-集成与功能扩展)
 - [v3.5.3 → v3.5.5: Test Fixes & Cleanup](#v353--v355-test-fixes--cleanup)
@@ -13,6 +14,51 @@
 - [v2.x → v3.0: Package Rename & Auto-Activation](#v2x--v30-package-rename--auto-activation)
 - [v3.0 → v3.1: Notepad Wisdom & Enhanced Features](#v30--v31-notepad-wisdom--enhanced-features)
 - [v3.x → v4.0: Major Architecture Overhaul](#v3x--v40-major-architecture-overhaul)
+
+---
+
+## v5.0.2 → v5.0.3: Axiom 专家 Agent 扩展
+
+### TL;DR
+
+v5.0.3 在 v5.0.2 的 Axiom 基础上新增 6 个专家评审 Agent、2 个 Skills（ax-knowledge、ax-export），将总 Agent 数从 38 扩展至 44，Skills 从 67 扩展至 69，Hooks 从 35 扩展至 38。
+
+### 新增功能
+
+**44 个专业 Agent**（新增 6 个 Axiom 专家 agents）：
+- `axiom-ux-director`：UX/体验专家评审，输出 review_ux.md
+- `axiom-product-director`：产品战略专家评审，输出 review_product.md
+- `axiom-domain-expert`：领域知识专家评审，输出 review_domain.md
+- `axiom-tech-lead`：技术可行性评审，输出 review_tech.md
+- `axiom-critic`：安全/质量/逻辑评审，输出 review_critic.md
+- `axiom-sub-prd-writer`：将 Manifest 任务拆解为可执行 Sub-PRD
+
+**69 个 Skills**（新增 2 个）：
+- `ax-knowledge`：查询 Axiom 知识库
+- `ax-export`：导出 Axiom 工作流产物
+
+**38 个 Hooks**（新增 3 个）：
+- `axiom-scope-gate`：防止超出 PRD 范围的变更
+- `axiom-ci-gate`：CI 门禁，确保代码变更通过编译和测试
+- `axiom-context-sync`：跨会话同步 Axiom 上下文
+
+### 破坏性变更
+
+无破坏性变更。所有 v5.0.2 命令和 Agent 名称继续有效。
+
+### 迁移步骤
+
+1. **无需操作** - 所有 v5.0.2 命令继续有效
+2. **重新运行 `/ultrapower:omc-setup`** 以获取包含 44 个 Agent 和 69 个 Skills 的最新配置
+3. **可选**：使用 `/ultrapower:ax-knowledge` 查询知识库，`/ultrapower:ax-export` 导出工作流产物
+
+### 验证
+
+```bash
+# 在 Claude Code 中验证
+/ultrapower:omc-help
+/ultrapower:ax-status
+```
 
 ---
 

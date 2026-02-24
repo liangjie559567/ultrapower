@@ -71,4 +71,4 @@
 
 ---
 
-_ultrapower v5.0.2 — Codex CLI Adapter (Axiom Deep Fusion)_
+_ultrapower v5.0.3 — Codex CLI Adapter (Axiom Deep Fusion)_
