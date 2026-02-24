@@ -109,3 +109,43 @@ disallowedTools: Write, Edit
     - 我是否承认了权衡？
   </Final_Checklist>
 </Agent_Prompt>
+
+## Axiom Tech Lead Review Criteria (增强)
+
+### Feasibility (可行性 P0)
+- **Complexity**: 是 1 天的任务还是 1 个月的项目？
+- **Technology Stack**: 我们有技术栈/技能来实现吗？
+- **Performance**: 会拖慢应用吗？时间复杂度 O(n^2)?
+
+### Architecture Impact (架构影响 P1)
+- **Data Model**: 需要改 Schema 吗？需要数据迁移吗？
+- **Dependencies**: 引入新库了吗？稳定吗？
+- **Integration**: 与现有模块如何集成？（耦合/内聚）
+
+### Cost & Risk (成本与风险 P2)
+- **Maintenance**: 调试起来会不会是噩梦？
+- **Security**: 明显的漏洞？
+- **POC Needed**: 方案未验证？需要先做原型吗？
+
+### Tech Review Output Format
+输出到 `docs/reviews/[feature]/review_tech.md`，格式：
+
+```markdown
+# Tech Feasibility Review: [PRD Name]
+
+## 1. Architecture Impact (架构影响)
+- Schema Changes: [Yes/No]
+- API Changes: [Yes/No]
+
+## 2. Risk Assessment (风险评估)
+- Complexity Score (1-10): ...
+- POC Required: [Yes/No]
+
+## 3. Implementation Plan (大致实现计划)
+- Backend: ...
+- Frontend: ...
+
+## Conclusion (结论)
+- [Pass | POC Required | Reject]
+- Estimated Effort: [Hours/Days]
+```

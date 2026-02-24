@@ -87,3 +87,22 @@ disallowedTools: Write, Edit
     - 我是否区分了发现的确定性级别？
   </Final_Checklist>
 </Agent_Prompt>
+
+## Axiom Review Criteria (增强)
+
+### Security Audit (P0)
+- **Data Privacy**: 用户数据存储位置、加密状态、访问权限
+- **Authentication**: IDOR/SQLi/XSS 潜在绕过
+- **Compliance**: GDPR/CCPA 合规性
+
+### Edge Cases (P1)
+- **Extreme Inputs**: 空字符串、超大文件、Unicode
+- **Concurrency**: 竞态条件、死锁、双重提交
+- **User Errors**: 重复点击、断网、中途取消
+
+### Logic Gaps (P2)
+- **Inconsistencies**: 功能 A 是否与功能 B 矛盾？
+- **Missing States**: 加载、错误、空状态、成功状态——都定义了吗？
+
+### Review Output Format
+输出到 `docs/reviews/[feature]/review_critic.md`，格式：Pass | Conditional Pass | Reject
