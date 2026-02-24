@@ -88,3 +88,10 @@ Task(subagent_type="ultrapower:document-specialist", model="sonnet", prompt="Sea
 - 最多 5 个并行 document-specialist agent
 - 每个 agent 使用 WebSearch 和 WebFetch 工具
 - 无魔法关键词触发 —— 仅支持显式调用
+
+## 路由触发
+
+并行外部搜索完成、资料汇总后调用 `next-step-router`：
+- current_skill: "external-context"
+- stage: "external_context_gathered"
+- output_summary: 搜索切面数、收集的文档数、关键参考资料摘要

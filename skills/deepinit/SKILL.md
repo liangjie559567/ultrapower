@@ -318,3 +318,10 @@ Reusable React components organized by feature and complexity.
 - **批量处理小目录** —— 一次处理多个
 - **跳过未变更的** —— 若目录未变化，跳过重新生成
 - **并行写入** —— 多个 agent 同时写入不同文件
+
+## 路由触发
+
+层级化 AGENTS.md 文档生成完成后调用 `next-step-router`：
+- current_skill: "deepinit"
+- stage: "agents_md_generated"
+- output_summary: 生成的 AGENTS.md 文件数、覆盖的目录层级数

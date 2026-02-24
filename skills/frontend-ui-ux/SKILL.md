@@ -32,3 +32,10 @@ Task(subagent_type="ultrapower:designer", model="sonnet", prompt="{{ARGUMENTS}}"
 - 无障碍合规
 
 Task: {{ARGUMENTS}}
+
+## 路由触发
+
+UI/UX 设计方案经用户确认后调用 `next-step-router`：
+- current_skill: "frontend-ui-ux"
+- stage: "ui_design_approved"
+- output_summary: 设计的组件数、是否有设计系统变更、是否有无障碍要求

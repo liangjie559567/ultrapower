@@ -508,3 +508,10 @@ Alt: Accessibility description
 - 验证 figures/ 目录是否存在
 - 检查发现中的 [FIGURE:] 标签
 - 确保路径相对于 session 目录
+
+## 路由触发
+
+并行 scientist 分析完成、综合报告生成后调用 `next-step-router`：
+- current_skill: "sciomc"
+- stage: "analysis_report_complete"
+- output_summary: 参与的 scientist agent 数、分析维度数、关键发现摘要
