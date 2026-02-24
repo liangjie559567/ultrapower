@@ -221,7 +221,7 @@ grep -n "Checklist\|检查清单\|## Process" skills/brainstorming/SKILL.md | he
 
 **Step 2: 在检查清单之前插入强制前置步骤块**
 
-在文件适当位置（检查清单之前）插入：
+在 `## Checklist` 标题之前插入（使用 Edit 工具，old_string 为 `## Checklist`）：
 
 ```markdown
 ## 强制前置：代码库探索
@@ -280,7 +280,7 @@ git commit -m "feat(brainstorming): add mandatory explore gate and next-step-rou
 grep -n "红旗\|Red Flag" skills/using-superpowers/SKILL.md | head -3
 ```
 
-**Step 2: 在红旗之前插入新功能路由规则**
+**Step 2: 在 `## Red Flags` 标题之前插入新功能路由规则**（使用 Edit 工具，old_string 为 `## Red Flags`）
 
 ```markdown
 ## 新功能路由规则
@@ -612,7 +612,7 @@ for skill in brainstorming using-superpowers writing-plans using-git-worktrees \
 done
 ```
 
-Expected: 所有19个 skill 都显示 OK
+Expected: 所有18个 skill 都显示 OK
 
 **Step 2: 检查 next-step-router skill 存在**
 
