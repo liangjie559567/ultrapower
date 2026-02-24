@@ -186,6 +186,7 @@ Skills 是用户可调用的命令（`/ultrapower:<name>`）。当检测到触�
 - `sciomc`（"sciomc"）：并行 scientist agents 进行全面分析
 - `external-context`：调用并行 document-specialist agents 进行网络搜索
 - `deepinit`（"deepinit"）：使用分层 AGENTS.md 进行深度代码库初始化
+- `next-step-router`：在关键节点分析产出，用 AskUserQuestion 推荐最优下一步 agent/skill，并完整传递上下文
 
 Agent 快捷方式（轻量包装器；直接调用 agent 并传入 `model` 可获得更多控制）：
 - `analyze` -> `debugger`："analyze"、"debug"、"investigate"
