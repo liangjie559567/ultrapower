@@ -115,6 +115,9 @@ Start a new session in your chosen platform and ask for something that should tr
 - **finishing-a-development-branch** - Merge/PR decision workflow
 - **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
 
+**Routing**
+- **next-step-router** - Analyzes skill output at key checkpoints and recommends the optimal next skill/agent via AskUserQuestion, with full context handoff
+
 **Meta**
 - **writing-skills** - Create new skills following best practices (includes testing methodology)
 - **using-superpowers** - Introduction to the skills system
