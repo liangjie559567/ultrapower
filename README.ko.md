@@ -4,9 +4,9 @@
 
 [![npm version](https://img.shields.io/npm/v/ultrapower?color=cb3837)](https://www.npmjs.com/package/ultrapower)
 [![npm downloads](https://img.shields.io/npm/dm/ultrapower?color=blue)](https://www.npmjs.com/package/ultrapower)
-[![GitHub stars](https://img.shields.io/github/stars/Yeachan-Heo/ultrapower?style=flat&color=yellow)](https://github.com/Yeachan-Heo/ultrapower/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/liangjie559567/ultrapower?style=flat&color=yellow)](https://github.com/liangjie559567/ultrapower/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Sponsor](https://img.shields.io/badge/Sponsor-❤️-red?style=flat&logo=github)](https://github.com/sponsors/Yeachan-Heo)
+[![Sponsor](https://img.shields.io/badge/Sponsor-❤️-red?style=flat&logo=github)](https://github.com/sponsors/liangjie559567)
 
 **Claude Code를 위한 멀티 에이전트 오케스트레이션. 학습 곡선 제로.**
 
@@ -20,7 +20,7 @@
 
 **Step 1: 설치**
 ```bash
-/plugin marketplace add https://github.com/Yeachan-Heo/ultrapower
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
 /plugin install ultrapower
 ```
 
@@ -234,13 +234,13 @@ MIT
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Yeachan-Heo/ultrapower&type=date&legend=top-left)](https://www.star-history.com/#Yeachan-Heo/ultrapower&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=liangjie559567/ultrapower&type=date&legend=top-left)](https://www.star-history.com/#liangjie559567/ultrapower&type=date&legend=top-left)
 
 ## 💖 이 프로젝트 후원하기
 
 Oh-My-ClaudeCode가 당신의 워크플로우에 도움이 된다면, 후원을 고려해주세요:
 
-[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-❤️-red?style=for-the-badge&logo=github)](https://github.com/sponsors/Yeachan-Heo)
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-❤️-red?style=for-the-badge&logo=github)](https://github.com/sponsors/liangjie559567)
 
 ### 왜 후원해야 하나요?
 

@@ -4,9 +4,9 @@
 
 [![npm version](https://img.shields.io/npm/v/ultrapower?color=cb3837)](https://www.npmjs.com/package/ultrapower)
 [![npm downloads](https://img.shields.io/npm/dm/ultrapower?color=blue)](https://www.npmjs.com/package/ultrapower)
-[![GitHub stars](https://img.shields.io/github/stars/Yeachan-Heo/ultrapower?style=flat&color=yellow)](https://github.com/Yeachan-Heo/ultrapower/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/liangjie559567/ultrapower?style=flat&color=yellow)](https://github.com/liangjie559567/ultrapower/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Sponsor](https://img.shields.io/badge/Sponsor-❤️-red?style=flat&logo=github)](https://github.com/sponsors/Yeachan-Heo)
+[![Sponsor](https://img.shields.io/badge/Sponsor-❤️-red?style=flat&logo=github)](https://github.com/sponsors/liangjie559567)
 
 **Điều phối đa tác tử cho Claude Code. Không cần thời gian làm quen.**
 
@@ -20,7 +20,7 @@
 
 **Bước 1: Cài đặt**
 ```bash
-/plugin marketplace add https://github.com/Yeachan-Heo/ultrapower
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
 /plugin install ultrapower
 ```
 
@@ -231,13 +231,13 @@ MIT
 
 ## Lịch sử sao
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Yeachan-Heo/ultrapower&type=date&legend=top-left)](https://www.star-history.com/#Yeachan-Heo/ultrapower&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=liangjie559567/ultrapower&type=date&legend=top-left)](https://www.star-history.com/#liangjie559567/ultrapower&type=date&legend=top-left)
 
 ## 💖 Ủng hộ dự án này
 
 Nếu Oh-My-ClaudeCode giúp ích cho quy trình làm việc của bạn, hãy cân nhắc tài trợ:
 
-[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-❤️-red?style=for-the-badge&logo=github)](https://github.com/sponsors/Yeachan-Heo)
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-❤️-red?style=for-the-badge&logo=github)](https://github.com/sponsors/liangjie559567)
 
 ### Vì sao nên tài trợ?
 
