@@ -828,3 +828,35 @@ export {
   recordModeChange,
 } from './subagent-tracker/flow-tracer.js';
 
+export {
+  // Axiom Boot Hook (Memory System Initialization)
+  processAxiomBoot,
+  buildAxiomBootContext,
+  isAxiomEnabled,
+  readActiveContext,
+  parseAxiomState,
+  readProjectDecisions,
+  readUserPreferences,
+  getAxiomDir,
+  getMemoryFilePaths,
+  type AxiomState,
+  type AxiomBootInput,
+  type AxiomBootOutput,
+  type AxiomMemoryFiles,
+} from './axiom-boot/index.js';
+
+export {
+  // Axiom Guards Hook (Gatekeeper System)
+  processAxiomGuards,
+  checkExpertGate,
+  getExpertGateMessage,
+  CI_COMMANDS,
+  EXPERT_GATE_MESSAGE,
+  USER_GATE_MESSAGE,
+  CI_GATE_MESSAGE,
+  type GateType,
+  type GateCheckResult,
+  type AxiomGuardsInput,
+  type AxiomGuardsOutput,
+} from './axiom-guards/index.js';
+

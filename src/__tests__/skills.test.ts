@@ -8,9 +8,9 @@ describe('Builtin Skills', () => {
   });
 
   describe('createBuiltinSkills()', () => {
-    it('should return correct number of skills (54)', () => {
+    it('should return correct number of skills (67)', () => {
       const skills = createBuiltinSkills();
-      expect(skills).toHaveLength(54);
+      expect(skills).toHaveLength(67);
     });
 
     it('should return an array of BuiltinSkill objects', () => {
@@ -62,6 +62,18 @@ describe('Builtin Skills', () => {
       const expectedSkills = [
         'analyze',
         'autopilot',
+        'ax-analyze-error',
+        'ax-context',
+        'ax-decompose',
+        'ax-draft',
+        'ax-evolution',
+        'ax-evolve',
+        'ax-implement',
+        'ax-reflect',
+        'ax-review',
+        'ax-rollback',
+        'ax-status',
+        'ax-suspend',
         'brainstorming',
         'build-fix',
         'cancel',
@@ -81,14 +93,13 @@ describe('Builtin Skills', () => {
         'learn-about-omc',
         'learner',
         'mcp-setup',
+        'next-step-router',
         'note',
         'omc-doctor',
         'omc-help',
-        'omc-plan',
-        'omc-review',
-        'omc-security-review',
         'omc-setup',
         'pipeline',
+        'omc-plan',
         'project-session-manager',
         'psm',
         'ralph',
@@ -97,7 +108,9 @@ describe('Builtin Skills', () => {
         'receiving-code-review',
         'release',
         'requesting-code-review',
+        'omc-review',
         'sciomc',
+        'omc-security-review',
         'skill',
         'subagent-driven-development',
         'swarm',
@@ -158,7 +171,7 @@ describe('Builtin Skills', () => {
     it('should return all skill names', () => {
       const names = listBuiltinSkillNames();
 
-      expect(names).toHaveLength(54);
+      expect(names).toHaveLength(67);
       expect(names).toContain('autopilot');
       expect(names).toContain('cancel');
       expect(names).toContain('ccg');
