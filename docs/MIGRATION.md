@@ -6,12 +6,68 @@
 
 ## 目录
 
+- [v5.0 → v5.0.2: Axiom 框架深度融合](#v50--v502-axiom-框架深度融合)
 - [v4.x → v5.0: ultrapower 集成与功能扩展](#v4x--v50-ultrapower-集成与功能扩展)
 - [v3.5.3 → v3.5.5: Test Fixes & Cleanup](#v353--v355-test-fixes--cleanup)
 - [v3.5.2 → v3.5.3: Skill Consolidation](#v352--v353-skill-consolidation)
 - [v2.x → v3.0: Package Rename & Auto-Activation](#v2x--v30-package-rename--auto-activation)
 - [v3.0 → v3.1: Notepad Wisdom & Enhanced Features](#v30--v31-notepad-wisdom--enhanced-features)
 - [v3.x → v4.0: Major Architecture Overhaul](#v3x--v40-major-architecture-overhaul)
+
+---
+
+## v5.0 → v5.0.2: Axiom 框架深度融合
+
+### TL;DR
+
+v5.0.2 将 Axiom 框架深度融合进 ultrapower，将 Agent 数量从 31 扩展至 39，Skills 从 55 扩展至 67，新增 Axiom 工作流系统、记忆系统和 TypeScript hooks。
+
+### 新增功能
+
+**39 个专业 Agent**（新增 8 个 Axiom agents）：
+- `axiom-requirement-analyst`：需求分析三态门（PASS/CLARIFY/REJECT）
+- `axiom-product-designer`：Draft PRD 生成，含 Mermaid 流程图
+- `axiom-review-aggregator`：5 专家并行审查聚合与冲突仲裁
+- `axiom-prd-crafter`：工程级 PRD，含门控验证
+- `axiom-system-architect`：原子任务 DAG 与 Manifest 生成
+- `axiom-evolution-engine`：知识收割、模式检测、工作流优化
+- `axiom-context-manager`：7 操作记忆系统（读/写/状态/检查点）
+- `axiom-worker`：PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED）
+
+**67 个 Skills**（新增 12 个 Axiom skills）：
+- `ax-analyze-error`、`ax-context`、`ax-decompose`、`ax-draft`
+- `ax-evolution`、`ax-evolve`、`ax-implement`、`ax-reflect`
+- `ax-review`、`ax-rollback`、`ax-status`、`ax-suspend`
+
+**新增 TypeScript Hooks：**
+- `axiom-boot`：会话启动时自动加载 Axiom 上下文
+- `axiom-guards`：工作流守卫，防止无效状态转换
+
+**记忆系统（`.omc/axiom/`）：**
+- `memory.json`：持久化知识库
+- `patterns.json`：检测到的工作流模式
+- `evolution-log.json`：演化历史
+
+**AI 工具适配器：**
+- `.codex/`、`.gemini/`、`.kiro/`、`.opencode/`、`.cursorrules`、`.github/`
+
+### 破坏性变更
+
+无破坏性变更。所有 v5.0 命令和 Agent 名称继续有效。
+
+### 迁移步骤
+
+1. **无需操作** - 所有 v5.0 命令继续有效
+2. **重新运行 `/ultrapower:omc-setup`** 以获取包含 39 个 Agent 和 67 个 Skills 的最新配置
+3. **可选**：使用 `/ultrapower:ax-status` 查看 Axiom 工作流状态
+
+### 验证
+
+```bash
+# 在 Claude Code 中验证
+/ultrapower:omc-help
+/ultrapower:ax-status
+```
 
 ---
 
@@ -375,7 +431,7 @@ npm uninstall -g oh-my-claude-sisyphus
 
 ```bash
 # In Claude Code:
-/plugin marketplace add https://github.com/Yeachan-Heo/ultrapower
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
 /plugin install ultrapower
 ```
 
@@ -869,7 +925,7 @@ Task(subagent_type="ultrapower:architect", model="opus", ...)
 ### 保持更新
 
 - 查看 [CHANGELOG.md](../CHANGELOG.md) 了解详细发布说明
-- 参与 [GitHub Issues](https://github.com/Yeachan-Heo/ultrapower/issues) 讨论
+- 参与 [GitHub Issues](https://github.com/liangjie559567/ultrapower/issues) 讨论
 
 ---
 
@@ -995,7 +1051,7 @@ A：关键词是显式快捷方式。自然语言触发自动检测。两者均�
 - **查看所有命令**：运行 `/ultrapower:omc-help`
 - **查看实时状态**：运行 `/ultrapower:hud setup`
 - **查看详细变更日志**：参见 [CHANGELOG.md](../CHANGELOG.md)
-- **报告 bug**：[GitHub Issues](https://github.com/Yeachan-Heo/oh-my-claude-sisyphus/issues)
+- **报告 bug**：[GitHub Issues](https://github.com/liangjie559567/ultrapower/issues)
 
 ---
 
