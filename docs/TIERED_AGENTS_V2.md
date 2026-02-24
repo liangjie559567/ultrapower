@@ -1,5 +1,66 @@
 # 分层 Agent v2 架构设计
 
+## 当前 Agent 目录（共 31 个）
+
+### Build/Analysis Lane（8 个）
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| explore | haiku | 代码库发现、符号/文件映射 |
+| analyst | opus | 需求分析、验收标准、隐藏约束 |
+| planner | opus | 任务排序、执行计划、风险标记 |
+| architect | opus | 系统设计、边界、接口、长期权衡 |
+| debugger | sonnet | 根因分析、回归隔离、故障诊断 |
+| executor | sonnet | 代码实现、重构、功能开发 |
+| deep-executor | opus | 复杂自主目标导向任务 |
+| verifier | sonnet | 完成证据、声明验证、测试充分性 |
+
+### Review Lane（6 个）
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| style-reviewer | haiku | 格式、命名、惯用法、lint 规范 |
+| quality-reviewer | sonnet | 逻辑缺陷、可维护性、反模式 |
+| api-reviewer | sonnet | API 契约、版本控制、向后兼容性 |
+| security-reviewer | sonnet | 漏洞、信任边界、认证/授权 |
+| performance-reviewer | sonnet | 热点、复杂度、内存/延迟优化 |
+| code-reviewer | opus | 跨关注点综合审查 |
+
+### Domain Specialists（11 个）
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| dependency-expert | sonnet | 外部 SDK/API/包评估 |
+| test-engineer | sonnet | 测试策略、覆盖率、不稳定测试加固 |
+| quality-strategist | sonnet | 质量策略、发布就绪性、风险评估 |
+| build-fixer | sonnet | 构建/工具链/类型错误修复 |
+| designer | sonnet | UX/UI 架构、交互设计 |
+| writer | haiku | 文档、迁移说明、用户指南 |
+| qa-tester | sonnet | 交互式 CLI/服务运行时验证 |
+| scientist | sonnet | 数据/统计分析 |
+| document-specialist | sonnet | 外部文档与参考查找 |
+| git-master | sonnet | 提交策略、历史管理 |
+| vision | sonnet | 图像/截图/图表分析 |
+
+### Coordination（1 个）
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| critic | opus | 计划/设计批判性挑战 |
+
+### Product Lane（4 个）
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| product-manager | sonnet | 问题框架、用户画像/JTBD、PRD |
+| ux-researcher | sonnet | 启发式审计、可用性、无障碍性 |
+| information-architect | sonnet | 分类法、导航、可发现性 |
+| product-analyst | sonnet | 产品指标、漏斗分析、实验设计 |
+
+**废弃别名**：`researcher` -> `document-specialist`，`tdd-guide` -> `test-engineer`
+
+---
+
 ## 概述
 
 本文档描述了一种改进的分层 agent 架构，旨在解决现有不足，并实现模型路由、能力继承和动态升级的高级模式。

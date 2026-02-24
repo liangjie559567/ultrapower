@@ -969,3 +969,209 @@ ls ~/.claude/commands/ralph-loop.md 2>/dev/null || ls ~/.claude/commands/ultrawo
 ```
 
 如果找到，这是从 2.x 的升级。
+
+## 步骤 7：显示欢迎消息
+
+### 新用户：
+
+```
+OMC Setup Complete!
+
+You don't need to learn any commands. I now have intelligent behaviors that activate automatically.
+
+WHAT HAPPENS AUTOMATICALLY:
+- Complex tasks -> I parallelize and delegate to specialists
+- "plan this" -> I start a planning interview
+- "don't stop until done" -> I persist until verified complete
+- "stop" or "cancel" -> I intelligently stop current operation
+
+MAGIC KEYWORDS (optional power-user shortcuts):
+Just include these words naturally in your request:
+
+| Keyword | Effect | Example |
+|---------|--------|---------|
+| ralph | Persistence mode | "ralph: fix the auth bug" |
+| ralplan | Iterative planning | "ralplan this feature" |
+| ulw | Max parallelism | "ulw refactor the API" |
+| eco | Token-efficient mode | "eco refactor the API" |
+| plan | Planning interview | "plan the new endpoints" |
+| team | Coordinated agents | "/team 3:executor fix errors" |
+
+**ralph includes ultrawork:** When you activate ralph mode, it automatically includes ultrawork's parallel execution. No need to combine keywords.
+
+TEAMS:
+Spawn coordinated agents with shared task lists and real-time messaging:
+- /ultrapower:team 3:executor "fix all TypeScript errors"
+- /ultrapower:team 5:build-fixer "fix build errors in src/"
+Teams use Claude Code native tools (TeamCreate/SendMessage/TaskCreate).
+
+MCP SERVERS:
+Run /ultrapower:mcp-setup to add tools like web search, GitHub, etc.
+
+HUD STATUSLINE:
+The status bar now shows OMC state. Restart Claude Code to see it.
+
+That's it! Just use Claude Code normally.
+```
+
+### 从 2.x 升级的用户：
+
+```
+OMC Setup Complete! (Upgraded from 2.x)
+
+GOOD NEWS: Your existing commands still work!
+- /ralph, /ultrawork, /plan, etc. all still function
+
+WHAT'S NEW in 3.0:
+You no longer NEED those commands. Everything is automatic now:
+- Just say "don't stop until done" instead of /ralph
+- Just say "fast" or "parallel" instead of /ultrawork
+- Just say "plan this" instead of /plan
+- Just say "stop" instead of /cancel
+
+MAGIC KEYWORDS (power-user shortcuts):
+
+| Keyword | Same as old... | Example |
+|---------|----------------|---------|
+| ralph | /ralph | "ralph: fix the bug" |
+| ralplan | /ralplan | "ralplan this feature" |
+| ulw | /ultrawork | "ulw refactor API" |
+| eco | (new!) | "eco fix all errors" |
+| plan | /plan | "plan the endpoints" |
+| team | (new!) | "/team 3:executor fix errors" |
+
+TEAMS (NEW!):
+Spawn coordinated agents with shared task lists and real-time messaging:
+- /ultrapower:team 3:executor "fix all TypeScript errors"
+- Uses Claude Code native tools (TeamCreate/SendMessage/TaskCreate)
+
+HUD STATUSLINE:
+The status bar now shows OMC state. Restart Claude Code to see it.
+
+Your workflow won't break - it just got easier!
+```
+
+## 步骤 8：询问是否为仓库加星
+
+首先，检查 `gh` CLI 是否可用且已认证：
+
+```bash
+gh auth status &>/dev/null
+```
+
+### 如果 gh 可用且已认证：
+
+使用 AskUserQuestion 工具提示用户：
+
+**问题：** "If you're enjoying ultrapower, would you like to support the project by starring it on GitHub?"
+
+**选项：**
+1. **Yes, star it!** - 为仓库加星
+2. **No thanks** - 跳过，不再提示
+3. **Maybe later** - 跳过，不再提示
+
+如果用户选择"Yes, star it!"：
+
+```bash
+gh api -X PUT /user/starred/Yeachan-Heo/ultrapower 2>/dev/null && echo "Thanks for starring!" || true
+```
+
+**注意：** 如果 API 调用失败，静默失败——绝不阻塞设置完成。
+
+### 如果 gh 不可用或未认证：
+
+```bash
+echo ""
+echo "If you enjoy ultrapower, consider starring the repo:"
+echo "  https://github.com/Yeachan-Heo/ultrapower"
+echo ""
+```
+
+### 清除设置状态并标记完成
+
+步骤 8 完成后（无论是否加星），清除临时状态并标记设置为已完成：
+
+```bash
+rm -f ".omc/state/setup-state.json"
+
+CONFIG_FILE="$HOME/.claude/.omc-config.json"
+mkdir -p "$(dirname "$CONFIG_FILE")"
+
+OMC_VERSION=""
+if [ -f ".claude/CLAUDE.md" ]; then
+  OMC_VERSION=$(grep -m1 "^# ultrapower" .claude/CLAUDE.md 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+elif [ -f "$HOME/.claude/CLAUDE.md" ]; then
+  OMC_VERSION=$(grep -m1 "^# ultrapower" "$HOME/.claude/CLAUDE.md" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+fi
+
+if [ -f "$CONFIG_FILE" ]; then EXISTING=$(cat "$CONFIG_FILE"); else EXISTING='{}'; fi
+echo "$EXISTING" | jq --arg ts "$(date -Iseconds)" --arg ver "$OMC_VERSION" \
+  '. + {setupCompleted: $ts, setupVersion: $ver}' > "$CONFIG_FILE"
+
+echo "Setup completed successfully!"
+echo "Note: Future updates will only refresh CLAUDE.md, not the full setup wizard."
+```
+
+## 保持更新
+
+安装 ultrapower 更新后（通过 npm 或插件更新）：
+
+**自动**：只需运行 `/ultrapower:omc-setup` - 它会检测你已配置并提供快速"Update CLAUDE.md only"选项，跳过完整向导。
+
+**手动选项**：
+- `/ultrapower:omc-setup --local` 仅更新项目配置
+- `/ultrapower:omc-setup --global` 仅更新全局配置
+- `/ultrapower:omc-setup --force` 重新运行完整向导（重新配置偏好）
+
+这确保你拥有最新功能和 agent 配置，而无需重复完整设置的 token 成本。
+
+## 帮助文本
+
+当用户运行 `/ultrapower:omc-setup --help` 或仅 `--help` 时，显示：
+
+```
+OMC Setup - Configure ultrapower
+
+USAGE:
+  /ultrapower:omc-setup           Run initial setup wizard (or update if already configured)
+  /ultrapower:omc-setup --local   Configure local project (.claude/CLAUDE.md)
+  /ultrapower:omc-setup --global  Configure global settings (~/.claude/CLAUDE.md)
+  /ultrapower:omc-setup --force   Force full setup wizard even if already configured
+  /ultrapower:omc-setup --help    Show this help
+
+MODES:
+  Initial Setup (no flags)
+    - Interactive wizard for first-time setup
+    - Configures CLAUDE.md (local or global)
+    - Sets up HUD statusline
+    - Checks for updates
+    - Offers MCP server configuration
+    - Configures team mode defaults (agent count, type, model)
+    - If already configured, offers quick update option
+
+  Local Configuration (--local)
+    - Downloads fresh CLAUDE.md to ./.claude/
+    - Backs up existing CLAUDE.md to .claude/CLAUDE.md.backup.YYYY-MM-DD
+    - Project-specific settings
+    - Use this to update project config after OMC upgrades
+
+  Global Configuration (--global)
+    - Downloads fresh CLAUDE.md to ~/.claude/
+    - Backs up existing CLAUDE.md to ~/.claude/CLAUDE.md.backup.YYYY-MM-DD
+    - Applies to all Claude Code sessions
+    - Cleans up legacy hooks
+    - Use this to update global config after OMC upgrades
+
+  Force Full Setup (--force)
+    - Bypasses the "already configured" check
+    - Runs the complete setup wizard from scratch
+    - Use when you want to reconfigure preferences
+
+EXAMPLES:
+  /ultrapower:omc-setup           # First time setup (or update CLAUDE.md if configured)
+  /ultrapower:omc-setup --local   # Update this project
+  /ultrapower:omc-setup --global  # Update all projects
+  /ultrapower:omc-setup --force   # Re-run full setup wizard
+
+For more info: https://github.com/Yeachan-Heo/ultrapower
+```

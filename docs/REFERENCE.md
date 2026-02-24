@@ -8,7 +8,7 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Agents (30 Total)](#agents-30-total)
+- [Agents (31 Total)](#agents-31-total)
 - [Skills (54 Total)](#skills-54-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
@@ -161,63 +161,75 @@ omc config-stop-callback discord --show
 
 ---
 
-## Agents（共 30 个）
+## Agents（共 31 个）
 
 通过 Task 工具调用时，始终使用 `ultrapower:` 前缀。
 
 ### 按领域和层级分类
 
-| 领域 | LOW (Haiku) | MEDIUM (Sonnet) | HIGH (Opus) |
-|--------|-------------|-----------------|-------------|
-| **分析** | `architect-low` | `architect-medium` | `architect` |
-| **执行** | `executor-low` | `executor` | `executor-high` |
-| **搜索** | `explore` | - | `explore-high` |
-| **研究** | - | `document-specialist` | - |
-| **前端** | `designer-low` | `designer` | `designer-high` |
-| **文档** | `writer` | - | - |
-| **视觉** | - | `vision` | - |
-| **规划** | - | - | `planner` |
-| **评审** | - | - | `critic` |
-| **预规划** | - | - | `analyst` |
-| **测试** | - | `qa-tester` | - |
-| **安全** | `security-reviewer-low` | - | `security-reviewer` |
-| **构建** | - | `build-fixer` | - |
-| **TDD** | `tdd-guide-low` | `test-engineer` | - |
-| **代码审查** | - | - | `code-reviewer` |
-| **数据科学** | - | `scientist` | `scientist-high` |
+| 领域 | Agent | 默认模型 | 说明 |
+|--------|-------|----------|------|
+| **分析/规划** | `explore` | haiku | 代码库发现、符号/文件映射 |
+| **分析/规划** | `analyst` | opus | 需求分析、验收标准 |
+| **分析/规划** | `planner` | opus | 任务排序、执行计划 |
+| **分析/规划** | `architect` | opus | 系统设计、接口、长期权衡 |
+| **执行** | `debugger` | sonnet | 根因分析、回归隔离 |
+| **执行** | `executor` | sonnet | 代码实现、重构、功能开发 |
+| **执行** | `deep-executor` | opus | 复杂自主目标导向任务 |
+| **执行** | `verifier` | sonnet | 完成证据、声明验证 |
+| **代码审查** | `style-reviewer` | haiku | 格式、命名、lint 规范 |
+| **代码审查** | `quality-reviewer` | sonnet | 逻辑缺陷、可维护性 |
+| **代码审查** | `api-reviewer` | sonnet | API 契约、版本兼容性 |
+| **代码审查** | `security-reviewer` | sonnet | 漏洞、信任边界、认证授权 |
+| **代码审查** | `performance-reviewer` | sonnet | 热点、复杂度、内存/延迟 |
+| **代码审查** | `code-reviewer` | opus | 跨关注点综合审查 |
+| **领域专家** | `dependency-expert` | sonnet | 外部 SDK/API/包评估 |
+| **领域专家** | `test-engineer` | sonnet | 测试策略、覆盖率、flaky 测试 |
+| **领域专家** | `quality-strategist` | sonnet | 质量策略、发布就绪、风险评估 |
+| **领域专家** | `build-fixer` | sonnet | 构建/工具链/类型错误修复 |
+| **领域专家** | `designer` | sonnet | UX/UI 架构、交互设计 |
+| **领域专家** | `writer` | haiku | 文档、迁移说明、用户指南 |
+| **领域专家** | `qa-tester` | sonnet | 交互式 CLI/服务运行时验证 |
+| **领域专家** | `scientist` | sonnet | 数据/统计分析 |
+| **领域专家** | `document-specialist` | sonnet | 外部文档与参考查找 |
+| **领域专家** | `git-master` | sonnet | 提交策略、历史管理 |
+| **领域专家** | `vision` | sonnet | 图片/截图/图表分析 |
+| **协调** | `critic` | opus | 计划/设计批判性挑战 |
+| **产品** | `product-manager` | sonnet | 问题框架、PRD |
+| **产品** | `ux-researcher` | sonnet | 启发式审计、可用性、无障碍 |
+| **产品** | `information-architect` | sonnet | 分类、导航、可发现性 |
+| **产品** | `product-analyst` | sonnet | 产品指标、漏斗分析、实验 |
+| **废弃别名** | `researcher` | - | 已废弃，映射到 `document-specialist` |
 
 ### Agent 选择指南
 
 | 任务类型 | 最佳 Agent | 模型 |
 |-----------|------------|-------|
 | 快速代码查找 | `explore` | haiku |
-| 查找文件/模式 | `explore` | haiku |
-| 复杂架构搜索 | `explore-high` | opus |
-| 简单代码修改 | `executor-low` | haiku |
 | 功能实现 | `executor` | sonnet |
-| 复杂重构 | `executor-high` | opus |
-| 调试简单问题 | `architect-low` | haiku |
-| 调试复杂问题 | `architect` | opus |
-| UI 组件 | `designer` | sonnet |
-| 复杂 UI 系统 | `designer-high` | opus |
+| 复杂重构/自主任务 | `deep-executor` | opus |
+| 调试/根因分析 | `debugger` | sonnet |
+| 完成验证 | `verifier` | sonnet |
+| 系统设计/架构 | `architect` | opus |
+| 战略规划 | `planner` | opus |
+| 需求分析 | `analyst` | opus |
+| 审查/评审计划 | `critic` | opus |
+| UI 组件/设计 | `designer` | sonnet |
 | 编写文档/注释 | `writer` | haiku |
 | 研究文档/API | `document-specialist` | sonnet |
 | 分析图片/图表 | `vision` | sonnet |
-| 战略规划 | `planner` | opus |
-| 审查/评审计划 | `critic` | opus |
-| 预规划分析 | `analyst` | opus |
 | 交互式测试 CLI | `qa-tester` | sonnet |
-| 安全审查 | `security-reviewer` | opus |
-| 快速安全扫描 | `security-reviewer-low` | haiku |
+| 安全审查 | `security-reviewer` | sonnet |
 | 修复构建错误 | `build-fixer` | sonnet |
-| 简单构建修复 | `build-fixer` (model=haiku) | haiku |
 | TDD 工作流 | `test-engineer` | sonnet |
-| 快速测试建议 | `tdd-guide-low` | haiku |
 | 代码审查 | `code-reviewer` | opus |
-| 快速代码检查 | `code-reviewer` (model=haiku) | haiku |
 | 数据分析/统计 | `scientist` | sonnet |
-| 快速数据检查 | `scientist` (model=haiku) | haiku |
-| 复杂 ML/假设验证 | `scientist-high` | opus |
+| 外部包/SDK 评估 | `dependency-expert` | sonnet |
+| Git 提交/历史 | `git-master` | sonnet |
+| 产品需求/PRD | `product-manager` | sonnet |
+| 可用性/无障碍审计 | `ux-researcher` | sonnet |
+| 信息架构 | `information-architect` | sonnet |
+| 产品指标/实验 | `product-analyst` | sonnet |
 
 ---
 
@@ -604,13 +616,22 @@ ultrapower 包含全面的 agent 性能、token 使用量监控及并行工作�
 
 ### CLI 命令
 
+CLI 入口：`ultrapower`、`omc`、`omc-cli`（三者等价）。
+
 ```bash
 omc stats          # 当前会话统计
 omc cost daily     # 每日成本报告
 omc cost weekly    # 每周成本报告
+omc sessions       # 列出会话记录
 omc agents         # Agent 明细
+omc export         # 导出数据
+omc cleanup        # 清理旧数据
 omc backfill       # 导入历史记录数据
+omc wait           # 等待后台任务完成
+omc config-stop-callback  # 配置 stop callback 通知标签
 ```
+
+分析工具：`omc-analytics`（独立分析命令）。
 
 ### HUD Analytics 预设
 

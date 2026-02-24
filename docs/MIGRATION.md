@@ -6,11 +6,86 @@
 
 ## 目录
 
+- [v4.x → v5.0: ultrapower 集成与功能扩展](#v4x--v50-ultrapower-集成与功能扩展)
 - [v3.5.3 → v3.5.5: Test Fixes & Cleanup](#v353--v355-test-fixes--cleanup)
 - [v3.5.2 → v3.5.3: Skill Consolidation](#v352--v353-skill-consolidation)
 - [v2.x → v3.0: Package Rename & Auto-Activation](#v2x--v30-package-rename--auto-activation)
 - [v3.0 → v3.1: Notepad Wisdom & Enhanced Features](#v30--v31-notepad-wisdom--enhanced-features)
 - [v3.x → v4.0: Major Architecture Overhaul](#v3x--v40-major-architecture-overhaul)
+
+---
+
+## v4.x → v5.0: ultrapower 集成与功能扩展
+
+### TL;DR
+
+v5.0 集成了 superpowers skill 系统，将 Agent 数量从 28 扩展至 31，Skills 从 34 扩展至 54，并引入 Team 模式作为默认多 Agent 编排器。
+
+### 破坏性变更
+
+**Agent 重命名（向后兼容别名保留）：**
+
+| 旧名称 | 新名称 | 别名保留 |
+|--------|--------|----------|
+| `tdd-guide` | `test-engineer` | 是 |
+| `researcher` | `document-specialist` | 是 |
+
+**模式路由变更：**
+
+| 旧行为 | 新行为 |
+|--------|--------|
+| `swarm` 直接执行 | `swarm` 路由到 Team（兼容外观） |
+| `ultrapilot` 直接执行 | `ultrapilot` 路由到 Team（兼容外观） |
+
+### 新增功能
+
+**31 个专业 Agent**（新增 3 个）：
+- `build-fixer`：构建/工具链/类型错误修复
+- `qa-tester`：交互式 CLI/服务运行时验证
+- `scientist`：数据/统计分析
+
+**54 个 Skills**（新增 20 个），包括 superpowers skill 系统：
+- `brainstorming`、`systematic-debugging`、`test-driven-development`
+- `writing-plans`、`executing-plans`、`dispatching-parallel-agents`
+- `verification-before-completion`、`requesting-code-review`、`receiving-code-review`
+- `finishing-a-development-branch`、`using-git-worktrees`、`using-superpowers`
+- `subagent-driven-development`、`writer-memory`、`writing-skills`
+- `project-session-manager` (psm)：支持 GitHub/GitLab/Bitbucket/Jira/Gitea/Azure DevOps
+
+**Team 模式（默认多 Agent 编排器）：**
+
+分阶段 pipeline：`team-plan -> team-prd -> team-exec -> team-verify -> team-fix`
+
+```bash
+/ultrapower:team "implement OAuth with multiple providers"
+```
+
+**新工具集成：**
+- LSP 工具（12 个）：`lsp_hover`、`lsp_goto_definition`、`lsp_find_references` 等
+- AST 工具：`ast_grep_search`、`ast_grep_replace`
+- Python REPL：`python_repl`
+- 速率限制等待守护进程
+- 自动更新系统
+- 分析/成本追踪系统
+- MCP 后台任务管理（SQLite 持久化）
+
+### 迁移步骤
+
+1. **无需操作** - 所有 v4.x 命令和 Agent 名称继续有效
+2. **更新脚本中的 Agent 引用**（可选，推荐）：
+   - `tdd-guide` → `test-engineer`
+   - `researcher` → `document-specialist`
+3. **重新运行 `/omc-setup`** 以获取新的 CLAUDE.md 配置（包含 31 个 Agent 和 54 个 Skills）
+
+### 验证
+
+```bash
+# 验证安装
+npm list -g ultrapower
+
+# 在 Claude Code 中验证
+/ultrapower:omc-help
+```
 
 ---
 
@@ -769,44 +844,32 @@ npm update -g oh-my-claude-sisyphus
 
 ### 概述
 
-Version 4.0 是完整的架构重新设计，专注于可扩展性、可维护性和开发者体验。
+Version 4.0 完整重新设计了 Agent 架构，将 34 个分层 Agent 整合为 28 个统一专业 Agent，并引入了高级 Team 协调系统。
 
-### 即将推出
+### 破坏性变更
 
-⚠️ **本节正在积极开发中，v4.0 正在构建中。**
+**Agent 层级系统移除：**
 
-#### 计划变更
+之前的 `-low`、`-medium`、`-high` 后缀 Agent 已全部移除。
 
-1. **模块化架构**
-   - 可扩展性插件系统
-   - 核心/扩展分离
-   - 更好的依赖管理
+```typescript
+// 之前（v3.x）
+Task(subagent_type="ultrapower:architect-high", ...)
 
-2. **增强的 Agent 系统**
-   - 改进的 agent 生命周期管理
-   - 更好的错误恢复
-   - 性能优化
+// 之后（v4.0+）
+Task(subagent_type="ultrapower:architect", model="opus", ...)
+```
 
-3. **改进的配置**
-   - 统一配置 schema
-   - 更好的验证
-   - 迁移工具
+### 迁移步骤
 
-4. **破坏性变更**
-   - 根据开发进度确定
-   - 将提供完整迁移指南
-
-### 迁移路径（即将推出）
-
-当 v4.0 达到候选发布状态时，将提供详细的迁移说明。
-
-预计时间线：Q1 2026
+1. 将所有 `*-low`、`*-medium`、`*-high` Agent 引用替换为对应的统一 Agent 名称
+2. 通过 `model` 参数指定所需模型（`haiku`/`sonnet`/`opus`）
+3. 重新运行 `/omc-setup` 更新配置
 
 ### 保持更新
 
-- 关注 [GitHub 仓库](https://github.com/Yeachan-Heo/oh-my-claude-sisyphus) 获取公告
 - 查看 [CHANGELOG.md](../CHANGELOG.md) 了解详细发布说明
-- 参与 GitHub Issues 讨论
+- 参与 [GitHub Issues](https://github.com/Yeachan-Heo/ultrapower/issues) 讨论
 
 ---
 

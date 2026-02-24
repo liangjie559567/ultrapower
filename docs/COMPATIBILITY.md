@@ -2,6 +2,34 @@
 
 兼容层使 ultrapower 能够发现、注册和使用外部插件、MCP 服务器及工具。它提供统一接口来管理外部工具，同时通过集成的权限系统维护安全性。
 
+## v5.0 兼容性说明
+
+### Agent 别名（向后兼容）
+
+以下旧名称作为别名保留，仍可正常使用：
+
+| 旧名称 | 新名称 |
+|--------|--------|
+| `tdd-guide` | `test-engineer` |
+| `researcher` | `document-specialist` |
+
+### 模式兼容外观
+
+`swarm` 和 `ultrapilot` 现在路由到 Team 模式，原有调用语法保持不变：
+
+```bash
+/ultrapower:swarm 5:executor "task"    # 路由到 Team
+/ultrapower:ultrapilot "task"          # 路由到 Team
+```
+
+### 新增工具（v5.0）
+
+| 工具类别 | 工具列表 |
+|----------|----------|
+| LSP（12 个） | `lsp_hover`、`lsp_goto_definition`、`lsp_find_references`、`lsp_document_symbols`、`lsp_workspace_symbols`、`lsp_diagnostics`、`lsp_diagnostics_directory`、`lsp_prepare_rename`、`lsp_rename`、`lsp_code_actions`、`lsp_code_action_resolve`、`lsp_servers` |
+| AST | `ast_grep_search`、`ast_grep_replace` |
+| Python REPL | `python_repl` |
+
 ## 目录
 
 - [概述](#overview)

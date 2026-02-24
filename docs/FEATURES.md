@@ -10,6 +10,7 @@
 5. [Agent Templates](#agent-templates)
 6. [Session Resume](#session-resume)
 7. [Autopilot](#autopilot)
+8. [MCP Integration](#mcp-integration)
 
 ---
 
@@ -571,6 +572,43 @@ if (validationStatus?.allApproved) {
 - agent 生成数量和指标
 - 阶段耗时追踪
 - 会话绑定
+
+---
+
+## MCP Integration
+
+ultrapower 通过 4 个 MCP 服务器提供外部 AI 模型集成。
+
+### 服务器列表
+
+| 服务器文件 | 模型 | 用途 |
+|-----------|------|------|
+| `bridge/codex-server.cjs` | gpt-5.3-codex | 代码分析、规划验证、架构审查 |
+| `bridge/gemini-server.cjs` | gemini-3-pro-preview | 大上下文任务（1M tokens）、UI/UX 设计 |
+| `bridge/mcp-server.cjs` | - | 通用 MCP 工具服务 |
+| `bridge/team-bridge.cjs` | - | 团队协调桥接 |
+
+### 调用方式
+
+```typescript
+// Codex (GPT)
+mcp__plugin_smart-dev-flow_x__ask_codex({
+  agent_role: 'architect',  // 任意 OMC agent 角色
+  prompt: '...',
+  context_files: ['src/foo.ts']
+})
+
+// Gemini
+mcp__plugin_smart-dev-flow_g__ask_gemini({
+  agent_role: 'designer',
+  prompt: '...',
+  files: ['src/components/Foo.tsx']
+})
+```
+
+### 路径边界规则
+
+`prompt_file` 和 `output_file` 均相对于 `working_directory` 解析，受 `OMC_MCP_OUTPUT_PATH_POLICY` 控制（`strict` 默认 / `redirect_output`）。详见 [REFERENCE.md](./REFERENCE.md#mcp-path-boundary-rules)。
 
 ---
 

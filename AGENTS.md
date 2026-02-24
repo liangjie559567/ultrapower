@@ -12,7 +12,7 @@
 
 ultrapower 为 Claude Code 提供以下增强功能：
 
-- **30 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
+- **31 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
 - **54 个 skills**，用于工作流自动化和专业行为
 - **34 个 hooks**，用于事件驱动的执行模式和增强功能
 - **15 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
@@ -53,17 +53,16 @@ ultrapower 为 Claude Code 提供以下增强功能：
 
    | 工作类型 | 委托给 | 模型 |
    |-----------|-------------|-------|
-   | 代码变更 | `executor` / `executor-low` / `executor-high` | sonnet/haiku/opus |
-   | 分析 | `architect` / `architect-medium` / `architect-low` | opus/sonnet/haiku |
-   | 搜索 | `explore` / `explore-high` | haiku/opus |
-   | UI/UX | `designer` / `designer-low` / `designer-high` | sonnet/haiku/opus |
+   | 代码变更 | `executor` / `deep-executor` | sonnet/opus |
+   | 分析 | `architect` / `analyst` | opus/opus |
+   | 搜索 | `explore` | haiku |
+   | UI/UX | `designer` | sonnet |
    | 文档 | `writer` | haiku |
-   | 安全 | `security-reviewer` / `security-reviewer-low` | opus/haiku |
+   | 安全 | `security-reviewer` | sonnet |
    | 构建错误 | `build-fixer` | sonnet |
-   | 测试 | `qa-tester` | sonnet |
+   | 测试 | `qa-tester` / `test-engineer` | sonnet/sonnet |
    | 代码审查 | `code-reviewer` | opus |
-   | TDD | `test-engineer` | sonnet |
-   | 数据分析 | `scientist` / `scientist-high` | sonnet/opus |
+   | 数据分析 | `scientist` | sonnet |
 
 2. **LSP/AST 工具**：使用类 IDE 工具进行代码智能分析：
    - `lsp_hover` - 指定位置的类型信息和文档
@@ -180,7 +179,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 │                  ultrapower                                 │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
 │  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
-│  │ (54 skills) │ (30 agents) │(LSP/AST/REPL)│ (34 hooks)  │  │
+│  │ (54 skills) │ (31 agents) │(LSP/AST/REPL)│ (34 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │              Features Layer                             ││
@@ -190,54 +189,68 @@ import { allCustomTools, lspTools, astTools } from './tools';
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 智能体概览（共 30 个）
+## 智能体概览（共 31 个）
 
-### 基础智能体（12 个）
-
-| 智能体 | 模型 | 用途 |
-|-------|-------|---------|
-| architect | opus | 架构设计、调试、根因分析 |
-| document-specialist | sonnet | 文档、外部 API 研究 |
-| explore | haiku | 快速代码库模式搜索 |
-| executor | sonnet | 专注任务实现 |
-| designer | sonnet | UI/UX、组件设计 |
-| writer | haiku | 技术文档编写 |
-| vision | sonnet | 图像/截图分析 |
-| critic | opus | 批判性计划审查 |
-| analyst | opus | 规划前需求分析 |
-| planner | opus | 带访谈的战略规划 |
-| qa-tester | sonnet | 交互式 CLI/服务测试 |
-| scientist | sonnet | 数据分析、假设验证 |
-
-### 专业智能体（18 个）
+### Build/Analysis Lane（8 个）
 
 | 智能体 | 模型 | 用途 |
 |-------|-------|---------|
-| security-reviewer | opus | 安全漏洞检测和审计 |
-| build-fixer | sonnet | 构建/类型错误修复（多语言） |
-| test-engineer | sonnet | 测试驱动开发工作流 |
-| code-reviewer | opus | 专家代码审查和质量评估 |
-| api-reviewer | sonnet | API 契约、版本控制、向后兼容性 |
-| debugger | sonnet | 根因分析、回归隔离 |
-| deep-executor | opus | 复杂的自主目标导向任务 |
-| dependency-expert | sonnet | 外部 SDK/API/包评估 |
-| information-architect | sonnet | 分类法、导航、可发现性 |
-| performance-reviewer | sonnet | 热点、复杂度、内存/延迟优化 |
-| product-analyst | sonnet | 产品指标、漏斗分析、实验 |
-| product-manager | sonnet | 问题框架、用户画像/JTBD、PRD |
-| quality-reviewer | sonnet | 逻辑缺陷、可维护性、反模式 |
-| quality-strategist | sonnet | 质量策略、发布就绪性、风险评估 |
-| style-reviewer | haiku | 格式化、命名、惯用法、lint 规范 |
-| ux-researcher | sonnet | 启发式审计、可用性、无障碍性 |
+| explore | haiku | 代码库发现、符号/文件映射 |
+| analyst | opus | 需求分析、验收标准、隐藏约束 |
+| planner | opus | 任务排序、执行计划、风险标记 |
+| architect | opus | 系统设计、边界、接口、长期权衡 |
+| debugger | sonnet | 根因分析、回归隔离、故障诊断 |
+| executor | sonnet | 代码实现、重构、功能开发 |
+| deep-executor | opus | 复杂自主目标导向任务 |
 | verifier | sonnet | 完成证据、声明验证、测试充分性 |
-| git-master | sonnet | 提交策略、历史整洁度 |
 
-### 分层变体（无独立文件——通过 `model` 参数传递模型）
+### Review Lane（6 个）
 
-所有智能体均支持通过 Task 调用中的 `model` 参数进行模型路由：
-- `haiku`：快速查找、轻量扫描
-- `sonnet`：标准实现、调试、审查
-- `opus`：架构设计、深度分析、复杂重构
+| 智能体 | 模型 | 用途 |
+|-------|-------|---------|
+| style-reviewer | haiku | 格式、命名、惯用法、lint 规范 |
+| quality-reviewer | sonnet | 逻辑缺陷、可维护性、反模式 |
+| api-reviewer | sonnet | API 契约、版本控制、向后兼容性 |
+| security-reviewer | sonnet | 漏洞、信任边界、认证/授权 |
+| performance-reviewer | sonnet | 热点、复杂度、内存/延迟优化 |
+| code-reviewer | opus | 跨关注点综合审查 |
+
+### Domain Specialists（11 个）
+
+| 智能体 | 模型 | 用途 |
+|-------|-------|---------|
+| dependency-expert | sonnet | 外部 SDK/API/包评估 |
+| test-engineer | sonnet | 测试策略、覆盖率、不稳定测试加固 |
+| quality-strategist | sonnet | 质量策略、发布就绪性、风险评估 |
+| build-fixer | sonnet | 构建/工具链/类型错误修复 |
+| designer | sonnet | UX/UI 架构、交互设计 |
+| writer | haiku | 文档、迁移说明、用户指南 |
+| qa-tester | sonnet | 交互式 CLI/服务运行时验证 |
+| scientist | sonnet | 数据/统计分析 |
+| document-specialist | sonnet | 外部文档与参考查找 |
+| git-master | sonnet | 提交策略、历史管理 |
+| vision | sonnet | 图像/截图/图表分析 |
+
+### Coordination（1 个）
+
+| 智能体 | 模型 | 用途 |
+|-------|-------|---------|
+| critic | opus | 计划/设计批判性挑战 |
+
+### Product Lane（4 个）
+
+| 智能体 | 模型 | 用途 |
+|-------|-------|---------|
+| product-manager | sonnet | 问题框架、用户画像/JTBD、PRD |
+| ux-researcher | sonnet | 启发式审计、可用性、无障碍性 |
+| information-architect | sonnet | 分类法、导航、可发现性 |
+| product-analyst | sonnet | 产品指标、漏斗分析、实验设计 |
+
+### 废弃别名
+
+- `researcher` -> `document-specialist`
+- `tdd-guide` -> `test-engineer`
+
 
 ## 执行模式
 
