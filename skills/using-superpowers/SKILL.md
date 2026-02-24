@@ -53,6 +53,24 @@ digraph skill_flow {
 }
 ```
 
+## 新功能路由规则
+
+当用户请求涉及**新功能开发**时（非 bug 修复），强制执行以下流程：
+
+1. 调用 explore agent（haiku）→ 理解代码库，写入 notepad（codebase_summary）
+2. 调用 brainstorming skill → 设计对话（brainstorming 会读取 notepad，不重复 explore）
+3. 设计批准后 → next-step-router 推荐下一步
+
+**判断是否为新功能：**
+- 包含"添加"、"新增"、"实现"、"构建"、"创建" → 新功能流程
+- 包含"修复"、"bug"、"错误"、"不工作" → 调试流程（systematic-debugging）
+- 包含"重构"、"优化"、"改进" → 先 explore，再判断
+
+**路由触发（每次消息到达后）：**
+- 新功能 → explore agent → brainstorming
+- 已知 bug → systematic-debugging
+- 不确定 → AskUserQuestion 询问用户意图
+
 ## 红旗
 
 这些想法意味着停下——你在自我合理化：
