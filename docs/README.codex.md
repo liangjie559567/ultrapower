@@ -1,13 +1,13 @@
-# Codex 的 Superpowers
+# Codex 的 ultrapower
 
-通过原生 skill 发现功能，在 OpenAI Codex 中使用 Superpowers 的指南。
+通过原生 skill 发现功能，在 OpenAI Codex 中使用 ultrapower 的指南。
 
 ## 快速安装
 
 告诉 Codex：
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/liangjie559567/ultrapower/refs/heads/main/.codex/INSTALL.md
 ```
 
 ## 手动安装
@@ -21,13 +21,13 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 
 1. 克隆仓库：
    ```bash
-   git clone https://github.com/obra/superpowers.git ~/.codex/superpowers
+   git clone https://github.com/liangjie559567/ultrapower.git ~/.codex/ultrapower
    ```
 
 2. 创建 skills 符号链接：
    ```bash
    mkdir -p ~/.agents/skills
-   ln -s ~/.codex/superpowers/skills ~/.agents/skills/superpowers
+   ln -s ~/.codex/ultrapower/skills ~/.agents/skills/ultrapower
    ```
 
 3. 重启 Codex。
@@ -38,15 +38,15 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\superpowers\skills"
+cmd /c mklink /J "$env:USERPROFILE\.agents\skills\ultrapower" "$env:USERPROFILE\.codex\ultrapower\skills"
 ```
 
 ## 工作原理
 
-Codex 具有原生 skill 发现功能——它在启动时扫描 `~/.agents/skills/`，解析 SKILL.md frontmatter，并按需加载 skills。Superpowers skills 通过单个符号链接变得可见：
+Codex 具有原生 skill 发现功能——它在启动时扫描 `~/.agents/skills/`，解析 SKILL.md frontmatter，并按需加载 skills。ultrapower skills 通过单个符号链接变得可见：
 
 ```
-~/.agents/skills/superpowers/ → ~/.codex/superpowers/skills/
+~/.agents/skills/ultrapower/ → ~/.codex/ultrapower/skills/
 ```
 
 `using-superpowers` skill 会被自动发现并强制执行 skill 使用规范——无需额外配置。
@@ -84,7 +84,7 @@ description: Use when [condition] - [what it does]
 ## 更新
 
 ```bash
-cd ~/.codex/superpowers && git pull
+cd ~/.codex/ultrapower && git pull
 ```
 
 Skills 通过符号链接即时更新。
@@ -92,22 +92,22 @@ Skills 通过符号链接即时更新。
 ## 卸载
 
 ```bash
-rm ~/.agents/skills/superpowers
+rm ~/.agents/skills/ultrapower
 ```
 
 **Windows (PowerShell)：**
 ```powershell
-Remove-Item "$env:USERPROFILE\.agents\skills\superpowers"
+Remove-Item "$env:USERPROFILE\.agents\skills\ultrapower"
 ```
 
-可选择删除克隆：`rm -rf ~/.codex/superpowers`（Windows：`Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\superpowers"`）。
+可选择删除克隆：`rm -rf ~/.codex/ultrapower`（Windows：`Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\ultrapower"`）。
 
 ## 故障排除
 
 ### Skills 未显示
 
-1. 验证符号链接：`ls -la ~/.agents/skills/superpowers`
-2. 检查 skills 是否存在：`ls ~/.codex/superpowers/skills`
+1. 验证符号链接：`ls -la ~/.agents/skills/ultrapower`
+2. 检查 skills 是否存在：`ls ~/.codex/ultrapower/skills`
 3. 重启 Codex——skills 在启动时被发现
 
 ### Windows junction 问题
@@ -116,5 +116,5 @@ Junction 通常无需特殊权限即可工作。如果创建失败，请尝试�
 
 ## 获取帮助
 
-- 报告问题：https://github.com/obra/superpowers/issues
-- 主要文档：https://github.com/obra/superpowers
+- 报告问题：https://github.com/liangjie559567/ultrapower/issues
+- 主要文档：https://github.com/liangjie559567/ultrapower
