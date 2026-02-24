@@ -133,7 +133,7 @@ ultrapower 包含 4 个 MCP 服务器：
 
 调用方式：`mcp__plugin_smart-dev-flow_x__ask_codex`（Codex）、`mcp__plugin_smart-dev-flow_g__ask_gemini`（Gemini）。
 
-## Superpowers × Ultrapower 集成
+## Superpowers × ultrapower 集成
 
 ultrapower v5.0.0 深度集成了 superpowers skill 体系，通过 `next-step-router` 在关键节点串联工作流。
 
