@@ -8,9 +8,9 @@ describe('Builtin Skills', () => {
   });
 
   describe('createBuiltinSkills()', () => {
-    it('should return correct number of skills (67)', () => {
+    it('should return correct number of skills (69)', () => {
       const skills = createBuiltinSkills();
-      expect(skills).toHaveLength(67);
+      expect(skills).toHaveLength(69);
     });
 
     it('should return an array of BuiltinSkill objects', () => {
@@ -68,7 +68,9 @@ describe('Builtin Skills', () => {
         'ax-draft',
         'ax-evolution',
         'ax-evolve',
+        'ax-export',
         'ax-implement',
+        'ax-knowledge',
         'ax-reflect',
         'ax-review',
         'ax-rollback',
@@ -171,7 +173,7 @@ describe('Builtin Skills', () => {
     it('should return all skill names', () => {
       const names = listBuiltinSkillNames();
 
-      expect(names).toHaveLength(67);
+      expect(names).toHaveLength(69);
       expect(names).toContain('autopilot');
       expect(names).toContain('cancel');
       expect(names).toContain('ccg');

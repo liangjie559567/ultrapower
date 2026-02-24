@@ -360,6 +360,54 @@ export const axiomWorkerAgent: AgentConfig = {
   defaultModel: 'sonnet'
 };
 
+export const axiomUxDirectorAgent: AgentConfig = {
+  name: 'axiom-ux-director',
+  description: 'Axiom UX/experience expert review, outputs review_ux.md (Sonnet).',
+  prompt: loadAgentPrompt('axiom-ux-director'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomProductDirectorAgent: AgentConfig = {
+  name: 'axiom-product-director',
+  description: 'Axiom product strategy expert review, outputs review_product.md (Sonnet).',
+  prompt: loadAgentPrompt('axiom-product-director'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomDomainExpertAgent: AgentConfig = {
+  name: 'axiom-domain-expert',
+  description: 'Axiom domain knowledge expert review, outputs review_domain.md (Sonnet).',
+  prompt: loadAgentPrompt('axiom-domain-expert'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomTechLeadAgent: AgentConfig = {
+  name: 'axiom-tech-lead',
+  description: 'Axiom technical feasibility review, outputs review_tech.md (Sonnet).',
+  prompt: loadAgentPrompt('axiom-tech-lead'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomCriticAgent: AgentConfig = {
+  name: 'axiom-critic',
+  description: 'Axiom security/quality/logic review, outputs review_critic.md (Sonnet).',
+  prompt: loadAgentPrompt('axiom-critic'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+export const axiomSubPrdWriterAgent: AgentConfig = {
+  name: 'axiom-sub-prd-writer',
+  description: 'Axiom Manifest task decomposition into executable Sub-PRDs (Sonnet).',
+  prompt: loadAgentPrompt('axiom-sub-prd-writer'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
 /**
  * Get all agent definitions as a record for use with Claude Agent SDK
  */
@@ -432,6 +480,12 @@ export function getAgentDefinitions(overrides?: Partial<Record<string, Partial<A
     'axiom-evolution-engine': axiomEvolutionEngineAgent,
     'axiom-context-manager': axiomContextManagerAgent,
     'axiom-worker': axiomWorkerAgent,
+    'axiom-ux-director': axiomUxDirectorAgent,
+    'axiom-product-director': axiomProductDirectorAgent,
+    'axiom-domain-expert': axiomDomainExpertAgent,
+    'axiom-tech-lead': axiomTechLeadAgent,
+    'axiom-critic': axiomCriticAgent,
+    'axiom-sub-prd-writer': axiomSubPrdWriterAgent,
 
     // ============================================================
     // BACKWARD COMPATIBILITY (Deprecated)

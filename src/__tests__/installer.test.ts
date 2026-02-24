@@ -378,7 +378,9 @@ describe('Installer Constants', () => {
                                  content.includes('You are a') ||
                                  content.includes('You are an') ||
                                  content.includes('You interpret') ||
-                                 content.includes('Named after');
+                                 content.includes('Named after') ||
+                                 content.includes('# Role:') ||
+                                 content.includes('## Role');
           expect(hasRoleSection).toBe(true);
         }
       }

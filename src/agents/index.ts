@@ -90,7 +90,13 @@ export {
   axiomSystemArchitectAgent,
   axiomEvolutionEngineAgent,
   axiomContextManagerAgent,
-  axiomWorkerAgent
+  axiomWorkerAgent,
+  axiomUxDirectorAgent,
+  axiomProductDirectorAgent,
+  axiomDomainExpertAgent,
+  axiomTechLeadAgent,
+  axiomCriticAgent,
+  axiomSubPrdWriterAgent
 } from './definitions.js';
 
 // Core exports (getAgentDefinitions and omcSystemPrompt)
