@@ -1,3 +1,33 @@
+# ultrapower v5.0.3
+
+### 新增
+
+- **Axiom 深度融合**：将 Axiom 智能体编排框架完整集成到 ultrapower，提供需求→开发→进化全流程工作流
+  - **14 个 Axiom agents**：axiom-requirement-analyst、axiom-product-designer、axiom-review-aggregator、axiom-prd-crafter、axiom-system-architect、axiom-evolution-engine、axiom-context-manager、axiom-worker，以及 6 个专家评审角色（axiom-ux-director、axiom-product-director、axiom-domain-expert、axiom-tech-lead、axiom-critic、axiom-sub-prd-writer）
+  - **14 个 Axiom skills**：ax-draft、ax-review、ax-decompose、ax-implement、ax-analyze-error、ax-reflect、ax-evolve、ax-status、ax-rollback、ax-suspend、ax-context、ax-evolution、ax-knowledge、ax-export
+  - **14 个斜杠命令**：对应所有 ax-* skills 的 `/ultrapower:ax-*` 命令
+  - **14 个 Codex prompts**：为所有 Axiom agents 提供 OpenAI Codex 适配提示词
+- **Axiom 记忆系统**：`.omc/axiom/` 目录，含 active_context、project_decisions、user_preferences、state_machine、reflection_log 及 evolution/ 子目录（knowledge_base、pattern_library、learning_queue、workflow_metrics）
+- **Axiom 进化引擎**：知识收割、模式检测、置信度系统、学习队列（P0-P3 优先级）
+- **Axiom Context Manager**：7 种记忆操作（读/写/状态/检查点）的 TypeScript 实现
+- **Axiom Guards**：双层门禁系统（Git hooks shell 脚本 + Claude Code hooks TypeScript），含 Expert Gate、User Gate、CI Gate
+- **Axiom Boot Hook**：会话启动时自动注入记忆上下文
+- **Scope Gate 规则**：防止超出任务范围的代码修改
+- **多平台适配器**：`.kiro/steering/axiom.md`（Kiro）、`.cursorrules`（Cursor）、`.gemini/GEMINI.md`（Gemini）、`.gemini/GEMINI-CLI.md`（Gemini CLI）、`.opencode/OPENCODE.md`（OpenCode CLI）、`.github/copilot-instructions.md`（GitHub Copilot）、`.codex/AGENTS.md`（Codex CLI）
+- **axiom-config.ts**：AxiomConfig 接口与默认配置
+
+### 修复
+
+- **ax-review**：使用专用专家角色 agents（axiom-ux-director 等）替代通用 critic agent，确保评审专业性
+
+### 文档
+
+- 更新 AGENTS.md：agents 38→44，skills 67→69，hooks 35→38，新增 Axiom Lane（14 个）和 Axiom Skill 系统表
+- 更新 README.md：修正 Axiom Agents 和 Axiom Skills 小节，计数同步至 44/69
+- 更新 docs/REFERENCE.md：补充 6 个 Axiom 专家 agents，补充 ax-knowledge/ax-export 条目
+
+---
+
 # ultrapower v5.0.2
 
 ### 修复
