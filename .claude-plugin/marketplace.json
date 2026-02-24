@@ -1,17 +1,21 @@
 {
-  "name": "ultrapower-dev",
-  "description": "Development marketplace for Ultrapower - disciplined multi-agent orchestration",
+  "name": "ultrapower",
+  "description": "Disciplined multi-agent orchestration for Claude Code: workflow enforcement + parallel execution",
   "owner": {
-    "name": "Jesse Vincent & oh-my-claudecode contributors"
+    "name": "liangjie559567"
   },
   "plugins": [
     {
       "name": "ultrapower",
       "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
-      "version": "5.0.0",
-      "source": "./",
+      "version": "5.0.1",
+      "source": {
+        "source": "github",
+        "repo": "liangjie559567/ultrapower",
+        "ref": "v5.0.1"
+      },
       "author": {
-        "name": "Jesse Vincent & oh-my-claudecode contributors"
+        "name": "liangjie559567"
       }
     }
   ]
