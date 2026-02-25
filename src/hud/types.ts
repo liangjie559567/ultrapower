@@ -181,6 +181,26 @@ export interface RateLimits {
   monthlyResetsAt?: Date | null;
 }
 
+export interface AxiomStateForHud {
+  status: string;
+  currentGoal: string | null;
+  learningQueueCount: number;
+  learningQueueTopPriority: string | null;
+  knowledgeBaseCount: number;
+  workflowSuccessRate: number | null;
+  inProgressCount: number;
+  pendingCount: number;
+}
+
+export interface SmartSuggestion {
+  /** 建议的命令或操作 */
+  command: string;
+  /** 建议原因说明 */
+  reason: string;
+  /** 优先级：high / medium / low */
+  priority: 'high' | 'medium' | 'low';
+}
+
 export interface HudRenderContext {
   /** Context window percentage (0-100) */
   contextPercent: number;
@@ -241,6 +261,15 @@ export interface HudRenderContext {
 
   /** Total Skill/proxy_Skill calls seen in transcript */
   skillCallCount: number;
+
+  /** Whether context warning is suppressed due to recent /compact cooldown */
+  suppressCompactWarning?: boolean;
+
+  /** Axiom system state (null if Axiom not initialized) */
+  axiom: AxiomStateForHud | null;
+
+  /** Smart suggestions based on current state */
+  smartSuggestions: SmartSuggestion[];
 }
 
 // ============================================================================

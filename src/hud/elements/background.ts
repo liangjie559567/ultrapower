@@ -38,7 +38,7 @@ export function renderBackground(tasks: BackgroundTask[]): string | null {
     color = GREEN; // Plenty of room
   }
 
-  return `后台:${color}${running}/${MAX_CONCURRENT}${RESET}`;
+  return `bg:${color}${running}/${MAX_CONCURRENT}${RESET}`;
 }
 
 /**
@@ -75,5 +75,5 @@ export function renderBackgroundDetailed(tasks: BackgroundTask[]): string | null
   });
 
   const suffix = running.length > 3 ? ',+' + (running.length - 3) : '';
-  return `后台:${color}${running.length}/${MAX_CONCURRENT}${RESET} ${DIM}[${descriptions.join(',')}${suffix}]${RESET}`;
+  return `bg:${color}${running.length}/${MAX_CONCURRENT}${RESET} ${DIM}[${descriptions.join(',')}${suffix}]${RESET}`;
 }

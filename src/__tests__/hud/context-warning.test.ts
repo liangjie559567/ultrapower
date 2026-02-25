@@ -30,20 +30,22 @@ describe('renderContextLimitWarning', () => {
       expect(result).toContain('85%');
     });
 
-    it('includes the threshold value in the warning', () => {
+    it('shows current context percent in the warning', () => {
       const result = renderContextLimitWarning(82, 80, false);
-      expect(result).toContain('80%');
+      expect(result).toContain('82%');
     });
 
-    it('includes /compact instruction when autoCompact is false', () => {
+    it('shows monitoring-only indicator (no /compact suggestion)', () => {
       const result = renderContextLimitWarning(80, 80, false);
-      expect(result).toContain('/compact');
+      expect(result).not.toContain('/compact');
+      expect(result).toContain('ctx');
     });
 
-    it('shows auto-compact queued message when autoCompact is true', () => {
+    it('shows monitoring-only indicator when autoCompact is true', () => {
       const result = renderContextLimitWarning(80, 80, true);
-      expect(result).toContain('auto-compact queued');
+      expect(result).not.toContain('auto-compact queued');
       expect(result).not.toContain('/compact');
+      expect(result).toContain('ctx');
     });
   });
 

@@ -31,7 +31,64 @@ MCP server 为 Claude Code agent 提供额外工具。本 skill 帮助你通过 
 11. **以上全部** - 配置所有推荐的 MCP server
 12. **自定义** - 添加自定义 MCP server
 
-## 第二步：收集所需信息
+## 第二步：处理"以上全部"选项
+
+如果用户选择"以上全部"，按以下流程批量收集信息后一次性安装：
+
+### 批量信息收集顺序
+
+使用 AskUserQuestion 依次询问（每次一个问题）：
+
+**问题 1：** Exa API key
+```
+Exa Web Search 需要 API key。
+请输入您的 Exa API key（在 https://dashboard.exa.ai 获取），或输入 'skip' 跳过
+```
+
+**问题 2：** GitHub Token
+```
+GitHub 集成需要 Personal Access Token。
+请输入您的 GitHub Token（在 https://github.com/settings/tokens 创建，推荐权限：repo, read:org），或输入 'skip' 跳过
+```
+
+**问题 3：** Slack Bot Token
+```
+Slack 集成需要 Bot Token。
+请输入您的 Slack Bot Token（xoxb-...），或输入 'skip' 跳过
+```
+
+**问题 4：** Jira/Linear（可选）
+```
+是否需要配置项目管理工具？
+1. Jira
+2. Linear
+3. 跳过
+```
+
+**问题 5：** PostgreSQL（可选）
+```
+是否需要配置 PostgreSQL 数据库连接？
+请输入连接字符串（postgresql://user:pass@host:port/db），或输入 'skip' 跳过
+```
+
+收集完毕后，按以下顺序依次执行安装命令（跳过用户选择 skip 的项目）：
+
+1. Context7（无需 key，直接安装）
+2. Exa（如提供了 key）
+3. Filesystem（使用当前工作目录）
+4. GitHub（如提供了 token）
+5. Slack（如提供了 token）
+6. Jira 或 Linear（如用户选择了）
+7. PostgreSQL（如提供了连接字符串）
+8. Playwright（无需 key，直接安装）
+9. Sequential Thinking（无需 key，直接安装）
+10. Software Planning Tool（无需 key，直接安装）
+
+安装完成后跳转到**第四步：验证安装**。
+
+---
+
+## 第三步：收集所需信息（单个安装）
 
 ### Context7：
 无需 API key，可立即使用。

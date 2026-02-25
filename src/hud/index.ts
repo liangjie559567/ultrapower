@@ -21,6 +21,8 @@ import {
   readPrdStateForHud,
   readAutopilotStateForHud,
 } from "./omc-state.js";
+import { readAxiomStateForHud } from "./elements/axiom.js";
+import { generateSuggestions } from "./elements/suggestions.js";
 import { getUsage } from "./usage-api.js";
 import { render } from "./render.js";
 import { sanitizeOutput } from "./sanitize.js";
@@ -38,7 +40,7 @@ import { extractSessionId } from "../analytics/output-estimator.js";
 import { getTokenTracker } from "../analytics/token-tracker.js";
 import { getRuntimePackageVersion } from "../lib/version.js";
 import { compareVersions } from "../features/auto-update.js";
-import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 
@@ -346,6 +348,7 @@ async function main(): Promise<void> {
     const ultrawork = readUltraworkStateForHud(cwd);
     const prd = readPrdStateForHud(cwd);
     const autopilot = readAutopilotStateForHud(cwd);
+    const axiom = readAxiomStateForHud(cwd);
 
     // Read HUD state for background tasks
     const hudState = readHudState(cwd);
@@ -401,6 +404,23 @@ async function main(): Promise<void> {
     }
 
     // Build render context
+    const sessionHealth = await calculateSessionHealth(
+      sessionStart,
+      getContextPercent(stdin),
+      stdin,
+      config.thresholds,
+    );
+    const activeAgents = transcriptData.agents.filter((a) => a.status === "running");
+
+    // Generate smart suggestions based on current state
+    const smartSuggestions = generateSuggestions({
+      contextPercent: getContextPercent(stdin),
+      axiom,
+      sessionHealth,
+      activeAgentCount: activeAgents.length,
+      contextWarningThreshold: config.contextLimitWarning.threshold,
+    });
+
     const context: HudRenderContext = {
       contextPercent: getContextPercent(stdin),
       modelName: getModelName(stdin),
@@ -408,7 +428,7 @@ async function main(): Promise<void> {
       ultrawork,
       prd,
       autopilot,
-      activeAgents: transcriptData.agents.filter((a) => a.status === "running"),
+      activeAgents,
       todos: transcriptData.todos,
       backgroundTasks: getRunningTasks(hudState),
       cwd,
@@ -416,17 +436,14 @@ async function main(): Promise<void> {
       rateLimits,
       pendingPermission: transcriptData.pendingPermission || null,
       thinkingState: transcriptData.thinkingState || null,
-      sessionHealth: await calculateSessionHealth(
-        sessionStart,
-        getContextPercent(stdin),
-        stdin,
-        config.thresholds,
-      ),
+      sessionHealth,
       omcVersion,
       updateAvailable,
       toolCallCount: transcriptData.toolCallCount,
       agentCallCount: transcriptData.agentCallCount,
       skillCallCount: transcriptData.skillCallCount,
+      axiom,
+      smartSuggestions,
     };
 
     // Debug: log data if OMC_DEBUG is set
@@ -441,40 +458,8 @@ async function main(): Promise<void> {
       );
     }
 
-    // autoCompact: write trigger file when context exceeds threshold
-    // A companion hook can read this file to inject a /compact suggestion.
-    if (
-      config.contextLimitWarning.autoCompact &&
-      context.contextPercent >= config.contextLimitWarning.threshold
-    ) {
-      try {
-        const omcStateDir = join(cwd, '.omc', 'state');
-        if (!existsSync(omcStateDir)) {
-          mkdirSync(omcStateDir, { recursive: true });
-        }
-        const triggerFile = join(omcStateDir, 'compact-requested.json');
-        writeFileSync(
-          triggerFile,
-          JSON.stringify({
-            requestedAt: new Date().toISOString(),
-            contextPercent: context.contextPercent,
-            threshold: config.contextLimitWarning.threshold,
-          }),
-        );
-      } catch {
-        // Silent failure — don't break HUD rendering
-      }
-    } else if (config.contextLimitWarning.autoCompact) {
-      // ctx dropped below threshold — clear the trigger file to stop infinite compaction
-      try {
-        const triggerFile = join(cwd, '.omc', 'state', 'compact-requested.json');
-        if (existsSync(triggerFile)) {
-          unlinkSync(triggerFile);
-        }
-      } catch {
-        // Silent failure
-      }
-    }
+    // Context monitoring only — autoCompact and compact suggestions disabled.
+    // Claude Code handles compaction automatically.
 
     // Render and output
     let output = await render(context, config);

@@ -8,6 +8,8 @@ import type { HudRenderContext, HudConfig } from './types.js';
 import { DEFAULT_HUD_CONFIG } from './types.js';
 import { bold, dim } from './colors.js';
 import { renderRalph } from './elements/ralph.js';
+import { renderAxiom } from './elements/axiom.js';
+import { renderSuggestions } from './elements/suggestions.js';
 import { renderAgentsByFormat, renderAgentsMultiLine } from './elements/agents.js';
 import { renderTodosWithCurrent } from './elements/todos.js';
 import { renderSkills, renderLastSkill } from './elements/skills.js';
@@ -310,7 +312,8 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
   const ctxWarning = renderContextLimitWarning(
     context.contextPercent,
     config.contextLimitWarning.threshold,
-    config.contextLimitWarning.autoCompact
+    config.contextLimitWarning.autoCompact,
+    context.suppressCompactWarning
   );
   if (ctxWarning) detailLines.push(ctxWarning);
 
@@ -330,6 +333,18 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
   if (enabledElements.todos) {
     const todos = renderTodosWithCurrent(context.todos);
     if (todos) detailLines.push(todos);
+  }
+
+  // Axiom state line (if Axiom is initialized)
+  if (context.axiom) {
+    const axiomLine = renderAxiom(context.axiom);
+    if (axiomLine) detailLines.push(axiomLine);
+  }
+
+  // Smart suggestions line (if any suggestions available)
+  if (context.smartSuggestions && context.smartSuggestions.length > 0) {
+    const suggestionsLine = renderSuggestions(context.smartSuggestions);
+    if (suggestionsLine) detailLines.push(suggestionsLine);
   }
 
   // Optionally add analytics line for full/dense presets

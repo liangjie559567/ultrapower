@@ -25,13 +25,13 @@ export interface AutopilotStateForHud {
 }
 
 const PHASE_NAMES: Record<string, string> = {
-  expansion: '扩展',
-  planning: '规划',
-  execution: '构建',
-  qa: '测试',
-  validation: '验证',
-  complete: '完成',
-  failed: '失败'
+  expansion: 'expand',
+  planning: 'plan',
+  execution: 'build',
+  qa: 'test',
+  validation: 'verify',
+  complete: 'done',
+  failed: 'failed'
 };
 
 const PHASE_INDEX: Record<string, number> = {

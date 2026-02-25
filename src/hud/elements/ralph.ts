@@ -39,5 +39,5 @@ export function renderRalph(
     color = GREEN;
   }
 
-  return `循环:${color}${iteration}/${maxIterations}${RESET}`;
+  return `ralph:${color}${iteration}/${maxIterations}${RESET}`;
 }

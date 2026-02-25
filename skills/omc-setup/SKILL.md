@@ -423,6 +423,75 @@ echo "Default execution mode set to: USER_CHOICE"
 
 **注意**：此偏好仅影响通用关键词（"fast"、"parallel"）。明确关键词（"ulw"）始终覆盖此偏好。
 
+## 步骤 3.75：配置操作权限
+
+使用 AskUserQuestion 工具提示用户：
+
+**问题：** "是否开启「全部权限」模式？开启后，AI 执行读写、编辑、Bash 命令、MCP 工具等所有操作时**无需逐一向你确认**。"
+
+**选项：**
+1. **开启全部权限（无需确认）** - 所有操作自动执行，适合信任 AI 自主完成任务的用户。（推荐用于 autopilot/ultrawork 模式）
+2. **保持默认（按需确认）** - 保留 Claude Code 原有的权限提示行为，每次敏感操作前询问。
+
+### 如果用户选择「开启全部权限」
+
+向 `~/.claude/settings.json` 写入权限配置：
+
+```bash
+SETTINGS_FILE="$HOME/.claude/settings.json"
+mkdir -p "$(dirname "$SETTINGS_FILE")"
+
+# 读取现有配置（如果存在）
+if [ -f "$SETTINGS_FILE" ]; then
+  EXISTING=$(cat "$SETTINGS_FILE")
+else
+  EXISTING='{}'
+fi
+
+# 合并权限配置（不覆盖其他现有设置）
+echo "$EXISTING" | jq '. + {
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "MultiEdit(*)",
+      "mcp__*",
+      "WebFetch(*)",
+      "WebSearch(*)"
+    ],
+    "deny": []
+  }
+}' > "$SETTINGS_FILE"
+
+echo "全部权限已配置：所有操作将自动执行，无需确认"
+echo "  配置文件：$SETTINGS_FILE"
+echo "  如需恢复默认，删除 permissions 字段或运行 /ultrapower:omc-setup --force"
+```
+
+同时在 `~/.claude/.omc-config.json` 中记录此偏好：
+
+```bash
+CONFIG_FILE="$HOME/.claude/.omc-config.json"
+mkdir -p "$(dirname "$CONFIG_FILE")"
+if [ -f "$CONFIG_FILE" ]; then EXISTING=$(cat "$CONFIG_FILE"); else EXISTING='{}'; fi
+echo "$EXISTING" | jq '. + {permissionsMode: "allow-all", permissionsConfiguredAt: (now | todate)}' > "$CONFIG_FILE"
+```
+
+### 如果用户选择「保持默认」
+
+跳过此步骤，不修改 `~/.claude/settings.json`。
+
+在 `~/.claude/.omc-config.json` 中记录：
+
+```bash
+CONFIG_FILE="$HOME/.claude/.omc-config.json"
+mkdir -p "$(dirname "$CONFIG_FILE")"
+if [ -f "$CONFIG_FILE" ]; then EXISTING=$(cat "$CONFIG_FILE"); else EXISTING='{}'; fi
+echo "$EXISTING" | jq '. + {permissionsMode: "default", permissionsConfiguredAt: (now | todate)}' > "$CONFIG_FILE"
+```
+
 ## 步骤 3.8：安装 CLI 分析工具（可选）
 
 CLI（`omc` 命令）**不再支持**通过 npm/bun 全局安装。

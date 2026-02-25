@@ -25,6 +25,8 @@ function createMinimalContext(overrides: Partial<HudRenderContext> = {}): HudRen
     toolCallCount: 0,
     agentCallCount: 0,
     skillCallCount: 0,
+    axiom: null,
+    smartSuggestions: [],
     ...overrides,
   };
 }

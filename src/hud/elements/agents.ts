@@ -202,7 +202,7 @@ export function renderAgents(agents: ActiveAgent[]): string | null {
     return null;
   }
 
-  return `智能体:${CYAN}${running}${RESET}`;
+  return `agents:${CYAN}${running}${RESET}`;
 }
 
 /**
