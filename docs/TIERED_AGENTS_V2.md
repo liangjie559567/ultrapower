@@ -26,7 +26,7 @@
 | performance-reviewer | sonnet | 热点、复杂度、内存/延迟优化 |
 | code-reviewer | opus | 跨关注点综合审查 |
 
-### Domain Specialists（11 个）
+### Domain Specialists（16 个）
 
 | Agent | 模型 | 用途 |
 |-------|------|------|
@@ -41,6 +41,11 @@
 | document-specialist | sonnet | 外部文档与参考查找 |
 | git-master | sonnet | 提交策略、历史管理 |
 | vision | sonnet | 图像/截图/图表分析 |
+| database-expert | sonnet | 数据库设计、查询优化和迁移 |
+| devops-engineer | sonnet | CI/CD、容器化、基础设施即代码 |
+| i18n-specialist | sonnet | 国际化、本地化和多语言支持 |
+| accessibility-auditor | sonnet | Web 无障碍审查和 WCAG 合规 |
+| api-designer | sonnet | REST/GraphQL API 设计和契约定义 |
 
 ### Coordination（1 个）
 
@@ -57,7 +62,7 @@
 | information-architect | sonnet | 分类法、导航、可发现性 |
 | product-analyst | sonnet | 产品指标、漏斗分析、实验设计 |
 
-### Axiom Lane（8 个）
+### Axiom Lane（14 个）
 
 | Agent | 模型 | 用途 |
 |-------|------|------|
@@ -69,11 +74,6 @@
 | axiom-evolution-engine | sonnet | 知识收割、模式检测、工作流优化 |
 | axiom-context-manager | sonnet | 7 操作记忆系统（读/写/状态/检查点） |
 | axiom-worker | sonnet | PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED） |
-
-### Axiom Specialists（6 个）
-
-| Agent | 模型 | 用途 |
-|-------|------|------|
 | axiom-ux-director | sonnet | UX/体验专家评审，输出 review_ux.md |
 | axiom-product-director | sonnet | 产品战略专家评审，输出 review_product.md |
 | axiom-domain-expert | sonnet | 领域知识专家评审，输出 review_domain.md |
