@@ -3,7 +3,7 @@
 
 # agents
 
-28 个专业 AI agent 定义，采用 3 级模型路由以优化成本和性能。
+44 个专业 AI agent 定义，采用 3 级模型路由以优化成本和性能。
 
 ## 用途
 
@@ -43,7 +43,7 @@
 主注册表位于 `definitions.ts`：
 
 ```typescript
-// 获取全部 28 个 agent
+// 获取全部 44 个 agent
 const agents = getAgentDefinitions();
 
 // 每个 agent 包含：

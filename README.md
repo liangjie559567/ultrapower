@@ -1,6 +1,6 @@
 # ultrapower
 
-ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **44 个专业 agents**、**69 个 skills** 和完整的 TypeScript hooks 系统。
+ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **44 个专业 agents**、**70 个 skills** 和完整的 TypeScript hooks 系统。
 
 ## 核心能力
 
@@ -15,10 +15,10 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 ```bash
 # 第一步：添加插件市场
-/plugin marketplace add liangjie559567/ultrapower
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
 
 # 第二步：安装插件
-/plugin install ultrapower@ultrapower-marketplace
+/plugin install ultrapower
 ```
 
 ### 验证安装
@@ -102,7 +102,7 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 | `critic` | opus | 计划/设计批判性挑战 |
 | `vision` | sonnet | 图片/截图/图表分析 |
 
-### Axiom Agents（v5.0.2 新增）
+### Axiom Agents
 
 | Agent | 模型 | 用途 |
 |-------|------|------|
@@ -123,7 +123,7 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 ---
 
-## Skills（69 个）
+## Skills（70 个）
 
 ### 工作流 Skills
 
@@ -157,7 +157,7 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 | `finishing-a-development-branch` | 合并/PR 决策工作流 |
 | `next-step-router` | 关键节点推荐最优下一步 |
 
-### Axiom Skills（v5.0.2 新增）
+### Axiom Skills
 
 | Skill | 用途 |
 |-------|------|
@@ -176,9 +176,49 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 | `ax-knowledge` | 查询 Axiom 知识库 |
 | `ax-export` | 导出 Axiom 工作流产物 |
 
+### 增强 Skills
+
+| Skill | 用途 |
+|-------|------|
+| `deepinit` | 分层 AGENTS.md 代码库文档化 |
+| `deepsearch` | 多策略深度代码库搜索 |
+| `analyze` | 深度分析与调查（debugger 别名） |
+| `sciomc` | 并行 scientist 编排 |
+| `external-context` | 并行 document-specialist 网络搜索 |
+| `ccg` | Claude-Codex-Gemini 三模型并行编排 |
+| `frontend-ui-ux` | UI/UX 专业能力（静默激活） |
+| `git-master` | Git 专家，原子提交和历史管理（静默激活） |
+| `build-fix` | 修复构建和 TypeScript 错误 |
+| `code-review` | 全面代码审查 |
+| `security-review` | 安全漏洞检测 |
+| `trace` | 显示 agent 流程追踪时间线 |
+| `learn-about-omc` | 了解 OMC 使用模式并获取建议 |
+| `dispatching-parallel-agents` | 并行分发独立任务给多个 agents |
+
 ### 工具类 Skills
 
-`cancel`、`note`、`learner`、`omc-setup`、`mcp-setup`、`release`、`writing-skills`、`using-superpowers`、`configure-discord`、`configure-telegram`
+| Skill | 用途 |
+|-------|------|
+| `cancel` | 统一取消所有执行模式 |
+| `note` | 保存笔记到抗压缩 notepad |
+| `learner` | 从会话中提取可复用 skill |
+| `omc-setup` | 一次性安装向导 |
+| `mcp-setup` | 配置 MCP 服务器 |
+| `hud` | 配置 HUD 状态栏 |
+| `omc-doctor` | 诊断并修复安装问题 |
+| `omc-help` | 显示 OMC 使用指南 |
+| `release` | 自动化发布工作流 |
+| `ralph-init` | 初始化 PRD 以进行结构化任务跟踪 |
+| `review` | 用 critic 审查工作计划 |
+| `writer-memory` | 面向写作者的 agent 记忆系统 |
+| `project-session-manager` | 管理隔离开发环境（git worktrees + tmux） |
+| `psm` | project-session-manager 别名 |
+| `skill` | 管理本地 skills（列出、添加、删除、搜索、编辑） |
+| `wizard` | 交互式配置向导 |
+| `writing-skills` | 创建/编辑/验证 skills |
+| `configure-discord` | 配置 Discord webhook/bot 通知 |
+| `configure-telegram` | 配置 Telegram bot 通知 |
+| `using-superpowers` | 建立 skill 使用规则 |
 
 ---
 

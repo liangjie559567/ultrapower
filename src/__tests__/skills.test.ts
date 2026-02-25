@@ -8,9 +8,9 @@ describe('Builtin Skills', () => {
   });
 
   describe('createBuiltinSkills()', () => {
-    it('should return correct number of skills (69)', () => {
+    it('should return correct number of skills (70)', () => {
       const skills = createBuiltinSkills();
-      expect(skills).toHaveLength(69);
+      expect(skills).toHaveLength(70);
     });
 
     it('should return an array of BuiltinSkill objects', () => {
@@ -128,6 +128,7 @@ describe('Builtin Skills', () => {
         'verification-before-completion',
         'writer-memory',
         'writing-plans',
+        'wizard',
         'writing-skills',
       ];
 
@@ -173,7 +174,7 @@ describe('Builtin Skills', () => {
     it('should return all skill names', () => {
       const names = listBuiltinSkillNames();
 
-      expect(names).toHaveLength(69);
+      expect(names).toHaveLength(70);
       expect(names).toContain('autopilot');
       expect(names).toContain('cancel');
       expect(names).toContain('ccg');

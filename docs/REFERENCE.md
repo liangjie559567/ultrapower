@@ -9,7 +9,7 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Agents (44 Total)](#agents-44-total)
-- [Skills (69 Total)](#skills-69-total)
+- [Skills (70 Total)](#skills-70-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
 - [Magic Keywords](#magic-keywords)
@@ -248,25 +248,42 @@ omc config-stop-callback discord --show
 
 ---
 
-## Skills（共 69 个）
+## Skills（共 70 个）
 
 ### 核心 Skills
 
 | Skill | 说明 | 手动命令 |
 |-------|-------------|----------------|
-| `orchestrate` | 多 agent 编排模式 | - |
 | `autopilot` | 从想法到可运行代码的全自主执行 | `/ultrapower:autopilot` |
 | `ultrawork` | 并行 agents 最大性能模式 | `/ultrapower:ultrawork` |
 | `ultrapilot` | 并行 autopilot，速度提升 3-5 倍 | `/ultrapower:ultrapilot` |
 | `swarm` | N 个协调 agents 并行认领任务 | `/ultrapower:swarm` |
+| `team` | N 个协调 agents 使用 Claude Code 原生 team | `/ultrapower:team` |
 | `pipeline` | 顺序 agent 链式执行 | `/ultrapower:pipeline` |
-| `` | Token 高效并行执行 | `/ultrapower:` |
 | `ralph` | 自引用开发直至完成 | `/ultrapower:ralph` |
 | `ralph-init` | 初始化 PRD 以进行结构化任务跟踪 | `/ultrapower:ralph-init` |
 | `ultraqa` | 自主 QA 循环工作流 | `/ultrapower:ultraqa` |
 | `plan` | 启动规划会话 | `/ultrapower:plan` |
 | `ralplan` | 迭代规划（Planner+Architect+Critic） | `/ultrapower:ralplan` |
 | `review` | 用 critic 审查工作计划 | `/ultrapower:review` |
+
+### 工作流 Skills
+
+| Skill | 说明 | 手动命令 |
+|-------|-------------|----------------|
+| `brainstorming` | 实现前探索需求和设计方案 | `/ultrapower:brainstorming` |
+| `writing-plans` | 将需求拆解为原子任务计划 | `/ultrapower:writing-plans` |
+| `subagent-driven-development` | 当前 session 中执行独立任务 | `/ultrapower:subagent-driven-development` |
+| `executing-plans` | 在独立 session 中执行计划 | `/ultrapower:executing-plans` |
+| `test-driven-development` | TDD 强制执行：测试优先开发 | `/ultrapower:test-driven-development` |
+| `systematic-debugging` | 系统化调试工作流 | `/ultrapower:systematic-debugging` |
+| `requesting-code-review` | 完成任务后请求代码审查 | `/ultrapower:requesting-code-review` |
+| `receiving-code-review` | 接收并处理代码审查反馈 | `/ultrapower:receiving-code-review` |
+| `finishing-a-development-branch` | 完成开发分支并整合工作 | `/ultrapower:finishing-a-development-branch` |
+| `using-git-worktrees` | 创建隔离 git worktree 工作区 | `/ultrapower:using-git-worktrees` |
+| `verification-before-completion` | 声明完成前运行验证 | `/ultrapower:verification-before-completion` |
+| `using-superpowers` | 建立 skill 使用规则 | `/ultrapower:using-superpowers` |
+| `dispatching-parallel-agents` | 并行分发独立任务给多个 agents | `/ultrapower:dispatching-parallel-agents` |
 
 ### 增强 Skills
 
@@ -277,13 +294,18 @@ omc config-stop-callback discord --show
 | `deepsearch` | 多策略深度代码库搜索 | `/ultrapower:deepsearch` |
 | `analyze` | 深度分析与调查 | `/ultrapower:analyze` |
 | `sciomc` | 并行 scientist 编排 | `/ultrapower:sciomc` |
+| `external-context` | 并行 document-specialist 网络搜索 | `/ultrapower:external-context` |
+| `ccg` | Claude-Codex-Gemini 三模型并行编排 | `/ultrapower:ccg` |
 | `frontend-ui-ux` | 设计师转开发者的 UI/UX 专业能力 | （静默激活） |
 | `git-master` | Git 专家，处理原子提交和历史管理 | （静默激活） |
-| `tdd` | TDD 强制执行：测试优先开发 | `/ultrapower:tdd` |
+| `tdd` | TDD 强制执行（`test-driven-development` 别名） | `/ultrapower:tdd` |
 | `learner` | 从会话中提取可复用 skill | `/ultrapower:learner` |
 | `build-fix` | 修复构建和 TypeScript 错误 | `/ultrapower:build-fix` |
 | `code-review` | 全面代码审查 | `/ultrapower:code-review` |
 | `security-review` | 安全漏洞检测 | `/ultrapower:security-review` |
+| `trace` | 显示 agent 流程追踪时间线 | `/ultrapower:trace` |
+| `learn-about-omc` | 了解 OMC 使用模式并获取建议 | `/ultrapower:learn-about-omc` |
+| `writing-skills` | 创建/编辑/验证 skills | `/ultrapower:writing-skills` |
 
 ### 工具 Skills
 
@@ -299,7 +321,11 @@ omc config-stop-callback discord --show
 | `mcp-setup` | 配置 MCP 服务器 | `/ultrapower:mcp-setup` |
 | `writer-memory` | 面向写作者的 agent 记忆系统 | `/ultrapower:writer-memory` |
 | `project-session-manager` | 管理隔离开发环境（git worktrees + tmux） | `/ultrapower:project-session-manager` |
+| `psm` | project-session-manager 别名 | `/ultrapower:psm` |
 | `skill` | 管理本地 skills（列出、添加、删除、搜索、编辑） | `/ultrapower:skill` |
+| `configure-discord` | 配置 Discord webhook/bot 通知 | `/ultrapower:configure-discord` |
+| `configure-telegram` | 配置 Telegram bot 通知 | `/ultrapower:configure-telegram` |
+| `wizard` | 交互式配置向导 | `/ultrapower:wizard` |
 
 ### Axiom Skills
 
@@ -328,25 +354,37 @@ omc config-stop-callback discord --show
 
 | 命令 | 说明 |
 |---------|-------------|
-| `/ultrapower:orchestrate <task>` | 激活多 agent 编排模式 |
 | `/ultrapower:autopilot <task>` | 全自主执行 |
 | `/ultrapower:ultrawork <task>` | 并行 agents 最大性能模式 |
 | `/ultrapower:ultrapilot <task>` | 并行 autopilot（速度提升 3-5 倍） |
 | `/ultrapower:swarm <N>:<agent> <task>` | 协调 agent 集群 |
+| `/ultrapower:team <task>` | N 个协调 agents（Claude Code 原生 team） |
 | `/ultrapower:pipeline <stages>` | 顺序 agent 链式执行 |
-| `/ultrapower: <task>` | Token 高效并行执行 |
 | `/ultrapower:ralph-init <task>` | 初始化 PRD 以进行结构化任务跟踪 |
 | `/ultrapower:ralph <task>` | 自引用循环直至任务完成 |
 | `/ultrapower:ultraqa <goal>` | 自主 QA 循环工作流 |
 | `/ultrapower:plan <description>` | 启动规划会话 |
 | `/ultrapower:ralplan <description>` | 共识迭代规划 |
 | `/ultrapower:review [plan-path]` | 用 critic 审查计划 |
+| `/ultrapower:brainstorming` | 实现前探索需求和设计方案 |
+| `/ultrapower:writing-plans <task>` | 将需求拆解为原子任务计划 |
+| `/ultrapower:test-driven-development <feature>` | TDD 工作流强制执行 |
+| `/ultrapower:systematic-debugging` | 系统化调试工作流 |
+| `/ultrapower:requesting-code-review` | 请求代码审查 |
+| `/ultrapower:receiving-code-review` | 处理代码审查反馈 |
+| `/ultrapower:finishing-a-development-branch` | 完成开发分支 |
+| `/ultrapower:using-git-worktrees` | 创建隔离 git worktree |
+| `/ultrapower:verification-before-completion` | 声明完成前验证 |
+| `/ultrapower:dispatching-parallel-agents` | 并行分发独立任务 |
 | `/ultrapower:deepsearch <query>` | 多策略深度代码库搜索 |
 | `/ultrapower:deepinit [path]` | 用分层 AGENTS.md 文件索引代码库 |
 | `/ultrapower:analyze <target>` | 深度分析与调查 |
 | `/ultrapower:sciomc <topic>` | 并行研究编排 |
-| `/ultrapower:tdd <feature>` | TDD 工作流强制执行 |
+| `/ultrapower:ccg <task>` | Claude-Codex-Gemini 三模型并行编排 |
+| `/ultrapower:external-context <query>` | 并行网络搜索 |
+| `/ultrapower:tdd <feature>` | TDD 工作流（test-driven-development 别名） |
 | `/ultrapower:learner` | 从会话中提取可复用 skill |
+| `/ultrapower:trace` | 显示 agent 流程追踪时间线 |
 | `/ultrapower:note <content>` | 保存笔记到 notepad.md |
 | `/ultrapower:cancel` | 统一取消 |
 | `/ultrapower:omc-setup` | 一次性安装向导 |
@@ -355,12 +393,18 @@ omc config-stop-callback discord --show
 | `/ultrapower:hud` | 配置 HUD 状态栏 |
 | `/ultrapower:release` | 自动化发布工作流 |
 | `/ultrapower:mcp-setup` | 配置 MCP 服务器 |
+| `/ultrapower:configure-discord` | 配置 Discord 通知 |
+| `/ultrapower:configure-telegram` | 配置 Telegram 通知 |
+| `/ultrapower:project-session-manager` | 管理隔离开发环境 |
+| `/ultrapower:skill` | 管理本地 skills |
+| `/ultrapower:writing-skills` | 创建/编辑/验证 skills |
+| `/ultrapower:learn-about-omc` | 了解 OMC 使用模式 |
 
 ---
 
 ## Hooks System
 
-ultrapower 包含 34 个生命周期 hooks，用于增强 Claude Code 的行为。
+ultrapower 包含 37 个生命周期 hooks，用于增强 Claude Code 的行为。
 
 ### 执行模式 Hooks
 
@@ -371,8 +415,7 @@ ultrapower 包含 34 个生命周期 hooks，用于增强 Claude Code 的行为�
 | `ralph` | 持续执行直至验证完成 |
 | `ultrapilot` | 带文件所有权的并行 autopilot |
 | `ultraqa` | QA 循环直至目标达成 |
-| `swarm` | 基于 SQLite 任务认领的协调多 agent |
-| `mode-registry` | 跟踪当前执行模式（含 ） |
+| `mode-registry` | 跟踪当前执行模式（含 ultrawork、ralph、team 等） |
 | `persistent-mode` | 跨会话维护模式状态 |
 
 ### 核心 Hooks
@@ -405,6 +448,7 @@ ultrapower 包含 34 个生命周期 hooks，用于增强 Claude Code 的行为�
 | `empty-message-sanitizer` | 空消息处理 |
 | `permission-handler` | 权限请求与验证 |
 | `think-mode` | 扩展思考检测 |
+| `guards` | PreToolUse/PostToolUse 守卫，执行权限检查、范围验证和会话监控 |
 
 ### 协调与环境 Hooks
 
@@ -417,6 +461,17 @@ ultrapower 包含 34 个生命周期 hooks，用于增强 Claude Code 的行为�
 | `background-notification` | 后台任务完成通知 |
 | `plugin-patterns` | 插件模式检测 |
 | `setup` | 初始安装与配置 |
+| `team-pipeline` | Team 分阶段流水线协调 |
+| `beads-context` | 上下文珠链管理 |
+| `memory` | 持久化记忆读写 |
+| `project-memory` | 项目级记忆管理 |
+
+### Axiom Hooks
+
+| Hook | 说明 |
+|------|-------------|
+| `axiom-boot` | 会话启动时注入 Axiom 记忆上下文 |
+| `axiom-guards` | Axiom 门禁规则执行（Expert/User/CI Gate） |
 
 ---
 
@@ -427,7 +482,7 @@ ultrapower 包含 34 个生命周期 hooks，用于增强 Claude Code 的行为�
 | 关键词 | 效果 |
 |---------|--------|
 | `ultrawork`, `ulw`, `uw` | 激活并行 agent 编排 |
-| ``, `eco`, `efficient`, `save-tokens`, `budget` | Token 高效并行执行 |
+| `eco`, `efficient`, `save-tokens`, `budget` | Token 高效并行执行 |
 | `autopilot`, `build me`, `I want a` | 全自主执行 |
 | `ultrapilot`, `parallel build`, `swarm build` | 并行 autopilot（速度提升 3-5 倍） |
 | `ralph`, `don't stop`, `must complete` | 持续执行直至验证完成 |
@@ -581,9 +636,9 @@ prompt.txt                    -> /home/user/project/prompt.txt
 
 | 平台 | 安装方式 | Hook 类型 |
 |----------|---------------|-----------|
-| **Windows** | `npm install -g` | Node.js (.mjs) |
-| **macOS** | curl 或 npm | Bash (.sh) |
-| **Linux** | curl 或 npm | Bash (.sh) |
+| **Windows** | Claude Code Plugin | Node.js (.mjs) |
+| **macOS** | Claude Code Plugin | Node.js (.mjs) |
+| **Linux** | Claude Code Plugin | Node.js (.mjs) |
 
 > **注意**：Bash hooks 在 macOS 和 Linux 上完全可移植（无 GNU 特定依赖）。
 
@@ -752,7 +807,7 @@ omc config-stop-callback  # 配置 stop callback 通知标签
 
 ### 自动更新
 
-Oh-my-claudecode 包含一个静默自动更新系统，在后台检查更新。
+ultrapower 包含一个静默自动更新系统，在后台检查更新。
 
 特性：
 - **频率限制**：最多每 24 小时检查一次
@@ -780,7 +835,7 @@ rm ~/.claude/commands/{analyze,autopilot,deepsearch,plan,review,ultrawork}.md
 
 ultrapower 深度融合了 Axiom 智能体编排框架，提供完整的需求→开发→进化工作流。
 
-### Axiom Agents（8 个）
+### Axiom Agents（14 个）
 
 | 智能体 | 模型 | 用途 |
 |-------|-------|------|
@@ -792,8 +847,14 @@ ultrapower 深度融合了 Axiom 智能体编排框架，提供完整的需求�
 | axiom-evolution-engine | sonnet | 知识收割 + 模式检测 + 工作流优化 |
 | axiom-context-manager | sonnet | 7 种记忆操作（读/写/状态/检查点） |
 | axiom-worker | sonnet | PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED） |
+| axiom-ux-director | sonnet | UX/体验专家评审，输出 review_ux.md |
+| axiom-product-director | sonnet | 产品战略专家评审，输出 review_product.md |
+| axiom-domain-expert | sonnet | 领域知识专家评审，输出 review_domain.md |
+| axiom-tech-lead | sonnet | 技术可行性评审，输出 review_tech.md |
+| axiom-critic | sonnet | 安全/质量/逻辑评审，输出 review_critic.md |
+| axiom-sub-prd-writer | sonnet | 将 Manifest 任务拆解为可执行 Sub-PRD |
 
-### Axiom Skills（12 个）
+### Axiom Skills（14 个）
 
 | Skill | 指令 | 用途 |
 |-------|------|------|
@@ -809,6 +870,8 @@ ultrapower 深度融合了 Axiom 智能体编排框架，提供完整的需求�
 | ax-suspend | `/ax-suspend` | 保存会话状态，安全退出 |
 | ax-context | `/ax-context` | 直接操作 Axiom 记忆系统 |
 | ax-evolution | `/ax-evolution` | 进化引擎统一入口（evolve/reflect/knowledge/patterns） |
+| ax-knowledge | `/ax-knowledge` | 查询 Axiom 知识库和模式库 |
+| ax-export | `/ax-export` | 导出 Axiom 工作流产物为可移植 zip |
 
 ### Axiom Hooks（2 个）
 

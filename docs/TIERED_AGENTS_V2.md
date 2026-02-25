@@ -1,6 +1,6 @@
 # 分层 Agent v2 架构设计
 
-## 当前 Agent 目录（共 38 个）
+## 当前 Agent 目录（共 44 个）
 
 ### Build/Analysis Lane（8 个）
 
@@ -56,6 +56,30 @@
 | ux-researcher | sonnet | 启发式审计、可用性、无障碍性 |
 | information-architect | sonnet | 分类法、导航、可发现性 |
 | product-analyst | sonnet | 产品指标、漏斗分析、实验设计 |
+
+### Axiom Lane（8 个）
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| axiom-requirement-analyst | sonnet | 需求分析三态门（PASS/CLARIFY/REJECT） |
+| axiom-product-designer | sonnet | Draft PRD 生成，含 Mermaid 流程图 |
+| axiom-review-aggregator | sonnet | 5 专家并行审查聚合与冲突仲裁 |
+| axiom-prd-crafter | sonnet | 工程级 PRD，含门控验证 |
+| axiom-system-architect | sonnet | 原子任务 DAG 与 Manifest 生成 |
+| axiom-evolution-engine | sonnet | 知识收割、模式检测、工作流优化 |
+| axiom-context-manager | sonnet | 7 操作记忆系统（读/写/状态/检查点） |
+| axiom-worker | sonnet | PM→Worker 协议，三态输出（QUESTION/COMPLETE/BLOCKED） |
+
+### Axiom Specialists（6 个）
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| axiom-ux-director | sonnet | UX/体验专家评审，输出 review_ux.md |
+| axiom-product-director | sonnet | 产品战略专家评审，输出 review_product.md |
+| axiom-domain-expert | sonnet | 领域知识专家评审，输出 review_domain.md |
+| axiom-tech-lead | sonnet | 技术可行性评审，输出 review_tech.md |
+| axiom-critic | sonnet | 安全/质量/逻辑评审，输出 review_critic.md |
+| axiom-sub-prd-writer | sonnet | 将 Manifest 任务拆解为可执行 Sub-PRD |
 
 **废弃别名**：`researcher` -> `document-specialist`，`tdd-guide` -> `test-engineer`
 

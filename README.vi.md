@@ -117,7 +117,7 @@ Nhiều chiến lược cho nhiều tình huống — từ điều phối dựa 
 
 ### Điều phối thông minh
 
-- **30 tác tử chuyên biệt** cho kiến trúc, nghiên cứu, thiết kế, kiểm thử, khoa học dữ liệu
+- **44 tác tử chuyên biệt** cho kiến trúc, nghiên cứu, thiết kế, kiểm thử, khoa học dữ liệu
 - **Định tuyến model thông minh** - Haiku cho tác vụ đơn giản, Opus cho suy luận phức tạp
 - **Ủy quyền tự động** - Đúng tác tử cho đúng việc, mọi lúc
 

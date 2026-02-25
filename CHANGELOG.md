@@ -1,3 +1,18 @@
+# ultrapower v5.0.4
+
+### 文档
+
+- 修正 docs/TIERED_AGENTS_V2.md：补充缺失的 Axiom Lane（8 个）和 Axiom Specialists（6 个）章节，agent 总计 44 个
+- 验证并同步所有文档计数：44 agents / 70 skills / 37 hooks / 15 tools
+- 更新 AGENTS.md、README.md、docs/REFERENCE.md 确保数字一致
+
+### 构建
+
+- 重新构建所有 bridge 服务（mcp-server.cjs、codex-server.cjs、gemini-server.cjs、team-bridge.cjs）
+- 更新 .claude-plugin/marketplace.json 版本引用至 v5.0.4
+
+---
+
 # ultrapower v5.0.3
 
 ### 新增

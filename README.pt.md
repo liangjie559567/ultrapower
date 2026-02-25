@@ -117,7 +117,7 @@ Múltiplas estratégias para diferentes casos de uso — da orquestração com T
 
 ### Orquestração Inteligente
 
-- **30 agentes especializados** para arquitetura, pesquisa, design, testes e ciência de dados
+- **44 agentes especializados** para arquitetura, pesquisa, design, testes e ciência de dados
 - **Roteamento inteligente de modelos** - Haiku para tarefas simples, Opus para raciocínio complexo
 - **Delegação automática** - O agente certo para o trabalho, sempre
 

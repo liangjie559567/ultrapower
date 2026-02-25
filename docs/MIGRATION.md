@@ -21,7 +21,7 @@
 
 ### TL;DR
 
-v5.0.3 在 v5.0.2 的 Axiom 基础上新增 6 个专家评审 Agent、2 个 Skills（ax-knowledge、ax-export），将总 Agent 数从 38 扩展至 44，Skills 从 67 扩展至 69，Hooks 从 35 扩展至 38。
+v5.0.3 在 v5.0.2 的 Axiom 基础上新增 6 个专家评审 Agent、2 个 Skills（ax-knowledge、ax-export），将总 Agent 数从 38 扩展至 44，Skills 从 67 扩展至 70，Hooks 从 35 扩展至 36。
 
 ### 新增功能
 
@@ -33,14 +33,12 @@ v5.0.3 在 v5.0.2 的 Axiom 基础上新增 6 个专家评审 Agent、2 个 Skil
 - `axiom-critic`：安全/质量/逻辑评审，输出 review_critic.md
 - `axiom-sub-prd-writer`：将 Manifest 任务拆解为可执行 Sub-PRD
 
-**69 个 Skills**（新增 2 个）：
+**70 个 Skills**（新增 2 个）：
 - `ax-knowledge`：查询 Axiom 知识库
 - `ax-export`：导出 Axiom 工作流产物
 
-**38 个 Hooks**（新增 3 个）：
-- `axiom-scope-gate`：防止超出 PRD 范围的变更
-- `axiom-ci-gate`：CI 门禁，确保代码变更通过编译和测试
-- `axiom-context-sync`：跨会话同步 Axiom 上下文
+**37 个 Hooks**（新增 1 个）：
+- `axiom-guards`：Axiom CI 门禁，确保代码变更通过编译和测试
 
 ### 破坏性变更
 
@@ -49,7 +47,7 @@ v5.0.3 在 v5.0.2 的 Axiom 基础上新增 6 个专家评审 Agent、2 个 Skil
 ### 迁移步骤
 
 1. **无需操作** - 所有 v5.0.2 命令继续有效
-2. **重新运行 `/ultrapower:omc-setup`** 以获取包含 44 个 Agent 和 69 个 Skills 的最新配置
+2. **重新运行 `/ultrapower:omc-setup`** 以获取包含 44 个 Agent 和 70 个 Skills 的最新配置
 3. **可选**：使用 `/ultrapower:ax-knowledge` 查询知识库，`/ultrapower:ax-export` 导出工作流产物
 
 ### 验证
@@ -66,7 +64,7 @@ v5.0.3 在 v5.0.2 的 Axiom 基础上新增 6 个专家评审 Agent、2 个 Skil
 
 ### TL;DR
 
-v5.0.2 将 Axiom 框架深度融合进 ultrapower，将 Agent 数量从 31 扩展至 39，Skills 从 55 扩展至 67，新增 Axiom 工作流系统、记忆系统和 TypeScript hooks。
+v5.0.2 将 Axiom 框架深度融合进 ultrapower，将 Agent 数量从 31 扩展至 38，Skills 从 55 扩展至 67，新增 Axiom 工作流系统、记忆系统和 TypeScript hooks。
 
 ### 新增功能
 

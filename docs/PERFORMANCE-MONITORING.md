@@ -338,7 +338,7 @@ console.log(`Cleaned ${cleaned} stale agents`);
 | 资源 | 描述 | 链接 |
 |----------|-------------|------|
 | Claude Code Discord | 社区支持和技巧 | [discord.gg/anthropic](https://discord.gg/anthropic) |
-| OMC GitHub Issues | 错误报告和功能请求 | [GitHub Issues](https://github.com/Yeachan-Heo/ultrapower/issues) |
+| OMC GitHub Issues | 错误报告和功能请求 | [GitHub Issues](https://github.com/liangjie559567/ultrapower/issues) |
 | Anthropic Documentation | 官方 Claude 文档 | [docs.anthropic.com](https://docs.anthropic.com) |
 
 ### 模型性能基准测试

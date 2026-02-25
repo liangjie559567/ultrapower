@@ -1,1 +1,7 @@
-{"tool_name":"Bash","error":"{\"stdout\":\"\\u001b[22m\\u001b[39m[mcp] E_WRITE_FAILED: Failed to write output file 'is-a-dir': EISDIR: illegal operation on a directory, open 'C:\\\\Users\\\\ljyih\\\\Desktop\\\\ultrapower\\\\.test-safe-write-15256\\\\is-a-dir'\\n\\n \\u001b[32m✓\\u001b[39m src/__tests__/prompt-file-only.test.ts \\u001b[2m(\\u001b[22m\\u001b[2m24 tests\\u001b[22m\\u001b[2m)\\u001b[22m\\u001b[32m 61\\u001b[2mms\\u001b[22m\\u001b[39m\\n \\u001b[32m✓\\u001b[39m dist/mcp/__tests__/shared-exec.test.js \\u001b[2m(\\u001b[22m\\u001b[2m13 tests\\u001b[22","retry_count":90,"timestamp":"2026-02-24T06:38:32.080Z"}
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /c/Users/ljyih/Desktop/ultrapower && git log --oneline -5 && git status --short\"}",
+  "error": "EINVAL: invalid argument, open 'C:\\Users\\ljyih\\AppData\\Local\\Temp\\claude\\C--Users-ljyih-Desktop-ultrapower\\tasks\\bs262s5ap.output'",
+  "timestamp": "2026-02-25T03:16:10.851Z",
+  "retry_count": 1
+}

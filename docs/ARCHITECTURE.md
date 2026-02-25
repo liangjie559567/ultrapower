@@ -55,7 +55,7 @@ Skills: ultrawork + default + git-master
 
 ### Agents
 
-38 个专业化 agent，按复杂度层级组织：
+44 个专业化 agent，按复杂度层级组织：
 
 | 层级 | 模型 | 适用场景 |
 |------|-------|---------|
@@ -77,7 +77,7 @@ Task(
 )
 ```
 
-`visual-engineering` 和 `ultrabrain` 等类别会自动选择模型层级、温度和思考预算。
+`designer`、`scientist` 等类别会自动选择模型层级、温度和思考预算。
 
 ## Skill 组合
 
@@ -183,7 +183,7 @@ notepad_write_working("full_context", {
 
 ### 集成的 Skills
 
-以下 18 个 superpowers skills 末尾均包含 `## 路由触发` 块：
+以下 17 个 superpowers skills 末尾均包含 `## 路由触发` 块：
 
 `writing-plans`、`using-git-worktrees`、`subagent-driven-development`、`executing-plans`、`dispatching-parallel-agents`、`systematic-debugging`、`test-driven-development`、`requesting-code-review`、`receiving-code-review`、`verification-before-completion`、`finishing-a-development-branch`、`writing-skills`、`deepinit`、`sciomc`、`external-context`、`frontend-ui-ux`、`release`
 
@@ -191,7 +191,7 @@ notepad_write_working("full_context", {
 
 ## Hooks
 
-ultrapower 在 `src/hooks/` 中包含 35 个 hook，用于生命周期事件：
+ultrapower 在 `src/hooks/` 中包含 37 个 hook，用于生命周期事件：
 
 | 事件 | 用途 |
 |-------|---------|

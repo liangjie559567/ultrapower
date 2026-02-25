@@ -1,9 +1,9 @@
 <!-- Parent: ../AGENTS.md -->
-<!-- Generated: 2026-01-28 | Updated: 2026-01-31 -->
+<!-- Generated: 2026-01-28 | Updated: 2026-02-25 -->
 
 # hooks
 
-35 个事件驱动 hook，驱动执行模式和行为。
+37 个事件驱动 hook，驱动执行模式和行为。
 
 ## 用途
 
@@ -31,7 +31,6 @@ Hook 拦截 Claude Code 事件以实现：
 | `ultrawork/` | 最大并行执行 | "ulw"、"ultrawork" |
 | `ralph/` | 持续执行直到验证通过 | "ralph"、"don't stop" |
 | `ultrapilot/` | 带文件所有权的并行 autopilot | "ultrapilot" |
-| `swarm/` | N 个协调 agent 带任务认领 | "swarm N agents" |
 | `ultraqa/` | QA 循环直到目标达成 | 测试失败 |
 | `mode-registry/` | 追踪活跃执行模式 | 内部 |
 | `persistent-mode/` | 跨会话维护模式状态 | 内部 |
@@ -44,6 +43,7 @@ Hook 拦截 Claude Code 事件以实现：
 | `empty-message-sanitizer/` | 处理空/空白消息 |
 | `comment-checker/` | 检查代码注释质量 |
 | `permission-handler/` | 处理权限请求和验证 |
+| `guards/` | PreToolUse/PostToolUse 守卫，执行权限检查、范围验证和会话监控 |
 
 ### 恢复 Hook
 
@@ -153,7 +153,7 @@ export function createHook(config: HookConfig) {
 - 协调并行执行
 - 整合结果
 
-**swarm/** - 协调多 agent：
+**team-pipeline/** - 协调多 agent（swarm 路由到 Team）：
 - 基于 SQLite 的任务认领
 - 每个任务 5 分钟超时
 - 原子认领/释放

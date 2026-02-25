@@ -92,7 +92,7 @@ Múltiples estrategias para diferentes casos de uso - desde construcciones compl
 
 ### Orquestación Inteligente
 
-- **30 agentes especializados** para arquitectura, investigación, diseño, pruebas, ciencia de datos
+- **44 agentes especializados** para arquitectura, investigación, diseño, pruebas, ciencia de datos
 - **Enrutamiento inteligente de modelos** - Haiku para tareas simples, Opus para razonamiento complejo
 - **Delegación automática** - El agente correcto para el trabajo, siempre
 
