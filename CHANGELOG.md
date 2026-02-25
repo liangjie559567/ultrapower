@@ -1,3 +1,11 @@
+# ultrapower v5.0.11
+
+### 修复
+
+- **npm 发布修复**：移除 `.claude-plugin` 目录从 npm files 列表，防止无限缓存循环
+
+---
+
 # ultrapower v5.0.10
 
 ### 文档与工具
