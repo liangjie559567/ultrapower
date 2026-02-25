@@ -1,3 +1,15 @@
+# ultrapower v5.0.10
+
+### 文档与工具
+
+- **工具数量修正**：将所有文档中的工具数量从 15 更新为 35（8 类：LSP×12、AST×2、Python REPL×1、Notepad×6、State×5、Project Memory×4、Trace×2、Skills×3）
+- **Agents 数量修正**：确认并统一 49 个 agents 的完整列表（含 14 个 Axiom agents）
+- **Hooks 数量修正**：将文档中的 hooks 数量从 37 更正为 35
+- **Skills 数量确认**：70 个 skills 完整列表已验证
+- **AGENTS.md 全面更新**：根据真实代码实现更新所有文档，确保数量一致性
+
+---
+
 # ultrapower v5.0.9
 
 ### 代码质量

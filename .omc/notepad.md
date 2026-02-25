@@ -3,9 +3,9 @@
 
 ## Priority Context
 <!-- ALWAYS loaded. Keep under 500 chars. Critical discoveries only. -->
-项目：ultrapower v5.0.9 | 主分支：main
-确认数量：49 agents | 70 skills | 35 hooks | 15 tools
-已修复：所有文档 hooks 数量 37→35，agents 数量 44→49
+项目：ultrapower v5.0.10 | 主分支：main
+确认数量：49 agents | 70 skills | 35 hooks | 35 tools（8类）
+已修复：所有文档 hooks 数量 37→35，agents 数量 44→49，tools 15→35
 已完成：REFERENCE.md、README.md、ARCHITECTURE.md、AGENTS.md 数量一致性更新
 
 ## Working Memory
