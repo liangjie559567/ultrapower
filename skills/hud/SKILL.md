@@ -41,7 +41,7 @@ node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR
 
 **步骤 2：** 验证插件已安装：
 ```bash
-node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length===0){console.log('Plugin not installed - run: /plugin install ultrapower');process.exit()}const l=v[v.length-1],h=p.join(b,l,'dist','hud','index.js');console.log('Version:',l);console.log(f.existsSync(h)?'READY':'NOT_FOUND - try reinstalling: /plugin install ultrapower')}catch{console.log('Plugin not installed - run: /plugin install ultrapower')}"
+node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude');const bases=['liangjie559567','omc'].map(ns=>p.join(d,'plugins','cache',ns,'ultrapower'));let found=false;for(const b of bases){try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length===0)continue;const l=v[v.length-1],h=p.join(b,l,'dist','hud','index.js');console.log('Version:',l,'Path:',b);console.log(f.existsSync(h)?'READY':'NOT_FOUND - try reinstalling: /plugin install ultrapower');found=true;break}catch{}}if(!found)console.log('Plugin not installed - run: /plugin install ultrapower')"
 ```
 
 **步骤 3：** 若 omc-hud.mjs 缺失或参数为 `setup`，创建 HUD 目录和脚本：
@@ -87,27 +87,34 @@ async function main() {
   const home = homedir();
   let pluginCacheDir = null;
 
-  // 1. Try plugin cache first (marketplace: omc, plugin: ultrapower)
-  const pluginCacheBase = join(home, ".claude/plugins/cache/omc/ultrapower");
-  if (existsSync(pluginCacheBase)) {
-    try {
-      const versions = readdirSync(pluginCacheBase);
-      if (versions.length > 0) {
-        const latestVersion = versions.sort(semverCompare).reverse()[0];
-        pluginCacheDir = join(pluginCacheBase, latestVersion);
-        const pluginPath = join(pluginCacheDir, "dist/hud/index.js");
-        if (existsSync(pluginPath)) {
-          await import(pathToFileURL(pluginPath).href);
-          return;
+  const claudeConfigDir = process.env.CLAUDE_CONFIG_DIR || join(home, ".claude");
+
+  // 1. Try plugin cache - check multiple marketplace/publisher namespaces
+  const pluginCacheBases = [
+    join(claudeConfigDir, "plugins/cache/liangjie559567/ultrapower"),
+    join(claudeConfigDir, "plugins/cache/omc/ultrapower"),
+  ];
+
+  for (const pluginCacheBase of pluginCacheBases) {
+    if (existsSync(pluginCacheBase)) {
+      try {
+        const versions = readdirSync(pluginCacheBase);
+        if (versions.length > 0) {
+          const latestVersion = versions.sort(semverCompare).reverse()[0];
+          pluginCacheDir = join(pluginCacheBase, latestVersion);
+          const pluginPath = join(pluginCacheDir, "dist/hud/index.js");
+          if (existsSync(pluginPath)) {
+            await import(pathToFileURL(pluginPath).href);
+            return;
+          }
         }
-      }
-    } catch { /* continue */ }
+      } catch { /* continue */ }
+    }
   }
 
   // 2. Development paths
   const devPaths = [
-    join(home, "Workspace/ultrapower/dist/hud/index.js"),
-    join(home, "workspace/ultrapower/dist/hud/index.js"),
+    join(home, "Desktop/ultrapower/dist/hud/index.js"),
     join(home, "Workspace/ultrapower/dist/hud/index.js"),
     join(home, "workspace/ultrapower/dist/hud/index.js"),
   ];
