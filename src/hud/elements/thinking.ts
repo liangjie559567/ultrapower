@@ -30,7 +30,7 @@ export function renderThinking(
     case 'face':
       return '🤔';
     case 'text':
-      return `${CYAN}思考中${RESET}`;
+      return `${CYAN}thinking${RESET}`;
     default:
       return '💭';
   }

@@ -68,7 +68,7 @@ export function getGitBranch(cwd?: string): string | null {
 export function renderGitRepo(cwd?: string): string | null {
   const repo = getGitRepoName(cwd);
   if (!repo) return null;
-  return `${dim('仓库:')}${cyan(repo)}`;
+  return `${dim('repo:')}${cyan(repo)}`;
 }
 
 /**
@@ -80,5 +80,5 @@ export function renderGitRepo(cwd?: string): string | null {
 export function renderGitBranch(cwd?: string): string | null {
   const branch = getGitBranch(cwd);
   if (!branch) return null;
-  return `${dim('分支:')}${cyan(branch)}`;
+  return `${dim('branch:')}${cyan(branch)}`;
 }

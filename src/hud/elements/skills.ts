@@ -69,7 +69,7 @@ export function renderSkills(
   if (lastSkill && !isActiveMode(lastSkill.name, ultrawork, ralph)) {
     const argsDisplay = lastSkill.args ? `(${truncate(lastSkill.args, 15)})` : '';
     const displayName = getSkillDisplayName(lastSkill.name);
-    parts.push(cyan(`技能:${displayName}${argsDisplay}`));
+    parts.push(cyan(`skill:${displayName}${argsDisplay}`));
   }
 
   return parts.length > 0 ? parts.join(' ') : null;
@@ -85,7 +85,7 @@ export function renderLastSkill(
 
   const argsDisplay = lastSkill.args ? `(${truncate(lastSkill.args, 15)})` : '';
   const displayName = getSkillDisplayName(lastSkill.name);
-  return cyan(`技能:${displayName}${argsDisplay}`);
+  return cyan(`skill:${displayName}${argsDisplay}`);
 }
 
 /**
