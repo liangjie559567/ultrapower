@@ -8,7 +8,7 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Agents (44 Total)](#agents-44-total)
+- [Agents (49 Total)](#agents-49-total)
 - [Skills (70 Total)](#skills-70-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
@@ -185,7 +185,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Agents（共 49 个）
+## Agents（49 Total）
 
 通过 Task 工具调用时，始终使用 `ultrapower:` 前缀。
 

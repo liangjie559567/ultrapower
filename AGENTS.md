@@ -179,7 +179,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 │                  ultrapower                                 │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
 │  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
-│  │ (70 skills) │ (44 agents) │(LSP/AST/REPL)│ (37 hooks)  │  │
+│  │ (70 skills) │ (49 agents) │(LSP/AST/REPL)│ (37 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │              Features Layer                             ││

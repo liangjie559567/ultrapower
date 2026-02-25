@@ -55,7 +55,7 @@ Skills: ultrawork + default + git-master
 
 ### Agents
 
-44 个专业化 agent，按复杂度层级组织：
+49 个专业化 agent，按复杂度层级组织：
 
 | 层级 | 模型 | 适用场景 |
 |------|-------|---------|
