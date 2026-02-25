@@ -24,5 +24,5 @@ export function renderSession(session: SessionHealth | null): string | null {
     : session.health === 'warning' ? YELLOW
     : GREEN;
 
-  return `session:${color}${session.durationMinutes}m${RESET}`;
+  return `会话:${color}${session.durationMinutes}m${RESET}`;
 }

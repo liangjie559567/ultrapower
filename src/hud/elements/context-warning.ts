@@ -34,7 +34,7 @@ export function renderContextLimitWarning(
   const isCritical = safePercent >= 90;
   const color = isCritical ? RED : YELLOW;
   const icon = isCritical ? '!!' : '!';
-  const action = autoCompact ? '(auto-compact queued)' : 'run /compact';
+  const action = autoCompact ? '(自动压缩已排队)' : '运行 /compact';
 
-  return `${color}${BOLD}[${icon}] ctx ${safePercent}% >= ${threshold}% threshold - ${action}${RESET}`;
+  return `${color}${BOLD}[${icon}] 上下文 ${safePercent}% >= ${threshold}% 阈值 - ${action}${RESET}`;
 }

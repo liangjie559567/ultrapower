@@ -25,13 +25,13 @@ export interface AutopilotStateForHud {
 }
 
 const PHASE_NAMES: Record<string, string> = {
-  expansion: 'Expand',
-  planning: 'Plan',
-  execution: 'Build',
-  qa: 'QA',
-  validation: 'Verify',
-  complete: 'Done',
-  failed: 'Failed'
+  expansion: '扩展',
+  planning: '规划',
+  execution: '构建',
+  qa: '测试',
+  validation: '验证',
+  complete: '完成',
+  failed: '失败'
 };
 
 const PHASE_INDEX: Record<string, number> = {
@@ -81,22 +81,22 @@ export function renderAutopilot(
       phaseColor = CYAN;
   }
 
-  let output = `${CYAN}[AUTOPILOT]${RESET} Phase ${phaseColor}${phaseNum}/5${RESET}: ${phaseName}`;
+  let output = `${CYAN}[自动驾驶]${RESET} 阶段 ${phaseColor}${phaseNum}/5${RESET}: ${phaseName}`;
 
   // Add iteration count if not first iteration
   if (iteration > 1) {
-    output += ` (iter ${iteration}/${maxIterations})`;
+    output += ` (迭代 ${iteration}/${maxIterations})`;
   }
 
   // Add task progress if in execution phase
   if (phase === 'execution' && tasksTotal && tasksTotal > 0) {
     const taskColor = tasksCompleted === tasksTotal ? GREEN : YELLOW;
-    output += ` | Tasks: ${taskColor}${tasksCompleted || 0}/${tasksTotal}${RESET}`;
+    output += ` | 任务: ${taskColor}${tasksCompleted || 0}/${tasksTotal}${RESET}`;
   }
 
   // Add file count if available
   if (filesCreated && filesCreated > 0) {
-    output += ` | ${filesCreated} files`;
+    output += ` | ${filesCreated} 文件`;
   }
 
   return output;
@@ -118,11 +118,11 @@ export function renderAutopilotCompact(
   const phaseNum = PHASE_INDEX[phase] || 0;
 
   if (phase === 'complete') {
-    return `${GREEN}AP:Done${RESET}`;
+    return `${GREEN}AP:完成${RESET}`;
   }
 
   if (phase === 'failed') {
-    return `${RED}AP:Fail${RESET}`;
+    return `${RED}AP:失败${RESET}`;
   }
 
   return `${CYAN}AP:${phaseNum}/5${RESET}`;

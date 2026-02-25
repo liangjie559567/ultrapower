@@ -18,5 +18,5 @@ const DIM = '\x1b[2m';
  */
 export function renderPermission(pending: PendingPermission | null): string | null {
   if (!pending) return null;
-  return `${YELLOW}APPROVE?${RESET} ${DIM}${pending.toolName.toLowerCase()}${RESET}:${pending.targetSummary}`;
+  return `${YELLOW}待审批?${RESET} ${DIM}${pending.toolName.toLowerCase()}${RESET}:${pending.targetSummary}`;
 }

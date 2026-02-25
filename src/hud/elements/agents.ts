@@ -202,7 +202,7 @@ export function renderAgents(agents: ActiveAgent[]): string | null {
     return null;
   }
 
-  return `agents:${CYAN}${running}${RESET}`;
+  return `智能体:${CYAN}${running}${RESET}`;
 }
 
 /**
@@ -233,7 +233,7 @@ export function renderAgentsCoded(agents: ActiveAgent[]): string | null {
     return `${color}${code}${RESET}`;
   });
 
-  return `agents:${codes.join('')}`;
+  return `智能体:${codes.join('')}`;
 }
 
 /**
@@ -273,7 +273,7 @@ export function renderAgentsCodedWithDuration(agents: ActiveAgent[]): string | n
     }
   });
 
-  return `agents:${codes.join('')}`;
+  return `智能体:${codes.join('')}`;
 }
 
 /**
@@ -328,7 +328,7 @@ export function renderAgentsDetailed(agents: ActiveAgent[]): string | null {
     return duration ? `${name}${duration}` : name;
   });
 
-  return `agents:[${CYAN}${names.join(',')}${RESET}]`;
+  return `智能体:[${CYAN}${names.join(',')}${RESET}]`;
 }
 
 /**
@@ -503,7 +503,7 @@ export function renderAgentsMultiLine(
   }
 
   // Header part shows count for awareness
-  const headerPart = `agents:${CYAN}${running.length}${RESET}`;
+  const headerPart = `智能体:${CYAN}${running.length}${RESET}`;
 
   // Build detail lines
   const now = Date.now();

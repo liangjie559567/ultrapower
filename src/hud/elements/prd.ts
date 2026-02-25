@@ -26,7 +26,7 @@ export function renderPrd(state: PrdStateForHud | null): string | null {
 
   // If all complete, show completion
   if (completed === total) {
-    return `${GREEN}PRD:done${RESET}`;
+    return `${GREEN}PRD:完成${RESET}`;
   }
 
   // Show current story ID
@@ -51,7 +51,7 @@ export function renderPrdWithProgress(state: PrdStateForHud | null): string | nu
 
   // If all complete, show completion
   if (completed === total) {
-    return `${GREEN}PRD:${completed}/${total} done${RESET}`;
+    return `${GREEN}PRD:${completed}/${total} 完成${RESET}`;
   }
 
   // Show current story with progress

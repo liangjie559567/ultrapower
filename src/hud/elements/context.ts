@@ -27,17 +27,17 @@ export function renderContext(
 
   if (safePercent >= thresholds.contextCritical) {
     color = RED;
-    suffix = ' CRITICAL';
+    suffix = ' 危险';
   } else if (safePercent >= thresholds.contextCompactSuggestion) {
     color = YELLOW;
-    suffix = ' COMPRESS?';
+    suffix = ' 压缩?';
   } else if (safePercent >= thresholds.contextWarning) {
     color = YELLOW;
   } else {
     color = GREEN;
   }
 
-  return `ctx:${color}${safePercent}%${suffix}${RESET}`;
+  return `上下文:${color}${safePercent}%${suffix}${RESET}`;
 }
 
 /**
@@ -59,10 +59,10 @@ export function renderContextWithBar(
 
   if (safePercent >= thresholds.contextCritical) {
     color = RED;
-    suffix = ' CRITICAL';
+    suffix = ' 危险';
   } else if (safePercent >= thresholds.contextCompactSuggestion) {
     color = YELLOW;
-    suffix = ' COMPRESS?';
+    suffix = ' 压缩?';
   } else if (safePercent >= thresholds.contextWarning) {
     color = YELLOW;
   } else {
@@ -70,5 +70,5 @@ export function renderContextWithBar(
   }
 
   const bar = `${color}${'█'.repeat(filled)}${DIM}${'░'.repeat(empty)}${RESET}`;
-  return `ctx:[${bar}]${color}${safePercent}%${suffix}${RESET}`;
+  return `上下文:[${bar}]${color}${safePercent}%${suffix}${RESET}`;
 }

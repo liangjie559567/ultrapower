@@ -39,7 +39,7 @@ export function renderTodos(todos: TodoItem[]): string | null {
     color = CYAN;
   }
 
-  return `todos:${color}${completed}/${total}${RESET}`;
+  return `任务:${color}${completed}/${total}${RESET}`;
 }
 
 /**
@@ -68,13 +68,13 @@ export function renderTodosWithCurrent(todos: TodoItem[]): string | null {
     color = CYAN;
   }
 
-  let result = `todos:${color}${completed}/${total}${RESET}`;
+  let result = `任务:${color}${completed}/${total}${RESET}`;
 
   if (inProgress) {
     const activeText = inProgress.activeForm || inProgress.content || "...";
     // Use CJK-aware truncation (30 visual columns)
     const truncated = truncateToWidth(activeText, 30);
-    result += ` ${DIM}(working: ${truncated})${RESET}`;
+    result += ` ${DIM}(进行中: ${truncated})${RESET}`;
   }
 
   return result;
