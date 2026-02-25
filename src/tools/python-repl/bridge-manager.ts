@@ -259,6 +259,7 @@ function killProcessGroup(pid: number, signal: NodeJS.Signals): boolean {
     try {
       const force = signal === 'SIGKILL';
       const args = force ? '/F /T' : '/T';
+      // eslint-disable-next-line @typescript-eslint/no-require-imports -- inline one-off call, no top-level import needed
       require('child_process').execSync(
         `taskkill ${args} /PID ${pid}`,
         { stdio: 'ignore', timeout: 5000, windowsHide: true }

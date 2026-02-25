@@ -136,7 +136,7 @@ export function checkDuplicateTriggers(
   triggers: string[],
   projectRoot: string | null
 ): { isDuplicate: boolean; existingSkillId?: string } {
-  // Import dynamically to avoid circular dependency
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- avoid circular dependency with loader
   const { loadAllSkills } = require('./loader.js');
   const skills = loadAllSkills(projectRoot);
 

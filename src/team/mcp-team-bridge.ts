@@ -56,7 +56,7 @@ function sleep(ms: number): Promise<void> {
  * Returns a Set of relative file paths that currently exist or are modified.
  */
 function captureFileSnapshot(cwd: string): Set<string> {
-  const { execSync } = require('child_process') as typeof import('child_process');
+  const { execSync } = await import('child_process');
   const files = new Set<string>();
   try {
     // Get all tracked files that are modified, added, or staged

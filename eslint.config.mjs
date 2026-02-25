@@ -16,5 +16,13 @@ export default tseslint.config(
       'no-useless-escape': 'warn',
       'no-useless-catch': 'warn',
     },
+  },
+  {
+    // Test files: relax any and require-imports (mocking patterns are idiomatic)
+    files: ['**/__tests__/**/*.ts', '**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+    },
   }
 );

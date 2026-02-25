@@ -99,7 +99,9 @@ export function routeAndAdaptTask(
   agentType?: string,
   previousFailures?: number
 ): { decision: import('./types.js').RoutingDecision; adaptedPrompt: string } {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { routeWithEscalation } = require('./router.js');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { adaptPromptForTier } = require('./prompts/index.js');
 
   const decision = routeWithEscalation({

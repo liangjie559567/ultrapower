@@ -96,7 +96,7 @@ export class BackgroundManager {
     if (!existsSync(BACKGROUND_TASKS_DIR)) return;
 
     try {
-      const { readdirSync } = require('fs');
+      const { readdirSync } = await import('fs');
       const files = readdirSync(BACKGROUND_TASKS_DIR) as string[];
 
       for (const file of files) {
