@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { mkdirSync, rmSync, existsSync, mkdtempSync } from 'fs';
+import { _mkdirSync, rmSync, existsSync, mkdtempSync } from 'fs';
 import { execSync } from 'child_process';
 import { join } from 'path';
 import { tmpdir } from 'os';
@@ -286,7 +286,7 @@ describe('worktree-paths', () => {
     });
 
     it('should generate a new ID after reset', () => {
-      const id1 = getProcessSessionId();
+      const _id1 = getProcessSessionId();
       resetProcessSessionId();
       const id2 = getProcessSessionId();
       // IDs should differ (different timestamp)

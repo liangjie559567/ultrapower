@@ -8,11 +8,11 @@
  */
 
 import { spawn, ChildProcess } from 'child_process';
-import { existsSync, readFileSync, openSync, readSync, closeSync } from 'fs';
+import { existsSync, _readFileSync, openSync, readSync, closeSync } from 'fs';
 import { join } from 'path';
 import { writeFileWithMode, ensureDirWithMode } from './fs-utils.js';
-import type { BridgeConfig, TaskFile, OutboxMessage, HeartbeatData, InboxMessage } from './types.js';
-import { findNextTask, updateTask, readTask, writeTaskFailure, readTaskFailure, isTaskRetryExhausted } from './task-file-ops.js';
+import type { BridgeConfig, TaskFile, _OutboxMessage, HeartbeatData, InboxMessage } from './types.js';
+import { findNextTask, updateTask, _readTask, writeTaskFailure, readTaskFailure, isTaskRetryExhausted } from './task-file-ops.js';
 import {
   readNewInboxMessages, appendOutbox, rotateOutboxIfNeeded, rotateInboxIfNeeded,
   checkShutdownSignal, deleteShutdownSignal, checkDrainSignal, deleteDrainSignal
@@ -22,7 +22,7 @@ import { writeHeartbeat, deleteHeartbeat } from './heartbeat.js';
 import { killSession } from './tmux-session.js';
 import { logAuditEvent } from './audit-log.js';
 import type { AuditEvent } from './audit-log.js';
-import { getEffectivePermissions, findPermissionViolations, getDefaultPermissions } from './permissions.js';
+import { getEffectivePermissions, findPermissionViolations, _getDefaultPermissions } from './permissions.js';
 import type { WorkerPermissions, PermissionViolation } from './permissions.js';
 
 /** Simple logger */
@@ -587,7 +587,7 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
 
         // --- 7. Build prompt ---
         const prompt = buildTaskPrompt(task, messages, config);
-        const promptFile = writePromptFile(config, task.id, prompt);
+        const _promptFile = writePromptFile(config, task.id, prompt);
         const outputFile = getOutputPath(config, task.id);
 
         log(`[bridge] Executing task ${task.id}: ${task.subject}`);

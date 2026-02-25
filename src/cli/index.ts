@@ -14,7 +14,7 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { _readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -69,7 +69,7 @@ import { getRuntimePackageVersion } from '../lib/version.js';
 import { launchCommand } from './launch.js';
 import { interopCommand } from './interop.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const ___dirname = dirname(fileURLToPath(import.meta.url));
 
 const version = getRuntimePackageVersion();
 
@@ -630,7 +630,7 @@ Examples:
 /**
  * Config stop-callback subcommand - Configure stop hook callbacks
  */
-const configStopCallback = program
+const _configStopCallback = program
   .command('config-stop-callback <type>')
   .description('Configure stop hook callbacks (file/telegram/discord)')
   .option('--enable', 'Enable callback')

@@ -32,7 +32,7 @@ import {
   ULTRATHINK_MESSAGE,
   SEARCH_MESSAGE,
   ANALYZE_MESSAGE,
-  TODO_CONTINUATION_PROMPT,
+  _TODO_CONTINUATION_PROMPT,
   RALPH_MESSAGE,
 } from "../installer/hooks.js";
 // Agent dashboard is used in pre/post-tool-use hot path

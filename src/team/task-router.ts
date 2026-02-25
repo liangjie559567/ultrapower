@@ -10,7 +10,7 @@
  */
 
 import type { TaskFile, WorkerCapability, WorkerBackend } from './types.js';
-import type { UnifiedTeamMember } from './unified-team.js';
+import type { _UnifiedTeamMember } from './unified-team.js';
 import { getTeamMembers } from './unified-team.js';
 import { scoreWorkerFitness } from './capabilities.js';
 

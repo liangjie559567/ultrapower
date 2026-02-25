@@ -375,7 +375,7 @@ async function fileExists(filePath: string): Promise<boolean> {
 /**
  * Helper: Extract version from config file
  */
-async function extractVersion(filePath: string, language: string): Promise<string | null> {
+async function extractVersion(filePath: string, _language: string): Promise<string | null> {
   try {
     const content = await fs.readFile(filePath, 'utf-8');
 

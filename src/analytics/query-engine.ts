@@ -1,6 +1,6 @@
 import { getTokenTracker } from './token-tracker.js';
 import { getSessionManager } from './session-manager.js';
-import { getMetricsCollector, aggregators } from './metrics-collector.js';
+import { _getMetricsCollector, _aggregators } from './metrics-collector.js';
 import { calculateCost } from './cost-estimator.js';
 import { getTokscaleAdapter, TokscaleAdapter } from './tokscale-adapter.js';
 import * as fs from 'fs/promises';

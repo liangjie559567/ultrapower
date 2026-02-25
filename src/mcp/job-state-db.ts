@@ -195,7 +195,7 @@ export async function initJobDb(cwd: string): Promise<boolean> {
       "SELECT value FROM schema_info WHERE key = 'version'",
     );
     const versionRow = versionStmt.get() as { value: string } | undefined;
-    const _currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    const __currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
 
     // Future migrations would go here:
     // if (_currentVersion > 0 && _currentVersion < 2) { ... }

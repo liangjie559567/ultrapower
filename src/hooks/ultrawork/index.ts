@@ -29,7 +29,7 @@ export interface UltraworkState {
   linked_to_ralph?: boolean;
 }
 
-const _DEFAULT_STATE: UltraworkState = {
+const __DEFAULT_STATE: UltraworkState = {
   active: false,
   started_at: '',
   original_prompt: '',

@@ -14,7 +14,7 @@ import {
   handleContextWindowRecovery,
   detectContextLimitError,
   parseTokenLimitError,
-  containsTokenLimitError,
+  _containsTokenLimitError,
 } from './context-window.js';
 import {
   handleEditErrorRecovery,

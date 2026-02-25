@@ -4,16 +4,16 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 import {
   readAutopilotState,
-  writeAutopilotState,
+  _writeAutopilotState,
   clearAutopilotState,
   isAutopilotActive,
   initAutopilot,
   transitionPhase,
   updateExpansion,
-  updatePlanning,
+  _updatePlanning,
   updateExecution,
-  updateQA,
-  updateValidation
+  _updateQA,
+  _updateValidation
 } from '../state.js';
 
 describe('AutopilotState', () => {
@@ -34,7 +34,7 @@ describe('AutopilotState', () => {
     });
 
     it('should return parsed state when file exists', () => {
-      const state = initAutopilot(testDir, 'test idea');
+      const _state = initAutopilot(testDir, 'test idea');
       const readState = readAutopilotState(testDir);
       expect(readState).not.toBeNull();
       expect(readState?.originalIdea).toBe('test idea');

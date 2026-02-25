@@ -10,8 +10,8 @@
 
 import safeRegex from 'safe-regex';
 import type {
-  ExternalTool,
-  PluginPermission,
+  _ExternalTool,
+  _PluginPermission,
   PermissionCheckResult,
   SafeCommandPattern,
   DiscoveredPlugin,

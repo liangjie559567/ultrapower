@@ -12,7 +12,7 @@ import {
   readReplayEvents,
   getReplaySummary,
   type ReplayEvent,
-  type ReplaySummary,
+  type _ReplaySummary,
 } from '../hooks/subagent-tracker/session-replay.js';
 import {
   validateWorkingDirectory,

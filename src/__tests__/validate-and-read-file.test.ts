@@ -58,7 +58,7 @@ describe('validateAndReadFile boundary checks', () => {
 
   it('allows valid in-tree file', () => {
     const filePath = 'src/index.ts';
-    const resolvedPath = path.resolve(baseDir, filePath);
+    const _resolvedPath = path.resolve(baseDir, filePath);
     mockRealpathSync.mockImplementation((p: any) => String(p));
     mockStatSync.mockReturnValue({ isFile: () => true, size: 100 } as any);
     mockReadFileSync.mockReturnValue('const x = 1;');

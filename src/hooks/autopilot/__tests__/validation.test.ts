@@ -12,7 +12,7 @@ import {
   formatValidationResults
 } from '../validation.js';
 import { initAutopilot, transitionPhase } from '../state.js';
-import type { AutopilotState } from '../types.js';
+import type { _AutopilotState } from '../types.js';
 
 describe('AutopilotValidation', () => {
   let testDir: string;
@@ -493,7 +493,7 @@ describe('AutopilotValidation', () => {
 
     it('should format approved verdicts with checkmark icon', () => {
       initAutopilot(testDir, 'test idea');
-      const state = transitionPhase(testDir, 'validation');
+      const _state = transitionPhase(testDir, 'validation');
 
       recordValidationVerdict(testDir, 'functional', 'APPROVED');
       const updatedState = transitionPhase(testDir, 'validation');
@@ -507,7 +507,7 @@ describe('AutopilotValidation', () => {
 
     it('should format rejected verdicts with X icon', () => {
       initAutopilot(testDir, 'test idea');
-      const state = transitionPhase(testDir, 'validation');
+      const _state = transitionPhase(testDir, 'validation');
 
       recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
       const updatedState = transitionPhase(testDir, 'validation');
@@ -521,7 +521,7 @@ describe('AutopilotValidation', () => {
 
     it('should include issues with bullet points', () => {
       initAutopilot(testDir, 'test idea');
-      const state = transitionPhase(testDir, 'validation');
+      const _state = transitionPhase(testDir, 'validation');
 
       recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1', 'Issue 2']);
       const updatedState = transitionPhase(testDir, 'validation');

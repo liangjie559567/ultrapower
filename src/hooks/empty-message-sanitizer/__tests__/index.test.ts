@@ -231,7 +231,7 @@ describe('empty-message-sanitizer', () => {
 
     it('should insert text part before tool part when no text exists', () => {
       const message = createMessage('user', [createToolPart('tool_use')]);
-      const originalLength = message.parts.length;
+      const _originalLength = message.parts.length;
       const result = sanitizeMessage(message, false);
       expect(result).toBe(false); // Tool part counts as valid content
     });
@@ -330,7 +330,7 @@ describe('empty-message-sanitizer', () => {
       const input: EmptyMessageSanitizerInput = {
         messages: [createMessage('user', [])],
       };
-      const result = sanitizeMessages(input, { placeholderText: '[custom]' });
+      const _result = sanitizeMessages(input, { placeholderText: '[custom]' });
       expect(input.messages[0].parts[0].text).toBe('[custom]');
     });
 

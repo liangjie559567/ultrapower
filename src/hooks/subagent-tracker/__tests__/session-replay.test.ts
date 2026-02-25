@@ -12,7 +12,7 @@ import {
   recordIntervention,
   readReplayEvents,
   getReplaySummary,
-  cleanupReplayFiles,
+  _cleanupReplayFiles,
   resetSessionStartTimes,
 } from '../session-replay.js';
 

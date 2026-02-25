@@ -54,7 +54,7 @@ export class BackfillDedup {
             this.processedSet.add(entryId);
             this.totalProcessed++;
           }
-        } catch (parseError) {
+        } catch (_parseError) {
           // Skip malformed lines
         }
       }

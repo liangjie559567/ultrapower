@@ -19,7 +19,7 @@ import {
   type Todo,
   type IncompleteTodosResult,
   type StopContext,
-  type TaskCheckResult
+  type _TaskCheckResult
 } from '../hooks/todo-continuation/index.js';
 
 // Mock fs and os modules

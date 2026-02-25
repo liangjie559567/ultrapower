@@ -292,7 +292,7 @@ describe("reply-listener", () => {
       // No reply-listener-config.json should be needed
       // The daemon calls buildDaemonConfig() which uses getNotificationConfig()
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -309,7 +309,7 @@ describe("reply-listener", () => {
 
     it("forwards OMC_* env vars to daemon process", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -358,7 +358,7 @@ describe("reply-listener", () => {
 
     it("Discord feedback includes message_reference in source code", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -383,7 +383,7 @@ describe("reply-listener", () => {
 
     it("feedback is non-critical and wrapped in try/catch", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -399,7 +399,7 @@ describe("reply-listener", () => {
 
     it("feedback uses 5-second timeout", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -416,7 +416,7 @@ describe("reply-listener", () => {
 
     it("Discord channel notification uses parseMentionAllowedMentions for mention-aware allowed_mentions", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -430,7 +430,7 @@ describe("reply-listener", () => {
 
     it("does not send feedback on failed injection", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -489,7 +489,7 @@ describe("reply-listener", () => {
 
     it("ReplyListenerDaemonConfig includes discordMention field", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -500,7 +500,7 @@ describe("reply-listener", () => {
 
     it("buildDaemonConfig passes discordMention from notification config", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",
@@ -513,7 +513,7 @@ describe("reply-listener", () => {
 
     it("getReplyListenerPlatformConfig returns discordMention", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const configSource = fs.readFileSync(
         resolveSourceFile(__dirname, "../config.ts"),
         "utf-8",
@@ -526,7 +526,7 @@ describe("reply-listener", () => {
 
     it("Telegram feedback does not include Discord mention", () => {
       const fs = require("fs");
-      const path = require("path");
+      const _path = require("path");
       const source = fs.readFileSync(
         resolveSourceFile(__dirname, "../reply-listener.ts"),
         "utf-8",

@@ -4,7 +4,7 @@ import {
   parseMentionAllowedMentions,
   buildConfigFromEnv,
 } from "../config.js";
-import type { NotificationConfig } from "../types.js";
+import type { _NotificationConfig } from "../types.js";
 
 describe("validateMention", () => {
   it("accepts valid user mention", () => {
@@ -96,7 +96,7 @@ describe("parseMentionAllowedMentions", () => {
 });
 
 describe("buildConfigFromEnv", () => {
-  const originalEnv = process.env;
+  const _originalEnv = process.env;
 
   beforeEach(() => {
     vi.stubEnv("OMC_DISCORD_NOTIFIER_BOT_TOKEN", "");
@@ -203,8 +203,8 @@ describe("buildConfigFromEnv", () => {
 });
 
 describe("getNotificationConfig - deep merge", () => {
-  let mockExistsSync: ReturnType<typeof vi.fn>;
-  let mockReadFileSync: ReturnType<typeof vi.fn>;
+  let _mockExistsSync: ReturnType<typeof vi.fn>;
+  let _mockReadFileSync: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     // Clear env vars

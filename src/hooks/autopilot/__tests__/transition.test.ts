@@ -8,7 +8,7 @@ import {
   readAutopilotState,
   transitionRalphToUltraQA,
   transitionUltraQAToValidation,
-  transitionToComplete,
+  _transitionToComplete,
   getTransitionPrompt
 } from '../state.js';
 

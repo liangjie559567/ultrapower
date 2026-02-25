@@ -83,9 +83,9 @@ function resolveExplicitTool(
 function resolveFromConfig(
   agentRole: string,
   route: DelegationRoute,
-  config: DelegationRoutingConfig
+  _config: DelegationRoutingConfig
 ): DelegationDecision {
-  let provider = route.provider;
+  const provider = route.provider;
   let tool = route.tool;
 
   // Validate provider matches tool

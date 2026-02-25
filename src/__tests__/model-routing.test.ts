@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, _vi, _beforeEach } from 'vitest';
 import {
   extractLexicalSignals,
   extractStructuralSignals,
@@ -970,7 +970,7 @@ describe('Integration Scenarios', () => {
       taskPrompt: 'Simple task that keeps failing',
       previousFailures: 3,
     };
-    const _decision = routeTask(context);
+    const __decision = routeTask(context);
 
     // Previous failures should increase complexity score
     const signals = extractContextSignals(context);

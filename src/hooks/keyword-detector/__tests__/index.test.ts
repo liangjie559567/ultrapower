@@ -7,8 +7,8 @@ import {
   hasKeyword,
   getPrimaryKeyword,
   getAllKeywords,
-  type KeywordType,
-  type DetectedKeyword,
+  type _KeywordType,
+  type _DetectedKeyword,
 } from '../index.js';
 
 // Mock isTeamEnabled
