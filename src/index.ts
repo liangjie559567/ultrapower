@@ -362,8 +362,11 @@ export function createSisyphusSession(options?: SisyphusOptions): SisyphusSessio
         agents,
         mcpServers: {
           ...toSdkMcpFormat(externalMcpServers),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SDK mcpServers type requires any for in-process servers
           't': omcToolsServer as any,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SDK mcpServers type requires any for in-process servers
           'x': codexMcpServer as any,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SDK mcpServers type requires any for in-process servers
           'g': geminiMcpServer as any
         },
         allowedTools,

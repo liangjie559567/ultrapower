@@ -328,6 +328,7 @@ Examples:
       console.error(chalk.gray('Example: omc export sessions csv sessions.csv'));
       process.exit(1);
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- commander string narrowing
     exportCommand(type as any, format as any, output, options);
   });
 
@@ -682,7 +683,7 @@ Examples:
         process.exit(1);
       }
 
-      const config = getOMCConfig() as OMCConfig & { notificationProfiles?: Record<string, any> };
+      const config = getOMCConfig() as OMCConfig & { notificationProfiles?: Record<string, unknown> };
       config.notificationProfiles = config.notificationProfiles || {};
       const profileName = options.profile as string;
       const profile = config.notificationProfiles[profileName] || { enabled: true };
@@ -951,7 +952,7 @@ Examples:
   # Select profile at launch:
   $ OMC_NOTIFY_PROFILE=work claude`)
   .action(async (name: string | undefined, options) => {
-    const config = getOMCConfig() as OMCConfig & { notificationProfiles?: Record<string, any> };
+    const config = getOMCConfig() as OMCConfig & { notificationProfiles?: Record<string, unknown> };
     const profiles = config.notificationProfiles || {};
 
     if (options.list || !name) {

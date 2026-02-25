@@ -78,9 +78,10 @@ export function formatRange(range: Range): string {
  * Format a location for display
  */
 export function formatLocation(location: Location): string {
-  const uri = location.uri || (location as any).targetUri;
+  const uri = location.uri || (location as { targetUri?: string }).targetUri;
   if (!uri) return 'Unknown location';
   const path = uriToPath(uri);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- LSP Location subtypes have optional fields not in base type
   const locationRange = location.range || (location as any).targetRange || (location as any).targetSelectionRange;
   if (!locationRange) return path;
   const range = formatRange(locationRange);

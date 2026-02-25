@@ -44,7 +44,7 @@ function getAgentCounts(directory: string): { spawned: number; completed: number
     const tracking = JSON.parse(content);
 
     const spawned = tracking.agents?.length || 0;
-    const completed = tracking.agents?.filter((a: any) => a.status === 'completed').length || 0;
+    const completed = tracking.agents?.filter((a: { status: string }) => a.status === 'completed').length || 0;
 
     return { spawned, completed };
   } catch (_error) {

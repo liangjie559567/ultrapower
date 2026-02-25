@@ -21,6 +21,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = [
   {
     name: 'explicit-model-specified',
     condition: (ctx) => ctx.explicitModel !== undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- EXPLICIT tier is not in the enum but used as sentinel
     action: { tier: 'EXPLICIT' as any, reason: 'User specified model explicitly' },
     priority: 100,
   },

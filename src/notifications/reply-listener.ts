@@ -569,6 +569,7 @@ async function pollTelegram(
     const offset = state.telegramLastUpdateId ? state.telegramLastUpdateId + 1 : 0;
     const path = `/bot${config.telegramBotToken}/getUpdates?offset=${offset}&timeout=0`;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https response body has dynamic shape
     const updates = await new Promise<any[]>((resolve, reject) => {
       const req = httpsRequest(
         {

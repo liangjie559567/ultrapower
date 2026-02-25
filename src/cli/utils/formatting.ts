@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- generic table renderer accepts arbitrary row data */
 export interface TableColumn {
   header: string;
   field: string;

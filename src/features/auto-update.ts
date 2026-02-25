@@ -37,6 +37,7 @@ function syncMarketplaceClone(verbose: boolean = false): { ok: boolean; message:
   }
 
   const stdio = verbose ? 'inherit' : 'pipe';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- execSync stdio type narrowing
   const execOpts = { encoding: 'utf-8' as const, stdio: stdio as any, timeout: 60000 };
 
   try {

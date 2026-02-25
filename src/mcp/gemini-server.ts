@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- MCP tool() API requires `as any` for schema/args typing */
 /**
  * Gemini MCP Server - In-process MCP server for Google Gemini CLI integration
  *

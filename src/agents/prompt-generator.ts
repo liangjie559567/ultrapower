@@ -188,7 +188,7 @@ export function convertDefinitionsToConfigs(
     tools?: string[];
     disallowedTools?: string[];
     model?: string;
-    metadata?: any;
+    metadata?: unknown;
   }>
 ): AgentConfig[] {
   return Object.entries(definitions).map(([name, def]) => ({
@@ -197,6 +197,7 @@ export function convertDefinitionsToConfigs(
     prompt: def.prompt,
     tools: def.tools,
     disallowedTools: def.disallowedTools,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SDK model type is narrower than string
     model: def.model as any,
     metadata: def.metadata
   }));

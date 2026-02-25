@@ -184,7 +184,7 @@ export interface ProjectContext {
   existingFiles?: string[];
 
   /** Framework conventions */
-  conventions?: Record<string, any>;
+  conventions?: Record<string, unknown>;
 }
 
 export interface DecompositionStrategy {

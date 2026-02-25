@@ -52,7 +52,9 @@ let previousSnapshot: TokenSnapshot | null = null;
  * Silent failure - doesn't break HUD rendering.
  */
 async function recordTokenUsage(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook stdin has dynamic shape from Claude Code
   stdin: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- transcript data has dynamic shape
   transcriptData: any,
 ): Promise<void> {
   try {
@@ -69,7 +71,7 @@ async function recordTokenUsage(
 
     // Get running agents from transcript
     const runningAgents =
-      transcriptData.agents?.filter((a: any) => a.status === "running") ?? [];
+      transcriptData.agents?.filter((a: { status: string }) => a.status === "running") ?? [];
     const agentName =
       runningAgents.length > 0 ? runningAgents[0].name : undefined;
 

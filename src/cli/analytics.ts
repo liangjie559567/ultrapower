@@ -73,6 +73,7 @@ program
       console.error('Invalid format. Use: json or csv');
       process.exit(1);
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- commander string narrowing
     exportCommand(type as any, format as any, output, options);
   });
 

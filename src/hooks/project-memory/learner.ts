@@ -20,6 +20,7 @@ import { detectDirectivesFromMessage, addDirective } from './directive-detector.
  */
 export async function learnFromToolOutput(
   toolName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook input has dynamic shape from Claude Code
   toolInput: any,
   toolOutput: string,
   projectRoot: string,

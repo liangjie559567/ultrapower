@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- JSON state files have dynamic shape */
 /**
  * PreCompact Hook - State Preservation Before Context Compaction
  *

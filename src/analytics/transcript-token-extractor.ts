@@ -52,7 +52,7 @@ export function extractTaskSpawns(entry: TranscriptEntry): TaskSpawnInfo[] {
 
   for (const block of entry.message.content) {
     if (block.type === 'tool_use' && block.name === 'Task') {
-      const toolUseId = (block as any).id;
+      const toolUseId = (block as { id?: string }).id;
       const input = block.input as { subagent_type?: string } | undefined;
       if (toolUseId && input?.subagent_type) {
         spawns.push({
@@ -81,7 +81,7 @@ function detectAgentName(
 ): string | undefined {
   // For progress entries, look up agent from parentToolUseID
   if (entry.type === 'progress') {
-    const parentToolUseID = (entry as any).parentToolUseID;
+    const parentToolUseID = (entry as { parentToolUseID?: string }).parentToolUseID;
     if (parentToolUseID && agentLookup) {
       return agentLookup.get(parentToolUseID);
     }
@@ -122,6 +122,7 @@ export function extractTokenUsage(
   sourceFile: string,
   agentLookup?: Map<string, string>
 ): ExtractedUsage | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- usage shape varies across entry types
   let usage: any;
   let model: string | undefined;
 

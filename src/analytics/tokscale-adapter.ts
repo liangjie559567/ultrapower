@@ -81,9 +81,11 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
       originalWarn.apply(console, args);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import of optional native module
     let tokscale: any;
     try {
       // Dynamic import of @tokscale/core
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- external module has no types
       tokscale = await import('@tokscale/core') as any;
 
       // Verify native module is functional via health check
@@ -103,6 +105,7 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
     }
 
     // Helper to convert tokscale's entries array to our byModel format
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- tokscale entries have no published types
     const convertEntriesToByModel = (entries: any[]): Record<string, { tokens: number; cost: number }> => {
       const result: Record<string, { tokens: number; cost: number }> = {};
       if (!entries || !Array.isArray(entries)) {

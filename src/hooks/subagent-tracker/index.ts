@@ -299,8 +299,8 @@ function acquireLock(directory: string): boolean {
       // Try to create lock atomically with PID:timestamp
       writeFileSync(lockPath, `${process.pid}:${Date.now()}`, { flag: "wx" });
       return true;
-    } catch (e: any) {
-      if (e.code === "EEXIST") {
+    } catch (e: unknown) {
+      if ((e as NodeJS.ErrnoException).code === "EEXIST") {
         // Lock exists, retry
         syncSleep(LOCK_RETRY_MS);
         continue;

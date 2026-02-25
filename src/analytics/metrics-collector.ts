@@ -4,7 +4,7 @@ import * as path from 'path';
 export interface MetricEvent {
   timestamp: string;
   type: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   sessionId?: string;
 }
 
@@ -20,7 +20,7 @@ export interface MetricQuery {
 const METRICS_LOG_FILE = '.omc/logs/metrics.jsonl';
 
 export class MetricsCollector {
-  async recordEvent(type: string, data: Record<string, any>, sessionId?: string): Promise<void> {
+  async recordEvent(type: string, data: Record<string, unknown>, sessionId?: string): Promise<void> {
     const event: MetricEvent = {
       timestamp: new Date().toISOString(),
       type,
@@ -69,8 +69,8 @@ export class MetricsCollector {
 
   async aggregate(
     query: MetricQuery,
-    aggregator: (events: MetricEvent[]) => any
-  ): Promise<any> {
+    aggregator: (events: MetricEvent[]) => unknown
+  ): Promise<unknown> {
     const events = await this.query(query);
     return aggregator(events);
   }

@@ -187,9 +187,9 @@ async function openNoFollow(
 
   try {
     return await fs.open(filePath, flagsWithNoFollow, mode);
-  } catch (err: any) {
+  } catch (err: unknown) {
     // ELOOP means it's a symlink - reject it
-    if (err.code === 'ELOOP') {
+    if ((err as NodeJS.ErrnoException).code === 'ELOOP') {
       throw new LockError(`Lock file is a symlink: ${filePath}`);
     }
     throw err;
@@ -206,8 +206,8 @@ async function readFileNoFollow(filePath: string): Promise<string> {
     if (stat.isSymbolicLink()) {
       throw new LockError(`Lock file is a symlink: ${filePath}`);
     }
-  } catch (err: any) {
-    if (err.code === 'ENOENT') {
+  } catch (err: unknown) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
       throw err; // File doesn't exist - propagate
     }
     if (err instanceof LockError) {
@@ -389,8 +389,8 @@ export class SessionLock {
         } finally {
           await lockFile.close();
         }
-      } catch (err: any) {
-        if (err.code === 'EEXIST') {
+      } catch (err: unknown) {
+        if ((err as NodeJS.ErrnoException).code === 'EEXIST') {
           // Another process created the lock file first
           return {
             acquired: false,
@@ -416,7 +416,7 @@ export class SessionLock {
         acquired: true,
         reason: existingLock ? 'stale_broken' : 'success',
       };
-    } catch (_err: any) {
+    } catch (_err: unknown) {
       return {
         acquired: false,
         reason: 'error',
@@ -456,8 +456,8 @@ export class SessionLock {
   async forceBreak(): Promise<void> {
     try {
       await fs.unlink(this.lockPath);
-    } catch (err: any) {
-      if (err.code !== 'ENOENT') {
+    } catch (err: unknown) {
+      if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
         throw err;
       }
     }

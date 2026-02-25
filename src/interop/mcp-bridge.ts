@@ -603,6 +603,7 @@ export const interopReadOmxTasksTool: ToolDefinition<{
 /**
  * Get all interop MCP tools for registration
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ToolDefinition generic parameter requires any for mixed tool types
 export function getInteropTools(): ToolDefinition<any>[] {
   return [
     interopSendTaskTool,

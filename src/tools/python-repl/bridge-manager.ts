@@ -723,8 +723,9 @@ async function removeFileIfExists(filePath: string): Promise<boolean> {
   try {
     await fsPromises.unlink(filePath);
     return true;
-  } catch (error: any) {
-    if (error?.code === 'ENOENT') {
+  } catch (error: unknown) {
+    const e = error as { code?: string };
+    if (e?.code === 'ENOENT') {
       return false;
     }
     throw error;

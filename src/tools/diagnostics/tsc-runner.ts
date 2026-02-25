@@ -53,8 +53,9 @@ export function runTscDiagnostics(directory: string): TscResult {
       errorCount: 0,
       warningCount: 0
     };
-  } catch (error: any) {
-    const output = error.stdout || error.stderr || '';
+  } catch (error: unknown) {
+    const e = error as { stdout?: string; stderr?: string };
+    const output = e.stdout || e.stderr || '';
     return parseTscOutput(output);
   }
 }

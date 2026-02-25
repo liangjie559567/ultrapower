@@ -570,6 +570,7 @@ export function getReplyConfig(): import("./types.js").ReplyConfig | null {
 
   // Read reply-specific config
   const raw = readRawConfig();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw config has dynamic shape
   const replyRaw = (raw?.notifications as any)?.reply;
 
   const enabled = process.env.OMC_REPLY_ENABLED === "true" || replyRaw?.enabled === true;
