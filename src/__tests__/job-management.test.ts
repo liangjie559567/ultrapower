@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { findJobStatusFile, handleKillJob, handleWaitForJob, handleCheckJobStatus, handleListJobs } from '../mcp/job-management.js';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { findJobStatusFile, handleKillJob, handleWaitForJob, handleCheckJobStatus } from '../mcp/job-management.js';
 import * as promptPersistence from '../mcp/prompt-persistence.js';
 
 // Mock the prompt-persistence module

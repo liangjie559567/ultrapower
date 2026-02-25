@@ -8,7 +8,7 @@ import type { AxiomConfig } from '../../config/axiom-config.js';
 import { KnowledgeHarvester } from './harvester.js';
 import { PatternDetector, type PatternEntry } from './pattern-detector.js';
 import { ConfidenceEngine } from './confidence.js';
-import { WorkflowMetrics, type WorkflowInsight } from './metrics.js';
+import { WorkflowMetrics } from './metrics.js';
 import { LearningQueue } from './learning-queue.js';
 import { ReflectionEngine } from './reflection.js';
 import { KnowledgeIndexManager } from './index-manager.js';

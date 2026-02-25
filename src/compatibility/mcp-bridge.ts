@@ -13,7 +13,6 @@ import { spawn, type ChildProcess } from 'child_process';
 import { EventEmitter } from 'events';
 import { basename } from 'path';
 import type {
-  DiscoveredMcpServer,
   McpServerEntry,
   ExternalTool,
   McpToolResult,

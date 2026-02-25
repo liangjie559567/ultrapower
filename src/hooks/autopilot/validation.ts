@@ -9,7 +9,6 @@
 import {
   readAutopilotState,
   writeAutopilotState,
-  updateValidation
 } from './state.js';
 import type {
   AutopilotState,

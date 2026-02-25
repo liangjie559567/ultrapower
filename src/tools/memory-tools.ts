@@ -6,7 +6,6 @@
 
 import { z } from 'zod';
 import {
-  getWorktreeRoot,
   getWorktreeProjectMemoryPath,
   ensureOmcDir,
   validateWorkingDirectory,
@@ -16,9 +15,7 @@ import {
   saveProjectMemory,
   addCustomNote,
   addDirective,
-  formatDirectivesForContext,
   type ProjectMemory,
-  type CustomNote,
   type UserDirective,
 } from '../hooks/project-memory/index.js';
 import { ToolDefinition } from './types.js';

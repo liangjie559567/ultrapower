@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { codexMcpServer, codexToolNames } from '../mcp/codex-server.js';
 import { geminiMcpServer, geminiToolNames } from '../mcp/gemini-server.js';
 import { detectCodexCli, detectGeminiCli, resetDetectionCache } from '../mcp/cli-detection.js';

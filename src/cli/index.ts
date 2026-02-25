@@ -14,7 +14,7 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';

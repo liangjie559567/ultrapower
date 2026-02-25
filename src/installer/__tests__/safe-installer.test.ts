@@ -4,10 +4,10 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { existsSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
-import { isOmcHook, install, InstallOptions } from '../index.js';
+import { isOmcHook, InstallOptions } from '../index.js';
 
 /**
  * Detect hook conflicts using the real isOmcHook function.

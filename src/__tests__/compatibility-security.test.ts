@@ -11,8 +11,8 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { join, resolve } from 'path';
-import { mkdirSync, writeFileSync, rmSync, existsSync, symlinkSync } from 'fs';
+import { join } from 'path';
+import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { tmpdir } from 'os';
 
 // Import functions under test

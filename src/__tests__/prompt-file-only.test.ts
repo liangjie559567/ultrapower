@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { handleAskCodex } from '../mcp/codex-core.js';
 import { handleAskGemini } from '../mcp/gemini-core.js';
 import { expectMissingPromptError, expectNoMissingPromptError } from './helpers/prompt-test-helpers.js';

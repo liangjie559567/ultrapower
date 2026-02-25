@@ -7,7 +7,6 @@ import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
 import { isOmcHook } from '../../installer/index.js';
-import type { PluginConfig } from '../../shared/types.js';
 import { colors } from '../utils/formatting.js';
 
 export interface ConflictReport {

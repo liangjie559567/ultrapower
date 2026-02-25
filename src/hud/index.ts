@@ -40,7 +40,7 @@ import { extractSessionId } from "../analytics/output-estimator.js";
 import { getTokenTracker } from "../analytics/token-tracker.js";
 import { getRuntimePackageVersion } from "../lib/version.js";
 import { compareVersions } from "../features/auto-update.js";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 

@@ -84,11 +84,7 @@ export async function backfillCommand(options: BackfillCommandOptions): Promise<
   const engine = new BackfillEngine();
 
   // Setup progress handler
-  let lastProgress: BackfillProgress | null = null;
-
   engine.on('progress', (progress: BackfillProgress) => {
-    lastProgress = progress;
-
     if (!options.json && !options.verbose) {
       // Show progress bar
       clearLine();

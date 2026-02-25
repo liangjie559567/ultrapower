@@ -1,8 +1,7 @@
 import { getTokenTracker } from './token-tracker.js';
-import { getSessionManager } from './session-manager.js';
-import { getMetricsCollector, aggregators } from './metrics-collector.js';
 import { calculateCost } from './cost-estimator.js';
 import { getTokscaleAdapter, TokscaleAdapter } from './tokscale-adapter.js';
+import { getSessionManager } from './session-manager.js';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { homedir } from 'os';

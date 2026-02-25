@@ -8,11 +8,11 @@
  */
 
 import { spawn, ChildProcess, execSync } from 'child_process';
-import { existsSync, readFileSync, openSync, readSync, closeSync } from 'fs';
+import { existsSync, openSync, readSync, closeSync } from 'fs';
 import { join } from 'path';
 import { writeFileWithMode, ensureDirWithMode } from './fs-utils.js';
-import type { BridgeConfig, TaskFile, OutboxMessage, HeartbeatData, InboxMessage } from './types.js';
-import { findNextTask, updateTask, readTask, writeTaskFailure, readTaskFailure, isTaskRetryExhausted } from './task-file-ops.js';
+import type { BridgeConfig, TaskFile, HeartbeatData, InboxMessage } from './types.js';
+import { findNextTask, updateTask, writeTaskFailure, readTaskFailure, isTaskRetryExhausted } from './task-file-ops.js';
 import {
   readNewInboxMessages, appendOutbox, rotateOutboxIfNeeded, rotateInboxIfNeeded,
   checkShutdownSignal, deleteShutdownSignal, checkDrainSignal, deleteDrainSignal
@@ -22,7 +22,7 @@ import { writeHeartbeat, deleteHeartbeat } from './heartbeat.js';
 import { killSession } from './tmux-session.js';
 import { logAuditEvent } from './audit-log.js';
 import type { AuditEvent } from './audit-log.js';
-import { getEffectivePermissions, findPermissionViolations, getDefaultPermissions } from './permissions.js';
+import { getEffectivePermissions, findPermissionViolations } from './permissions.js';
 import type { WorkerPermissions, PermissionViolation } from './permissions.js';
 
 /** Simple logger */

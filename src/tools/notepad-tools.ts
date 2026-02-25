@@ -7,14 +7,11 @@
 
 import { z } from 'zod';
 import {
-  getWorktreeRoot,
   getWorktreeNotepadPath,
   ensureOmcDir,
   validateWorkingDirectory,
 } from '../lib/worktree-paths.js';
 import {
-  initNotepad,
-  readNotepad,
   getPriorityContext,
   getWorkingMemory,
   getManualSection,

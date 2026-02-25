@@ -519,14 +519,14 @@ export class TokenTracker {
     try {
       const content = await fs.readFile(TOKEN_LOG_FILE, "utf-8");
       const lines = content.trim().split("\n");
-      let kept = 0;
+      let _kept = 0;
       let removed = 0;
 
       const filteredLines = lines.filter((line) => {
         const record: TokenUsage = JSON.parse(line);
         const recordDate = new Date(record.timestamp);
         if (recordDate >= cutoffDate) {
-          kept++;
+          _kept++;
           return true;
         }
         removed++;

@@ -14,7 +14,6 @@ import type {
   ProjectContext,
   TaskType,
   ComponentRole,
-  FileOwnership,
   DecompositionStrategy
 } from './types.js';
 

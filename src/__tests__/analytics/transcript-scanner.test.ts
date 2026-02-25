@@ -2,7 +2,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs/promises';
 import { mkdirSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
-import { homedir, tmpdir, platform } from 'os';
+import { homedir, tmpdir } from 'os';
 import { scanTranscripts, decodeProjectPath } from '../../analytics/transcript-scanner.js';
 import type { Dirent, Stats } from 'fs';
 
