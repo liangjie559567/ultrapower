@@ -1,7 +1,7 @@
 /**
  * Shared stdin utilities for OMC hooks
  * Provides timeout-protected stdin reading to prevent hangs on Linux and Windows
- * See: https://github.com/Yeachan-Heo/ultrapower/issues/240
+ * See: https://github.com/liangjie559567/ultrapower/issues/240
  */
 
 /**
