@@ -720,6 +720,81 @@ prompt.txt                    -> /home/user/project/prompt.txt
 
 > **注意**：AST 工具使用 [@ast-grep/napi](https://ast-grep.github.io/) 进行结构化代码匹配。支持元变量，如 `$VAR`（单节点）和 `$$$`（多节点）。
 
+### Python REPL 工具
+
+| 工具 | 状态 | 说明 |
+|------|--------|-------------|
+| `python_repl` | ✅ 已实现 | 持久 Python REPL，支持 pandas/numpy/matplotlib 数据分析 |
+
+### Notepad 工具（会话记忆）
+
+| 工具 | 状态 | 说明 |
+|------|--------|-------------|
+| `notepad_read` | ✅ 已实现 | 读取 notepad 内容（章节：all/priority/working/manual） |
+| `notepad_write_priority` | ✅ 已实现 | 写入优先上下文（≤500 字符，会话开始时自动加载） |
+| `notepad_write_working` | ✅ 已实现 | 写入工作记忆（带时间戳，7 天后自动清理） |
+| `notepad_write_manual` | ✅ 已实现 | 写入手动记录（永久保存，永不自动清理） |
+| `notepad_prune` | ✅ 已实现 | 清理 N 天前的工作记忆条目 |
+| `notepad_stats` | ✅ 已实现 | 获取 notepad 统计信息（大小、条目数、最旧条目） |
+
+> **存储位置**：`{worktree}/.omc/notepad.md`
+
+### State 工具（执行模式状态）
+
+| 工具 | 状态 | 说明 |
+|------|--------|-------------|
+| `state_read` | ✅ 已实现 | 读取指定模式的状态（autopilot/ralph/ultrawork/team 等） |
+| `state_write` | ✅ 已实现 | 写入/更新模式状态（支持 active、iteration、phase 等字段） |
+| `state_clear` | ✅ 已实现 | 清除指定模式的状态文件 |
+| `state_list_active` | ✅ 已实现 | 列出所有当前活跃的模式 |
+| `state_get_status` | ✅ 已实现 | 获取指定模式或所有模式的详细状态 |
+
+> **支持的模式**：`autopilot`、`ultrapilot`、`team`、`pipeline`、`ralph`、`ultrawork`、`ultraqa`、`ralplan`
+
+### Project Memory 工具（项目级持久记忆）
+
+| 工具 | 状态 | 说明 |
+|------|--------|-------------|
+| `project_memory_read` | ✅ 已实现 | 读取项目记忆（章节：techStack/build/conventions/structure/notes/directives） |
+| `project_memory_write` | ✅ 已实现 | 写入/更新项目记忆（支持合并模式） |
+| `project_memory_add_note` | ✅ 已实现 | 添加分类笔记（build/test/deploy/env/architecture 等） |
+| `project_memory_add_directive` | ✅ 已实现 | 添加用户指令（跨会话持久化，抗压缩） |
+
+> **存储位置**：`{worktree}/.omc/project-memory.json`
+
+### Trace 工具（Agent 流程追踪）
+
+| 工具 | 状态 | 说明 |
+|------|--------|-------------|
+| `trace_timeline` | ✅ 已实现 | 显示按时间顺序的 agent 流程追踪（hooks/skills/agents/keywords/tools/modes） |
+| `trace_summary` | ✅ 已实现 | 显示会话聚合统计（hook 统计、keyword 频率、skill 激活、工具瓶颈） |
+
+### Skills 工具（Skill 加载）
+
+| 工具 | 状态 | 说明 |
+|------|--------|-------------|
+| `load_omc_skills_local` | ✅ 已实现 | 从项目本地加载 OMC skills |
+| `load_omc_skills_global` | ✅ 已实现 | 从全局安装加载 OMC skills |
+| `list_omc_skills` | ✅ 已实现 | 列出所有可用 skills |
+
+### 工具汇总
+
+ultrapower 通过 `mcp__plugin_ultrapower_t__` 前缀暴露 **35 个自定义工具**：
+
+| 类别 | 数量 | 工具前缀 |
+|------|------|---------|
+| LSP（语言服务器协议） | 12 | `lsp_*` |
+| AST（结构化代码搜索） | 2 | `ast_grep_*` |
+| Python REPL | 1 | `python_repl` |
+| Notepad（会话记忆） | 6 | `notepad_*` |
+| State（执行模式状态） | 5 | `state_*` |
+| Project Memory（项目记忆） | 4 | `project_memory_*` |
+| Trace（流程追踪） | 2 | `trace_*` |
+| Skills（Skill 加载） | 3 | `*_omc_skills*` |
+| **合计** | **35** | |
+
+> **禁用工具组**：通过 `OMC_DISABLE_TOOLS=lsp,python-repl,project-memory` 等环境变量可在启动时禁用指定工具组。
+
 ---
 
 ## Performance Monitoring

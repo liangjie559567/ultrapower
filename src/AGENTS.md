@@ -9,8 +9,8 @@ ultrapower 的 TypeScript 源代码 - 驱动多 agent 编排的核心库。
 
 此目录包含按模块组织的所有 TypeScript 源代码：
 
-- **agents/** - 44 个专业 AI agent 定义，含分级变体
-- **tools/** - 15 个 LSP/AST/REPL 工具，提供类 IDE 能力
+- **agents/** - 49 个专业 AI agent 定义，含分级变体
+- **tools/** - 35 个自定义工具（8 类），提供类 IDE 能力
 - **hooks/** - 35 个事件驱动行为，用于执行模式
 - **features/** - 核心功能（模型路由、状态管理、验证）
 - **config/** - 配置加载与验证
@@ -28,8 +28,8 @@ ultrapower 的 TypeScript 源代码 - 驱动多 agent 编排的核心库。
 
 | 目录 | 用途 |
 |------|------|
-| `agents/` | 44 个 agent 定义，含提示词和工具（见 `agents/AGENTS.md`） |
-| `tools/` | 15 个 LSP、AST 和 Python REPL 工具（见 `tools/AGENTS.md`） |
+| `agents/` | 49 个 agent 定义，含提示词和工具（见 `agents/AGENTS.md`） |
+| `tools/` | 35 个自定义工具（LSP/AST/REPL/Notepad/State/Memory/Trace/Skills，见 `tools/AGENTS.md`） |
 | `hooks/` | 35 个执行模式 hook（见 `hooks/AGENTS.md`） |
 | `features/` | 核心功能，如模型路由、状态（见 `features/AGENTS.md`） |
 | `config/` | 配置加载（`loader.ts`） |
@@ -61,10 +61,15 @@ ultrapower 的 TypeScript 源代码 - 驱动多 agent 编排的核心库。
 3. **工具注册**：自定义工具在 `tools/index.ts` 中注册：
 
    ```typescript
+   // allCustomTools 导出 15 个向后兼容工具（LSP/AST/REPL）
+   // 完整 35 个工具（8 类）通过 omcToolsServer 暴露：
+   //   lsp_*（12）| ast_grep_*（2）| python_repl（1）
+   //   notepad_*（6）| state_*（5）| project_memory_*（4）
+   //   trace_*（2）| *_omc_skills*（3）
    export const allCustomTools = [
      ...lspTools,      // 12 个 LSP 工具
      ...astTools,      // 2 个 AST 工具
-     pythonReplTool    // 1 个 REPL 工具（共 15 个）
+     pythonReplTool    // 1 个 REPL 工具（向后兼容导出，共 15 个）
    ];
    ```
 
@@ -74,7 +79,7 @@ ultrapower 的 TypeScript 源代码 - 驱动多 agent 编排的核心库。
      return {
        architect: architectAgent,
        executor: executorAgent,
-       // ... 全部 44 个 agent
+       // ... 全部 49 个 agent
      };
    }
    ```

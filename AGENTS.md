@@ -332,9 +332,11 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | `ax-evolution` | 查看知识演化历史 |
 | `ax-evolve` | 触发知识收割与工作流优化 |
 
-## LSP/AST 工具
+## 自定义工具（共 35 个）
 
-### LSP 工具
+ultrapower 通过 `mcp__plugin_ultrapower_t__` 前缀暴露 35 个自定义工具，分 8 类。
+
+### LSP 工具（12 个）
 
 ```typescript
 // 通过语言服务器协议实现类 IDE 代码智能
@@ -352,11 +354,9 @@ lsp_code_actions       // 可用的重构/修复
 lsp_code_action_resolve // 获取操作详情
 ```
 
-#### 支持的语言
+支持语言：TypeScript、Python、Rust、Go、C/C++、Java、JSON、HTML、CSS、YAML
 
-TypeScript、Python、Rust、Go、C/C++、Java、JSON、HTML、CSS、YAML
-
-### AST 工具
+### AST 工具（2 个）
 
 ```typescript
 // 通过 ast-grep 进行结构化代码搜索/转换
@@ -364,9 +364,74 @@ ast_grep_search   // 使用元变量（$NAME、$$$ARGS）进行模式匹配
 ast_grep_replace  // AST 感知的代码转换（默认为 dry-run）
 ```
 
-#### 支持的语言
+支持语言：JavaScript、TypeScript、TSX、Python、Ruby、Go、Rust、Java、Kotlin、Swift、C、C++、C#、HTML、CSS、JSON、YAML
 
-JavaScript、TypeScript、TSX、Python、Ruby、Go、Rust、Java、Kotlin、Swift、C、C++、C#、HTML、CSS、JSON、YAML
+### Python REPL 工具（1 个）
+
+```typescript
+python_repl  // 持久 Python REPL，支持 pandas/numpy/matplotlib 数据分析
+```
+
+### Notepad 工具（6 个）— 会话记忆
+
+```typescript
+notepad_read              // 读取 notepad（章节：all/priority/working/manual）
+notepad_write_priority    // 写入优先上下文（≤500 字符，会话开始时自动加载）
+notepad_write_working     // 写入工作记忆（带时间戳，7 天后自动清理）
+notepad_write_manual      // 写入手动记录（永久保存）
+notepad_prune             // 清理 N 天前的工作记忆
+notepad_stats             // 获取 notepad 统计信息
+```
+
+存储位置：`{worktree}/.omc/notepad.md`
+
+### State 工具（5 个）— 执行模式状态
+
+```typescript
+state_read          // 读取指定模式的状态
+state_write         // 写入/更新模式状态
+state_clear         // 清除指定模式的状态文件
+state_list_active   // 列出所有当前活跃的模式
+state_get_status    // 获取指定模式或所有模式的详细状态
+```
+
+支持模式：`autopilot`、`ultrapilot`、`team`、`pipeline`、`ralph`、`ultrawork`、`ultraqa`、`ralplan`
+
+### Project Memory 工具（4 个）— 项目级持久记忆
+
+```typescript
+project_memory_read          // 读取项目记忆（章节：techStack/build/conventions/structure/notes/directives）
+project_memory_write         // 写入/更新项目记忆（支持合并）
+project_memory_add_note      // 添加分类笔记
+project_memory_add_directive // 添加用户指令（跨会话持久化，抗压缩）
+```
+
+存储位置：`{worktree}/.omc/project-memory.json`
+
+### Trace 工具（2 个）— Agent 流程追踪
+
+```typescript
+trace_timeline  // 显示按时间顺序的 agent 流程追踪（hooks/skills/agents/keywords/tools/modes）
+trace_summary   // 显示会话聚合统计（hook 统计、keyword 频率、skill 激活、工具瓶颈）
+```
+
+### Skills 工具（3 个）— Skill 加载
+
+```typescript
+load_omc_skills_local   // 从项目本地加载 OMC skills
+load_omc_skills_global  // 从全局安装加载 OMC skills
+list_omc_skills         // 列出所有可用 skills
+```
+
+### 工具禁用
+
+通过 `OMC_DISABLE_TOOLS` 环境变量可在启动时禁用指定工具组：
+
+```bash
+OMC_DISABLE_TOOLS=lsp,python-repl,project-memory
+```
+
+支持的组名：`lsp`、`ast`、`python`/`python-repl`、`trace`、`state`、`notepad`、`memory`/`project-memory`、`skills`
 
 ## 状态文件
 
