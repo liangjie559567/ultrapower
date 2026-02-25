@@ -58,7 +58,7 @@ gh release create v<version> --title "v<version> - <title>" --notes "<release no
 
 ### 7. 验证
 - [ ] npm: https://www.npmjs.com/package/@liangjie559567/ultrapower
-- [ ] GitHub: https://github.com/Yeachan-Heo/ultrapower/releases
+- [ ] GitHub: https://github.com/liangjie559567/ultrapower/releases
 
 ## 版本文件参考
 

@@ -45,7 +45,7 @@ aliases: [psm]
 {
   "aliases": {
     "omc": {
-      "repo": "Yeachan-Heo/ultrapower",
+      "repo": "liangjie559567/ultrapower",
       "local": "~/Workspace/ultrapower",
       "default_base": "main"
     }
@@ -539,7 +539,7 @@ if [[ ! -f ~/.psm/projects.json ]]; then
 {
   "aliases": {
     "omc": {
-      "repo": "Yeachan-Heo/ultrapower",
+      "repo": "liangjie559567/ultrapower",
       "local": "~/Workspace/ultrapower",
       "default_base": "main"
     }

@@ -216,7 +216,7 @@ fi
 # 下载新鲜 OMC 内容到临时文件
 TEMP_OMC=$(mktemp /tmp/omc-claude-XXXXXX.md)
 trap 'rm -f "$TEMP_OMC"' EXIT
-curl -fsSL "https://raw.githubusercontent.com/Yeachan-Heo/ultrapower/main/docs/CLAUDE.md" -o "$TEMP_OMC"
+curl -fsSL "https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md" -o "$TEMP_OMC"
 
 if [ ! -s "$TEMP_OMC" ]; then
   echo "ERROR: Failed to download CLAUDE.md. Aborting."
@@ -291,7 +291,7 @@ fi
 
 **备用方案**（如果 curl 失败）：
 告知用户手动从以下地址下载：
-https://raw.githubusercontent.com/Yeachan-Heo/ultrapower/main/docs/CLAUDE.md
+https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md
 
 ### 验证插件安装
 
@@ -492,7 +492,7 @@ fi
 # 下载新鲜 OMC 内容到临时文件
 TEMP_OMC=$(mktemp /tmp/omc-claude-XXXXXX.md)
 trap 'rm -f "$TEMP_OMC"' EXIT
-curl -fsSL "https://raw.githubusercontent.com/Yeachan-Heo/ultrapower/main/docs/CLAUDE.md" -o "$TEMP_OMC"
+curl -fsSL "https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md" -o "$TEMP_OMC"
 
 if [ ! -s "$TEMP_OMC" ]; then
   echo "ERROR: Failed to download CLAUDE.md. Aborting."
@@ -1043,7 +1043,7 @@ gh auth status &>/dev/null
 如果用户选择"是的，加星！"：
 
 ```bash
-gh api -X PUT /user/starred/Yeachan-Heo/ultrapower 2>/dev/null && echo "Thanks for starring!" || true
+gh api -X PUT /user/starred/liangjie559567/ultrapower 2>/dev/null && echo "Thanks for starring!" || true
 ```
 
 **注意：** 如果 API 调用失败，静默失败——绝不阻塞设置完成。
@@ -1053,7 +1053,7 @@ gh api -X PUT /user/starred/Yeachan-Heo/ultrapower 2>/dev/null && echo "Thanks f
 ```bash
 echo ""
 echo "如果你喜欢 ultrapower，欢迎为项目加星："
-echo "  https://github.com/Yeachan-Heo/ultrapower"
+echo "  https://github.com/liangjie559567/ultrapower"
 echo ""
 ```
 
@@ -1143,5 +1143,5 @@ EXAMPLES:
   /ultrapower:omc-setup --global  # Update all projects
   /ultrapower:omc-setup --force   # Re-run full setup wizard
 
-For more info: https://github.com/Yeachan-Heo/ultrapower
+For more info: https://github.com/liangjie559567/ultrapower
 ```

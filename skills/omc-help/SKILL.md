@@ -184,8 +184,8 @@ TOKEN 摘要：
 
 ## 需要更多帮助？
 
-- **README**：https://github.com/Yeachan-Heo/ultrapower
-- **Issues**：https://github.com/Yeachan-Heo/ultrapower/issues
+- **README**：https://github.com/liangjie559567/ultrapower
+- **Issues**：https://github.com/liangjie559567/ultrapower/issues
 
 ---
 

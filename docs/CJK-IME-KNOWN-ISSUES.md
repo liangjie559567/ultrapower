@@ -138,7 +138,7 @@ xclip -selection clipboard -o | claude --stdin
 ## 相关问题
 
 ### ultrapower
-- [#344](https://github.com/Yeachan-Heo/ultrapower/issues/344) - 韩语 IME 输入在输入框中不可见
+- [#344](https://github.com/liangjie559567/ultrapower/issues/344) - 韩语 IME 输入在输入框中不可见
 
 ### anthropics/claude-code
 - [#22732](https://github.com/anthropics/claude-code/issues/22732) - 韩语 IME：组合过程中字符完全不可见

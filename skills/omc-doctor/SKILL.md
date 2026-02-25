@@ -159,7 +159,7 @@ node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=pro
 ### 修复：缺失/过时的 CLAUDE.md
 从 GitHub 获取最新版本并写入 `~/.claude/CLAUDE.md`：
 ```
-WebFetch(url: "https://raw.githubusercontent.com/Yeachan-Heo/ultrapower/main/docs/CLAUDE.md", prompt: "Return the complete raw markdown content exactly as-is")
+WebFetch(url: "https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md", prompt: "Return the complete raw markdown content exactly as-is")
 ```
 
 ### 修复：旧版 curl 安装内容
