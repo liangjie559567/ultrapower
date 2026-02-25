@@ -74,7 +74,7 @@ Task(
 为单个 agent 委托调用执行 model 参数强制注入。
 
 ```typescript
-import { enforceModel } from 'oh-my-claude-sisyphus';
+import { enforceModel } from '@liangjie559567/ultrapower';
 
 const input = {
   description: 'Implement feature',
@@ -92,7 +92,7 @@ console.log(result.injected); // true
 获取 agent 类型的默认模型。
 
 ```typescript
-import { getModelForAgent } from 'oh-my-claude-sisyphus';
+import { getModelForAgent } from '@liangjie559567/ultrapower';
 
 getModelForAgent('executor'); // 'sonnet'
 getModelForAgent('executor-low'); // 'haiku'
@@ -104,7 +104,7 @@ getModelForAgent('executor-high'); // 'opus'
 检查工具调用是否为 agent 委托调用。
 
 ```typescript
-import { isAgentCall } from 'oh-my-claude-sisyphus';
+import { isAgentCall } from '@liangjie559567/ultrapower';
 
 isAgentCall('Task', { subagent_type: 'executor', ... }); // true
 isAgentCall('Bash', { command: 'ls' }); // false
@@ -115,7 +115,7 @@ isAgentCall('Bash', { command: 'ls' }); // false
 enforcer 自动与 pre-tool-use hook 集成：
 
 ```typescript
-import { processHook } from 'oh-my-claude-sisyphus';
+import { processHook } from '@liangjie559567/ultrapower';
 
 const hookInput = {
   toolName: 'Task',

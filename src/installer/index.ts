@@ -683,7 +683,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         '  ',
         '  // 3. npm package (global or local install)',
         '  try {',
-        '    await import("oh-my-claude-sisyphus/dist/hud/index.js");',
+        '    await import("@liangjie559567/ultrapower/dist/hud/index.js");',
         '    return;',
         '  } catch { /* continue */ }',
         '  ',

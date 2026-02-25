@@ -79,7 +79,7 @@ npm run sync-metadata
 ========================
 
 Version: 3.5.0
-Package: oh-my-claude-sisyphus
+Package: @liangjie559567/ultrapower
 Agents: 32
 Skills: 45
 

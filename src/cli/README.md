@@ -4,10 +4,10 @@ Command-line interface for Oh-My-ClaudeCode analytics, token tracking, cost repo
 
 ## Installation
 
-Install via npm (note: the npm package name is `oh-my-claude-sisyphus`):
+Install via npm (note: the npm package name is `@liangjie559567/ultrapower`):
 
 ```bash
-npm install -g oh-my-claude-sisyphus
+npm install -g @liangjie559567/ultrapower
 ```
 
 The `omc-analytics` command will be available globally.

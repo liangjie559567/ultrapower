@@ -296,14 +296,12 @@ npm list -g ultrapower
 项目进行了品牌重塑，以更好地反映其用途并提高可发现性。
 
 - **项目/品牌名称**：`ultrapower`（GitHub 仓库、插件名称、命令）
-- **npm 包名称**：`oh-my-claude-sisyphus`（不变）
+- **npm 包名称**：`@liangjie559567/ultrapower`
 
-> **为何有差异？** npm 包名 `oh-my-claude-sisyphus` 保留是为了与现有安装向后兼容。项目、GitHub 仓库、插件和所有命令均使用 `ultrapower`。
-
-#### NPM 安装命令（不变）
+#### NPM 安装命令
 
 ```bash
-npm install -g oh-my-claude-sisyphus
+npm install -g @liangjie559567/ultrapower
 ```
 
 ### 变更内容
@@ -468,7 +466,7 @@ If multiple active   → Stop the most recent
 #### 1. 卸载旧包（如果通过 npm 安装）
 
 ```bash
-npm uninstall -g oh-my-claude-sisyphus
+npm uninstall -g @liangjie559567/ultrapower
 ```
 
 #### 2. 通过插件系统安装（必须）
@@ -517,7 +515,7 @@ mv ~/.claude/sisyphus ~/.claude/omc
 #### 6. 更新脚本和配置
 
 搜索并更新所有引用：
-- 包名：`oh-my-claude-sisyphus` → `ultrapower`
+- 包名：`oh-my-claude-sisyphus` → `@liangjie559567/ultrapower`
 - Agent 名称：使用上方的映射表
 - 命令：使用新的 slash 命令
 - 目录路径：将 `.sisyphus` 更新为 `.omc`
@@ -539,7 +537,7 @@ mv ~/.claude/sisyphus ~/.claude/omc
 
 1. **检查安装**：
    ```bash
-   npm list -g oh-my-claude-sisyphus
+   npm list -g @liangjie559567/ultrapower
    ```
 
 2. **验证目录存在**：
@@ -723,7 +721,7 @@ Version 3.1 是一个小版本，在保持与 v3.0 完全向后兼容的同时�
 Version 3.1 是即插即用的升级。无需迁移！
 
 ```bash
-npm update -g oh-my-claude-sisyphus
+npm update -g @liangjie559567/ultrapower
 ```
 
 所有现有配置、计划和工作流继续正常工作。
@@ -855,7 +853,7 @@ Task(subagent_type="ultrapower:explore-high",
 Version 3.4.0 是即插即用的升级。无需迁移！
 
 ```bash
-npm update -g oh-my-claude-sisyphus
+npm update -g @liangjie559567/ultrapower
 ```
 
 所有现有配置、计划和工作流继续正常工作。
@@ -920,7 +918,7 @@ npm update -g oh-my-claude-sisyphus
 
 1. **检查安装**：
    ```bash
-   npm list -g oh-my-claude-sisyphus
+   npm list -g @liangjie559567/ultrapower
    ```
 
 2. **测试 ultrapilot**：

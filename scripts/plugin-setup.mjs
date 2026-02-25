@@ -81,8 +81,8 @@ async function main() {
 
   // 2. Development paths
   const devPaths = [
-    join(home, "Workspace/oh-my-claude-sisyphus/dist/hud/index.js"),
-    join(home, "workspace/oh-my-claude-sisyphus/dist/hud/index.js"),
+    join(home, "Workspace/ultrapower/dist/hud/index.js"),
+    join(home, "workspace/ultrapower/dist/hud/index.js"),
     join(home, "Workspace/ultrapower/dist/hud/index.js"),
     join(home, "workspace/ultrapower/dist/hud/index.js"),
   ];

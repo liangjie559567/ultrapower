@@ -16,7 +16,7 @@ description: 诊断并修复 ultrapower 安装问题
 ```bash
 # 获取已安装版本和最新版本（跨平台）
 node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));console.log('Installed:',v.length?v[v.length-1]:'(none)')}catch{console.log('Installed: (none)')}"
-npm view oh-my-claude-sisyphus version 2>/dev/null || echo "Latest: (unavailable)"
+npm view @liangjie559567/ultrapower version 2>/dev/null || echo "Latest: (unavailable)"
 ```
 
 **诊断**：
