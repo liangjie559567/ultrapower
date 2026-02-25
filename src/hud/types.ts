@@ -359,8 +359,8 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     cwd: false,               // Disabled by default for backward compatibility
     cwdFormat: 'relative',
     gitRepo: false,           // Disabled by default for backward compatibility
-    gitBranch: false,         // Disabled by default for backward compatibility
-    model: false,             // Disabled by default for backward compatibility
+    gitBranch: true,          // Show branch by default
+    model: true,              // Show model name by default
     modelFormat: 'short',     // Short names by default for backward compatibility
     omcLabel: true,
     rateLimits: true,  // Show rate limits by default
@@ -371,7 +371,7 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     contextBar: true,
     agents: true,
     agentsFormat: 'multiline', // Multi-line for rich agent visualization
-    agentsMaxLines: 5, // Show up to 5 agent detail lines
+    agentsMaxLines: 3, // Show up to 3 agent detail lines (balance info vs space)
     backgroundTasks: true,
     todos: true,
     lastSkill: true,
@@ -380,12 +380,12 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     thinkingFormat: 'text',   // Text format for backward compatibility
     sessionHealth: true,
     // showSessionDuration, showCostPerHour, showBudgetWarning: undefined = default to true
-    useBars: false,  // Disabled by default for backwards compatibility
+    useBars: true,   // Enable bars by default for better visual feedback
     showCache: true,
     showCost: true,
     showCallCounts: true,  // Show tool/agent/skill call counts by default (Issue #710)
-    maxOutputLines: 4,
-    safeMode: true,  // Enabled by default to prevent terminal rendering corruption (Issue #346)
+    maxOutputLines: 6,     // More lines to accommodate multiline agents
+    safeMode: false, // Disable safeMode to allow ANSI colors
   },
   thresholds: {
     contextWarning: 70,
