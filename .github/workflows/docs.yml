@@ -1,0 +1,141 @@
+name: Deploy Docs to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build site
+        run: |
+          mkdir -p _site
+          # Copy README as index
+          cp README.md _site/index.md
+          # Copy all docs
+          cp -r docs/* _site/
+          # Generate simple HTML index
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="zh">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>ultrapower - Multi-Agent Orchestration</title>
+            <style>
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; color: #24292f; }
+              h1 { border-bottom: 1px solid #d0d7de; padding-bottom: .5rem; }
+              h2 { margin-top: 2rem; }
+              a { color: #0969da; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+              .badge { display: inline-block; padding: .2em .5em; border-radius: 4px; font-size: .85em; background: #ddf4ff; color: #0550ae; margin: .1em; }
+              .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+              .card { border: 1px solid #d0d7de; border-radius: 8px; padding: 1rem 1.25rem; }
+              .card h3 { margin: 0 0 .5rem; font-size: 1rem; }
+              .card p { margin: 0; font-size: .9rem; color: #57606a; }
+              code { background: #f6f8fa; padding: .1em .3em; border-radius: 4px; font-size: .9em; }
+              pre { background: #f6f8fa; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+              pre code { background: none; padding: 0; }
+            </style>
+          </head>
+          <body>
+            <h1>ultrapower <span class="badge">v5.0.9</span></h1>
+            <p>Claude Code 的智能多 Agent 编排层（OMC）——提供 <strong>49 个专业 agents</strong>、<strong>70 个 skills</strong> 和完整的 TypeScript hooks 系统。</p>
+
+            <h2>快速安装</h2>
+            <pre><code># Claude Code 插件市场
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin install ultrapower
+
+# 或通过 npm
+npm install -g @liangjie559567/ultrapower@5.0.9</code></pre>
+
+            <h2>文档</h2>
+            <div class="grid">
+              <div class="card">
+                <h3><a href="REFERENCE.md">参考手册</a></h3>
+                <p>完整的 agents、skills、hooks 和工具参考</p>
+              </div>
+              <div class="card">
+                <h3><a href="ARCHITECTURE.md">架构说明</a></h3>
+                <p>系统设计、模块边界和集成模式</p>
+              </div>
+              <div class="card">
+                <h3><a href="MIGRATION.md">迁移指南</a></h3>
+                <p>各版本升级路径和破坏性变更说明</p>
+              </div>
+              <div class="card">
+                <h3><a href="CLAUDE.md">CLAUDE.md</a></h3>
+                <p>安装到用户项目的编排指令</p>
+              </div>
+              <div class="card">
+                <h3><a href="FEATURES.md">功能详解</a></h3>
+                <p>执行模式、MCP 路由、Team 流水线</p>
+              </div>
+              <div class="card">
+                <h3><a href="TIERED_AGENTS_V2.md">分层 Agent 设计</a></h3>
+                <p>Agent 架构演进和模型路由策略</p>
+              </div>
+              <div class="card">
+                <h3><a href="COMPATIBILITY.md">兼容性</a></h3>
+                <p>平台支持、已知问题和 Windows/WSL 说明</p>
+              </div>
+              <div class="card">
+                <h3><a href="ANALYTICS-SYSTEM.md">分析系统</a></h3>
+                <p>成本追踪、会话指标和 HUD 配置</p>
+              </div>
+            </div>
+
+            <h2>v5.0.9 新增</h2>
+            <ul>
+              <li>5 个新领域专家 Agent：<code>database-expert</code>、<code>devops-engineer</code>、<code>i18n-specialist</code>、<code>accessibility-auditor</code>、<code>api-designer</code></li>
+              <li>MCP 集成扩展：Slack、Jira/Linear、PostgreSQL、Playwright、Sequential Thinking、Software Planning Tool</li>
+              <li>HUD 标签英文化修复，autoCompact 无限循环修复</li>
+            </ul>
+
+            <hr>
+            <p style="color:#57606a;font-size:.85em">
+              <a href="https://github.com/liangjie559567/ultrapower">GitHub</a> ·
+              <a href="https://www.npmjs.com/package/@liangjie559567/ultrapower">npm</a> ·
+              <a href="https://github.com/liangjie559567/ultrapower/releases">Releases</a>
+            </p>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -6,6 +6,7 @@
 
 ## 目录
 
+- [v5.0.3 → v5.0.9: HUD 英文化 + 5 个新 Agent + MCP 扩展](#v503--v509-hud-英文化--5-个新-agent--mcp-扩展)
 - [v5.0.2 → v5.0.3: Axiom 专家 Agent 扩展](#v502--v503-axiom-专家-agent-扩展)
 - [v5.0 → v5.0.2: Axiom 框架深度融合](#v50--v502-axiom-框架深度融合)
 - [v4.x → v5.0: ultrapower 集成与功能扩展](#v4x--v50-ultrapower-集成与功能扩展)
@@ -14,6 +15,54 @@
 - [v2.x → v3.0: Package Rename & Auto-Activation](#v2x--v30-package-rename--auto-activation)
 - [v3.0 → v3.1: Notepad Wisdom & Enhanced Features](#v30--v31-notepad-wisdom--enhanced-features)
 - [v3.x → v4.0: Major Architecture Overhaul](#v3x--v40-major-architecture-overhaul)
+
+---
+
+## v5.0.3 → v5.0.9: HUD 英文化 + 5 个新 Agent + MCP 扩展
+
+### TL;DR
+
+v5.0.9 修复了 HUD 标签英文化问题，新增 5 个领域专家 Agent 和 6 个 MCP 集成，将总 Agent 数从 44 扩展至 49。
+
+### 修复
+
+- **HUD 标签英文化**：所有 HUD 元素标签恢复为英文（`行` → `lines`、`有更新` → `omc update`、`仓库:` → `repo:` 等）
+- **HUD autoCompact 无限循环**：修复 context-warning 在上下文恢复正常后仍持续触发 compact 的 bug
+- **DEFAULT_HUD_CONFIG 默认值**：`maxOutputLines: 6` → `4`，`gitBranch/model` 默认关闭
+- **MINGW64 兼容性**：修复 Git Bash 下 `!` 字符转义问题
+
+### 新增功能
+
+**49 个专业 Agent**（新增 5 个领域专家）：
+- `database-expert`：数据库 schema 设计、查询优化、索引策略和迁移方案
+- `devops-engineer`：CI/CD 流水线、Docker/Kubernetes 容器化、基础设施即代码
+- `i18n-specialist`：国际化架构、本地化工作流、多语言文本管理
+- `accessibility-auditor`：WCAG 2.1/2.2 合规审查、键盘导航、屏幕阅读器兼容
+- `api-designer`：REST/GraphQL API 设计、OpenAPI 规范、版本策略
+
+**MCP 集成扩展**（`skills/mcp-setup`）：
+- Slack：Bot Token 配置，支持频道消息发送
+- Jira/Linear：项目管理和 issue 追踪集成
+- PostgreSQL：直接数据库查询支持
+- Playwright：浏览器自动化和 Web 测试
+- Sequential Thinking：结构化逐步推理，复杂问题分解
+- Software Planning Tool：任务规划与分解，依赖图和执行追踪
+
+### 破坏性变更
+
+无破坏性变更。所有 v5.0.3 命令和 Agent 名称继续有效。
+
+### 迁移步骤
+
+1. **更新包**：`npm install -g @liangjie559567/ultrapower@5.0.9`
+2. **重新运行 `/ultrapower:omc-setup`** 以获取包含 49 个 Agent 的最新配置
+3. **可选**：运行 `/ultrapower:mcp-setup` 配置新增的 MCP 集成
+
+### 验证
+
+```bash
+npm install -g @liangjie559567/ultrapower@5.0.9
+```
 
 ---
 
