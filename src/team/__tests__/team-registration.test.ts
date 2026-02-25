@@ -8,11 +8,15 @@ import {
 } from '../team-registration.js';
 import type { ConfigProbeResult } from '../types.js';
 
-const TEST_DIR = join(tmpdir(), '__test_team_reg__');
-const TEST_TEAM = 'test-team-reg-team';
-const CONFIG_DIR = join(homedir(), '.claude', 'teams', TEST_TEAM);
+let TEST_DIR: string;
+let TEST_TEAM: string;
+let CONFIG_DIR: string;
 
 beforeEach(() => {
+  const uid = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  TEST_DIR = join(tmpdir(), `__test_team_reg__${uid}`);
+  TEST_TEAM = `test-team-reg-team-${uid}`;
+  CONFIG_DIR = join(homedir(), '.claude', 'teams', TEST_TEAM);
   mkdirSync(TEST_DIR, { recursive: true });
   mkdirSync(join(TEST_DIR, '.omc', 'state'), { recursive: true });
   mkdirSync(CONFIG_DIR, { recursive: true });

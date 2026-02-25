@@ -13,10 +13,12 @@ import { sanitizeName } from '../tmux-session.js';
 import { validateResolvedPath } from '../fs-utils.js';
 import type { OutboxMessage, InboxMessage } from '../types.js';
 
-const TEST_TEAM = 'test-team-io';
-const TEAMS_DIR = join(homedir(), '.claude', 'teams', TEST_TEAM);
+let TEST_TEAM: string;
+let TEAMS_DIR: string;
 
 beforeEach(() => {
+  TEST_TEAM = `test-team-io-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  TEAMS_DIR = join(homedir(), '.claude', 'teams', TEST_TEAM);
   mkdirSync(join(TEAMS_DIR, 'inbox'), { recursive: true });
   mkdirSync(join(TEAMS_DIR, 'outbox'), { recursive: true });
   mkdirSync(join(TEAMS_DIR, 'signals'), { recursive: true });
