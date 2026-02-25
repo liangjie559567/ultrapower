@@ -2,8 +2,8 @@
 
 # ultrapower
 
-[![npm version](https://img.shields.io/npm/v/ultrapower?color=cb3837)](https://www.npmjs.com/package/ultrapower)
-[![npm downloads](https://img.shields.io/npm/dm/ultrapower?color=blue)](https://www.npmjs.com/package/ultrapower)
+[![npm version](https://img.shields.io/npm/v/@liangjie559567/ultrapower?color=cb3837)](https://www.npmjs.com/package/@liangjie559567/ultrapower)
+[![npm downloads](https://img.shields.io/npm/dm/@liangjie559567/ultrapower?color=blue)](https://www.npmjs.com/package/@liangjie559567/ultrapower)
 [![GitHub stars](https://img.shields.io/github/stars/liangjie559567/ultrapower?style=flat&color=yellow)](https://github.com/liangjie559567/ultrapower/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Sponsor](https://img.shields.io/badge/Sponsor-❤️-red?style=flat&logo=github)](https://github.com/sponsors/liangjie559567)
@@ -14,7 +14,7 @@
 
 [快速开始](#快速开始) • [文档](https://yeachan-heo.github.io/ultrapower-website) • [迁移指南](docs/MIGRATION.md)
 
-**版本 5.0.3** | 44 个专业智能体 | 70 个技能 | 36 个 Hooks
+**版本 5.0.4** | 44 个专业智能体 | 70 个技能 | 37 个 Hooks
 
 ---
 
@@ -38,7 +38,7 @@ autopilot: build a REST API for managing tasks
 
 就这么简单。其余都是自动的。
 
-> **安装：** `npm install -g ultrapower`
+> **安装：** `npm install -g @liangjie559567/ultrapower`
 
 ### 更新
 

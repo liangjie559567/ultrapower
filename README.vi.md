@@ -2,8 +2,8 @@
 
 # ultrapower
 
-[![npm version](https://img.shields.io/npm/v/ultrapower?color=cb3837)](https://www.npmjs.com/package/ultrapower)
-[![npm downloads](https://img.shields.io/npm/dm/ultrapower?color=blue)](https://www.npmjs.com/package/ultrapower)
+[![npm version](https://img.shields.io/npm/v/@liangjie559567/ultrapower?color=cb3837)](https://www.npmjs.com/package/@liangjie559567/ultrapower)
+[![npm downloads](https://img.shields.io/npm/dm/@liangjie559567/ultrapower?color=blue)](https://www.npmjs.com/package/@liangjie559567/ultrapower)
 [![GitHub stars](https://img.shields.io/github/stars/liangjie559567/ultrapower?style=flat&color=yellow)](https://github.com/liangjie559567/ultrapower/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Sponsor](https://img.shields.io/badge/Sponsor-❤️-red?style=flat&logo=github)](https://github.com/sponsors/liangjie559567)
@@ -60,7 +60,7 @@ Bật Claude Code native teams trong `~/.claude/settings.json`:
 
 > Nếu teams bị tắt, OMC sẽ cảnh báo và chuyển sang chế độ thực thi không dùng team khi có thể.
 
-> **Cài đặt:** `npm install -g ultrapower`
+> **Cài đặt:** `npm install -g @liangjie559567/ultrapower`
 
 ### Cập nhật
 

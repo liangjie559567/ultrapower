@@ -2,8 +2,8 @@
 
 # ultrapower
 
-[![npm version](https://img.shields.io/npm/v/ultrapower?color=cb3837)](https://www.npmjs.com/package/ultrapower)
-[![npm downloads](https://img.shields.io/npm/dm/ultrapower?color=blue)](https://www.npmjs.com/package/ultrapower)
+[![npm version](https://img.shields.io/npm/v/@liangjie559567/ultrapower?color=cb3837)](https://www.npmjs.com/package/@liangjie559567/ultrapower)
+[![npm downloads](https://img.shields.io/npm/dm/@liangjie559567/ultrapower?color=blue)](https://www.npmjs.com/package/@liangjie559567/ultrapower)
 [![GitHub stars](https://img.shields.io/github/stars/liangjie559567/ultrapower?style=flat&color=yellow)](https://github.com/liangjie559567/ultrapower/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Sponsor](https://img.shields.io/badge/Sponsor-❤️-red?style=flat&logo=github)](https://github.com/sponsors/liangjie559567)
@@ -60,7 +60,7 @@ Ative os times nativos do Claude Code em `~/.claude/settings.json`:
 
 > Se os times estiverem desativados, o OMC vai avisar você e fazer fallback para execução sem Team quando possível.
 
-> **Instalação:** `npm install -g ultrapower`
+> **Instalação:** `npm install -g @liangjie559567/ultrapower`
 
 ### Atualizando
 
