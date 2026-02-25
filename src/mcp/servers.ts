@@ -72,6 +72,28 @@ export function createMemoryServer(): McpServerConfig {
 }
 
 /**
+ * Sequential Thinking MCP Server - Structured step-by-step reasoning
+ * Enables agents to break down complex problems into sequential thought chains
+ */
+export function createSequentialThinkingServer(): McpServerConfig {
+  return {
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-sequential-thinking']
+  };
+}
+
+/**
+ * Software Planning Tool MCP Server - Task planning and decomposition
+ * Provides structured task analysis, planning, and execution tracking
+ */
+export function createSoftwarePlanningToolServer(): McpServerConfig {
+  return {
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/software-planning-tool']
+  };
+}
+
+/**
  * Get all default MCP servers for the Sisyphus system
  */
 export interface McpServersConfig {
@@ -79,6 +101,8 @@ export interface McpServersConfig {
   context7?: McpServerConfig;
   playwright?: McpServerConfig;
   memory?: McpServerConfig;
+  sequentialThinking?: McpServerConfig;
+  softwarePlanningTool?: McpServerConfig;
 }
 
 export function getDefaultMcpServers(options?: {
@@ -87,6 +111,8 @@ export function getDefaultMcpServers(options?: {
   enableContext7?: boolean;
   enablePlaywright?: boolean;
   enableMemory?: boolean;
+  enableSequentialThinking?: boolean;
+  enableSoftwarePlanningTool?: boolean;
 }): McpServersConfig {
   const servers: McpServersConfig = {};
 
@@ -104,6 +130,14 @@ export function getDefaultMcpServers(options?: {
 
   if (options?.enableMemory) {
     servers.memory = createMemoryServer();
+  }
+
+  if (options?.enableSequentialThinking) {
+    servers.sequentialThinking = createSequentialThinkingServer();
+  }
+
+  if (options?.enableSoftwarePlanningTool) {
+    servers.softwarePlanningTool = createSoftwarePlanningToolServer();
   }
 
   return servers;

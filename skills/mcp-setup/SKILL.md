@@ -22,8 +22,14 @@ MCP server 为 Claude Code agent 提供额外工具。本 skill 帮助你通过 
 2. **Exa Web Search** - 增强网页搜索（替代内置 websearch）
 3. **Filesystem** - 扩展文件系统访问能力
 4. **GitHub** - GitHub API 集成，用于 issue、PR 和仓库管理
-5. **以上全部** - 配置所有推荐的 MCP server
-6. **自定义** - 添加自定义 MCP server
+5. **Slack** - Slack 消息发送和频道管理
+6. **Jira/Linear** - 项目管理和 issue 追踪
+7. **PostgreSQL** - 直接查询 PostgreSQL 数据库
+8. **Playwright** - 浏览器自动化和 Web 测试
+9. **Sequential Thinking** - 结构化逐步推理，帮助 agent 分解复杂问题
+10. **Software Planning Tool** - 任务规划与分解，提供结构化任务分析和执行追踪
+11. **以上全部** - 配置所有推荐的 MCP server
+12. **自定义** - 添加自定义 MCP server
 
 ## 第二步：收集所需信息
 
@@ -34,7 +40,7 @@ MCP server 为 Claude Code agent 提供额外工具。本 skill 帮助你通过 
 询问 API key：
 ```
 您有 Exa API key 吗？
-- 在 https://exa.ai 获取
+- 在 https://dashboard.exa.ai 获取
 - 输入您的 API key，或输入 'skip' 稍后配置
 ```
 
@@ -53,6 +59,56 @@ filesystem MCP 应该访问哪些目录？
 - 在 https://github.com/settings/tokens 创建
 - 推荐权限：repo, read:org
 - 输入您的 token，或输入 'skip' 稍后配置
+```
+
+### Slack：
+询问 Bot Token：
+```
+您有 Slack Bot Token 吗？
+- 在 https://api.slack.com/apps 创建 App
+- 需要权限：channels:read, chat:write, users:read
+- 输入您的 Bot Token（xoxb-...），或输入 'skip' 稍后配置
+```
+
+### Jira/Linear：
+询问使用哪个工具：
+```
+您使用 Jira 还是 Linear？
+1. Jira - 输入 Jira URL 和 API Token
+2. Linear - 输入 Linear API Key
+```
+
+对于 Jira，询问：
+```
+Jira 实例 URL（如 https://yourcompany.atlassian.net）：
+Jira 邮箱：
+Jira API Token（在 https://id.atlassian.com/manage-profile/security/api-tokens 创建）：
+```
+
+对于 Linear，询问：
+```
+Linear API Key（在 https://linear.app/settings/api 创建）：
+```
+
+### PostgreSQL：
+询问连接信息：
+```
+PostgreSQL 连接信息：
+- 主机（默认 localhost）：
+- 端口（默认 5432）：
+- 数据库名：
+- 用户名：
+- 密码：
+或直接输入连接字符串（postgresql://user:pass@host:port/db）
+```
+
+### Playwright：
+无需 API key，可立即使用。询问是否需要特定浏览器：
+```
+Playwright 浏览器配置：
+1. Chromium（默认，推荐）
+2. Firefox
+3. WebKit（Safari）
 ```
 
 ## 第三步：使用 CLI 添加 MCP Server
@@ -88,6 +144,57 @@ claude mcp add --transport http github https://api.githubcopilot.com/mcp/
 
 > 注意：Docker 选项需要安装 Docker。HTTP 选项更简单但功能可能有所不同。
 
+### Slack 配置：
+```bash
+claude mcp add -e SLACK_BOT_TOKEN=<用户提供的token> slack -- npx -y @modelcontextprotocol/server-slack
+```
+
+### Jira 配置：
+```bash
+claude mcp add \
+  -e JIRA_URL=<用户提供的URL> \
+  -e JIRA_EMAIL=<用户提供的邮箱> \
+  -e JIRA_API_TOKEN=<用户提供的token> \
+  jira -- npx -y @modelcontextprotocol/server-jira
+```
+
+### Linear 配置：
+```bash
+claude mcp add -e LINEAR_API_KEY=<用户提供的key> linear -- npx -y @linear/mcp-server
+```
+
+### PostgreSQL 配置：
+```bash
+# 使用连接字符串
+claude mcp add -e DATABASE_URL=<连接字符串> postgres -- npx -y @modelcontextprotocol/server-postgres
+
+# 或使用独立参数
+claude mcp add \
+  -e POSTGRES_HOST=<主机> \
+  -e POSTGRES_PORT=<端口> \
+  -e POSTGRES_DB=<数据库名> \
+  -e POSTGRES_USER=<用户名> \
+  -e POSTGRES_PASSWORD=<密码> \
+  postgres -- npx -y @modelcontextprotocol/server-postgres
+```
+
+### Playwright 配置：
+```bash
+claude mcp add playwright -- npx -y @playwright/mcp
+```
+
+### Sequential Thinking 配置：
+无需 API key，可立即使用。
+```bash
+claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
+```
+
+### Software Planning Tool 配置：
+无需 API key，可立即使用。
+```bash
+claude mcp add software-planning-tool -- npx -y @modelcontextprotocol/software-planning-tool
+```
+
 ## 第四步：验证安装
 
 配置完成后，验证 MCP server 是否正确设置：
@@ -117,6 +224,12 @@ MCP Server 配置完成！
 - Exa：用于网页搜索（如"搜索最新 TypeScript 特性"）
 - Filesystem：工作目录之外的扩展文件操作
 - GitHub：与 GitHub 仓库、issue 和 PR 交互
+- Slack：发送消息到频道（如"发送部署通知到 #deployments"）
+- Jira/Linear：查询和创建 issue（如"查看本周待处理的 bug"）
+- PostgreSQL：直接查询数据库（如"查询用户表中最近注册的 10 个用户"）
+- Playwright：浏览器自动化（如"截图并测试登录流程"）
+- Sequential Thinking：复杂问题逐步推理（如"分析这个架构决策的利弊"）
+- Software Planning Tool：任务规划与分解（如"将这个需求拆解为可执行的子任务"）
 
 故障排除：
 - 如果 MCP server 未出现，运行 `claude mcp list` 检查状态

@@ -83,6 +83,11 @@ Task 子 agent 类型使用 `ultrapower:` 前缀。
 - `scientist` (sonnet)：数据/统计分析
 - `document-specialist` (sonnet)：外部文档和参考查找
 - `git-master` (sonnet)：提交策略、历史整洁
+- `database-expert` (sonnet)：数据库设计、查询优化和迁移
+- `devops-engineer` (sonnet)：CI/CD、容器化、基础设施即代码
+- `i18n-specialist` (sonnet)：国际化、本地化和多语言支持
+- `accessibility-auditor` (sonnet)：Web 无障碍审查和 WCAG 合规
+- `api-designer` (sonnet)：REST/GraphQL API 设计和契约定义
 
 产品通道：
 - `product-manager` (sonnet)：问题定义、用户画像/JTBD、PRD
@@ -119,6 +124,10 @@ Task 子 agent 类型使用 `ultrapower:` 前缀。
 提供商优势（用于选择合适的提供商）：
 - **Codex 擅长**：架构审查、规划验证、批判性分析、代码审查、安全审查、测试策略。推荐角色：architect、planner、critic、analyst、code-reviewer、security-reviewer、tdd-guide。
 - **Gemini 擅长**：UI/UX 设计审查、文档、视觉分析、大上下文任务（1M token）。推荐角色：designer、writer、vision。
+
+本地 MCP 工具（通过 `claude mcp add` 配置，无需 API key）：
+- **sequential-thinking**：结构化逐步推理——将复杂问题分解为有序思维链。适用于架构决策分析、根因排查、多步骤规划。
+- **software-planning-tool**：任务规划与分解——提供结构化任务分析、依赖图、执行追踪。适用于需求拆解、sprint 规划、技术方案评估。
 
 调用 MCP 工具时始终附加 `context_files`/`files`。MCP 输出是建议性的——验证（测试、类型检查）应来自使用工具的 agents。
 

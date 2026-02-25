@@ -162,6 +162,61 @@ export const qualityStrategistAgent: AgentConfig = {
   defaultModel: 'sonnet'
 };
 
+/**
+ * Database-Expert Agent - Database Design & Query Optimization (Sonnet)
+ */
+export const databaseExpertAgent: AgentConfig = {
+  name: 'database-expert',
+  description: 'Database schema design, query optimization, migration strategy (Sonnet).',
+  prompt: loadAgentPrompt('database-expert'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+/**
+ * DevOps-Engineer Agent - CI/CD & Infrastructure as Code (Sonnet)
+ */
+export const devopsEngineerAgent: AgentConfig = {
+  name: 'devops-engineer',
+  description: 'CI/CD pipelines, containerization, IaC, deployment automation (Sonnet).',
+  prompt: loadAgentPrompt('devops-engineer'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+/**
+ * I18n-Specialist Agent - Internationalization & Localization (Sonnet)
+ */
+export const i18nSpecialistAgent: AgentConfig = {
+  name: 'i18n-specialist',
+  description: 'Internationalization, localization, multi-language support (Sonnet).',
+  prompt: loadAgentPrompt('i18n-specialist'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+/**
+ * Accessibility-Auditor Agent - WCAG Compliance & Inclusive Design (Sonnet)
+ */
+export const accessibilityAuditorAgent: AgentConfig = {
+  name: 'accessibility-auditor',
+  description: 'Web accessibility audits, WCAG 2.1/2.2 compliance, inclusive design (Sonnet).',
+  prompt: loadAgentPrompt('accessibility-auditor'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+/**
+ * API-Designer Agent - REST/GraphQL API Design & Contracts (Sonnet)
+ */
+export const apiDesignerAgent: AgentConfig = {
+  name: 'api-designer',
+  description: 'REST/GraphQL API design, OpenAPI contracts, versioning strategy (Sonnet).',
+  prompt: loadAgentPrompt('api-designer'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
 // ============================================================
 // REFORMED AGENTS (PRODUCT LANE)
 // ============================================================
@@ -454,6 +509,11 @@ export function getAgentDefinitions(overrides?: Partial<Record<string, Partial<A
     'qa-tester': qaTesterAgent,
     scientist: scientistAgent,
     'git-master': gitMasterAgent,
+    'database-expert': databaseExpertAgent,
+    'devops-engineer': devopsEngineerAgent,
+    'i18n-specialist': i18nSpecialistAgent,
+    'accessibility-auditor': accessibilityAuditorAgent,
+    'api-designer': apiDesignerAgent,
 
     // ============================================================
     // PRODUCT LANE

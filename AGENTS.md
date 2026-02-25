@@ -12,7 +12,7 @@
 
 ultrapower 为 Claude Code 提供以下增强功能：
 
-- **44 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
+- **49 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
 - **70 个 skills**，用于工作流自动化和专业行为
 - **37 个 hooks**，用于事件驱动的执行模式和增强功能
 - **15 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
@@ -36,7 +36,7 @@ ultrapower 为 Claude Code 提供以下增强功能：
 | 目录 | 用途 | 相关 AGENTS.md |
 |-----------|---------|-------------------|
 | `src/` | TypeScript 源代码 - 核心库 | `src/AGENTS.md` |
-| `agents/` | 44 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
+| `agents/` | 49 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
 | `skills/` | 70 个工作流 skill 定义 | `skills/AGENTS.md` |
 | `commands/` | 17 个斜杠命令定义（Axiom 工作流命令） | - |
 | `scripts/` | 构建脚本、工具和自动化 | - |
@@ -189,7 +189,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 智能体概览（共 44 个）
+## 智能体概览（共 49 个）
 
 ### Build/Analysis Lane（8 个）
 
@@ -215,7 +215,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | performance-reviewer | sonnet | 热点、复杂度、内存/延迟优化 |
 | code-reviewer | opus | 跨关注点综合审查 |
 
-### Domain Specialists（11 个）
+### Domain Specialists（16 个）
 
 | 智能体 | 模型 | 用途 |
 |-------|-------|---------|
@@ -230,6 +230,11 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | document-specialist | sonnet | 外部文档与参考查找 |
 | git-master | sonnet | 提交策略、历史管理 |
 | vision | sonnet | 图像/截图/图表分析 |
+| database-expert | sonnet | 数据库设计、查询优化和迁移 |
+| devops-engineer | sonnet | CI/CD、容器化、基础设施即代码 |
+| i18n-specialist | sonnet | 国际化、本地化和多语言支持 |
+| accessibility-auditor | sonnet | Web 无障碍审查和 WCAG 合规 |
+| api-designer | sonnet | REST/GraphQL API 设计和契约定义 |
 
 ### Coordination（1 个）
 
