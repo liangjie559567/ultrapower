@@ -233,7 +233,7 @@ export function renderAgentsCoded(agents: ActiveAgent[]): string | null {
     return `${color}${code}${RESET}`;
   });
 
-  return `智能体:${codes.join('')}`;
+  return `agents:${codes.join('')}`;
 }
 
 /**
@@ -273,7 +273,7 @@ export function renderAgentsCodedWithDuration(agents: ActiveAgent[]): string | n
     }
   });
 
-  return `智能体:${codes.join('')}`;
+  return `agents:${codes.join('')}`;
 }
 
 /**
@@ -328,7 +328,7 @@ export function renderAgentsDetailed(agents: ActiveAgent[]): string | null {
     return duration ? `${name}${duration}` : name;
   });
 
-  return `智能体:[${CYAN}${names.join(',')}${RESET}]`;
+  return `agents:[${CYAN}${names.join(',')}${RESET}]`;
 }
 
 /**

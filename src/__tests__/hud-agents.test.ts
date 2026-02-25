@@ -58,7 +58,7 @@ describe('Agents Element', () => {
         createAgent('explore'),
       ];
       const result = renderAgents(agents);
-      expect(result).toBe(`智能体:${CYAN}2${RESET}`);
+      expect(result).toBe(`agents:${CYAN}2${RESET}`);
     });
   });
 
@@ -73,7 +73,7 @@ describe('Agents Element', () => {
       ];
       const result = renderAgentsCoded(agents);
       // Architect with opus should be uppercase A in magenta
-      expect(result).toContain('智能体:');
+      expect(result).toContain('agents:');
       expect(result).toContain('A');
     });
 
@@ -95,7 +95,7 @@ describe('Agents Element', () => {
       const result = renderAgentsCoded(agents);
       expect(result).toBeDefined();
       // Should contain codes for all three (freshest first: x, e, A)
-      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('智能体:xeA');
+      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('agents:xeA');
     });
 
     it('should handle agents without model info', () => {
@@ -109,7 +109,7 @@ describe('Agents Element', () => {
         createAgent('ultrapower:unknown-agent', 'sonnet'),
       ];
       const result = renderAgentsCoded(agents);
-      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('智能体:u');
+      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('agents:u');
     });
   });
 
@@ -124,7 +124,7 @@ describe('Agents Element', () => {
       ];
       const result = renderAgentsCodedWithDuration(agents);
       // No duration suffix for <10s
-      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('智能体:A');
+      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('agents:A');
     });
 
     it('should show seconds for agents running 10-59s', () => {
@@ -137,7 +137,7 @@ describe('Agents Element', () => {
       ];
       const result = renderAgentsCodedWithDuration(agents);
       const stripped = result!.replace(/\x1b\[[0-9;]*m/g, '');
-      expect(stripped).toMatch(/智能体:A\(30s\)/);
+      expect(stripped).toMatch(/agents:A\(30s\)/);
     });
 
     it('should show minutes for agents running 1-9 min', () => {
@@ -150,7 +150,7 @@ describe('Agents Element', () => {
       ];
       const result = renderAgentsCodedWithDuration(agents);
       const stripped = result!.replace(/\x1b\[[0-9;]*m/g, '');
-      expect(stripped).toMatch(/智能体:A\(3m\)/);
+      expect(stripped).toMatch(/agents:A\(3m\)/);
     });
 
     it('should show alert for agents running 10+ min', () => {
@@ -163,7 +163,7 @@ describe('Agents Element', () => {
       ];
       const result = renderAgentsCodedWithDuration(agents);
       const stripped = result!.replace(/\x1b\[[0-9;]*m/g, '');
-      expect(stripped).toMatch(/智能体:A!/);
+      expect(stripped).toMatch(/agents:A!/);
     });
   });
 
@@ -208,19 +208,19 @@ describe('Agents Element', () => {
 
     it('should route to count format', () => {
       const result = renderAgentsByFormat(agents, 'count');
-      expect(result).toBe(`智能体:${CYAN}2${RESET}`);
+      expect(result).toBe(`agents:${CYAN}2${RESET}`);
     });
 
     it('should route to codes format', () => {
       const result = renderAgentsByFormat(agents, 'codes');
-      expect(result).toContain('智能体:');
+      expect(result).toContain('agents:');
       // Freshest first: explore (e), then architect (A)
-      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('智能体:eA');
+      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('agents:eA');
     });
 
     it('should route to codes-duration format', () => {
       const result = renderAgentsByFormat(agents, 'codes-duration');
-      expect(result).toContain('智能体:');
+      expect(result).toContain('agents:');
     });
 
     it('should route to detailed format', () => {
@@ -256,8 +256,8 @@ describe('Agents Element', () => {
     it('should default to codes for unknown format', () => {
       const result = renderAgentsByFormat(agents, 'unknown' as any);
       // Should fall back to codes format (freshest first: e, A)
-      expect(result).toContain('智能体:');
-      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('智能体:eA');
+      expect(result).toContain('agents:');
+      expect(result!.replace(/\x1b\[[0-9;]*m/g, '')).toBe('agents:eA');
     });
   });
 
@@ -315,7 +315,7 @@ describe('Agents Element', () => {
         ];
         const result = renderAgentsCoded(agents);
         const stripped = result!.replace(/\x1b\[[0-9;]*m/g, '');
-        expect(stripped).toBe(`智能体:${expected}`);
+        expect(stripped).toBe(`agents:${expected}`);
       });
     });
   });
@@ -462,7 +462,7 @@ describe('Agents Element', () => {
       const agents: ActiveAgent[] = [createAgent('ultrapower:architect', 'opus')];
       const result = renderAgentsByFormat(agents, 'multiline');
       // Should return the header part only (backward compatibility)
-      expect(result).toContain('智能体:');
+      expect(result).toContain('agents:');
       expect(result).toContain('1');
     });
   });
