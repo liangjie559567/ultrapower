@@ -1,5 +1,20 @@
 # ultrapower v5.0.7
 
+### 修复
+
+- **HUD 标签英文化**：将 HUD 元素标签从中文恢复为英文，确保测试断言通过
+  - `render.ts`：截断提示 `行` → `lines`，更新通知 `有更新` → `omc update`
+  - `types.ts`：`DEFAULT_HUD_CONFIG` 默认值修正——`maxOutputLines: 6` → `4`，`gitBranch: true` → `false`，`model: true` → `false`
+  - `agents.ts`：`renderAgentsByFormat` multiline 分支改为调用 `renderAgents()` 解决测试冲突
+  - `context-warning.ts`：警告文本改为英文（`auto-compact queued`、`run /compact`）
+  - `git.ts`：`仓库:` → `repo:`，`分支:` → `branch:`
+  - `thinking.ts`：`思考中` → `thinking`
+  - `skills.ts`：`技能:` → `skill:`
+
+- **HUD autoCompact 无限循环**：修复 context-warning 在上下文降至阈值以下后仍持续触发 compact 的 bug，现在在上下文恢复正常后清除触发标记文件
+
+- **skills/hud/SKILL.md**：修复 MINGW64 兼容性——`if(!found)` → `if(found===false)`，避免 Git Bash 将 `!` 转义为 `\!` 导致语法错误
+
 ### 新增
 
 - **5 个新专业 Agent**：
