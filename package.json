@@ -1,5 +1,5 @@
 {
-  "name": "ultrapower",
+  "name": "@liangjie559567/ultrapower",
   "version": "5.0.4",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
   "type": "module",
