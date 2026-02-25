@@ -38,7 +38,7 @@ import { extractSessionId } from "../analytics/output-estimator.js";
 import { getTokenTracker } from "../analytics/token-tracker.js";
 import { getRuntimePackageVersion } from "../lib/version.js";
 import { compareVersions } from "../features/auto-update.js";
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 
@@ -463,6 +463,16 @@ async function main(): Promise<void> {
         );
       } catch {
         // Silent failure — don't break HUD rendering
+      }
+    } else if (config.contextLimitWarning.autoCompact) {
+      // ctx dropped below threshold — clear the trigger file to stop infinite compaction
+      try {
+        const triggerFile = join(cwd, '.omc', 'state', 'compact-requested.json');
+        if (existsSync(triggerFile)) {
+          unlinkSync(triggerFile);
+        }
+      } catch {
+        // Silent failure
       }
     }
 
