@@ -14,7 +14,7 @@
 
 [快速开始](#快速开始) • [文档](https://yeachan-heo.github.io/ultrapower-website) • [迁移指南](docs/MIGRATION.md)
 
-**版本 5.0.4** | 44 个专业智能体 | 70 个技能 | 37 个 Hooks
+**版本 5.0.9** | 49 个专业智能体 | 70 个技能 | 35 个 Hooks
 
 ---
 
@@ -94,7 +94,7 @@ autopilot: build a REST API for managing tasks
 
 ### 智能编排
 
-- **44 个专业智能体** 涵盖架构、研究、设计、测试、数据科学
+- **49 个专业智能体** 涵盖架构、研究、设计、测试、数据科学
 - **智能模型路由** - 简单任务用 Haiku，复杂推理用 Opus
 - **自动委派** - 每次都选择最合适的智能体
 

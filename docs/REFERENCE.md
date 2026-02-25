@@ -433,7 +433,7 @@ omc config-stop-callback discord --show
 
 ## Hooks System
 
-ultrapower 包含 37 个生命周期 hooks，用于增强 Claude Code 的行为。
+ultrapower 包含 35 个生命周期 hooks，用于增强 Claude Code 的行为。
 
 ### 执行模式 Hooks
 
@@ -477,22 +477,20 @@ ultrapower 包含 37 个生命周期 hooks，用于增强 Claude Code 的行为�
 | `empty-message-sanitizer` | 空消息处理 |
 | `permission-handler` | 权限请求与验证 |
 | `think-mode` | 扩展思考检测 |
-| `guards` | PreToolUse/PostToolUse 守卫，执行权限检查、范围验证和会话监控 |
 
 ### 协调与环境 Hooks
 
 | Hook | 说明 |
 |------|-------------|
 | `subagent-tracker` | 跟踪已生成的子 agents |
+| `flow-tracer` | Agent 流程追踪记录（hook 触发、keyword 检测、skill 激活、模式变更） |
 | `session-end` | 会话终止处理 |
 | `non-interactive-env` | CI/非交互式环境处理 |
 | `agent-usage-reminder` | 提醒使用专业 agents |
 | `background-notification` | 后台任务完成通知 |
 | `plugin-patterns` | 插件模式检测 |
 | `setup` | 初始安装与配置 |
-| `team-pipeline` | Team 分阶段流水线协调 |
 | `beads-context` | 上下文珠链管理 |
-| `memory` | 持久化记忆读写 |
 | `project-memory` | 项目级记忆管理 |
 
 ### Axiom Hooks
@@ -510,20 +508,23 @@ ultrapower 包含 37 个生命周期 hooks，用于增强 Claude Code 的行为�
 
 | 关键词 | 效果 |
 |---------|--------|
-| `ultrawork`, `ulw`, `uw` | 激活并行 agent 编排 |
-| `eco`, `efficient`, `save-tokens`, `budget` | Token 高效并行执行 |
-| `autopilot`, `build me`, `I want a` | 全自主执行 |
-| `ultrapilot`, `parallel build`, `swarm build` | 并行 autopilot（速度提升 3-5 倍） |
-| `ralph`, `don't stop`, `must complete` | 持续执行直至验证完成 |
+| `ultrawork`, `ulw` | 激活并行 agent 编排 |
+| `autopilot`, `auto-pilot`, `fullsend`, `full auto` | 全自主执行 |
+| `ultrapilot`, `ultra-pilot`, `parallel build`, `swarm build` | 并行 autopilot（速度提升 3-5 倍） |
+| `ralph` | 持续执行直至验证完成 |
+| `team`, `coordinated team` | Team 模式多 agent 协调 |
+| `swarm N agents`, `coordinated agents`, `team mode` | 协调 agent 集群 |
 | `plan this`, `plan the` | 规划访谈工作流 |
 | `ralplan` | 迭代规划共识 |
-| `search`, `find`, `locate` | 增强搜索模式 |
-| `analyze`, `investigate`, `debug` | 深度分析模式 |
-| `sciomc` | 并行研究编排 |
-| `tdd`, `test first`, `red green` | TDD 工作流强制执行 |
-| `swarm N agents` | 协调 agent 集群 |
-| `pipeline`, `chain agents` | 顺序 agent 链式执行 |
-| `stop`, `cancel`, `abort` | 统一取消 |
+| `tdd`, `test first` | TDD 工作流强制执行 |
+| `ultrathink` | 扩展思考模式 |
+| `deepsearch`, `search the codebase`, `find in codebase` | 深度代码库搜索 |
+| `deep analyze`, `deepanalyze` | 深度分析模式 |
+| `ccg`, `claude-codex-gemini` | Claude-Codex-Gemini 三模型并行编排 |
+| `ask codex`, `use codex`, `delegate to codex` | 委派给 Codex（OpenAI） |
+| `ask gemini`, `use gemini`, `delegate to gemini` | 委派给 Gemini（Google） |
+| `agent pipeline`, `chain agents` | 顺序 agent 链式执行 |
+| `cancelomc`, `stopomc` | 统一取消所有活跃模式 |
 
 ### 示例
 
@@ -532,15 +533,6 @@ ultrapower 包含 37 个生命周期 hooks，用于增强 Claude Code 的行为�
 
 # 最大并行度
 ultrawork implement user authentication with OAuth
-
-# Token 高效并行
-eco fix all TypeScript errors
-
-# 增强搜索
-find all files that import the utils module
-
-# 深度分析
-analyze why the tests are failing
 
 # 自主执行
 autopilot: build a todo app with React
@@ -561,7 +553,19 @@ tdd: implement password validation
 swarm 5 agents: fix all lint errors
 
 # Agent 链式执行
-pipeline: analyze → fix → test this bug
+chain agents: analyze → fix → test this bug
+
+# 深度代码库搜索
+deepsearch all files that import the utils module
+
+# 深度分析
+deep analyze why the tests are failing
+
+# 三模型并行编排
+ccg: implement the payment module
+
+# 取消活跃模式
+cancelomc
 ```
 
 ---

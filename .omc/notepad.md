@@ -3,10 +3,10 @@
 
 ## Priority Context
 <!-- ALWAYS loaded. Keep under 500 chars. Critical discoveries only. -->
-项目：ultrapower v5.0.3 | 主分支：main
-确认数量：44 agents | 70 skills | 37 hooks | 15 tools
-已修复：TIERED_AGENTS_V2.md 补充 Axiom Lane 8个agents
-待验证：docs/REFERENCE.md、README.md、CHANGELOG.md 数量一致性
+项目：ultrapower v5.0.9 | 主分支：main
+确认数量：49 agents | 70 skills | 35 hooks | 15 tools
+已修复：所有文档 hooks 数量 37→35，agents 数量 44→49
+已完成：REFERENCE.md、README.md、ARCHITECTURE.md、AGENTS.md 数量一致性更新
 
 ## Working Memory
 <!-- Session notes. Auto-pruned after 7 days. -->
@@ -102,7 +102,7 @@ Hook 系统（34 个）
 
 注：Working Memory 中 2026-02-24 14:31 条目记录的 38/67/35 均为过时数字，以本条为准。
 ### 2026-02-25 02:23
-hooks 数量已更新：36→37（新增 guards/ hook）。当前验证数量：44 agents | 70 skills | 37 hooks
+hooks 数量已更新：37→35（移除非 hook 的 guards/team-pipeline/memory，新增 flow-tracer）。当前验证数量：49 agents | 70 skills | 35 hooks
 
 
 ## 2026-02-24 10:12

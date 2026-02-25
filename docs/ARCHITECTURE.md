@@ -191,7 +191,7 @@ notepad_write_working("full_context", {
 
 ## Hooks
 
-ultrapower 在 `src/hooks/` 中包含 37 个 hook，用于生命周期事件：
+ultrapower 在 `src/hooks/` 中包含 35 个 hook，用于生命周期事件：
 
 | 事件 | 用途 |
 |-------|---------|

@@ -14,7 +14,7 @@ ultrapower 为 Claude Code 提供以下增强功能：
 
 - **49 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
 - **70 个 skills**，用于工作流自动化和专业行为
-- **37 个 hooks**，用于事件驱动的执行模式和增强功能
+- **35 个 hooks**，用于事件驱动的执行模式和增强功能
 - **15 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
 - **执行模式**：autopilot、ultrawork、ralph、ultrapilot、swarm、pipeline
 - **MCP 集成**，支持插件范围的工具发现和 skill 加载
@@ -179,7 +179,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 │                  ultrapower                                 │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
 │  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
-│  │ (70 skills) │ (49 agents) │(LSP/AST/REPL)│ (37 hooks)  │  │
+│  │ (70 skills) │ (49 agents) │(LSP/AST/REPL)│ (35 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │              Features Layer                             ││
@@ -411,7 +411,7 @@ npm run lint            # ESLint
 npm run sync-metadata   # 同步智能体/skill 元数据
 ```
 
-## Hook 系统（37 个）
+## Hook 系统（35 个）
 
 `src/hooks/` 中的关键 hooks：
 
