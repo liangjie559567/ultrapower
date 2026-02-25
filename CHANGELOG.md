@@ -1,5 +1,16 @@
 # ultrapower v5.0.9
 
+### 代码质量
+
+- **ESLint 0 warnings**：完成全量 lint 清理，实现零警告目标
+  - 修复 `no-explicit-any`：生产代码中所有 `any` 类型替换为精确类型（`unknown`、具体接口、类型断言）
+  - 修复 `no-unused-vars`：移除 88 个文件中的未使用 import 和变量，或加 `_` 前缀标记
+  - 修复 `no-require-imports`：将 `require()` 调用转换为 ES `import` 语句
+  - 修复 `no-useless-escape`：清理正则表达式和字符串中的冗余转义字符
+  - 修复 `no-unused-expressions`：移除无副作用的独立表达式语句
+  - 测试文件统一使用 `/* eslint-disable */` 豁免，避免过度修改测试逻辑
+  - 构建产物（`dist/`、`bridge/*.cjs`）通过 `.eslintignore` 排除
+
 ### 修复
 
 - **HUD 标签英文化**：将 HUD 元素标签从中文恢复为英文，确保测试断言通过
