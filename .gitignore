@@ -7,3 +7,15 @@ package-lock.json
 .omc/state/
 .omc/logs/
 .omc/prompts/
+
+# Temp lint/build scripts
+*.cjs
+fix_imports.py
+lint-output.json
+data/
+.test-job-state-db-*/
+
+# Build artifacts / tarballs
+*.tgz
+*.tar.gz
+*.zip
