@@ -1,10 +1,10 @@
-<!-- Generated: 2026-01-28 | Updated: 2026-02-25 -->
+<!-- Generated: 2026-01-28 | Updated: 2026-02-26 -->
 
 # ultrapower
 
 严格的多智能体编排：工作流强制执行 + 并行执行
 
-**版本：** 5.0.10
+**版本：** 5.0.12
 **用途：** 将 Claude Code 转变为专业 AI 智能体的指挥者
 **灵感来源：** oh-my-zsh / oh-my-opencode
 
