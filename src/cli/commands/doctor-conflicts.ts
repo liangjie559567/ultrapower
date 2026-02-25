@@ -55,7 +55,7 @@ function collectHooksFromSettings(settingsPath: string): ConflictReport['hookCon
         }
       }
     }
-  } catch (error) {
+  } catch (_error) {
     // Ignore parse errors, will be reported separately
   }
 
@@ -128,7 +128,7 @@ export function checkClaudeMdStatus(): ConflictReport['claudeMdStatus'] {
       hasUserContent,
       path: claudeMdPath
     };
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 }
@@ -191,7 +191,7 @@ export function checkConfigIssues(): ConflictReport['configIssues'] {
         unknownFields.push(field);
       }
     }
-  } catch (error) {
+  } catch (_error) {
     // Ignore parse errors
   }
 

@@ -217,7 +217,7 @@ function parsePluginManifest(manifestPath: string): PluginManifest | null {
     }
 
     return parsed as PluginManifest;
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 }

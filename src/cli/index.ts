@@ -118,7 +118,7 @@ async function displayAnalyticsBanner() {
     ].join('\n'));
     console.log(banner);
     console.log('');
-  } catch (error) {
+  } catch (_error) {
     // Fallback if gradient-string not installed
     console.log('╔═══════════════════════════════════════╗');
     console.log('║   Oh-My-ClaudeCode - Analytics Dashboard   ║');

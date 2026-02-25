@@ -71,7 +71,7 @@ export function launchInteropSession(cwd: string = process.cwd()): void {
       encoding: 'utf-8',
     });
     currentPaneId = output.trim();
-  } catch (error) {
+  } catch (_error) {
     console.error('Error: Failed to get current tmux pane ID');
     process.exit(1);
   }

@@ -256,7 +256,7 @@ export class TokenTracker {
       }
 
       return stats.totalInputTokens > 0 ? stats : null;
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -301,7 +301,7 @@ export class TokenTracker {
         firstEntry: agentData.firstEntry,
         lastEntry: agentData.lastEntry,
       };
-    } catch (error) {
+    } catch (_error) {
       // If tokscale fails, fall back to legacy implementation
       return this.getAllStatsLegacy();
     }
@@ -374,7 +374,7 @@ export class TokenTracker {
 
       result.sessionCount = sessions.size;
       return result;
-    } catch (error) {
+    } catch (_error) {
       // If file doesn't exist or is empty, return empty result
       return result;
     }
@@ -461,7 +461,7 @@ export class TokenTracker {
 
       stats.sessionCount = sessions.size;
       return stats;
-    } catch (error) {
+    } catch (_error) {
       // If file doesn't exist or is empty, return empty stats
       return stats;
     }
@@ -539,7 +539,7 @@ export class TokenTracker {
         "utf-8",
       );
       return removed;
-    } catch (error) {
+    } catch (_error) {
       return 0;
     }
   }

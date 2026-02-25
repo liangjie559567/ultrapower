@@ -79,7 +79,7 @@ export async function getAnalyticsDisplay(): Promise<AnalyticsDisplay> {
       cacheEfficiency,
       costColor
     };
-  } catch (error) {
+  } catch (_error) {
     // Return safe defaults if analytics not yet initialized
     return {
       sessionCost: '$0.00',
@@ -174,7 +174,7 @@ export async function getSessionInfo(): Promise<string> {
     const tags = session.tags.join(',');
 
     return `会话: ${session.id.slice(-8)} | ${durationMinutes}m | 标签: ${tags}`;
-  } catch (error) {
+  } catch (_error) {
     return '会话信息不可用';
   }
 }
