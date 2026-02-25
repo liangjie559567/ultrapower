@@ -597,12 +597,8 @@ class LspClientManager {
     let client = this.clients.get(key);
     if (!client) {
       client = new LspClient(workspaceRoot, serverConfig);
-      try {
-        await client.connect();
-        this.clients.set(key, client);
-      } catch (error) {
-        throw error;
-      }
+      await client.connect();
+      this.clients.set(key, client);
     }
 
     // Track last-used timestamp
@@ -628,12 +624,8 @@ class LspClientManager {
     let client = this.clients.get(key);
     if (!client) {
       client = new LspClient(workspaceRoot, serverConfig);
-      try {
-        await client.connect();
-        this.clients.set(key, client);
-      } catch (error) {
-        throw error;
-      }
+      await client.connect();
+      this.clients.set(key, client);
     }
 
     // Touch timestamp and increment in-flight counter
