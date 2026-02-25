@@ -128,9 +128,9 @@ describe('renderAnalyticsLineWithConfig', () => {
   describe('showCost=true, showCache=true (default)', () => {
     it('renders all elements', () => {
       const result = renderAnalyticsLineWithConfig(baseAnalytics, true, true);
-      expect(result).toContain('Cost: $1.2345');
-      expect(result).toContain('Cache: 45.6%');
-      expect(result).toContain('Top: executor:$0.80 architect:$0.30');
+      expect(result).toContain('费用: $1.2345');
+      expect(result).toContain('缓存: 45.6%');
+      expect(result).toContain('主要: executor:$0.80 architect:$0.30');
     });
 
     it('shows green indicator for green costColor', () => {
@@ -150,39 +150,39 @@ describe('renderAnalyticsLineWithConfig', () => {
 
     it('handles empty topAgents gracefully', () => {
       const result = renderAnalyticsLineWithConfig({ ...baseAnalytics, topAgents: 'none' }, true, true);
-      expect(result).toContain('Top: none');
+      expect(result).toContain('主要: none');
     });
   });
 
   describe('showCost=false, showCache=true', () => {
     it('hides cost but shows cache', () => {
       const result = renderAnalyticsLineWithConfig(baseAnalytics, false, true);
-      expect(result).not.toContain('Cost:');
-      expect(result).toContain('Cache: 45.6%');
-      expect(result).toContain('Top:');
+      expect(result).not.toContain('费用:');
+      expect(result).toContain('缓存: 45.6%');
+      expect(result).toContain('主要:');
     });
   });
 
   describe('showCost=true, showCache=false', () => {
     it('shows cost but hides cache', () => {
       const result = renderAnalyticsLineWithConfig(baseAnalytics, true, false);
-      expect(result).toContain('Cost: $1.2345');
-      expect(result).not.toContain('Cache:');
-      expect(result).toContain('Top:');
+      expect(result).toContain('费用: $1.2345');
+      expect(result).not.toContain('缓存:');
+      expect(result).toContain('主要:');
     });
   });
 
   describe('showCost=false, showCache=false (minimal)', () => {
     it('shows only top agents', () => {
       const result = renderAnalyticsLineWithConfig(baseAnalytics, false, false);
-      expect(result).not.toContain('Cost:');
-      expect(result).not.toContain('Cache:');
-      expect(result).toContain('Top:');
+      expect(result).not.toContain('费用:');
+      expect(result).not.toContain('缓存:');
+      expect(result).toContain('主要:');
     });
 
     it('formats without pipe separators when minimal', () => {
       const result = renderAnalyticsLineWithConfig(baseAnalytics, false, false);
-      expect(result).toBe('Top: executor:$0.80 architect:$0.30');
+      expect(result).toBe('主要: executor:$0.80 architect:$0.30');
     });
   });
 });

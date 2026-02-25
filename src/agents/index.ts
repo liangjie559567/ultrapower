@@ -81,6 +81,15 @@ export {
   gitMasterAgent
 } from './definitions.js';
 
+// New Domain Specialists (v5.0+)
+export {
+  databaseExpertAgent,
+  devopsEngineerAgent,
+  i18nSpecialistAgent,
+  accessibilityAuditorAgent,
+  apiDesignerAgent
+} from './definitions.js';
+
 // Axiom agents
 export {
   axiomRequirementAnalystAgent,
