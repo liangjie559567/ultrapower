@@ -1,3 +1,32 @@
+# ultrapower v5.0.7
+
+### 新增
+
+- **5 个新专业 Agent**：
+  - `database-expert`：数据库 schema 设计、查询优化、索引策略和迁移方案
+  - `devops-engineer`：CI/CD 流水线、Docker/Kubernetes 容器化、基础设施即代码
+  - `i18n-specialist`：国际化架构、本地化工作流、多语言文本管理
+  - `accessibility-auditor`：WCAG 2.1/2.2 合规审查、键盘导航、屏幕阅读器兼容
+  - `api-designer`：REST/GraphQL API 设计、OpenAPI 规范、版本策略
+
+- **MCP 集成扩展**（`skills/mcp-setup`）：
+  - Slack：Bot Token 配置，支持频道消息发送
+  - Jira/Linear：项目管理和 issue 追踪集成
+  - PostgreSQL：直接数据库查询支持
+  - Playwright：浏览器自动化和 Web 测试
+  - Sequential Thinking：结构化逐步推理，复杂问题分解
+  - Software Planning Tool：任务规划与分解，依赖图和执行追踪
+
+- **Codex Prompts**：为 5 个新 agent 添加 `agents.codex/` 适配提示词
+
+### 文档
+
+- 更新 `AGENTS.md`：agents 44 → 49，Domain Specialists 11 → 16
+- 更新 `docs/CLAUDE.md`：agent_catalog 新增 5 个专家，mcp_routing 新增本地 MCP 工具说明
+- 更新 `src/mcp/servers.ts`：新增 `createSequentialThinkingServer()` 和 `createSoftwarePlanningToolServer()` 工厂函数
+
+---
+
 # ultrapower v5.0.4
 
 ### 文档
