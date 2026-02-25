@@ -1,3 +1,12 @@
+# ultrapower v5.0.12
+
+### 修复
+
+- **版本同步修复**：确保 `.claude-plugin/marketplace.json` 和 `plugin.json` 与 npm 版本保持一致
+- **gitignore 修复**：恢复 `dist/` 到 `.gitignore`，防止构建产物被意外提交
+
+---
+
 # ultrapower v5.0.11
 
 ### 修复
