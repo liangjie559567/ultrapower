@@ -1,6 +1,6 @@
 # ultrapower
 
-ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **44 个专业 agents**、**70 个 skills** 和完整的 TypeScript hooks 系统。
+ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **49 个专业 agents**、**70 个 skills** 和完整的 TypeScript hooks 系统。
 
 ## 核心能力
 
@@ -45,7 +45,7 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 ---
 
-## Agents（44 个）
+## Agents（49 个）
 
 ### 构建/分析通道
 
@@ -85,6 +85,11 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 | `scientist` | sonnet | 数据/统计分析 |
 | `document-specialist` | sonnet | 外部文档查找 |
 | `git-master` | sonnet | 提交策略、历史整洁 |
+| `database-expert` | sonnet | 数据库设计、查询优化和迁移 |
+| `devops-engineer` | sonnet | CI/CD、容器化、基础设施即代码 |
+| `i18n-specialist` | sonnet | 国际化、本地化和多语言支持 |
+| `accessibility-auditor` | sonnet | Web 无障碍审查和 WCAG 合规 |
+| `api-designer` | sonnet | REST/GraphQL API 设计和契约定义 |
 
 ### 产品通道
 

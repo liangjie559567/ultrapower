@@ -161,7 +161,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Agents（共 44 个）
+## Agents（共 49 个）
 
 通过 Task 工具调用时，始终使用 `ultrapower:` 前缀。
 
@@ -194,6 +194,11 @@ omc config-stop-callback discord --show
 | **领域专家** | `document-specialist` | sonnet | 外部文档与参考查找 |
 | **领域专家** | `git-master` | sonnet | 提交策略、历史管理 |
 | **领域专家** | `vision` | sonnet | 图片/截图/图表分析 |
+| **领域专家** | `database-expert` | sonnet | 数据库设计、查询优化和迁移 |
+| **领域专家** | `devops-engineer` | sonnet | CI/CD、容器化、基础设施即代码 |
+| **领域专家** | `i18n-specialist` | sonnet | 国际化、本地化和多语言支持 |
+| **领域专家** | `accessibility-auditor` | sonnet | Web 无障碍审查和 WCAG 合规 |
+| **领域专家** | `api-designer` | sonnet | REST/GraphQL API 设计和契约定义 |
 | **协调** | `critic` | opus | 计划/设计批判性挑战 |
 | **产品** | `product-manager` | sonnet | 问题框架、PRD |
 | **产品** | `ux-researcher` | sonnet | 启发式审计、可用性、无障碍 |
