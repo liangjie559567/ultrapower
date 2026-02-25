@@ -162,6 +162,14 @@ export interface AutopilotState {
   session_id?: string;
   /** Project path for isolation */
   project_path?: string;
+  /** Whether the session was interrupted unexpectedly (crash/disconnect) */
+  was_interrupted?: boolean;
+  /** Timestamp when the session was resumed after interruption */
+  resumed_at?: string;
+  /** Ordered list of phases that completed successfully */
+  completed_steps?: string[];
+  /** Reason for failure if phase === 'failed' */
+  failure_reason?: string;
 }
 
 /**

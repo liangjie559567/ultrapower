@@ -543,6 +543,10 @@ export function transitionToFailed(
     };
   }
 
+  if (error) {
+    recordFailureReason(directory, error, sessionId);
+  }
+
   return { success: true, state };
 }
 
@@ -629,4 +633,40 @@ Signal when all tasks complete: EXECUTION_COMPLETE
   }
 
   return '';
+}
+
+/**
+ * Append a completed step to the state's completed_steps list.
+ * Called after each phase successfully finishes.
+ */
+export function appendCompletedStep(
+  directory: string,
+  step: string,
+  sessionId?: string
+): boolean {
+  const state = readAutopilotState(directory, sessionId);
+  if (!state) return false;
+
+  if (!state.completed_steps) {
+    state.completed_steps = [];
+  }
+  if (!state.completed_steps.includes(step)) {
+    state.completed_steps.push(step);
+  }
+  return writeAutopilotState(directory, state, sessionId);
+}
+
+/**
+ * Record a failure reason in the state.
+ */
+export function recordFailureReason(
+  directory: string,
+  reason: string,
+  sessionId?: string
+): boolean {
+  const state = readAutopilotState(directory, sessionId);
+  if (!state) return false;
+
+  state.failure_reason = reason;
+  return writeAutopilotState(directory, state, sessionId);
 }

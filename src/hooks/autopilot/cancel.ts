@@ -149,12 +149,16 @@ export function clearAutopilot(directory: string, sessionId?: string): CancelRes
 /** Maximum age (ms) for state to be considered resumable (1 hour) */
 export const STALE_STATE_MAX_AGE_MS = 60 * 60 * 1000;
 
+/** Threshold (ms) after which an active state is treated as interrupted (crash/disconnect) */
+const INTERRUPTED_THRESHOLD_MS = 5 * 60 * 1000;
+
 /**
  * Check if autopilot can be resumed.
  *
  * Guards against stale state reuse (issue #609):
  * - Rejects terminal phases (complete/failed)
- * - Rejects states still marked active (session may still be running)
+ * - Rejects states still marked active AND recently updated (session may still be running)
+ * - Treats active states older than INTERRUPTED_THRESHOLD_MS as interrupted (crash/disconnect)
  * - Rejects stale states older than STALE_STATE_MAX_AGE_MS
  * - Auto-cleans stale state files to prevent future false positives
  */
@@ -162,6 +166,7 @@ export function canResumeAutopilot(directory: string, sessionId?: string): {
   canResume: boolean;
   state?: AutopilotState;
   resumePhase?: string;
+  wasInterrupted?: boolean;
 } {
   const state = readAutopilotState(directory, sessionId);
 
@@ -174,10 +179,15 @@ export function canResumeAutopilot(directory: string, sessionId?: string): {
     return { canResume: false, state, resumePhase: state.phase };
   }
 
-  // Cannot resume a state that claims to be actively running — it may belong
-  // to another session that is still alive.
+  // If state is still marked active, check how old it is
   if (state.active) {
-    return { canResume: false, state, resumePhase: state.phase };
+    const ageMs = getAutopilotStateAge(directory, sessionId);
+    // If age is within threshold, the session may still be running — do not resume
+    if (ageMs === null || ageMs <= INTERRUPTED_THRESHOLD_MS) {
+      return { canResume: false, state, resumePhase: state.phase };
+    }
+    // Age exceeds threshold: treat as interrupted (crash / network disconnect)
+    return { canResume: true, state, resumePhase: state.phase, wasInterrupted: true };
   }
 
   // Reject stale states: if the state file hasn't been touched in over an hour
@@ -186,7 +196,7 @@ export function canResumeAutopilot(directory: string, sessionId?: string): {
   if (ageMs !== null && ageMs > STALE_STATE_MAX_AGE_MS) {
     // Auto-cleanup stale state to prevent future false positives
     clearAutopilotState(directory, sessionId);
-    return { canResume: false, state, resumePhase: state.phase };
+    return { canResume: false };
   }
 
   return {
@@ -204,7 +214,7 @@ export function resumeAutopilot(directory: string, sessionId?: string): {
   message: string;
   state?: AutopilotState;
 } {
-  const { canResume, state } = canResumeAutopilot(directory, sessionId);
+  const { canResume, state, wasInterrupted } = canResumeAutopilot(directory, sessionId);
 
   if (!canResume || !state) {
     return {
@@ -213,9 +223,23 @@ export function resumeAutopilot(directory: string, sessionId?: string): {
     };
   }
 
+  // Guard against exceeding max iterations
+  if (state.iteration >= state.max_iterations) {
+    return {
+      success: false,
+      message: `Max iterations (${state.max_iterations}) reached, cannot resume`
+    };
+  }
+
   // Re-activate
   state.active = true;
   state.iteration++;
+
+  // Record interruption metadata if applicable
+  if (wasInterrupted) {
+    state.was_interrupted = true;
+    state.resumed_at = new Date().toISOString();
+  }
 
   if (!writeAutopilotState(directory, state, sessionId)) {
     return {
@@ -257,6 +281,48 @@ export function formatCancelMessage(result: CancelResult): string {
     lines.push('');
     lines.push('Run /autopilot to resume from where you left off.');
   }
+
+  return lines.join('\n');
+}
+
+/**
+ * Format a structured failure summary for display when autopilot fails.
+ * Shows completed steps, failure location, and recovery command.
+ */
+export function formatFailureSummary(state: AutopilotState): string {
+  const allPhases: string[] = ['expansion', 'planning', 'execution', 'qa', 'validation'];
+  const completedSteps = state.completed_steps ?? [];
+
+  const lines: string[] = [
+    '',
+    '[AUTOPILOT FAILED]',
+    `阶段: ${state.phase} 失败`,
+    '',
+    '已完成步骤:',
+  ];
+
+  for (const phase of allPhases) {
+    if (completedSteps.includes(phase)) {
+      const durationMs = state.phase_durations[phase];
+      const durationStr = durationMs
+        ? ` (${Math.round(durationMs / 1000 / 60)}m ${Math.round((durationMs / 1000) % 60)}s)`
+        : '';
+      lines.push(`  ✓ ${phase}${durationStr}`);
+    } else if (phase === state.phase) {
+      lines.push(`  ✗ ${phase}  ← 失败于此`);
+      break;
+    }
+    // Phases not yet reached are silently skipped
+  }
+
+  if (state.failure_reason) {
+    lines.push('');
+    lines.push(`失败原因: ${state.failure_reason}`);
+  }
+
+  lines.push('');
+  lines.push('恢复命令: /autopilot  (将从上次失败阶段续跑)');
+  lines.push('');
 
   return lines.join('\n');
 }

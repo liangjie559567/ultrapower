@@ -8,6 +8,7 @@ import {
   canResumeAutopilot,
   resumeAutopilot,
   formatCancelMessage,
+  formatFailureSummary,
   STALE_STATE_MAX_AGE_MS,
   type CancelResult
 } from '../cancel.js';
@@ -16,7 +17,9 @@ import {
   transitionPhase,
   readAutopilotState,
   writeAutopilotState,
-  updateExecution
+  updateExecution,
+  appendCompletedStep,
+  recordFailureReason
 } from '../state.js';
 
 // Mock the ralph and ultraqa modules
@@ -529,6 +532,39 @@ describe('AutopilotCancel', () => {
       expect(result.success).toBe(false);
       expect(result.message).toBe('No autopilot session available to resume');
     });
+
+    it('should resume interrupted state (active=true but older than 5 min)', () => {
+      initAutopilot(testDir, 'test idea');
+      transitionPhase(testDir, 'execution');
+      // Simulate crash: state is still active=true but file is old
+
+      const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
+      const pastTime = new Date(Date.now() - 6 * 60 * 1000); // 6 minutes ago
+      utimesSync(stateFile, pastTime, pastTime);
+
+      const result = resumeAutopilot(testDir);
+
+      expect(result.success).toBe(true);
+      expect(result.state?.was_interrupted).toBe(true);
+      expect(result.state?.resumed_at).toBeDefined();
+      expect(result.state?.active).toBe(true);
+    });
+
+    it('should set was_interrupted and resumed_at on interrupted resume', () => {
+      initAutopilot(testDir, 'test idea');
+      transitionPhase(testDir, 'qa');
+
+      const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
+      const pastTime = new Date(Date.now() - 10 * 60 * 1000); // 10 minutes ago
+      utimesSync(stateFile, pastTime, pastTime);
+
+      const result = resumeAutopilot(testDir);
+
+      expect(result.success).toBe(true);
+      expect(result.state?.was_interrupted).toBe(true);
+      expect(result.state?.resumed_at).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+      expect(result.message).toContain('qa');
+    });
   });
 
   describe('formatCancelMessage', () => {
@@ -624,6 +660,141 @@ describe('AutopilotCancel', () => {
       expect(formatted).toContain('[AUTOPILOT CANCELLED]');
       expect(formatted).toContain('Cleaned up: ralph, ultrawork');
       expect(formatted).toContain('Progress Summary:');
+    });
+  });
+
+  describe('formatFailureSummary', () => {
+    it('should show completed steps with checkmarks', () => {
+      const state = initAutopilot(testDir, 'test idea');
+      if (!state) throw new Error('Failed to init');
+      state.phase = 'execution';
+      state.completed_steps = ['expansion', 'planning'];
+      state.failure_reason = 'Ralph state clear failed';
+
+      const output = formatFailureSummary(state);
+
+      expect(output).toContain('✓ expansion');
+      expect(output).toContain('✓ planning');
+      expect(output).toContain('✗ execution');
+      expect(output).toContain('Ralph state clear failed');
+      expect(output).toContain('/autopilot');
+    });
+
+    it('should handle no completed steps', () => {
+      const state = initAutopilot(testDir, 'test idea');
+      if (!state) throw new Error('Failed to init');
+      state.phase = 'expansion';
+      state.completed_steps = [];
+
+      const output = formatFailureSummary(state);
+
+      expect(output).toContain('✗ expansion');
+      expect(output).not.toContain('✓');
+    });
+
+    it('should not show phases beyond failure point', () => {
+      const state = initAutopilot(testDir, 'test idea');
+      if (!state) throw new Error('Failed to init');
+      state.phase = 'planning';
+      state.completed_steps = ['expansion'];
+
+      const output = formatFailureSummary(state);
+
+      expect(output).toContain('✓ expansion');
+      expect(output).toContain('✗ planning');
+      expect(output).not.toContain('execution');
+    });
+  });
+
+  describe('appendCompletedStep', () => {
+    it('should append a step to completed_steps', () => {
+      initAutopilot(testDir, 'test idea');
+      appendCompletedStep(testDir, 'expansion');
+
+      const state = readAutopilotState(testDir);
+      expect(state?.completed_steps).toContain('expansion');
+    });
+
+    it('should accumulate multiple steps', () => {
+      initAutopilot(testDir, 'test idea');
+      appendCompletedStep(testDir, 'expansion');
+      appendCompletedStep(testDir, 'planning');
+
+      const state = readAutopilotState(testDir);
+      expect(state?.completed_steps).toEqual(['expansion', 'planning']);
+    });
+
+    it('should return false when no state exists', () => {
+      const result = appendCompletedStep(testDir, 'expansion');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('recordFailureReason', () => {
+    it('should record failure reason in state', () => {
+      initAutopilot(testDir, 'test idea');
+      recordFailureReason(testDir, 'Build failed: tsc error');
+
+      const state = readAutopilotState(testDir);
+      expect(state?.failure_reason).toBe('Build failed: tsc error');
+    });
+
+    it('should return false when no state exists', () => {
+      const result = recordFailureReason(testDir, 'some error');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('review fixes', () => {
+    it('canResumeAutopilot: stale cleanup should not return state', () => {
+      initAutopilot(testDir, 'test idea');
+      cancelAutopilot(testDir);
+
+      const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
+      const pastTime = new Date(Date.now() - STALE_STATE_MAX_AGE_MS - 60_000);
+      utimesSync(stateFile, pastTime, pastTime);
+
+      const result = canResumeAutopilot(testDir);
+
+      expect(result.canResume).toBe(false);
+      expect(result.state).toBeUndefined();
+    });
+
+    it('appendCompletedStep: deduplicates repeated steps', () => {
+      initAutopilot(testDir, 'test idea');
+      appendCompletedStep(testDir, 'expansion');
+      appendCompletedStep(testDir, 'expansion'); // duplicate
+
+      const state = readAutopilotState(testDir);
+      expect(state?.completed_steps?.filter(s => s === 'expansion').length).toBe(1);
+    });
+
+    it('resumeAutopilot: refuses when max_iterations reached', () => {
+      const state = initAutopilot(testDir, 'test idea');
+      if (!state) throw new Error('Failed to init');
+      cancelAutopilot(testDir);
+
+      // Set iteration to max
+      const s = readAutopilotState(testDir)!;
+      s.iteration = s.max_iterations;
+      writeAutopilotState(testDir, s);
+
+      const result = resumeAutopilot(testDir);
+      expect(result.success).toBe(false);
+      expect(result.message).toContain('Max iterations');
+    });
+
+    it('formatFailureSummary: shows failure phase even when intermediate phases skipped', () => {
+      const state = initAutopilot(testDir, 'test idea');
+      if (!state) throw new Error('Failed to init');
+      // expansion done, planning skipped (e.g. skipQa scenario analog), failed at qa
+      state.phase = 'qa';
+      state.completed_steps = ['expansion'];
+
+      const output = formatFailureSummary(state);
+
+      expect(output).toContain('✓ expansion');
+      expect(output).toContain('✗ qa');
     });
   });
 });
