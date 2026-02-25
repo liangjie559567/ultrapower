@@ -8,7 +8,7 @@ import {
   acquireTaskLock, releaseTaskLock, withTaskLock,
 } from '../task-file-ops.js';
 import type { TaskFile } from '../types.js';
-import type { _LockHandle } from '../task-file-ops.js';
+import type { LockHandle } from '../task-file-ops.js';
 
 const TEST_TEAM = 'test-team-ops';
 let TEST_BASE_DIR: string;

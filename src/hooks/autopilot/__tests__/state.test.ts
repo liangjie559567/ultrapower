@@ -4,16 +4,16 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 import {
   readAutopilotState,
-  _writeAutopilotState,
+  writeAutopilotState,
   clearAutopilotState,
   isAutopilotActive,
   initAutopilot,
   transitionPhase,
   updateExpansion,
-  _updatePlanning,
+  updatePlanning,
   updateExecution,
-  _updateQA,
-  _updateValidation
+  updateQA,
+  updateValidation
 } from '../state.js';
 
 describe('AutopilotState', () => {

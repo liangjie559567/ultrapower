@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { _mkdirSync, rmSync, existsSync, mkdtempSync } from 'fs';
+import { mkdirSync, rmSync, existsSync, mkdtempSync } from 'fs';
 import { execSync } from 'child_process';
 import { join } from 'path';
 import { tmpdir } from 'os';

@@ -8,8 +8,8 @@
  * - Project-local .claude-plugin/ directories
  */
 
-import { existsSync, readdirSync, readFileSync, _statSync, realpathSync } from 'fs';
-import { join, basename, _dirname, resolve, normalize } from 'path';
+import { existsSync, readdirSync, readFileSync, statSync, realpathSync } from 'fs';
+import { join, basename, dirname, resolve, normalize } from 'path';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import Ajv, { type ValidateFunction } from 'ajv';
 import type {

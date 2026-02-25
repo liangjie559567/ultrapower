@@ -10,12 +10,12 @@ import { ToolDefinition } from '../tools/types.js';
 import {
   addSharedTask,
   readSharedTasks,
-  _updateSharedTask,
+  updateSharedTask,
   addSharedMessage,
   readSharedMessages,
   markMessageAsRead,
   SharedTask,
-  _SharedMessage,
+  SharedMessage,
 } from './shared-state.js';
 import {
   listOmxTeams,

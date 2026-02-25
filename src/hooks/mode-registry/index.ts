@@ -12,7 +12,7 @@
 import { existsSync, readFileSync, writeFileSync, unlinkSync, mkdirSync, readdirSync, statSync, rmdirSync, rmSync } from 'fs';
 import { join, dirname } from 'path';
 import type { ExecutionMode, ModeConfig, ModeStatus, CanStartResult } from './types.js';
-import { listSessionIds, resolveSessionStatePath, getSessionStateDir, _validateSessionId } from '../../lib/worktree-paths.js';
+import { listSessionIds, resolveSessionStatePath, getSessionStateDir, validateSessionId } from '../../lib/worktree-paths.js';
 
 export type { ExecutionMode, ModeConfig, ModeStatus, CanStartResult } from './types.js';
 

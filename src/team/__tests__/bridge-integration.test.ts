@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync, statSync, realpathSync } from 'fs';
-import { join, _resolve } from 'path';
+import { join, resolve } from 'path';
 import { homedir, tmpdir } from 'os';
 import type { BridgeConfig, TaskFile, OutboxMessage } from '../types.js';
 import { readTask, updateTask } from '../task-file-ops.js';

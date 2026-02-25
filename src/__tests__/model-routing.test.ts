@@ -1,4 +1,4 @@
-import { describe, it, expect, _vi, _beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   extractLexicalSignals,
   extractStructuralSignals,

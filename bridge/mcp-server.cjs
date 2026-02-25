@@ -18347,12 +18347,8 @@ var LspClientManager = class {
     let client = this.clients.get(key);
     if (!client) {
       client = new LspClient(workspaceRoot, serverConfig);
-      try {
-        await client.connect();
-        this.clients.set(key, client);
-      } catch (error2) {
-        throw error2;
-      }
+      await client.connect();
+      this.clients.set(key, client);
     }
     this.lastUsed.set(key, Date.now());
     return client;
@@ -18372,12 +18368,8 @@ var LspClientManager = class {
     let client = this.clients.get(key);
     if (!client) {
       client = new LspClient(workspaceRoot, serverConfig);
-      try {
-        await client.connect();
-        this.clients.set(key, client);
-      } catch (error2) {
-        throw error2;
-      }
+      await client.connect();
+      this.clients.set(key, client);
     }
     this.lastUsed.set(key, Date.now());
     this.inFlightCount.set(key, (this.inFlightCount.get(key) || 0) + 1);
@@ -18698,7 +18690,8 @@ function runTscDiagnostics(directory) {
       warningCount: 0
     };
   } catch (error2) {
-    const output = error2.stdout || error2.stderr || "";
+    const e = error2;
+    const output = e.stdout || e.stderr || "";
     return parseTscOutput(output);
   }
 }
@@ -18749,11 +18742,11 @@ function findFiles(directory, extensions, ignoreDirs = []) {
               results.push(fullPath);
             }
           }
-        } catch (error2) {
+        } catch (_error) {
           continue;
         }
       }
-    } catch (error2) {
+    } catch (_error) {
       return;
     }
   }
@@ -18778,7 +18771,7 @@ async function runLspAggregatedDiagnostics(directory, extensions = [".ts", ".tsx
         }
         filesChecked++;
       });
-    } catch (error2) {
+    } catch (_error) {
       continue;
     }
   }
@@ -20212,7 +20205,7 @@ var SessionLock = class {
         acquired: true,
         reason: existingLock ? "stale_broken" : "success"
       };
-    } catch (err) {
+    } catch (_err) {
       return {
         acquired: false,
         reason: "error"
@@ -20917,7 +20910,7 @@ async function handleReset(sessionId, socketPath) {
   try {
     const result = await sendSocketRequest(socketPath, "reset", {}, 1e4);
     return formatResetResult(result, sessionId);
-  } catch (error2) {
+  } catch (_error) {
     await killBridgeWithEscalation(sessionId);
     return [
       "=== Bridge Restarted ===",
@@ -22837,7 +22830,7 @@ async function loadProjectMemory(projectRoot) {
       return null;
     }
     return memory;
-  } catch (error2) {
+  } catch (_error) {
     return null;
   }
 }
@@ -23030,7 +23023,7 @@ var projectMemoryAddNoteTool = {
     const { category, content, workingDirectory } = args;
     try {
       const root = validateWorkingDirectory(workingDirectory);
-      let memory = await loadProjectMemory(root);
+      const memory = await loadProjectMemory(root);
       if (!memory) {
         return {
           content: [{
@@ -23072,7 +23065,7 @@ var projectMemoryAddDirectiveTool = {
     const { directive, context = "", priority = "normal", workingDirectory } = args;
     try {
       const root = validateWorkingDirectory(workingDirectory);
-      let memory = await loadProjectMemory(root);
+      const memory = await loadProjectMemory(root);
       if (!memory) {
         return {
           content: [{

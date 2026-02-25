@@ -8,7 +8,7 @@
  */
 
 import type { ActiveAgent, AgentsFormat } from '../types.js';
-import { _cyan, dim, RESET, getModelTierColor, getDurationColor } from '../colors.js';
+import { cyan, dim, RESET, getModelTierColor, getDurationColor } from '../colors.js';
 import { truncateToWidth } from '../../utils/string-width.js';
 
 const CYAN = '\x1b[36m';

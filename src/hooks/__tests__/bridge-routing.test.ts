@@ -17,7 +17,7 @@ import {
   resetSkipHooksCache,
   requiredKeysForHook,
   HookInput,
-  _HookOutput,
+  HookOutput,
   HookType,
 } from '../bridge.js';
 

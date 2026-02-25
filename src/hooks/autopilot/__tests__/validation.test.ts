@@ -12,7 +12,7 @@ import {
   formatValidationResults
 } from '../validation.js';
 import { initAutopilot, transitionPhase } from '../state.js';
-import type { _AutopilotState } from '../types.js';
+import type { AutopilotState } from '../types.js';
 
 describe('AutopilotValidation', () => {
   let testDir: string;

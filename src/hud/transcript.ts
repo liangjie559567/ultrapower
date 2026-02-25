@@ -24,9 +24,9 @@ import type {
   TranscriptData,
   ActiveAgent,
   TodoItem,
-  _SkillInvocation,
+  SkillInvocation,
   PendingPermission,
-  _ThinkingState,
+  ThinkingState,
 } from "./types.js";
 
 // Performance constants

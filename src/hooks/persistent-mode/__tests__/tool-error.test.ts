@@ -3,10 +3,10 @@
  * Tests the functions that read tool error state and generate retry messages
  */
 
-import { describe, it, expect, vi, beforeEach, _afterEach } from 'vitest';
-import { existsSync, readFileSync, unlinkSync, _mkdirSync, _writeFileSync } from 'fs';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { existsSync, readFileSync, unlinkSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { _tmpdir } from 'os';
+import { tmpdir } from 'os';
 import {
   readLastToolError,
   clearToolErrorState,

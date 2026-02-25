@@ -22,7 +22,7 @@ import {
   PermissionRequestInput,
 } from '../permission-handler/index.js';
 import { validatePath } from '../../lib/worktree-paths.js';
-import { normalizeHookInput, SENSITIVE_HOOKS, _KNOWN_FIELDS, isAlreadyCamelCase, HookInputSchema } from '../bridge-normalize.js';
+import { normalizeHookInput, SENSITIVE_HOOKS, KNOWN_FIELDS, isAlreadyCamelCase, HookInputSchema } from '../bridge-normalize.js';
 import { readAutopilotState } from '../autopilot/state.js';
 
 // ============================================================================

@@ -87,7 +87,7 @@ export class MetricsCollector {
 // Common aggregators
 export const aggregators = {
   sum: (field: string) => (events: MetricEvent[]) => {
-    return events.reduce((sum, e) => sum + (e.data[field] || 0), 0);
+    return events.reduce((sum, e) => sum + ((e.data[field] as number) || 0), 0);
   },
 
   avg: (field: string) => (events: MetricEvent[]) => {
@@ -112,12 +112,12 @@ export const aggregators = {
 
   max: (field: string) => (events: MetricEvent[]) => {
     if (events.length === 0) return 0;
-    return Math.max(...events.map(e => e.data[field] || 0));
+    return Math.max(...events.map(e => (e.data[field] as number) || 0));
   },
 
   min: (field: string) => (events: MetricEvent[]) => {
     if (events.length === 0) return 0;
-    return Math.min(...events.map(e => e.data[field] || 0));
+    return Math.min(...events.map(e => (e.data[field] as number) || 0));
   }
 };
 

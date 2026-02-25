@@ -6,10 +6,10 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, _writeFileSync, rmSync } from 'fs';
+import { mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-import type { DaemonState, _RateLimitStatus, _BlockedPane } from '../../features/rate-limit-wait/types.js';
+import type { DaemonState, RateLimitStatus, BlockedPane } from '../../features/rate-limit-wait/types.js';
 
 // Mock modules
 vi.mock('../../hud/usage-api.js', () => ({

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, _vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { resetTokenTracker } from '../../analytics/token-tracker.js';
 
 describe('TokenTracker.getTopAgents', () => {

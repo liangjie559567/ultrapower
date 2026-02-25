@@ -233,8 +233,8 @@ describe('LspClientManager eviction and disconnectAll', () => {
       manager._lastUsed.set(key, Date.now());
 
       // Use the real runWithClientLease logic
-      let _leaseResolve: () => void;
-      const _leasePromise = new Promise<void>((resolve) => {
+      let leaseResolve: () => void;
+      const leasePromise = new Promise<void>((resolve) => {
         leaseResolve = resolve;
       });
 

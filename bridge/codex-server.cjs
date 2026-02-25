@@ -14865,7 +14865,7 @@ async function initJobDb(cwd) {
       "SELECT value FROM schema_info WHERE key = 'version'"
     );
     const versionRow = versionStmt.get();
-    const _currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    const __currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
     const setVersion = db.prepare(
       "INSERT OR REPLACE INTO schema_info (key, value) VALUES (?, ?)"
     );
@@ -15351,7 +15351,7 @@ function getDefaultModelForProvider(provider, config2) {
   }
   return HARDCODED_DEFAULTS[provider];
 }
-function buildFallbackChain(provider, resolvedModel, config2) {
+function buildFallbackChain(provider, resolvedModel, _config) {
   const defaultChain = provider === "codex" ? CODEX_MODEL_FALLBACKS : GEMINI_MODEL_FALLBACKS;
   const chain = [resolvedModel, ...defaultChain];
   return [...new Set(chain)];

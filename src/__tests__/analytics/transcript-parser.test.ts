@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, _beforeEach, _afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';

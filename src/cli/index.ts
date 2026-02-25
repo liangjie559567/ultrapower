@@ -14,7 +14,7 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { _readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -692,7 +692,7 @@ Examples:
       if (options.show) {
         if (config.notificationProfiles[profileName]) {
           console.log(chalk.blue(`Profile "${profileName}" — ${type} configuration:`));
-          const platformConfig = profile[type];
+          const platformConfig = (profile as unknown as Record<string, unknown>)[type];
           if (platformConfig) {
             console.log(JSON.stringify(platformConfig, null, 2));
           } else {
@@ -797,7 +797,7 @@ Examples:
       try {
         writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), 'utf-8');
         console.log(chalk.green(`\u2713 Profile "${profileName}" — ${type} configured`));
-        console.log(JSON.stringify(profile[type], null, 2));
+        console.log(JSON.stringify((profile as unknown as Record<string, unknown>)[type], null, 2));
       } catch (error) {
         console.error(chalk.red('Failed to write configuration:'), error);
         process.exit(1);
@@ -965,7 +965,7 @@ Examples:
         for (const pName of names) {
           const p = profiles[pName];
           const platforms = ['discord', 'discord-bot', 'telegram', 'slack', 'webhook']
-            .filter((plat) => p[plat]?.enabled)
+            .filter((plat) => (p as unknown as Record<string, unknown>)[plat] && ((p as unknown as Record<string, { enabled?: boolean }>)[plat])?.enabled)
             .join(', ');
           const status = p.enabled !== false ? chalk.green('enabled') : chalk.red('disabled');
           console.log(`  ${chalk.bold(pName)} [${status}] — ${platforms || 'no platforms'}`);

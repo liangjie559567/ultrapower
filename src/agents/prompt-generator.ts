@@ -5,7 +5,7 @@
  * Adding a new agent to definitions.ts automatically includes it in the generated prompt.
  */
 
-import type { AgentConfig } from './types.js';
+import type { AgentConfig, AgentPromptMetadata } from './types.js';
 import {
   buildHeader,
   buildAgentRegistry,
@@ -199,6 +199,6 @@ export function convertDefinitionsToConfigs(
     disallowedTools: def.disallowedTools,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SDK model type is narrower than string
     model: def.model as any,
-    metadata: def.metadata
+    metadata: def.metadata as AgentPromptMetadata | undefined
   }));
 }

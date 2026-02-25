@@ -8,7 +8,7 @@
  */
 
 import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, readFileSync, appendFileSync } from 'fs';
-import { join, _dirname } from 'path';
+import { join, dirname } from 'path';
 
 import { registerBeadsContext } from '../beads-context/index.js';
 
