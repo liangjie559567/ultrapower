@@ -98,14 +98,14 @@ export function detectSecurityImplications(files: string[]): boolean {
   const securityPatterns = [
     /\/auth\//i,                              // auth directory
     /\/security\//i,                          // security directory
-    /(^|[\/-])permissions?\.(ts|js)$/i,       // permission.ts, permissions.ts
-    /(^|[\/-])credentials?\.(ts|js|json)$/i,  // credential.ts, credentials.json
-    /(^|[\/-])secrets?\.(ts|js|json|ya?ml)$/i, // secret.ts, secrets.yaml
-    /(^|[\/-])tokens?\.(ts|js|json)$/i,       // token.ts, auth-token.ts
+    /(^|[/-])permissions?\.(ts|js)$/i,       // permission.ts, permissions.ts
+    /(^|[/-])credentials?\.(ts|js|json)$/i,  // credential.ts, credentials.json
+    /(^|[/-])secrets?\.(ts|js|json|ya?ml)$/i, // secret.ts, secrets.yaml
+    /(^|[/-])tokens?\.(ts|js|json)$/i,       // token.ts, auth-token.ts
     /\.(env|pem|key)(\.|$)/i,                 // .env, .env.local, cert.pem, private.key
-    /(^|[\/-])passwords?\.(ts|js|json)$/i,    // password.ts
-    /(^|[\/-])oauth/i,                        // oauth.ts, oauth-config.ts, oauth2.ts
-    /(^|[\/-])jwt/i,                          // jwt.ts, jwt-utils.ts, jwt_utils.ts
+    /(^|[/-])passwords?\.(ts|js|json)$/i,    // password.ts
+    /(^|[/-])oauth/i,                        // oauth.ts, oauth-config.ts, oauth2.ts
+    /(^|[/-])jwt/i,                          // jwt.ts, jwt-utils.ts, jwt_utils.ts
   ];
 
   return files.some((file) =>

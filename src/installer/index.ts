@@ -159,7 +159,7 @@ export function isOmcHook(command: string): boolean {
   const lowerCommand = command.toLowerCase();
   // Match "omc" as a path segment or word boundary
   // Matches: /omc/, /omc-, omc/, -omc, _omc, omc_
-  const omcPattern = /(?:^|[\/\\_-])omc(?:$|[\/\\_-])/;
+  const omcPattern = /(?:^|[/\\_-])omc(?:$|[/\\_-])/;
   const fullNamePattern = /ultrapower|oh-my-claudecode/;
   if (omcPattern.test(lowerCommand) || fullNamePattern.test(lowerCommand)) {
     return true;

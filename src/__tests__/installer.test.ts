@@ -347,7 +347,7 @@ describe('Installer Constants', () => {
     });
 
     it('should have agents referenced in CLAUDE.md exist in AGENT_DEFINITIONS', () => {
-      const agentMatches = CLAUDE_MD_CONTENT.matchAll(/\`([a-z-]+)\`\s*\|\s*(Opus|Sonnet|Haiku)/g);
+      const agentMatches = CLAUDE_MD_CONTENT.matchAll(/`([a-z-]+)`\s*\|\s*(Opus|Sonnet|Haiku)/g);
 
       for (const match of agentMatches) {
         const agentName = match[1];

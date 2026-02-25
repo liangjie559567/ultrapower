@@ -9,7 +9,7 @@ import { createHash } from "crypto";
 import type { SkillMetadata } from "./types.js";
 
 const ABSOLUTE_PATH_PATTERN =
-  /(?:^|\s)((?:[A-Z]:)?(?:\/|\\)[\w\/\\.-]+\.\w+)/gi;
+  /(?:^|\s)((?:[A-Z]:)?(?:\/|\\)[\w/\\.-]+\.\w+)/gi;
 const RELATIVE_PATH_PATTERN = /(?:^|\s)(\.\.?\/[\w\/.-]+\.\w+)/gi;
 const SIMPLE_PATH_PATTERN = /(?:^|\s)([\w-]+(?:\/[\w-]+)+\.\w+)/gi;
 const ERROR_MESSAGE_PATTERN = /(?:Error|Exception|Warning):\s*([^\n]+)/gi;

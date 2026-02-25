@@ -519,7 +519,7 @@ export class TokenTracker {
     try {
       const content = await fs.readFile(TOKEN_LOG_FILE, "utf-8");
       const lines = content.trim().split("\n");
-      let _kept = 0;
+      const _kept = 0;
       let removed = 0;
 
       const filteredLines = lines.filter((line) => {

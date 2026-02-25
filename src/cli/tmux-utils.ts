@@ -101,7 +101,7 @@ export function buildTmuxShellCommand(command: string, args: string[]): string {
  * Uses single quotes with proper escaping
  */
 export function quoteShellArg(value: string): string {
-  return `'${value.replace(/'/g, `'\"'\"'`)}'`;
+  return `'${value.replace(/'/g, `'"'"'`)}'`;
 }
 
 /**
