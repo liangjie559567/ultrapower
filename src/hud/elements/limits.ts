@@ -68,8 +68,8 @@ export function renderRateLimits(limits: RateLimits | null): string | null {
   const fiveHourReset = formatResetTime(limits.fiveHourResetsAt);
 
   const fiveHourPart = fiveHourReset
-    ? `5h:${fiveHourColor}${fiveHour}%${RESET}${DIM}(${fiveHourReset})${RESET}`
-    : `5h:${fiveHourColor}${fiveHour}%${RESET}`;
+    ? `5时:${fiveHourColor}${fiveHour}%${RESET}${DIM}(${fiveHourReset})${RESET}`
+    : `5时:${fiveHourColor}${fiveHour}%${RESET}`;
 
   const parts = [fiveHourPart];
 
@@ -79,8 +79,8 @@ export function renderRateLimits(limits: RateLimits | null): string | null {
     const weeklyReset = formatResetTime(limits.weeklyResetsAt);
 
     const weeklyPart = weeklyReset
-      ? `${DIM}wk:${RESET}${weeklyColor}${weekly}%${RESET}${DIM}(${weeklyReset})${RESET}`
-      : `${DIM}wk:${RESET}${weeklyColor}${weekly}%${RESET}`;
+      ? `${DIM}周:${RESET}${weeklyColor}${weekly}%${RESET}${DIM}(${weeklyReset})${RESET}`
+      : `${DIM}周:${RESET}${weeklyColor}${weekly}%${RESET}`;
 
     parts.push(weeklyPart);
   }
@@ -91,8 +91,8 @@ export function renderRateLimits(limits: RateLimits | null): string | null {
     const monthlyReset = formatResetTime(limits.monthlyResetsAt);
 
     const monthlyPart = monthlyReset
-      ? `${DIM}mo:${RESET}${monthlyColor}${monthly}%${RESET}${DIM}(${monthlyReset})${RESET}`
-      : `${DIM}mo:${RESET}${monthlyColor}${monthly}%${RESET}`;
+      ? `${DIM}月:${RESET}${monthlyColor}${monthly}%${RESET}${DIM}(${monthlyReset})${RESET}`
+      : `${DIM}月:${RESET}${monthlyColor}${monthly}%${RESET}`;
 
     parts.push(monthlyPart);
   }
@@ -147,8 +147,8 @@ export function renderRateLimitsWithBar(
   const fiveHourReset = formatResetTime(limits.fiveHourResetsAt);
 
   const fiveHourPart = fiveHourReset
-    ? `5h:[${fiveHourBar}]${fiveHourColor}${fiveHour}%${RESET}${DIM}(${fiveHourReset})${RESET}`
-    : `5h:[${fiveHourBar}]${fiveHourColor}${fiveHour}%${RESET}`;
+    ? `5时:[${fiveHourBar}]${fiveHourColor}${fiveHour}%${RESET}${DIM}(${fiveHourReset})${RESET}`
+    : `5时:[${fiveHourBar}]${fiveHourColor}${fiveHour}%${RESET}`;
 
   const parts = [fiveHourPart];
 
@@ -161,8 +161,8 @@ export function renderRateLimitsWithBar(
     const weeklyReset = formatResetTime(limits.weeklyResetsAt);
 
     const weeklyPart = weeklyReset
-      ? `${DIM}wk:${RESET}[${weeklyBar}]${weeklyColor}${weekly}%${RESET}${DIM}(${weeklyReset})${RESET}`
-      : `${DIM}wk:${RESET}[${weeklyBar}]${weeklyColor}${weekly}%${RESET}`;
+      ? `${DIM}周:${RESET}[${weeklyBar}]${weeklyColor}${weekly}%${RESET}${DIM}(${weeklyReset})${RESET}`
+      : `${DIM}周:${RESET}[${weeklyBar}]${weeklyColor}${weekly}%${RESET}`;
 
     parts.push(weeklyPart);
   }
@@ -176,8 +176,8 @@ export function renderRateLimitsWithBar(
     const monthlyReset = formatResetTime(limits.monthlyResetsAt);
 
     const monthlyPart = monthlyReset
-      ? `${DIM}mo:${RESET}[${monthlyBar}]${monthlyColor}${monthly}%${RESET}${DIM}(${monthlyReset})${RESET}`
-      : `${DIM}mo:${RESET}[${monthlyBar}]${monthlyColor}${monthly}%${RESET}`;
+      ? `${DIM}月:${RESET}[${monthlyBar}]${monthlyColor}${monthly}%${RESET}${DIM}(${monthlyReset})${RESET}`
+      : `${DIM}月:${RESET}[${monthlyBar}]${monthlyColor}${monthly}%${RESET}`;
 
     parts.push(monthlyPart);
   }
