@@ -163,7 +163,7 @@ export function isUserAbort(context?: StopContext): boolean {
  * Blocking these stops causes a deadlock: can't compact because can't stop,
  * can't continue because context is full.
  *
- * See: https://github.com/Yeachan-Heo/ultrapower/issues/213
+ * See: https://github.com/liangjie559567/ultrapower/issues/213
  */
 export function isContextLimitStop(context?: StopContext): boolean {
   if (!context) return false;

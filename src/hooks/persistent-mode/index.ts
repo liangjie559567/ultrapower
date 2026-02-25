@@ -572,7 +572,7 @@ export async function checkPersistentModes(
 
   // CRITICAL: Never block context-limit stops.
   // Blocking these causes a deadlock where Claude Code cannot compact.
-  // See: https://github.com/Yeachan-Heo/ultrapower/issues/213
+  // See: https://github.com/liangjie559567/ultrapower/issues/213
   if (isContextLimitStop(stopContext)) {
     return {
       shouldBlock: false,

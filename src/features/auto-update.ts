@@ -19,7 +19,7 @@ import { getConfigDir } from '../utils/config-dir.js';
 import type { NotificationConfig } from '../notifications/types.js';
 
 /** GitHub repository information */
-export const REPO_OWNER = 'Yeachan-Heo';
+export const REPO_OWNER = 'liangjie559567';
 export const REPO_NAME = 'ultrapower';
 export const GITHUB_API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
 export const GITHUB_RAW_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}`;

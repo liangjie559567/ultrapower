@@ -444,7 +444,7 @@ Examples:
 
     // Generate config content
     const configContent = `// Oh-My-ClaudeCode Configuration
-// See: https://github.com/Yeachan-Heo/ultrapower for documentation
+// See: https://github.com/liangjie559567/ultrapower for documentation
 {
   "$schema": "./sisyphus-schema.json",
 
