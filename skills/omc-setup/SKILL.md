@@ -35,12 +35,12 @@ fi
 
 使用 AskUserQuestion 工具提示：
 
-**问题：** "OMC is already configured. What would you like to do?"
+**问题：** "OMC 已配置完成。你想做什么？"
 
 **选项：**
-1. **Update CLAUDE.md only** - 下载最新 CLAUDE.md 而不重新运行完整设置
-2. **Run full setup again** - 完整设置向导
-3. **Cancel** - 不做任何更改退出
+1. **仅更新 CLAUDE.md** - 下载最新 CLAUDE.md 而不重新运行完整设置
+2. **重新运行完整设置** - 完整设置向导
+3. **取消** - 不做任何更改退出
 
 **如果用户选择"Update CLAUDE.md only"：**
 - 检测本地（.claude/CLAUDE.md）或全局（~/.claude/CLAUDE.md）配置是否存在
@@ -117,11 +117,11 @@ fi
 
 如果状态存在，使用 AskUserQuestion 提示：
 
-**问题：** "Found a previous setup session. Would you like to resume or start fresh?"
+**问题：** "找到上次设置会话。是否继续还是重新开始？"
 
 **选项：**
-1. **Resume from step $LAST_STEP** - 从中断处继续
-2. **Start fresh** - 从头开始（清除已保存状态）
+1. **从步骤 $LAST_STEP 继续** - 从中断处继续
+2. **重新开始** - 从头开始（清除已保存状态）
 
 如果用户选择"Start fresh"：
 ```bash
@@ -179,11 +179,11 @@ echo "Setup completed successfully. State cleared."
 
 使用 AskUserQuestion 工具提示用户：
 
-**问题：** "Where should I configure ultrapower?"
+**问题：** "ultrapower 应该配置在哪里？"
 
 **选项：**
-1. **Local (this project)** - 在当前项目目录创建 `.claude/CLAUDE.md`。最适合项目特定配置。
-2. **Global (all projects)** - 创建 `~/.claude/CLAUDE.md` 用于所有 Claude Code session。最适合全局一致行为。
+1. **本地（此项目）** - 在当前项目目录创建 `.claude/CLAUDE.md`。最适合项目特定配置。
+2. **全局（所有项目）** - 创建 `~/.claude/CLAUDE.md` 用于所有 Claude Code session。最适合全局一致行为。
 
 ## 步骤 2A：本地配置（--local 标志或用户选择 LOCAL）
 
@@ -405,7 +405,7 @@ fi
 
 使用 AskUserQuestion 工具提示用户：
 
-**问题：** "Which parallel execution mode should be your default when you say 'fast' or 'parallel'?"
+**问题：** "默认并行执行模式应该是什么（当你说 'fast' 或 'parallel' 时）？"
 
 **选项：**
 1. **ultrawork（最大能力）** - 使用所有 agent 层级，包括 Opus 处理复杂任务。最适合质量最重要的挑战性工作。（推荐）
@@ -416,14 +416,7 @@ fi
 ```bash
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
 mkdir -p "$(dirname "$CONFIG_FILE")"
-
-if [ -f "$CONFIG_FILE" ]; then
-  EXISTING=$(cat "$CONFIG_FILE")
-else
-  EXISTING='{}'
-fi
-
-# 将 USER_CHOICE 替换为 "ultrawork" 或 ""
+if [ -f "$CONFIG_FILE" ]; then EXISTING=$(cat "$CONFIG_FILE"); else EXISTING='{}'; fi
 echo "$EXISTING" | jq --arg mode "USER_CHOICE" '. + {defaultExecutionMode: $mode, configuredAt: (now | todate)}' > "$CONFIG_FILE"
 echo "Default execution mode set to: USER_CHOICE"
 ```
@@ -431,8 +424,6 @@ echo "Default execution mode set to: USER_CHOICE"
 **注意**：此偏好仅影响通用关键词（"fast"、"parallel"）。明确关键词（"ulw"）始终覆盖此偏好。
 
 ## 步骤 3.8：安装 CLI 分析工具（可选）
-
-OMC CLI 提供独立的 token 分析命令（`omc stats`、`omc agents`、`omc tui`）。
 
 CLI（`omc` 命令）**不再支持**通过 npm/bun 全局安装。
 
@@ -447,58 +438,37 @@ CLI（`omc` 命令）**不再支持**通过 npm/bun 全局安装。
 首先，检测可用的任务工具：
 
 ```bash
-BD_VERSION=""
-if command -v bd &>/dev/null; then
-  BD_VERSION=$(bd --version 2>/dev/null | head -1 || echo "installed")
-fi
-
-BR_VERSION=""
-if command -v br &>/dev/null; then
-  BR_VERSION=$(br --version 2>/dev/null | head -1 || echo "installed")
-fi
-
-if [ -n "$BD_VERSION" ]; then
-  echo "Found beads (bd): $BD_VERSION"
-fi
-if [ -n "$BR_VERSION" ]; then
-  echo "Found beads-rust (br): $BR_VERSION"
-fi
-if [ -z "$BD_VERSION" ] && [ -z "$BR_VERSION" ]; then
-  echo "No external task tools found. Using built-in Tasks."
-fi
+BD_VERSION=""; if command -v bd &>/dev/null; then BD_VERSION=$(bd --version 2>/dev/null | head -1 || echo "installed"); fi
+BR_VERSION=""; if command -v br &>/dev/null; then BR_VERSION=$(br --version 2>/dev/null | head -1 || echo "installed"); fi
+[ -n "$BD_VERSION" ] && echo "Found beads (bd): $BD_VERSION"
+[ -n "$BR_VERSION" ] && echo "Found beads-rust (br): $BR_VERSION"
+[ -z "$BD_VERSION" ] && [ -z "$BR_VERSION" ] && echo "No external task tools found. Using built-in Tasks."
 ```
 
 如果**两者都未**检测到，跳过此步骤（默认使用内置）。
 
 如果检测到 beads 或 beads-rust，使用 AskUserQuestion：
 
-**问题：** "Which task management tool should I use for tracking work?"
+**问题：** "应该使用哪个任务管理工具来跟踪工作？"
 
 **选项：**
-1. **Built-in Tasks（默认）** - 使用 Claude Code 原生 TaskCreate/TodoWrite。任务仅限 session。
+1. **内置 Tasks（默认）** - 使用 Claude Code 原生 TaskCreate/TodoWrite。任务仅限 session。
 2. **Beads (bd)** - Git 支持的持久化任务。跨 session 存活。[仅在检测到时显示]
 3. **Beads-Rust (br)** - beads 的轻量级 Rust 移植版。[仅在检测到时显示]
-
-（仅在检测到对应工具时显示选项 2/3）
 
 存储偏好：
 
 ```bash
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
 mkdir -p "$(dirname "$CONFIG_FILE")"
-
-if [ -f "$CONFIG_FILE" ]; then
-  EXISTING=$(cat "$CONFIG_FILE")
-else
-  EXISTING='{}'
-fi
-
-# USER_CHOICE 根据用户选择为 "builtin"、"beads" 或 "beads-rust"
+if [ -f "$CONFIG_FILE" ]; then EXISTING=$(cat "$CONFIG_FILE"); else EXISTING='{}'; fi
 echo "$EXISTING" | jq --arg tool "USER_CHOICE" '. + {taskTool: $tool, taskToolConfig: {injectInstructions: true, useMcp: false}}' > "$CONFIG_FILE"
 echo "Task tool set to: USER_CHOICE"
 ```
 
-**注意：** beads 上下文指令将在下次 session 启动时自动注入。配置生效无需重启。（--global 标志或用户选择 GLOBAL）
+**注意：** beads 上下文指令将在下次 session 启动时自动注入。配置生效无需重启。
+
+## 步骤 2B：全局配置（--global 标志或用户选择 GLOBAL）
 
 **关键**：这始终从 GitHub 下载新鲜的 CLAUDE.md 到全局配置。不要使用 Write 工具——专用 bash curl。
 
@@ -782,7 +752,7 @@ grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" || echo "
 
 MCP 服务器通过额外工具（网络搜索、GitHub 等）扩展 Claude Code。
 
-询问用户："Would you like to configure MCP servers for enhanced capabilities? (Context7, Exa search, GitHub, etc.)"
+询问用户："是否要配置 MCP 服务器以增强功能？（Context7、Exa 搜索、GitHub 等）"
 
 如果是，调用 mcp-setup skill：
 ```
@@ -801,7 +771,7 @@ Agent teams 是 Claude Code 的实验性功能，允许你生成 N 个协调 age
 
 使用 AskUserQuestion 工具提示：
 
-**问题：** "Would you like to enable agent teams? Teams let you spawn coordinated agents (e.g., `/team 3:executor 'fix all errors'`). This is an experimental Claude Code feature."
+**问题：** "是否要启用 agent teams？Teams 允许你生成协调 agents（例如 `/team 3:executor 'fix all errors'`）。这是 Claude Code 的实验性功能。"
 
 **选项：**
 1. **Yes, enable teams（推荐）** - 启用实验性功能并配置默认值
@@ -865,7 +835,7 @@ fi
 
 使用 AskUserQuestion 工具：
 
-**问题：** "How should teammates be displayed?"
+**问题：** "Teammate 应该如何显示？"
 
 **选项：**
 1. **Auto（推荐）** - 在 tmux 中使用分割窗格，否则在进程内。适合大多数用户。
@@ -885,14 +855,14 @@ echo "Teammate display mode set to: TEAMMATE_MODE"
 
 使用 AskUserQuestion 工具提出多个问题：
 
-**问题 1：** "How many agents should teams spawn by default?"
+**问题 1：** "Teams 默认应该生成多少个 agents？"
 
 **选项：**
 1. **3 agents（推荐）** - 速度和资源使用的良好平衡
 2. **5 agents（最大）** - 大型任务的最大并行性
 3. **2 agents** - 保守，适合较小项目
 
-**问题 2：** "Which agent type should teammates use by default?"
+**问题 2：** "Teammate 默认应该使用哪种 agent 类型？"
 
 **选项：**
 1. **executor（推荐）** - 通用代码实现 agent
@@ -975,80 +945,80 @@ ls ~/.claude/commands/ralph-loop.md 2>/dev/null || ls ~/.claude/commands/ultrawo
 ### 新用户：
 
 ```
-OMC Setup Complete!
+OMC 设置完成！
 
-You don't need to learn any commands. I now have intelligent behaviors that activate automatically.
+你不需要学习任何命令。我现在具备了自动激活的智能行为。
 
-WHAT HAPPENS AUTOMATICALLY:
-- Complex tasks -> I parallelize and delegate to specialists
-- "plan this" -> I start a planning interview
-- "don't stop until done" -> I persist until verified complete
-- "stop" or "cancel" -> I intelligently stop current operation
+自动触发的行为：
+- 复杂任务 -> 自动并行化并委派给专业 agents
+- "plan this" -> 启动规划访谈
+- "don't stop until done" -> 持续执行直到验证完成
+- "stop" 或 "cancel" -> 智能停止当前操作
 
-MAGIC KEYWORDS (optional power-user shortcuts):
-Just include these words naturally in your request:
+魔法关键词（可选的高级用户快捷方式）：
+在请求中自然地包含这些词即可：
 
-| Keyword | Effect | Example |
-|---------|--------|---------|
-| ralph | Persistence mode | "ralph: fix the auth bug" |
-| ralplan | Iterative planning | "ralplan this feature" |
-| ulw | Max parallelism | "ulw refactor the API" |
-| eco | Token-efficient mode | "eco refactor the API" |
-| plan | Planning interview | "plan the new endpoints" |
-| team | Coordinated agents | "/team 3:executor fix errors" |
+| 关键词 | 效果 | 示例 |
+|--------|------|------|
+| ralph | 持久执行模式 | "ralph: fix the auth bug" |
+| ralplan | 迭代规划 | "ralplan this feature" |
+| ulw | 最大并行度 | "ulw refactor the API" |
+| eco | Token 节省模式 | "eco refactor the API" |
+| plan | 规划访谈 | "plan the new endpoints" |
+| team | 协调 agents | "/team 3:executor fix errors" |
 
-**ralph includes ultrawork:** When you activate ralph mode, it automatically includes ultrawork's parallel execution. No need to combine keywords.
+**ralph 包含 ultrawork：** 激活 ralph 模式时，自动包含 ultrawork 的并行执行。无需组合关键词。
 
-TEAMS:
-Spawn coordinated agents with shared task lists and real-time messaging:
+TEAMS（协调 agents）：
+生成共享任务列表和实时消息传递的协调 agents：
 - /ultrapower:team 3:executor "fix all TypeScript errors"
 - /ultrapower:team 5:build-fixer "fix build errors in src/"
-Teams use Claude Code native tools (TeamCreate/SendMessage/TaskCreate).
+Teams 使用 Claude Code 原生工具（TeamCreate/SendMessage/TaskCreate）。
 
-MCP SERVERS:
-Run /ultrapower:mcp-setup to add tools like web search, GitHub, etc.
+MCP 服务器：
+运行 /ultrapower:mcp-setup 添加网络搜索、GitHub 等工具。
 
-HUD STATUSLINE:
-The status bar now shows OMC state. Restart Claude Code to see it.
+HUD 状态栏：
+状态栏现在显示 OMC 状态。重启 Claude Code 即可看到。
 
-That's it! Just use Claude Code normally.
+就这些！正常使用 Claude Code 即可。
 ```
 
 ### 从 2.x 升级的用户：
 
 ```
-OMC Setup Complete! (Upgraded from 2.x)
+OMC 设置完成！（从 2.x 升级）
 
-GOOD NEWS: Your existing commands still work!
-- /ralph, /ultrawork, /plan, etc. all still function
+好消息：你现有的命令仍然有效！
+- /ralph、/ultrawork、/plan 等全部正常运行
 
-WHAT'S NEW in 3.0:
-You no longer NEED those commands. Everything is automatic now:
-- Just say "don't stop until done" instead of /ralph
-- Just say "fast" or "parallel" instead of /ultrawork
-- Just say "plan this" instead of /plan
-- Just say "stop" instead of /cancel
+3.0 新特性：
+你不再需要那些命令了。现在一切都是自动的：
+- 直接说 "don't stop until done" 代替 /ralph
+- 直接说 "fast" 或 "parallel" 代替 /ultrawork
+- 直接说 "plan this" 代替 /plan
+- 直接说 "stop" 代替 /cancel
 
-MAGIC KEYWORDS (power-user shortcuts):
+魔法关键词（高级用户快捷方式）：
 
-| Keyword | Same as old... | Example |
-|---------|----------------|---------|
+| 关键词 | 等同于旧版... | 示例 |
+|--------|--------------|------|
 | ralph | /ralph | "ralph: fix the bug" |
 | ralplan | /ralplan | "ralplan this feature" |
 | ulw | /ultrawork | "ulw refactor API" |
-| eco | (new!) | "eco fix all errors" |
+| eco | （新增！） | "eco fix all errors" |
 | plan | /plan | "plan the endpoints" |
-| team | (new!) | "/team 3:executor fix errors" |
+| team | （新增！） | "/team 3:executor fix errors" |
 
-TEAMS (NEW!):
-Spawn coordinated agents with shared task lists and real-time messaging:
+TEAMS（新功能！）：
+生成共享任务列表和实时消息传递的协调 agents：
 - /ultrapower:team 3:executor "fix all TypeScript errors"
-- Uses Claude Code native tools (TeamCreate/SendMessage/TaskCreate)
+- 使用 Claude Code 原生工具（TeamCreate/SendMessage/TaskCreate）
 
-HUD STATUSLINE:
-The status bar now shows OMC state. Restart Claude Code to see it.
+HUD 状态栏：
+状态栏现在显示 OMC 状态。重启 Claude Code 即可看到。
 
-Your workflow won't break - it just got easier!
+你的工作流不会中断——只是变得更简单了！
 ```
 
 ## 步骤 8：询问是否为仓库加星
@@ -1063,14 +1033,14 @@ gh auth status &>/dev/null
 
 使用 AskUserQuestion 工具提示用户：
 
-**问题：** "If you're enjoying ultrapower, would you like to support the project by starring it on GitHub?"
+**问题：** "如果你喜欢 ultrapower，是否愿意在 GitHub 上为项目加星以支持我们？"
 
 **选项：**
-1. **Yes, star it!** - 为仓库加星
-2. **No thanks** - 跳过，不再提示
-3. **Maybe later** - 跳过，不再提示
+1. **是的，加星！** - 为仓库加星
+2. **不了，谢谢** - 跳过，不再提示
+3. **以后再说** - 跳过，不再提示
 
-如果用户选择"Yes, star it!"：
+如果用户选择"是的，加星！"：
 
 ```bash
 gh api -X PUT /user/starred/Yeachan-Heo/ultrapower 2>/dev/null && echo "Thanks for starring!" || true
@@ -1082,7 +1052,7 @@ gh api -X PUT /user/starred/Yeachan-Heo/ultrapower 2>/dev/null && echo "Thanks f
 
 ```bash
 echo ""
-echo "If you enjoy ultrapower, consider starring the repo:"
+echo "如果你喜欢 ultrapower，欢迎为项目加星："
 echo "  https://github.com/Yeachan-Heo/ultrapower"
 echo ""
 ```
