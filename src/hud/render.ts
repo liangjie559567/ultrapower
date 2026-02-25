@@ -48,7 +48,7 @@ export function limitOutputLines(lines: string[], maxLines?: number): string[] {
     return lines;
   }
   const truncatedCount = lines.length - limit + 1;
-  return [...lines.slice(0, limit - 1), `... (+${truncatedCount} 行)`];
+  return [...lines.slice(0, limit - 1), `... (+${truncatedCount} lines)`];
 }
 
 /**
@@ -180,7 +180,7 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
   if (enabledElements.omcLabel) {
     const versionTag = context.omcVersion ? `#${context.omcVersion}` : '';
     if (context.updateAvailable) {
-      elements.push(bold(`[OMC${versionTag}] -> ${context.updateAvailable} 有更新`));
+      elements.push(bold(`[OMC${versionTag}] -> ${context.updateAvailable} omc update`));
     } else {
       elements.push(bold(`[OMC${versionTag}]`));
     }

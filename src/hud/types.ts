@@ -359,8 +359,8 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     cwd: false,               // Disabled by default for backward compatibility
     cwdFormat: 'relative',
     gitRepo: false,           // Disabled by default for backward compatibility
-    gitBranch: true,          // Show branch by default
-    model: true,              // Show model name by default
+    gitBranch: false,         // Disabled by default for backward compatibility
+    model: false,             // Disabled by default for backward compatibility
     modelFormat: 'short',     // Short names by default for backward compatibility
     omcLabel: true,
     rateLimits: true,  // Show rate limits by default
@@ -384,7 +384,7 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     showCache: true,
     showCost: true,
     showCallCounts: true,  // Show tool/agent/skill call counts by default (Issue #710)
-    maxOutputLines: 6,     // More lines to accommodate multiline agents
+    maxOutputLines: 4,     // Default limit to prevent input field shrinkage
     safeMode: false, // Disable safeMode to allow ANSI colors
   },
   thresholds: {

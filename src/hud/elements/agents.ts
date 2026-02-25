@@ -503,7 +503,7 @@ export function renderAgentsMultiLine(
   }
 
   // Header part shows count for awareness
-  const headerPart = `智能体:${CYAN}${running.length}${RESET}`;
+  const headerPart = `agents:${CYAN}${running.length}${RESET}`;
 
   // Build detail lines
   const now = Date.now();
@@ -561,9 +561,9 @@ export function renderAgentsByFormat(
     case 'tasks':
       return renderAgentsDescOnly(agents);
     case 'multiline':
-      // For backward compatibility, return just the header part
+      // For backward compatibility, return count format header
       // The render.ts will handle the full multi-line output
-      return renderAgentsMultiLine(agents).headerPart;
+      return renderAgents(agents);
     default:
       return renderAgentsCoded(agents);
   }
