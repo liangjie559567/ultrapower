@@ -129,7 +129,7 @@ function getHealthIndicator(health: 'healthy' | 'warning' | 'critical'): string 
 export function renderAnalyticsLine(analytics: AnalyticsDisplay): string {
   const costIndicator = getCostColorIndicator(analytics.costColor);
 
-  return `${costIndicator} Cost: ${analytics.sessionCost} | Tokens: ${analytics.sessionTokens} | Cache: ${analytics.cacheEfficiency} | Top: ${analytics.topAgents}`;
+  return `${costIndicator} 费用: ${analytics.sessionCost} | 令牌: ${analytics.sessionTokens} | 缓存: ${analytics.cacheEfficiency} | 主要: ${analytics.topAgents}`;
 }
 
 /**
@@ -144,14 +144,14 @@ export function renderAnalyticsLineWithConfig(
 
   if (showCost) {
     const costIndicator = getCostColorIndicator(analytics.costColor);
-    parts.push(`${costIndicator} Cost: ${analytics.sessionCost}`);
+    parts.push(`${costIndicator} 费用: ${analytics.sessionCost}`);
   }
 
   if (showCache) {
-    parts.push(`Cache: ${analytics.cacheEfficiency}`);
+    parts.push(`缓存: ${analytics.cacheEfficiency}`);
   }
 
-  parts.push(`Top: ${analytics.topAgents}`);
+  parts.push(`主要: ${analytics.topAgents}`);
 
   return parts.join(' | ');
 }
@@ -166,16 +166,16 @@ export async function getSessionInfo(): Promise<string> {
     const session = await manager.getCurrentSession();
 
     if (!session) {
-      return 'No active session';
+      return '无活跃会话';
     }
 
     const duration = Date.now() - new Date(session.startTime).getTime();
     const durationMinutes = Math.floor(duration / 60000);
     const tags = session.tags.join(',');
 
-    return `Session: ${session.id.slice(-8)} | ${durationMinutes}m | Tags: ${tags}`;
+    return `会话: ${session.id.slice(-8)} | ${durationMinutes}m | 标签: ${tags}`;
   } catch (error) {
-    return 'Session info unavailable';
+    return '会话信息不可用';
   }
 }
 
@@ -200,7 +200,7 @@ export function getSessionHealthAnalyticsData(sessionHealth: SessionHealth): Ses
  */
 export function renderSessionHealthAnalytics(sessionHealth: SessionHealth): string {
   const data = getSessionHealthAnalyticsData(sessionHealth);
-  const parts = [data.costIndicator, data.cost, data.tokens, `Cache: ${data.cache}`];
+  const parts = [data.costIndicator, data.cost, data.tokens, `缓存: ${data.cache}`];
   if (data.costHour) parts.push(data.costHour);
   return parts.join(' | ');
 }
@@ -217,9 +217,9 @@ export function renderBudgetWarning(
   const warningThreshold = thresholds?.budgetWarning ?? 2.0;
 
   if (cost > criticalThreshold) {
-    return `⚠️  BUDGET ALERT: Session cost ${cost.toFixed(2)} exceeds $${criticalThreshold.toFixed(2)}`;
+    return `⚠️  预算警报: 会话费用 ${cost.toFixed(2)} 超过 $${criticalThreshold.toFixed(2)}`;
   } else if (cost > warningThreshold) {
-    return `⚡ Budget notice: Session cost ${cost.toFixed(2)} approaching limit`;
+    return `⚡ 预算提示: 会话费用 ${cost.toFixed(2)} 接近上限`;
   }
 
   return '';
@@ -235,5 +235,5 @@ export function renderCacheEfficiency(sessionHealth: SessionHealth): string {
   const filled = Math.round((rate / 100) * barLength);
   const bar = '█'.repeat(filled) + '░'.repeat(barLength - filled);
 
-  return `Cache: ${bar} ${rate.toFixed(1)}%`;
+  return `缓存: ${bar} ${rate.toFixed(1)}%`;
 }
