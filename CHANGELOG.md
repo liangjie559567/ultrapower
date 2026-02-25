@@ -34,6 +34,22 @@
 
 - **Codex Prompts**：为 5 个新 agent 添加 `agents.codex/` 适配提示词
 
+- **HUD Axiom 状态元素**（`src/hud/elements/axiom.ts`）：新增 HUD 元素，实时读取并渲染 `.omc/axiom/` 目录中的 Axiom 系统状态
+  - 显示：当前状态（IDLE/EXECUTING/BLOCKED/PLANNING 等）、当前目标、任务进度（进行中/待办）、学习队列条数及优先级、知识库条数、工作流成功率
+  - 解析 `active_context.md`、`evolution/learning_queue.md`、`evolution/knowledge_base.md`、`evolution/workflow_metrics.md`
+  - 未初始化 Axiom 时自动隐藏（返回 null）
+
+- **HUD 智能建议元素**（`src/hud/elements/suggestions.ts`）：基于当前系统状态生成上下文感知的下一步操作建议
+  - 上下文建议：≥90% 高优先级 `/compact`，≥阈值 中优先级 `/compact`
+  - Axiom 建议：BLOCKED → `/ax-analyze-error`，IDLE+学习队列 → `/ax-evolve`，EXECUTING+无 Agent → `/ax-status`，IDLE+待办任务 → `/ax-implement`，任务完成 → `/ax-reflect`
+  - 会话健康建议：会话超 120 分钟或费用超 $4 → `/ax-suspend`
+  - 按优先级排序，最多显示 2 条
+
+- **omc-setup 权限配置步骤**（步骤 3.75）：在 omc-setup 流程中新增权限配置步骤
+  - 自动将常用工具权限写入 `~/.claude/settings.json` 的 `permissions.allow` 数组
+  - 包含：Bash、Read、Write、Edit、Glob、Grep、Task、WebFetch、WebSearch 等核心工具
+  - 避免每次工具调用时弹出权限确认对话框
+
 ### 文档
 
 - 更新 `AGENTS.md`：agents 44 → 49，Domain Specialists 11 → 16

@@ -102,6 +102,30 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 
 > **注意**：通过 `npm update`、`git pull` 或 Claude Code 插件更新后，必须重新运行 `/ultrapower:omc-setup` 以应用最新的 CLAUDE.md 变更。
 
+### 权限配置（步骤 3.75）
+
+omc-setup 包含一个权限配置步骤，自动将常用工具权限写入 `~/.claude/settings.json`：
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Task(*)",
+      "WebFetch(*)",
+      "WebSearch(*)"
+    ]
+  }
+}
+```
+
+此步骤避免每次工具调用时弹出权限确认对话框，提升工作流流畅度。如需跳过，在 setup 过程中选择"跳过"即可。
+
 ### Agent 自定义
 
 编辑 `~/.claude/agents/` 中的 agent 文件以自定义行为：
@@ -797,6 +821,8 @@ omc config-stop-callback  # 配置 stop callback 通知标签
 | `todos` | 显示 todo 进度 | `true` |
 | `ralph` | 显示 ralph 循环状态 | `true` |
 | `autopilot` | 显示 autopilot 状态 | `true` |
+| `axiom` | 显示 Axiom 系统状态（状态/目标/任务/学习队列/知识库/成功率） | `false` |
+| `suggestions` | 显示智能下一步建议（基于上下文/Axiom 状态/会话健康） | `false` |
 
 可用预设：`minimal`、`focused`、`full`、`dense`、`analytics`、`opencode`
 
