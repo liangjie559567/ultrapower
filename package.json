@@ -1,6 +1,6 @@
 {
   "name": "@liangjie559567/ultrapower",
-  "version": "5.0.10",
+  "version": "5.0.11",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
   "type": "module",
   "main": "dist/index.js",
@@ -31,7 +31,6 @@
     "skills",
     "templates",
     "docs",
-    ".claude-plugin",
     ".mcp.json",
     "README.md",
     "LICENSE"
