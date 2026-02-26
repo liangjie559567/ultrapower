@@ -40,7 +40,10 @@ export async function syncToRemote(directory: string, sessionId: string): Promis
       return { success: true, filesCommitted: 0 };
     }
 
-    git(['add', join('.omc', 'nexus', 'events')], directory);
+    const addResult = git(['add', join('.omc', 'nexus', 'events')], directory);
+    if (!addResult.ok) {
+      return { success: false, error: addResult.stderr };
+    }
 
     const statusResult = git(['status', '--porcelain'], directory);
     const nexusLines = statusResult.stdout
