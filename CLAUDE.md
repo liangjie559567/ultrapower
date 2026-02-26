@@ -77,5 +77,34 @@ gh pr create --base dev ...
 | 状态 → ARCHIVING | 自动触发 `/ax-reflect` |
 | 状态 → IDLE | 处理学习队列 (P0/P1) |
 
+# 规范体系引用
+
+## 全链路规范文档
+
+ultrapower v5.0.21 规范体系位于 `docs/standards/`，所有实现必须遵守：
+
+| 优先级 | 文档 | 核心内容 |
+|--------|------|---------|
+| P0 | [runtime-protection.md](./docs/standards/runtime-protection.md) | 路径遍历防护、Hook 输入消毒、状态文件权限 |
+| P0 | [hook-execution-order.md](./docs/standards/hook-execution-order.md) | 15 类 HookType、路由规则、执行顺序 |
+| P0 | [state-machine.md](./docs/standards/state-machine.md) | Agent 状态机、Team Pipeline 转换矩阵 |
+| P0 | [agent-lifecycle.md](./docs/standards/agent-lifecycle.md) | 超时/孤儿/成本超限/死锁边界情况 |
+| P1 | [user-guide.md](./docs/standards/user-guide.md) | Skill 决策树、Agent 路由指南 |
+| P1 | [anti-patterns.md](./docs/standards/anti-patterns.md) | 已知反模式及正确替代方案 |
+| P1 | [contribution-guide.md](./docs/standards/contribution-guide.md) | 贡献流程、质量门禁、文档同步要求 |
+
+## 不可协商的安全规则
+
+1. **路径遍历防护**：`mode` 参数必须通过 `assertValidMode()` 校验后才能拼接路径。
+   ```typescript
+   import { assertValidMode } from './src/lib/validateMode';
+   const validMode = assertValidMode(mode);
+   const path = `.omc/state/${validMode}-state.json`;
+   ```
+
+2. **Hook 输入消毒**：所有 hook 输入经 `bridge-normalize.ts` 白名单过滤，未知字段被丢弃。
+
+3. **SubagentStop 推断**：禁止直接读取 `input.success`，使用 `input.success !== false`。
+
 # currentDate
-Today's date is 2026-02-24.
+Today's date is 2026-02-26.
