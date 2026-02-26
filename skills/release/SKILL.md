@@ -26,9 +26,11 @@ description: ultrapower 的自动化发布工作流
 - `src/__tests__/installer.test.ts`（预期版本）
 - `.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`（`"version"` 和 `"source.version"` 两处）
+- `docs/CLAUDE.md`（`<!-- OMC:VERSION:X.Y.Z -->`）
 - `README.md`（版本徽章和标题）
 
 > ⚠️ `marketplace.json` 是安装器读取的入口，版本不同步会导致用户始终安装旧版本。
+> ⚠️ `docs/CLAUDE.md` 是 `/ultrapower:omc-setup` 下载的模板，版本不同步会导致用户安装后显示旧版本号。
 
 ### 2. 运行测试
 ```bash
@@ -79,6 +81,7 @@ gh release create v<version> --title "v<version> - <title>" --notes "<release no
 | `src/__tests__/installer.test.ts` | `expect(VERSION).toBe('X.Y.Z')` |
 | `.claude-plugin/plugin.json` | `"version": "X.Y.Z"` |
 | `.claude-plugin/marketplace.json` | `"version": "X.Y.Z"` 和 `"source": { "version": "X.Y.Z" }` |
+| `docs/CLAUDE.md` | `<!-- OMC:VERSION:X.Y.Z -->` |
 | `README.md` | 标题 + 版本徽章 |
 
 ## 语义化版本
