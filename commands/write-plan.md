@@ -1,6 +1,5 @@
 ---
-description: Create detailed implementation plan with bite-sized tasks
-disable-model-invocation: true
+description: 创建包含细粒度任务的详细实现计划
 ---
 
 Invoke the superpowers:writing-plans skill and follow it exactly as presented to you

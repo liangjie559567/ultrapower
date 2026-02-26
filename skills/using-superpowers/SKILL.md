@@ -1,45 +1,27 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+description: 开始任何对话时使用——建立如何查找和使用 skill 的规则，要求在任何响应（包括澄清问题）之前调用 Skill 工具
 ---
 
-<SUBAGENT-STOP>
-If you were dispatched as a subagent to execute a specific task, skip this skill.
-</SUBAGENT-STOP>
-
 <EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+如果你认为某个 skill 有哪怕 1% 的可能适用于你正在做的事情，你绝对必须调用该 skill。
 
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+如果一个 SKILL 适用于你的任务，你没有选择。你必须使用它。
 
-This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+这不可协商。这不是可选的。你无法通过理性化来逃避这一点。
 </EXTREMELY-IMPORTANT>
 
-## Instruction Priority
+## 如何访问 Skill
 
-Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:
+**在 Claude Code 中：** 使用 `Skill` 工具。当你调用一个 skill 时，其内容会被加载并呈现给你——直接遵循它。永远不要在 skill 文件上使用 Read 工具。
 
-1. **User's explicit instructions** (CLAUDE.md, direct requests) — highest priority
-2. **Superpowers skills** — override default system behavior where they conflict
-3. **Default system prompt** — lowest priority
+**在其他环境中：** 查看你的平台文档了解如何加载 skill。
 
-If CLAUDE.md says "don't use TDD" and a skill says "always use TDD," follow CLAUDE.md. The user is in control.
+# 使用 Skill
 
-## How to Access Skills
+## 规则
 
-**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you—follow it directly. Never use the Read tool on skill files.
-
-**In other environments:** Check your platform's documentation for how skills are loaded.
-
-## Platform Adaptation
-
-Skills use Claude Code tool names. Non-CC platforms: see `references/codex-tools.md` for tool equivalents.
-
-# Using Skills
-
-## The Rule
-
-**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+**在任何响应或行动之前调用相关 skill。** 即使只有 1% 的可能性某个 skill 适用，也意味着你应该调用该 skill 进行检查。如果调用的 skill 结果不适合当前情况，你不需要使用它。
 
 ```dot
 digraph skill_flow {
@@ -71,43 +53,61 @@ digraph skill_flow {
 }
 ```
 
-## Red Flags
+## 新功能路由规则
 
-These thoughts mean STOP—you're rationalizing:
+当用户请求涉及**新功能开发**时（非 bug 修复），强制执行以下流程：
 
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+1. 调用 explore agent（haiku）→ 理解代码库，写入 notepad（codebase_summary）
+2. 调用 brainstorming skill → 设计对话（brainstorming 会读取 notepad，不重复 explore）
+3. 设计批准后 → next-step-router 推荐下一步
 
-## Skill Priority
+**判断是否为新功能：**
+- 包含"添加"、"新增"、"实现"、"构建"、"创建" → 新功能流程
+- 包含"修复"、"bug"、"错误"、"不工作" → 调试流程（systematic-debugging）
+- 包含"重构"、"优化"、"改进" → 先 explore，再判断
 
-When multiple skills could apply, use this order:
+**路由触发（每次消息到达后）：**
+- 新功能 → explore agent → brainstorming
+- 已知 bug → systematic-debugging
+- 不确定 → AskUserQuestion 询问用户意图
 
-1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
-2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+## 红旗
 
-"Let's build X" → brainstorming first, then implementation skills.
-"Fix this bug" → debugging first, then domain-specific skills.
+这些想法意味着停下——你在自我合理化：
 
-## Skill Types
+| 想法 | 现实 |
+|------|------|
+| "这只是个简单问题" | 问题也是任务。检查 skill。 |
+| "我需要先了解更多上下文" | Skill 检查在澄清问题之前。 |
+| "让我先探索代码库" | Skill 告诉你如何探索。先检查。 |
+| "我可以快速检查 git/文件" | 文件缺乏对话上下文。检查 skill。 |
+| "让我先收集信息" | Skill 告诉你如何收集信息。 |
+| "这不需要正式的 skill" | 如果 skill 存在，就使用它。 |
+| "我记得这个 skill" | Skill 会演进。阅读当前版本。 |
+| "这不算任务" | 行动 = 任务。检查 skill。 |
+| "这个 skill 太重了" | 简单的事情会变复杂。使用它。 |
+| "我先做这一件事" | 在做任何事之前先检查。 |
+| "这感觉很有效率" | 无纪律的行动浪费时间。Skill 防止这种情况。 |
+| "我知道那是什么意思" | 了解概念 ≠ 使用 skill。调用它。 |
 
-**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+## Skill 优先级
 
-**Flexible** (patterns): Adapt principles to context.
+当多个 skill 可能适用时，按此顺序使用：
 
-The skill itself tells you which.
+1. **流程 skill 优先**（brainstorming、debugging）- 这些决定如何处理任务
+2. **实施 skill 其次**（frontend-design、mcp-builder）- 这些指导执行
 
-## User Instructions
+"让我们构建 X" → 先 brainstorming，然后实施 skill。
+"修复这个 bug" → 先 debugging，然后领域特定 skill。
 
-Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+## Skill 类型
+
+**刚性**（TDD、debugging）：严格遵循。不要偏离纪律。
+
+**灵活**（patterns）：将原则适应上下文。
+
+Skill 本身会告诉你是哪种类型。
+
+## 用户指令
+
+指令说明做什么，而非如何做。"添加 X"或"修复 Y"不意味着跳过工作流。

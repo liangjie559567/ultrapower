@@ -1,198 +1,198 @@
-# Superpowers for OpenCode
+# OpenCode 的 ultrapower
 
-Complete guide for using Superpowers with [OpenCode.ai](https://opencode.ai).
+在 [OpenCode.ai](https://opencode.ai) 中使用 ultrapower 的完整指南。
 
-## Quick Install
+## 快速安装
 
-Tell OpenCode:
+告诉 OpenCode：
 
 ```
-Clone https://github.com/obra/superpowers to ~/.config/opencode/superpowers, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js to ~/.config/opencode/plugins/superpowers.js, then symlink ~/.config/opencode/superpowers/skills to ~/.config/opencode/skills/superpowers, then restart opencode.
+Clone https://github.com/liangjie559567/ultrapower to ~/.config/opencode/ultrapower, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/ultrapower/.opencode/plugins/ultrapower.js to ~/.config/opencode/plugins/ultrapower.js, then symlink ~/.config/opencode/ultrapower/skills to ~/.config/opencode/skills/ultrapower, then restart opencode.
 ```
 
-## Manual Installation
+## 手动安装
 
-### Prerequisites
+### 前提条件
 
-- [OpenCode.ai](https://opencode.ai) installed
-- Git installed
+- 已安装 [OpenCode.ai](https://opencode.ai)
+- 已安装 Git
 
 ### macOS / Linux
 
 ```bash
-# 1. Install Superpowers (or update existing)
-if [ -d ~/.config/opencode/superpowers ]; then
-  cd ~/.config/opencode/superpowers && git pull
+# 1. 安装 ultrapower（或更新现有安装）
+if [ -d ~/.config/opencode/ultrapower ]; then
+  cd ~/.config/opencode/ultrapower && git pull
 else
-  git clone https://github.com/obra/superpowers.git ~/.config/opencode/superpowers
+  git clone https://github.com/liangjie559567/ultrapower.git ~/.config/opencode/ultrapower
 fi
 
-# 2. Create directories
+# 2. 创建目录
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/skills
 
-# 3. Remove old symlinks/directories if they exist
-rm -f ~/.config/opencode/plugins/superpowers.js
-rm -rf ~/.config/opencode/skills/superpowers
+# 3. 删除已存在的符号链接/目录（如有）
+rm -f ~/.config/opencode/plugins/ultrapower.js
+rm -rf ~/.config/opencode/skills/ultrapower
 
-# 4. Create symlinks
-ln -s ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js ~/.config/opencode/plugins/superpowers.js
-ln -s ~/.config/opencode/superpowers/skills ~/.config/opencode/skills/superpowers
+# 4. 创建符号链接
+ln -s ~/.config/opencode/ultrapower/.opencode/plugins/ultrapower.js ~/.config/opencode/plugins/ultrapower.js
+ln -s ~/.config/opencode/ultrapower/skills ~/.config/opencode/skills/ultrapower
 
-# 5. Restart OpenCode
+# 5. 重启 OpenCode
 ```
 
-#### Verify Installation
+#### 验证安装
 
 ```bash
-ls -l ~/.config/opencode/plugins/superpowers.js
-ls -l ~/.config/opencode/skills/superpowers
+ls -l ~/.config/opencode/plugins/ultrapower.js
+ls -l ~/.config/opencode/skills/ultrapower
 ```
 
-Both should show symlinks pointing to the superpowers directory.
+两者都应显示指向 ultrapower 目录的符号链接。
 
 ### Windows
 
-**Prerequisites:**
-- Git installed
-- Either **Developer Mode** enabled OR **Administrator privileges**
-  - Windows 10: Settings → Update & Security → For developers
-  - Windows 11: Settings → System → For developers
+**前提条件：**
+- 已安装 Git
+- 已启用**开发者模式**或拥有**管理员权限**
+  - Windows 10：设置 → 更新和安全 → 开发者选项
+  - Windows 11：设置 → 系统 → 开发者选项
 
-Pick your shell below: [Command Prompt](#command-prompt) | [PowerShell](#powershell) | [Git Bash](#git-bash)
+选择你的 shell：[命令提示符](#命令提示符) | [PowerShell](#powershell) | [Git Bash](#git-bash)
 
-#### Command Prompt
+#### 命令提示符
 
-Run as Administrator, or with Developer Mode enabled:
+以管理员身份运行，或启用开发者模式后运行：
 
 ```cmd
-:: 1. Install Superpowers
-git clone https://github.com/obra/superpowers.git "%USERPROFILE%\.config\opencode\superpowers"
+:: 1. 安装 ultrapower
+git clone https://github.com/liangjie559567/ultrapower.git "%USERPROFILE%\.config\opencode\ultrapower"
 
-:: 2. Create directories
+:: 2. 创建目录
 mkdir "%USERPROFILE%\.config\opencode\plugins" 2>nul
 mkdir "%USERPROFILE%\.config\opencode\skills" 2>nul
 
-:: 3. Remove existing links (safe for reinstalls)
-del "%USERPROFILE%\.config\opencode\plugins\superpowers.js" 2>nul
-rmdir "%USERPROFILE%\.config\opencode\skills\superpowers" 2>nul
+:: 3. 删除已存在的链接（重装时安全执行）
+del "%USERPROFILE%\.config\opencode\plugins\ultrapower.js" 2>nul
+rmdir "%USERPROFILE%\.config\opencode\skills\ultrapower" 2>nul
 
-:: 4. Create plugin symlink (requires Developer Mode or Admin)
-mklink "%USERPROFILE%\.config\opencode\plugins\superpowers.js" "%USERPROFILE%\.config\opencode\superpowers\.opencode\plugins\superpowers.js"
+:: 4. 创建插件符号链接（需要开发者模式或管理员权限）
+mklink "%USERPROFILE%\.config\opencode\plugins\ultrapower.js" "%USERPROFILE%\.config\opencode\ultrapower\.opencode\plugins\ultrapower.js"
 
-:: 5. Create skills junction (works without special privileges)
-mklink /J "%USERPROFILE%\.config\opencode\skills\superpowers" "%USERPROFILE%\.config\opencode\superpowers\skills"
+:: 5. 创建 skills junction（无需特殊权限）
+mklink /J "%USERPROFILE%\.config\opencode\skills\ultrapower" "%USERPROFILE%\.config\opencode\ultrapower\skills"
 
-:: 6. Restart OpenCode
+:: 6. 重启 OpenCode
 ```
 
 #### PowerShell
 
-Run as Administrator, or with Developer Mode enabled:
+以管理员身份运行，或启用开发者模式后运行：
 
 ```powershell
-# 1. Install Superpowers
-git clone https://github.com/obra/superpowers.git "$env:USERPROFILE\.config\opencode\superpowers"
+# 1. 安装 ultrapower
+git clone https://github.com/liangjie559567/ultrapower.git "$env:USERPROFILE\.config\opencode\ultrapower"
 
-# 2. Create directories
+# 2. 创建目录
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\plugins"
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\skills"
 
-# 3. Remove existing links (safe for reinstalls)
-Remove-Item "$env:USERPROFILE\.config\opencode\plugins\superpowers.js" -Force -ErrorAction SilentlyContinue
-Remove-Item "$env:USERPROFILE\.config\opencode\skills\superpowers" -Force -ErrorAction SilentlyContinue
+# 3. 删除已存在的链接（重装时安全执行）
+Remove-Item "$env:USERPROFILE\.config\opencode\plugins\ultrapower.js" -Force -ErrorAction SilentlyContinue
+Remove-Item "$env:USERPROFILE\.config\opencode\skills\ultrapower" -Force -ErrorAction SilentlyContinue
 
-# 4. Create plugin symlink (requires Developer Mode or Admin)
-New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.config\opencode\plugins\superpowers.js" -Target "$env:USERPROFILE\.config\opencode\superpowers\.opencode\plugins\superpowers.js"
+# 4. 创建插件符号链接（需要开发者模式或管理员权限）
+New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.config\opencode\plugins\ultrapower.js" -Target "$env:USERPROFILE\.config\opencode\ultrapower\.opencode\plugins\ultrapower.js"
 
-# 5. Create skills junction (works without special privileges)
-New-Item -ItemType Junction -Path "$env:USERPROFILE\.config\opencode\skills\superpowers" -Target "$env:USERPROFILE\.config\opencode\superpowers\skills"
+# 5. 创建 skills junction（无需特殊权限）
+New-Item -ItemType Junction -Path "$env:USERPROFILE\.config\opencode\skills\ultrapower" -Target "$env:USERPROFILE\.config\opencode\ultrapower\skills"
 
-# 6. Restart OpenCode
+# 6. 重启 OpenCode
 ```
 
 #### Git Bash
 
-Note: Git Bash's native `ln` command copies files instead of creating symlinks. Use `cmd //c mklink` instead (the `//c` is Git Bash syntax for `/c`).
+注意：Git Bash 的原生 `ln` 命令会复制文件而非创建符号链接。请改用 `cmd //c mklink`（`//c` 是 Git Bash 中 `/c` 的语法）。
 
 ```bash
-# 1. Install Superpowers
-git clone https://github.com/obra/superpowers.git ~/.config/opencode/superpowers
+# 1. 安装 ultrapower
+git clone https://github.com/liangjie559567/ultrapower.git ~/.config/opencode/ultrapower
 
-# 2. Create directories
+# 2. 创建目录
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/skills
 
-# 3. Remove existing links (safe for reinstalls)
-rm -f ~/.config/opencode/plugins/superpowers.js 2>/dev/null
-rm -rf ~/.config/opencode/skills/superpowers 2>/dev/null
+# 3. 删除已存在的链接（重装时安全执行）
+rm -f ~/.config/opencode/plugins/ultrapower.js 2>/dev/null
+rm -rf ~/.config/opencode/skills/ultrapower 2>/dev/null
 
-# 4. Create plugin symlink (requires Developer Mode or Admin)
-cmd //c "mklink \"$(cygpath -w ~/.config/opencode/plugins/superpowers.js)\" \"$(cygpath -w ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js)\""
+# 4. 创建插件符号链接（需要开发者模式或管理员权限）
+cmd //c "mklink \"$(cygpath -w ~/.config/opencode/plugins/ultrapower.js)\" \"$(cygpath -w ~/.config/opencode/ultrapower/.opencode/plugins/ultrapower.js)\""
 
-# 5. Create skills junction (works without special privileges)
-cmd //c "mklink /J \"$(cygpath -w ~/.config/opencode/skills/superpowers)\" \"$(cygpath -w ~/.config/opencode/superpowers/skills)\""
+# 5. 创建 skills junction（无需特殊权限）
+cmd //c "mklink /J \"$(cygpath -w ~/.config/opencode/skills/ultrapower)\" \"$(cygpath -w ~/.config/opencode/ultrapower/skills)\""
 
-# 6. Restart OpenCode
+# 6. 重启 OpenCode
 ```
 
-#### WSL Users
+#### WSL 用户
 
-If running OpenCode inside WSL, use the [macOS / Linux](#macos--linux) instructions instead.
+如果在 WSL 内运行 OpenCode，请改用 [macOS / Linux](#macos--linux) 的安装说明。
 
-#### Verify Installation
+#### 验证安装
 
-**Command Prompt:**
+**命令提示符：**
 ```cmd
 dir /AL "%USERPROFILE%\.config\opencode\plugins"
 dir /AL "%USERPROFILE%\.config\opencode\skills"
 ```
 
-**PowerShell:**
+**PowerShell：**
 ```powershell
 Get-ChildItem "$env:USERPROFILE\.config\opencode\plugins" | Where-Object { $_.LinkType }
 Get-ChildItem "$env:USERPROFILE\.config\opencode\skills" | Where-Object { $_.LinkType }
 ```
 
-Look for `<SYMLINK>` or `<JUNCTION>` in the output.
+在输出中查找 `<SYMLINK>` 或 `<JUNCTION>`。
 
-#### Troubleshooting Windows
+#### Windows 故障排除
 
-**"You do not have sufficient privilege" error:**
-- Enable Developer Mode in Windows Settings, OR
-- Right-click your terminal → "Run as Administrator"
+**"权限不足"错误：**
+- 在 Windows 设置中启用开发者模式，或
+- 右键点击终端 → "以管理员身份运行"
 
-**"Cannot create a file when that file already exists":**
-- Run the removal commands (step 3) first, then retry
+**"当文件已存在时无法创建文件"：**
+- 先运行删除命令（步骤 3），然后重试
 
-**Symlinks not working after git clone:**
-- Run `git config --global core.symlinks true` and re-clone
+**git clone 后符号链接不起作用：**
+- 运行 `git config --global core.symlinks true` 并重新克隆
 
-## Usage
+## 使用方法
 
-### Finding Skills
+### 查找 Skills
 
-Use OpenCode's native `skill` tool to list all available skills:
+使用 OpenCode 的原生 `skill` 工具列出所有可用 skills：
 
 ```
 use skill tool to list skills
 ```
 
-### Loading a Skill
+### 加载 Skill
 
-Use OpenCode's native `skill` tool to load a specific skill:
+使用 OpenCode 的原生 `skill` 工具加载特定 skill：
 
 ```
-use skill tool to load superpowers/brainstorming
+use skill tool to load ultrapower/brainstorming
 ```
 
-### Personal Skills
+### 个人 Skills
 
-Create your own skills in `~/.config/opencode/skills/`:
+在 `~/.config/opencode/skills/` 中创建你自己的 skills：
 
 ```bash
 mkdir -p ~/.config/opencode/skills/my-skill
 ```
 
-Create `~/.config/opencode/skills/my-skill/SKILL.md`:
+创建 `~/.config/opencode/skills/my-skill/SKILL.md`：
 
 ```markdown
 ---
@@ -205,16 +205,16 @@ description: Use when [condition] - [what it does]
 [Your skill content here]
 ```
 
-### Project Skills
+### 项目 Skills
 
-Create project-specific skills in your OpenCode project:
+在你的 OpenCode 项目中创建项目专属 skills：
 
 ```bash
-# In your OpenCode project
+# 在你的 OpenCode 项目中
 mkdir -p .opencode/skills/my-project-skill
 ```
 
-Create `.opencode/skills/my-project-skill/SKILL.md`:
+创建 `.opencode/skills/my-project-skill/SKILL.md`：
 
 ```markdown
 ---
@@ -227,104 +227,104 @@ description: Use when [condition] - [what it does]
 [Your skill content here]
 ```
 
-## Skill Locations
+## Skill 位置
 
-OpenCode discovers skills from these locations:
+OpenCode 从以下位置发现 skills：
 
-1. **Project skills** (`.opencode/skills/`) - Highest priority
-2. **Personal skills** (`~/.config/opencode/skills/`)
-3. **Superpowers skills** (`~/.config/opencode/skills/superpowers/`) - via symlink
+1. **项目 skills**（`.opencode/skills/`）- 最高优先级
+2. **个人 skills**（`~/.config/opencode/skills/`）
+3. **ultrapower skills**（`~/.config/opencode/skills/ultrapower/`）- 通过符号链接
 
-## Features
+## 功能特性
 
-### Automatic Context Injection
+### 自动上下文注入
 
-The plugin automatically injects superpowers context via the `experimental.chat.system.transform` hook. This adds the "using-superpowers" skill content to the system prompt on every request.
+插件通过 `experimental.chat.system.transform` hook 自动注入 ultrapower 上下文。这会在每次请求时将 "using-superpowers" skill 内容添加到系统提示词中。
 
-### Native Skills Integration
+### 原生 Skills 集成
 
-Superpowers uses OpenCode's native `skill` tool for skill discovery and loading. Skills are symlinked into `~/.config/opencode/skills/superpowers/` so they appear alongside your personal and project skills.
+ultrapower 使用 OpenCode 的原生 `skill` 工具进行 skill 发现和加载。Skills 通过符号链接到 `~/.config/opencode/skills/ultrapower/`，与你的个人和项目 skills 并列显示。
 
-### Tool Mapping
+### 工具映射
 
-Skills written for Claude Code are automatically adapted for OpenCode. The bootstrap provides mapping instructions:
+为 Claude Code 编写的 skills 会自动适配 OpenCode。bootstrap 提供映射说明：
 
 - `TodoWrite` → `update_plan`
-- `Task` with subagents → OpenCode's `@mention` system
-- `Skill` tool → OpenCode's native `skill` tool
-- File operations → Native OpenCode tools
+- 带子 agents 的 `Task` → OpenCode 的 `@mention` 系统
+- `Skill` 工具 → OpenCode 的原生 `skill` 工具
+- 文件操作 → OpenCode 原生工具
 
-## Architecture
+## 架构
 
-### Plugin Structure
+### 插件结构
 
-**Location:** `~/.config/opencode/superpowers/.opencode/plugins/superpowers.js`
+**位置：** `~/.config/opencode/ultrapower/.opencode/plugins/ultrapower.js`
 
-**Components:**
-- `experimental.chat.system.transform` hook for bootstrap injection
-- Reads and injects the "using-superpowers" skill content
+**组件：**
+- 用于 bootstrap 注入的 `experimental.chat.system.transform` hook
+- 读取并注入 "using-superpowers" skill 内容
 
 ### Skills
 
-**Location:** `~/.config/opencode/skills/superpowers/` (symlink to `~/.config/opencode/superpowers/skills/`)
+**位置：** `~/.config/opencode/skills/ultrapower/`（符号链接到 `~/.config/opencode/ultrapower/skills/`）
 
-Skills are discovered by OpenCode's native skill system. Each skill has a `SKILL.md` file with YAML frontmatter.
+Skills 由 OpenCode 的原生 skill 系统发现。每个 skill 都有一个带 YAML frontmatter 的 `SKILL.md` 文件。
 
-## Updating
+## 更新
 
 ```bash
-cd ~/.config/opencode/superpowers
+cd ~/.config/opencode/ultrapower
 git pull
 ```
 
-Restart OpenCode to load the updates.
+重启 OpenCode 以加载更新。
 
-## Troubleshooting
+## 故障排除
 
-### Plugin not loading
+### 插件未加载
 
-1. Check plugin exists: `ls ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js`
-2. Check symlink/junction: `ls -l ~/.config/opencode/plugins/` (macOS/Linux) or `dir /AL %USERPROFILE%\.config\opencode\plugins` (Windows)
-3. Check OpenCode logs: `opencode run "test" --print-logs --log-level DEBUG`
-4. Look for plugin loading message in logs
+1. 检查插件是否存在：`ls ~/.config/opencode/ultrapower/.opencode/plugins/ultrapower.js`
+2. 检查符号链接/junction：`ls -l ~/.config/opencode/plugins/`（macOS/Linux）或 `dir /AL %USERPROFILE%\.config\opencode\plugins`（Windows）
+3. 检查 OpenCode 日志：`opencode run "test" --print-logs --log-level DEBUG`
+4. 在日志中查找插件加载消息
 
-### Skills not found
+### Skills 未找到
 
-1. Verify skills symlink: `ls -l ~/.config/opencode/skills/superpowers` (should point to superpowers/skills/)
-2. Use OpenCode's `skill` tool to list available skills
-3. Check skill structure: each skill needs a `SKILL.md` file with valid frontmatter
+1. 验证 skills 符号链接：`ls -l ~/.config/opencode/skills/ultrapower`（应指向 ultrapower/skills/）
+2. 使用 OpenCode 的 `skill` 工具列出可用 skills
+3. 检查 skill 结构：每个 skill 需要一个带有效 frontmatter 的 `SKILL.md` 文件
 
-### Windows: Module not found error
+### Windows：模块未找到错误
 
-If you see `Cannot find module` errors on Windows:
-- **Cause:** Git Bash `ln -sf` copies files instead of creating symlinks
-- **Fix:** Use `mklink /J` directory junctions instead (see Windows installation steps)
+如果在 Windows 上看到 `Cannot find module` 错误：
+- **原因：** Git Bash 的 `ln -sf` 复制文件而非创建符号链接
+- **修复：** 改用 `mklink /J` 目录 junction（参见 Windows 安装步骤）
 
-### Bootstrap not appearing
+### Bootstrap 未出现
 
-1. Verify using-superpowers skill exists: `ls ~/.config/opencode/superpowers/skills/using-superpowers/SKILL.md`
-2. Check OpenCode version supports `experimental.chat.system.transform` hook
-3. Restart OpenCode after plugin changes
+1. 验证 using-superpowers skill 是否存在：`ls ~/.config/opencode/ultrapower/skills/using-superpowers/SKILL.md`
+2. 检查 OpenCode 版本是否支持 `experimental.chat.system.transform` hook
+3. 修改插件后重启 OpenCode
 
-## Getting Help
+## 获取帮助
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
-- OpenCode docs: https://opencode.ai/docs/
+- 报告问题：https://github.com/liangjie559567/ultrapower/issues
+- 主要文档：https://github.com/liangjie559567/ultrapower
+- OpenCode 文档：https://opencode.ai/docs/
 
-## Testing
+## 测试
 
-Verify your installation:
+验证你的安装：
 
 ```bash
-# Check plugin loads
-opencode run --print-logs "hello" 2>&1 | grep -i superpowers
+# 检查插件是否加载
+opencode run --print-logs "hello" 2>&1 | grep -i ultrapower
 
-# Check skills are discoverable
-opencode run "use skill tool to list all skills" 2>&1 | grep -i superpowers
+# 检查 skills 是否可发现
+opencode run "use skill tool to list all skills" 2>&1 | grep -i ultrapower
 
-# Check bootstrap injection
-opencode run "what superpowers do you have?"
+# 检查 bootstrap 注入
+opencode run "what ultrapower skills do you have?"
 ```
 
-The agent should mention having superpowers and be able to list skills from `superpowers/`.
+agent 应提及拥有 ultrapower 并能列出 `ultrapower/` 中的 skills。

@@ -1,71 +1,71 @@
-# Installing Superpowers for OpenCode
+# 为 OpenCode 安装 ultrapower
 
-## Prerequisites
+## 前提条件
 
-- [OpenCode.ai](https://opencode.ai) installed
-- Git installed
+- [OpenCode.ai](https://opencode.ai) 已安装
+- Git 已安装
 
-## Installation Steps
+## 安装步骤
 
-### 1. Clone Superpowers
+### 1. 克隆 ultrapower
 
 ```bash
-git clone https://github.com/obra/superpowers.git ~/.config/opencode/superpowers
+git clone https://github.com/liangjie559567/ultrapower.git ~/.config/opencode/ultrapower
 ```
 
-### 2. Register the Plugin
+### 2. 注册插件
 
-Create a symlink so OpenCode discovers the plugin:
+创建符号链接，使 OpenCode 能够发现插件：
 
 ```bash
 mkdir -p ~/.config/opencode/plugins
-rm -f ~/.config/opencode/plugins/superpowers.js
-ln -s ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js ~/.config/opencode/plugins/superpowers.js
+rm -f ~/.config/opencode/plugins/ultrapower.js
+ln -s ~/.config/opencode/ultrapower/.opencode/plugins/ultrapower.js ~/.config/opencode/plugins/ultrapower.js
 ```
 
-### 3. Symlink Skills
+### 3. 创建 Skills 符号链接
 
-Create a symlink so OpenCode's native skill tool discovers superpowers skills:
+创建符号链接，使 OpenCode 的原生 skill 工具能够发现 ultrapower skills：
 
 ```bash
 mkdir -p ~/.config/opencode/skills
-rm -rf ~/.config/opencode/skills/superpowers
-ln -s ~/.config/opencode/superpowers/skills ~/.config/opencode/skills/superpowers
+rm -rf ~/.config/opencode/skills/ultrapower
+ln -s ~/.config/opencode/ultrapower/skills ~/.config/opencode/skills/ultrapower
 ```
 
-### 4. Restart OpenCode
+### 4. 重启 OpenCode
 
-Restart OpenCode. The plugin will automatically inject superpowers context.
+重启 OpenCode。插件将自动注入 ultrapower 上下文。
 
-Verify by asking: "do you have superpowers?"
+通过询问以下内容来验证："do you have ultrapower skills?"
 
-## Usage
+## 使用方法
 
-### Finding Skills
+### 查找 Skills
 
-Use OpenCode's native `skill` tool to list available skills:
+使用 OpenCode 的原生 `skill` 工具列出可用的 skills：
 
 ```
 use skill tool to list skills
 ```
 
-### Loading a Skill
+### 加载 Skill
 
-Use OpenCode's native `skill` tool to load a specific skill:
+使用 OpenCode 的原生 `skill` 工具加载特定 skill：
 
 ```
-use skill tool to load superpowers/brainstorming
+use skill tool to load ultrapower/brainstorming
 ```
 
-### Personal Skills
+### 个人 Skills
 
-Create your own skills in `~/.config/opencode/skills/`:
+在 `~/.config/opencode/skills/` 中创建你自己的 skills：
 
 ```bash
 mkdir -p ~/.config/opencode/skills/my-skill
 ```
 
-Create `~/.config/opencode/skills/my-skill/SKILL.md`:
+创建 `~/.config/opencode/skills/my-skill/SKILL.md`：
 
 ```markdown
 ---
@@ -78,42 +78,42 @@ description: Use when [condition] - [what it does]
 [Your skill content here]
 ```
 
-### Project Skills
+### 项目 Skills
 
-Create project-specific skills in `.opencode/skills/` within your project.
+在项目的 `.opencode/skills/` 目录中创建项目专属 skills。
 
-**Skill Priority:** Project skills > Personal skills > Superpowers skills
+**Skill 优先级：** 项目 skills > 个人 skills > ultrapower skills
 
-## Updating
+## 更新
 
 ```bash
-cd ~/.config/opencode/superpowers
+cd ~/.config/opencode/ultrapower
 git pull
 ```
 
-## Troubleshooting
+## 故障排查
 
-### Plugin not loading
+### 插件未加载
 
-1. Check plugin symlink: `ls -l ~/.config/opencode/plugins/superpowers.js`
-2. Check source exists: `ls ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js`
-3. Check OpenCode logs for errors
+1. 检查插件符号链接：`ls -l ~/.config/opencode/plugins/ultrapower.js`
+2. 检查源文件是否存在：`ls ~/.config/opencode/ultrapower/.opencode/plugins/ultrapower.js`
+3. 检查 OpenCode 日志中的错误信息
 
-### Skills not found
+### Skills 未找到
 
-1. Check skills symlink: `ls -l ~/.config/opencode/skills/superpowers`
-2. Verify it points to: `~/.config/opencode/superpowers/skills`
-3. Use `skill` tool to list what's discovered
+1. 检查 skills 符号链接：`ls -l ~/.config/opencode/skills/ultrapower`
+2. 验证其指向：`~/.config/opencode/ultrapower/skills`
+3. 使用 `skill` 工具列出已发现的内容
 
-### Tool mapping
+### 工具映射
 
-When skills reference Claude Code tools:
+当 skills 引用 Claude Code 工具时：
 - `TodoWrite` → `update_plan`
-- `Task` with subagents → `@mention` syntax
-- `Skill` tool → OpenCode's native `skill` tool
-- File operations → your native tools
+- `Task` with subagents → `@mention` 语法
+- `Skill` tool → OpenCode 的原生 `skill` 工具
+- 文件操作 → 你的原生工具
 
-## Getting Help
+## 获取帮助
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Full documentation: https://github.com/obra/superpowers/blob/main/docs/README.opencode.md
+- 报告问题：https://github.com/liangjie559567/ultrapower/issues
+- 完整文档：https://github.com/liangjie559567/ultrapower/blob/main/docs/README.opencode.md

@@ -2,5 +2,23 @@
 .private-journal/
 .claude/
 node_modules/
-inspo
-triage/
+dist/
+package-lock.json
+.omc/state/
+.omc/logs/
+.omc/prompts/
+
+# Temp lint/build scripts
+*.cjs
+fix_imports.py
+lint-output.json
+data/
+.test-job-state-db-*/
+
+# Build artifacts / tarballs
+*.tgz
+*.tar.gz
+*.zip
+
+# Plugin cache directories (prevent infinite nesting on install)
+ultrapower/

@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /c/Users/ljyih/Desktop/ultrapower && git checkout dev && git pull origin dev 2>&1 | tail -5\"}",
+  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by checkout:\n\t.omc/axiom/active_context.md\n\t.omc/axiom/evolution/knowledge_base.md\n\t.omc/axiom/evolution/learning_queue.md\n\t.omc/axiom/evolution/workflow_metrics.md\n\t.omc/axiom/project_decisions.md\n\t.omc/axiom/reflection_log.md\n\t.omc/notepad.md\n\t.omc/state/last-tool-error.json\nPlease commit your changes or stash them before you switch branches.\nAborting\n\nerror: Your local changes to the following files would be ove...",
+  "timestamp": "2026-02-26T13:30:22.458Z",
+  "retry_count": 1
+}

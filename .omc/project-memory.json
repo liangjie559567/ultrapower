@@ -1,0 +1,11 @@
+{
+  "techStack": "TypeScript/Node.js | ESM modules | Vitest testing | ESLint + Prettier | npm scripts | Claude Code plugin architecture",
+  "build": "npm run build (tsc + skill bridge) | tsc --noEmit (type check) | npm test (vitest) | npm run lint (eslint) | npm run sync-metadata",
+  "conventions": "Conventional Commits: type(scope): description | feat/fix/refactor/docs/test/chore | English commit messages | Chinese user-facing content | Default branch: dev | PR target: dev",
+  "structure": "src/hooks/ (34 hooks) | src/agents/ (31 agents) | skills/ (54 skills) | commands/ (54 commands) | agents/ (markdown prompts) | bridge/ (MCP servers) | docs/ (documentation)",
+  "notes": "Axiom deep fusion: .omc/axiom/ memory system | /ax- skill prefix | axiom-boot hook (session startup) | axiom-guards hook (CI gate) | State machine: IDLE→PLANNING→CONFIRMING→EXECUTING→AUTO_FIX→BLOCKED→ARCHIVING | CI Gate: tsc --noEmit && npm run build && npm test",
+  "directives": "Always run tsc --noEmit before claiming TypeScript changes are complete | New features must go through /ax-draft → /ax-review flow | All PRs target dev branch not main | Use npm not yarn or bun",
+  "version": "1.0.0",
+  "lastScanned": 1771930310195,
+  "projectRoot": "C:/Users/ljyih/Desktop/ultrapower"
+}

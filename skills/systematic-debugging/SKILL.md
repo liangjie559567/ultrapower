@@ -294,3 +294,38 @@ From debugging sessions:
 - Random fixes approach: 2-3 hours of thrashing
 - First-time fix rate: 95% vs 40%
 - New bugs introduced: Near zero vs common
+
+## 路由触发
+
+根因确认后调用 `next-step-router`：
+- current_skill: "systematic-debugging"
+- stage: "root_cause_confirmed"
+- output_summary: 根因描述、涉及文件、是否需要测试先行
+
+## Axiom 错误分析增强流程
+
+当遇到熔断（3次修复失败）或直接抛出报错时，执行以下步骤：
+
+### Phase 1: 日志收集
+- 读取构建日志完整输出
+- 读取测试失败详情
+- 执行 `git diff HEAD~1` 查看最近代码变更
+
+### Phase 2: 差异分析
+- 读取 `.omc/axiom/active_context.md` 中的 `last_checkpoint`
+- 执行 `git diff [last_checkpoint]..HEAD` 对比差异
+- 定位可能出问题的文件
+
+### Phase 3: 根因分析（模式匹配优先）
+- 检查 `.omc/axiom/project_decisions.md` 的 `Known Issues` 是否有类似错误
+- 若匹配：直接应用历史修复方案
+- 若无匹配：基于上下文进行 AI 推理
+
+### Phase 4: 解决方案选择
+- **Option A - Auto-Fix（置信度 > 80%）**: 自动应用修复，重新运行验证
+- **Option B - Rollback**: `git reset --hard [last_checkpoint]`，输出"已回滚到检查点"
+- **Option C - Skip Task**: 将当前任务标记为 `BLOCKED`，继续执行队列中下一个任务
+
+### Phase 5: 学习记录
+- 将错误模式写入 `.omc/axiom/project_decisions.md` 的 `## Known Issues`
+- 格式：`| 日期 | 错误类型 | 根因分析 | 修复方案 | 影响范围 |`

@@ -1,19 +1,21 @@
 {
-  "name": "superpowers-dev",
-  "description": "Development marketplace for Superpowers core skills library",
+  "name": "ultrapower",
+  "description": "Disciplined multi-agent orchestration for Claude Code: workflow enforcement + parallel execution",
   "owner": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "liangjie559567"
   },
   "plugins": [
     {
-      "name": "superpowers",
-      "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-      "version": "4.3.0",
-      "source": "./",
+      "name": "ultrapower",
+      "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
+      "version": "5.0.25",
+      "source": {
+        "source": "npm",
+        "package": "@liangjie559567/ultrapower",
+        "version": "5.0.25"
+      },
       "author": {
-        "name": "Jesse Vincent",
-        "email": "jesse@fsck.com"
+        "name": "liangjie559567"
       }
     }
   ]

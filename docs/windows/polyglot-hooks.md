@@ -1,23 +1,23 @@
-# Cross-Platform Polyglot Hooks for Claude Code
+# Claude Code 跨平台 Polyglot Hooks
 
-Claude Code plugins need hooks that work on Windows, macOS, and Linux. This document explains the polyglot wrapper technique that makes this possible.
+Claude Code 插件需要能在 Windows、macOS 和 Linux 上运行的 hooks。本文档介绍实现这一目标的 polyglot 包装器技术。
 
-## The Problem
+## 问题
 
-Claude Code runs hook commands through the system's default shell:
-- **Windows**: CMD.exe
-- **macOS/Linux**: bash or sh
+Claude Code 通过系统默认 shell 运行 hook 命令：
+- **Windows**：CMD.exe
+- **macOS/Linux**：bash 或 sh
 
-This creates several challenges:
+这带来了几个挑战：
 
-1. **Script execution**: Windows CMD can't execute `.sh` files directly - it tries to open them in a text editor
-2. **Path format**: Windows uses backslashes (`C:\path`), Unix uses forward slashes (`/path`)
-3. **Environment variables**: `$VAR` syntax doesn't work in CMD
-4. **No `bash` in PATH**: Even with Git Bash installed, `bash` isn't in the PATH when CMD runs
+1. **脚本执行**：Windows CMD 无法直接执行 `.sh` 文件——它会尝试在文本编辑器中打开
+2. **路径格式**：Windows 使用反斜杠（`C:\path`），Unix 使用正斜杠（`/path`）
+3. **环境变量**：`$VAR` 语法在 CMD 中不起作用
+4. **PATH 中没有 `bash`**：即使安装了 Git Bash，CMD 运行时 `bash` 也不在 PATH 中
 
-## The Solution: Polyglot `.cmd` Wrapper
+## 解决方案：Polyglot `.cmd` 包装器
 
-A polyglot script is valid syntax in multiple languages simultaneously. Our wrapper is valid in both CMD and bash:
+Polyglot 脚本是同时在多种语言中有效的语法。我们的包装器在 CMD 和 bash 中都有效：
 
 ```cmd
 : << 'CMDBLOCK'
@@ -30,32 +30,32 @@ CMDBLOCK
 "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
 ```
 
-### How It Works
+### 工作原理
 
-#### On Windows (CMD.exe)
+#### 在 Windows（CMD.exe）上
 
-1. `: << 'CMDBLOCK'` - CMD sees `:` as a label (like `:label`) and ignores `<< 'CMDBLOCK'`
-2. `@echo off` - Suppresses command echoing
-3. The bash.exe command runs with:
-   - `-l` (login shell) to get proper PATH with Unix utilities
-   - `cygpath -u` converts Windows path to Unix format (`C:\foo` → `/c/foo`)
-4. `exit /b` - Exits the batch script, stopping CMD here
-5. Everything after `CMDBLOCK` is never reached by CMD
+1. `: << 'CMDBLOCK'` - CMD 将 `:` 视为标签（如 `:label`），忽略 `<< 'CMDBLOCK'`
+2. `@echo off` - 禁止命令回显
+3. bash.exe 命令运行时带有：
+   - `-l`（登录 shell）以获取包含 Unix 工具的正确 PATH
+   - `cygpath -u` 将 Windows 路径转换为 Unix 格式（`C:\foo` → `/c/foo`）
+4. `exit /b` - 退出批处理脚本，CMD 在此停止
+5. `CMDBLOCK` 之后的所有内容 CMD 永远不会执行到
 
-#### On Unix (bash/sh)
+#### 在 Unix（bash/sh）上
 
-1. `: << 'CMDBLOCK'` - `:` is a no-op, `<< 'CMDBLOCK'` starts a heredoc
-2. Everything until `CMDBLOCK` is consumed by the heredoc (ignored)
-3. `# Unix shell runs from here` - Comment
-4. The script runs directly with the Unix path
+1. `: << 'CMDBLOCK'` - `:` 是空操作，`<< 'CMDBLOCK'` 开始一个 heredoc
+2. 直到 `CMDBLOCK` 的所有内容都被 heredoc 消耗（忽略）
+3. `# Unix shell runs from here` - 注释
+4. 脚本直接使用 Unix 路径运行
 
-## File Structure
+## 文件结构
 
 ```
 hooks/
-├── hooks.json           # Points to the .cmd wrapper
-├── session-start.cmd    # Polyglot wrapper (cross-platform entry point)
-└── session-start.sh     # Actual hook logic (bash script)
+├── hooks.json           # 指向 .cmd 包装器
+├── session-start.cmd    # Polyglot 包装器（跨平台入口点）
+└── session-start.sh     # 实际 hook 逻辑（bash 脚本）
 ```
 
 ### hooks.json
@@ -78,41 +78,41 @@ hooks/
 }
 ```
 
-Note: The path must be quoted because `${CLAUDE_PLUGIN_ROOT}` may contain spaces on Windows (e.g., `C:\Program Files\...`).
+注意：路径必须加引号，因为 `${CLAUDE_PLUGIN_ROOT}` 在 Windows 上可能包含空格（例如 `C:\Program Files\...`）。
 
-## Requirements
+## 要求
 
 ### Windows
-- **Git for Windows** must be installed (provides `bash.exe` and `cygpath`)
-- Default installation path: `C:\Program Files\Git\bin\bash.exe`
-- If Git is installed elsewhere, the wrapper needs modification
+- 必须安装 **Git for Windows**（提供 `bash.exe` 和 `cygpath`）
+- 默认安装路径：`C:\Program Files\Git\bin\bash.exe`
+- 如果 Git 安装在其他位置，需要修改包装器
 
-### Unix (macOS/Linux)
-- Standard bash or sh shell
-- The `.cmd` file must have execute permission (`chmod +x`)
+### Unix（macOS/Linux）
+- 标准 bash 或 sh shell
+- `.cmd` 文件必须有执行权限（`chmod +x`）
 
-## Writing Cross-Platform Hook Scripts
+## 编写跨平台 Hook 脚本
 
-Your actual hook logic goes in the `.sh` file. To ensure it works on Windows (via Git Bash):
+实际的 hook 逻辑放在 `.sh` 文件中。为确保在 Windows 上（通过 Git Bash）正常工作：
 
-### Do:
-- Use pure bash builtins when possible
-- Use `$(command)` instead of backticks
-- Quote all variable expansions: `"$VAR"`
-- Use `printf` or here-docs for output
+### 推荐做法：
+- 尽可能使用纯 bash 内置命令
+- 使用 `$(command)` 而非反引号
+- 对所有变量展开加引号：`"$VAR"`
+- 使用 `printf` 或 here-docs 输出
 
-### Avoid:
-- External commands that may not be in PATH (sed, awk, grep)
-- If you must use them, they're available in Git Bash but ensure PATH is set up (use `bash -l`)
+### 避免：
+- 可能不在 PATH 中的外部命令（sed、awk、grep）
+- 如果必须使用，它们在 Git Bash 中可用，但需确保 PATH 已设置（使用 `bash -l`）
 
-### Example: JSON Escaping Without sed/awk
+### 示例：不使用 sed/awk 进行 JSON 转义
 
-Instead of:
+不要这样：
 ```bash
 escaped=$(echo "$content" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | awk '{printf "%s\\n", $0}')
 ```
 
-Use pure bash:
+使用纯 bash：
 ```bash
 escape_for_json() {
     local input="$1"
@@ -133,9 +133,9 @@ escape_for_json() {
 }
 ```
 
-## Reusable Wrapper Pattern
+## 可复用包装器模式
 
-For plugins with multiple hooks, you can create a generic wrapper that takes the script name as an argument:
+对于有多个 hooks 的插件，可以创建一个以脚本名称为参数的通用包装器：
 
 ### run-hook.cmd
 ```cmd
@@ -154,7 +154,7 @@ shift
 "${SCRIPT_DIR}/${SCRIPT_NAME}" "$@"
 ```
 
-### hooks.json using the reusable wrapper
+### 使用可复用包装器的 hooks.json
 ```json
 {
   "hooks": {
@@ -184,29 +184,29 @@ shift
 }
 ```
 
-## Troubleshooting
+## 故障排除
 
 ### "bash is not recognized"
-CMD can't find bash. The wrapper uses the full path `C:\Program Files\Git\bin\bash.exe`. If Git is installed elsewhere, update the path.
+CMD 找不到 bash。包装器使用完整路径 `C:\Program Files\Git\bin\bash.exe`。如果 Git 安装在其他位置，请更新路径。
 
-### "cygpath: command not found" or "dirname: command not found"
-Bash isn't running as a login shell. Ensure `-l` flag is used.
+### "cygpath: command not found" 或 "dirname: command not found"
+Bash 没有以登录 shell 方式运行。确保使用了 `-l` 标志。
 
-### Path has weird `\/` in it
-`${CLAUDE_PLUGIN_ROOT}` expanded to a Windows path ending with backslash, then `/hooks/...` was appended. Use `cygpath` to convert the entire path.
+### 路径中出现奇怪的 `\/`
+`${CLAUDE_PLUGIN_ROOT}` 展开为以反斜杠结尾的 Windows 路径，然后附加了 `/hooks/...`。使用 `cygpath` 转换整个路径。
 
-### Script opens in text editor instead of running
-The hooks.json is pointing directly to the `.sh` file. Point to the `.cmd` wrapper instead.
+### 脚本在文本编辑器中打开而非运行
+hooks.json 直接指向了 `.sh` 文件。改为指向 `.cmd` 包装器。
 
-### Works in terminal but not as hook
-Claude Code may run hooks differently. Test by simulating the hook environment:
+### 在终端中有效但作为 hook 无效
+Claude Code 运行 hooks 的方式可能不同。通过模拟 hook 环境来测试：
 ```powershell
 $env:CLAUDE_PLUGIN_ROOT = "C:\path\to\plugin"
 cmd /c "C:\path\to\plugin\hooks\session-start.cmd"
 ```
 
-## Related Issues
+## 相关 Issues
 
-- [anthropics/claude-code#9758](https://github.com/anthropics/claude-code/issues/9758) - .sh scripts open in editor on Windows
-- [anthropics/claude-code#3417](https://github.com/anthropics/claude-code/issues/3417) - Hooks don't work on Windows
-- [anthropics/claude-code#6023](https://github.com/anthropics/claude-code/issues/6023) - CLAUDE_PROJECT_DIR not found
+- [anthropics/claude-code#9758](https://github.com/anthropics/claude-code/issues/9758) - .sh 脚本在 Windows 上用编辑器打开
+- [anthropics/claude-code#3417](https://github.com/anthropics/claude-code/issues/3417) - Hooks 在 Windows 上不工作
+- [anthropics/claude-code#6023](https://github.com/anthropics/claude-code/issues/6023) - CLAUDE_PROJECT_DIR 未找到
