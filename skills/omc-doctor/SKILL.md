@@ -24,6 +24,53 @@ npm view @liangjie559567/ultrapower version 2>/dev/null || echo "Latest: (unavai
 - 已安装版本 != 最新版本：警告——插件已过时
 - 存在多个版本：警告——缓存陈旧
 
+### 第一步 bis：检查 npm-cache 复用问题
+
+检查插件缓存目录标注的版本号与实际内容是否一致：
+
+```bash
+node -e "
+const p=require('path'),f=require('fs'),h=require('os').homedir();
+const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const b=p.join(d,'plugins','cache','omc','ultrapower');
+try {
+  const vs=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));
+  if(!vs.length){console.log('No cache versions found');process.exit();}
+  const latest=vs[vs.length-1];
+  const pkgPath=p.join(b,latest,'package.json');
+  if(f.existsSync(pkgPath)){
+    const pkg=JSON.parse(f.readFileSync(pkgPath,'utf-8'));
+    if(pkg.version!==latest){
+      console.log('MISMATCH: dir='+latest+' pkg.version='+pkg.version);
+      console.log('CAUSE: npm-cache reuse (semver range satisfied old version)');
+    } else {
+      console.log('OK: version matches ('+latest+')');
+    }
+  } else {
+    console.log('WARN: package.json not found in cache/'+latest);
+  }
+} catch(e){console.log('Error:',e.message);}
+"
+
+# 检查 npm-cache 中存储的 semver 范围
+node -e "
+const p=require('path'),f=require('fs'),h=require('os').homedir();
+const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const npmCachePkg=p.join(d,'plugins','npm-cache','package.json');
+if(f.existsSync(npmCachePkg)){
+  const pkg=JSON.parse(f.readFileSync(npmCachePkg,'utf-8'));
+  const dep=pkg.dependencies&&pkg.dependencies['@liangjie559567/ultrapower'];
+  console.log('npm-cache range:',dep||'(not found)');
+} else {
+  console.log('npm-cache: not present (normal for fresh installs)');
+}
+"
+```
+
+**诊断**：
+- `MISMATCH: dir=X pkg.version=Y`：严重错误——npm-cache 复用导致旧内容被安装到新版本目录
+- npm-cache range 显示旧版本范围（如 `^5.0.11`）：警告——下次安装仍会复用旧缓存
+
 ### 第二步：检查 settings.json 中的旧版 hook
 
 读取 `~/.claude/settings.json`（用户级）和 `./.claude/settings.json`（项目级），检查是否存在包含以下条目的 `"hooks"` 键：
@@ -109,6 +156,7 @@ ls -la ~/.claude/skills/ 2>/dev/null
 | 检查项 | 状态 | 详情 |
 |-------|--------|---------|
 | 插件版本 | OK/WARN/CRITICAL | ... |
+| npm-cache 复用 | OK/WARN/CRITICAL | ... |
 | 旧版 Hook (settings.json) | OK/CRITICAL | ... |
 | 旧版脚本 (~/.claude/hooks/) | OK/WARN | ... |
 | CLAUDE.md | OK/WARN/CRITICAL | ... |
@@ -149,6 +197,21 @@ rm -f ~/.claude/hooks/stop-continuation.sh
 # 清除插件缓存（跨平台）
 node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{f.rmSync(b,{recursive:true,force:true});console.log('Plugin cache cleared. Restart Claude Code to fetch latest version.')}catch{console.log('No plugin cache found')}"
 ```
+
+### 修复：npm-cache 复用（插件内容是旧版本）
+
+症状：插件缓存目录版本号与 `package.json` 内 `version` 字段不一致。
+
+```bash
+# 完整清洁重装（必须同时清除 npm-cache）
+claude plugin uninstall ultrapower
+rm -rf ~/.claude/plugins/npm-cache        # 关键：清除 semver 范围缓存
+rm -rf ~/.claude/plugins/cache/ultrapower
+claude plugin marketplace update ultrapower
+claude plugin install ultrapower
+```
+
+> ⚠️ 仅清除插件缓存不够——npm-cache 中的 `^` semver 范围会导致安装器继续复用旧内容。
 
 ### 修复：陈旧缓存（多个版本）
 ```bash
