@@ -1,3 +1,13 @@
+# ultrapower v5.0.25
+
+### 修复
+
+- **ax-context init 无限循环**：`skills/ax-context/SKILL.md` 的 init 命令缺少执行指令，导致 Opus 4.6 反复重试（`PreToolUse:Skill hook error` 循环 20+ 次）
+  - 新增编号步骤：`Bash("mkdir -p .omc/axiom/evolution")` + 9 个 `Write(...)` 调用（含初始内容模板）
+  - 新增回归测试 `src/skills/__tests__/ax-context-init.test.ts`（2 个测试），验证 init 节包含可执行指令
+
+---
+
 # ultrapower v5.0.24
 
 ### 修复
