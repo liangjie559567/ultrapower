@@ -1,3 +1,15 @@
+# ultrapower v5.0.24
+
+### 修复
+
+- **Plugin Cache 缺少 templates/**：`plugin-setup.mjs` 新增 `copyTemplatesToCache()` 函数，在 postinstall 时将 `templates/hooks/` 复制到插件缓存，修复 `stop-continuation.mjs MODULE_NOT_FOUND` 错误
+  - 使用 `withFileTypes + isDirectory()` 守卫，跳过非目录条目
+  - 复制失败时清理空目录，允许下次安装重试
+  - 为 `dirname(__dirname)` 假设添加文档注释
+- **测试覆盖**：新增 `src/__tests__/hooks-json-paths.test.ts`（4 个测试），验证 `hooks/hooks.json` 路径正确性
+
+---
+
 # ultrapower v5.0.23
 
 ### 修复
