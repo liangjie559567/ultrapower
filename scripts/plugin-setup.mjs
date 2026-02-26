@@ -54,6 +54,66 @@ function fixNestedCacheDir() {
 
 fixNestedCacheDir();
 
+// Fix: npm install strips hidden directories (starting with '.'), so .claude-plugin/plugin.json
+// is never extracted to the plugin cache. We recreate it directly in the plugin cache.
+// The postinstall script runs from the npm-cache node_modules dir, so we must target the
+// plugin cache path explicitly rather than relying on __dirname.
+function fixMissingPluginJson() {
+  try {
+    const pluginRoot = dirname(__dirname);
+    const pkgPath = join(pluginRoot, 'package.json');
+    if (!existsSync(pkgPath)) return;
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+    const version = pkg.version || '0.0.0';
+
+    const pluginJson = {
+      name: 'ultrapower',
+      description: pkg.description || '',
+      version,
+      author: pkg.author ? { name: typeof pkg.author === 'string' ? pkg.author : pkg.author.name } : undefined,
+      homepage: pkg.homepage || '',
+      repository: pkg.repository?.url || pkg.repository || '',
+      license: pkg.license || 'MIT',
+      keywords: pkg.keywords || [],
+      skills: './skills/',
+      mcpServers: './.mcp.json'
+    };
+    const pluginJsonStr = JSON.stringify(pluginJson, null, 2);
+
+    // 1. Write to current install location (npm-cache node_modules dir)
+    const localPluginJsonDir = join(pluginRoot, '.claude-plugin');
+    const localPluginJsonPath = join(localPluginJsonDir, 'plugin.json');
+    if (!existsSync(localPluginJsonPath)) {
+      mkdirSync(localPluginJsonDir, { recursive: true });
+      writeFileSync(localPluginJsonPath, pluginJsonStr);
+      console.log('[OMC] Created .claude-plugin/plugin.json in install dir');
+    }
+
+    // 2. Write directly to plugin cache (marketplace: ultrapower, plugin: ultrapower)
+    // Claude Code copies from npm-cache but skips hidden dirs, so we patch the cache directly.
+    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
+    if (existsSync(pluginCacheBase)) {
+      const versions = readdirSync(pluginCacheBase);
+      for (const v of versions) {
+        const cacheVersionDir = join(pluginCacheBase, v);
+        const cachePluginJsonDir = join(cacheVersionDir, '.claude-plugin');
+        const cachePluginJsonPath = join(cachePluginJsonDir, 'plugin.json');
+        if (!existsSync(cachePluginJsonPath)) {
+          mkdirSync(cachePluginJsonDir, { recursive: true });
+          // Use version-specific content for each cached version
+          const versionedPkg = { ...pluginJson, version: v };
+          writeFileSync(cachePluginJsonPath, JSON.stringify(versionedPkg, null, 2));
+          console.log(`[OMC] Created .claude-plugin/plugin.json in plugin cache v${v}`);
+        }
+      }
+    }
+  } catch (e) {
+    console.log('[OMC] Warning: Could not create .claude-plugin/plugin.json:', e.message);
+  }
+}
+
+fixMissingPluginJson();
+
 // 1. Create HUD directory
 if (!existsSync(HUD_DIR)) {
   mkdirSync(HUD_DIR, { recursive: true });
