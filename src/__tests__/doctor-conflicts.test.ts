@@ -8,15 +8,14 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
-import { homedir } from 'os';
-
-const TEST_CLAUDE_DIR = join(homedir(), '.claude-test-doctor-conflicts');
-const TEST_PROJECT_DIR = join(homedir(), '.claude-test-doctor-project');
-const TEST_PROJECT_CLAUDE_DIR = join(TEST_PROJECT_DIR, '.claude');
+import { homedir, tmpdir } from 'os';
+import { randomBytes } from 'crypto';
 
 // Mock getClaudeConfigDir before importing the module under test
+// Use a factory so each test suite worker gets its own path via the closure
+let testClaudeDir = '';
 vi.mock('../utils/paths.js', () => ({
-  getClaudeConfigDir: () => TEST_CLAUDE_DIR,
+  getClaudeConfigDir: () => testClaudeDir,
 }));
 
 // Import after mock setup
@@ -24,21 +23,24 @@ import { checkHookConflicts, runConflictCheck } from '../cli/commands/doctor-con
 
 describe('doctor-conflicts: hook ownership classification', () => {
   let cwdSpy: ReturnType<typeof vi.spyOn>;
+  let testProjectDir: string;
+  let testProjectClaudeDir: string;
 
   beforeEach(() => {
-    for (const dir of [TEST_CLAUDE_DIR, TEST_PROJECT_DIR]) {
-      if (existsSync(dir)) {
-        rmSync(dir, { recursive: true, force: true });
-      }
-    }
-    mkdirSync(TEST_CLAUDE_DIR, { recursive: true });
-    mkdirSync(TEST_PROJECT_CLAUDE_DIR, { recursive: true });
-    cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(TEST_PROJECT_DIR);
+    // Use unique directories per test to avoid cross-test filesystem races
+    const uid = randomBytes(6).toString('hex');
+    testClaudeDir = join(tmpdir(), `omc-test-doctor-${uid}`);
+    testProjectDir = join(tmpdir(), `omc-test-project-${uid}`);
+    testProjectClaudeDir = join(testProjectDir, '.claude');
+
+    mkdirSync(testClaudeDir, { recursive: true });
+    mkdirSync(testProjectClaudeDir, { recursive: true });
+    cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(testProjectDir);
   });
 
   afterEach(() => {
     cwdSpy.mockRestore();
-    for (const dir of [TEST_CLAUDE_DIR, TEST_PROJECT_DIR]) {
+    for (const dir of [testClaudeDir, testProjectDir]) {
       if (existsSync(dir)) {
         rmSync(dir, { recursive: true, force: true });
       }
@@ -82,7 +84,7 @@ describe('doctor-conflicts: hook ownership classification', () => {
       },
     };
 
-    writeFileSync(join(TEST_CLAUDE_DIR, 'settings.json'), JSON.stringify(settings));
+    writeFileSync(join(testClaudeDir, 'settings.json'), JSON.stringify(settings));
     const conflicts = checkHookConflicts();
 
     // All hooks should be classified as OMC-owned
@@ -104,7 +106,7 @@ describe('doctor-conflicts: hook ownership classification', () => {
       },
     };
 
-    writeFileSync(join(TEST_CLAUDE_DIR, 'settings.json'), JSON.stringify(settings));
+    writeFileSync(join(testClaudeDir, 'settings.json'), JSON.stringify(settings));
     const conflicts = checkHookConflicts();
 
     expect(conflicts).toHaveLength(1);
@@ -123,7 +125,7 @@ describe('doctor-conflicts: hook ownership classification', () => {
       },
     };
 
-    writeFileSync(join(TEST_CLAUDE_DIR, 'settings.json'), JSON.stringify(settings));
+    writeFileSync(join(testClaudeDir, 'settings.json'), JSON.stringify(settings));
     const conflicts = checkHookConflicts();
 
     expect(conflicts).toHaveLength(1);
@@ -148,7 +150,7 @@ describe('doctor-conflicts: hook ownership classification', () => {
       },
     };
 
-    writeFileSync(join(TEST_CLAUDE_DIR, 'settings.json'), JSON.stringify(settings));
+    writeFileSync(join(testClaudeDir, 'settings.json'), JSON.stringify(settings));
     const conflicts = checkHookConflicts();
 
     expect(conflicts).toHaveLength(2);
@@ -173,7 +175,7 @@ describe('doctor-conflicts: hook ownership classification', () => {
       },
     };
 
-    writeFileSync(join(TEST_CLAUDE_DIR, 'settings.json'), JSON.stringify(omcOnlySettings));
+    writeFileSync(join(testClaudeDir, 'settings.json'), JSON.stringify(omcOnlySettings));
     const omcReport = runConflictCheck();
     // hasConflicts should be false when all hooks are OMC-owned
     expect(omcReport.hookConflicts.every(h => h.isOmc)).toBe(true);
@@ -193,7 +195,7 @@ describe('doctor-conflicts: hook ownership classification', () => {
       },
     };
 
-    writeFileSync(join(TEST_PROJECT_CLAUDE_DIR, 'settings.json'), JSON.stringify(projectSettings));
+    writeFileSync(join(testProjectClaudeDir, 'settings.json'), JSON.stringify(projectSettings));
     const conflicts = checkHookConflicts();
 
     expect(conflicts).toHaveLength(1);
@@ -223,8 +225,8 @@ describe('doctor-conflicts: hook ownership classification', () => {
       },
     };
 
-    writeFileSync(join(TEST_CLAUDE_DIR, 'settings.json'), JSON.stringify(profileSettings));
-    writeFileSync(join(TEST_PROJECT_CLAUDE_DIR, 'settings.json'), JSON.stringify(projectSettings));
+    writeFileSync(join(testClaudeDir, 'settings.json'), JSON.stringify(profileSettings));
+    writeFileSync(join(testProjectClaudeDir, 'settings.json'), JSON.stringify(projectSettings));
     const conflicts = checkHookConflicts();
 
     expect(conflicts).toHaveLength(2);
@@ -249,8 +251,8 @@ describe('doctor-conflicts: hook ownership classification', () => {
     };
 
     // Same hook in both profile and project settings
-    writeFileSync(join(TEST_CLAUDE_DIR, 'settings.json'), JSON.stringify(sharedHook));
-    writeFileSync(join(TEST_PROJECT_CLAUDE_DIR, 'settings.json'), JSON.stringify(sharedHook));
+    writeFileSync(join(testClaudeDir, 'settings.json'), JSON.stringify(sharedHook));
+    writeFileSync(join(testProjectClaudeDir, 'settings.json'), JSON.stringify(sharedHook));
     const conflicts = checkHookConflicts();
 
     // Should appear only once, not twice
