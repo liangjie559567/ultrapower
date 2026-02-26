@@ -1,7 +1,6 @@
 ---
 name: ax-draft
 description: "/ax-draft — Axiom 需求起草工作流：需求澄清循环 → PRD 初稿生成 → 用户评审门禁"
-triggers: ["ax-draft", "draft requirement", "起草需求", "需求起草", "新需求"]
 ---
 
 # Axiom 需求起草工作流 (Phase 1)

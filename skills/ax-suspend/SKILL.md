@@ -1,7 +1,6 @@
 ---
 name: ax-suspend
 description: "/ax-suspend — Axiom 暂停保存工作流：保存当前状态快照，安全退出会话"
-triggers: ["ax-suspend", "suspend", "暂停任务", "保存退出", "save and exit"]
 ---
 
 # Axiom 暂停保存工作流

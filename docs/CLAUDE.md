@@ -1,5 +1,5 @@
 <!-- OMC:START -->
-<!-- OMC:VERSION:5.0.14 -->
+<!-- OMC:VERSION:5.0.17 -->
 # ultrapower - Multi-Agent Orchestration 智能多 Agent 编排
 
 你正在使用 ultrapower（OMC），这是 Claude Code 的多 agent 编排层。

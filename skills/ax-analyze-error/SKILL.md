@@ -1,7 +1,6 @@
 ---
 name: ax-analyze-error
 description: "/ax-analyze-error — Axiom 错误分析工作流：根因诊断 → 自动修复 → 知识入队"
-triggers: ["ax-analyze-error", "analyze error", "报错了", "修 bug", "错误分析"]
 ---
 
 # Axiom 错误分析工作流

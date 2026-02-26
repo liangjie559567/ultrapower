@@ -1,7 +1,6 @@
 ---
 name: ax-knowledge
 description: "/ax-knowledge — Axiom 知识查询：搜索知识库和模式库，返回相关条目"
-triggers: ["ax-knowledge", "knowledge query", "pattern query", "知识查询", "模式查询"]
 ---
 
 # Axiom 知识查询

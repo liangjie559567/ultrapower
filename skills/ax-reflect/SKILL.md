@@ -1,7 +1,6 @@
 ---
 name: ax-reflect
 description: "/ax-reflect — Axiom 反思工作流：会话总结 → 经验提取 → Action Items → 知识入队"
-triggers: ["ax-reflect", "reflect", "反思", "总结", "session reflect"]
 ---
 
 # Axiom 反思工作流

@@ -1,7 +1,6 @@
 ---
 name: ax-context
 description: "/ax-context — Axiom 上下文管理：读取/更新/保存记忆系统，维护任务状态"
-triggers: ["ax-context", "context manager", "上下文管理", "读取记忆", "保存状态"]
 ---
 
 # Axiom 上下文管理 Skill

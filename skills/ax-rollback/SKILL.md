@@ -1,7 +1,6 @@
 ---
 name: ax-rollback
 description: "/ax-rollback — Axiom 回滚工作流：回滚到最近检查点，恢复系统状态"
-triggers: ["ax-rollback", "rollback", "回滚", "恢复状态", "undo"]
 ---
 
 # Axiom 回滚工作流

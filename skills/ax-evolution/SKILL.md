@@ -1,7 +1,6 @@
 ---
 name: ax-evolution
 description: "/ax-evolution — Axiom 进化引擎触发：手动触发知识收割、模式检测和反思"
-triggers: ["ax-evolution", "evolution engine", "进化引擎", "查询知识库", "查询模式库"]
 ---
 
 # Axiom 进化引擎触发 Skill

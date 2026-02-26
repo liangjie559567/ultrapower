@@ -1,7 +1,6 @@
 ---
 name: ax-export
 description: "/ax-export — Axiom 系统导出：将 Axiom 配置打包为可移植 zip，支持模板模式和完整模式"
-triggers: ["ax-export", "export axiom", "导出系统", "axiom export"]
 ---
 
 # Axiom 系统导出
