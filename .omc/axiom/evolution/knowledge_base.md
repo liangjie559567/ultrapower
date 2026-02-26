@@ -1,7 +1,7 @@
 ---
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
-last_updated: 2026-02-09
+last_updated: 2026-02-26
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -40,16 +40,20 @@ last_updated: 2026-02-09
 | k-026 | Codex CLI Best Practices (Windows) | tooling | 0.95 | 2026-02-12 | active |
 | k-027 | Async Interaction Pattern (Turn-Based Resume) | pattern | 0.9 | 2026-02-12 | active |
 | k-028 | Unique Artifact Injection Pattern | architecture | 0.95 | 2026-02-12 | active |
+| k-029 | Axiom Full-Chain Workflow Validation | workflow | 0.9 | 2026-02-26 | active |
+| k-030 | assertValidMode() Path Traversal Protection | security | 0.95 | 2026-02-26 | active |
+| k-031 | Exclusive Modes Set (4 modes, not 2) | architecture | 0.9 | 2026-02-26 | active |
 
 ## 2. 分类统计 (Category Stats)
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| architecture | 15 | 架构相关知识 |
+| architecture | 16 | 架构相关知识 |
 | debugging | 1 | 调试技巧 |
 | pattern | 3 | 代码模式 |
-| workflow | 4 | 工作流相关 |
+| workflow | 5 | 工作流相关 |
 | tooling | 2 | 工具使用 |
+| security | 1 | 安全相关知识 |
 
 
 ## 3. 标签云 (Tag Cloud)

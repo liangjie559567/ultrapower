@@ -1,3 +1,32 @@
+# ultrapower v5.0.22
+
+### 新增
+
+- **全链路规范体系**：新增 `docs/standards/` 目录，包含 8 个规范文档和 3 个模板
+  - `README.md`：规范体系索引，P0/P1 优先级分层
+  - `audit-report.md`：Axiom 专家评审报告（10 个差异点 D-01~D-10，4 个技术债务 TD-1~TD-4）
+  - `runtime-protection.md`：运行时保护规范（路径遍历防护、输入验证）
+  - `hook-execution-order.md`：Hook 执行顺序规范
+  - `state-machine.md`：状态机规范（7 个状态，互斥模式 4 个）
+  - `agent-lifecycle.md`：Agent 生命周期规范
+  - `user-guide.md`：用户指南
+  - `anti-patterns.md`：反模式文档（6 类，含 ❌/✅ 示例）
+  - `contribution-guide.md`：贡献指南
+  - `templates/`：skill/agent/hook 三个模板
+
+- **安全防护实现**：`src/lib/validateMode.ts` 新增 `assertValidMode()` 路径遍历防护
+  - `validateMode()`：返回 boolean
+  - `assertValidMode()`：抛出异常，阻止路径遍历
+  - 65 个测试用例，覆盖非字符串类型（null/undefined/number/array）
+
+- **Axiom 进化记录**：首次完整走通 ax-draft → ax-review → ax-decompose → ax-implement → ax-reflect → ax-evolve 全链路，知识库新增 k-029/030/031，模式库新增 P-002/003
+
+### 修复
+
+- **CLAUDE.md 规范引用**：在项目 CLAUDE.md 中添加 Axiom 门禁规则和工作流路由表引用
+
+---
+
 # ultrapower v5.0.14
 
 ### 修复
