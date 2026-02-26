@@ -657,7 +657,13 @@ export function install(options: InstallOptions = {}): InstallResult {
         '  }',
         '  ',
         '  // 2. Plugin cache (for production installs)',
-        '  const pluginCacheBase = join(home, ".claude/plugins/cache/omc/ultrapower");',
+        '  // Search multiple namespaces: Claude Code uses the package name as namespace',
+        '  const pluginCacheBases = [',
+        '    join(home, ".claude/plugins/cache/ultrapower/ultrapower"),',
+        '    join(home, ".claude/plugins/cache/omc/ultrapower"),',
+        '    join(home, ".claude/plugins/cache/liangjie559567/ultrapower"),',
+        '  ];',
+        '  for (const pluginCacheBase of pluginCacheBases) {',
         '  if (existsSync(pluginCacheBase)) {',
         '    try {',
         '      const versions = readdirSync(pluginCacheBase);',
@@ -680,6 +686,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         '      }',
         '    } catch { /* continue */ }',
         '  }',
+        '  }',
         '  ',
         '  // 3. npm package (global or local install)',
         '  try {',
@@ -696,9 +703,6 @@ export function install(options: InstallOptions = {}): InstallResult {
         '    } else {',
         '      console.log(`[OMC HUD] Plugin dist/ exists but HUD not found. Run: cd "${pluginCacheDir}" && npm run build`);',
         '    }',
-        '  } else if (existsSync(pluginCacheBase)) {',
-        '    // Plugin cache directory exists but no versions',
-        '    console.log(`[OMC HUD] Plugin cache found but no versions installed. Run: /ultrapower:omc-setup`);',
         '  } else {',
         '    // No plugin installation found at all',
         '    console.log("[OMC HUD] Plugin not installed. Run: /ultrapower:omc-setup");',
@@ -801,16 +805,20 @@ export function install(options: InstallOptions = {}): InstallResult {
 
       // 2. Configure statusLine (always, even in plugin mode)
       if (hudScriptPath) {
+        // Normalize path separators for cross-platform compatibility.
+        // Claude Code executes statusLine commands via Git Bash on Windows,
+        // which requires forward slashes. Backslashes in JSON cause parse failures.
+        const hudCommandPath = hudScriptPath.replace(/\\/g, '/');
         if (!existingSettings.statusLine) {
           existingSettings.statusLine = {
             type: 'command',
-            command: 'node ' + hudScriptPath
+            command: 'node ' + hudCommandPath
           };
           log('  Configured statusLine');
         } else if (options.force && isOmcStatusLine(existingSettings.statusLine)) {
           existingSettings.statusLine = {
             type: 'command',
-            command: 'node ' + hudScriptPath
+            command: 'node ' + hudCommandPath
           };
           log('  Updated statusLine (--force)');
         } else if (options.force) {

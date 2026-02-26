@@ -1,3 +1,12 @@
+# ultrapower v5.0.13
+
+### 修复
+
+- **plugin 发布修复**：将 `.claude-plugin` 目录加入 `package.json` 的 `files` 字段，确保 npm 发布时包含 `plugin.json`，修复插件安装后 `ultrapower:` 前缀 skills 无法调用的问题
+- **缓存嵌套修复**：因 `plugin.json` 缺失导致 Claude Code 反复重新安装造成的路径无限嵌套问题（`5.0.12/ultrapower/5.0.12/ultrapower/...`）一并修复
+
+---
+
 # ultrapower v5.0.12
 
 ### 修复
