@@ -1,3 +1,21 @@
+# ultrapower v5.0.23
+
+### 修复
+
+- **安全加固（C-01）**：`assertValidMode()` 错误消息截断超长输入（>50 字符），防止 DoS 攻击和信息泄露
+- **安全测试（H-02）**：`validateMode.test.ts` 新增 6 个安全边界测试用例
+  - 空白字符串（空格/制表符/换行）
+  - null 字节注入（`autopilot\x00`、`autopilot\x00../../etc`）
+  - 原型污染向量（`__proto__`、`constructor`、`prototype`）
+  - 超长字符串（100 万字符）不抛出异常
+  - 错误消息截断验证（长度 < 500，含 `truncated` 标记）
+  - 非字符串输入不暴露原始内容（防止对象属性泄露）
+- **文档修复（M-02）**：`audit-report.md` 补充 D-10 差异点（死锁检测常量已定义但未实现），差异点总数更新为 10 个
+- **版本同步（L-01）**：`docs/standards/` 下版本引用从 v5.0.21 更新至 v5.0.22
+- **示例修复（L-02）**：`anti-patterns.md` 中 `validateMode()` 无参调用修正为 `validateMode(undefined)`
+
+---
+
 # ultrapower v5.0.22
 
 ### 新增
