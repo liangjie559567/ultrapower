@@ -1,3 +1,11 @@
+# ultrapower v5.0.14
+
+### 修复
+
+- **缓存嵌套根因修复**：将 `package.json` 的 `files` 字段从 `.claude-plugin`（整个目录）改为 `.claude-plugin/plugin.json`（仅 plugin.json），防止 `marketplace.json` 被发布到 npm 包中。Claude Code 读到 npm 包里的 `marketplace.json`（含 `source: npm`）后会触发循环安装，造成路径无限嵌套（`5.0.13/ultrapower/5.0.13/ultrapower/...`）。v5.0.13 修复了 plugin.json 缺失问题，但未排除 marketplace.json，本版本彻底修复。
+
+---
+
 # ultrapower v5.0.13
 
 ### 修复
