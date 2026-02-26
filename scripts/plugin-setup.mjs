@@ -98,19 +98,32 @@ function copyTemplatesToCache() {
     const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
     if (!existsSync(pluginCacheBase)) return;
 
-    // Source: templates/hooks/ relative to this script's package root
+    // __dirname = <pkg-root>/scripts/, so dirname(__dirname) = <pkg-root>/
+    // This assumes the postinstall script lives one level below the package root.
+    // If the script is ever moved, update this path accordingly.
     const pluginRoot = dirname(__dirname);
     const srcTemplatesHooks = join(pluginRoot, 'templates', 'hooks');
-    if (!existsSync(srcTemplatesHooks)) return;
+    if (!existsSync(srcTemplatesHooks)) {
+      console.log('[OMC] Warning: templates/hooks/ not found in package root:', srcTemplatesHooks);
+      return;
+    }
 
-    const versions = readdirSync(pluginCacheBase);
-    for (const version of versions) {
+    const entries = readdirSync(pluginCacheBase, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isDirectory()) continue;
+      const version = entry.name;
       const cacheVersionDir = join(pluginCacheBase, version);
       const destTemplatesHooks = join(cacheVersionDir, 'templates', 'hooks');
       if (!existsSync(destTemplatesHooks)) {
         mkdirSync(destTemplatesHooks, { recursive: true });
-        cpSync(srcTemplatesHooks, destTemplatesHooks, { recursive: true });
-        console.log(`[OMC] Copied templates/hooks/ to plugin cache v${version}`);
+        try {
+          cpSync(srcTemplatesHooks, destTemplatesHooks, { recursive: true });
+          console.log(`[OMC] Copied templates/hooks/ to plugin cache v${version}`);
+        } catch (copyErr) {
+          // Clean up empty dir so next install can retry
+          rmSync(destTemplatesHooks, { recursive: true, force: true });
+          console.log(`[OMC] Warning: Failed to copy templates/hooks/ to cache v${version}:`, copyErr.message);
+        }
       }
     }
   } catch (e) {

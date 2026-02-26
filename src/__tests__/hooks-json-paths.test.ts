@@ -109,7 +109,7 @@ describe('hooks/hooks.json path correctness', () => {
   it('plugin-setup.mjs copies templates/hooks/ to plugin cache', () => {
     // Verify that plugin-setup.mjs contains logic to copy templates/hooks/ to cache
     const setupScript = readFileSync(join(PROJECT_ROOT, 'scripts', 'plugin-setup.mjs'), 'utf-8');
-    // Must have logic to copy templates dir to plugin cache
-    expect(setupScript).toMatch(/templates.*hooks|copyTemplates|cpSync.*templates/);
+    // Must have cpSync call referencing srcTemplatesHooks (not just a comment)
+    expect(setupScript).toMatch(/cpSync\s*\(\s*srcTemplatesHooks/);
   });
 });
