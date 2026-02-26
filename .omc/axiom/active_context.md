@@ -2,7 +2,7 @@
 session_id: "2026-02-26"
 task_status: IDLE
 current_phase: "Completed"
-last_gate: "CI Gate Pass (9093 tests)"
+last_gate: "CI Gate Pass (9117 tests, hooks-json-paths 4/4)"
 ---
 
 # Active Context
@@ -10,7 +10,7 @@ last_gate: "CI Gate Pass (9093 tests)"
 ## Status: IDLE
 
 ## Current Goal
-全链路规范体系构建完毕，已推送到 main。
+ax-context init 无限循环 Bug 修复完成（TDD），反思已写入。
 
 ## Task Queues
 
@@ -18,9 +18,10 @@ last_gate: "CI Gate Pass (9093 tests)"
 - (none)
 
 ### Pending
-- [ ] [REFLECTION] 修复 ax-implement skill 的 disable-model-invocation 问题
-- [ ] [REFLECTION] 修复 doctor-conflicts / inbox-outbox 并发竞态测试（TD-5）
-- [ ] [REFLECTION] 下次工作前先切换到 dev 分支
+- [ ] [REFLECTION] 下次工作前先执行 `git checkout dev && git pull`，在 dev 分支上工作（连续三次提醒）
+- [ ] [REFLECTION] 确认 inbox-outbox 测试文件是否存在
+- [ ] [REFLECTION] 运行完整 `npm test` 验证无回归
+- [ ] [REFLECTION] 在 contribution-guide.md 中添加"init/setup 命令必须包含可执行指令"要求
 
 ### Completed
 - [x] T-01a: docs/standards/README.md

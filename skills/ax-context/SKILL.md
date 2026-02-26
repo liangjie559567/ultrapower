@@ -49,13 +49,25 @@ Task(subagent_type="ultrapower:axiom-context-manager", model="sonnet", prompt="c
 ### /ax-context init
 初始化 Axiom 记忆系统（首次使用时）。
 
-创建以下文件（若不存在）：
-- `.omc/axiom/active_context.md`
-- `.omc/axiom/project_decisions.md`
-- `.omc/axiom/user_preferences.md`
-- `.omc/axiom/state_machine.md`
-- `.omc/axiom/reflection_log.md`
-- `.omc/axiom/evolution/knowledge_base.md`
-- `.omc/axiom/evolution/pattern_library.md`
-- `.omc/axiom/evolution/learning_queue.md`
-- `.omc/axiom/evolution/workflow_metrics.md`
+按以下步骤执行：
+
+1. 使用 `Bash` 创建目录结构：
+```
+Bash("mkdir -p .omc/axiom/evolution")
+```
+
+2. 使用 `Write` 创建各文件（若不存在则创建，已存在则跳过）：
+
+```
+Write(".omc/axiom/active_context.md", "# Active Context\n\n## Current Task\n\n## Status\nIDLE\n\n## Last Updated\n")
+Write(".omc/axiom/project_decisions.md", "# Project Decisions\n\n## Architecture Decisions\n\n## Library Choices\n\n## Rules\n")
+Write(".omc/axiom/user_preferences.md", "# User Preferences\n\n## Communication Style\n\n## Workflow Preferences\n\n## Tool Preferences\n")
+Write(".omc/axiom/state_machine.md", "# State Machine\n\nCurrent State: IDLE\n\n## Valid States\n- IDLE\n- PLANNING\n- CONFIRMING\n- EXECUTING\n- AUTO_FIX\n- BLOCKED\n- ARCHIVING\n")
+Write(".omc/axiom/reflection_log.md", "# Reflection Log\n\n## Sessions\n")
+Write(".omc/axiom/evolution/knowledge_base.md", "# Knowledge Base\n\n## Patterns\n\n## Insights\n")
+Write(".omc/axiom/evolution/pattern_library.md", "# Pattern Library\n\n## Code Patterns\n")
+Write(".omc/axiom/evolution/learning_queue.md", "# Learning Queue\n\n## Pending\n")
+Write(".omc/axiom/evolution/workflow_metrics.md", "# Workflow Metrics\n\n## Sessions\n")
+```
+
+3. 完成后输出：`✅ Axiom 记忆系统初始化完成。`
