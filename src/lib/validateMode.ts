@@ -62,8 +62,12 @@ export function validateMode(mode: unknown): mode is ValidMode {
  */
 export function assertValidMode(mode: unknown): ValidMode {
   if (!validateMode(mode)) {
+    // Truncate input to prevent DoS via memory amplification and avoid
+    // leaking large attacker-controlled payloads into logs/notifications.
+    const raw = typeof mode === 'string' ? mode : String(mode);
+    const display = raw.length > 50 ? `${raw.slice(0, 50)}...(truncated)` : raw;
     throw new Error(
-      `Invalid mode: ${JSON.stringify(mode)}. ` +
+      `Invalid mode: "${display}". ` +
         `Valid modes are: ${VALID_MODES.join(', ')}`
     );
   }

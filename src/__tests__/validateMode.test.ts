@@ -32,6 +32,31 @@ describe('validateMode', () => {
     expect(validateMode(42)).toBe(false);
     expect(validateMode({})).toBe(false);
     expect(validateMode([])).toBe(false);
+    expect(validateMode(true)).toBe(false);
+    expect(validateMode(Symbol('autopilot'))).toBe(false);
+  });
+
+  it('should return false for whitespace-only strings', () => {
+    expect(validateMode(' ')).toBe(false);
+    expect(validateMode('\t')).toBe(false);
+    expect(validateMode('\n')).toBe(false);
+    expect(validateMode('   ')).toBe(false);
+  });
+
+  it('should return false for null byte injection', () => {
+    expect(validateMode('autopilot\x00')).toBe(false);
+    expect(validateMode('autopilot\x00../../etc')).toBe(false);
+  });
+
+  it('should return false for prototype pollution vectors', () => {
+    expect(validateMode('__proto__')).toBe(false);
+    expect(validateMode('constructor')).toBe(false);
+    expect(validateMode('prototype')).toBe(false);
+  });
+
+  it('should handle very long strings without throwing', () => {
+    const longString = 'a'.repeat(1_000_000);
+    expect(validateMode(longString)).toBe(false);
   });
 });
 
@@ -54,6 +79,29 @@ describe('assertValidMode', () => {
 
   it('error message should list valid modes', () => {
     expect(() => assertValidMode('bad')).toThrow('autopilot');
+  });
+
+  it('error message should truncate very long input to prevent DoS', () => {
+    const longInput = 'x'.repeat(1_000_000);
+    let errorMessage = '';
+    try {
+      assertValidMode(longInput);
+    } catch (e) {
+      errorMessage = (e as Error).message;
+    }
+    expect(errorMessage.length).toBeLessThan(500);
+    expect(errorMessage).toContain('truncated');
+  });
+
+  it('error message should not expose raw non-string input verbatim', () => {
+    const obj = { secret: 'password123' };
+    let errorMessage = '';
+    try {
+      assertValidMode(obj);
+    } catch (e) {
+      errorMessage = (e as Error).message;
+    }
+    expect(errorMessage).not.toContain('password123');
   });
 
   it('returned value should be usable in path construction without traversal risk', () => {

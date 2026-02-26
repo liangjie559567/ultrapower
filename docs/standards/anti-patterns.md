@@ -347,7 +347,7 @@ it('should return false for non-string types', () => {
   expect(validateMode(null)).toBe(false);
   expect(validateMode(undefined)).toBe(false);
   expect(validateMode(42)).toBe(false);
-  expect(validateMode()).toBe(false);
+  expect(validateMode(undefined)).toBe(false);
   expect(validateMode([])).toBe(false);
 });
 ```

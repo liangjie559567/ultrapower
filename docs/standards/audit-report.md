@@ -1,7 +1,7 @@
 # ultrapower 全链路规范体系 — 现有实现审计报告
 
 > **状态**: 完成
-> **版本**: ultrapower v5.0.21
+> **版本**: ultrapower v5.0.22
 > **审计日期**: 2026-02-26
 > **审计范围**: T-01a（Hook/Bridge）+ T-01b（Mode/Agent/State）
 > **产出用途**: 作为 T-02 至 T-09 所有 P0 规范文档的真理之源
@@ -342,8 +342,9 @@ export function safeReadJson<T>(filePath: string): T | null {
 | D-07 | subagent-tracker 内部写入 | "所有状态文件写入必须使用 atomicWriteJsonSync" | `writeTrackingStateImmediate` 使用 `writeFileSync` 直接写入 | T-03b |
 | D-08 | DEADLOCK_CHECK_THRESHOLD 使用位置 | 在 subagent-tracker 中使用 | 在 subagent-tracker 中定义并导出，但未在该文件内使用（由外部调用方使用） | T-06 |
 | D-09 | stale 阈值含义 | 未区分两种 stale 阈值 | 两个不同概念：mode stale（1 小时）vs agent stale（5 分钟） | T-05、T-06 |
+| D-10 | 死锁检测未实现 | "DEADLOCK_CHECK_THRESHOLD 用于死锁检测" | 常量已定义并导出，但死锁检测逻辑未在代码中实现 | T-06 |
 
-**差异点数量：9 个**（满足验收条件：差异点数量 ≥ 0）
+**差异点数量：10 个**（满足验收条件：差异点数量 ≥ 0）
 
 ---
 
