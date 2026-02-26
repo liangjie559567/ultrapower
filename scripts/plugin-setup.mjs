@@ -19,9 +19,12 @@ const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json');
 
 console.log('[OMC] Running post-install setup...');
 
-// Fix: flatten nested cache directories caused by installer wrapping content in plugin-name subdir.
-// The installer places npm package contents under cache/.../VERSION/ultrapower/ instead of cache/.../VERSION/
-// This function detects and fixes that by moving contents up one level.
+// Fix: flatten nested cache directories caused by Claude Code installer bug.
+// Root cause: xF6(src, dest) copies src contents to dest, but dest is a subdirectory of src.
+// After mkdir -p dest, readdir(src) includes the newly created dest subdir, causing recursive copy.
+// Result: cache/.../VERSION/ultrapower/VERSION/ultrapower/VERSION/... infinite nesting.
+// This function detects and fixes arbitrary-depth nesting by finding the real plugin content
+// and moving it up to the version directory, then removing all nested dirs.
 function fixNestedCacheDir() {
   try {
     const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
@@ -31,25 +34,51 @@ function fixNestedCacheDir() {
       const versionDir = join(pluginCacheBase, version);
       const nestedDir = join(versionDir, 'ultrapower');
       if (!existsSync(nestedDir)) continue;
-      // Check if the nested dir itself has the actual plugin content (skills/, dist/, etc.)
-      const nestedContents = readdirSync(nestedDir);
-      // If nested dir is empty (leftover from previous fix), just remove it
-      if (nestedContents.length === 0) {
-        rmSync(nestedDir, { recursive: true, force: true });
-        console.log(`[OMC] Removed empty nested dir for version ${version}`);
-        continue;
+
+      // Walk down the nesting to find the real plugin content (arbitrary depth)
+      // Real content has skills/, dist/, agents/, or hooks/ directly inside
+      const PLUGIN_MARKERS = ['skills', 'dist', 'agents', 'hooks'];
+      let realContentDir = null;
+      let searchDir = nestedDir;
+      let depth = 0;
+      while (depth < 20) {
+        const contents = readdirSync(searchDir);
+        if (contents.length === 0) {
+          // Empty dir - just remove it
+          rmSync(nestedDir, { recursive: true, force: true });
+          console.log(`[OMC] Removed empty nested dir for version ${version}`);
+          break;
+        }
+        if (contents.some(f => PLUGIN_MARKERS.includes(f))) {
+          realContentDir = searchDir;
+          break;
+        }
+        // Go deeper: look for ultrapower/ or version/ subdir
+        const nextDir = join(searchDir, 'ultrapower');
+        const nextVerDir = join(searchDir, version);
+        if (existsSync(nextDir)) {
+          searchDir = nextDir;
+        } else if (existsSync(nextVerDir)) {
+          searchDir = nextVerDir;
+        } else {
+          break;
+        }
+        depth++;
       }
-      const hasPluginContent = nestedContents.some(f => ['skills', 'dist', 'agents', 'hooks'].includes(f));
-      if (!hasPluginContent) continue;
-      console.log(`[OMC] Fixing nested cache dir for version ${version}...`);
-      // Move contents of nestedDir up to versionDir, then remove nestedDir
-      for (const item of nestedContents) {
-        const src = join(nestedDir, item);
+
+      if (!realContentDir) continue;
+
+      console.log(`[OMC] Fixing nested cache dir for version ${version} (depth ${depth})...`);
+      // Move contents of realContentDir up to versionDir
+      const realContents = readdirSync(realContentDir);
+      for (const item of realContents) {
+        const src = join(realContentDir, item);
         const dest = join(versionDir, item);
         if (!existsSync(dest)) {
           renameSync(src, dest);
         }
       }
+      // Remove the entire nested ultrapower/ subtree
       rmSync(nestedDir, { recursive: true, force: true });
       console.log(`[OMC] Fixed nested cache dir for version ${version}`);
     }
