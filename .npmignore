@@ -1,0 +1,41 @@
+# Development files
+*.tgz
+*.log
+node_modules/
+.git/
+.gitignore
+
+# Test files
+src/**/*.test.ts
+src/**/*.spec.ts
+tests/
+coverage/
+
+# Build artifacts not needed
+tsconfig*.json
+eslint.config.mjs
+vitest.config.ts
+*.cjs
+analyze-*.cjs
+check-*.cjs
+fix-*.cjs
+fix_imports.py
+list-*.cjs
+lint-output.json
+
+# Cache directories (prevent infinite nesting)
+.claude/
+~/.claude/
+plugins/cache/
+ultrapower/
+
+# Docs source (composed versions are in docs/)
+agents.codex/
+
+# Misc
+ANALYSIS.md
+CATEGORY_IMPLEMENTATION.md
+IMPLEMENTATION_SUMMARY.md
+ISSUE-*.md
+data/
+lib/
