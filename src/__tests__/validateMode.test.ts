@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateMode, assertValidMode, VALID_MODES } from '../lib/validateMode';
+import { validateMode, assertValidMode, VALID_MODES } from '../lib/validateMode.js';
 
 describe('validateMode', () => {
   it('should return true for all 8 valid modes', () => {
