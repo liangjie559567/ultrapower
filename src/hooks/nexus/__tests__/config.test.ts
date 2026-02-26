@@ -16,9 +16,7 @@ describe('loadNexusConfig', () => {
 
   it('returns default config when file does not exist', () => {
     const config = loadNexusConfig(tmpDir);
-    expect(config.enabled).toBe(false);
-    expect(config.autoApplyThreshold).toBe(80);
-    expect(config.consciousnessInterval).toBe(300);
+    expect(config).toEqual(DEFAULT_NEXUS_CONFIG);
   });
 
   it('loads and merges config from .omc/nexus/config.json', () => {
@@ -32,6 +30,8 @@ describe('loadNexusConfig', () => {
     expect(config.enabled).toBe(true);
     expect(config.gitRemote).toBe('git@github.com:user/nexus-daemon.git');
     expect(config.autoApplyThreshold).toBe(80);
+    expect(config.consciousnessInterval).toBe(300);
+    expect(config.consciousnessBudgetPercent).toBe(10);
   });
 
   it('returns default config on malformed JSON', () => {

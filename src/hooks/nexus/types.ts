@@ -1,10 +1,17 @@
 export interface NexusConfig {
+  /** 是否启用 nexus 系统 */
   enabled: boolean;
+  /** nexus-daemon 仓库的 git remote URL */
   gitRemote: string;
+  /** Telegram Bot Token（可选） */
   telegramToken?: string;
+  /** Telegram Chat ID（可选） */
   telegramChatId?: string;
+  /** 自动应用改进建议的置信度阈值（0-100） */
   autoApplyThreshold: number;
+  /** 后台意识循环间隔（秒） */
   consciousnessInterval: number;
+  /** 意识循环的 API 预算上限（百分比，0-100） */
   consciousnessBudgetPercent: number;
 }
 
