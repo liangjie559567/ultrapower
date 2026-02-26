@@ -71,6 +71,36 @@ if(f.existsSync(npmCachePkg)){
 - `MISMATCH: dir=X pkg.version=Y`：严重错误——npm-cache 复用导致旧内容被安装到新版本目录
 - npm-cache range 显示旧版本范围（如 `^5.0.11`）：警告——下次安装仍会复用旧缓存
 
+### 第一步 ter：检查无限嵌套缓存目录
+
+检查插件缓存目录是否存在无限嵌套（Claude Code 安装器 `xF6` bug 导致）：
+
+```bash
+node -e "
+const p=require('path'),f=require('fs'),h=require('os').homedir();
+const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const b=p.join(d,'plugins','cache','ultrapower','ultrapower');
+try {
+  const vs=f.readdirSync(b).filter(x=>/^\d/.test(x));
+  let found=false;
+  for(const v of vs){
+    const nested=p.join(b,v,'ultrapower');
+    if(f.existsSync(nested)){
+      console.log('CRITICAL: nested dir found: '+nested);
+      found=true;
+    }
+  }
+  if(!found) console.log('OK: no nested ultrapower/ dirs found');
+} catch(e){console.log('Cache not found (normal if not installed)');}
+"
+```
+
+**诊断**：
+- `CRITICAL: nested dir found`：严重错误——安装器 `xF6` bug 导致无限嵌套，插件内容可能损坏
+  - 根本原因：`xF6(src, dest)` 先 `mkdir -p dest`，再 `readdir(src)`；因 `dest` 是 `src` 子目录，readdir 包含刚创建的子目录，递归复制时把自身复制进去
+  - 加剧因素：`PM1()` 检测目标非空则跳过复制，嵌套一旦产生安装器永远不会自动修复
+  - 自动修复：5.0.20+ 的 `postinstall` 脚本会自动检测并修复任意深度嵌套
+
 ### 第二步：检查 settings.json 中的旧版 hook
 
 读取 `~/.claude/settings.json`（用户级）和 `./.claude/settings.json`（项目级），检查是否存在包含以下条目的 `"hooks"` 键：
@@ -157,6 +187,7 @@ ls -la ~/.claude/skills/ 2>/dev/null
 |-------|--------|---------|
 | 插件版本 | OK/WARN/CRITICAL | ... |
 | npm-cache 复用 | OK/WARN/CRITICAL | ... |
+| 无限嵌套缓存 | OK/CRITICAL | ... |
 | 旧版 Hook (settings.json) | OK/CRITICAL | ... |
 | 旧版脚本 (~/.claude/hooks/) | OK/WARN | ... |
 | CLAUDE.md | OK/WARN/CRITICAL | ... |
@@ -197,6 +228,21 @@ rm -f ~/.claude/hooks/stop-continuation.sh
 # 清除插件缓存（跨平台）
 node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{f.rmSync(b,{recursive:true,force:true});console.log('Plugin cache cleared. Restart Claude Code to fetch latest version.')}catch{console.log('No plugin cache found')}"
 ```
+
+### 修复：无限嵌套缓存目录
+
+症状：`versionDir/ultrapower/` 子目录存在，插件内容可能损坏。
+
+```bash
+# 完整清洁重装（5.0.20+ postinstall 会自动修复残留嵌套）
+claude plugin uninstall ultrapower
+rm -rf ~/.claude/plugins/npm-cache
+rm -rf ~/.claude/plugins/cache/ultrapower
+claude plugin marketplace update ultrapower
+claude plugin install ultrapower
+```
+
+> ✅ 安装 5.0.20+ 后，`postinstall` 脚本会自动检测并修复任意深度嵌套，无需手动干预。
 
 ### 修复：npm-cache 复用（插件内容是旧版本）
 

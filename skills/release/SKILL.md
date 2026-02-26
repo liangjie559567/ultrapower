@@ -128,25 +128,32 @@ ls ~/.claude/plugins/cache/ultrapower/ultrapower/<version>/skills/
 
 症状：`cache/ultrapower/ultrapower/5.x.x/ultrapower/5.x.x/ultrapower/...`
 
-原因：npm 包中包含了 `ultrapower/` 子目录（通常是缓存目录被打包进去）。
+**根本原因（已确认）**：Claude Code 安装器的 `xF6(src, dest)` 函数存在 bug：
+1. 先执行 `mkdir -p dest`（`dest = cache/ultrapower/ultrapower/5.x.x`）
+2. 再执行 `readdir(src)`（`src = cache/ultrapower`）
+3. 由于 `dest` 是 `src` 的子目录，`readdir` 结果包含刚创建的 `ultrapower/` 子目录
+4. 递归复制时把自身也复制进去，产生无限嵌套
 
-修复步骤：
+**加剧因素**：`PM1()` 检查目标目录是否非空，非空则跳过复制（认为已缓存）。一旦嵌套产生，安装器永远不会自动修复。
+
+**自动修复**：5.0.20+ 的 `postinstall` 脚本（`fixNestedCacheDir()`）会自动检测并修复任意深度嵌套。
+
+手动修复步骤：
 ```bash
-# 1. 卸载插件
-claude plugin uninstall ultrapower
-
-# 2. 清除缓存
+# 1. 清除嵌套的缓存目录
 rm -rf ~/.claude/plugins/cache/ultrapower
-rm -rf ~/.claude/plugins/marketplaces/ultrapower
 
-# 3. 确认 .npmignore 已排除 ultrapower/ 目录
+# 2. 清除 npm-cache（防止复用旧内容）
+rm -rf ~/.claude/plugins/npm-cache
 
-# 4. 重新发布（需升级版本号）
-npm publish --access public
+# 3. 刷新 marketplace 缓存
+claude plugin marketplace update ultrapower
 
-# 5. 重新安装
+# 4. 重新安装（postinstall 会自动修复任何残留嵌套）
 claude plugin install ultrapower
 ```
+
+> ⚠️ `.npmignore` 中的 `ultrapower/` 排除项仍然必要，防止开发目录被打包进 npm 包。
 
 ### 安装后仍是旧版本
 
