@@ -89,6 +89,37 @@ function fixNestedCacheDir() {
 
 fixNestedCacheDir();
 
+// Fix: Claude Code plugin cache does not include templates/ directory when installed via npm,
+// because npm install runs from a temp node_modules dir and Claude Code copies files to cache
+// after postinstall. We copy templates/hooks/ directly to the plugin cache so that
+// hooks/hooks.json paths (${CLAUDE_PLUGIN_ROOT}/templates/hooks/*.mjs) resolve correctly.
+function copyTemplatesToCache() {
+  try {
+    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
+    if (!existsSync(pluginCacheBase)) return;
+
+    // Source: templates/hooks/ relative to this script's package root
+    const pluginRoot = dirname(__dirname);
+    const srcTemplatesHooks = join(pluginRoot, 'templates', 'hooks');
+    if (!existsSync(srcTemplatesHooks)) return;
+
+    const versions = readdirSync(pluginCacheBase);
+    for (const version of versions) {
+      const cacheVersionDir = join(pluginCacheBase, version);
+      const destTemplatesHooks = join(cacheVersionDir, 'templates', 'hooks');
+      if (!existsSync(destTemplatesHooks)) {
+        mkdirSync(destTemplatesHooks, { recursive: true });
+        cpSync(srcTemplatesHooks, destTemplatesHooks, { recursive: true });
+        console.log(`[OMC] Copied templates/hooks/ to plugin cache v${version}`);
+      }
+    }
+  } catch (e) {
+    console.log('[OMC] Warning: Could not copy templates/hooks/ to plugin cache:', e.message);
+  }
+}
+
+copyTemplatesToCache();
+
 // Fix: npm install strips hidden directories (starting with '.'), so .claude-plugin/plugin.json
 // is never extracted to the plugin cache. We recreate it directly in the plugin cache.
 // The postinstall script runs from the npm-cache node_modules dir, so we must target the
