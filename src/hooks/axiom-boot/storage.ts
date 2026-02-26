@@ -4,7 +4,7 @@
  * Reads and parses Axiom memory files from .omc/axiom/ directory.
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { AxiomState, AxiomMemoryFiles } from './types.js';
 
@@ -57,4 +57,41 @@ export function readUserPreferences(workingDirectory: string): string | null {
   const paths = getMemoryFilePaths(workingDirectory);
   if (!existsSync(paths.userPreferences)) return null;
   return readFileSync(paths.userPreferences, 'utf-8');
+}
+
+const DEFAULT_CONSTITUTION_CONTENT = `# Axiom Constitution — 进化安全边界
+
+> 本文件定义了进化引擎的不可逾越规则。任何自动修改必须通过 constitution-checker 验证。
+> **本文件本身不可被自动修改。**
+
+## 1. 不可修改文件
+- constitution.md（本文件）
+- src/hooks/bridge-normalize.ts
+- src/lib/validateMode.ts
+- package.json、tsconfig.json
+
+## 2. 可修改范围
+- Layer 2（自由修改）：.omc/axiom/evolution/*
+- Layer 1（受审查修改）：agents/*.md、skills/*/SKILL.md（需用户确认）
+
+## 3. 修改频率限制
+- 每个 agent 提示词：最多每 7 天优化 1 次
+- 冷启动保护：至少 10 个会话后才启用自动优化建议
+
+## 4. 回滚要求
+所有 Layer 1 修改必须通过 CI Gate：tsc --noEmit && npm run build && npm test
+`;
+
+export function ensureConstitution(workingDirectory: string): void {
+  const axiomDir = getAxiomDir(workingDirectory);
+  if (!existsSync(axiomDir)) return; // Axiom 未初始化，不创建
+
+  const constitutionPath = join(axiomDir, 'constitution.md');
+  if (existsSync(constitutionPath)) return; // 已存在，不覆盖
+
+  try {
+    writeFileSync(constitutionPath, DEFAULT_CONSTITUTION_CONTENT, 'utf-8');
+  } catch {
+    // 静默失败
+  }
 }

@@ -4,6 +4,7 @@ import * as readline from 'readline';
 import { triggerStopCallbacks } from './callbacks.js';
 import { notify } from '../../notifications/index.js';
 import { cleanupBridgeSessions } from '../../tools/python-repl/bridge-manager.js';
+import { resolveToWorktreeRoot } from '../../lib/worktree-paths.js';
 
 export interface SessionEndInput {
   session_id: string;
@@ -437,6 +438,22 @@ export async function processSessionEnd(input: SessionEndInput): Promise<HookOut
     }
   } catch {
     // Ignore cleanup errors
+  }
+
+  // Auto-reflect: trigger Axiom evolution engine on session end (best-effort)
+  try {
+    const { reflectOnSessionEnd } = await import('../learner/session-reflector.js');
+    await reflectOnSessionEnd({
+      sessionId: input.session_id,
+      directory: resolveToWorktreeRoot(input.cwd),
+      durationMs: metrics.duration_ms,
+      agentsSpawned: metrics.agents_spawned,
+      agentsCompleted: metrics.agents_completed,
+      modesUsed: metrics.modes_used,
+      reason: metrics.reason,
+    });
+  } catch {
+    // Auto-reflect failures should never block session end
   }
 
   // Trigger stop hook callbacks (#395)

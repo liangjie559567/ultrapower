@@ -81,8 +81,9 @@ export class LearningQueue {
     } catch {
       return;
     }
+    const escapedId = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const updated = text.replace(
-      new RegExp(`(\\| ${id} \\|[^|]+\\|[^|]+\\|[^|]+\\|)\\s*pending\\s*(\\|)`),
+      new RegExp(`(\\| ${escapedId} \\|[^|]+\\|[^|]+\\|[^|]+\\|)\\s*pending\\s*(\\|)`),
       `$1 ${status} $2`
     );
     await fs.writeFile(this.queueFile, updated, 'utf-8');

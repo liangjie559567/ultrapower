@@ -42,6 +42,8 @@ import {
 import {
   recordFileTouch,
 } from "./subagent-tracker/session-replay.js";
+// Usage tracking for post-tool-use (non-blocking)
+import { recordUsage, extractAgentRole, extractSkillName } from "./learner/usage-tracker.js";
 
 // Type-only imports for lazy-loaded modules (zero runtime cost)
 import type { SubagentStartInput, SubagentStopInput } from "./subagent-tracker/index.js";
@@ -962,6 +964,15 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
       messages.push(dashboard);
     }
   }
+
+  // Non-blocking UsageTracker call (silent failure, must not block hook)
+  recordUsage(directory, {
+    toolName: input.toolName ?? '',
+    agentRole: extractAgentRole(input.toolName ?? '', input.toolInput),
+    skillName: extractSkillName(input.toolName ?? '', input.toolInput),
+    timestamp: Date.now(),
+    sessionId: input.sessionId ?? '',
+  }).catch(() => {});
 
   if (messages.length > 0) {
     return {

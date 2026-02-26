@@ -10,6 +10,7 @@ import {
   parseAxiomState,
   readProjectDecisions,
   readUserPreferences,
+  ensureConstitution,
 } from './storage.js';
 import type { AxiomBootInput, AxiomBootOutput } from './types.js';
 
@@ -22,6 +23,8 @@ export function processAxiomBoot(input: AxiomBootInput): AxiomBootOutput {
   if (!isAxiomEnabled(workingDirectory)) {
     return { contextInjected: false, state: null };
   }
+
+  ensureConstitution(workingDirectory);
 
   const activeContextContent = readActiveContext(workingDirectory);
   if (!activeContextContent) {
