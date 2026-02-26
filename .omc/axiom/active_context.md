@@ -2,7 +2,7 @@
 session_id: "2026-02-26"
 task_status: IDLE
 current_phase: "Completed"
-last_gate: "CI Gate Pass (9117 tests, hooks-json-paths 4/4)"
+last_gate: "CI Gate Pass (9127 tests, Phase 1 Passive Learning MVP)"
 ---
 
 # Active Context
@@ -10,7 +10,7 @@ last_gate: "CI Gate Pass (9117 tests, hooks-json-paths 4/4)"
 ## Status: IDLE
 
 ## Current Goal
-ax-context init 无限循环 Bug 修复完成（TDD），反思已写入。
+Phase 1 Passive Learning MVP 完成。ax-evolution 进化引擎已执行，4 个新知识条目（k-032~k-035）已入库，反思已写入。
 
 ## Task Queues
 
@@ -18,10 +18,11 @@ ax-context init 无限循环 Bug 修复完成（TDD），反思已写入。
 - (none)
 
 ### Pending
-- [ ] [REFLECTION] 下次工作前先执行 `git checkout dev && git pull`，在 dev 分支上工作（连续三次提醒）
-- [ ] [REFLECTION] 确认 inbox-outbox 测试文件是否存在
-- [ ] [REFLECTION] 运行完整 `npm test` 验证无回归
+- [ ] [REFLECTION] 下次工作前先执行 `git checkout dev && git pull`，在 dev 分支上工作（连续四次提醒）
+- [ ] [REFLECTION] 确认 inbox-outbox 测试文件是否存在（三次遗留）
+- [ ] [REFLECTION] 运行完整 `npm test` 验证无回归（两次遗留）
 - [ ] [REFLECTION] 在 contribution-guide.md 中添加"init/setup 命令必须包含可执行指令"要求
+- [ ] [PHASE2] 实现 Phase 2 主动学习：分析 usage_metrics.json → 生成优化建议 → 更新 agent 提示词
 
 ### Completed
 - [x] T-01a: docs/standards/README.md

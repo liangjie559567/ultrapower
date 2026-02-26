@@ -2,6 +2,7 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-26
+entries: 35
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -43,6 +44,10 @@ last_updated: 2026-02-26
 | k-029 | Axiom Full-Chain Workflow Validation | workflow | 0.9 | 2026-02-26 | active |
 | k-030 | assertValidMode() Path Traversal Protection | security | 0.95 | 2026-02-26 | active |
 | k-031 | Exclusive Modes Set (4 modes, not 2) | architecture | 0.9 | 2026-02-26 | active |
+| k-032 | Atomic Write + Silent Failure Pattern (被动学习写入) | pattern | 0.95 | 2026-02-26 | active |
+| k-033 | Promise.race Timer Leak Prevention | security | 0.95 | 2026-02-26 | active |
+| k-034 | Regex Injection Prevention in Dynamic Patterns | security | 0.95 | 2026-02-26 | active |
+| k-035 | Bounded Growth Collections (entry caps + key sanitization) | pattern | 0.9 | 2026-02-26 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -50,10 +55,10 @@ last_updated: 2026-02-26
 |----------|-------|-------------|
 | architecture | 16 | 架构相关知识 |
 | debugging | 1 | 调试技巧 |
-| pattern | 3 | 代码模式 |
+| pattern | 5 | 代码模式 |
 | workflow | 5 | 工作流相关 |
 | tooling | 2 | 工具使用 |
-| security | 1 | 安全相关知识 |
+| security | 3 | 安全相关知识 |
 
 
 ## 3. 标签云 (Tag Cloud)
