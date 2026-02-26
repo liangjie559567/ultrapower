@@ -156,6 +156,40 @@ claude plugin uninstall ultrapower
 claude plugin install ultrapower
 ```
 
+### 安装后插件内容是旧版本（npm-cache 复用）
+
+症状：插件缓存目录标注为新版本号（如 `5.0.17/`），但 `package.json` 内的 `version` 字段仍是旧版本（如 `5.0.11`）。
+
+原因：`~/.claude/plugins/npm-cache/package.json` 中存储了 semver 范围（如 `"^5.0.11"`），Claude Code 安装器判断旧缓存满足该范围，直接复用旧文件而不重新下载。
+
+验证：
+```bash
+cat ~/.claude/plugins/npm-cache/package.json
+# 如果看到 "^5.0.11" 之类的旧版本范围，即为此问题
+cat ~/.claude/plugins/cache/ultrapower/ultrapower/5.0.17/package.json
+# 如果 version 字段不是 5.0.17，确认是 npm-cache 复用导致
+```
+
+修复（完整清洁重装）：
+```bash
+# 1. 卸载插件
+claude plugin uninstall ultrapower
+
+# 2. 清除 npm-cache（关键！仅清除插件缓存不够）
+rm -rf ~/.claude/plugins/npm-cache
+
+# 3. 清除插件缓存
+rm -rf ~/.claude/plugins/cache/ultrapower
+
+# 4. 刷新 marketplace 缓存
+claude plugin marketplace update ultrapower
+
+# 5. 重新安装（此时会强制从 npm 下载最新版）
+claude plugin install ultrapower
+```
+
+> ⚠️ 仅执行步骤 3（清除插件缓存）不够——npm-cache 仍会导致安装器复用旧内容。必须同时清除 npm-cache。
+
 ## 路由触发
 
 发布流程完成后调用 `next-step-router`：

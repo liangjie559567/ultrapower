@@ -365,6 +365,23 @@ EOF
 node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length<=1){console.log('Cache is clean');process.exit()}v.slice(0,-1).forEach(x=>{f.rmSync(p.join(b,x),{recursive:true,force:true})});console.log('Cleared',v.length-1,'stale cache version(s)')}catch{console.log('No cache directory found (normal for new installs)')}"
 ```
 
+### 如果插件内容是旧版本（npm-cache 复用问题）
+
+**症状**：插件缓存目录标注为新版本号，但实际内容是旧版本（`package.json` 中 `version` 字段不匹配）。
+
+**原因**：`~/.claude/plugins/npm-cache/package.json` 使用 `^` semver 范围，Claude Code 安装器判断旧缓存满足范围后直接复用，不重新下载。
+
+**完整清洁重装**：
+```bash
+claude plugin uninstall ultrapower
+rm -rf ~/.claude/plugins/npm-cache        # 关键：必须清除 npm-cache
+rm -rf ~/.claude/plugins/cache/ultrapower
+claude plugin marketplace update ultrapower
+claude plugin install ultrapower
+```
+
+> ⚠️ 仅清除插件缓存不够，必须同时清除 `npm-cache`。
+
 ## 步骤 3.6：检查更新
 
 如果有新版本可用，通知用户：
@@ -711,6 +728,23 @@ EOF
 ```bash
 node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length<=1){console.log('Cache is clean');process.exit()}v.slice(0,-1).forEach(x=>{f.rmSync(p.join(b,x),{recursive:true,force:true})});console.log('Cleared',v.length-1,'stale cache version(s)')}catch{console.log('No cache directory found (normal for new installs)')}"
 ```
+
+### 如果插件内容是旧版本（npm-cache 复用问题）
+
+**症状**：插件缓存目录标注为新版本号，但实际内容是旧版本（`package.json` 中 `version` 字段不匹配）。
+
+**原因**：`~/.claude/plugins/npm-cache/package.json` 使用 `^` semver 范围，Claude Code 安装器判断旧缓存满足范围后直接复用，不重新下载。
+
+**完整清洁重装**：
+```bash
+claude plugin uninstall ultrapower
+rm -rf ~/.claude/plugins/npm-cache        # 关键：必须清除 npm-cache
+rm -rf ~/.claude/plugins/cache/ultrapower
+claude plugin marketplace update ultrapower
+claude plugin install ultrapower
+```
+
+> ⚠️ 仅清除插件缓存不够，必须同时清除 `npm-cache`。
 
 ## 步骤 3.6：检查更新
 
