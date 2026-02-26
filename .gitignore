@@ -19,3 +19,6 @@ data/
 *.tgz
 *.tar.gz
 *.zip
+
+# Plugin cache directories (prevent infinite nesting on install)
+ultrapower/

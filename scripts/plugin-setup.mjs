@@ -5,7 +5,7 @@
  * Configures HUD statusline when plugin is installed.
  */
 
-import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync, chmodSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, readdirSync, chmodSync, renameSync, rmSync, cpSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -18,6 +18,41 @@ const HUD_DIR = join(CLAUDE_DIR, 'hud');
 const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json');
 
 console.log('[OMC] Running post-install setup...');
+
+// Fix: flatten nested cache directories caused by installer wrapping content in plugin-name subdir.
+// The installer places npm package contents under cache/.../VERSION/ultrapower/ instead of cache/.../VERSION/
+// This function detects and fixes that by moving contents up one level.
+function fixNestedCacheDir() {
+  try {
+    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
+    if (!existsSync(pluginCacheBase)) return;
+    const versions = readdirSync(pluginCacheBase);
+    for (const version of versions) {
+      const versionDir = join(pluginCacheBase, version);
+      const nestedDir = join(versionDir, 'ultrapower');
+      if (!existsSync(nestedDir)) continue;
+      // Check if the nested dir itself has the actual plugin content (skills/, dist/, etc.)
+      const nestedContents = readdirSync(nestedDir);
+      const hasPluginContent = nestedContents.some(f => ['skills', 'dist', 'agents', 'hooks'].includes(f));
+      if (!hasPluginContent) continue;
+      console.log(`[OMC] Fixing nested cache dir for version ${version}...`);
+      // Move contents of nestedDir up to versionDir, then remove nestedDir
+      for (const item of nestedContents) {
+        const src = join(nestedDir, item);
+        const dest = join(versionDir, item);
+        if (!existsSync(dest)) {
+          renameSync(src, dest);
+        }
+      }
+      rmSync(nestedDir, { recursive: true, force: true });
+      console.log(`[OMC] Fixed nested cache dir for version ${version}`);
+    }
+  } catch (e) {
+    console.log('[OMC] Warning: Could not fix nested cache dir:', e.message);
+  }
+}
+
+fixNestedCacheDir();
 
 // 1. Create HUD directory
 if (!existsSync(HUD_DIR)) {
