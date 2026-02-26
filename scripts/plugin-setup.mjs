@@ -33,6 +33,12 @@ function fixNestedCacheDir() {
       if (!existsSync(nestedDir)) continue;
       // Check if the nested dir itself has the actual plugin content (skills/, dist/, etc.)
       const nestedContents = readdirSync(nestedDir);
+      // If nested dir is empty (leftover from previous fix), just remove it
+      if (nestedContents.length === 0) {
+        rmSync(nestedDir, { recursive: true, force: true });
+        console.log(`[OMC] Removed empty nested dir for version ${version}`);
+        continue;
+      }
       const hasPluginContent = nestedContents.some(f => ['skills', 'dist', 'agents', 'hooks'].includes(f));
       if (!hasPluginContent) continue;
       console.log(`[OMC] Fixing nested cache dir for version ${version}...`);
