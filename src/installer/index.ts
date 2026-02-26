@@ -459,7 +459,9 @@ export function install(options: InstallOptions = {}): InstallResult {
       if (!existsSync(AGENTS_DIR)) {
         mkdirSync(AGENTS_DIR, { recursive: true });
       }
-      // NOTE: COMMANDS_DIR creation removed - commands/ deprecated in v4.1.16 (#582)
+      if (!existsSync(COMMANDS_DIR)) {
+        mkdirSync(COMMANDS_DIR, { recursive: true });
+      }
       if (!existsSync(SKILLS_DIR)) {
         mkdirSync(SKILLS_DIR, { recursive: true });
       }
@@ -480,18 +482,11 @@ export function install(options: InstallOptions = {}): InstallResult {
         }
       }
 
-      // Skip command installation - all commands are now plugin-scoped skills
-      // Commands are accessible via the plugin system (${CLAUDE_PLUGIN_ROOT}/commands/)
-      // and are managed by Claude Code's skill discovery mechanism.
-      log('Skipping slash command installation (all commands are now plugin-scoped skills)');
+      // Install slash commands to ~/.claude/commands/ so users can invoke them
+      // without the ultrapower: prefix (e.g. /ax-reflect instead of /ultrapower:ax-reflect)
+      log('Installing slash commands to ~/.claude/commands/');
 
-      // The command installation loop is disabled - CORE_COMMANDS is empty
       for (const [filename, content] of Object.entries(loadCommandDefinitions())) {
-        // All commands are skipped - they're managed by the plugin system
-        if (!CORE_COMMANDS.includes(filename)) {
-          log(`  Skipping ${filename} (plugin-scoped skill)`);
-          continue;
-        }
 
         const filepath = join(COMMANDS_DIR, filename);
 
