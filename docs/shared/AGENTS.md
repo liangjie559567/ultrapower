@@ -1,24 +1,24 @@
 <!-- Parent: ../AGENTS.md -->
 <!-- Generated: 2026-02-27 | Updated: 2026-02-27 -->
 
-# docs/shared/
+# docs/partials/
 
 ## Purpose
-共享文档片段目录。存放跨文档复用的内容片段，与 `docs/partials/` 类似，专注于功能描述和模式说明的共享内容。
+文档片段目录。存放可复用的文档组件，包括 agent 层级说明、功能特性描述、模式层级和选择指南等，供主文档引用。
 
 ## Key Files
 
 | File | Description |
 |------|-------------|
-| `agent-tiers.md` | Agent 层级说明（共享版本） |
-| `features.md` | 功能特性描述（共享版本） |
-| `mode-hierarchy.md` | 执行模式层级（共享版本） |
-| `mode-selection-guide.md` | 模式选择指南（共享版本） |
-| `verification-tiers.md` | 验证层级说明（共享版本） |
+| `agent-tiers.md` | Agent 层级（haiku/sonnet/opus）说明 |
+| `features.md` | 功能特性描述片段 |
+| `mode-hierarchy.md` | 执行模式层级关系说明 |
+| `mode-selection-guide.md` | 模式选择决策指南 |
+| `verification-tiers.md` | 验证层级说明 |
 
 ## For AI Agents
 
 ### 修改此目录时
-- 与 `docs/partials/` 保持内容同步
+- 片段变更需检查所有引用该片段的主文档
 
 <!-- MANUAL: -->
