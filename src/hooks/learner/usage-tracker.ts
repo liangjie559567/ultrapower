@@ -167,7 +167,8 @@ export function extractSkillName(
   toolName: string,
   toolInput: unknown
 ): string | undefined {
-  if (toolName !== 'Task' && toolName !== 'skill') return undefined;
+  const lowerTool = toolName.toLowerCase();
+  if (lowerTool !== 'task' && lowerTool !== 'skill') return undefined;
   if (toolInput === null || typeof toolInput !== 'object') return undefined;
   const input = toolInput as Record<string, unknown>;
   return typeof input['skill'] === 'string' ? input['skill'] : undefined;
