@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from evolution_engine import EvolutionEngine
+from self_modifier import SelfModifier
 
 logging.basicConfig(
     level=logging.INFO,
@@ -86,6 +87,7 @@ class NexusDaemon:
         )
         from self_evaluator import SelfEvaluator
         self._evaluator = SelfEvaluator(repo_path=self.repo_path)
+        self._modifier = SelfModifier(repo_path=self.repo_path)
         self._last_report_date: str = ''
 
     def _ensure_dirs(self) -> None:
@@ -216,6 +218,16 @@ class NexusDaemon:
                         sent = await self._telegram.notify_improvement(imp)
                         if sent:
                             self._notified_improvements[imp_id] = time.time()
+                        # Auto-apply high-confidence improvements (confidence >= 80)
+                        if imp.get('confidence', 0) >= 80 and imp.get('status') == 'pending':
+                            result = self._modifier.apply(imp)
+                            if result.status == 'applied':
+                                imp['status'] = 'auto_applied'
+                                f.write_text(
+                                    json.dumps(imp, indent=2, ensure_ascii=False),
+                                    encoding='utf-8',
+                                )
+                                logger.info('Auto-applied improvement %s', imp_id)
                 except (json.JSONDecodeError, OSError) as e:
                     logger.warning('Failed to read improvement file %s: %s', f.name, e)
                 except Exception as e:
