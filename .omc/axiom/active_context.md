@@ -1,8 +1,8 @@
 ---
 session_id: "2026-02-27"
 task_status: IDLE
-current_phase: "v5.2.4 发布完成，ax-evolve cycle 8 完成，学习队列清空"
-last_gate: "CI Gate 通过：tsc 零错误，build 成功，4663 tests passed"
+current_phase: "插件自动更新功能实现完成（T-01~T-08），CI Gate 通过"
+last_gate: "CI Gate 通过：tsc 零错误，build 成功，4685 tests passed"
 ---
 
 # Active Context
@@ -19,6 +19,16 @@ last_gate: "CI Gate 通过：tsc 零错误，build 成功，4663 tests passed"
 
 ### Pending
 - (none)
+
+### Resolved (2026-02-27 插件自动更新会话)
+- [x] T-01: 创建 src/lib/plugin-registry.ts（syncPluginRegistry、checkVersionConsistency）
+- [x] T-02: 单元测试 src/lib/__tests__/plugin-registry.test.ts（13 tests passed）
+- [x] T-03: 修改 performUpdate() plugin 分支（引导流程替代错误返回）
+- [x] T-04: 修改 reconcileUpdateRuntime()（成功后调用 syncPluginRegistry）
+- [x] T-05: 修改 syncMarketplaceClone()（成功后更新注册表版本）
+- [x] T-06: 增强 formatUpdateNotification()（按安装模式显示不同指令）
+- [x] T-07: omc-doctor 集成 checkVersionConsistency()（版本漂移检测）
+- [x] T-08: CI Gate 通过（tsc 零错误，4685 tests passed，build 成功）
 
 ### Resolved (2026-02-27 Windows 修复会话)
 - [x] [FIX] src/installer/hooks.ts: getHomeEnvVar() 返回 $USERPROFILE（bash 语法），修复 Windows hook 路径
