@@ -1,5 +1,79 @@
 # Reflection Log
 
+## 反思 - 2026-02-27 15:28（会话：v5.2.5 发布）
+
+### 📊 本次会话统计
+
+- **任务完成**: 1/1（v5.2.5 发布）
+- **文件变更**: 5 个（package.json、docs/CLAUDE.md、CLAUDE.md、.claude-plugin/plugin.json、.claude-plugin/marketplace.json）
+- **提交数**: 1 个（`64f7ec4` chore: Bump version to 5.2.5）
+- **发布**: npm `@liangjie559567/ultrapower@5.2.5` + GitHub Actions CI 接管（github-release + marketplace-sync）
+- **测试**: 4685 passed, 0 failed
+
+### ✅ 做得好的
+
+1. **动态版本读取模式识别**：`src/installer/index.ts` 使用 `getRuntimePackageVersion()` 动态读取，`src/__tests__/installer.test.ts` 使用正则匹配——两者均无需手动更新，一次确认，无遗漏。
+2. **版本同步完整**：5 个文件全部同步（package.json、docs/CLAUDE.md OMC:VERSION 注释、CLAUDE.md vX.Y.Z 引用、plugin.json、marketplace.json 两处），无遗漏。
+3. **Git stash 处理得当**：`git checkout main` 被 `.omc/axiom/evolution/usage_metrics.json` 阻塞时，立即识别为 stash 场景，`git stash` → 切换 → 操作 → `git stash pop`，流程顺畅。
+4. **GitHub Actions CI 接管**：tag 推送后 CI 自动触发 4-job 流水线（build-test → publish → github-release ∥ marketplace-sync），无需手动 npm publish 或 gh release create。
+
+### ⚠️ 待改进
+
+1. **active_context.md Edit 失败一次**：Edit 工具要求同会话内先 Read 再 Edit，跨会话恢复后直接 Edit 会报 "File has not been read yet"。应在每次跨会话恢复后，先 Read 目标文件再 Edit。
+2. **bridge/*.cjs 被纳入版本提交**：`npm run build` 重新生成了 bridge CJS 文件，这些构建产物被 `git add -A` 一并提交。可考虑在 `.gitignore` 中排除 bridge/*.cjs，或在 release 流程中明确说明这是预期行为。
+
+### 🔑 关键决策
+
+- v5.2.5 是 patch 版本：包含插件自动更新（T-01~T-08）、Windows hook 修复、CI/CD 流水线、ax-evolve cycle 9 的累积发布。
+- GitHub Actions 4-job 流水线（k-059）首次在生产环境验证：tag 推送触发，CI 接管后续所有发布步骤。
+
+### 📝 经验提取 → 学习队列
+
+- 无新 LQ 条目（本次为纯发布流程，无新 bug 或架构发现）
+
+### 🎯 Action Items
+
+- （无新 Action Items，系统 IDLE）
+
+---
+
+## 反思 - 2026-02-27 15:02（会话：CI/CD 流水线实现 + Windows Hook 修复）
+
+### 📊 本次会话统计
+
+- **任务完成**: 7/7（T1-T5 CI/CD 流水线 + Windows Hook 路径修复 2 项）
+- **文件变更**: 10 个（release-steps.mjs、release-local.mjs、release.yml、SKILL.md、package.json、hooks.ts、plugin-setup.mjs、settings.json、2 个测试文件）
+- **提交数**: 6 个（fa7fc9d、79b5306、75fcf06、e9f9225、e5785c6、3a53e44）
+- **新增测试**: 9 个（6 release-steps + 3 release-local），总数 4672
+- **CI Gate**: tsc 零错误，build 成功，4672 tests passed
+
+### ✅ 做得好的
+
+1. **共享核心模式设计正确**：`release-steps.mjs` 被 GitHub Actions（CLI 调用）和本地脚本（import 调用）共同使用，DRY 原则落地，无重复逻辑。
+2. **dry-run 模式完整**：所有 4 个步骤均支持 `dryRun: true`，`npm run release:dry-run` 端到端验证输出 8 行 `[dry-run]` 命令，无实际执行。
+3. **verifier 委派有效**：T5 CI Gate 委派给 verifier subagent，发现了 @ts-ignore 缺失问题并自动修复，主 session 无需介入细节。
+4. **双重修复策略（Windows）**：既修复了源码（`hooks.ts` + `plugin-setup.mjs`）防止未来复发，又直接修复了用户环境（`settings.json` + 手动复制缓存文件）立即生效。
+5. **平台差异识别精准**：确认 Claude Code 在 Windows 上通过 bash 运行 hooks，`%USERPROFILE%`（cmd.exe 语法）不被 bash 展开，一次定位根因。
+
+### ⚠️ 待改进
+
+1. **TypeScript + ESM 混用限制未提前标注**：`.ts` 测试文件 import `.mjs` 模块需要 `@ts-ignore`，这是已知限制，应在 Sub-PRD 中提前标注，避免 CI Gate 阶段才发现。
+2. **`settings.json` 未随 hooks.ts 同步更新**：`hooks.ts` 修复后，已安装用户的 `settings.json` 不会自动更新。`omc-setup` 应包含 hooks 路径格式检查和修复步骤。
+3. **CLI 入口与模块入口共存**：`release-steps.mjs` 底部的 CLI 入口与模块导出共存，测试中需要 mock `child_process` 防止 CLI 入口被意外触发，可考虑将 CLI 入口分离到独立文件。
+
+### 💡 学到了什么
+
+- **k-059 候选**：GitHub Actions 4-job 依赖图标准模式：`build-test → publish → (github-release ∥ marketplace-sync)`。publish 串行依赖 build-test，github-release 和 marketplace-sync 并行依赖 publish。secrets 需求：NPM_TOKEN 手动配置，GITHUB_TOKEN 内置。
+- **k-060 候选**：TypeScript 测试文件 import `.mjs` ESM 模块的唯一可行方案（不修改 tsconfig.json）：在每个动态 import 前加 `// @ts-ignore`。
+- **k-061 候选**：`copyTemplatesToCache()` 空目录边界情况：当 `pluginCacheBase` 下无版本子目录时（`versions.length === 0`），读取 `package.json` 版本，创建版本目录后再复制。
+
+### 🎯 Action Items
+
+- [ ] [EVOLVE] 处理 LQ-027（P2）和 LQ-028（P3）入库，触发 ax-evolve cycle 9
+- [ ] [INFRA] `omc-setup` 增加 hooks 路径格式检查步骤（检测 `%USERPROFILE%` 并自动替换为 `$USERPROFILE`）
+
+---
+
 ## 反思 - 2026-02-27 17:05（会话：ax-implement 用户插件部署自动更新版本流程）
 
 ### 📊 本次会话统计
@@ -536,3 +610,72 @@
 - [ ] [REFLECTION] 运行完整 `npm test` 验证无回归（遗留）
 
 ---
+
+## 反思 - 2026-02-27 13:29（会话：Windows Hook 路径修复 + 插件缓存空目录修复）
+
+### 📊 本次会话统计
+
+- **任务完成**: 2/2（Error 1: %USERPROFILE% 修复、Error 2: 空插件缓存修复）
+- **文件变更**: 3 个（src/installer/hooks.ts、scripts/plugin-setup.mjs、~/.claude/settings.json）
+- **手动操作**: 1 个（手动复制 templates/hooks/ 到插件缓存）
+- **提交数**: 0 个（修复已就绪，待提交）
+- **CI Gate**: tsc 零错误，npm run build 成功，4663 tests passed
+
+### ✅ 做得好的
+
+1. **根因追踪精准**：Error 1 从 `settings.json` 追溯到 `src/installer/hooks.ts` 的 `getHomeEnvVar()` 返回 `%USERPROFILE%`（cmd.exe 语法），bash 不展开该变量。Error 2 从 MODULE_NOT_FOUND 追溯到 `installed_plugins.json` → `installPath` → 空目录 → `copyTemplatesToCache()` 空循环。
+2. **平台差异识别**：确认 Claude Code 在 Windows 上通过 bash（Git Bash/WSL）运行 hooks，而非 cmd.exe。`bash -c 'echo %USERPROFILE%'` 输出字面量，`bash -c 'echo $USERPROFILE'` 才正确展开。
+3. **双重修复策略**：既修复了源码（`hooks.ts` + `plugin-setup.mjs`）防止未来复发，又直接修复了用户环境（`settings.json` + 手动复制缓存文件）立即生效。
+4. **插件缓存路径发现**：通过 `installed_plugins.json` 确认实际 `installPath` 为 `cache/ultrapower/ultrapower/5.2.3/`，而非 `cache/claude-plugins-official/`，避免了错误路径假设。
+
+### ⚠️ 待改进
+
+1. **`copyTemplatesToCache()` 的空目录边界情况**：原实现假设 `pluginCacheBase` 下已有版本子目录，但 Claude Code 安装器在 postinstall 后才填充缓存，导致 `readdirSync` 返回空数组，整个复制逻辑被跳过。应在设计时考虑"缓存目录存在但为空"的边界情况。
+2. **`settings.json` 未随 hooks.ts 同步更新**：`hooks.ts` 修复后，已安装用户的 `settings.json` 不会自动更新。`omc-setup` 应包含 hooks 路径格式检查和修复步骤。
+
+### 🔑 关键决策
+
+- `getHomeEnvVar()` 在 Windows 上返回 `$USERPROFILE`（bash 语法），所有 hook 命令路径使用正斜杠。
+- `copyTemplatesToCache()` 新增 `versions.length === 0` 分支：读取 `package.json` 版本，创建版本目录后再复制。
+
+### 📝 经验提取 → 学习队列
+
+- LQ-025: Windows bash hook 路径 — `%USERPROFILE%` vs `$USERPROFILE` 不兼容模式 → P1
+- LQ-026: 插件缓存空目录 — `copyTemplatesToCache()` 必须处理空缓存基目录 → P1
+
+---
+
+## 反思 - 2026-02-27 14:24（会话：插件发布 CI/CD 流水线实现 T1-T5）
+
+### 📊 本次会话统计
+
+- **任务完成**: 5/5（T1 release-steps.mjs、T2 release-local.mjs、T3 GitHub Actions workflow、T4 SKILL.md 更新、T5 CI Gate 验证）
+- **文件变更**: 7 个（scripts/release-steps.mjs、scripts/release-local.mjs、src/__tests__/release-steps.test.ts、src/__tests__/release-local.test.ts、.github/workflows/release.yml、skills/release/SKILL.md、package.json）
+- **提交数**: 6 个（`fa7fc9d` 设计文档、`79b5306` T1、`75fcf06` T2、`e9f9225` T3、`e5785c6` T4、`3a53e44` @ts-ignore 修复）
+- **新增测试**: 9 个（6 release-steps + 3 release-local），总数 4672
+- **CI Gate**: tsc 零错误，build 成功，4672 tests passed
+
+### ✅ 做得好的
+
+1. **共享核心模式设计正确**：`release-steps.mjs` 被 GitHub Actions（CLI 调用）和本地脚本（import 调用）共同使用，DRY 原则落地，无重复逻辑。
+2. **dry-run 模式完整**：所有 4 个步骤均支持 `dryRun: true`，`npm run release:dry-run` 端到端验证输出 8 行 `[dry-run]` 命令，无实际执行。
+3. **`parseArgs()` 导出设计**：`release-local.mjs` 将参数解析逻辑导出为独立函数，使 Vitest 可以直接 import 测试，无需 mock process.argv。
+4. **TDD 纪律执行**：每个任务先写失败测试，确认 FAIL 后再实现，最后确认 PASS，完整走完红绿循环。
+5. **verifier 委派有效**：T5 CI Gate 委派给 verifier subagent，发现了 @ts-ignore 缺失问题并自动修复，主 session 无需介入细节。
+
+### ⚠️ 待改进
+
+1. **TypeScript 无法直接 import `.mjs` 文件**：`tsc --noEmit` 对 `.ts` 测试文件中的 `import('../../scripts/release-steps.mjs')` 报错（无法解析 ESM .mjs 模块）。需要在每个动态 import 前加 `// @ts-ignore`。这是 TypeScript + ESM 混用的已知限制，应在 Sub-PRD 中提前标注。
+2. **CLI 入口与模块入口混用**：`release-steps.mjs` 底部的 CLI 入口（`process.argv[2]` 检测）与模块导出共存，在测试中需要 mock `child_process` 防止 CLI 入口被意外触发。设计上可以考虑将 CLI 入口分离到独立文件。
+
+### 🔑 关键决策
+
+- GitHub Actions workflow 使用 `node scripts/release-steps.mjs validate` 直接调用，而非通过 `release-local.mjs`，因为 CI 不需要 `parseArgs()` 的 CLI 参数解析层。
+- `marketplace-sync` job 与 `github-release` job 并行（均依赖 `publish`），因为两者互相独立。
+- `@ts-ignore` 是 TypeScript 测试文件 import `.mjs` 的唯一可行方案（不修改 tsconfig.json 的前提下）。
+
+### 📝 经验提取 → 学习队列
+
+- LQ-027: TypeScript 测试文件 import `.mjs` ESM 模块需要 `@ts-ignore` → P2
+- LQ-028: GitHub Actions 4-job 依赖图模式（build-test → publish → parallel jobs）→ P3
+
