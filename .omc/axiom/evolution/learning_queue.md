@@ -91,6 +91,36 @@
 - 元数据: file=src/hooks/learner/usage-tracker.ts, pattern=bounded-growth
 - 知识产出: k-035
 
+### LQ-008: Release Skill 版本文件清单遗漏 CLAUDE.md
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: release skill 的版本同步清单遗漏了根目录 `CLAUDE.md` 中的 `ultrapower vX.Y.Z 规范体系位于 docs/standards/` 引用。该引用在 v5.0.22~v5.1.0 多个版本发布期间未同步更新，需要将其加入 `skills/release/SKILL.md` 的版本文件表格。
+- 元数据: file=skills/release/SKILL.md, session=2026-02-27
+- 知识产出: k-036
+
+### LQ-009: 动态版本读取模式（getRuntimePackageVersion）
+- 优先级: P2
+- 来源类型: pattern
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `src/installer/index.ts` 使用 `getRuntimePackageVersion()` 从 `package.json` 动态读取版本，无需硬编码 VERSION 常量。发布时只需更新 `package.json`，其他文件自动跟随。这是比硬编码常量更健壮的模式，应在新模块中推广。
+- 元数据: file=src/installer/index.ts, pattern=dynamic-version
+- 知识产出: k-037
+
+### LQ-010: 特性分支生命周期管理
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 特性分支合并到 dev（PR merge）后应立即删除本地和远程分支，避免积累过时分支。正确时序：PR merge → 删除特性分支（本地+远程）→ dev 同步到 main（发布时）→ main 同步回 dev。
+- 元数据: session=2026-02-27, pattern=branch-lifecycle
+- 知识产出: k-038
+
 ## 处理中
 
 ## 已完成

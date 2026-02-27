@@ -6,5 +6,11 @@ export default defineConfig({
     testTimeout: 30000,
     // Use forks pool for better isolation between test files
     pool: 'forks',
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      // brainstorm-server uses Node assert (not Vitest) - run standalone
+      'tests/brainstorm-server/**',
+    ],
   },
 });

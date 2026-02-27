@@ -173,7 +173,58 @@ npm test        # 所有测试通过
 
 ---
 
-## 6. PR 提交流程
+## 6. 版本与分支管理
+
+### 6.1 动态版本读取模式
+
+`src/installer/index.ts` 使用 `getRuntimePackageVersion()` 从 `package.json` 动态读取版本号，无需硬编码 `VERSION` 常量。
+
+**推荐模式：**
+
+```typescript
+// ✅ 动态读取（推荐）
+import { getRuntimePackageVersion } from '../lib/version';
+const version = getRuntimePackageVersion(); // 从 package.json 读取
+
+// ❌ 硬编码（不推荐）
+export const VERSION = '5.1.0'; // 发布时容易遗漏更新
+```
+
+**优势：** 发布时只需更新 `package.json`，所有使用 `getRuntimePackageVersion()` 的模块自动跟随，无需逐一同步。
+
+**适用场景：** 新模块需要读取当前版本时，优先使用 `getRuntimePackageVersion()` 而非硬编码常量。
+
+### 6.2 特性分支生命周期
+
+特性分支合并后必须及时清理，避免积累过时分支。
+
+**正确时序：**
+
+```
+PR merge → 删除特性分支（本地 + 远程）→ dev 同步到 main（发布时）→ main 同步回 dev
+```
+
+**操作命令：**
+
+```bash
+# PR 合并后删除远程分支（GitHub 可配置自动删除）
+git push origin --delete feat/my-feature
+
+# 删除本地分支
+git branch -d feat/my-feature
+
+# 确认清理完成
+git branch -a | grep feat/my-feature  # 应无输出
+```
+
+**规则：**
+- PR merge 后 24 小时内删除对应特性分支
+- 禁止在已合并的特性分支上继续开发
+- 发布完成后：`dev` → `main`（tag + push），然后 `main` → `dev`（同步）
+
+---
+
+## 7. PR 提交流程
 
 ```bash
 # 1. 确保基于最新 dev

@@ -1,8 +1,8 @@
 ---
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
-last_updated: 2026-02-26
-entries: 35
+last_updated: 2026-02-27
+entries: 38
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -48,6 +48,9 @@ entries: 35
 | k-033 | Promise.race Timer Leak Prevention | security | 0.95 | 2026-02-26 | active |
 | k-034 | Regex Injection Prevention in Dynamic Patterns | security | 0.95 | 2026-02-26 | active |
 | k-035 | Bounded Growth Collections (entry caps + key sanitization) | pattern | 0.9 | 2026-02-26 | active |
+| k-036 | Release Skill Version File Checklist (CLAUDE.md missing) | workflow | 0.9 | 2026-02-27 | active |
+| k-037 | Dynamic Version Reading Pattern (getRuntimePackageVersion) | pattern | 0.95 | 2026-02-27 | active |
+| k-038 | Branch Lifecycle: Delete After Merge | workflow | 0.85 | 2026-02-27 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -55,8 +58,8 @@ entries: 35
 |----------|-------|-------------|
 | architecture | 16 | 架构相关知识 |
 | debugging | 1 | 调试技巧 |
-| pattern | 5 | 代码模式 |
-| workflow | 5 | 工作流相关 |
+| pattern | 6 | 代码模式 |
+| workflow | 7 | 工作流相关 |
 | tooling | 2 | 工具使用 |
 | security | 3 | 安全相关知识 |
 
