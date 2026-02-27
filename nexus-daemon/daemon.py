@@ -86,8 +86,8 @@ class NexusDaemon:
             self._processed_log_path().write_text(
                 json.dumps(sorted(self._processed), indent=2)
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error('Failed to save processed log: %s', e)
 
     def git_pull(self) -> bool:
         """Pull latest from remote. Returns True on success."""
@@ -147,8 +147,9 @@ class NexusDaemon:
                 data = json.loads(f.read_text())
                 data['_filename'] = f.name
                 result.append(data)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning('Skipping malformed event file %s: %s', f.name, e)
+                self.mark_event_processed(f.name)
         return result
 
     def mark_event_processed(self, filename: str) -> None:
@@ -171,7 +172,10 @@ class NexusDaemon:
             except Exception as e:
                 logger.error('Error processing event %s: %s', event.get('_filename'), e)
         if new_events:
-            self._evolution_engine.process_events(new_events)
+            try:
+                self._evolution_engine.process_events(new_events)
+            except Exception as e:
+                logger.error('Evolution engine failed to process events: %s', e)
 
     async def _process_event(self, event: dict[str, Any]) -> None:
         """Placeholder: route to evolution engine."""

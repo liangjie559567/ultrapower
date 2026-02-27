@@ -73,8 +73,12 @@ class EvolutionEngine:
             for ev in p.evidence:
                 lines.append(f'  - {ev}')
         lines.append('')
-        with self._kb_path.open('a', encoding='utf-8') as f:
-            f.write('\n'.join(lines))
+        try:
+            with self._kb_path.open('a', encoding='utf-8') as f:
+                f.write('\n'.join(lines))
+        except Exception as e:
+            logger.error('Failed to write knowledge base: %s', e)
+            raise
 
     def _update_pattern_library(self, patterns: list[PatternRecord]) -> None:
         now = datetime.now(timezone.utc).isoformat()
@@ -86,5 +90,9 @@ class EvolutionEngine:
             lines.append(f'- First seen: {p.first_seen}')
             lines.append(f'- Last seen: {p.last_seen}')
             lines.append('')
-        with self._pl_path.open('a', encoding='utf-8') as f:
-            f.write('\n'.join(lines))
+        try:
+            with self._pl_path.open('a', encoding='utf-8') as f:
+                f.write('\n'.join(lines))
+        except Exception as e:
+            logger.error('Failed to write pattern library: %s', e)
+            raise
