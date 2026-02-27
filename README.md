@@ -256,6 +256,51 @@ team-plan → team-prd → team-exec → team-verify → team-fix（循环）
 
 ---
 
+## Axiom 自我进化系统
+
+ultrapower 内置 Axiom 自我进化引擎，让 AI 工作流随使用不断优化。
+
+### 核心机制
+
+| 机制 | 说明 |
+|------|------|
+| 知识收割 | 每次任务完成后自动提取经验教训，存入知识库 |
+| 模式检测 | 识别重复代码模式，达到阈值（出现 ≥3 次）后提升为最佳实践 |
+| 工作流优化 | 分析执行指标，发现瓶颈并生成优化建议 |
+| 跨会话记忆 | 知识库和模式库跨会话持久化，越用越聪明 |
+
+### 快速开始
+
+```bash
+# 1. 安装插件
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin install ultrapower
+
+# 2. 初始化 Axiom 系统
+/ultrapower:ax-context init
+
+# 3. 查看系统状态
+/ax-status
+```
+
+### 进化工作流
+
+```
+需求 → /ax-draft → /ax-review → /ax-decompose → /ax-implement
+                                                      ↓
+                                                 任务完成
+                                                      ↓
+                                             /ax-reflect（反思）
+                                                      ↓
+                                             /ax-evolve（进化）
+                                                      ↓
+                                        知识库更新 + 模式库更新
+```
+
+详细文档请参阅 [docs/EVOLUTION.md](docs/EVOLUTION.md)。
+
+---
+
 ## 哲学
 
 - **测试驱动开发** — 始终先写测试
