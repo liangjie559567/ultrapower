@@ -1,5 +1,39 @@
 # Reflection Log
 
+## 反思 - 2026-02-27 04:29（会话：LQ-013 reflection_log 空条目修复）
+
+### 📊 本次会话统计
+
+- **任务完成**: 1/1（LQ-013 修复）
+- **提交数**: 1 个（`bc2589c` fix(learner): skip empty session reflections）
+- **自动修复**: 0 次
+- **回滚**: 0 次
+- **文件变更**: 3 个（session-reflector.ts + reflection_log.md + learning_queue.md）
+
+### ✅ 做得好的
+
+1. **调用链追踪精准**：从 `session-end/index.ts` 入口，逐层追踪到 `session-reflector.ts` → `orchestrator.reflect()` → `ReflectionEngine.reflect()` → `appendToLog()`，一次定位根因，无需多次尝试。
+2. **Guard 插入位置正确**：将 guard 放在 `session-reflector.ts`（入口层）而非 `reflection.ts`（底层），保留了手动调用 `/ax-reflect` 时不受 guard 影响的能力。
+3. **保守的 guard 条件**：三条件 AND（无 agents + 无 modes + duration < 60s）确保真实会话不会被误跳过，只过滤完全空的测试/短暂会话。
+4. **大规模清理**：reflection_log.md 从 970 行清理到 ~280 行，移除 30+ 个空模板条目，文件恢复可读性。
+5. **最小化提交**：只 stage 3 个相关文件，排除 bridge/*.cjs、usage_metrics.json 等运行时文件。
+
+### ⚠️ 待改进
+
+1. **LQ-012 仍未验证**：`usage_metrics.json` 中 `skills` 字段是否开始填充，已连续两次会话延迟，需要在下次会话开始时优先检查。
+2. **active_context.md Current Goal 未更新**：本次会话完成后，`Current Goal` 字段仍显示上次 ax-evolve 的状态，未同步为 LQ-013 完成。
+
+### 💡 新知识
+
+- **k-043**: session-reflector.ts guard 模式：在 `isAxiomEnabled()` 检查之后、`orchestrator.reflect()` 调用之前插入空会话 guard，条件为 `!hasAgents && !hasModes && !hasSignificantDuration`（duration 阈值 60s）。这是防止 reflection_log 膨胀的标准模式。
+
+### 🎯 Action Items
+
+- [ ] [VERIFY] 检查 `usage_metrics.json` 中 `skills` 字段是否开始填充（LQ-012，已延迟两次）
+- [ ] [SYNC] 更新 `active_context.md` 的 `Current Goal` 为 LQ-013 完成状态
+
+---
+
 ## 2026-02-11 Reflection (Session: Codex Workflow Optimization)
 
 ### 📊 本次会话统计 (Session Stats)

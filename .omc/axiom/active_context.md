@@ -10,7 +10,7 @@ last_gate: "CI Gate Pass (4589 tests, Phase 2 Active Learning)"
 ## Status: IDLE
 
 ## Current Goal
-Phase 2 Active Learning 完成。3 个数据收集缺口已修复（extractSkillName、空工具名过滤、nexus toolCalls 动态读取），k-039~k-041 已入库，反思已写入。
+LQ-013 修复完成（bc2589c）。session-reflector.ts 加入空会话 guard，reflection_log.md 从 970 行清理至 ~280 行。LQ-012（usage_metrics skills 验证）延迟到下次会话优先检查。
 
 ## Task Queues
 
