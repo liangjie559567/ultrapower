@@ -72,6 +72,14 @@ class NexusDaemon:
             chat_id=self.config.telegram_chat_id,
         )
         self._notified_improvements: dict[str, float] = {}
+        from consciousness_loop import ConsciousnessLoop, ConsciousnessConfig
+        self._consciousness = ConsciousnessLoop(
+            repo_path=self.repo_path,
+            config=ConsciousnessConfig(
+                interval_seconds=self.config.consciousness_interval,
+                budget_percent=self.config.consciousness_budget_percent,
+            ),
+        )
 
     def _ensure_dirs(self) -> None:
         for d in ['events', 'improvements', 'consciousness', 'evolution']:
@@ -213,8 +221,16 @@ class NexusDaemon:
                     event.get('agentsSpawned', 0))
 
     async def run(self) -> None:
-        """Main loop: poll every config.poll_interval seconds."""
+        """Main daemon loop."""
         logger.info('nexus-daemon started (poll_interval=%ds)', self.config.poll_interval)
+        tasks = [
+            asyncio.create_task(self._main_loop()),
+            asyncio.create_task(self._consciousness.run_loop()),
+        ]
+        await asyncio.gather(*tasks)
+
+    async def _main_loop(self) -> None:
+        """Git pull + evolution engine loop."""
         while True:
             try:
                 await self.run_once()
