@@ -116,10 +116,31 @@ function copyTemplatesToCache() {
       return;
     }
 
-    const entries = readdirSync(pluginCacheBase, { withFileTypes: true });
-    for (const entry of entries) {
-      if (!entry.isDirectory()) continue;
-      const version = entry.name;
+    // Collect version directories to copy into.
+    // If the cache base exists but is empty (Claude Code hasn't populated it yet),
+    // fall back to the package version so we can pre-populate the correct directory.
+    let versions = readdirSync(pluginCacheBase, { withFileTypes: true })
+      .filter(e => e.isDirectory())
+      .map(e => e.name);
+
+    if (versions.length === 0) {
+      // Cache dir exists but is empty — read version from package.json and create the dir
+      try {
+        const pkgPath = join(pluginRoot, 'package.json');
+        const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+        const pkgVersion = pkg.version;
+        if (pkgVersion) {
+          const versionDir = join(pluginCacheBase, pkgVersion);
+          mkdirSync(versionDir, { recursive: true });
+          versions = [pkgVersion];
+          console.log(`[OMC] Plugin cache was empty — created version dir for v${pkgVersion}`);
+        }
+      } catch (pkgErr) {
+        console.log('[OMC] Warning: Could not read package.json to determine version:', pkgErr.message);
+      }
+    }
+
+    for (const version of versions) {
       const cacheVersionDir = join(pluginCacheBase, version);
       const destTemplatesHooks = join(cacheVersionDir, 'templates', 'hooks');
       if (!existsSync(destTemplatesHooks)) {
