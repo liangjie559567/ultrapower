@@ -10,12 +10,17 @@ WorkingDirectory=/opt/nexus-daemon
 ExecStart=/opt/nexus-daemon/venv/bin/python daemon.py
 Restart=on-failure
 RestartSec=10
+StartLimitIntervalSec=60
+StartLimitBurst=5
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=nexus-daemon
 
 # Environment
 Environment=PYTHONUNBUFFERED=1
+MemoryMax=512M
+CPUQuota=50%
+EnvironmentFile=-/etc/nexus-daemon/env
 
 [Install]
 WantedBy=multi-user.target
