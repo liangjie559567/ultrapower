@@ -36,7 +36,7 @@ function loadAgentDefinitions(): Record<string, string> {
   }
 
   for (const file of readdirSync(agentsDir)) {
-    if (file.endsWith('.md')) {
+    if (file.endsWith('.md') && file !== 'AGENTS.md') {
       definitions[file] = readFileSync(join(agentsDir, file), 'utf-8');
     }
   }
