@@ -21,6 +21,16 @@
 
 <!-- 新的学习素材将自动添加到此处 -->
 
+### LQ-024: deepinit 生成的 AGENTS.md 必须从 agent 定义加载器中排除
+- 优先级: P1
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `deepinit` 在 `agents/` 目录下生成 `AGENTS.md` 作为目录文档（无 `name:` frontmatter）。`loadAgentDefinitions()` 读取所有 `.md` 文件时会包含此文件，导致 `should have unique agent names` 测试失败（`nameMatch` 为 null）。修复：在文件过滤条件中加入 `&& file !== 'AGENTS.md'`。根本原因：deepinit 生成的目录文档与 agent 定义文件共存于同一目录，加载器必须明确排除非 agent 文件。
+- 元数据: file=src/__tests__/installer.test.ts:39, version=v5.2.4, tests_after=4663
+- 知识产出: k-056, P-010
+
 ### LQ-016: 技术债扫描两轮策略
 - 优先级: P2
 - 来源类型: session
@@ -250,6 +260,26 @@
 - 内容: 删除用户目录（如 ~/.claude/agents、~/.claude/commands）前，先 `cp -r src src.bak` 备份。用户选择"先备份再删除"时执行此约定。备份文件名格式：`<dirname>.bak`，位于同级目录。omc-doctor 的自动修复流程应默认提供此选项。
 - 元数据: session=2026-02-27, dirs=agents.bak, commands.bak
 - 知识产出: k-055
+
+### LQ-025: Windows bash hook 路径 — %USERPROFILE% vs $USERPROFILE 不兼容
+- 优先级: P1
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: Claude Code 在 Windows 上通过 bash（Git Bash/WSL）运行 hooks，而非 cmd.exe。bash 不展开 `%USERPROFILE%`（cmd.exe 语法），只展开 `$USERPROFILE`（bash 语法）。`src/installer/hooks.ts` 的 `getHomeEnvVar()` 已修复为返回 `$USERPROFILE`，所有 hook 命令路径改用正斜杠。已安装用户的 `settings.json` 不会自动更新，需要 `omc-setup` 增加 hooks 路径格式检查步骤。
+- 元数据: file=src/installer/hooks.ts, settings=~/.claude/settings.json, platform=win32
+- 知识产出: k-057
+
+### LQ-026: 插件缓存空目录 — copyTemplatesToCache() 必须处理空缓存基目录
+- 优先级: P1
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `scripts/plugin-setup.mjs` 的 `copyTemplatesToCache()` 原实现假设 `pluginCacheBase` 下已有版本子目录，但 Claude Code 安装器在 postinstall 后才填充缓存，导致 `readdirSync` 返回空数组，整个复制逻辑被跳过。修复：当 `versions.length === 0` 时，读取 `package.json` 版本，创建版本目录后再复制。边界情况：缓存目录存在但为空。
+- 元数据: file=scripts/plugin-setup.mjs, error=MODULE_NOT_FOUND, cache=~/.claude/plugins/cache/ultrapower/ultrapower/
+- 知识产出: k-058
 
 ## 处理中
 

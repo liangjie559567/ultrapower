@@ -21,12 +21,14 @@ last_updated: 2026-02-27
 | P-007 | Circular Dependency via Parameter Passing | architecture | 1 | 0.95 | pending |
 | P-008 | Backup-Before-Delete Convention (.bak suffix) | workflow | 1 | 0.9 | pending |
 | P-009 | omc install Flag Validation (no --refresh-hooks) | tooling | 1 | 0.95 | active |
+| P-010 | deepinit AGENTS.md Exclusion from Agent Definition Loaders | workflow-def | 1 | 0.95 | active |
+| P-011 | Windows Bash Hook Path: Shell Syntax Mismatch Anti-Pattern | platform | 1 | 0.95 | pending |
 
 ## 2. 模式分类 (Categories)
 
 | Category | Description | Count |
 |----------|-------------|-------|
-| workflow-def | 工作流定义模式 | 3 |
+| workflow-def | 工作流定义模式 | 4 |
 | data-layer | 数据层模式 | 0 |
 | ui-layer | UI 层模式 | 0 |
 | business-logic | 业务逻辑模式 | 0 |
@@ -34,6 +36,7 @@ last_updated: 2026-02-27
 | security | 安全防护模式 | 1 |
 | debugging | 调试反模式 | 1 |
 | architecture | 架构设计模式 | 1 |
+| platform | 平台兼容性反模式 | 1 |
 
 ---
 
@@ -213,6 +216,71 @@ syncPluginRegistry({ skipIfProjectScoped: isProjectScopedPlugin() });
 ```
 
 **Related**: k-050, LQ-018
+
+---
+
+### P-010: deepinit AGENTS.md Exclusion from Agent Definition Loaders
+
+**Category**: workflow-def
+**Occurrences**: 1 (src/__tests__/installer.test.ts:39 — k-056)
+**Confidence**: 0.95
+**First Seen**: 2026-02-27
+**Status**: active
+
+**Description**:
+> `deepinit` 在 `agents/` 目录下生成 `AGENTS.md` 作为目录文档（无 `name:` frontmatter）。任何读取该目录下所有 `.md` 文件的加载器，必须明确排除 `AGENTS.md`，否则会因 `nameMatch` 为 null 导致测试失败或运行时错误。
+
+**Template**:
+```typescript
+// ❌ 错误：读取所有 .md 文件，包含 deepinit 生成的 AGENTS.md
+for (const file of readdirSync(agentsDir)) {
+  if (file.endsWith('.md')) {
+    definitions[file] = readFileSync(join(agentsDir, file), 'utf-8');
+  }
+}
+
+// ✅ 正确：明确排除 AGENTS.md 目录文档
+for (const file of readdirSync(agentsDir)) {
+  if (file.endsWith('.md') && file !== 'AGENTS.md') {
+    definitions[file] = readFileSync(join(agentsDir, file), 'utf-8');
+  }
+}
+```
+
+**Root Cause**: deepinit 生成的目录文档与 agent 定义文件共存于同一目录，加载器必须明确排除非 agent 文件。
+
+**Related**: k-056, LQ-024
+
+---
+
+### P-011: Windows Bash Hook Path: Shell Syntax Mismatch Anti-Pattern
+
+**Category**: platform
+**Occurrences**: 1 (src/installer/hooks.ts — k-057)
+**Confidence**: 0.95
+**First Seen**: 2026-02-27
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> Claude Code 在 Windows 上通过 bash（Git Bash/WSL）运行 hooks，而非 cmd.exe。`%USERPROFILE%`（cmd.exe 语法）在 bash 中不展开，只有 `$USERPROFILE`（bash 语法）才正确。任何生成 hook 命令路径的代码，必须使用 bash 语法，并使用正斜杠。
+
+**Template**:
+```typescript
+// ❌ 错误：使用 cmd.exe 语法，bash 不展开
+const hookCmd = `node "%USERPROFILE%/.claude/hooks/my-hook.mjs"`;
+
+// ✅ 正确：使用 bash 语法，正斜杠
+const hookCmd = `node "$USERPROFILE/.claude/hooks/my-hook.mjs"`;
+
+// ✅ getHomeEnvVar() 正确实现
+function getHomeEnvVar(): string {
+  return process.platform === 'win32' ? '$USERPROFILE' : '$HOME';
+}
+```
+
+**Prevention**: 已安装用户的 `settings.json` 不会自动更新，`omc-setup` 应包含 hooks 路径格式检查步骤。
+
+**Related**: k-057, LQ-025
 
 ---
 

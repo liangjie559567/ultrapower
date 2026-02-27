@@ -2,7 +2,7 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-27
-entries: 53
+entries: 58
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -68,6 +68,9 @@ entries: 53
 | k-053 | omc-doctor: curl-install vs plugin-install Migration Path | workflow | 0.95 | 2026-02-27 | active |
 | k-054 | omc install --refresh-hooks Flag Does Not Exist | tooling | 0.95 | 2026-02-27 | active |
 | k-055 | Backup Before Delete: .bak Directory Convention | workflow | 0.9 | 2026-02-27 | active |
+| k-056 | deepinit AGENTS.md Must Be Excluded from Agent Definition Loaders | workflow | 0.95 | 2026-02-27 | active |
+| k-057 | Windows Bash Hook Path: $USERPROFILE not %USERPROFILE% | platform | 0.95 | 2026-02-27 | active |
+| k-058 | Plugin Cache Empty Dir: copyTemplatesToCache() Must Handle Empty Base | tooling | 0.95 | 2026-02-27 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -76,9 +79,10 @@ entries: 53
 | architecture | 19 | 架构相关知识 |
 | debugging | 5 | 调试技巧 |
 | pattern | 6 | 代码模式 |
-| workflow | 14 | 工作流相关 |
-| tooling | 5 | 工具使用 |
+| workflow | 15 | 工作流相关 |
+| tooling | 6 | 工具使用 |
 | security | 3 | 安全相关知识 |
+| platform | 1 | 平台兼容性 |
 
 
 ## 3. 标签云 (Tag Cloud)
