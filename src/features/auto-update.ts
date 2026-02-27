@@ -16,6 +16,8 @@ import { execSync } from 'child_process';
 import { TaskTool } from '../hooks/beads-context/types.js';
 import { install as installSisyphus, HOOKS_DIR, isProjectScopedPlugin, isRunningAsPlugin } from '../installer/index.js';
 import { getConfigDir } from '../utils/config-dir.js';
+import { syncPluginRegistry } from '../lib/plugin-registry.js';
+import { getRuntimePackageVersion } from '../lib/version.js';
 import type { NotificationConfig } from '../notifications/types.js';
 
 /** GitHub repository information */
@@ -53,6 +55,19 @@ function syncMarketplaceClone(verbose: boolean = false): { ok: boolean; message:
     execSync(`git -C "${marketplacePath}" pull --ff-only origin main`, execOpts);
   } catch (err) {
     return { ok: false, message: `Failed to update marketplace clone: ${err instanceof Error ? err.message : err}` };
+  }
+
+  // After successful sync, update registry version from marketplace package.json
+  try {
+    const marketplacePackageJson = join(marketplacePath, 'package.json');
+    if (existsSync(marketplacePackageJson)) {
+      const pkg = JSON.parse(readFileSync(marketplacePackageJson, 'utf-8')) as { version?: string };
+      if (pkg.version) {
+        syncPluginRegistry({ newVersion: pkg.version });
+      }
+    }
+  } catch {
+    // Non-fatal: registry sync failure should not block marketplace sync
   }
 
   return { ok: true, message: 'Marketplace clone updated' };
@@ -464,6 +479,14 @@ export function reconcileUpdateRuntime(options?: { verbose?: boolean }): UpdateR
     };
   }
 
+  // Sync plugin registry version after successful reconciliation
+  try {
+    const newVersion = getRuntimePackageVersion();
+    syncPluginRegistry({ newVersion, skipIfProjectScoped: projectScopedPlugin });
+  } catch {
+    // Non-fatal: registry sync failure should not block reconciliation
+  }
+
   return {
     success: true,
     message: 'Runtime state reconciled successfully',
@@ -482,13 +505,54 @@ export async function performUpdate(options?: {
   const previousVersion = installed?.version ?? null;
 
   try {
-    // Check if running as plugin - prevent npm global update from corrupting plugin
+    // Check if running as plugin - guide user to correct update path
     if (isRunningAsPlugin() && !options?.standalone) {
+      // Project-scoped plugin: prompt user to navigate to project directory
+      if (isProjectScopedPlugin()) {
+        return {
+          success: true,
+          previousVersion,
+          newVersion: 'unknown',
+          message: 'Project-scoped plugin detected.\nTo update, navigate to your project directory and run:\n  /plugin install ultrapower',
+        };
+      }
+
+      // Fetch latest version for display (best-effort)
+      let latestVersion = 'unknown';
+      try {
+        const release = await fetchLatestRelease();
+        latestVersion = release.tag_name.replace(/^v/, '');
+      } catch { /* ignore */ }
+
+      // [1/2] Sync marketplace clone
+      process.stdout.write('[1/2] Syncing marketplace... ');
+      const syncResult = syncMarketplaceClone(options?.verbose ?? false);
+      if (!syncResult.ok) {
+        process.stdout.write('⚠\n');
+      } else {
+        process.stdout.write('✓\n');
+        // Update registry version after successful sync
+        try {
+          const { syncPluginRegistry } = await import('../lib/plugin-registry.js');
+          syncPluginRegistry({ newVersion: latestVersion, skipIfProjectScoped: false });
+        } catch { /* non-fatal */ }
+      }
+
+      // [2/2] Guide user to complete update
+      const versionHint = latestVersion !== 'unknown'
+        ? ` (current: v${previousVersion ?? 'unknown'} → available: v${latestVersion})`
+        : '';
+      const guidanceMessage = [
+        `[2/2] → Action required: run /plugin install ultrapower to complete update${versionHint}`,
+        '',
+        '  Or pass --standalone to force npm global update.',
+      ].join('\n');
+
       return {
-        success: false,
+        success: true,
         previousVersion,
-        newVersion: 'unknown',
-        message: 'Running as a Claude Code plugin. Use "/plugin install ultrapower" to update, or pass --standalone to force npm update.',
+        newVersion: latestVersion,
+        message: guidanceMessage,
       };
     }
 
@@ -611,8 +675,9 @@ export function formatUpdateNotification(checkResult: UpdateCheckResult): string
     `  Current version: ${checkResult.currentVersion ?? 'unknown'}`,
     `  Latest version:  ${checkResult.latestVersion}`,
     '',
-    '  To update, run: /update',
-    '  Or reinstall via: /plugin install ultrapower',
+    isRunningAsPlugin()
+      ? '  To update, run: /plugin install ultrapower'
+      : '  To update, run: /update',
     ''
   ];
 
