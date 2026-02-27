@@ -339,5 +339,7 @@ MIT License — 详见 LICENSE 文件
 
 - **Issues**: https://github.com/liangjie559567/ultrapower/issues
 - **Marketplace**: https://github.com/liangjie559567/ultrapower
+- **安装部署教程**: [docs/INSTALL.md](docs/INSTALL.md)
 - **完整参考文档**: [docs/REFERENCE.md](docs/REFERENCE.md)
+- **进化系统文档**: [docs/EVOLUTION.md](docs/EVOLUTION.md)
 - **迁移指南**: [docs/MIGRATION.md](docs/MIGRATION.md)
