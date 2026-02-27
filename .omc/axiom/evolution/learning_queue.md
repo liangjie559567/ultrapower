@@ -221,6 +221,36 @@
 - 元数据: file=docs/REFERENCE.md, session=2026-02-27, commit=e3495f4
 - 知识产出: k-047（已入库）；skills/release/SKILL.md 已加入检查点（commit 03d1c79）
 
+### LQ-021: omc-doctor curl-install vs plugin-install 迁移路径
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: omc-doctor 诊断时，若 `~/.claude/plugins/cache/omc/ultrapower` 不存在但 `~/.claude/agents/` 和 `~/.claude/commands/` 存在 ultrapower 文件，说明是旧版 curl 安装。迁移路径：1) `npm install -g @liangjie559567/ultrapower@latest`，2) `omc install --force --skip-claude-check`，3) 备份旧目录到 `.bak`，4) 删除旧目录。插件安装后 agents/commands 由插件系统接管，旧目录可安全删除。
+- 元数据: session=2026-02-27, files=~/.claude/agents, ~/.claude/commands
+- 知识产出: k-053
+
+### LQ-022: omc install 不支持 --refresh-hooks 参数
+- 优先级: P2
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `omc install --force --skip-claude-check --refresh-hooks` 会报 `error: unknown option '--refresh-hooks'`。正确命令是 `omc install --force --skip-claude-check`（不带 --refresh-hooks）。omc-doctor skill 文档中的升级命令需要修正，去掉该参数。
+- 元数据: session=2026-02-27, error=unknown option '--refresh-hooks'
+- 知识产出: k-054
+
+### LQ-023: 删除前备份到 .bak 目录约定
+- 优先级: P3
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 删除用户目录（如 ~/.claude/agents、~/.claude/commands）前，先 `cp -r src src.bak` 备份。用户选择"先备份再删除"时执行此约定。备份文件名格式：`<dirname>.bak`，位于同级目录。omc-doctor 的自动修复流程应默认提供此选项。
+- 元数据: session=2026-02-27, dirs=agents.bak, commands.bak
+- 知识产出: k-055
+
 ## 处理中
 
 ## 已完成

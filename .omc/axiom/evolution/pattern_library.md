@@ -19,16 +19,18 @@ last_updated: 2026-02-27
 | P-005 | Plugin Registry Path Drift Anti-Pattern | tooling | 1 | 0.9 | pending |
 | P-006 | Two-Pass Tech Debt Scanning | workflow-def | 1 | 0.9 | pending |
 | P-007 | Circular Dependency via Parameter Passing | architecture | 1 | 0.95 | pending |
+| P-008 | Backup-Before-Delete Convention (.bak suffix) | workflow | 1 | 0.9 | pending |
+| P-009 | omc install Flag Validation (no --refresh-hooks) | tooling | 1 | 0.95 | active |
 
 ## 2. 模式分类 (Categories)
 
 | Category | Description | Count |
 |----------|-------------|-------|
-| workflow-def | 工作流定义模式 | 2 |
+| workflow-def | 工作流定义模式 | 3 |
 | data-layer | 数据层模式 | 0 |
 | ui-layer | UI 层模式 | 0 |
 | business-logic | 业务逻辑模式 | 0 |
-| tooling | 工具使用反模式 | 1 |
+| tooling | 工具使用反模式 | 2 |
 | security | 安全防护模式 | 1 |
 | debugging | 调试反模式 | 1 |
 | architecture | 架构设计模式 | 1 |

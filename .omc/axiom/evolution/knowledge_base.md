@@ -2,7 +2,7 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-27
-entries: 50
+entries: 53
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -65,6 +65,9 @@ entries: 50
 | k-050 | Circular Dep Prevention via Parameter Passing (循环依赖防护：参数传递模式) | architecture | 0.95 | 2026-02-27 | active |
 | k-051 | Sub-PRD File Location Must Be Grep-Verified (Sub-PRD 函数位置需 grep 验证) | workflow | 0.9 | 2026-02-27 | active |
 | k-052 | readFileSync Mock Call Count Awareness (mock 调用次数感知) | debugging | 0.9 | 2026-02-27 | active |
+| k-053 | omc-doctor: curl-install vs plugin-install Migration Path | workflow | 0.95 | 2026-02-27 | active |
+| k-054 | omc install --refresh-hooks Flag Does Not Exist | tooling | 0.95 | 2026-02-27 | active |
+| k-055 | Backup Before Delete: .bak Directory Convention | workflow | 0.9 | 2026-02-27 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -73,8 +76,8 @@ entries: 50
 | architecture | 19 | 架构相关知识 |
 | debugging | 5 | 调试技巧 |
 | pattern | 6 | 代码模式 |
-| workflow | 12 | 工作流相关 |
-| tooling | 4 | 工具使用 |
+| workflow | 14 | 工作流相关 |
+| tooling | 5 | 工具使用 |
 | security | 3 | 安全相关知识 |
 
 
