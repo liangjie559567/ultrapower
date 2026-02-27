@@ -161,6 +161,16 @@
 - 元数据: file=~/.claude/plugins/installed_plugins.json, error=MODULE_NOT_FOUND, session=2026-02-27
 - 知识产出: k-046
 
+### LQ-015: REFERENCE.md 多处数量声明同步缺失
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: REFERENCE.md 存在两处 skills 数量声明（TOC 第 12 行 + 正文第 280 行），发布时只更新了正文，TOC 遗漏。建议在 release skill 的版本文件清单中加入 REFERENCE.md 内部一致性检查点。
+- 元数据: file=docs/REFERENCE.md, session=2026-02-27, commit=e3495f4
+- 知识产出: k-047（已入库）；skills/release/SKILL.md 已加入检查点（commit 03d1c79）
+
 ## 处理中
 
 ## 已完成
