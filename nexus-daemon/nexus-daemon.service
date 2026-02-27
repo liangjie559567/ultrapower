@@ -2,6 +2,8 @@
 Description=nexus Daemon - ultrapower self-improvement VPS service
 After=network.target
 Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
 
 [Service]
 Type=simple
@@ -10,8 +12,6 @@ WorkingDirectory=/opt/nexus-daemon
 ExecStart=/opt/nexus-daemon/venv/bin/python daemon.py
 Restart=on-failure
 RestartSec=10
-StartLimitIntervalSec=60
-StartLimitBurst=5
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=nexus-daemon
