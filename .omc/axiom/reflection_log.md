@@ -1,5 +1,160 @@
 # Reflection Log
 
+## 反思 - 2026-02-27 17:05（会话：ax-implement 用户插件部署自动更新版本流程）
+
+### 📊 本次会话统计
+
+- **任务完成**: 8/8（T-01~T-08 全部通过 CI Gate）
+- **文件变更**: 4 个（plugin-registry.ts 新建、auto-update.ts 修改、cli/index.ts 修改、plugin-registry.test.ts 新建）
+- **新增测试**: 13 个（plugin-registry.test.ts，全部通过）
+- **测试总数**: 206 passed, 0 failed（+13 新增，无回归）
+- **CI Gate**: tsc 零错误，build 成功，npm test 全通过
+
+### ✅ 做得好的
+
+1. **循环依赖防护设计**：`plugin-registry.ts` 严格禁止 import `auto-update.ts` 或 `installer/index.ts`，通过 `skipIfProjectScoped?: boolean` 参数将判断权交给调用方，彻底避免循环依赖，且在文件顶部加注释说明原因。
+2. **两处并行执行**：T-01（创建 plugin-registry.ts）和 T-06（formatUpdateNotification 修改）无依赖关系，同时执行，节省时间。
+3. **Mock 策略精准**：测试中发现 `syncPluginRegistry` 内部调用两次 `readFileSync`（getInstalledPluginEntry + 主体），第一次用 `mockReturnValueOnce` 只覆盖一次导致测试失败，快速定位并修复为两次 `mockReturnValueOnce`。
+4. **Sub-PRD 与实际代码的偏差处理**：Sub-PRD T-04 指向 `installer/index.ts`，但实际 `reconcileUpdateRuntime` 在 `auto-update.ts`——读取源码后正确定位，未盲目按 PRD 操作。
+5. **动态 import 用于 T-03**：`performUpdate()` 中用 `await import('../lib/plugin-registry.js')` 避免顶层循环依赖风险，而 T-04/T-05 因 `auto-update.ts` 已是调用链末端，直接顶层 import 更简洁。
+
+### ⚠️ 待改进
+
+1. **Sub-PRD 文件路径需验证**：T-04 Sub-PRD 写的是 `installer/index.ts`，实际函数在 `auto-update.ts`。ax-decompose 阶段应通过 grep 验证函数实际位置，而非依赖记忆。
+2. **readFileSync mock 调用次数**：测试中需要了解被测函数内部调用 readFileSync 的次数，才能正确设置 mock。可在 Sub-PRD 中标注"内部调用 N 次 readFileSync"以提前告知测试编写者。
+
+### 🔑 关键决策
+
+- `syncPluginRegistry` 在 `auto-update.ts` 顶层 import（非动态），因为 `plugin-registry.ts` 不 import `auto-update.ts`，无循环。
+- `performUpdate()` 中用动态 import 是防御性设计，避免未来有人在 `plugin-registry.ts` 中误加 import。
+- `checkVersionConsistency` 的 `isUpdating` 字段：当 registryVersion ≠ packageJsonVersion 时为 true，doctor 命令据此跳过漂移警告（更新进行中属正常状态）。
+
+## 反思 - 2026-02-27 16:20（会话：技术债清理）
+
+### 📊 本次会话统计
+
+- **任务完成**: 3/3（HUD检测修复、coordinator-deprecated清理、metrics集成）
+- **文件变更**: 5 个（launch.ts、agents/index.ts、src/index.ts、metrics-collector.ts、query-engine.ts）
+- **提交数**: 2 个（`7595cc2` refactor + `63f3074` feat(analytics)）
+- **删除文件**: 1 个（coordinator-deprecated.ts，过期 v4.0.0 存根）
+- **测试**: 4589 passed, 15 skipped, 0 failed（两次提交均通过）
+
+### ✅ 做得好的
+
+1. **精准区分真假 TODO**：`ARCHITECTURE.md:215` 的 `- TODO：所有任务已完成` 是验证清单项而非占位符，`continuation-enforcement.ts:53` 的 `hasIncompleteTasks = false` 是有意的结构设计——两处均正确识别，未做无效修改。
+2. **依赖分析到位**：修复 `query-engine.ts` TODO 前，先确认 `MetricsCollector` 已完整实现（有 `recordEvent`/`query`/`aggregate` 和单例），再添加缺失的 `cleanupOldEvents` 方法，而非重复造轮子。
+3. **代码库扫描系统化**：用 explore agent 分两轮扫描（技术债标记 + 代码质量），覆盖 TODO/FIXME/deprecated/console.log/eslint-disable/as any，结论有据可查。
+4. **coordinator-deprecated 清理彻底**：删除文件 + 清理 index.ts + 清理 src/index.ts 三处同步，无遗漏引用。
+
+### ⚠️ 待改进
+
+1. **next-step-router skill 不可用**：两次调用均返回 "Unknown skill"，需确认 skill 是否已正确安装或路径是否变更。
+2. **ax-reflect skill 不可用**：同上，需检查 skill 加载机制。
+
+### 📝 经验提取 → 学习队列
+
+- LQ-016: 技术债扫描方法论（两轮扫描策略）→ P2
+- LQ-017: MetricsCollector 集成模式 → P3
+
+
+
+## 反思 - 2026-02-27 16:00（会话：v5.2.2 发布）
+
+### 📊 本次会话统计
+
+- **任务完成**: 1/1（v5.2.2 发布）
+- **文件变更**: 4 个（plugin.json、marketplace.json、CLAUDE.md、skills/omc-setup/SKILL.md）
+- **提交数**: 1 个（`4fd60b4` chore: Bump version to 5.2.2）
+- **发布**: npm `@liangjie559567/ultrapower@5.2.2` + GitHub Release v5.2.2
+- **测试**: 4589 passed, 15 skipped, 0 failed
+
+### ✅ 做得好的
+
+1. **跨会话恢复精准**：从压缩摘要恢复后，直接定位到第二个 step 3.55 块（~line 789），无需重新分析上下文。
+2. **Edit 唯一性处理**：第二个 step 3.55 块与第一个内容几乎相同，通过只替换 `!` 行（不含周边上下文）成功唯一定位并修复。
+3. **版本同步完整**：发现并修复 3 处版本不同步（plugin.json、marketplace.json 在 5.2.1，CLAUDE.md 在 v5.1.0），全部更新到 5.2.2。
+4. **发布流程完整执行**：按 release skill 清单完整执行——版本同步、测试、提交、tag、push、marketplace 更新、npm publish、GitHub Release、dev 同步，无遗漏。
+
+### ⚠️ 待改进
+
+1. **MINGW64 `!` 问题是跨会话遗留**：step 3.55 脚本在上次会话添加时未经 mingw-escape 测试验证，导致本次发布前才发现。应在每次添加 node -e 脚本后立即运行 `npm run test:run` 验证。
+2. **第二个 step 3.55 Edit 失败一次**：上次会话的 Edit 将步骤 3.6 内容包含在替换范围内，导致本次恢复后 old_string 不匹配。教训：Edit 的 old_string 应尽量精简，只包含需要修改的行，避免包含大段上下文。
+
+### 💡 新知识
+
+- 无新知识条目（本次为纯发布流程，无新 bug 或架构发现）
+
+### 🎯 Action Items
+
+- （无新 Action Items，系统 IDLE）
+
+---
+
+## 反思 - 2026-02-27 08:00（会话：Action Items 修复 + ax-evolve LQ-015）
+
+### 📊 本次会话统计
+
+- **任务完成**: 3/3
+- **文件变更**: 4 个（skills/release/SKILL.md、skills/omc-setup/SKILL.md、axiom 进化引擎 3 个文件）
+- **提交数**: 2 个（`03d1c79` fix(skills)、`ea4d735` chore(axiom)）
+- **dev push**: `46d5e8b`
+- **知识库**: 46 → 47 条（+k-047）
+
+### ✅ 做得好的
+
+1. **跨会话延续无缝**：从 summary 恢复后，直接定位到两个 pending Action Items，无需重新分析上下文。
+2. **双处插入精准**：`skills/omc-setup/SKILL.md` 存在两个对称的步骤 3.5 区块（本地/全局配置路径），两处均正确插入步骤 3.55，覆盖完整。
+3. **最小化修改**：`skills/release/SKILL.md` 只增加 1 行表格行 + 1 行警告注释，精准解决问题，无冗余改动。
+4. **ax-evolve 流程规范**：LQ-015 → k-047 入库，workflow_metrics、active_context 同步更新，进化引擎状态一致。
+
+### ⚠️ 待改进
+
+1. **Edit 工具唯一性**：`skills/omc-setup/SKILL.md` 中两处相同文本导致第一次 Edit 失败（`replace_all=false` 但有 2 个匹配），需要加更多上下文才能唯一定位。应在编辑前先确认目标文本的唯一性。
+2. **active_context.md 写入冲突**：Edit 工具因文件内容与预期不符（时间戳差异 05:32 vs 07:19）导致失败，需要改用 Write 工具覆写。说明跨会话后文件状态可能与 summary 描述有细微差异，应先 Read 再 Edit。
+
+### 💡 新知识
+
+- 无新知识条目（本次为纯修复和进化引擎执行，无新 bug 或架构发现）
+
+### 🎯 Action Items
+
+- （无新 Action Items，所有待办已清零）
+
+---
+
+## 反思 - 2026-02-27 07:19（会话：REFERENCE.md 修复 + Nexus hooks 验证 + PR #8 合并）
+
+### 📊 本次会话统计
+
+- **任务完成**: 3/3
+- **文件变更**: 1 个（docs/REFERENCE.md）
+- **提交数**: 1 个（e3495f4）
+- **PR 合并**: PR #8 → main（squash merge）
+- **测试**: 4589 passed, 15 skipped, 0 failed
+
+### ✅ 做得好的
+
+1. **跨会话任务延续**：从上次会话中断处（PR 创建失败）精准恢复，无需重新分析上下文。
+2. **PR 命令参数修正**：上次 `--base dev --head dev` 错误，本次正确使用 `--base main --head dev`，一次成功。
+3. **Nexus hooks 实现验证**：通过代码审查确认 data-collector、consciousness-sync、improvement-puller 三个 hooks 均已完整实现（非框架骨架），14 个单元测试全部通过。
+4. **最小化修复**：REFERENCE.md 只改一行（第 12 行 "70 Total" → "71 Total"），精准解决文档不一致问题。
+
+### ⚠️ 待改进
+
+1. **PR 创建命令记忆**：上次会话已犯 `--base dev --head dev` 错误，说明 PR 创建命令的 base/head 方向需要更明确的记忆机制。
+2. **文档数量同步检查**：skills 数量在 TOC（第 12 行）和正文（第 280 行）不一致，说明发布流程中缺少文档内部一致性检查步骤。
+
+### 💡 新知识
+
+- **k-047 候选**：REFERENCE.md 存在两处 skills 数量声明（TOC 第 12 行 + 正文第 280 行），发布时需同步更新两处。建议在 release skill 的版本文件清单中加入此检查点。
+
+### 🎯 Action Items
+
+- [ ] [RELEASE] `skills/release/SKILL.md` 增加 REFERENCE.md 内部一致性检查（TOC 数量 vs 正文数量）
+- [ ] [PATTERN] k-047：文档多处数量声明同步模式
+
+---
+
 ## 反思 - 2026-02-27 05:32（会话：stop hook 修复 + ax-evolution stats）
 
 ### 📊 本次会话统计

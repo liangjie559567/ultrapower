@@ -1508,6 +1508,30 @@ Examples:
   $ omc doctor conflicts --json  Output results as JSON`)
   .action(async (options) => {
     const exitCode = await doctorConflictsCommand(options);
+
+    // Version consistency check
+    try {
+      const { checkVersionConsistency } = await import('../lib/plugin-registry.js');
+      const report = checkVersionConsistency();
+      if (!report.consistent && !report.isUpdating) {
+        console.log(chalk.yellow('[WARN] Version drift detected:'));
+        if (report.registryVersion) {
+          console.log(`  installed_plugins.json: v${report.registryVersion}`);
+        }
+        if (report.versionMetadataVersion) {
+          console.log(`  version metadata:       v${report.versionMetadataVersion}`);
+        }
+        console.log(`  package.json:           v${report.packageJsonVersion}`);
+        if (report.fixCommand) {
+          console.log(`  Fix: ${report.fixCommand}`);
+        }
+      } else if (report.consistent) {
+        console.log(chalk.green('✓ Version consistency: OK'));
+      }
+    } catch {
+      // Non-fatal: version check failure should not affect other doctor checks
+    }
+
     process.exit(exitCode);
   });
 

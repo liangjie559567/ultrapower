@@ -17,6 +17,8 @@ last_updated: 2026-02-27
 | P-003 | Multi-Expert Parallel Review Pattern | workflow-def | 1 | 0.9 | pending |
 | P-004 | Case-Sensitivity Anti-Pattern in String Comparisons | debugging | 2 | 0.95 | pending |
 | P-005 | Plugin Registry Path Drift Anti-Pattern | tooling | 1 | 0.9 | pending |
+| P-006 | Two-Pass Tech Debt Scanning | workflow-def | 1 | 0.9 | pending |
+| P-007 | Circular Dependency via Parameter Passing | architecture | 1 | 0.95 | pending |
 
 ## 2. 模式分类 (Categories)
 
@@ -29,6 +31,7 @@ last_updated: 2026-02-27
 | tooling | 工具使用反模式 | 1 |
 | security | 安全防护模式 | 1 |
 | debugging | 调试反模式 | 1 |
+| architecture | 架构设计模式 | 1 |
 
 ---
 
@@ -176,6 +179,40 @@ if (normalizedToolName === 'skill' || normalizedToolName === 'task') { ... }
 **Prevention**: `omc-setup` 应在本地开发安装后自动同步 `installed_plugins.json`。
 
 **Related**: k-046, LQ-014
+
+### P-007: Circular Dependency via Parameter Passing
+
+**Category**: architecture
+**Occurrences**: 1 (src/lib/plugin-registry.ts — k-050)
+**Confidence**: 0.95
+**First Seen**: 2026-02-27
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> 当新模块 A 需要调用模块 B 的判断逻辑，但 B 已 import A（或 B 的依赖链包含 A）时，不能在 A 中 import B。解决方案：将判断结果作为参数传入，由调用方在调用前判断并传入。文件顶部加注释说明禁止 import 的原因，防止未来误加。
+
+**Template**:
+```typescript
+// ❌ 错误：A import B，但 B 已 import A → 循环依赖
+// plugin-registry.ts
+import { isProjectScopedPlugin } from './auto-update.js'; // FORBIDDEN
+
+// ✅ 正确：将判断结果作为参数传入
+// plugin-registry.ts
+// IMPORTANT: Do NOT import auto-update.ts or installer/index.ts (circular dep)
+export function syncPluginRegistry(options: { skipIfProjectScoped?: boolean }) {
+  if (options.skipIfProjectScoped) return { skipped: true };
+  // ...
+}
+
+// auto-update.ts（调用方）
+import { syncPluginRegistry } from '../lib/plugin-registry.js';
+syncPluginRegistry({ skipIfProjectScoped: isProjectScopedPlugin() });
+```
+
+**Related**: k-050, LQ-018
+
+---
 
 ## 4. 模式匹配规则 (Detection Rules)
 

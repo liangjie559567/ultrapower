@@ -21,6 +21,56 @@
 
 <!-- 新的学习素材将自动添加到此处 -->
 
+### LQ-016: 技术债扫描两轮策略
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 技术债扫描分两轮效果更好。第一轮：TODO/FIXME/deprecated/placeholder 标记定位候选项。第二轮：console.log/eslint-disable/as any/空catch 评估代码质量。两轮结合可区分"真正需要修复的"与"有意的设计决策"，避免误改。关键判断：注释说明了原因的 eslint-disable 和 as any 通常是合理的，不需要处理。
+- 元数据: session=2026-02-27, commits=2, files_changed=5
+- 知识产出: k-048, P-006
+
+### LQ-017: MetricsCollector 集成模式
+- 优先级: P3
+- 来源类型: pattern
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 当 TODO 注释依赖"某模块集成后"时，先确认该模块是否已实现（查找类定义、单例函数、接口）。MetricsCollector 已有完整实现但缺少 cleanupOldEvents 方法——正确做法是扩展现有类而非重新实现。修复路径：1) 给 MetricsCollector 添加缺失方法，2) 在调用方 import 并调用，3) 删除 TODO 注释。
+- 元数据: files=metrics-collector.ts+query-engine.ts, commit=63f3074
+- 知识产出: k-049
+
+### LQ-018: 循环依赖防护：参数传递模式
+- 优先级: P1
+- 来源类型: pattern
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 当新模块 A 需要调用模块 B 的判断逻辑，但 B 已 import A（或 B 的依赖链包含 A）时，不能在 A 中 import B。解决方案：将判断结果作为参数传入（如 `skipIfProjectScoped?: boolean`），由调用方（B 或 C）在调用前判断并传入。文件顶部加注释说明禁止 import 的原因，防止未来误加。
+- 元数据: files=plugin-registry.ts, feature=plugin-auto-update
+- 知识产出: k-050
+
+### LQ-019: Sub-PRD 函数位置需 grep 验证
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: ax-decompose 生成 Sub-PRD 时，函数位置应通过 grep 实时验证，而非依赖记忆。本次 T-04 Sub-PRD 写的是 `installer/index.ts`，实际 `reconcileUpdateRuntime` 在 `auto-update.ts`。ax-implement 执行时通过 grep 发现偏差并正确定位，未造成错误，但增加了额外查找步骤。改进：ax-decompose 阶段对每个 Sub-PRD 中的函数名执行 grep 验证。
+- 元数据: task=T-04, expected=installer/index.ts, actual=auto-update.ts
+- 知识产出: k-051
+
+### LQ-020: readFileSync mock 调用次数感知
+- 优先级: P3
+- 来源类型: debugging
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 测试中 `mockReturnValueOnce` 只覆盖一次调用。若被测函数内部多次调用 readFileSync（如 getInstalledPluginEntry 一次 + 主体一次），需要提供对应次数的 mock。测试失败时 `previousVersion` 为 undefined 是典型症状。修复：链式调用 `.mockReturnValueOnce(a).mockReturnValueOnce(b)` 或改用 `mockReturnValue`（每次都返回相同值）。
+- 元数据: test=plugin-registry.test.ts, case=idempotency
+- 知识产出: k-052
+
 ### LQ-001: Axiom 全链路工作流验证模式
 - 优先级: P1
 - 来源类型: session

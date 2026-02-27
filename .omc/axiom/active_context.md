@@ -1,16 +1,17 @@
 ---
 session_id: "2026-02-27"
-task_status: IDLE
-current_phase: "Completed"
-last_gate: "ax-evolve complete (LQ-015, knowledge_base 47 entries)"
+task_status: EXECUTING
+current_phase: "ax-implement 完成，待 ax-reflect"
+last_gate: "CI Gate 通过：tsc 零错误，build 成功，206 tests passed"
 ---
 
 # Active Context
 
-## Status: IDLE
+## Status: EXECUTING
 
 ## Current Goal
-ax-evolve 完成（2026-02-27）。LQ-015 处理完毕，k-047 入库。所有 Action Items 已完成。系统就绪。
+功能开发：用户插件部署 自动更新版本流程
+- ax-draft ✓ → ax-review ✓ → Rough PRD ✓ → ax-decompose ✓ → **ax-implement ✓**
 
 ## Task Queues
 
@@ -18,25 +19,29 @@ ax-evolve 完成（2026-02-27）。LQ-015 处理完毕，k-047 入库。所有 A
 - (none)
 
 ### Pending
-- (none)
+- [ ] ax-reflect：反思本次实现，提取经验到知识库
 
-### Resolved (2026-02-27)
-- [x] [LQ-012] extractSkillName 大小写修复 — usage-tracker.ts:170 `toolName.toLowerCase()`
-- [x] [PR] PR #3 合并到 main（9 files, 335 insertions, 90 deletions）
-- [x] [RELEASE] v5.2.1 发布 — npm @liangjie559567/ultrapower@5.2.1 + GitHub Release
-- [x] [SYNC] dev 分支同步到 main（c9377ee）
-- [x] [EVOLVE] ax-evolve LQ-001~LQ-013 全量处理（5cea855）
-- [x] [REFLECT] ax-reflect 本次 ax-evolve 会话
-- [x] [ACTION] skills/release/SKILL.md 增加 REFERENCE.md 一致性检查（k-047）
-- [x] [ACTION] skills/omc-setup/SKILL.md 增加步骤 3.55 installed_plugins.json 同步（k-046）
-- [x] [EVOLVE] ax-evolve LQ-015 处理，k-047 入库（47 条）
+### Resolved (本次会话)
+- [x] ax-draft：Draft PRD 生成
+- [x] 开放问题解答（Q-01/Q-02/Q-03）
+- [x] PRD 修订（DRAFT_REVISED）
+- [x] ax-review：5专家并行评审，29差异点，7 HIGH 已解决
+- [x] ax-decompose：Manifest + 8个 Sub-PRD 生成
+- [x] ax-implement：T-01~T-08 全部完成，CI Gate 通过
 
-### Completed
+### Resolved (2026-02-27 本次会话)
+- [x] [REFACTOR] launch.ts HUD 检测修复（hasHudCommand=false → omcBin 存在性检查）
+- [x] [CLEANUP] coordinator-deprecated.ts 删除（v4.0.0 过期存根）
+- [x] [FEAT] MetricsCollector 集成到 QueryEngine.cleanupOldData（commit 63f3074）
+- [x] [REFLECT] ax-reflect 本次技术债清理会话
+
+### Completed (历史)
 - [x] T-01a~T-14: 全部 18 任务完成（2026-02-26）
 - [x] LQ-001~LQ-015: 全部处理完成
+- [x] v5.2.2 发布（2026-02-27）
 
 ## Last Checkpoint
-2026-02-27 — 所有 Action Items 完成，ax-evolve LQ-015 处理完毕，系统 IDLE
+2026-02-27 17:01 — ax-implement 完成，T-01~T-08 全部通过 CI Gate
 
 ## Suspension Note
 (none)
