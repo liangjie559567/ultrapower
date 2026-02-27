@@ -9,7 +9,7 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Agents (49 Total)](#agents-49-total)
-- [Skills (70 Total)](#skills-70-total)
+- [Skills (71 Total)](#skills-71-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
 - [Magic Keywords](#magic-keywords)
