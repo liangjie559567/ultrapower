@@ -57,3 +57,31 @@ def test_is_paused_when_busy(tmp_repo):
 def test_not_paused_when_idle(tmp_repo):
     loop = make_loop(tmp_repo)
     assert loop.is_paused() is False
+
+
+@pytest.mark.asyncio
+async def test_run_once_increments_counter(tmp_repo):
+    loop = make_loop(tmp_repo)
+    result = await loop.run_once()
+    assert loop._round_count == 1
+    assert loop.scratchpad_path.exists()
+    assert result is not None
+
+
+@pytest.mark.asyncio
+async def test_run_once_respects_max_rounds(tmp_repo):
+    loop = make_loop(tmp_repo)
+    for _ in range(5):
+        await loop.run_once()
+    result = await loop.run_once()
+    assert result is None
+    assert loop._round_count == 5
+
+
+@pytest.mark.asyncio
+async def test_run_once_skips_when_paused(tmp_repo):
+    loop = make_loop(tmp_repo)
+    (tmp_repo / '.nexus-busy').write_text('1')
+    result = await loop.run_once()
+    assert result is None
+    assert loop._round_count == 0

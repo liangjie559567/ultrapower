@@ -33,6 +33,7 @@ class DaemonConfig:
     telegram_chat_id: str = ''
     consciousness_interval: int = 300
     consciousness_budget_percent: int = 10
+    consciousness_max_rounds_per_session: int = 5
 
 
 def load_config(config_path: Path) -> DaemonConfig:
@@ -49,6 +50,7 @@ def load_config(config_path: Path) -> DaemonConfig:
             telegram_chat_id=raw.get('telegram_chat_id', ''),
             consciousness_interval=raw.get('consciousness_interval', 300),
             consciousness_budget_percent=raw.get('consciousness_budget_percent', 10),
+            consciousness_max_rounds_per_session=raw.get('consciousness_max_rounds_per_session', 5),
         )
     except Exception:
         return DaemonConfig()
@@ -78,6 +80,7 @@ class NexusDaemon:
             config=ConsciousnessConfig(
                 interval_seconds=self.config.consciousness_interval,
                 budget_percent=self.config.consciousness_budget_percent,
+                max_rounds_per_session=self.config.consciousness_max_rounds_per_session,
             ),
         )
 
