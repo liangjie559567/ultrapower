@@ -261,6 +261,26 @@
 - 元数据: session=2026-02-27, dirs=agents.bak, commands.bak
 - 知识产出: k-055
 
+### LQ-027: TypeScript 测试文件 import `.mjs` ESM 模块需要 @ts-ignore
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: TypeScript 无法直接解析 .ts 测试文件中对 ESM .mjs 模块的动态 import。`tsc --noEmit` 报错"无法解析模块"。解决方案：在每个 `import('../../scripts/xxx.mjs')` 前加 `// @ts-ignore` 注释。这是 TypeScript + ESM 混用的已知限制，不修改 tsconfig.json 的前提下唯一可行方案。Sub-PRD 中应提前标注此限制。
+- 元数据: files=src/__tests__/release-steps.test.ts+release-local.test.ts, commit=3a53e44
+- 知识产出: k-059
+
+### LQ-028: GitHub Actions 4-job 依赖图模式
+- 优先级: P3
+- 来源类型: pattern
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `build-test → publish → (github-release ∥ marketplace-sync)` 四 job 依赖图。publish 串行依赖 build-test（确保验证通过才发布），github-release 和 marketplace-sync 并行依赖 publish（两者互相独立）。secrets 需求：NPM_TOKEN（手动配置到 repo Settings）、GITHUB_TOKEN（Actions 内置，无需手动配置）。CLI 入口：`node scripts/release-steps.mjs <step>` 直接调用，不经过 release-local.mjs 的 parseArgs 层。
+- 元数据: file=.github/workflows/release.yml, commit=e9f9225
+- 知识产出: k-060
+
 ### LQ-025: Windows bash hook 路径 — %USERPROFILE% vs $USERPROFILE 不兼容
 - 优先级: P1
 - 来源类型: error

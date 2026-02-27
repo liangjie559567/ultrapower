@@ -56,7 +56,7 @@ last_gate: "CI Gate 通过：tsc 零错误，build 成功，4685 tests passed"
 - [x] ax-evolve cycle 7：k-056, P-010 入库，知识库 56 条，模式库 10 个（2026-02-27）
 
 ## Last Checkpoint
-2026-02-27 — ax-evolve cycle 8 完成，k-057/k-058/P-011 入库，系统 IDLE
+2026-02-27 — ax-evolve cycle 9 完成，LQ-027/LQ-028 → done，k-059/k-060 确认入库，知识库 60 条，系统 IDLE
 
 ## Suspension Note
 (none)
