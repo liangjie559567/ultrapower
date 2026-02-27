@@ -32,6 +32,12 @@ Fetch and follow instructions from https://raw.githubusercontent.com/liangjie559
 
 3. 重启 Codex。
 
+4. **For subagent skills** (optional): Skills like `dispatching-parallel-agents` and `subagent-driven-development` require Codex's collab feature. Add to your Codex config:
+   ```toml
+   [features]
+   collab = true
+   ```
+
 ### Windows
 
 使用 junction 代替符号链接（无需开发者模式）：
