@@ -1,3 +1,19 @@
+# ultrapower v5.2.1
+
+### 修复
+
+- **extractSkillName 大小写修复**：`toolName.toLowerCase()` 统一规范化，修复 Claude Code 发送 `"Skill"`（大写）无法匹配 `'skill'`（小写）导致 skills 追踪始终为空的问题（k-044）
+
+### 进化引擎
+
+- **ax-evolve Cycle 3**：处理 LQ-001~LQ-013 全量，知识库扩展至 45 条，新增 P-004 大小写反模式
+
+### 测试
+
+- 4589 passed, 0 failed
+
+---
+
 # ultrapower v5.2.0
 
 ### 新功能

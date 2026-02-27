@@ -1,7 +1,7 @@
 ---
 description: 代码模式库 - 存储可复用的代码模式和模板
 version: 1.0
-last_updated: 2026-02-26
+last_updated: 2026-02-27
 ---
 
 # Pattern Library (代码模式库)
@@ -15,6 +15,8 @@ last_updated: 2026-02-26
 | P-001 | Markdown Workflow Pattern | workflow-def | 5 | 0.9 | active |
 | P-002 | assertValidMode() Guard Pattern | security | 1 | 0.95 | pending |
 | P-003 | Multi-Expert Parallel Review Pattern | workflow-def | 1 | 0.9 | pending |
+| P-004 | Case-Sensitivity Anti-Pattern in String Comparisons | debugging | 2 | 0.95 | pending |
+| P-005 | Plugin Registry Path Drift Anti-Pattern | tooling | 1 | 0.9 | pending |
 
 ## 2. 模式分类 (Categories)
 
@@ -24,8 +26,9 @@ last_updated: 2026-02-26
 | data-layer | 数据层模式 | 0 |
 | ui-layer | UI 层模式 | 0 |
 | business-logic | 业务逻辑模式 | 0 |
-| common | 通用模式 | 0 |
+| tooling | 工具使用反模式 | 1 |
 | security | 安全防护模式 | 1 |
+| debugging | 调试反模式 | 1 |
 
 ---
 
@@ -115,6 +118,64 @@ ax-review workflow:
 **Related**: LQ-001, k-029
 
 ---
+
+### P-004: Case-Sensitivity Anti-Pattern in String Comparisons
+
+**Category**: debugging
+**Occurrences**: 2 (usage-tracker.ts extractSkillName — k-039 + k-044)
+**Confidence**: 0.95
+**First Seen**: 2026-02-27
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> 在同一函数中对 toolName 进行字符串比较时，未统一大小写，导致大写输入（如 `"Skill"`）无法匹配小写字面量（如 `'skill'`）。同一函数出现两次相同 bug（k-039: `=== 'Task'` 漏掉 Skill，k-044: `=== 'skill'` 大小写不匹配）。
+
+**Template**:
+```typescript
+// ❌ 错误：直接比较，大小写敏感
+if (toolName === 'skill') { ... }
+
+// ✅ 正确：先 toLowerCase() 再比较
+if (toolName.toLowerCase() === 'skill') { ... }
+
+// ✅ 最佳实践：在函数入口统一规范化
+const normalizedToolName = toolName.toLowerCase();
+if (normalizedToolName === 'skill' || normalizedToolName === 'task') { ... }
+```
+
+**Related**: k-039, k-044, LQ-012
+
+---
+
+### P-005: Plugin Registry Path Drift Anti-Pattern
+
+**Category**: tooling
+**Occurrences**: 1 (installed_plugins.json — k-046)
+**Confidence**: 0.9
+**First Seen**: 2026-02-27
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> 本地开发安装插件后，`installed_plugins.json` 中的 `installPath` 可能仍指向旧 npm 缓存路径（如 v5.0.23），而非当前本地开发目录。导致 hook 文件 MODULE_NOT_FOUND。根因：`omc-setup` 未包含注册表同步步骤。
+
+**Template**:
+```json
+// ❌ 错误：installPath 指向旧 npm 缓存
+{
+  "installPath": "~/.claude/plugins/cache/ultrapower/ultrapower/5.0.23",
+  "version": "5.0.23"
+}
+
+// ✅ 正确：installPath 指向本地开发目录，version 同步
+{
+  "installPath": "/path/to/local/ultrapower",
+  "version": "5.2.1"
+}
+```
+
+**Prevention**: `omc-setup` 应在本地开发安装后自动同步 `installed_plugins.json`。
+
+**Related**: k-046, LQ-014
 
 ## 4. 模式匹配规则 (Detection Rules)
 

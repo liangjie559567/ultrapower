@@ -1,5 +1,106 @@
 # Reflection Log
 
+## 反思 - 2026-02-27 05:32（会话：stop hook 修复 + ax-evolution stats）
+
+### 📊 本次会话统计
+
+- **任务完成**: 2/2
+- **文件变更**: 1 个（installed_plugins.json）
+- **提交数**: 0 个
+- **自动修复**: 0 次 / 回滚: 0 次
+
+### ✅ 做得好的
+
+1. **根因定位精准**：直接定位到 `installed_plugins.json` 注册项版本漂移，无需多轮排查。
+2. **最小化修复**：只修改 `installPath` 和 `version` 两个字段，影响范围最小。
+3. **版本漂移识别**：发现 npm 缓存路径（v5.0.23）与本地开发版本（v5.2.1）注册表不同步的根本原因。
+4. **stats 展示完整**：一次性读取 4 个进化引擎文件，完整呈现系统状态仪表盘。
+
+### ⚠️ 待改进
+
+1. **注册表同步缺乏自动化**：`omc-setup` 未包含 `installed_plugins.json` 同步步骤，导致本地开发版本与缓存版本脱节时需手动修复。
+2. **stop hook 错误信息不友好**：`MODULE_NOT_FOUND` 错误未提示用户检查 `installed_plugins.json`，排查路径不直观。
+
+### 💡 新知识
+
+- **k-046**：`installed_plugins.json` 版本漂移模式——本地开发安装后，注册表 `installPath` 可能仍指向旧 npm 缓存路径，导致 hook 加载失败。修复方式：更新 `installPath` 为本地开发目录，`version` 同步为当前版本。
+
+### 🎯 Action Items
+
+- [ ] [INFRA] `omc-setup` 增加 `installed_plugins.json` 自动同步步骤，检测本地开发安装时自动更新 `installPath`
+- [ ] [PATTERN] P-005 候选：注册表路径漂移反模式（本地开发 vs npm 缓存路径不一致）
+- [ ] [EVOLVE] 将 k-046 加入下次 ax-evolve 处理队列（P2）
+
+---
+
+## 反思 - 2026-02-27 05:00（会话：ax-evolve LQ-001~LQ-013 全量处理）
+
+### 📊 本次会话统计
+
+- **任务完成**: 1/1（ax-evolve 全量处理）
+- **提交数**: 1 个（`5cea855` chore(axiom): ax-evolve 2026-02-27）
+- **自动修复**: 0 次
+- **回滚**: 0 次
+- **知识库**: 44 → 45 条（+k-045）
+- **模式库**: 3 → 4 个（+P-004）
+
+### ✅ 做得好的
+
+1. **跨会话上下文恢复**：从压缩状态恢复后，通过读取 knowledge_base.md + pattern_library.md + workflow_metrics.md，精准定位中断点（k-045 已入库，分类统计未更新），无需用户重新说明。
+2. **模式检测有效**：从 LQ-001~LQ-013 中识别出 P-004「大小写比较反模式」——同一函数 `extractSkillName` 出现两次相同类型 bug（k-039 + k-044），符合模式检测逻辑。
+3. **最小化变更**：3 个文件，38 行新增，9 行删除，精准更新，无冗余修改。
+4. **指标同步完整**：WF-006 release 2→3，WF-007 ax-evolve 2→3，系统健康备注同步至 v5.2.1。
+
+### ⚠️ 待改进
+
+1. **P-004 仍为 pending**：大小写反模式只有 2 次出现（k-039 + k-044），未达到 3 次提升阈值。需要在下次发现同类 bug 时更新 occurrences。
+2. **ax-evolve 被中断后恢复**：本次 ax-evolve 在上一会话中途被压缩中断，恢复时需要重新读取 3 个文件确认状态。可考虑在 ax-evolve 开始时写入 state 文件作为检查点。
+
+### 💡 新知识
+
+- 无新知识条目（本次为纯进化引擎执行，无新 bug 或架构发现）
+
+### 🎯 Action Items
+
+- [ ] [PATTERN] 下次发现大小写比较 bug 时，更新 P-004 occurrences 2→3，提升为 active
+- [ ] [EVOLVE] 考虑在 ax-evolve 开始时写入 `.omc/state/ax-evolve-state.json` 作为检查点，防止压缩中断后状态丢失
+
+---
+
+## 反思 - 2026-02-27 04:44（会话：LQ-012 根因修复 + v5.2.1 发布）
+
+### 📊 本次会话统计
+
+- **任务完成**: 3/3（LQ-012 根因修复、PR #3 合并、v5.2.1 发布）
+- **提交数**: 3 个（`5882c12` fix + `10120d5` chore + `c9377ee` version bump）
+- **自动修复**: 0 次
+- **回滚**: 0 次
+- **发布**: npm `@liangjie559567/ultrapower@5.2.1` + GitHub Release v5.2.1
+
+### ✅ 做得好的
+
+1. **LQ-012 根因二次挖掘**：Phase 2 已修复 `toolName === 'skill'` 的缺失，但本次发现更深层根因——Claude Code 发送的是 `"Skill"`（大写 S），而比较是小写 `'skill'`，导致 skills 追踪始终为空。通过 `toolName.toLowerCase()` 一行修复。
+2. **调用链追踪精准**：从 `usage_metrics.json` 的 `skills: {}` 出发，逆向追踪到 `bridge.ts:969` → `extractSkillName` → 大小写不匹配，一次定位，无需多次尝试。
+3. **发布流程完整执行**：按 release skill 清单完整执行 7 步——版本同步（5 个文件）、测试确认（4589 passed）、提交、tag、push、npm publish、GitHub Release，无遗漏。
+4. **dev 分支恢复**：PR #3 合并时 dev 被删除，通过 `git reset --hard main && git push origin dev` 正确恢复，保持双分支一致。
+
+### ⚠️ 待改进
+
+1. **dev 分支被意外删除**：`gh pr merge --delete-branch` 删除了 dev 分支（PR 的 head branch），导致需要手动恢复。应在 PR 创建时确认 head/base 分支，避免删除基础分支。
+2. **installer.test.ts 版本检查**：本次发布未检查 `src/__tests__/installer.test.ts` 是否有版本硬编码——实际确认 installer 使用 `getRuntimePackageVersion()` 动态读取，无需更新，但检查步骤应保留在流程中。
+
+### 💡 新知识
+
+- **k-044**: `extractSkillName` 大小写不匹配：Claude Code 发送 `toolName = "Skill"`（大写），而 Phase 2 修复只添加了 `toolName !== 'skill'`（小写）检查。修复：`toolName.toLowerCase()` 后再比较。这是同一函数的第二个大小写 bug。
+- **k-045**: `gh pr merge --delete-branch` 会删除 PR 的 head branch（即 dev），而非 feature branch。当 dev 作为 PR head 时，合并后需手动重建 dev 分支。
+
+### 🎯 Action Items
+
+- [ ] [EVOLVE] 触发 ax-evolve 处理学习队列（LQ-001~LQ-013 全部 done，可进行模式检测）
+- [ ] [PROCESS] 在 release skill 清单中添加警告：`gh pr merge --delete-branch` 会删除 head branch，dev 作为 head 时慎用
+
+---
+
 ## 反思 - 2026-02-27 04:29（会话：LQ-013 reflection_log 空条目修复）
 
 ### 📊 本次会话统计
