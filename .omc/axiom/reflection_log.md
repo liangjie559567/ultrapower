@@ -1,5 +1,38 @@
 # Reflection Log
 
+## 反思 - 2026-02-27 05:32（会话：stop hook 修复 + ax-evolution stats）
+
+### 📊 本次会话统计
+
+- **任务完成**: 2/2
+- **文件变更**: 1 个（installed_plugins.json）
+- **提交数**: 0 个
+- **自动修复**: 0 次 / 回滚: 0 次
+
+### ✅ 做得好的
+
+1. **根因定位精准**：直接定位到 `installed_plugins.json` 注册项版本漂移，无需多轮排查。
+2. **最小化修复**：只修改 `installPath` 和 `version` 两个字段，影响范围最小。
+3. **版本漂移识别**：发现 npm 缓存路径（v5.0.23）与本地开发版本（v5.2.1）注册表不同步的根本原因。
+4. **stats 展示完整**：一次性读取 4 个进化引擎文件，完整呈现系统状态仪表盘。
+
+### ⚠️ 待改进
+
+1. **注册表同步缺乏自动化**：`omc-setup` 未包含 `installed_plugins.json` 同步步骤，导致本地开发版本与缓存版本脱节时需手动修复。
+2. **stop hook 错误信息不友好**：`MODULE_NOT_FOUND` 错误未提示用户检查 `installed_plugins.json`，排查路径不直观。
+
+### 💡 新知识
+
+- **k-046**：`installed_plugins.json` 版本漂移模式——本地开发安装后，注册表 `installPath` 可能仍指向旧 npm 缓存路径，导致 hook 加载失败。修复方式：更新 `installPath` 为本地开发目录，`version` 同步为当前版本。
+
+### 🎯 Action Items
+
+- [ ] [INFRA] `omc-setup` 增加 `installed_plugins.json` 自动同步步骤，检测本地开发安装时自动更新 `installPath`
+- [ ] [PATTERN] P-005 候选：注册表路径漂移反模式（本地开发 vs npm 缓存路径不一致）
+- [ ] [EVOLVE] 将 k-046 加入下次 ax-evolve 处理队列（P2）
+
+---
+
 ## 反思 - 2026-02-27 05:00（会话：ax-evolve LQ-001~LQ-013 全量处理）
 
 ### 📊 本次会话统计

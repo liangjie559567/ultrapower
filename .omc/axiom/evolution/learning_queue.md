@@ -151,6 +151,16 @@
 - 元数据: session=2026-02-27, file=.omc/axiom/reflection_log.md, hook=session-end
 - 知识产出: 在 session-reflector.ts 加入三条件 guard（无 agents + 无 modes + duration < 60s），reflection_log.md 从 970 行清理至 ~280 行
 
+### LQ-014: installed_plugins.json 版本漂移导致 hook 加载失败
+- 优先级: P2
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 本地开发安装（`installPath` 指向本地目录）后，若 `installed_plugins.json` 中的 `installPath` 仍指向旧 npm 缓存路径（如 v5.0.23），会导致 `stop-continuation.mjs` 等 hook 文件 MODULE_NOT_FOUND。修复：更新 `installPath` 为本地开发目录，`version` 同步为当前版本。预防：`omc-setup` 应增加注册表同步步骤。
+- 元数据: file=~/.claude/plugins/installed_plugins.json, error=MODULE_NOT_FOUND, session=2026-02-27
+- 知识产出: k-046
+
 ## 处理中
 
 ## 已完成

@@ -33,6 +33,11 @@ ax-evolve 完成（5cea855）。LQ-001~LQ-013 全部处理，知识库 45 条，
 - [x] LQ-013: reflection_log 空条目修复（bc2589c）
 - [x] LQ-012: extractSkillName 大小写修复（5882c12）
 
+## Reflection Action Items (2026-02-27 05:32)
+- [ ] [INFRA] `omc-setup` 增加 `installed_plugins.json` 自动同步步骤
+- [ ] [PATTERN] P-005 候选：注册表路径漂移反模式
+- [x] [EVOLVE] k-046 加入下次 ax-evolve 处理队列（P2）— 已完成（本次 ax-evolve）
+
 ## Last Checkpoint
 2026-02-27 — ax-evolve + ax-reflect 完成，系统 IDLE
 

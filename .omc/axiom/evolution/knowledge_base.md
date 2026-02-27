@@ -2,7 +2,7 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-27
-entries: 45
+entries: 46
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -58,6 +58,7 @@ entries: 45
 | k-043 | Empty Session Guard in session-reflector.ts | pattern | 0.95 | 2026-02-27 | active |
 | k-044 | Case-Insensitive toolName Check in extractSkillName | debugging | 0.95 | 2026-02-27 | active |
 | k-045 | gh pr merge --delete-branch Deletes Head Branch (dev) | workflow | 0.9 | 2026-02-27 | active |
+| k-046 | Plugin Registry Version Drift (installed_plugins.json) | tooling | 0.9 | 2026-02-27 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -67,7 +68,7 @@ entries: 45
 | debugging | 4 | 调试技巧 |
 | pattern | 6 | 代码模式 |
 | workflow | 8 | 工作流相关 |
-| tooling | 3 | 工具使用 |
+| tooling | 4 | 工具使用 |
 | security | 3 | 安全相关知识 |
 
 
