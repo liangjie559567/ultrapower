@@ -75,6 +75,41 @@ export class MetricsCollector {
     return aggregator(events);
   }
 
+  async cleanupOldEvents(retentionDays: number = 30): Promise<number> {
+    const logPath = path.resolve(process.cwd(), METRICS_LOG_FILE);
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - retentionDays);
+    const cutoffStr = cutoff.toISOString();
+
+    try {
+      const content = await fs.readFile(logPath, 'utf-8');
+      const lines = content.trim().split('\n').filter(l => l.length > 0);
+      const kept: string[] = [];
+      let removed = 0;
+
+      for (const line of lines) {
+        try {
+          const event: MetricEvent = JSON.parse(line);
+          if (event.timestamp >= cutoffStr) {
+            kept.push(line);
+          } else {
+            removed++;
+          }
+        } catch {
+          kept.push(line); // keep unparseable lines
+        }
+      }
+
+      if (removed > 0) {
+        await fs.writeFile(logPath, kept.join('\n') + (kept.length > 0 ? '\n' : ''), 'utf-8');
+      }
+
+      return removed;
+    } catch {
+      return 0;
+    }
+  }
+
   private async appendToLog(event: MetricEvent): Promise<void> {
     const logPath = path.resolve(process.cwd(), METRICS_LOG_FILE);
     const logDir = path.dirname(logPath);

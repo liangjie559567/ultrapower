@@ -1,4 +1,5 @@
 import { getTokenTracker } from './token-tracker.js';
+import { getMetricsCollector } from './metrics-collector.js';
 import { calculateCost } from './cost-estimator.js';
 import { getTokscaleAdapter, TokscaleAdapter } from './tokscale-adapter.js';
 import { getSessionManager } from './session-manager.js';
@@ -265,8 +266,8 @@ export class QueryEngine {
     const tracker = getTokenTracker();
     const removedTokens = await tracker.cleanupOldLogs(retentionDays);
 
-    // TODO: Add metrics cleanup when metrics collector is integrated
-    const removedMetrics = 0;
+    const collector = getMetricsCollector();
+    const removedMetrics = await collector.cleanupOldEvents(retentionDays);
 
     return { removedTokens, removedMetrics };
   }
