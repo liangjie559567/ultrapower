@@ -1023,6 +1023,25 @@ ultrapower 深度融合了 Axiom 智能体编排框架，提供完整的需求�
 | `.github/copilot-instructions.md` | GitHub Copilot |
 | `.codex/CODEX.md` | Codex CLI |
 
+### 自我进化系统详细文档
+
+Axiom 自我进化系统的完整使用指南、安装说明和故障排除请参阅：
+
+**[docs/EVOLUTION.md](./EVOLUTION.md)** — Axiom 自我进化系统完整文档
+
+包含内容：
+- 系统概述与架构
+- 安装与初始化步骤
+- 核心组件说明（进化引擎、上下文管理器、Boot Hook、Guards Hook）
+- 记忆系统详解（知识库、模式库、学习队列）
+- 进化工作流（ax-reflect + ax-evolve 完整流程）
+- 所有 ax-* Skills 使用指南
+- 自动触发机制
+- 知识库管理与置信度系统
+- 状态机与门禁系统
+- HUD 集成
+- 故障排除
+
 ---
 
 ## Changelog

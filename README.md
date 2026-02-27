@@ -1,6 +1,6 @@
 # ultrapower
 
-ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **48 个专业 agents**、**71 个 skills** 和完整的 TypeScript hooks 系统。
+ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **49 个专业 agents**、**71 个 skills** 和完整的 TypeScript hooks 系统。
 
 ## 核心能力
 
@@ -45,7 +45,7 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 ---
 
-## Agents（48 个）
+## Agents（49 个）
 
 ### 构建/分析通道
 
@@ -253,6 +253,51 @@ team-plan → team-prd → team-exec → team-verify → team-fix（循环）
 - **LSP**：hover、goto definition、find references、diagnostics、rename
 - **AST**：`ast_grep_search`（结构化模式搜索）、`ast_grep_replace`（结构化转换）
 - **Python REPL**：持久数据分析环境
+
+---
+
+## Axiom 自我进化系统
+
+ultrapower 内置 Axiom 自我进化引擎，让 AI 工作流随使用不断优化。
+
+### 核心机制
+
+| 机制 | 说明 |
+|------|------|
+| 知识收割 | 每次任务完成后自动提取经验教训，存入知识库 |
+| 模式检测 | 识别重复代码模式，达到阈值（出现 ≥3 次）后提升为最佳实践 |
+| 工作流优化 | 分析执行指标，发现瓶颈并生成优化建议 |
+| 跨会话记忆 | 知识库和模式库跨会话持久化，越用越聪明 |
+
+### 快速开始
+
+```bash
+# 1. 安装插件
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin install ultrapower
+
+# 2. 初始化 Axiom 系统
+/ultrapower:ax-context init
+
+# 3. 查看系统状态
+/ax-status
+```
+
+### 进化工作流
+
+```
+需求 → /ax-draft → /ax-review → /ax-decompose → /ax-implement
+                                                      ↓
+                                                 任务完成
+                                                      ↓
+                                             /ax-reflect（反思）
+                                                      ↓
+                                             /ax-evolve（进化）
+                                                      ↓
+                                        知识库更新 + 模式库更新
+```
+
+详细文档请参阅 [docs/EVOLUTION.md](docs/EVOLUTION.md)。
 
 ---
 
