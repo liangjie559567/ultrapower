@@ -24,6 +24,42 @@
 - [ ] **Infrastructure**: 初始化 `.agent/memory/active_context.md` 和 `reflection_log.md`。
 - [ ] **Codex Knowledge**: 实现 `knowledge-sync` 脚本，将 `.agents/memory/` 下的关键决策同步到 `AGENT.md`。
 
+## 反思 - 2026-02-27 12:00
+
+### 📊 本次会话统计
+- **任务完成**: 7/7（4 个 REFLECTION 项 + 3 个 PHASE2 修复）
+- **自动修复**: 0 次
+- **回滚**: 0 次
+- **CI Gate**: 4589 tests passed, 0 failed
+
+### ✅ 做得好 (What Went Well)
+
+1. **系统性根因分析**：通过逐层读取 `usage_metrics.json` → `bridge.ts` → `usage-tracker.ts` → `session-end-hook.ts`，精准定位了 3 个数据收集缺口，而非猜测。
+2. **最小化修复**：3 个修复均为单行或小函数级别变更，没有引入不必要的复杂度。
+3. **数据驱动决策**：Phase 2 完全基于 `usage_metrics.json` 的实际数据（`agents:{}` 为空）推导出问题，而非假设。
+4. **上下文恢复**：会话从压缩状态恢复后，通过读取 `active_context.md` 和关键文件，快速重建了工作状态。
+
+### ⚠️ 待改进 (What Could Improve)
+
+1. **nexus 数据流文档缺失**：TS→Python 的数据流（events → improvements → self_modifier）没有文档，需要靠读代码推断，增加了分析成本。
+2. **active_context.md 的 Current Goal 未同步**：Phase 2 完成后，`Current Goal` 字段仍显示 Phase 1 的描述，需要手动更新。
+3. **usage_metrics 的 agents/skills 数据仍为空**：修复了追踪逻辑，但历史数据不会回填，需要等下次会话才能验证修复效果。
+
+### 💡 新知识 (New Knowledge)
+
+- **k-039**: `extractSkillName` 只检查 `toolName === 'Task'`，漏掉了 Skill tool（`toolName === 'skill'`）
+- **k-040**: `usage_metrics` 中空工具名（`""`）是 `input.toolName ?? ''` 的副产品，需要 guard 过滤
+- **k-041**: nexus `session-end-hook.ts` 中 `toolCalls: []` 硬编码，导致 nexus daemon 收不到工具调用历史
+
+### 🎯 Action Items
+
+- [ ] **提交**: 将 Phase 2 的 3 个修复提交到 dev 分支
+- [ ] **验证**: 下次会话后检查 `usage_metrics.json` 中 `skills` 字段是否开始填充
+- [ ] **文档**: 在 `nexus-daemon/README.md` 或 `docs/` 中补充 TS→Python 数据流说明
+- [ ] **Current Goal 同步**: 更新 `active_context.md` 的 `Current Goal` 为 Phase 2 完成状态
+
+---
+
 ## 反思 - 2026-02-26 12:30
 
 ### 📊 本次会话统计
@@ -139,6 +175,43 @@
 
 ---
 
+## 反思 - 2026-02-27 01:18（会话：nexus Phase 2 发布 + 分支整理）
+
+### 📊 本次会话统计
+
+- **任务完成**: 3/3（v5.1.0 发布、CLAUDE.md 版本更新、分支整理）
+- **提交数**: 2 个（chore: Bump version to 5.1.0、chore: update CLAUDE.md version reference to 5.1.0）
+- **自动修复**: 0 次
+- **回滚**: 0 次
+- **发布**: npm `@liangjie559567/ultrapower@5.1.0` + GitHub Release v5.1.0
+
+### ✅ 做得好的
+
+1. **发布流程完整执行**: 按 release skill 清单完整执行 8 步——版本同步（5 个文件）、测试确认、提交、tag、push、marketplace 更新、npm publish、GitHub Release，无遗漏。
+2. **动态版本检测**: 正确识别 `src/installer/index.ts` 使用 `getRuntimePackageVersion()` 动态读取，`src/__tests__/installer.test.ts` 使用正则匹配，两者均无需手动更新版本常量。
+3. **分支规范遵守**: 本次会话在 main 分支完成发布后，正确执行了 dev ← main 同步，保持双分支一致。
+4. **预存在测试失败确认**: 发布前确认 5 个文件 16 个测试失败为预存在问题（backfill-engine、brainstorm-server、installer skill-backing），与 nexus 变更无关，不阻塞发布。
+
+### ⚠️ 可以改进的
+
+1. **feat/phase2-active-learning 已在 dev 中**: 合并请求时发现该分支内容已通过 PR #2 进入 dev，`git merge` 返回 "Already up to date"。说明分支生命周期管理需要更及时——功能合并后应立即删除特性分支。
+2. **CLAUDE.md 版本引用滞后**: `CLAUDE.md` 中的 `ultrapower v5.0.21` 引用在 v5.0.22~v5.1.0 多个版本发布期间未同步更新，需要将其纳入 release skill 的版本同步清单。
+
+### 💡 学到了什么
+
+1. **release skill 版本文件清单不完整**: 当前清单包含 7 个文件，但遗漏了根目录 `CLAUDE.md` 中的版本引用（`ultrapower vX.Y.Z 规范体系位于 docs/standards/`）。应将其加入清单。
+2. **分支整理时序**: 特性分支合并到 dev 后，应立即删除（本地 + 远程），避免积累过时分支。正确时序：PR merge → 删除特性分支 → dev 同步到 main（发布时）→ main 同步回 dev。
+3. **npm 动态版本读取模式**: `getRuntimePackageVersion()` 从 `package.json` 动态读取，是比硬编码 `VERSION` 常量更健壮的模式——发布时只需更新 `package.json`，其他文件自动跟随。
+
+### 🎯 Action Items
+
+- [x] [REFLECTION] 下次工作前先执行 `git checkout dev && git pull`（本次已遵守，标记完成）
+- [ ] [REFLECTION] 将根目录 `CLAUDE.md` 的版本引用加入 release skill 的版本同步清单（`skills/release/SKILL.md`）
+- [ ] [REFLECTION] 确认 inbox-outbox 测试文件是否存在（三次遗留，需要最终确认）
+- [ ] [REFLECTION] 运行完整 `npm test` 验证无回归（遗留）
+
+---
+
 ## 2026-02-11: AgentOS �з���ˮ���ع�
 
 ### ?? ���λỰͳ�� (Session Stats)
@@ -230,3 +303,615 @@
 - [ ] [PHASE2] 实现 `ax-evolve` 命令：读取 usage_metrics → 生成洞察 → 更新 knowledge_base → 可选更新 agent 提示词
 
 ---
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-session-
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)
+### 2026-02-27 Session: auto-test-nex
+
+#### 📊 Quick Stats
+- Duration: ~0 min
+- Tasks Completed: 0/0
+
+#### ✅ What Went Well
+- (无)
+
+#### ⚠️ What Could Improve
+- (无)
+
+#### 💡 Learnings
+- (无)
+
+#### 🎯 Action Items
+- (无)

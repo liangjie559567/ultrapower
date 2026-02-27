@@ -121,6 +121,22 @@
 - 元数据: session=2026-02-27, pattern=branch-lifecycle
 - 知识产出: k-038
 
+### LQ-011: nexus TS→Python 数据流文档缺失
+- 优先级: P2
+- 来源类型: session
+- 状态: pending
+- 添加时间: 2026-02-27
+- 内容: nexus 系统的 TS→Python 数据流（events → improvements → self_modifier）没有文档，需要靠读代码推断。应在 nexus-daemon/README.md 或 docs/ 中补充数据流说明图。
+- 元数据: session=2026-02-27, files=src/hooks/nexus/, nexus-daemon/
+
+### LQ-012: usage_metrics agents/skills 修复效果验证
+- 优先级: P2
+- 来源类型: session
+- 状态: pending
+- 添加时间: 2026-02-27
+- 内容: Phase 2 修复了 extractSkillName 和空工具名过滤，但历史数据不会回填。需要在下次会话后检查 usage_metrics.json 中 skills 字段是否开始填充，验证修复效果。
+- 元数据: session=2026-02-27, file=.omc/axiom/evolution/usage_metrics.json
+
 ## 处理中
 
 ## 已完成

@@ -167,7 +167,7 @@ export function extractSkillName(
   toolName: string,
   toolInput: unknown
 ): string | undefined {
-  if (toolName !== 'Task') return undefined;
+  if (toolName !== 'Task' && toolName !== 'skill') return undefined;
   if (toolInput === null || typeof toolInput !== 'object') return undefined;
   const input = toolInput as Record<string, unknown>;
   return typeof input['skill'] === 'string' ? input['skill'] : undefined;
@@ -183,6 +183,7 @@ export async function recordUsage(
 ): Promise<void> {
   try {
     if (!isAxiomEnabled(directory)) return;
+    if (!event.toolName) return;
 
     const metricsPath = getMetricsPath(directory);
 
