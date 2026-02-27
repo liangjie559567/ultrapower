@@ -12,6 +12,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -83,6 +84,9 @@ class NexusDaemon:
                 max_rounds_per_session=self.config.consciousness_max_rounds_per_session,
             ),
         )
+        from self_evaluator import SelfEvaluator
+        self._evaluator = SelfEvaluator(repo_path=self.repo_path)
+        self._last_report_date: str = ''
 
     def _ensure_dirs(self) -> None:
         for d in ['events', 'improvements', 'consciousness', 'evolution']:
@@ -216,6 +220,21 @@ class NexusDaemon:
                     logger.warning('Failed to read improvement file %s: %s', f.name, e)
                 except Exception as e:
                     logger.error('Unexpected error processing improvement %s: %s', f.name, e)
+        # Daily health report
+        today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        if today != self._last_report_date:
+            self._last_report_date = today
+            try:
+                report = self._evaluator.generate_report()
+                md = self._evaluator.format_report(report)
+                report_path = self.repo_path / 'consciousness' / f'health-{today}.md'
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_text(md)
+                logger.info('Daily health report written: %s', report_path.name)
+                if self._telegram.enabled:
+                    await self._telegram.send_message(f'Daily health report ready: {today}')
+            except Exception as e:
+                logger.error('Failed to generate health report: %s', e)
 
     async def _process_event(self, event: dict[str, Any]) -> None:
         """Placeholder: route to evolution engine."""
