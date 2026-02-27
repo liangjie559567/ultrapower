@@ -342,4 +342,5 @@ MIT License — 详见 LICENSE 文件
 - **安装部署教程**: [docs/INSTALL.md](docs/INSTALL.md)
 - **完整参考文档**: [docs/REFERENCE.md](docs/REFERENCE.md)
 - **进化系统文档**: [docs/EVOLUTION.md](docs/EVOLUTION.md)
+- **主动进化系统**: [docs/NEXUS.md](docs/NEXUS.md)
 - **迁移指南**: [docs/MIGRATION.md](docs/MIGRATION.md)
