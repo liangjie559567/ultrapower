@@ -26,6 +26,10 @@ vi.mock('fs', async () => {
   };
 });
 
+vi.mock('../lib/version.js', () => ({
+  getRuntimePackageVersion: vi.fn().mockReturnValue('4.1.5'),
+}));
+
 import { execSync } from 'child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { homedir } from 'os';
