@@ -393,3 +393,54 @@ describe('isTaskRetryExhausted', () => {
     expect(isTaskRetryExhausted(TEST_TEAM, '1', 4)).toBe(false);
   });
 });
+
+// ═══════════════════════════════════════════════════════════════
+// P1 补充测试
+// ═══════════════════════════════════════════════════════════════
+
+describe('findNextTask — claim edge cases', () => {
+  it('claim race: second caller gets null when lock is held', async () => {
+    const task: TaskFile = {
+      id: 'race-1', subject: 'T', description: 'D', status: 'pending',
+      owner: 'w1', blocks: [], blockedBy: [],
+    };
+    writeTask(task);
+
+    // First worker acquires lock
+    const lock = acquireTaskLock(TEST_TEAM, 'race-1', { workerName: 'w1' });
+    expect(lock).not.toBeNull();
+
+    // Second worker tries to find the same task — should skip it
+    const result = await findNextTask(TEST_TEAM, 'w1');
+    expect(result).toBeNull();
+
+    if (lock) releaseTaskLock(lock);
+  });
+});
+
+describe('readTask — corruption handling', () => {
+  it('returns null for malformed JSON task file', () => {
+    mkdirSync(TASKS_DIR, { recursive: true });
+    writeFileSync(join(TASKS_DIR, 'bad.json'), '{not valid json!!!');
+    const result = readTask(TEST_TEAM, 'bad');
+    expect(result).toBeNull();
+  });
+
+  it('returns null for non-existent task', () => {
+    const result = readTask(TEST_TEAM, 'nonexistent-999');
+    expect(result).toBeNull();
+  });
+});
+
+describe('writeTaskFailure — retry count increment', () => {
+  it('increments retryCount on successive failures', () => {
+    writeTaskFailure(TEST_TEAM, 'inc-1', 'error-a');
+    const f1 = readTaskFailure(TEST_TEAM, 'inc-1');
+    expect(f1?.retryCount).toBe(1);
+
+    writeTaskFailure(TEST_TEAM, 'inc-1', 'error-b');
+    const f2 = readTaskFailure(TEST_TEAM, 'inc-1');
+    expect(f2?.retryCount).toBe(2);
+    expect(f2?.lastError).toBe('error-b');
+  });
+});

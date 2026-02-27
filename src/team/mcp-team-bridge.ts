@@ -783,3 +783,6 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
     }
   }
 }
+
+// Test exports — internal functions exposed for unit testing
+export { parseCodexOutput, buildTaskPrompt, diffSnapshots, readOutputSummary, spawnCliProcess };

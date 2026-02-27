@@ -93,7 +93,9 @@ export function getHooksDir(): string {
  * Returns the appropriate syntax for the current platform.
  */
 export function getHomeEnvVar(): string {
-  return isWindows() ? "%USERPROFILE%" : "$HOME";
+  // On Windows, Claude Code runs hooks via bash (Git Bash / WSL).
+  // bash does NOT expand cmd.exe-style %USERPROFILE%, but DOES expand $USERPROFILE.
+  return isWindows() ? "$USERPROFILE" : "$HOME";
 }
 
 /**
@@ -324,10 +326,10 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
         hooks: [
           {
             type: "command" as const,
-            // Note: On Windows, %USERPROFILE% is expanded by cmd.exe
-            // On Unix with node hooks, $HOME is expanded by the shell
+            // On Windows, Claude Code runs hooks via bash (Git Bash / WSL).
+            // bash expands $USERPROFILE but NOT cmd.exe-style %USERPROFILE%.
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.claude\\hooks\\keyword-detector.mjs"'
+              ? 'node "$USERPROFILE/.claude/hooks/keyword-detector.mjs"'
               : 'node "$HOME/.claude/hooks/keyword-detector.mjs"',
           },
         ],
@@ -339,7 +341,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.claude\\hooks\\session-start.mjs"'
+              ? 'node "$USERPROFILE/.claude/hooks/session-start.mjs"'
               : 'node "$HOME/.claude/hooks/session-start.mjs"',
           },
         ],
@@ -351,7 +353,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.claude\\hooks\\pre-tool-use.mjs"'
+              ? 'node "$USERPROFILE/.claude/hooks/pre-tool-use.mjs"'
               : 'node "$HOME/.claude/hooks/pre-tool-use.mjs"',
           },
         ],
@@ -363,7 +365,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.claude\\hooks\\post-tool-use.mjs"'
+              ? 'node "$USERPROFILE/.claude/hooks/post-tool-use.mjs"'
               : 'node "$HOME/.claude/hooks/post-tool-use.mjs"',
           },
         ],
@@ -375,7 +377,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.claude\\hooks\\post-tool-use-failure.mjs"'
+              ? 'node "$USERPROFILE/.claude/hooks/post-tool-use-failure.mjs"'
               : 'node "$HOME/.claude/hooks/post-tool-use-failure.mjs"',
           },
         ],
@@ -387,7 +389,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.claude\\hooks\\persistent-mode.mjs"'
+              ? 'node "$USERPROFILE/.claude/hooks/persistent-mode.mjs"'
               : 'node "$HOME/.claude/hooks/persistent-mode.mjs"',
           },
         ],

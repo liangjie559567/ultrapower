@@ -21,6 +21,16 @@
 
 <!-- 新的学习素材将自动添加到此处 -->
 
+### LQ-024: deepinit 生成的 AGENTS.md 必须从 agent 定义加载器中排除
+- 优先级: P1
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `deepinit` 在 `agents/` 目录下生成 `AGENTS.md` 作为目录文档（无 `name:` frontmatter）。`loadAgentDefinitions()` 读取所有 `.md` 文件时会包含此文件，导致 `should have unique agent names` 测试失败（`nameMatch` 为 null）。修复：在文件过滤条件中加入 `&& file !== 'AGENTS.md'`。根本原因：deepinit 生成的目录文档与 agent 定义文件共存于同一目录，加载器必须明确排除非 agent 文件。
+- 元数据: file=src/__tests__/installer.test.ts:39, version=v5.2.4, tests_after=4663
+- 知识产出: k-056, P-010
+
 ### LQ-016: 技术债扫描两轮策略
 - 优先级: P2
 - 来源类型: session
@@ -220,6 +230,76 @@
 - 内容: REFERENCE.md 存在两处 skills 数量声明（TOC 第 12 行 + 正文第 280 行），发布时只更新了正文，TOC 遗漏。建议在 release skill 的版本文件清单中加入 REFERENCE.md 内部一致性检查点。
 - 元数据: file=docs/REFERENCE.md, session=2026-02-27, commit=e3495f4
 - 知识产出: k-047（已入库）；skills/release/SKILL.md 已加入检查点（commit 03d1c79）
+
+### LQ-021: omc-doctor curl-install vs plugin-install 迁移路径
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: omc-doctor 诊断时，若 `~/.claude/plugins/cache/omc/ultrapower` 不存在但 `~/.claude/agents/` 和 `~/.claude/commands/` 存在 ultrapower 文件，说明是旧版 curl 安装。迁移路径：1) `npm install -g @liangjie559567/ultrapower@latest`，2) `omc install --force --skip-claude-check`，3) 备份旧目录到 `.bak`，4) 删除旧目录。插件安装后 agents/commands 由插件系统接管，旧目录可安全删除。
+- 元数据: session=2026-02-27, files=~/.claude/agents, ~/.claude/commands
+- 知识产出: k-053
+
+### LQ-022: omc install 不支持 --refresh-hooks 参数
+- 优先级: P2
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `omc install --force --skip-claude-check --refresh-hooks` 会报 `error: unknown option '--refresh-hooks'`。正确命令是 `omc install --force --skip-claude-check`（不带 --refresh-hooks）。omc-doctor skill 文档中的升级命令需要修正，去掉该参数。
+- 元数据: session=2026-02-27, error=unknown option '--refresh-hooks'
+- 知识产出: k-054
+
+### LQ-023: 删除前备份到 .bak 目录约定
+- 优先级: P3
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 删除用户目录（如 ~/.claude/agents、~/.claude/commands）前，先 `cp -r src src.bak` 备份。用户选择"先备份再删除"时执行此约定。备份文件名格式：`<dirname>.bak`，位于同级目录。omc-doctor 的自动修复流程应默认提供此选项。
+- 元数据: session=2026-02-27, dirs=agents.bak, commands.bak
+- 知识产出: k-055
+
+### LQ-027: TypeScript 测试文件 import `.mjs` ESM 模块需要 @ts-ignore
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: TypeScript 无法直接解析 .ts 测试文件中对 ESM .mjs 模块的动态 import。`tsc --noEmit` 报错"无法解析模块"。解决方案：在每个 `import('../../scripts/xxx.mjs')` 前加 `// @ts-ignore` 注释。这是 TypeScript + ESM 混用的已知限制，不修改 tsconfig.json 的前提下唯一可行方案。Sub-PRD 中应提前标注此限制。
+- 元数据: files=src/__tests__/release-steps.test.ts+release-local.test.ts, commit=3a53e44
+- 知识产出: k-059
+
+### LQ-028: GitHub Actions 4-job 依赖图模式
+- 优先级: P3
+- 来源类型: pattern
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `build-test → publish → (github-release ∥ marketplace-sync)` 四 job 依赖图。publish 串行依赖 build-test（确保验证通过才发布），github-release 和 marketplace-sync 并行依赖 publish（两者互相独立）。secrets 需求：NPM_TOKEN（手动配置到 repo Settings）、GITHUB_TOKEN（Actions 内置，无需手动配置）。CLI 入口：`node scripts/release-steps.mjs <step>` 直接调用，不经过 release-local.mjs 的 parseArgs 层。
+- 元数据: file=.github/workflows/release.yml, commit=e9f9225
+- 知识产出: k-060
+
+### LQ-025: Windows bash hook 路径 — %USERPROFILE% vs $USERPROFILE 不兼容
+- 优先级: P1
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: Claude Code 在 Windows 上通过 bash（Git Bash/WSL）运行 hooks，而非 cmd.exe。bash 不展开 `%USERPROFILE%`（cmd.exe 语法），只展开 `$USERPROFILE`（bash 语法）。`src/installer/hooks.ts` 的 `getHomeEnvVar()` 已修复为返回 `$USERPROFILE`，所有 hook 命令路径改用正斜杠。已安装用户的 `settings.json` 不会自动更新，需要 `omc-setup` 增加 hooks 路径格式检查步骤。
+- 元数据: file=src/installer/hooks.ts, settings=~/.claude/settings.json, platform=win32
+- 知识产出: k-057
+
+### LQ-026: 插件缓存空目录 — copyTemplatesToCache() 必须处理空缓存基目录
+- 优先级: P1
+- 来源类型: error
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: `scripts/plugin-setup.mjs` 的 `copyTemplatesToCache()` 原实现假设 `pluginCacheBase` 下已有版本子目录，但 Claude Code 安装器在 postinstall 后才填充缓存，导致 `readdirSync` 返回空数组，整个复制逻辑被跳过。修复：当 `versions.length === 0` 时，读取 `package.json` 版本，创建版本目录后再复制。边界情况：缓存目录存在但为空。
+- 元数据: file=scripts/plugin-setup.mjs, error=MODULE_NOT_FOUND, cache=~/.claude/plugins/cache/ultrapower/ultrapower/
+- 知识产出: k-058
 
 ## 处理中
 

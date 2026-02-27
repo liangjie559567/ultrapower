@@ -1,6 +1,6 @@
 {
   "name": "@liangjie559567/ultrapower",
-  "version": "5.2.3",
+  "version": "5.2.5",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
   "type": "module",
   "main": "dist/index.js",
@@ -56,7 +56,9 @@
     "sync-metadata:dry-run": "tsx scripts/sync-metadata.ts --dry-run",
     "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm run compose-docs",
-    "postinstall": "node scripts/plugin-setup.mjs"
+    "postinstall": "node scripts/plugin-setup.mjs",
+    "release:local": "node scripts/release-local.mjs",
+    "release:dry-run": "node scripts/release-local.mjs --dry-run"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.1.0",

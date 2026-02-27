@@ -54,19 +54,35 @@ git push origin main
 git push origin v<version>
 ```
 
-### 5. 刷新本地 marketplace 缓存
+### 4b. GitHub Actions 自动接管（推荐）
+
+执行 `git push --tags` 后，GitHub Actions 自动接管后续步骤：
+- **npm 发布**（`publish` job）
+- **GitHub Release 创建**（`github-release` job）
+- **marketplace.json 版本同步**（`marketplace-sync` job）
+
+在 GitHub Actions 页面查看进度：https://github.com/liangjie559567/ultrapower/actions
+
+如需手动执行（紧急发布或 CI 不可用）：
+```bash
+npm run release:local          # 完整流水线
+npm run release:dry-run        # 预检（不实际执行）
+npm run release:local -- --start-from=publish  # 从 publish 步骤重试
+```
+
+### 5. 刷新本地 marketplace 缓存（CI 已自动完成，手动备用）
 ```bash
 claude plugin marketplace update ultrapower
 ```
 > 推送到 GitHub 后必须执行此步，否则本地安装器仍读取旧版 `marketplace.json`。
 
-### 6. 发布到 npm
+### 6. 发布到 npm（CI 已自动完成，手动备用）
 ```bash
 npm publish --access public
 ```
 > ⚠️ npm 不允许覆盖已发布版本，版本号必须先升级再发布。
 
-### 7. 创建 GitHub Release
+### 7. 创建 GitHub Release（CI 已自动完成，手动备用）
 ```bash
 gh release create v<version> --title "v<version> - <title>" --notes "<release notes>"
 ```
