@@ -15,6 +15,7 @@ last_updated: 2026-02-26
 | P-001 | Markdown Workflow Pattern | workflow-def | 5 | 0.9 | active |
 | P-002 | assertValidMode() Guard Pattern | security | 1 | 0.95 | pending |
 | P-003 | Multi-Expert Parallel Review Pattern | workflow-def | 1 | 0.9 | pending |
+| P-004 | Case-Sensitivity Anti-Pattern in String Comparisons | debugging | 2 | 0.95 | pending |
 
 ## 2. 模式分类 (Categories)
 
@@ -26,6 +27,7 @@ last_updated: 2026-02-26
 | business-logic | 业务逻辑模式 | 0 |
 | common | 通用模式 | 0 |
 | security | 安全防护模式 | 1 |
+| debugging | 调试反模式 | 1 |
 
 ---
 
@@ -115,6 +117,32 @@ ax-review workflow:
 **Related**: LQ-001, k-029
 
 ---
+
+### P-004: Case-Sensitivity Anti-Pattern in String Comparisons
+
+**Category**: debugging
+**Occurrences**: 2 (usage-tracker.ts extractSkillName — k-039 + k-044)
+**Confidence**: 0.95
+**First Seen**: 2026-02-27
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> 在同一函数中对 toolName 进行字符串比较时，未统一大小写，导致大写输入（如 `"Skill"`）无法匹配小写字面量（如 `'skill'`）。同一函数出现两次相同 bug（k-039: `=== 'Task'` 漏掉 Skill，k-044: `=== 'skill'` 大小写不匹配）。
+
+**Template**:
+```typescript
+// ❌ 错误：直接比较，大小写敏感
+if (toolName === 'skill') { ... }
+
+// ✅ 正确：先 toLowerCase() 再比较
+if (toolName.toLowerCase() === 'skill') { ... }
+
+// ✅ 最佳实践：在函数入口统一规范化
+const normalizedToolName = toolName.toLowerCase();
+if (normalizedToolName === 'skill' || normalizedToolName === 'task') { ... }
+```
+
+**Related**: k-039, k-044, LQ-012
 
 ## 4. 模式匹配规则 (Detection Rules)
 
