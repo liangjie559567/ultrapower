@@ -124,10 +124,12 @@
 ### LQ-011: nexus TS→Python 数据流文档缺失
 - 优先级: P2
 - 来源类型: session
-- 状态: pending
+- 状态: done
 - 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
 - 内容: nexus 系统的 TS→Python 数据流（events → improvements → self_modifier）没有文档，需要靠读代码推断。应在 nexus-daemon/README.md 或 docs/ 中补充数据流说明图。
 - 元数据: session=2026-02-27, files=src/hooks/nexus/, nexus-daemon/
+- 知识产出: nexus-daemon/README.md 新增"数据流：TS → Python"章节，含 ASCII 流程图和详细步骤
 
 ### LQ-012: usage_metrics agents/skills 修复效果验证
 - 优先级: P2
