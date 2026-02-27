@@ -33,6 +33,7 @@ description: ultrapower 的自动化发布工作流
 > ⚠️ `marketplace.json` 是安装器读取的入口，版本不同步会导致用户始终安装旧版本。
 > ⚠️ `docs/CLAUDE.md` 是 `/ultrapower:omc-setup` 下载的模板，版本不同步会导致用户安装后显示旧版本号。
 > ⚠️ `CLAUDE.md` 是开发规范文档，版本引用不同步会导致开发者参考错误的规范版本。
+> ⚠️ `docs/REFERENCE.md` 存在两处数量声明（TOC 第 12 行 + 正文第 280 行），新增 skill/agent/hook 时必须同步更新两处，否则会出现文档内部不一致（k-047）。
 
 ### 2. 运行测试
 ```bash
@@ -86,6 +87,7 @@ gh release create v<version> --title "v<version> - <title>" --notes "<release no
 | `docs/CLAUDE.md` | `<!-- OMC:VERSION:X.Y.Z -->` |
 | `CLAUDE.md` | `ultrapower vX.Y.Z 规范体系位于 \`docs/standards/\`` |
 | `README.md` | 标题 + 版本徽章 |
+| `docs/REFERENCE.md` | TOC 第 12 行 `[Skills (N Total)]` + 正文 `## Skills（共 N 个）` 两处数量必须一致 |
 
 ## 语义化版本
 

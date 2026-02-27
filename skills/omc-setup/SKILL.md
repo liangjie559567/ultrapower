@@ -382,6 +382,40 @@ claude plugin install ultrapower
 
 > ⚠️ 仅清除插件缓存不够，必须同时清除 `npm-cache`。
 
+## 步骤 3.55：同步 installed_plugins.json 注册表
+
+检测并修复 `installed_plugins.json` 中的版本漂移问题（k-046）。
+
+**背景**：本地开发安装后，`~/.claude/plugins/installed_plugins.json` 中的 `installPath` 可能仍指向旧 npm 缓存路径，导致 hook 文件 `MODULE_NOT_FOUND`。
+
+```bash
+node -e "
+const p=require('path'),f=require('fs'),h=require('os').homedir();
+const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const pluginsJson=p.join(d,'plugins','installed_plugins.json');
+if(!f.existsSync(pluginsJson)){console.log('installed_plugins.json not found');process.exit(0);}
+let data;
+try{data=JSON.parse(f.readFileSync(pluginsJson,'utf-8'));}catch(e){console.log('Parse error:',e.message);process.exit(0);}
+const key=data.ultrapower?'ultrapower':'@liangjie559567/ultrapower';
+const entry=data[key];
+if(!entry){console.log('ultrapower not in installed_plugins.json');process.exit(0);}
+const installPath=entry.installPath||'';
+const isNpmCache=installPath.includes('npm-cache')||installPath.includes('plugins/cache');
+if(!isNpmCache){console.log('installPath OK (local dev):',installPath);process.exit(0);}
+const cacheBase=p.join(d,'plugins','cache','omc','ultrapower');
+let bestPath='';
+try{const vs=f.readdirSync(cacheBase).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(vs.length)bestPath=p.join(cacheBase,vs[vs.length-1]);}catch{}
+if(!bestPath){console.log('No local cache path found, skipping');process.exit(0);}
+let newVersion=entry.version||'';
+try{newVersion=JSON.parse(f.readFileSync(p.join(bestPath,'package.json'),'utf-8')).version||newVersion;}catch{}
+data[key].installPath=bestPath;data[key].version=newVersion;
+f.writeFileSync(pluginsJson,JSON.stringify(data,null,2));
+console.log('✅ installed_plugins.json synced — installPath:',bestPath,'version:',newVersion);
+"
+```
+
+> ⚠️ 此步骤仅在 `installPath` 指向 npm 缓存路径时才修改注册表。
+
 ## 步骤 3.6：检查更新
 
 如果有新版本可用，通知用户：
@@ -745,6 +779,40 @@ claude plugin install ultrapower
 ```
 
 > ⚠️ 仅清除插件缓存不够，必须同时清除 `npm-cache`。
+
+## 步骤 3.55：同步 installed_plugins.json 注册表
+
+检测并修复 `installed_plugins.json` 中的版本漂移问题（k-046）。
+
+**背景**：本地开发安装后，`~/.claude/plugins/installed_plugins.json` 中的 `installPath` 可能仍指向旧 npm 缓存路径，导致 hook 文件 `MODULE_NOT_FOUND`。
+
+```bash
+node -e "
+const p=require('path'),f=require('fs'),h=require('os').homedir();
+const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const pluginsJson=p.join(d,'plugins','installed_plugins.json');
+if(!f.existsSync(pluginsJson)){console.log('installed_plugins.json not found');process.exit(0);}
+let data;
+try{data=JSON.parse(f.readFileSync(pluginsJson,'utf-8'));}catch(e){console.log('Parse error:',e.message);process.exit(0);}
+const key=data.ultrapower?'ultrapower':'@liangjie559567/ultrapower';
+const entry=data[key];
+if(!entry){console.log('ultrapower not in installed_plugins.json');process.exit(0);}
+const installPath=entry.installPath||'';
+const isNpmCache=installPath.includes('npm-cache')||installPath.includes('plugins/cache');
+if(!isNpmCache){console.log('installPath OK (local dev):',installPath);process.exit(0);}
+const cacheBase=p.join(d,'plugins','cache','omc','ultrapower');
+let bestPath='';
+try{const vs=f.readdirSync(cacheBase).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(vs.length)bestPath=p.join(cacheBase,vs[vs.length-1]);}catch{}
+if(!bestPath){console.log('No local cache path found, skipping');process.exit(0);}
+let newVersion=entry.version||'';
+try{newVersion=JSON.parse(f.readFileSync(p.join(bestPath,'package.json'),'utf-8')).version||newVersion;}catch{}
+data[key].installPath=bestPath;data[key].version=newVersion;
+f.writeFileSync(pluginsJson,JSON.stringify(data,null,2));
+console.log('✅ installed_plugins.json synced — installPath:',bestPath,'version:',newVersion);
+"
+```
+
+> ⚠️ 此步骤仅在 `installPath` 指向 npm 缓存路径时才修改注册表。
 
 ## 步骤 3.6：检查更新
 
