@@ -1042,6 +1042,18 @@ Axiom 自我进化系统的完整使用指南、安装说明和故障排除请�
 - HUD 集成
 - 故障排除
 
+**[docs/NEXUS.md](./NEXUS.md)** — Nexus 主动进化系统完整文档
+
+包含内容：
+- Phase 1 被动学习（已完成）与 Phase 2 主动学习架构
+- Nexus 双层架构（插件层 + VPS 云端层）
+- 反馈系统、效果追踪、主动推荐、质量迭代模块详解
+- Consciousness Loop、Self-Modifier、Self-Evaluator 模块
+- Git 同步通信机制与数据存储结构
+- Phase 2 与 Nexus 配置参考
+- VPS 部署指南（nexus-daemon）
+- 实现路线图（P0/P1/P2 优先级）
+
 ---
 
 ## Changelog
