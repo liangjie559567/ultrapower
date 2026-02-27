@@ -20,13 +20,25 @@ const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json');
 console.log('[OMC] Running post-install setup...');
 
 // Fix: flatten nested cache directories caused by Claude Code installer bug.
-// Root cause: xF6(src, dest) copies src contents to dest, but dest is a subdirectory of src.
-// After mkdir -p dest, readdir(src) includes the newly created dest subdir, causing recursive copy.
-// Result: cache/.../VERSION/ultrapower/VERSION/ultrapower/VERSION/... infinite nesting.
-// This function detects and fixes arbitrary-depth nesting by finding the real plugin content
-// and moving it up to the version directory, then removing all nested dirs.
+// Root cause: Claude Code copies npm package contents into cache/ultrapower/, but the package
+// itself contains an 'ultrapower/' subdirectory, causing infinite nesting on each restart.
+// Two known nesting patterns:
+//   Pattern A (flat root): cache/ultrapower/ultrapower/5.0.23/ultrapower/5.0.23/...
+//   Pattern B (versioned): cache/ultrapower/ultrapower/VERSION/ultrapower/VERSION/...
+// This function handles both by detecting and removing the nested 'ultrapower/' subtree
+// directly under cache/ultrapower/ (Pattern A), which is the primary observed pattern.
 function fixNestedCacheDir() {
   try {
+    // Pattern A: cache/ultrapower/ultrapower/ exists directly (no version layer)
+    const pluginCacheRoot = join(CLAUDE_DIR, 'plugins/cache/ultrapower');
+    const nestedRootDir = join(pluginCacheRoot, 'ultrapower');
+    if (existsSync(nestedRootDir)) {
+      console.log('[OMC] Detected nested cache dir at plugins/cache/ultrapower/ultrapower/ — removing...');
+      rmSync(nestedRootDir, { recursive: true, force: true });
+      console.log('[OMC] Removed nested cache dir (Pattern A)');
+    }
+
+    // Pattern B: cache/ultrapower/ultrapower/VERSION/ (versioned nesting)
     const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
     if (!existsSync(pluginCacheBase)) return;
     const versions = readdirSync(pluginCacheBase);
@@ -44,7 +56,6 @@ function fixNestedCacheDir() {
       while (depth < 20) {
         const contents = readdirSync(searchDir);
         if (contents.length === 0) {
-          // Empty dir - just remove it
           rmSync(nestedDir, { recursive: true, force: true });
           console.log(`[OMC] Removed empty nested dir for version ${version}`);
           break;
@@ -53,7 +64,6 @@ function fixNestedCacheDir() {
           realContentDir = searchDir;
           break;
         }
-        // Go deeper: look for ultrapower/ or version/ subdir
         const nextDir = join(searchDir, 'ultrapower');
         const nextVerDir = join(searchDir, version);
         if (existsSync(nextDir)) {
@@ -69,7 +79,6 @@ function fixNestedCacheDir() {
       if (!realContentDir) continue;
 
       console.log(`[OMC] Fixing nested cache dir for version ${version} (depth ${depth})...`);
-      // Move contents of realContentDir up to versionDir
       const realContents = readdirSync(realContentDir);
       for (const item of realContents) {
         const src = join(realContentDir, item);
@@ -78,9 +87,8 @@ function fixNestedCacheDir() {
           renameSync(src, dest);
         }
       }
-      // Remove the entire nested ultrapower/ subtree
       rmSync(nestedDir, { recursive: true, force: true });
-      console.log(`[OMC] Fixed nested cache dir for version ${version}`);
+      console.log(`[OMC] Fixed nested cache dir for version ${version} (Pattern B)`);
     }
   } catch (e) {
     console.log('[OMC] Warning: Could not fix nested cache dir:', e.message);
