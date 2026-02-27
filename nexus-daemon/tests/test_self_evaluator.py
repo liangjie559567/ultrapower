@@ -39,14 +39,23 @@ def test_counts_skill_usage(tmp_repo):
 
 def test_detects_zombie_skills(tmp_repo):
     (tmp_repo / 'events').mkdir(exist_ok=True)
-    # 10 sessions, none trigger 'zombie-skill'
+    # 10 sessions: 'learner' triggered every time, 'rare-skill' triggered only once (<10%)
     for i in range(10):
         evt = make_event(f's{i}', ['learner'])
         (tmp_repo / 'events' / f's{i}.json').write_text(json.dumps(evt))
+    # one session triggers 'rare-skill' -> 1/10 = 10%, not < 10%, so use 0 triggers
+    # Instead: add a skill triggered 0 times by writing an event that previously triggered it
+    # but we need it in skill_stats with low count. Use a separate session with rare-skill once
+    # out of 20 total sessions so ratio = 1/20 = 5% < 10%.
+    for i in range(10, 20):
+        evt = make_event(f's{i}', ['learner'])
+        (tmp_repo / 'events' / f's{i}.json').write_text(json.dumps(evt))
+    rare_evt = make_event('s_rare', ['rare-skill'])
+    (tmp_repo / 'events' / 's_rare.json').write_text(json.dumps(rare_evt))
     ev = SelfEvaluator(repo_path=tmp_repo, zombie_threshold=5)
     report = ev.generate_report()
-    assert 'zombie-skill' not in report.skill_stats
-    assert report.total_sessions == 10
+    assert report.total_sessions == 21
+    assert 'rare-skill' in report.zombie_skills
 
 
 def test_format_report_markdown(tmp_repo):
@@ -55,3 +64,12 @@ def test_format_report_markdown(tmp_repo):
     md = ev.format_report(report)
     assert '# nexus Health Report' in md
     assert 'Total sessions: 3' in md
+
+
+def test_format_report_with_zombie_skills(tmp_repo):
+    ev = SelfEvaluator(repo_path=tmp_repo)
+    stats = {'learner': SkillStats(trigger_count=20), 'rare-skill': SkillStats(trigger_count=1)}
+    report = HealthReport(total_sessions=21, skill_stats=stats, zombie_skills=['rare-skill'])
+    md = ev.format_report(report)
+    assert '## Zombie Skills' in md
+    assert '`rare-skill`' in md

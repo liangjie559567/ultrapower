@@ -34,7 +34,7 @@ class SelfEvaluator:
         events = []
         for f in events_dir.glob('*.json'):
             try:
-                events.append(json.loads(f.read_text()))
+                events.append(json.loads(f.read_text(encoding='utf-8')))
             except (json.JSONDecodeError, OSError) as e:
                 logger.warning('Skipping malformed event file %s: %s', f.name, e)
         return events
@@ -49,18 +49,17 @@ class SelfEvaluator:
                     skill_stats[skill] = SkillStats()
                 skill_stats[skill].trigger_count += 1
 
-        # Detect zombie skills: sessions >= threshold but skill never triggered
+        total_sessions = len({evt.get('sessionId') for evt in events if evt.get('sessionId')})
+
+        # Detect zombie skills: triggered in <10% of sessions AND total_sessions >= threshold
         zombie_skills: list[str] = []
-        if len(events) >= self.zombie_threshold:
-            all_known: set[str] = set()
-            for evt in events:
-                all_known.update(evt.get('skillsAvailable', []))
-            for skill in all_known:
-                if skill not in skill_stats or skill_stats[skill].trigger_count == 0:
+        if total_sessions >= self.zombie_threshold:
+            for skill, stats in skill_stats.items():
+                if stats.trigger_count / total_sessions < 0.1:
                     zombie_skills.append(skill)
 
         return HealthReport(
-            total_sessions=len(events),
+            total_sessions=total_sessions,
             skill_stats=skill_stats,
             zombie_skills=sorted(zombie_skills),
         )
