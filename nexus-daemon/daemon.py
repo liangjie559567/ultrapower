@@ -145,8 +145,8 @@ class NexusDaemon:
     def git_push(self, message: str) -> bool:
         """Commit and push improvements. Returns True on success."""
         try:
-            subprocess.run(['git', 'add', 'improvements/', 'evolution/'], cwd=self.repo_path,
-                           capture_output=True, timeout=10)
+            subprocess.run(['git', 'add', 'improvements/', 'evolution/', 'skills/', 'agents/'],
+                           cwd=self.repo_path, capture_output=True, timeout=10)
             result = subprocess.run(
                 ['git', 'commit', '-m', message],
                 cwd=self.repo_path, capture_output=True, text=True, timeout=10,
@@ -200,38 +200,36 @@ class NexusDaemon:
                 self._evolution_engine.process_events(new_events)
             except Exception as e:
                 logger.error('Evolution engine failed to process events: %s', e)
-        # Notify via Telegram for improvements needing review (with deduplication)
-        if self._telegram.enabled:
-            improvements_dir = self.repo_path / 'improvements'
-            now = time.time()
-            self._notified_improvements = {
-                k: v for k, v in self._notified_improvements.items()
-                if now - v < 86400
-            }
-            for f in sorted(improvements_dir.glob('*.json')):
-                imp_id = f.stem
-                if imp_id in self._notified_improvements:
-                    continue
-                try:
-                    imp = json.loads(f.read_text())
-                    if imp.get('status') == 'pending':
-                        sent = await self._telegram.notify_improvement(imp)
-                        if sent:
-                            self._notified_improvements[imp_id] = time.time()
-                        # Auto-apply high-confidence improvements (confidence >= 80)
-                        if imp.get('confidence', 0) >= 80 and imp.get('status') == 'pending':
-                            result = self._modifier.apply(imp)
-                            if result.status == 'applied':
-                                imp['status'] = 'auto_applied'
-                                f.write_text(
-                                    json.dumps(imp, indent=2, ensure_ascii=False),
-                                    encoding='utf-8',
-                                )
-                                logger.info('Auto-applied improvement %s', imp_id)
-                except (json.JSONDecodeError, OSError) as e:
-                    logger.warning('Failed to read improvement file %s: %s', f.name, e)
-                except Exception as e:
-                    logger.error('Unexpected error processing improvement %s: %s', f.name, e)
+        # Scan improvements unconditionally
+        improvements_dir = self.repo_path / 'improvements'
+        now = time.time()
+        self._notified_improvements = {
+            k: v for k, v in self._notified_improvements.items()
+            if now - v < 86400
+        }
+        for f in sorted(improvements_dir.glob('*.json')):
+            imp_id = f.stem
+            try:
+                imp = json.loads(f.read_text())
+                # Auto-apply high-confidence improvements (confidence >= 80) - unconditional
+                if imp.get('confidence', 0) >= 80 and imp.get('status') == 'pending':
+                    result = self._modifier.apply(imp)
+                    if result.status == 'applied':
+                        imp['status'] = 'auto_applied'
+                        f.write_text(
+                            json.dumps(imp, indent=2, ensure_ascii=False),
+                            encoding='utf-8',
+                        )
+                        logger.info('Auto-applied improvement %s', imp_id)
+                # Telegram notification - only if enabled and pending
+                if self._telegram.enabled and imp_id not in self._notified_improvements and imp.get('status') == 'pending':
+                    sent = await self._telegram.notify_improvement(imp)
+                    if sent:
+                        self._notified_improvements[imp_id] = time.time()
+            except (json.JSONDecodeError, OSError) as e:
+                logger.warning('Failed to read improvement file %s: %s', f.name, e)
+            except Exception as e:
+                logger.error('Unexpected error processing improvement %s: %s', f.name, e)
         # Daily health report
         today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
         if today != self._last_report_date:

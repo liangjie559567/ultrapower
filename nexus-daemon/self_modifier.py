@@ -62,6 +62,14 @@ class SelfModifier:
                 improvement_id=imp_id,
             )
 
+        # newContent check before path validation
+        if new_content is None:
+            return ModificationResult(
+                status='error',
+                reason='newContent field missing',
+                improvement_id=imp_id,
+            )
+
         # Path validation
         error = self._validate_target(target_file)
         if error:
@@ -73,12 +81,6 @@ class SelfModifier:
 
         # Apply: write new content
         target_path = self.repo_path / target_file
-        if new_content is None:
-            return ModificationResult(
-                status='error',
-                reason='newContent field missing',
-                improvement_id=imp_id,
-            )
 
         try:
             target_path.parent.mkdir(parents=True, exist_ok=True)
