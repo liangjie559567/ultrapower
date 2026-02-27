@@ -134,10 +134,12 @@
 ### LQ-012: usage_metrics agents/skills 修复效果验证
 - 优先级: P2
 - 来源类型: session
-- 状态: pending
+- 状态: done
 - 添加时间: 2026-02-27
-- 内容: Phase 2 修复了 extractSkillName 和空工具名过滤，但历史数据不会回填。需要在下次会话后检查 usage_metrics.json 中 skills 字段是否开始填充，验证修复效果。
-- 元数据: session=2026-02-27, file=.omc/axiom/evolution/usage_metrics.json
+- 处理时间: 2026-02-27
+- 内容: Phase 2 修复了 extractSkillName 和空工具名过滤，但历史数据不会回填。验证发现 skills 字段仍为空，根因是 extractSkillName 大小写不匹配（'Skill' vs 'skill'）。已追加修复：toolName.toLowerCase() 后再比较。
+- 元数据: session=2026-02-27, file=src/hooks/learner/usage-tracker.ts, commit=5882c12
+- 知识产出: k-044
 
 ### LQ-013: reflection_log.md 空条目积累问题
 - 优先级: P2

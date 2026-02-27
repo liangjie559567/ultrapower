@@ -2,7 +2,7 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-27
-entries: 42
+entries: 44
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -55,13 +55,15 @@ entries: 42
 | k-037 | Dynamic Version Reading Pattern (getRuntimePackageVersion) | pattern | 0.95 | 2026-02-27 | active |
 | k-038 | Branch Lifecycle: Delete After Merge | workflow | 0.85 | 2026-02-27 | active |
 | k-042 | nexus TS→Python Data Flow (事件→进化→自修改) | architecture | 0.95 | 2026-02-27 | active |
+| k-043 | Empty Session Guard in session-reflector.ts | pattern | 0.95 | 2026-02-27 | active |
+| k-044 | Case-Insensitive toolName Check in extractSkillName | debugging | 0.95 | 2026-02-27 | active |
 
 ## 2. 分类统计 (Category Stats)
 
 | Category | Count | Description |
 |----------|-------|-------------|
 | architecture | 18 | 架构相关知识 |
-| debugging | 2 | 调试技巧 |
+| debugging | 4 | 调试技巧 |
 | pattern | 6 | 代码模式 |
 | workflow | 7 | 工作流相关 |
 | tooling | 3 | 工具使用 |
