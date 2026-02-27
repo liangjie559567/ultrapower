@@ -10,6 +10,7 @@ import logging
 import os
 import subprocess
 import sys
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -70,7 +71,7 @@ class NexusDaemon:
             token=self.config.telegram_token,
             chat_id=self.config.telegram_chat_id,
         )
-        self._notified_improvements: set[str] = set()
+        self._notified_improvements: dict[str, float] = {}
 
     def _ensure_dirs(self) -> None:
         for d in ['events', 'improvements', 'consciousness', 'evolution']:
@@ -185,19 +186,25 @@ class NexusDaemon:
         # Notify via Telegram for improvements needing review (with deduplication)
         if self._telegram.enabled:
             improvements_dir = self.repo_path / 'improvements'
-            import json as _json
+            now = time.time()
+            self._notified_improvements = {
+                k: v for k, v in self._notified_improvements.items()
+                if now - v < 86400
+            }
             for f in sorted(improvements_dir.glob('*.json')):
                 imp_id = f.stem
                 if imp_id in self._notified_improvements:
                     continue
                 try:
-                    imp = _json.loads(f.read_text())
+                    imp = json.loads(f.read_text())
                     if imp.get('status') == 'pending':
                         sent = await self._telegram.notify_improvement(imp)
                         if sent:
-                            self._notified_improvements.add(imp_id)
-                except Exception:
-                    pass
+                            self._notified_improvements[imp_id] = time.time()
+                except (json.JSONDecodeError, OSError) as e:
+                    logger.warning('Failed to read improvement file %s: %s', f.name, e)
+                except Exception as e:
+                    logger.error('Unexpected error processing improvement %s: %s', f.name, e)
 
     async def _process_event(self, event: dict[str, Any]) -> None:
         """Placeholder: route to evolution engine."""
