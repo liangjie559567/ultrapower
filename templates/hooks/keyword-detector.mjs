@@ -291,8 +291,7 @@ function resolveConflicts(matches) {
 
   // Sort by priority order
 const priorityOrder = ['cancel','ralph','autopilot','team','ultrawork',
-    'pipeline','ralplan','plan','tdd','ultrathink','deepsearch','analyze',
-    'pipeline','ccg','ralplan','plan','tdd','research','ultrathink','deepsearch','analyze',
+    'pipeline','ccg','ralplan','plan','tdd','ultrathink','deepsearch','analyze',
     'codex','gemini'];
   resolved.sort((a, b) => priorityOrder.indexOf(a.name) - priorityOrder.indexOf(b.name));
 

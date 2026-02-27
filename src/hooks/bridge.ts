@@ -1173,10 +1173,23 @@ export async function processHook(
         if (
           !validateHookInput<PermissionRequestInput>(input, requiredKeysForHook("permission-request"), "permission-request")
         ) {
-          return { continue: true };
+          return { continue: false };
         }
         const { handlePermissionRequest } = await import("./permission-handler/index.js");
-        return await handlePermissionRequest(input as PermissionRequestInput);
+        // normalizeHookInput converts snake_case to camelCase, but PermissionRequestInput
+        // uses snake_case fields. Re-map to ensure correct field access.
+        const normalized = input as unknown as Record<string, unknown>;
+        const permInput: PermissionRequestInput = {
+          session_id: (normalized.sessionId ?? normalized.session_id) as string,
+          cwd: (normalized.directory ?? normalized.cwd) as string,
+          tool_name: (normalized.toolName ?? normalized.tool_name) as string,
+          tool_input: (normalized.toolInput ?? normalized.tool_input) as PermissionRequestInput['tool_input'],
+          tool_use_id: (normalized.toolUseId ?? normalized.tool_use_id) as string,
+          transcript_path: (normalized.transcriptPath ?? normalized.transcript_path) as string,
+          permission_mode: (normalized.permissionMode ?? normalized.permission_mode) as string,
+          hook_event_name: 'PermissionRequest',
+        };
+        return await handlePermissionRequest(permInput);
       }
 
       default:
@@ -1185,6 +1198,10 @@ export async function processHook(
   } catch (error) {
     // Log error but don't block execution
     console.error(`[hook-bridge] Error in ${hookType}:`, error);
+    // For permission-request, fail closed on error (security default)
+    if (hookType === "permission-request") {
+      return { continue: false };
+    }
     return { continue: true };
   }
 }
