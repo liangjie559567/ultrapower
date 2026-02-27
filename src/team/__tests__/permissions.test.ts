@@ -4,6 +4,8 @@ import {
   isCommandAllowed,
   formatPermissionInstructions,
   getDefaultPermissions,
+  getEffectivePermissions,
+  findPermissionViolations,
 } from '../permissions.js';
 import type { WorkerPermissions } from '../permissions.js';
 
@@ -188,6 +190,104 @@ describe('permissions', () => {
       expect(perms.deniedPaths).toEqual([]);
       expect(perms.allowedCommands).toEqual([]);
       expect(perms.maxFileSize).toBe(Infinity);
+    });
+  });
+
+  describe('getEffectivePermissions', () => {
+    it('always includes SECURE_DENY_DEFAULTS', () => {
+      const perms = getEffectivePermissions({ workerName: 'w1' });
+      expect(perms.deniedPaths).toContain('.git/**');
+      expect(perms.deniedPaths).toContain('.env*');
+      expect(perms.deniedPaths).toContain('**/.env*');
+      expect(perms.deniedPaths).toContain('**/secrets/**');
+      expect(perms.deniedPaths).toContain('**/.ssh/**');
+    });
+
+    it('does not duplicate existing deny patterns', () => {
+      const perms = getEffectivePermissions({
+        workerName: 'w1',
+        deniedPaths: ['.git/**', 'custom/**'],
+      });
+      const gitCount = perms.deniedPaths.filter(p => p === '.git/**').length;
+      expect(gitCount).toBe(1);
+      expect(perms.deniedPaths).toContain('custom/**');
+    });
+
+    it('merges caller allowedPaths with secure defaults', () => {
+      const perms = getEffectivePermissions({
+        workerName: 'w1',
+        allowedPaths: ['src/**'],
+      });
+      expect(perms.allowedPaths).toEqual(['src/**']);
+      expect(perms.deniedPaths.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('findPermissionViolations', () => {
+    it('returns empty array when all paths are allowed', () => {
+      const perms = getDefaultPermissions('w1');
+      const violations = findPermissionViolations(['src/a.ts', 'src/b.ts'], perms, workDir);
+      expect(violations).toEqual([]);
+    });
+
+    it('detects path escaping with ../', () => {
+      const perms = getDefaultPermissions('w1');
+      const violations = findPermissionViolations(['../../etc/passwd'], perms, workDir);
+      expect(violations).toHaveLength(1);
+      expect(violations[0].reason).toContain('escapes');
+    });
+
+    it('detects denied path violations', () => {
+      const perms = getEffectivePermissions({ workerName: 'w1' });
+      const violations = findPermissionViolations(['.git/config', 'src/ok.ts'], perms, workDir);
+      expect(violations).toHaveLength(1);
+      expect(violations[0].path).toContain('.git/config');
+      expect(violations[0].reason).toContain('.git/**');
+    });
+
+    it('mixed paths: some allowed, some denied', () => {
+      const perms: WorkerPermissions = {
+        workerName: 'w1',
+        allowedPaths: ['src/**'],
+        deniedPaths: ['src/secrets/**'],
+        allowedCommands: [],
+        maxFileSize: Infinity,
+      };
+      const violations = findPermissionViolations(
+        ['src/index.ts', 'src/secrets/key.pem', 'package.json'],
+        perms,
+        workDir,
+      );
+      // src/secrets/key.pem is denied, package.json is not in allowedPaths
+      expect(violations).toHaveLength(2);
+      const paths = violations.map(v => v.path);
+      expect(paths).toContain('src/secrets/key.pem');
+      expect(paths).toContain('package.json');
+    });
+  });
+
+  describe('glob matching edge cases', () => {
+    it('** matches deeply nested paths', () => {
+      const perms: WorkerPermissions = {
+        workerName: 'w1',
+        allowedPaths: ['**/*.ts'],
+        deniedPaths: [],
+        allowedCommands: [],
+        maxFileSize: Infinity,
+      };
+      expect(isPathAllowed(perms, 'a/b/c/d/e.ts', workDir)).toBe(true);
+    });
+
+    it('? does not match /', () => {
+      const perms: WorkerPermissions = {
+        workerName: 'w1',
+        allowedPaths: ['src/?.ts'],
+        deniedPaths: [],
+        allowedCommands: [],
+        maxFileSize: Infinity,
+      };
+      expect(isPathAllowed(perms, 'src/a.ts', workDir)).toBe(true);
+      expect(isPathAllowed(perms, 'src//.ts', workDir)).toBe(false);
     });
   });
 });

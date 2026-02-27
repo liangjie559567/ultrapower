@@ -107,3 +107,80 @@ describe('validateConfigPath', () => {
     expect(validateConfigPath('/home/user/foo/.claude/../../evil.json', home, claudeConfigDir)).toBe(false);
   });
 });
+
+// ═══════════════════════════════════════════════════════════════
+// P2 补充测试
+// ═══════════════════════════════════════════════════════════════
+
+describe('validateConfigPath — edge cases', () => {
+  const home = '/home/user';
+  const claudeConfigDir = '/home/user/.claude';
+
+  it('accepts path exactly equal to claudeConfigDir', () => {
+    expect(validateConfigPath('/home/user/.claude', home, claudeConfigDir)).toBe(true);
+  });
+
+  it('accepts path exactly equal to ~/.omc', () => {
+    expect(validateConfigPath('/home/user/.omc', home, claudeConfigDir)).toBe(true);
+  });
+
+  it('accepts deeply nested .omc path', () => {
+    expect(validateConfigPath('/home/user/projects/myapp/.omc/teams/t1/config.json', home, claudeConfigDir)).toBe(true);
+  });
+
+  it('rejects home directory itself (no trusted subpath)', () => {
+    expect(validateConfigPath('/home/user', home, claudeConfigDir)).toBe(false);
+  });
+
+  it('rejects path with .omc in filename but not as directory component', () => {
+    // "not-.omc-file.json" does not contain "/.omc/" as a path segment
+    expect(validateConfigPath('/home/user/not-.omc-file.json', home, claudeConfigDir)).toBe(false);
+  });
+
+  it('rejects path completely outside home', () => {
+    expect(validateConfigPath('/etc/passwd', home, claudeConfigDir)).toBe(false);
+  });
+
+  it('rejects path that starts with home prefix but is a different user', () => {
+    // /home/user2 starts with /home/user but is NOT under /home/user/
+    expect(validateConfigPath('/home/user2/.omc/config.json', home, claudeConfigDir)).toBe(false);
+  });
+
+  it('accepts .claude nested under a project directory', () => {
+    // This has /.omc/ or /.claude/ component — but .claude is the claudeConfigDir prefix
+    // Actually this path has neither .omc nor matches claudeConfigDir prefix
+    // It should be rejected because /home/user/project/.claude is not the claudeConfigDir
+    // BUT the function checks hasOmcComponent which looks for /.omc/ — not .claude
+    // Let's verify: the path /home/user/project/.claude/foo.json
+    // isUnderHome: yes
+    // isTrustedSubpath: resolved.startsWith(normalizedConfigDir + '/') — normalizedConfigDir is /home/user/.claude
+    // /home/user/project/.claude/foo.json does NOT start with /home/user/.claude/
+    // hasOmcComponent: does NOT contain /.omc/
+    // So this should be rejected
+    expect(validateConfigPath('/home/user/project/.claude/foo.json', home, claudeConfigDir)).toBe(false);
+  });
+});
+
+describe('bridge-entry source — permission enforcement validation', () => {
+  const source = readFileSync(resolveSourceFile('../bridge-entry.ts'), 'utf-8');
+
+  it('validates permissionEnforcement mode values', () => {
+    expect(source).toContain("'off', 'audit', 'enforce'");
+  });
+
+  it('rejects dangerous allowedPaths patterns', () => {
+    expect(source).toContain('dangerousPatterns');
+    expect(source).toContain("'**'");
+    expect(source).toContain("'*'");
+  });
+
+  it('validates permissions shape (arrays)', () => {
+    expect(source).toContain('Array.isArray(p.allowedPaths)');
+    expect(source).toContain('Array.isArray(p.deniedPaths)');
+    expect(source).toContain('Array.isArray(p.allowedCommands)');
+  });
+
+  it('guards main() behind require.main === module', () => {
+    expect(source).toContain('require.main === module');
+  });
+});

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from 'fs';
+import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync, statSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 import {
@@ -217,7 +217,6 @@ describe('rotateInboxIfNeeded', () => {
     }
     writeFileSync(inbox, msgs.join('\n') + '\n');
 
-    const { statSync } = require('fs');
     const sizeBefore = statSync(inbox).size;
 
     // Rotate with a threshold smaller than current size
@@ -232,7 +231,6 @@ describe('rotateInboxIfNeeded', () => {
     const msg: InboxMessage = { type: 'message', content: 'small', timestamp: '2026-01-01T00:00:00Z' };
     writeFileSync(inbox, JSON.stringify(msg) + '\n');
 
-    const { statSync } = require('fs');
     const sizeBefore = statSync(inbox).size;
 
     rotateInboxIfNeeded(TEST_TEAM, 'w1', 10000);
@@ -262,3 +260,7 @@ describe('path traversal guard on teamsDir', () => {
       .toThrow();
   });
 });
+
+// ═══════════════════════════════════════════════════════════════
+// P1 补充测试
+// ═══════════════════════════════════════════════════════════════
