@@ -2,7 +2,7 @@
 session_id: "2026-02-27"
 task_status: IDLE
 current_phase: "Completed"
-last_gate: "ax-evolve complete (LQ-001~LQ-013, knowledge_base 45 entries, P-004 added)"
+last_gate: "ax-evolve complete (LQ-015, knowledge_base 47 entries)"
 ---
 
 # Active Context
@@ -10,7 +10,7 @@ last_gate: "ax-evolve complete (LQ-001~LQ-013, knowledge_base 45 entries, P-004 
 ## Status: IDLE
 
 ## Current Goal
-ax-evolve 完成（5cea855）。LQ-001~LQ-013 全部处理，知识库 45 条，新增 P-004 大小写反模式。ax-reflect 完成。系统就绪。
+ax-evolve 完成（2026-02-27）。LQ-015 处理完毕，k-047 入库。所有 Action Items 已完成。系统就绪。
 
 ## Task Queues
 
@@ -27,19 +27,16 @@ ax-evolve 完成（5cea855）。LQ-001~LQ-013 全部处理，知识库 45 条，
 - [x] [SYNC] dev 分支同步到 main（c9377ee）
 - [x] [EVOLVE] ax-evolve LQ-001~LQ-013 全量处理（5cea855）
 - [x] [REFLECT] ax-reflect 本次 ax-evolve 会话
+- [x] [ACTION] skills/release/SKILL.md 增加 REFERENCE.md 一致性检查（k-047）
+- [x] [ACTION] skills/omc-setup/SKILL.md 增加步骤 3.55 installed_plugins.json 同步（k-046）
+- [x] [EVOLVE] ax-evolve LQ-015 处理，k-047 入库（47 条）
 
 ### Completed
 - [x] T-01a~T-14: 全部 18 任务完成（2026-02-26）
-- [x] LQ-013: reflection_log 空条目修复（bc2589c）
-- [x] LQ-012: extractSkillName 大小写修复（5882c12）
-
-## Reflection Action Items (2026-02-27 05:32)
-- [ ] [INFRA] `omc-setup` 增加 `installed_plugins.json` 自动同步步骤
-- [ ] [PATTERN] P-005 候选：注册表路径漂移反模式
-- [x] [EVOLVE] k-046 加入下次 ax-evolve 处理队列（P2）— 已完成（本次 ax-evolve）
+- [x] LQ-001~LQ-015: 全部处理完成
 
 ## Last Checkpoint
-2026-02-27 — ax-evolve + ax-reflect 完成，系统 IDLE
+2026-02-27 — 所有 Action Items 完成，ax-evolve LQ-015 处理完毕，系统 IDLE
 
 ## Suspension Note
 (none)
