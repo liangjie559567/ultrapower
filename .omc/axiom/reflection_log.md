@@ -1,5 +1,34 @@
 # Reflection Log
 
+## 反思 - 2026-02-27 17:05（会话：ax-implement 用户插件部署自动更新版本流程）
+
+### 📊 本次会话统计
+
+- **任务完成**: 8/8（T-01~T-08 全部通过 CI Gate）
+- **文件变更**: 4 个（plugin-registry.ts 新建、auto-update.ts 修改、cli/index.ts 修改、plugin-registry.test.ts 新建）
+- **新增测试**: 13 个（plugin-registry.test.ts，全部通过）
+- **测试总数**: 206 passed, 0 failed（+13 新增，无回归）
+- **CI Gate**: tsc 零错误，build 成功，npm test 全通过
+
+### ✅ 做得好的
+
+1. **循环依赖防护设计**：`plugin-registry.ts` 严格禁止 import `auto-update.ts` 或 `installer/index.ts`，通过 `skipIfProjectScoped?: boolean` 参数将判断权交给调用方，彻底避免循环依赖，且在文件顶部加注释说明原因。
+2. **两处并行执行**：T-01（创建 plugin-registry.ts）和 T-06（formatUpdateNotification 修改）无依赖关系，同时执行，节省时间。
+3. **Mock 策略精准**：测试中发现 `syncPluginRegistry` 内部调用两次 `readFileSync`（getInstalledPluginEntry + 主体），第一次用 `mockReturnValueOnce` 只覆盖一次导致测试失败，快速定位并修复为两次 `mockReturnValueOnce`。
+4. **Sub-PRD 与实际代码的偏差处理**：Sub-PRD T-04 指向 `installer/index.ts`，但实际 `reconcileUpdateRuntime` 在 `auto-update.ts`——读取源码后正确定位，未盲目按 PRD 操作。
+5. **动态 import 用于 T-03**：`performUpdate()` 中用 `await import('../lib/plugin-registry.js')` 避免顶层循环依赖风险，而 T-04/T-05 因 `auto-update.ts` 已是调用链末端，直接顶层 import 更简洁。
+
+### ⚠️ 待改进
+
+1. **Sub-PRD 文件路径需验证**：T-04 Sub-PRD 写的是 `installer/index.ts`，实际函数在 `auto-update.ts`。ax-decompose 阶段应通过 grep 验证函数实际位置，而非依赖记忆。
+2. **readFileSync mock 调用次数**：测试中需要了解被测函数内部调用 readFileSync 的次数，才能正确设置 mock。可在 Sub-PRD 中标注"内部调用 N 次 readFileSync"以提前告知测试编写者。
+
+### 🔑 关键决策
+
+- `syncPluginRegistry` 在 `auto-update.ts` 顶层 import（非动态），因为 `plugin-registry.ts` 不 import `auto-update.ts`，无循环。
+- `performUpdate()` 中用动态 import 是防御性设计，避免未来有人在 `plugin-registry.ts` 中误加 import。
+- `checkVersionConsistency` 的 `isUpdating` 字段：当 registryVersion ≠ packageJsonVersion 时为 true，doctor 命令据此跳过漂移警告（更新进行中属正常状态）。
+
 ## 反思 - 2026-02-27 16:20（会话：技术债清理）
 
 ### 📊 本次会话统计

@@ -2,7 +2,7 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-27
-entries: 49
+entries: 52
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -64,15 +64,18 @@ entries: 49
 | k-047 | REFERENCE.md Dual Count Declaration Sync (TOC + body) | workflow | 0.9 | 2026-02-27 | active |
 | k-048 | Two-Pass Tech Debt Scanning Strategy (技术债两轮扫描策略) | workflow | 0.9 | 2026-02-27 | active |
 | k-049 | Extend Existing Class Before Calling (扩展现有类而非重造) | architecture | 0.9 | 2026-02-27 | active |
+| k-050 | Circular Dep Prevention via Parameter Passing (循环依赖防护：参数传递模式) | architecture | 0.95 | 2026-02-27 | active |
+| k-051 | Sub-PRD File Location Must Be Grep-Verified (Sub-PRD 函数位置需 grep 验证) | workflow | 0.9 | 2026-02-27 | active |
+| k-052 | readFileSync Mock Call Count Awareness (mock 调用次数感知) | debugging | 0.9 | 2026-02-27 | active |
 
 ## 2. 分类统计 (Category Stats)
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| architecture | 19 | 架构相关知识 |
-| debugging | 4 | 调试技巧 |
+| architecture | 20 | 架构相关知识 |
+| debugging | 5 | 调试技巧 |
 | pattern | 6 | 代码模式 |
-| workflow | 11 | 工作流相关 |
+| workflow | 13 | 工作流相关 |
 | tooling | 4 | 工具使用 |
 | security | 3 | 安全相关知识 |
 
