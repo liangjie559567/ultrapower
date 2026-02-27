@@ -4,7 +4,7 @@
 
 严格的多智能体编排：工作流强制执行 + 并行执行
 
-**版本：** 5.2.1
+**版本：** 5.2.2
 **用途：** 将 Claude Code 转变为专业 AI 智能体的指挥者
 **灵感来源：** oh-my-zsh / oh-my-opencode
 
@@ -12,7 +12,7 @@
 
 ultrapower 为 Claude Code 提供以下增强功能：
 
-- **48 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
+- **49 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
 - **71 个 skills**，用于工作流自动化和专业行为
 - **39 个 hooks**，用于事件驱动的执行模式和增强功能
 - **35 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
@@ -36,7 +36,7 @@ ultrapower 为 Claude Code 提供以下增强功能：
 | 目录 | 用途 | 相关 AGENTS.md |
 |-----------|---------|-------------------|
 | `src/` | TypeScript 源代码 - 核心库 | `src/AGENTS.md` |
-| `agents/` | 48 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
+| `agents/` | 49 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
 | `skills/` | 71 个工作流 skill 定义 | `skills/AGENTS.md` |
 | `commands/` | 17 个斜杠命令定义（Axiom 工作流命令） | - |
 | `scripts/` | 构建脚本、工具和自动化 | - |
@@ -179,7 +179,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 │                  ultrapower                                 │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
 │  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
-│  │ (71 skills) │ (48 agents) │(LSP/AST/REPL)│ (39 hooks)  │  │
+│  │ (71 skills) │ (49 agents) │(LSP/AST/REPL)│ (39 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │              Features Layer                             ││
@@ -189,7 +189,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 智能体概览（共 48 个）
+## 智能体概览（共 49 个）
 
 ### Build/Analysis Lane（8 个）
 
