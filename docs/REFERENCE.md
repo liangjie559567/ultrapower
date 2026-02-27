@@ -277,7 +277,7 @@ omc config-stop-callback discord --show
 
 ---
 
-## Skills（共 70 个）
+## Skills（共 71 个）
 
 ### 核心 Skills
 
@@ -355,6 +355,7 @@ omc config-stop-callback discord --show
 | `configure-discord` | 配置 Discord webhook/bot 通知 | `/ultrapower:configure-discord` |
 | `configure-telegram` | 配置 Telegram bot 通知 | `/ultrapower:configure-telegram` |
 | `wizard` | 交互式配置向导 | `/ultrapower:wizard` |
+| `nexus` | 主动学习系统管理（Phase 2 自我改进） | `/ultrapower:nexus` |
 
 ### Axiom Skills
 

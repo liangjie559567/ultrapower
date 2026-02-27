@@ -1,3 +1,49 @@
+# ultrapower v5.2.0
+
+### 新功能
+
+- **nexus Phase 2 主动学习系统**：完整的自我改进基础设施，包含 14 个原子任务
+  - `nexus-daemon`：Python 守护进程，监控 `.omc/axiom/evolution/learning_queue.md` 并自动触发进化
+  - `data-collector` hook：会话结束时收集工具使用数据、错误模式和成功率
+  - `consciousness-sync` hook：同步 Axiom 记忆系统（active_context、project_decisions、user_preferences）
+  - `improvement-puller` hook：从学习队列拉取待处理改进项并注入上下文
+  - `nexus-ts-plugin`：TypeScript 插件层，提供 `NexusClient` API 供 TS 代码调用 Python 守护进程
+  - `skills/nexus/SKILL.md`：nexus skill 入口，支持 `/ultrapower:nexus` 命令
+- **进化引擎 Cycle 2**：处理 LQ-008/009/010，知识库扩展至 38 条，新增 WF-006/007 工作流指标
+- **贡献规范扩展**（`docs/standards/contribution-guide.md`）：
+  - 新增 §6.1 动态版本读取模式（`getRuntimePackageVersion()` 最佳实践）
+  - 新增 §6.2 特性分支生命周期（PR merge → 删除分支 → dev→main → main→dev）
+
+### 修复
+
+- **vitest 配置**：排除 `tests/brainstorm-server/**` 独立 Node.js assert 脚本，防止测试框架误识别
+- **skill 计数**：`src/__tests__/skills.test.ts` 期望数量 70→71，`expectedSkills` 数组新增 `nexus`
+
+### 测试
+
+- 205 passed, 0 failed（+nexus 相关测试）
+
+---
+
+# ultrapower v5.1.0
+
+### 新功能
+
+- **nexus Phase 1 被动学习 MVP**：6 个核心任务完成
+  - `NexusConfig` 类型系统和配置加载器（`src/features/nexus/`）
+  - `data-collector` hook 基础框架
+  - `consciousness-sync` hook 基础框架
+  - `processSessionEnd` 集成 nexus hook 注册
+  - Python 守护进程基础框架（`src/features/nexus/daemon/`）
+  - `improvement-puller` hook 基础框架
+- **Axiom 进化引擎 Cycle 1**：处理 LQ-001~LQ-007，知识库建立 35 条基础条目
+
+### 测试
+
+- 205 passed, 0 failed（2 轮代码/安全审查通过）
+
+---
+
 # ultrapower v5.0.25
 
 ### 修复

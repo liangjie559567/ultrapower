@@ -1,10 +1,10 @@
-<!-- Generated: 2026-01-28 | Updated: 2026-02-26 -->
+<!-- Generated: 2026-01-28 | Updated: 2026-02-27 -->
 
 # ultrapower
 
 严格的多智能体编排：工作流强制执行 + 并行执行
 
-**版本：** 5.0.12
+**版本：** 5.2.0
 **用途：** 将 Claude Code 转变为专业 AI 智能体的指挥者
 **灵感来源：** oh-my-zsh / oh-my-opencode
 
@@ -13,9 +13,9 @@
 ultrapower 为 Claude Code 提供以下增强功能：
 
 - **49 个专业智能体**，覆盖多个领域，支持三级模型路由（Haiku/Sonnet/Opus）
-- **70 个 skills**，用于工作流自动化和专业行为
+- **71 个 skills**，用于工作流自动化和专业行为
 - **35 个 hooks**，用于事件驱动的执行模式和增强功能
-- **15 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
+- **35 个自定义工具**，包括 12 个 LSP、2 个 AST 和 Python REPL
 - **执行模式**：autopilot、ultrawork、ralph、ultrapilot、swarm、pipeline
 - **MCP 集成**，支持插件范围的工具发现和 skill 加载
 
@@ -37,7 +37,7 @@ ultrapower 为 Claude Code 提供以下增强功能：
 |-----------|---------|-------------------|
 | `src/` | TypeScript 源代码 - 核心库 | `src/AGENTS.md` |
 | `agents/` | 49 个智能体的 Markdown 提示模板（指南见 `agents/templates/`） | - |
-| `skills/` | 70 个工作流 skill 定义 | `skills/AGENTS.md` |
+| `skills/` | 71 个工作流 skill 定义 | `skills/AGENTS.md` |
 | `commands/` | 17 个斜杠命令定义（Axiom 工作流命令） | - |
 | `scripts/` | 构建脚本、工具和自动化 | - |
 | `docs/` | 用户文档和指南 | `docs/AGENTS.md` |
@@ -287,9 +287,9 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | swarm | "swarm N agents" | N 个协调智能体，使用 SQLite 任务认领 |
 | pipeline | "pipeline" | 带数据传递的顺序智能体链 |
 
-## Skills（70 个）
+## Skills（71 个）
 
-关键 skills：`autopilot`、`ultrawork`、`ralph`、`ultrapilot`、`plan`、`ralplan`、`deepsearch`、`deepinit`、`frontend-ui-ux`、`git-master`、`tdd`、`security-review`、`code-review`、`sciomc`、`external-context`、`analyze`、`swarm`、`pipeline`、`cancel`、`learner`、`note`、`hud`、`doctor`、`omc-setup`、`mcp-setup`、`build-fix`、`ultraqa`、`team`、`writer-memory`、`ralph-init`、`learn-about-omc`、`skill`、`trace`、`release`、`project-session-manager`、`next-step-router`、`wizard`、`ax-draft`、`ax-review`、`ax-decompose`、`ax-implement`、`ax-reflect`、`ax-rollback`、`ax-status`、`ax-suspend`、`ax-knowledge`、`ax-export`
+关键 skills：`autopilot`、`ultrawork`、`ralph`、`ultrapilot`、`plan`、`ralplan`、`deepsearch`、`deepinit`、`frontend-ui-ux`、`git-master`、`tdd`、`security-review`、`code-review`、`sciomc`、`external-context`、`analyze`、`swarm`、`pipeline`、`cancel`、`learner`、`note`、`hud`、`doctor`、`omc-setup`、`mcp-setup`、`build-fix`、`ultraqa`、`team`、`writer-memory`、`ralph-init`、`learn-about-omc`、`skill`、`trace`、`release`、`project-session-manager`、`next-step-router`、`wizard`、`ax-draft`、`ax-review`、`ax-decompose`、`ax-implement`、`ax-reflect`、`ax-rollback`、`ax-status`、`ax-suspend`、`ax-knowledge`、`ax-export`、`nexus`
 
 ### Superpowers Skill 系统
 
