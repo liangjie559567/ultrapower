@@ -114,8 +114,3 @@ export {
   omcSystemPrompt
 } from './definitions.js';
 
-// Deprecated exports (for backward compatibility)
-export {
-  coordinatorAgent,
-  ORCHESTRATOR_SISYPHUS_PROMPT_METADATA
-} from './coordinator-deprecated.js';

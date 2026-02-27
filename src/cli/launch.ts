@@ -77,9 +77,8 @@ export function runClaude(cwd: string, args: string[], sessionId: string): void 
   const omcBin = process.argv[1];
   const policy = resolveLaunchPolicy(process.env);
 
-  // Check if omc has a HUD command
-  // For now, use a simple placeholder or skip HUD if not available
-  const hasHudCommand = false; // TODO: Check if omc has hud command
+  // Check if omc binary exists (it does if we're running) — hud is always bundled
+  const hasHudCommand = typeof omcBin === 'string' && omcBin.length > 0;
   const hudCmd = hasHudCommand ? buildTmuxShellCommand('node', [omcBin, 'hud', '--watch']) : '';
 
   switch (policy) {
