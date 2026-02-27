@@ -456,6 +456,21 @@ export async function processSessionEnd(input: SessionEndInput): Promise<HookOut
     // Auto-reflect failures should never block session end
   }
 
+  // Nexus consciousness sync: collect session data and push to nexus-daemon (best-effort)
+  try {
+    const { handleNexusSessionEnd } = await import('../nexus/session-end-hook.js');
+    await handleNexusSessionEnd({
+      sessionId: input.session_id,
+      directory: resolveToWorktreeRoot(input.cwd),
+      durationMs: metrics.duration_ms,
+      agentsSpawned: metrics.agents_spawned,
+      agentsCompleted: metrics.agents_completed,
+      modesUsed: metrics.modes_used,
+    });
+  } catch {
+    // Nexus failures must never block session end
+  }
+
   // Trigger stop hook callbacks (#395)
   await triggerStopCallbacks(metrics, {
     session_id: input.session_id,
