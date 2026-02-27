@@ -17,6 +17,7 @@ last_updated: 2026-02-27
 | P-003 | Multi-Expert Parallel Review Pattern | workflow-def | 1 | 0.9 | pending |
 | P-004 | Case-Sensitivity Anti-Pattern in String Comparisons | debugging | 2 | 0.95 | pending |
 | P-005 | Plugin Registry Path Drift Anti-Pattern | tooling | 1 | 0.9 | pending |
+| P-006 | Two-Pass Tech Debt Scanning | workflow-def | 1 | 0.9 | pending |
 
 ## 2. 模式分类 (Categories)
 

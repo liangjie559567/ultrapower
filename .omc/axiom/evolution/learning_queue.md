@@ -21,6 +21,26 @@
 
 <!-- 新的学习素材将自动添加到此处 -->
 
+### LQ-016: 技术债扫描两轮策略
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 技术债扫描分两轮效果更好。第一轮：TODO/FIXME/deprecated/placeholder 标记定位候选项。第二轮：console.log/eslint-disable/as any/空catch 评估代码质量。两轮结合可区分"真正需要修复的"与"有意的设计决策"，避免误改。关键判断：注释说明了原因的 eslint-disable 和 as any 通常是合理的，不需要处理。
+- 元数据: session=2026-02-27, commits=2, files_changed=5
+- 知识产出: k-048, P-006
+
+### LQ-017: MetricsCollector 集成模式
+- 优先级: P3
+- 来源类型: pattern
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: 当 TODO 注释依赖"某模块集成后"时，先确认该模块是否已实现（查找类定义、单例函数、接口）。MetricsCollector 已有完整实现但缺少 cleanupOldEvents 方法——正确做法是扩展现有类而非重新实现。修复路径：1) 给 MetricsCollector 添加缺失方法，2) 在调用方 import 并调用，3) 删除 TODO 注释。
+- 元数据: files=metrics-collector.ts+query-engine.ts, commit=63f3074
+- 知识产出: k-049
+
 ### LQ-001: Axiom 全链路工作流验证模式
 - 优先级: P1
 - 来源类型: session
