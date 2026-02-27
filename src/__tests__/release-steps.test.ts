@@ -7,12 +7,14 @@ beforeEach(() => {
 
 describe('release-steps', () => {
   it('validateBuild: dry-run returns success without executing', async () => {
+    // @ts-ignore - .mjs runtime script outside rootDir
     const { validateBuild } = await import('../../../scripts/release-steps.mjs');
     const result = await validateBuild({ dryRun: true });
     expect(result.success).toBe(true);
   });
 
   it('publishNpm: dry-run prints command without executing', async () => {
+    // @ts-ignore - .mjs runtime script outside rootDir
     const { publishNpm } = await import('../../../scripts/release-steps.mjs');
     const result = await publishNpm({ dryRun: true });
     expect(result.success).toBe(true);
@@ -20,18 +22,21 @@ describe('release-steps', () => {
   });
 
   it('createGithubRelease: dry-run returns success', async () => {
+    // @ts-ignore - .mjs runtime script outside rootDir
     const { createGithubRelease } = await import('../../../scripts/release-steps.mjs');
     const result = await createGithubRelease({ version: '5.3.0', dryRun: true });
     expect(result.success).toBe(true);
   });
 
   it('syncMarketplace: dry-run returns success', async () => {
+    // @ts-ignore - .mjs runtime script outside rootDir
     const { syncMarketplace } = await import('../../../scripts/release-steps.mjs');
     const result = await syncMarketplace({ version: '5.3.0', dryRun: true });
     expect(result.success).toBe(true);
   });
 
   it('runReleasePipeline: startFrom skips earlier steps', async () => {
+    // @ts-ignore - .mjs runtime script outside rootDir
     const { runReleasePipeline } = await import('../../../scripts/release-steps.mjs');
     // startFrom='release' skips validate and publish
     const result = await runReleasePipeline({ dryRun: true, startFrom: 'release', version: '5.3.0' });
