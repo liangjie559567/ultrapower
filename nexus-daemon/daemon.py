@@ -14,6 +14,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from evolution_engine import EvolutionEngine
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
@@ -62,6 +64,7 @@ class NexusDaemon:
         self._processed: set[str] = set()
         self._ensure_dirs()
         self._load_processed_log()
+        self._evolution_engine = EvolutionEngine(repo_path=self.repo_path)
 
     def _ensure_dirs(self) -> None:
         for d in ['events', 'improvements', 'consciousness', 'evolution']:
@@ -159,12 +162,16 @@ class NexusDaemon:
         if not events:
             return
         logger.info('Processing %d new event(s)', len(events))
+        new_events: list[dict[str, Any]] = []
         for event in events:
             try:
                 await self._process_event(event)
                 self.mark_event_processed(event['_filename'])
+                new_events.append(event)
             except Exception as e:
                 logger.error('Error processing event %s: %s', event.get('_filename'), e)
+        if new_events:
+            self._evolution_engine.process_events(new_events)
 
     async def _process_event(self, event: dict[str, Any]) -> None:
         """Placeholder: route to evolution engine."""
