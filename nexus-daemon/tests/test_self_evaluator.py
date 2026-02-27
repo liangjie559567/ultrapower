@@ -43,10 +43,8 @@ def test_detects_zombie_skills(tmp_repo):
     for i in range(10):
         evt = make_event(f's{i}', ['learner'])
         (tmp_repo / 'events' / f's{i}.json').write_text(json.dumps(evt))
-    # one session triggers 'rare-skill' -> 1/10 = 10%, not < 10%, so use 0 triggers
-    # Instead: add a skill triggered 0 times by writing an event that previously triggered it
-    # but we need it in skill_stats with low count. Use a separate session with rare-skill once
-    # out of 20 total sessions so ratio = 1/20 = 5% < 10%.
+    # Add 10 more sessions with only 'learner', then one session with 'rare-skill'.
+    # Total: 21 sessions, rare-skill triggered 1/21 ≈ 4.8% < 10% → zombie.
     for i in range(10, 20):
         evt = make_event(f's{i}', ['learner'])
         (tmp_repo / 'events' / f's{i}.json').write_text(json.dumps(evt))
@@ -56,6 +54,21 @@ def test_detects_zombie_skills(tmp_repo):
     report = ev.generate_report()
     assert report.total_sessions == 21
     assert 'rare-skill' in report.zombie_skills
+    assert 'learner' not in report.zombie_skills
+
+
+def test_zombie_detection_suppressed_below_threshold(tmp_path):
+    # With only 3 sessions (< default threshold of 10), no zombies should be flagged
+    events_dir = tmp_path / 'events'
+    events_dir.mkdir()
+    for i in range(3):
+        (events_dir / f's{i}.json').write_text(
+            json.dumps({'sessionId': f's{i}', 'skillsTriggered': ['rare-skill']}),
+            encoding='utf-8',
+        )
+    evaluator = SelfEvaluator(repo_path=tmp_path)
+    report = evaluator.generate_report()
+    assert report.zombie_skills == []
 
 
 def test_format_report_markdown(tmp_repo):

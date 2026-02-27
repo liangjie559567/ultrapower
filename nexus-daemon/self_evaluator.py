@@ -79,7 +79,7 @@ class SelfEvaluator:
             for skill, stats in sorted(report.skill_stats.items()):
                 lines.append(f'- `{skill}`: {stats.trigger_count} triggers')
         if report.zombie_skills:
-            lines += ['', '## Zombie Skills (never triggered)', '']
+            lines += ['', '## Zombie Skills (triggered in <10% of sessions)', '']
             for z in report.zombie_skills:
                 lines.append(f'- `{z}`')
         return '\n'.join(lines)
