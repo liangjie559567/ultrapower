@@ -1,8 +1,8 @@
 ---
-session_id: "2026-02-26"
+session_id: "2026-02-27"
 task_status: IDLE
 current_phase: "Completed"
-last_gate: "CI Gate Pass (9127 tests, Phase 1 Passive Learning MVP)"
+last_gate: "CI Gate Pass (4589 tests, Phase 2 Active Learning)"
 ---
 
 # Active Context
@@ -10,7 +10,7 @@ last_gate: "CI Gate Pass (9127 tests, Phase 1 Passive Learning MVP)"
 ## Status: IDLE
 
 ## Current Goal
-Phase 1 Passive Learning MVP 完成。ax-evolution 进化引擎已执行，4 个新知识条目（k-032~k-035）已入库，反思已写入。
+LQ-013 修复完成（bc2589c）。session-reflector.ts 加入空会话 guard，reflection_log.md 从 970 行清理至 ~280 行。LQ-012（usage_metrics skills 验证）延迟到下次会话优先检查。
 
 ## Task Queues
 
@@ -18,11 +18,18 @@ Phase 1 Passive Learning MVP 完成。ax-evolution 进化引擎已执行，4 个
 - (none)
 
 ### Pending
-- [ ] [REFLECTION] 下次工作前先执行 `git checkout dev && git pull`，在 dev 分支上工作（连续四次提醒）
-- [ ] [REFLECTION] 确认 inbox-outbox 测试文件是否存在（三次遗留）
-- [ ] [REFLECTION] 运行完整 `npm test` 验证无回归（两次遗留）
-- [ ] [REFLECTION] 在 contribution-guide.md 中添加"init/setup 命令必须包含可执行指令"要求
-- [ ] [PHASE2] 实现 Phase 2 主动学习：分析 usage_metrics.json → 生成优化建议 → 更新 agent 提示词
+- (none)
+
+### Resolved (2026-02-27)
+- [x] [PHASE2-FIX-1] 修复 extractSkillName：支持 toolName === "skill" — usage-tracker.ts:170 单行修复
+- [x] [PHASE2-FIX-2] 过滤 usage_metrics 空工具名噪音 — usage-tracker.ts:185 加 guard
+- [x] [PHASE2-FIX-3] nexus toolCalls 从 usage_metrics 动态读取 — session-end-hook.ts 新增 readToolCallsFromMetrics()
+
+### Resolved (2026-02-27)
+- [x] [REFLECTION] `git checkout dev && git pull` — 已在 dev，已同步
+- [x] [REFLECTION] inbox-outbox 测试文件 — 确认不存在，无需处理（非遗留 bug，仅为检查项）
+- [x] [REFLECTION] `npm test` — 205 passed, 0 failed (4589 tests)
+- [x] [REFLECTION] contribution-guide.md 添加"init/setup 命令必须包含可执行指令" — §5.2 已更新
 
 ### Completed
 - [x] T-01a: docs/standards/README.md

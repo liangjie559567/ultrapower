@@ -121,6 +121,36 @@
 - 元数据: session=2026-02-27, pattern=branch-lifecycle
 - 知识产出: k-038
 
+### LQ-011: nexus TS→Python 数据流文档缺失
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: nexus 系统的 TS→Python 数据流（events → improvements → self_modifier）没有文档，需要靠读代码推断。应在 nexus-daemon/README.md 或 docs/ 中补充数据流说明图。
+- 元数据: session=2026-02-27, files=src/hooks/nexus/, nexus-daemon/
+- 知识产出: nexus-daemon/README.md 新增"数据流：TS → Python"章节，含 ASCII 流程图和详细步骤
+
+### LQ-012: usage_metrics agents/skills 修复效果验证
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: Phase 2 修复了 extractSkillName 和空工具名过滤，但历史数据不会回填。验证发现 skills 字段仍为空，根因是 extractSkillName 大小写不匹配（'Skill' vs 'skill'）。已追加修复：toolName.toLowerCase() 后再比较。
+- 元数据: session=2026-02-27, file=src/hooks/learner/usage-tracker.ts, commit=5882c12
+- 知识产出: k-044
+
+### LQ-013: reflection_log.md 空条目积累问题
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: session-end hook 自动追加空的 auto-session- 条目，导致 reflection_log.md 膨胀（30+ 空条目，约 450 行噪音）。需要在 hook 中加入 guard：无实质内容时不追加空条目，并清理现有积累。
+- 元数据: session=2026-02-27, file=.omc/axiom/reflection_log.md, hook=session-end
+- 知识产出: 在 session-reflector.ts 加入三条件 guard（无 agents + 无 modes + duration < 60s），reflection_log.md 从 970 行清理至 ~280 行
+
 ## 处理中
 
 ## 已完成

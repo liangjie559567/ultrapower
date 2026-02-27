@@ -2,7 +2,7 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-27
-entries: 38
+entries: 44
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -13,6 +13,9 @@ entries: 38
 
 | ID | Title | Category | Confidence | Created | Status |
 |----|-------|----------|------------|---------|--------|
+| k-039 | Skill Tracking Gap in extractSkillName (skill 追踪缺口) | debugging | 0.95 | 2026-02-27 | active |
+| k-040 | Empty toolName Records as Noise in usage_metrics (空工具名噪音) | tooling | 0.9 | 2026-02-27 | active |
+| k-041 | nexus toolCalls Hardcoded Empty Array (nexus 工具调用数据缺失) | architecture | 0.9 | 2026-02-27 | active |
 | k-001 | Global Configuration Pattern (全局配置模式) | architecture | 0.9 | 2026-02-08 | active |
 | k-002 | Evolution Engine Architecture (自进化引擎架构) | architecture | 0.85 | 2026-02-08 | active |
 | k-003 | GitHub Automation Fallback Strategy (GitHub 自动化降级策略) | tooling | 0.8 | 2026-02-08 | active |
@@ -51,16 +54,19 @@ entries: 38
 | k-036 | Release Skill Version File Checklist (CLAUDE.md missing) | workflow | 0.9 | 2026-02-27 | active |
 | k-037 | Dynamic Version Reading Pattern (getRuntimePackageVersion) | pattern | 0.95 | 2026-02-27 | active |
 | k-038 | Branch Lifecycle: Delete After Merge | workflow | 0.85 | 2026-02-27 | active |
+| k-042 | nexus TS→Python Data Flow (事件→进化→自修改) | architecture | 0.95 | 2026-02-27 | active |
+| k-043 | Empty Session Guard in session-reflector.ts | pattern | 0.95 | 2026-02-27 | active |
+| k-044 | Case-Insensitive toolName Check in extractSkillName | debugging | 0.95 | 2026-02-27 | active |
 
 ## 2. 分类统计 (Category Stats)
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| architecture | 16 | 架构相关知识 |
-| debugging | 1 | 调试技巧 |
+| architecture | 18 | 架构相关知识 |
+| debugging | 4 | 调试技巧 |
 | pattern | 6 | 代码模式 |
 | workflow | 7 | 工作流相关 |
-| tooling | 2 | 工具使用 |
+| tooling | 3 | 工具使用 |
 | security | 3 | 安全相关知识 |
 
 

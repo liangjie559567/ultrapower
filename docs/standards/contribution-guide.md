@@ -154,7 +154,26 @@ npm test        # 所有测试通过
 4. `docs/CLAUDE.md` — 更新 `state_write` 支持的模式列表
 5. `AGENTS.md` — 更新执行模式表
 
-### 5.2 新增 Agent
+### 5.2 新增 Skill 或 Init/Setup 命令
+
+新增 skill 或 init/setup 类命令时，必须包含可执行指令：
+
+- skill 的 `### /skill-name init` 章节必须包含具体的 `Bash`/`Write` 调用，不能只有描述性文字
+- setup 命令必须包含完整的目录创建和文件初始化步骤
+- 禁止只写"初始化系统"而不提供实际命令
+
+```markdown
+<!-- ✅ 正确：包含可执行指令 -->
+### /ax-context init
+1. Bash("mkdir -p .omc/axiom/evolution")
+2. Write(".omc/axiom/active_context.md", "...")
+
+<!-- ❌ 错误：只有描述 -->
+### /ax-context init
+初始化 Axiom 记忆系统。
+```
+
+### 5.3 新增 Agent
 
 新增 agent 时必须同步更新：
 

@@ -35,6 +35,14 @@ export async function reflectOnSessionEnd(
         return { reflected: false, queuedItems: 0 };
       }
 
+      // Guard: skip empty sessions with no substantive activity
+      const hasAgents = (input.agentsSpawned ?? 0) > 0;
+      const hasModes = (input.modesUsed?.length ?? 0) > 0;
+      const hasSignificantDuration = (input.durationMs ?? 0) >= 60000;
+      if (!hasAgents && !hasModes && !hasSignificantDuration) {
+        return { reflected: false, queuedItems: 0 };
+      }
+
       const sessionName = `auto-${input.sessionId.slice(0, 8)}`;
       const durationMin = input.durationMs != null ? Math.round(input.durationMs / 60000) : 0;
 
