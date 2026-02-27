@@ -1,3 +1,11 @@
+# ultrapower v5.2.2
+
+### 修复
+
+- **plugins/cache 无限嵌套修复**：`fixNestedCacheDir()` 新增 Pattern A 检测，直接删除 `cache/ultrapower/ultrapower/`（无版本层的平铺嵌套），修复 Windows 上 Claude Code 每次重启产生 15+ 层嵌套导致无法启动的问题
+
+---
+
 # ultrapower v5.2.1
 
 ### 修复
