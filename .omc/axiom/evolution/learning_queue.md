@@ -139,6 +139,16 @@
 - 内容: Phase 2 修复了 extractSkillName 和空工具名过滤，但历史数据不会回填。需要在下次会话后检查 usage_metrics.json 中 skills 字段是否开始填充，验证修复效果。
 - 元数据: session=2026-02-27, file=.omc/axiom/evolution/usage_metrics.json
 
+### LQ-013: reflection_log.md 空条目积累问题
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-27
+- 处理时间: 2026-02-27
+- 内容: session-end hook 自动追加空的 auto-session- 条目，导致 reflection_log.md 膨胀（30+ 空条目，约 450 行噪音）。需要在 hook 中加入 guard：无实质内容时不追加空条目，并清理现有积累。
+- 元数据: session=2026-02-27, file=.omc/axiom/reflection_log.md, hook=session-end
+- 知识产出: 在 session-reflector.ts 加入三条件 guard（无 agents + 无 modes + duration < 60s），reflection_log.md 从 970 行清理至 ~280 行
+
 ## 处理中
 
 ## 已完成
