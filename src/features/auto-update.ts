@@ -320,7 +320,7 @@ export function getInstalledVersion(): VersionMetadata | null {
     // (e.g. manual npm install, or update interrupted before saveVersionMetadata).
     try {
       const runtimeVersion = getRuntimePackageVersion();
-      if (runtimeVersion && runtimeVersion !== metadata.version) {
+      if (runtimeVersion && runtimeVersion !== 'unknown' && runtimeVersion !== metadata.version) {
         const updated: VersionMetadata = {
           ...metadata,
           version: runtimeVersion,
@@ -583,14 +583,12 @@ export async function performUpdate(options?: {
 
     // Use npm for updates on all platforms (install.sh was removed)
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- shell:true required on Windows to avoid spawnSync cmd.exe ETIMEDOUT
       execSync('npm install -g @liangjie559567/ultrapower@latest', {
         encoding: 'utf-8',
-        stdio: options?.verbose ? 'inherit' : 'pipe',
+        stdio: (options?.verbose ? 'inherit' : 'pipe') as 'inherit' | 'pipe',
         timeout: 120000, // 2 minute timeout for npm
-        shell: true,
-        ...(process.platform === 'win32' ? { windowsHide: true } : {})
-      } as any);
+        shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/sh',
+      });
 
       // Sync Claude Code marketplace clone so plugin cache picks up new version (#506)
       const marketplaceSync = syncMarketplaceClone(options?.verbose ?? false);

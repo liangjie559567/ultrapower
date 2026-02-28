@@ -87,6 +87,7 @@ describe('auto-update reconciliation', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    delete process.env.OMC_UPDATE_RECONCILE;
   });
 
   it('reconciles runtime state and refreshes hooks after update', () => {
@@ -174,8 +175,6 @@ describe('auto-update reconciliation', () => {
       forceHooks: true,
       refreshHooksInPlugin: true,
     });
-
-    delete process.env.OMC_UPDATE_RECONCILE;
   });
 
   it('does not persist metadata when reconciliation fails', async () => {
@@ -212,8 +211,6 @@ describe('auto-update reconciliation', () => {
     expect(result.success).toBe(false);
     expect(result.errors).toEqual(['Reconciliation failed: boom']);
     expect(mockedWriteFileSync).not.toHaveBeenCalled();
-
-    delete process.env.OMC_UPDATE_RECONCILE;
   });
 
   it('preserves non-OMC hooks when refreshing plugin hooks during reconciliation', () => {
