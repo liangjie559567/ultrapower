@@ -21,6 +21,26 @@
 
 <!-- 新的学习素材将自动添加到此处 -->
 
+### LQ-030: getRuntimePackageVersion() 返回 'unknown' 需显式 guard
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-28
+- 处理时间: 2026-02-28
+- 内容: `getRuntimePackageVersion()` 在读取失败时返回字符串 `'unknown'`（truthy），调用方若只做 truthy 检查会误将 `'unknown'` 写入 VERSION_FILE。正确 guard：`runtimeVersion && runtimeVersion !== 'unknown'`。应在函数文档中标注此边界情况。
+- 元数据: file=src/features/auto-update.ts, version=v5.2.7
+- 知识产出: k-062
+
+### LQ-029: execSync 不支持 windowsHide 选项
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-02-28
+- 处理时间: 2026-02-28
+- 内容: `child_process.execSync` 不支持 `windowsHide` 选项（该选项仅适用于 `spawn`/`fork`/`exec`）。在 execSync 调用中传入 `windowsHide: true` 会被静默忽略但引入 `as any` 类型断言。正确做法：移除 `windowsHide`，使用 `shell: process.platform === 'win32'` 实现平台感知。
+- 元数据: file=src/features/auto-update.ts, version=v5.2.7
+- 知识产出: k-061
+
 ### LQ-024: deepinit 生成的 AGENTS.md 必须从 agent 定义加载器中排除
 - 优先级: P1
 - 来源类型: error
