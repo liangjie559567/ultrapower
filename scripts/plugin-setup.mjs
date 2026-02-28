@@ -235,8 +235,10 @@ function fixMissingPluginJson() {
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
     const version = pkg.version || '0.0.0';
 
-    // Only include metadata fields — no component paths (hooks, agents, skills, commands, mcpServers)
-    // which cause Zod validation errors in Claude Code's plugin manifest validator.
+    // Include metadata fields + explicit component path declarations.
+    // Per official docs, paths must start with './' — auto-discovery constructs paths without
+    // this prefix, causing Zod validation errors: "hooks: Invalid input, agents: Invalid input".
+    // Declaring explicit paths prevents auto-discovery from taking over.
     const pluginJson = {
       name: 'ultrapower',
       description: pkg.description || '',
@@ -246,32 +248,39 @@ function fixMissingPluginJson() {
       repository: pkg.repository?.url || pkg.repository || '',
       license: pkg.license || 'MIT',
       keywords: pkg.keywords || [],
+      hooks: './hooks/hooks.json',
+      agents: './agents/',
     };
     const pluginJsonStr = JSON.stringify(pluginJson, null, 2);
 
-    // Fields that cause validation errors if present — used to detect and repair bad cache entries
-    const INVALID_FIELDS = ['hooks', 'agents', 'skills', 'commands', 'mcpServers'];
-    function hasInvalidFields(jsonPath) {
+    // Detect cache entries that need repair:
+    // - Missing hooks or agents fields (old clean format from v5.4.3)
+    // - hooks/agents not declared as relative string paths starting with './'
+    // - Old invalid inline object/array formats from v5.3.x
+    function needsRepair(jsonPath) {
       try {
         const content = JSON.parse(readFileSync(jsonPath, 'utf-8'));
-        return INVALID_FIELDS.some(f => f in content);
+        // hooks must be a string path starting with './'
+        if (!content.hooks || typeof content.hooks !== 'string' || !content.hooks.startsWith('./')) return true;
+        // agents must be a string path starting with './'
+        if (!content.agents || typeof content.agents !== 'string' || !content.agents.startsWith('./')) return true;
+        return false;
       } catch { return false; }
     }
 
     // 1. Write to current install location (npm-cache node_modules dir)
-    // Also overwrite if existing file contains invalid component path fields.
+    // Also overwrite if existing file has missing or incorrectly formatted component paths.
     const localPluginJsonDir = join(pluginRoot, '.claude-plugin');
     const localPluginJsonPath = join(localPluginJsonDir, 'plugin.json');
-    if (!existsSync(localPluginJsonPath) || hasInvalidFields(localPluginJsonPath)) {
+    if (!existsSync(localPluginJsonPath) || needsRepair(localPluginJsonPath)) {
       mkdirSync(localPluginJsonDir, { recursive: true });
       writeFileSync(localPluginJsonPath, pluginJsonStr);
-      console.log('[OMC] Wrote clean .claude-plugin/plugin.json in install dir');
+      console.log('[OMC] Wrote .claude-plugin/plugin.json with correct component paths in install dir');
     }
 
     // 2. Write directly to plugin cache (marketplace: omc, plugin: ultrapower)
     // Claude Code copies from npm-cache but skips hidden dirs, so we patch the cache directly.
-    // Also overwrite any existing cache entries that contain invalid component path fields
-    // left over from older versions of this script.
+    // Also repair any existing cache entries with missing or invalid component path formats.
     const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/omc/ultrapower');
     if (existsSync(pluginCacheBase)) {
       const versions = readdirSync(pluginCacheBase);
@@ -279,12 +288,12 @@ function fixMissingPluginJson() {
         const cacheVersionDir = join(pluginCacheBase, v);
         const cachePluginJsonDir = join(cacheVersionDir, '.claude-plugin');
         const cachePluginJsonPath = join(cachePluginJsonDir, 'plugin.json');
-        if (!existsSync(cachePluginJsonPath) || hasInvalidFields(cachePluginJsonPath)) {
+        if (!existsSync(cachePluginJsonPath) || needsRepair(cachePluginJsonPath)) {
           mkdirSync(cachePluginJsonDir, { recursive: true });
           // Use version-specific content for each cached version
           const versionedPkg = { ...pluginJson, version: v };
           writeFileSync(cachePluginJsonPath, JSON.stringify(versionedPkg, null, 2));
-          console.log(`[OMC] Wrote clean .claude-plugin/plugin.json in plugin cache v${v}`);
+          console.log(`[OMC] Wrote .claude-plugin/plugin.json with correct component paths in plugin cache v${v}`);
         }
       }
     }
