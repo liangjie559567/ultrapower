@@ -1,14 +1,22 @@
 {
   "name": "ultrapower",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution. Combines superpowers' TDD/debugging discipline with OMC's multi-agent execution capabilities.",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "author": {
     "name": "Yeachan Heo"
   },
   "homepage": "https://github.com/liangjie559567/ultrapower",
   "repository": "https://github.com/liangjie559567/ultrapower",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "multi-agent", "orchestration", "workflows", "ultrapower"],
+  "keywords": [
+    "skills",
+    "tdd",
+    "debugging",
+    "multi-agent",
+    "orchestration",
+    "workflows",
+    "ultrapower"
+  ],
   "skills": "./skills/",
   "agents": "./agents/",
   "commands": "./commands/",

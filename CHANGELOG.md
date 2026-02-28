@@ -1,3 +1,15 @@
+# ultrapower v5.3.1
+
+### 修复
+
+- **fix(plugin): 对齐插件清单与官方 Claude Code 插件规范**
+  - `plugin.json` author 字段与 `package.json` 保持一致（"Yeachan Heo"）
+  - 移除非标准 `ConfigChange` hook，新增官方 `SubagentStart` 和 `Notification` hook
+  - `TeammateIdle` 补充缺失的 `matcher` 字段，保持 14 个 hook 事件格式一致
+  - `package.json` files 数组补充 `marketplace.json` 和 `settings.json`
+
+---
+
 # ultrapower v5.3.0
 
 ### 新增
