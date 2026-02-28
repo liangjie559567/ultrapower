@@ -55,6 +55,19 @@ export async function syncMarketplace(opts = {}) {
   const { version, dryRun = false } = opts;
   const v = version || getVersion();
   try {
+    // Update marketplace.json version fields
+    const marketplacePath = resolve('.claude-plugin/marketplace.json');
+    const marketplace = JSON.parse(readFileSync(marketplacePath, 'utf-8'));
+    for (const plugin of marketplace.plugins ?? []) {
+      plugin.version = v;
+      if (plugin.source) plugin.source.version = v;
+    }
+    if (!dryRun) {
+      const { writeFileSync } = await import('node:fs');
+      writeFileSync(marketplacePath, JSON.stringify(marketplace, null, 2) + '\n');
+    } else {
+      console.log(`[dry-run] Would write marketplace.json version -> ${v}`);
+    }
     run(`git add .claude-plugin/marketplace.json`, dryRun);
     run(`git commit -m "chore: sync marketplace version to v${v}" --allow-empty`, dryRun);
     run(`git push origin HEAD`, dryRun);
