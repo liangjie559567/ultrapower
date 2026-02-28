@@ -20,6 +20,7 @@ export function readVersions() {
     pkg: pkg.version,
     plugin: plugin.version,
     marketplace: market.plugins?.[0]?.version,
+    marketplaceSource: market.plugins?.[0]?.source?.version,
   };
 }
 
