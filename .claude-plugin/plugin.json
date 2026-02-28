@@ -1,7 +1,7 @@
 {
   "name": "ultrapower",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution. Combines superpowers' TDD/debugging discipline with OMC's multi-agent execution capabilities.",
-  "version": "5.4.0",
+  "version": "5.4.1",
   "author": {
     "name": "liangjie559567"
   },
@@ -18,8 +18,6 @@
     "ultrapower"
   ],
   "skills": "./skills/",
-  "agents": "./agents/",
-  "commands": "./commands/",
-  "hooks": "./hooks/",
+  "hooks": "./hooks/hooks.json",
   "mcpServers": "./.mcp.json"
 }
