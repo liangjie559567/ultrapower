@@ -19,6 +19,35 @@ const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json');
 
 console.log('[OMC] Running post-install setup...');
 
+// Migration: rename marketplaces/ultrapower/ -> marketplaces/omc/ after marketplace name change.
+// Users who added the marketplace via GitHub URL have it registered as 'ultrapower' (old name).
+// Claude Code looks up marketplaces by directory name, so we rename to match new name 'omc'.
+function migrateMarketplaceName() {
+  try {
+    const marketplacesDir = join(CLAUDE_DIR, 'plugins/marketplaces');
+    const oldDir = join(marketplacesDir, 'ultrapower');
+    const newDir = join(marketplacesDir, 'omc');
+    if (existsSync(oldDir) && !existsSync(newDir)) {
+      renameSync(oldDir, newDir);
+      console.log('[OMC] Migrated marketplace directory: ultrapower -> omc');
+    }
+    // Also patch marketplace.json name field if it still says 'ultrapower'
+    const mktJsonPath = join(existsSync(newDir) ? newDir : oldDir, '.claude-plugin', 'marketplace.json');
+    if (existsSync(mktJsonPath)) {
+      const mkt = JSON.parse(readFileSync(mktJsonPath, 'utf-8'));
+      if (mkt.name === 'ultrapower') {
+        mkt.name = 'omc';
+        writeFileSync(mktJsonPath, JSON.stringify(mkt, null, 2));
+        console.log('[OMC] Patched marketplace.json name: ultrapower -> omc');
+      }
+    }
+  } catch (e) {
+    console.log('[OMC] Warning: Could not migrate marketplace directory:', e.message);
+  }
+}
+
+migrateMarketplaceName();
+
 // Fix: flatten nested cache directories caused by Claude Code installer bug.
 // Root cause: Claude Code copies npm package contents into cache/omc/, but the package
 // itself contains an 'ultrapower/' subdirectory, causing infinite nesting on each restart.
