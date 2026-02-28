@@ -140,13 +140,17 @@ export function analyzeContextUsage(
 /**
  * Get or create session state
  */
+// Approximate tokens consumed by CLAUDE.md files + AGENTS.md injected at session start
+// (~10K global CLAUDE.md + ~5K project CLAUDE.md + ~2.5K AGENTS.md + ~6K axiom-boot)
+const INITIAL_SESSION_TOKEN_OFFSET = 23500;
+
 function getSessionState(sessionId: string) {
   let state = sessionStates.get(sessionId);
   if (!state) {
     state = {
       lastWarningTime: 0,
       warningCount: 0,
-      estimatedTokens: 0,
+      estimatedTokens: INITIAL_SESSION_TOKEN_OFFSET,
     };
     sessionStates.set(sessionId, state);
   }
@@ -342,7 +346,7 @@ export function getSessionTokenEstimate(sessionId: string): number {
 export function resetSessionTokenEstimate(sessionId: string): void {
   const state = sessionStates.get(sessionId);
   if (state) {
-    state.estimatedTokens = 0;
+    state.estimatedTokens = INITIAL_SESSION_TOKEN_OFFSET;
     state.warningCount = 0;
     state.lastWarningTime = 0;
   }

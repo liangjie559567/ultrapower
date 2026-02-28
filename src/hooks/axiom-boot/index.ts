@@ -7,6 +7,7 @@
 import {
   isAxiomEnabled,
   readActiveContext,
+  readActiveContextRaw,
   parseAxiomState,
   readProjectDecisions,
   readUserPreferences,
@@ -26,12 +27,12 @@ export function processAxiomBoot(input: AxiomBootInput): AxiomBootOutput {
 
   ensureConstitution(workingDirectory);
 
-  const activeContextContent = readActiveContext(workingDirectory);
-  if (!activeContextContent) {
+  const rawContent = readActiveContextRaw(workingDirectory);
+  if (!rawContent) {
     return { contextInjected: false, state: null };
   }
 
-  const state = parseAxiomState(activeContextContent);
+  const state = parseAxiomState(rawContent);
 
   let message: string;
   switch (state.status) {

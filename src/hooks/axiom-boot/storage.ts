@@ -28,7 +28,21 @@ export function getMemoryFilePaths(workingDirectory: string): AxiomMemoryFiles {
   };
 }
 
+const MAX_AXIOM_FILE_CHARS = 8000;
+
+function truncateAxiomFile(content: string, filePath: string): string {
+  if (content.length <= MAX_AXIOM_FILE_CHARS) return content;
+  return content.slice(0, MAX_AXIOM_FILE_CHARS) + `\n\n[截断，完整内容见: ${filePath}]`;
+}
+
 export function readActiveContext(workingDirectory: string): string | null {
+  const paths = getMemoryFilePaths(workingDirectory);
+  if (!existsSync(paths.activeContext)) return null;
+  const raw = readFileSync(paths.activeContext, 'utf-8');
+  return truncateAxiomFile(raw, paths.activeContext);
+}
+
+export function readActiveContextRaw(workingDirectory: string): string | null {
   const paths = getMemoryFilePaths(workingDirectory);
   if (!existsSync(paths.activeContext)) return null;
   return readFileSync(paths.activeContext, 'utf-8');
@@ -50,13 +64,13 @@ export function parseAxiomState(activeContextContent: string): AxiomState {
 export function readProjectDecisions(workingDirectory: string): string | null {
   const paths = getMemoryFilePaths(workingDirectory);
   if (!existsSync(paths.projectDecisions)) return null;
-  return readFileSync(paths.projectDecisions, 'utf-8');
+  return truncateAxiomFile(readFileSync(paths.projectDecisions, 'utf-8'), paths.projectDecisions);
 }
 
 export function readUserPreferences(workingDirectory: string): string | null {
   const paths = getMemoryFilePaths(workingDirectory);
   if (!existsSync(paths.userPreferences)) return null;
-  return readFileSync(paths.userPreferences, 'utf-8');
+  return truncateAxiomFile(readFileSync(paths.userPreferences, 'utf-8'), paths.userPreferences);
 }
 
 const DEFAULT_CONSTITUTION_CONTENT = `# Axiom Constitution — 进化安全边界
