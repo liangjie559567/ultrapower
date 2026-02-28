@@ -1,3 +1,14 @@
+# ultrapower v5.2.12
+
+### 修复
+
+- **fix(plugin): 完整迁移 marketplace 注册表**（补充 v5.2.11）
+  - v5.2.11 仅迁移了目录名和 `marketplace.json`，遗漏了 `known_marketplaces.json`（key `ultrapower` → `omc`）和 `installed_plugins.json`（key `ultrapower@ultrapower` → `ultrapower@omc`）
+  - 这两个文件是 Claude Code 查找 marketplace 和已安装插件的核心索引，未迁移导致 `/plugin install omc@ultrapower` 仍然失败
+  - 现在 `migrateMarketplaceName()` 同步修正全部三个文件
+
+---
+
 # ultrapower v5.2.11
 
 ### 修复
