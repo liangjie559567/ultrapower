@@ -1,6 +1,27 @@
 # nexus-daemon
 
-VPS 守护进程，每分钟 git pull 拉取 ultrapower 会话事件，运行进化引擎，生成改进建议。
+ultrapower 多维智能自进化系统。VPS 守护进程，每分钟 git pull 拉取会话事件，运行 15 个子系统的完整进化管线，生成改进建议。
+
+## 架构概览
+
+```
+NexusIntegrator (编排器)
+  ├─ 1. EvolutionEngine      — 模式检测与知识收割
+  ├─ 2. SelfEvaluator        — 多维健康评估
+  ├─ 3. AnomalyDetector      — Z-score/IQR 异常检测
+  ├─ 4. RecommendationEngine — 协同过滤推荐
+  ├─ 5. BottleneckAnalyzer   — 性能瓶颈分析
+  ├─ 6. ReflexionEngine      — 自我反思循环
+  ├─ 7. KnowledgeGraph       — 知识图谱构建
+  ├─ 8. EvolutionDashboard   — 综合仪表盘
+  ├─ ExperiencePropagator    — 跨会话经验传播
+  ├─ PromptOptimizer         — 提示词优化
+  ├─ MemoryModel             — 记忆衰减模型
+  ├─ CodeHealthScorer        — 代码健康评分
+  ├─ ModuleRegistry          — 模块注册与发现
+  ├─ SelfModifier            — 自我修改器
+  └─ ConsciousnessLoop       — 意识循环
+```
 
 ## 运行
 
@@ -12,7 +33,9 @@ NEXUS_REPO_PATH=/path/to/nexus-daemon python daemon.py
 ## 测试
 
 ```bash
-python -m pytest tests/ -v
+python -m pytest tests/ -v          # 375 tests
+python -m pytest tests/ -q          # 简洁输出
+python ci_gate.py                   # CI 四门验证
 ```
 
 ## 数据流：TS → Python
@@ -25,87 +48,53 @@ Claude Code (TS)                    nexus-daemon (Python, VPS)
 PostToolUse hook                    git pull (每 60s)
   │                                   │
   ▼                                   ▼
-usage-tracker.ts                    daemon.py
-  recordUsage()                       _run_cycle()
-  → .omc/axiom/evolution/               │
-    usage_metrics.json                  ├─ EvolutionEngine.process_events()
-                                        │    detect_patterns()
-session-end hook                        │    → evolution/knowledge_base.md
-  handleNexusSessionEnd()               │    → evolution/pattern_library.md
-  readToolCallsFromMetrics()            │
-  collectSessionEvent()               ├─ SelfModifier.apply()
-  → .omc/nexus/events/                │    improvements/*.json → skills/*.md
-    {sessionId}-{ts}.json             │                        → agents/*.md
+usage-tracker.ts                    daemon.py → NexusIntegrator.run_cycle()
+  recordUsage()                       │
+  → .omc/axiom/evolution/             ├─ 1. EvolutionEngine (模式检测)
+    usage_metrics.json                ├─ 2. SelfEvaluator (健康评估)
+                                      ├─ 3. AnomalyDetector (异常检测)
+session-end hook                      ├─ 4. RecommendationEngine (推荐)
+  handleNexusSessionEnd()             ├─ 5. BottleneckAnalyzer (瓶颈分析)
+  collectSessionEvent()               ├─ 6. ReflexionEngine (自我反思)
+  → .omc/nexus/events/               ├─ 7. KnowledgeGraph (知识图谱)
+    {sessionId}-{ts}.json             ├─ 8. EvolutionDashboard (仪表盘)
                                       │
-  git push (session end)            └─ ConsciousnessLoop (每 300s)
-                                         periodic reflection
+  git push (session end)              └─ IntegrationResult → JSON 持久化
 ```
 
 ### 详细步骤
 
-#### 1. TS 侧：工具调用记录
-
-每次工具调用后，`bridge.ts` 的 PostToolUse hook 触发：
+#### 1. TS 侧：事件收集
 
 ```
-bridge.ts PostToolUse
-  → usage-tracker.ts recordUsage(event)
-      - 过滤空 toolName（guard: if (!event.toolName) return）
-      - 提取 skillName（toolName === 'Task' 或 'skill'）
-      - 写入 .omc/axiom/evolution/usage_metrics.json
-        { agents: {}, skills: {}, tools: { "ToolName": { totalCalls, lastUsed } } }
+bridge.ts PostToolUse → usage-tracker.ts recordUsage()
+  → .omc/axiom/evolution/usage_metrics.json
+
+session-end hook → collectSessionEvent()
+  → .omc/nexus/events/{sessionId}-{timestamp}.json
+  → git push
 ```
 
-#### 2. TS 侧：会话事件收集
+#### 2. Python 侧：NexusIntegrator 管线
 
-会话结束时，`session-end/index.ts` 触发：
-
-```
-session-end hook
-  → handleNexusSessionEnd(sessionId, directory)
-      - readToolCallsFromMetrics()  ← 从 usage_metrics.json 动态读取
-      - collectSessionEvent({ sessionId, toolCalls, modesUsed, ... })
-      - 写入 .omc/nexus/events/{sessionId}-{timestamp}.json
-      - git push → 推送到远端仓库
-```
-
-事件文件格式：
-```json
-{
-  "sessionId": "...",
-  "timestamp": "...",
-  "toolCalls": [{ "name": "Bash", "count": 11 }],
-  "modesUsed": ["autopilot"],
-  "duration": 3600
-}
-```
-
-#### 3. Python 侧：进化引擎
-
-`daemon.py` 每 60 秒执行一次 `_run_cycle()`：
+`daemon.py` 每 60 秒调用 `NexusIntegrator.run_cycle(events)`：
 
 ```
-_run_cycle()
-  1. git_pull()  ← git fetch + rebase origin/main
-  2. 读取 .omc/nexus/events/*.json
-  3. EvolutionEngine.process_events(events)
-       detect_patterns(events)
-         - 统计 modesUsed 跨事件出现次数
-         - confidence = min(100, 50 + count * 10)
-         - PATTERN_THRESHOLD = 3（出现 ≥ 3 次才晋升）
-       promoted patterns → 追加写入：
-         - evolution/knowledge_base.md
-         - evolution/pattern_library.md
-  4. 扫描 improvements/*.json
-       SelfModifier.apply(improvement)
-         - confidence < 70 → skipped
-         - targetFile 必须在 skills/ 或 agents/ 下
-         - 仅允许 .md 文件
-         - 写入新内容到目标文件
-  5. git add + commit + push（有变更时）
+run_cycle(events)
+  1. EvolutionEngine.detect_patterns()     → 模式列表
+  2. SelfEvaluator.generate_health_report() → 健康分数
+  3. AnomalyDetector.detect_anomalies()     → 异常列表
+  4. RecommendationEngine.recommend()       → 推荐列表
+  5. BottleneckAnalyzer.analyze()           → 瓶颈报告
+  6. ReflexionEngine.run_cycle()            → 反思分数
+  7. KnowledgeGraph.build_from_events()     → 节点/边统计
+  8. EvolutionDashboard.generate()          → 仪表盘报告
+  → IntegrationResult (JSON 持久化)
 ```
 
-#### 4. 安全边界
+每个步骤独立捕获异常（故障隔离），单个子系统失败不阻塞其他步骤。
+
+#### 3. 安全边界
 
 | 组件 | 限制 |
 |------|------|
@@ -114,3 +103,36 @@ _run_cycle()
 | SelfModifier | 路径遍历检测（resolve + relative_to） |
 | EvolutionEngine | 只追加写入，不覆盖现有内容 |
 | daemon | git rebase（非 merge），保持历史线性 |
+
+## 子系统一览（15 个）
+
+| 模块 | 类 | 功能 |
+|------|-----|------|
+| `evolution_engine.py` | `EvolutionEngine` | 模式检测、知识收割 |
+| `self_evaluator.py` | `SelfEvaluator` | 多维健康评估（5 维度） |
+| `anomaly_detector.py` | `AnomalyDetector` | Z-score/IQR 异常检测 |
+| `recommendation_engine.py` | `RecommendationEngine` | 协同过滤推荐 |
+| `bottleneck_analyzer.py` | `BottleneckAnalyzer` | 失败率/错误率/资源瓶颈 |
+| `reflexion.py` | `ReflexionEngine` | 自我反思循环 |
+| `knowledge_graph.py` | `KnowledgeGraph` | 知识图谱构建与查询 |
+| `experience_sharing.py` | `ExperiencePropagator` | 跨会话经验传播 |
+| `prompt_optimizer.py` | `PromptOptimizer` | 提示词优化 |
+| `memory_model.py` | `MemoryModel` | 记忆衰减模型 |
+| `code_health_scorer.py` | `CodeHealthScorer` | 代码可维护性评分 |
+| `evolution_dashboard.py` | `EvolutionDashboard` | 综合仪表盘（8 区域） |
+| `module_registry.py` | `ModuleRegistry` | 模块注册与发现 |
+| `self_modifier.py` | `SelfModifier` | 自我修改器 |
+| `daemon.py` | `NexusDaemon` | 守护进程主循环 |
+
+## CI 门禁（ci_gate.py）
+
+```bash
+python ci_gate.py
+```
+
+四道门禁依次执行：
+
+1. **Import Verification** — 15 个子系统全部可导入
+2. **Unit Tests** — pytest 全部通过（375 tests）
+3. **Integration Smoke** — NexusIntegrator 完整管线运行
+4. **Code Health** — 平均可维护性分数 ≥ 40
