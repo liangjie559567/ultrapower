@@ -18,7 +18,7 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
 
 # 第二步：安装插件
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 ### 验证安装
@@ -274,7 +274,7 @@ ultrapower 内置 Axiom 自我进化引擎，让 AI 工作流随使用不断优�
 ```bash
 # 1. 安装插件
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 
 # 2. 初始化 Axiom 系统
 /ultrapower:ax-context init
@@ -328,7 +328,7 @@ Skills 直接存放在本仓库中。贡献方式：
 ## 更新
 
 ```bash
-/plugin update ultrapower
+/plugin update omc@ultrapower
 ```
 
 ## 许可证

@@ -23,7 +23,7 @@
 **第一步：安装**
 ```bash
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 **第二步：配置**

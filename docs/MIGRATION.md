@@ -523,7 +523,7 @@ npm uninstall -g @liangjie559567/ultrapower
 ```bash
 # In Claude Code:
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 > **注意**：不再支持 npm/bun 全局安装。请使用插件系统。

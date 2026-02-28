@@ -57,7 +57,7 @@ ultrapower 插件已安装：
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
 
 # 安装插件
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 ### 初始化 Axiom 系统

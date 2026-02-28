@@ -35,7 +35,7 @@ cd tests/claude-code
 
 - 必须从 **ultrapower 插件目录**运行（不能从临时目录运行）
 - Claude Code 必须已安装并可通过 `claude` 命令访问
-- 必须启用本地开发 marketplace：在 `~/.claude/settings.json` 中设置 `"ultrapower@ultrapower-dev": true`
+- 必须启用本地开发 marketplace：在 `~/.claude/settings.json` 中设置 `"omc@ultrapower-dev": true`
 
 ## 集成测试：subagent-driven-development
 
@@ -183,7 +183,7 @@ ls -lt "$SESSION_DIR"/*.jsonl | head -5
 
 **解决方案**：
 1. 确保从 ultrapower 目录运行：`cd /path/to/ultrapower && tests/...`
-2. 检查 `~/.claude/settings.json` 的 `enabledPlugins` 中是否有 `"ultrapower@ultrapower-dev": true`
+2. 检查 `~/.claude/settings.json` 的 `enabledPlugins` 中是否有 `"omc@ultrapower-dev": true`
 3. 验证 skill 存在于 `skills/` 目录中
 
 ### 权限错误

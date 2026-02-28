@@ -21,7 +21,7 @@
 **Step 1: 설치**
 ```bash
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 **Step 2: 설정**

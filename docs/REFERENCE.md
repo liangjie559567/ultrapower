@@ -32,7 +32,7 @@ ultrapower 完整参考手册。快速入门请参阅 [README.md](../README.md)�
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
 
 # 第二步：安装插件
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 此方式直接集成到 Claude Code 的插件系统，使用 Node.js hooks。

@@ -41,7 +41,7 @@ node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR
 
 **步骤 2：** 验证插件已安装：
 ```bash
-node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude');const bases=['liangjie559567','omc'].map(ns=>p.join(d,'plugins','cache',ns,'ultrapower'));let found=false;for(const b of bases){try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length===0)continue;const l=v[v.length-1],h=p.join(b,l,'dist','hud','index.js');console.log('Version:',l,'Path:',b);console.log(f.existsSync(h)?'READY':'NOT_FOUND - try reinstalling: /plugin install ultrapower');found=true;break}catch{}}if(found===false)console.log('Plugin not installed - run: /plugin install ultrapower')"
+node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude');const bases=['liangjie559567','omc'].map(ns=>p.join(d,'plugins','cache',ns,'ultrapower'));let found=false;for(const b of bases){try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length===0)continue;const l=v[v.length-1],h=p.join(b,l,'dist','hud','index.js');console.log('Version:',l,'Path:',b);console.log(f.existsSync(h)?'READY':'NOT_FOUND - try reinstalling: /plugin install omc@ultrapower');found=true;break}catch{}}if(found===false)console.log('Plugin not installed - run: /plugin install omc@ultrapower')"
 ```
 
 **步骤 3：** 若 omc-hud.mjs 缺失或参数为 `setup`，创建 HUD 目录和脚本：

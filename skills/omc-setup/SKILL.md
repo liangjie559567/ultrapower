@@ -373,11 +373,11 @@ node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=pro
 
 **完整清洁重装**：
 ```bash
-claude plugin uninstall ultrapower
+claude plugin uninstall omc@ultrapower
 rm -rf ~/.claude/plugins/npm-cache        # 关键：必须清除 npm-cache
-rm -rf ~/.claude/plugins/cache/ultrapower
-claude plugin marketplace update ultrapower
-claude plugin install ultrapower
+rm -rf ~/.claude/plugins/cache/omc
+claude plugin marketplace update omc
+claude plugin install omc@ultrapower
 ```
 
 > ⚠️ 仅清除插件缓存不够，必须同时清除 `npm-cache`。
@@ -771,11 +771,11 @@ node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=pro
 
 **完整清洁重装**：
 ```bash
-claude plugin uninstall ultrapower
+claude plugin uninstall omc@ultrapower
 rm -rf ~/.claude/plugins/npm-cache        # 关键：必须清除 npm-cache
-rm -rf ~/.claude/plugins/cache/ultrapower
-claude plugin marketplace update ultrapower
-claude plugin install ultrapower
+rm -rf ~/.claude/plugins/cache/omc
+claude plugin marketplace update omc
+claude plugin install omc@ultrapower
 ```
 
 > ⚠️ 仅清除插件缓存不够，必须同时清除 `npm-cache`。

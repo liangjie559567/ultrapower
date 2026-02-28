@@ -1,3 +1,14 @@
+# ultrapower v5.2.10
+
+### 修复
+
+- **fix(plugin): marketplace name 改为 `omc`，根治缓存路径无限嵌套**
+  - 根因：marketplace name = plugin name = `ultrapower`，导致缓存路径 `plugins/cache/ultrapower/ultrapower/` 被 `fixNestedCacheDir()` 误判为嵌套并循环删除
+  - 新缓存路径：`plugins/cache/omc/ultrapower/VERSION/`，marketplace ≠ plugin name，彻底消除嵌套触发条件
+  - 同步更新 `plugin-setup.mjs` 所有硬编码路径及相关文档
+
+---
+
 # ultrapower v5.2.6
 
 ### 测试

@@ -21,7 +21,7 @@
 **Bước 1: Cài đặt**
 ```bash
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 **Bước 2: Thiết lập**

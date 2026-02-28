@@ -21,7 +21,7 @@
 **Paso 1: Instalar**
 ```bash
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 **Paso 2: Configurar**
