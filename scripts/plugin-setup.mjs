@@ -31,7 +31,7 @@ function migrateMarketplaceName() {
       renameSync(oldDir, newDir);
       console.log('[OMC] Migrated marketplace directory: ultrapower -> omc');
     }
-    // Also patch marketplace.json name field if it still says 'ultrapower'
+    // Patch marketplace.json name field if it still says 'ultrapower'
     const mktJsonPath = join(existsSync(newDir) ? newDir : oldDir, '.claude-plugin', 'marketplace.json');
     if (existsSync(mktJsonPath)) {
       const mkt = JSON.parse(readFileSync(mktJsonPath, 'utf-8'));
@@ -39,6 +39,30 @@ function migrateMarketplaceName() {
         mkt.name = 'omc';
         writeFileSync(mktJsonPath, JSON.stringify(mkt, null, 2));
         console.log('[OMC] Patched marketplace.json name: ultrapower -> omc');
+      }
+    }
+
+    // Patch known_marketplaces.json: rename key 'ultrapower' -> 'omc'
+    const knownMktPath = join(CLAUDE_DIR, 'plugins/known_marketplaces.json');
+    if (existsSync(knownMktPath)) {
+      const known = JSON.parse(readFileSync(knownMktPath, 'utf-8'));
+      if (known['ultrapower'] && !known['omc']) {
+        known['omc'] = { ...known['ultrapower'], installLocation: known['ultrapower'].installLocation.replace(/\\ultrapower$/, '\\omc').replace(/\/ultrapower$/, '/omc') };
+        delete known['ultrapower'];
+        writeFileSync(knownMktPath, JSON.stringify(known, null, 2));
+        console.log('[OMC] Patched known_marketplaces.json: ultrapower -> omc');
+      }
+    }
+
+    // Patch installed_plugins.json: rename key 'ultrapower@ultrapower' -> 'ultrapower@omc'
+    const installedPath = join(CLAUDE_DIR, 'plugins/installed_plugins.json');
+    if (existsSync(installedPath)) {
+      const installed = JSON.parse(readFileSync(installedPath, 'utf-8'));
+      if (installed.plugins?.['ultrapower@ultrapower'] && !installed.plugins?.['ultrapower@omc']) {
+        installed.plugins['ultrapower@omc'] = installed.plugins['ultrapower@ultrapower'];
+        delete installed.plugins['ultrapower@ultrapower'];
+        writeFileSync(installedPath, JSON.stringify(installed, null, 2));
+        console.log('[OMC] Patched installed_plugins.json: ultrapower@ultrapower -> ultrapower@omc');
       }
     }
   } catch (e) {
