@@ -55,8 +55,21 @@ export interface ConsistencyReport {
 
 // ---- Constants ----
 
-const PLUGIN_KEY = 'ultrapower@ultrapower';
 const REGISTRY_PATH = join(homedir(), '.claude', 'plugins', 'installed_plugins.json');
+
+/**
+ * Find the actual registry key for ultrapower.
+ * Claude Code uses the format `{pluginName}@{marketplaceName}`.
+ * The marketplace name varies (e.g. "omc", "ultrapower"), so we search dynamically.
+ */
+function findPluginKey(registry: InstalledPluginsJson): string | null {
+  for (const key of Object.keys(registry.plugins)) {
+    if (key.startsWith('ultrapower@')) {
+      return key;
+    }
+  }
+  return null;
+}
 
 // ---- Internal helpers ----
 
@@ -71,7 +84,9 @@ function getInstalledPluginEntry(): PluginRegistryEntry | null {
     }
     const raw = readFileSync(REGISTRY_PATH, 'utf-8');
     const registry = JSON.parse(raw) as InstalledPluginsJson;
-    const entries = registry?.plugins?.[PLUGIN_KEY];
+    const key = findPluginKey(registry);
+    if (!key) return null;
+    const entries = registry.plugins[key];
     if (!Array.isArray(entries) || entries.length === 0) {
       return null;
     }
@@ -108,16 +123,12 @@ function getPackageJsonVersion(): string {
 
 /**
  * Read version from version metadata file in plugin cache.
- * Path: ~/.claude/plugins/cache/ultrapower/ultrapower/{version}/version.json
+ * Derives path from the registry entry's installPath instead of hardcoding.
  */
-function getVersionMetadataVersion(registryVersion: string | null): string | null {
-  if (!registryVersion) return null;
+function getVersionMetadataVersion(entry: PluginRegistryEntry | null): string | null {
+  if (!entry?.installPath) return null;
   try {
-    const versionJsonPath = join(
-      homedir(),
-      '.claude', 'plugins', 'cache', 'ultrapower', 'ultrapower',
-      registryVersion, 'version.json'
-    );
+    const versionJsonPath = join(entry.installPath, 'version.json');
     if (!existsSync(versionJsonPath)) return null;
     const raw = readFileSync(versionJsonPath, 'utf-8');
     const data = JSON.parse(raw) as { version?: string };
@@ -152,7 +163,7 @@ export function syncPluginRegistry(options: SyncOptions): SyncResult {
       success: false,
       newVersion,
       registryPath: REGISTRY_PATH,
-      errors: [`Entry '${PLUGIN_KEY}' not found in registry`],
+      errors: [`No 'ultrapower@*' entry found in registry`],
     };
   }
 
@@ -161,7 +172,8 @@ export function syncPluginRegistry(options: SyncOptions): SyncResult {
   try {
     const raw = readFileSync(REGISTRY_PATH, 'utf-8');
     const registry = JSON.parse(raw) as InstalledPluginsJson;
-    const entries = registry.plugins[PLUGIN_KEY];
+    const key = findPluginKey(registry)!;
+    const entries = registry.plugins[key];
     entries[0].version = newVersion;
     entries[0].lastUpdated = new Date().toISOString();
     atomicWriteJsonSync(REGISTRY_PATH, registry);
@@ -182,7 +194,7 @@ export function checkVersionConsistency(): ConsistencyReport {
   const packageJsonVersion = getPackageJsonVersion();
   const entry = getInstalledPluginEntry();
   const registryVersion = entry?.version ?? null;
-  const versionMetadataVersion = getVersionMetadataVersion(registryVersion);
+  const versionMetadataVersion = getVersionMetadataVersion(entry);
 
   const sources: Array<[string, string | null]> = [
     ['package.json', packageJsonVersion],

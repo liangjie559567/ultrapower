@@ -97,7 +97,7 @@ describe('syncPluginRegistry', () => {
 
     expect(result.success).toBe(false);
     expect(result.errors).toBeDefined();
-    expect(result.errors![0]).toMatch(/not found/i);
+    expect(result.errors![0]).toMatch(/ultrapower@\*/i);
     expect(mockedAtomicWriteJsonSync).not.toHaveBeenCalled();
   });
 
@@ -263,6 +263,6 @@ describe('getInstalledPluginEntry (via syncPluginRegistry)', () => {
 
     const result = syncPluginRegistry({ newVersion: '5.2.2' });
     expect(result.success).toBe(false);
-    expect(result.errors![0]).toMatch(/not found/i);
+    expect(result.errors![0]).toMatch(/ultrapower@\*/i);
   });
 });

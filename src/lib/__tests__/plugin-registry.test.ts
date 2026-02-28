@@ -105,7 +105,7 @@ describe('syncPluginRegistry', () => {
 
     expect(result.success).toBe(false);
     expect(result.errors).toBeDefined();
-    expect(result.errors![0]).toContain('not found');
+    expect(result.errors![0]).toContain('ultrapower@*');
     expect(mockAtomicWriteJsonSync).not.toHaveBeenCalled();
   });
 
