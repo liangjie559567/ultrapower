@@ -1,3 +1,13 @@
+# ultrapower v5.2.11
+
+### 修复
+
+- **fix(plugin): 自动迁移本地 marketplace 目录名 `ultrapower` → `omc`**
+  - 根因：v5.2.10 将 marketplace name 改为 `omc`，但已通过 GitHub URL 添加 marketplace 的用户本地目录仍为 `marketplaces/ultrapower/`，导致 `/plugin install omc@ultrapower` 报错 "Plugin 'omc' not found"
+  - 修复：`plugin-setup.mjs` 新增 `migrateMarketplaceName()`，postinstall 时自动将 `marketplaces/ultrapower/` 重命名为 `marketplaces/omc/`，并同步修正目录内 `marketplace.json` 的 `name` 字段
+
+---
+
 # ultrapower v5.2.10
 
 ### 修复
