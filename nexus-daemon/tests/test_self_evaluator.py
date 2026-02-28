@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 import json
-from self_evaluator import SelfEvaluator, SkillStats, HealthReport
+from self_evaluator import SelfEvaluator, SkillStats, HealthReport, DimensionScore, EnhancedHealthReport
 
 
 @pytest.fixture
@@ -86,3 +86,90 @@ def test_format_report_with_zombie_skills(tmp_repo):
     md = ev.format_report(report)
     assert '## Zombie Skills' in md
     assert '`rare-skill`' in md
+
+
+class TestBackwardCompatibility:
+    """确保新接口不破坏现有调用"""
+
+    def test_repo_path_init_still_works(self, tmp_path):
+        (tmp_path / 'events').mkdir()
+        ev = SelfEvaluator(repo_path=tmp_path)
+        report = ev.generate_report()
+        assert isinstance(report, HealthReport)
+
+    def test_events_init_mode(self):
+        events = [
+            {'sessionId': 's1', 'skillsTriggered': ['autopilot']},
+            {'sessionId': 's2', 'skillsTriggered': ['ralph']},
+        ]
+        ev = SelfEvaluator(events=events)
+        report = ev.generate_report()
+        assert report.total_sessions == 2
+        assert 'autopilot' in report.skill_stats
+
+
+class TestEnhancedHealthReport:
+    def test_generates_six_dimensions(self):
+        events = [
+            {
+                'sessionId': 's1',
+                'skillsTriggered': ['autopilot', 'ralph'],
+                'toolCalls': [{'name': 'Read'}, {'name': 'Edit'}],
+                'modesUsed': ['ultrawork'],
+                'agentsSpawned': 3,
+                'agentsCompleted': 3,
+                'errors': [],
+            },
+            {
+                'sessionId': 's2',
+                'skillsTriggered': ['ultrawork'],
+                'toolCalls': [{'name': 'Grep'}],
+                'modesUsed': ['ralph'],
+                'agentsSpawned': 2,
+                'agentsCompleted': 2,
+                'errors': [],
+            },
+        ]
+        ev = SelfEvaluator(events=events)
+        report = ev.generate_health_report()
+        assert isinstance(report, EnhancedHealthReport)
+        assert len(report.dimension_scores) == 6
+        assert 0.0 <= report.overall_score <= 1.0
+        dim_names = {d.name for d in report.dimension_scores}
+        assert dim_names == {'skill_health', 'tool_health', 'mode_health',
+                             'error_health', 'agent_health', 'evolution_health'}
+
+    def test_perfect_agent_health(self):
+        events = [
+            {'sessionId': 's1', 'agentsSpawned': 5, 'agentsCompleted': 5},
+        ]
+        ev = SelfEvaluator(events=events)
+        report = ev.generate_health_report()
+        agent_dim = next(d for d in report.dimension_scores if d.name == 'agent_health')
+        assert agent_dim.score == 1.0
+
+    def test_error_health_degrades_with_errors(self):
+        events = [
+            {'sessionId': 's1', 'errors': [{'type': 'timeout'}]},
+            {'sessionId': 's2', 'errors': []},
+            {'sessionId': 's3', 'errors': [{'type': 'crash'}]},
+        ]
+        ev = SelfEvaluator(events=events)
+        report = ev.generate_health_report()
+        error_dim = next(d for d in report.dimension_scores if d.name == 'error_health')
+        # 2/3 有错误 → error_rate=0.667 → score = max(0, 1 - 0.667*2) = 0
+        assert error_dim.score < 0.5
+
+    def test_empty_events_health_report(self):
+        ev = SelfEvaluator(events=[])
+        report = ev.generate_health_report()
+        assert report.overall_score == 0.0
+        assert report.total_sessions == 0
+
+    def test_format_health_report(self):
+        ev = SelfEvaluator(events=[])
+        report = ev.generate_health_report()
+        md = ev.format_health_report(report)
+        assert '# nexus Enhanced Health Report' in md
+        assert 'Overall Score' in md
+        assert 'Dimension Scores' in md
