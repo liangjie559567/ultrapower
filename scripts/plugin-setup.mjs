@@ -20,28 +20,35 @@ const SETTINGS_FILE = join(CLAUDE_DIR, 'settings.json');
 console.log('[OMC] Running post-install setup...');
 
 // Fix: flatten nested cache directories caused by Claude Code installer bug.
-// Root cause: Claude Code copies npm package contents into cache/ultrapower/, but the package
+// Root cause: Claude Code copies npm package contents into cache/omc/, but the package
 // itself contains an 'ultrapower/' subdirectory, causing infinite nesting on each restart.
 // Two known nesting patterns:
-//   Pattern A (flat root): cache/ultrapower/ultrapower/5.0.23/ultrapower/5.0.23/...
-//   Pattern B (versioned): cache/ultrapower/ultrapower/VERSION/ultrapower/VERSION/...
+//   Pattern A (flat root): cache/omc/ultrapower/5.0.23/ultrapower/5.0.23/...
+//   Pattern B (versioned): cache/omc/ultrapower/VERSION/ultrapower/VERSION/...
 // This function handles both by detecting and removing the nested 'ultrapower/' subtree
-// directly under cache/ultrapower/ (Pattern A), which is the primary observed pattern.
+// directly under cache/omc/ (Pattern A), which is the primary observed pattern.
 function fixNestedCacheDir() {
   try {
-    // Pattern A: cache/ultrapower/ultrapower/ exists directly (no version layer)
-    const pluginCacheRoot = join(CLAUDE_DIR, 'plugins/cache/ultrapower');
+    // Pattern A: cache/omc/ultrapower/ exists but is NOT the legitimate
+    // marketplace/plugin path. Only remove if it contains no version dirs
+    // and no plugin markers — i.e. it's a stale empty nesting artifact.
+    const pluginCacheRoot = join(CLAUDE_DIR, 'plugins/cache/omc');
     const nestedRootDir = join(pluginCacheRoot, 'ultrapower');
     if (existsSync(nestedRootDir)) {
-      console.log('[OMC] Detected nested cache dir at plugins/cache/ultrapower/ultrapower/ — removing...');
-      rmSync(nestedRootDir, { recursive: true, force: true });
-      console.log('[OMC] Removed nested cache dir (Pattern A)');
+      const nestedContents = readdirSync(nestedRootDir);
+      const PLUGIN_MARKERS = ['skills', 'dist', 'agents', 'hooks'];
+      const hasVersionDirs = nestedContents.some(f => /^\d+\.\d+/.test(f));
+      const hasPluginMarkers = nestedContents.some(f => PLUGIN_MARKERS.includes(f));
+      if (!hasVersionDirs && !hasPluginMarkers) {
+        console.log('[OMC] Detected stale nested cache dir at plugins/cache/omc/ultrapower/ — removing...');
+        rmSync(nestedRootDir, { recursive: true, force: true });
+        console.log('[OMC] Removed stale nested cache dir (Pattern A)');
+      }
     }
 
-    // Pattern B: cache/ultrapower/ultrapower/VERSION/ (versioned nesting)
-    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
+    // Pattern B: cache/omc/ultrapower/VERSION/ (versioned nesting)
+    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/omc/ultrapower');
     if (!existsSync(pluginCacheBase)) return;
-    const versions = readdirSync(pluginCacheBase);
     for (const version of versions) {
       const versionDir = join(pluginCacheBase, version);
       const nestedDir = join(versionDir, 'ultrapower');
@@ -103,7 +110,7 @@ fixNestedCacheDir();
 // hooks/hooks.json paths (${CLAUDE_PLUGIN_ROOT}/templates/hooks/*.mjs) resolve correctly.
 function copyTemplatesToCache() {
   try {
-    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
+    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/omc/ultrapower');
     if (!existsSync(pluginCacheBase)) return;
 
     // __dirname = <pkg-root>/scripts/, so dirname(__dirname) = <pkg-root>/
@@ -199,7 +206,7 @@ function fixMissingPluginJson() {
 
     // 2. Write directly to plugin cache (marketplace: ultrapower, plugin: ultrapower)
     // Claude Code copies from npm-cache but skips hidden dirs, so we patch the cache directly.
-    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/ultrapower/ultrapower');
+    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/omc/ultrapower');
     if (existsSync(pluginCacheBase)) {
       const versions = readdirSync(pluginCacheBase);
       for (const v of versions) {

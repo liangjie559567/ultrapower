@@ -1,5 +1,5 @@
 {
-  "name": "ultrapower",
+  "name": "omc",
   "description": "Disciplined multi-agent orchestration for Claude Code: workflow enforcement + parallel execution",
   "owner": {
     "name": "liangjie559567"
@@ -8,11 +8,11 @@
     {
       "name": "ultrapower",
       "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
-      "version": "5.2.9",
+      "version": "5.2.10",
       "source": {
         "source": "npm",
         "package": "@liangjie559567/ultrapower",
-        "version": "5.2.9"
+        "version": "5.2.10"
       },
       "author": {
         "name": "liangjie559567"
