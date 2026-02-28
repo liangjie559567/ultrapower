@@ -191,12 +191,19 @@ notepad_write_working("full_context", {
 
 ## Hooks
 
-ultrapower 在 `src/hooks/` 中包含 35 个 hook，用于生命周期事件：
+ultrapower 在 `src/hooks/` 中包含 47 个 hook，用于生命周期事件：
 
 | 事件 | 用途 |
 |-------|---------|
 | `UserPromptSubmit` | 关键词检测、模式激活 |
-| `Stop` | 续行强制、会话结束 |
+| `SubagentStop` | 子 agent 完成时触发 |
+| `PreCompact` | 上下文压缩前触发 |
+| `TeammateIdle` | 团队成员空闲时触发 |
+| `SessionEnd` | 会话结束时触发 |
+| `UserPromptSubmit` | 用户提交提示词前触发 |
+| `PermissionRequest` | 工具权限请求时触发 |
+| `TaskCompleted` | 任务完成时触发 |
+| `ConfigChange` | 配置变更时触发 |
 | `PreToolUse` | 权限验证 |
 | `PostToolUse` | 错误恢复、规则注入 |
 

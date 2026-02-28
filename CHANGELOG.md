@@ -1,3 +1,13 @@
+# ultrapower v5.3.0
+
+### 新增
+
+- **feat(hooks): 新增 SubagentStop hook** — 子 agent 完成时触发，防止无限循环
+- **feat(hooks): 新增 PreCompact hook** — 上下文压缩前保存 Axiom 状态
+- **feat(hooks): 新增 TeammateIdle hook** — 团队成员空闲时触发，默认允许
+
+---
+
 # ultrapower v5.2.13
 
 ### 修复
