@@ -503,7 +503,9 @@ export function reconcileUpdateRuntime(options?: { verbose?: boolean }): UpdateR
   // Sync plugin registry version after successful reconciliation
   try {
     const newVersion = getRuntimePackageVersion();
-    syncPluginRegistry({ newVersion, skipIfProjectScoped: projectScopedPlugin });
+    if (newVersion && newVersion !== 'unknown') {
+      syncPluginRegistry({ newVersion, skipIfProjectScoped: projectScopedPlugin });
+    }
   } catch {
     // Non-fatal: registry sync failure should not block reconciliation
   }
@@ -554,8 +556,10 @@ export async function performUpdate(options?: {
         process.stdout.write('✓\n');
         // Update registry version after successful sync
         try {
-          const { syncPluginRegistry } = await import('../lib/plugin-registry.js');
-          syncPluginRegistry({ newVersion: latestVersion, skipIfProjectScoped: false });
+          if (latestVersion && latestVersion !== 'unknown') {
+            const { syncPluginRegistry } = await import('../lib/plugin-registry.js');
+            syncPluginRegistry({ newVersion: latestVersion, skipIfProjectScoped: false });
+          }
         } catch { /* non-fatal */ }
       }
 

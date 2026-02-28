@@ -676,8 +676,8 @@ Resume from this stage and continue the staged Team workflow.
     try {
       let agentsContent = readFileSync(agentsMdPath, 'utf-8').trim();
       if (agentsContent) {
-        // Truncate to ~5000 tokens (20000 chars) to avoid context bloat
-        const MAX_AGENTS_CHARS = 20000;
+        // Truncate to ~2500 tokens (10000 chars) to avoid context bloat
+        const MAX_AGENTS_CHARS = 10000;
         let truncationNotice = '';
         if (agentsContent.length > MAX_AGENTS_CHARS) {
           agentsContent = agentsContent.slice(0, MAX_AGENTS_CHARS);
