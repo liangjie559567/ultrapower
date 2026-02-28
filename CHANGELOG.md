@@ -1,3 +1,13 @@
+# ultrapower v5.2.13
+
+### 修复
+
+- **fix(plugin): 修复 `fixNestedCacheDir()` Pattern B 中 `versions` 未定义的 bug**
+  - 根因：Pattern B 分支直接使用 `versions` 变量但未在该作用域内定义，导致 `ReferenceError` 被 catch 吞掉，Pattern B 逻辑从未执行
+  - 修复：在 Pattern B 开头添加 `const versions = readdirSync(pluginCacheBase)`
+
+---
+
 # ultrapower v5.2.12
 
 ### 修复

@@ -102,6 +102,7 @@ function fixNestedCacheDir() {
     // Pattern B: cache/omc/ultrapower/VERSION/ (versioned nesting)
     const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/omc/ultrapower');
     if (!existsSync(pluginCacheBase)) return;
+    const versions = readdirSync(pluginCacheBase);
     for (const version of versions) {
       const versionDir = join(pluginCacheBase, version);
       const nestedDir = join(versionDir, 'ultrapower');
