@@ -32,7 +32,9 @@
     "templates",
     "docs",
     ".claude-plugin/plugin.json",
+    ".claude-plugin/marketplace.json",
     ".mcp.json",
+    "settings.json",
     "README.md",
     "LICENSE"
   ],
