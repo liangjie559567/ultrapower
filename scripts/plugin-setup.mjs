@@ -235,10 +235,13 @@ function fixMissingPluginJson() {
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
     const version = pkg.version || '0.0.0';
 
-    // Include metadata fields + explicit component path declarations.
-    // Per official docs, paths must start with './' — auto-discovery constructs paths without
-    // this prefix, causing Zod validation errors: "hooks: Invalid input, agents: Invalid input".
-    // Declaring explicit paths prevents auto-discovery from taking over.
+    // Metadata-only plugin manifest. Per the Claude Code plugin schema:
+    // - hooks/hooks.json is auto-discovered from the hooks/ directory
+    // - agents/ directory is auto-discovered automatically
+    // - The 'hooks' field is only for ADDITIONAL hooks files (must end with .json)
+    // - The 'agents' field is only for ADDITIONAL individual agent .md files (must end with .md)
+    // Declaring hooks/agents directory paths here causes Zod validation failures because
+    // the schema expects .md files for agents and .json files for hooks, NOT directory paths.
     const pluginJson = {
       name: 'ultrapower',
       description: pkg.description || '',
@@ -248,22 +251,20 @@ function fixMissingPluginJson() {
       repository: pkg.repository?.url || pkg.repository || '',
       license: pkg.license || 'MIT',
       keywords: pkg.keywords || [],
-      hooks: './hooks/hooks.json',
-      agents: './agents/',
     };
     const pluginJsonStr = JSON.stringify(pluginJson, null, 2);
 
     // Detect cache entries that need repair:
-    // - Missing hooks or agents fields (old clean format from v5.4.3)
-    // - hooks/agents not declared as relative string paths starting with './'
-    // - Old invalid inline object/array formats from v5.3.x
+    // - Old invalid inline object/array formats from v5.3.x (hooks as object, agents as array)
+    // - Old invalid path formats from v5.4.1-v5.4.4 (agents as directory path like './agents/')
+    // NOTE: Missing hooks/agents fields is NOT a problem — auto-discovery handles them.
     function needsRepair(jsonPath) {
       try {
         const content = JSON.parse(readFileSync(jsonPath, 'utf-8'));
-        // hooks must be a string path starting with './'
-        if (!content.hooks || typeof content.hooks !== 'string' || !content.hooks.startsWith('./')) return true;
-        // agents must be a string path starting with './'
-        if (!content.agents || typeof content.agents !== 'string' || !content.agents.startsWith('./')) return true;
+        // agents must NOT be a directory path (./agents/ fails r48() which requires .md files)
+        if (content.agents && (typeof content.agents !== 'string' || !content.agents.endsWith('.md'))) return true;
+        // hooks must NOT be an object/array (inline format is invalid; string path or absent is OK)
+        if (content.hooks && typeof content.hooks === 'object') return true;
         return false;
       } catch { return false; }
     }
