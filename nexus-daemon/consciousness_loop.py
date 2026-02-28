@@ -1,12 +1,15 @@
 # nexus-daemon/consciousness_loop.py
 from __future__ import annotations
 import asyncio
+import json
 import logging
 import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+
+from reflexion import ReflexionEngine, ReflectionMemory
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +22,48 @@ class ConsciousnessConfig:
 
 
 class ConsciousnessLoop:
-    def __init__(self, repo_path: Path, config: ConsciousnessConfig):
+    def __init__(self, repo_path: Path, config: ConsciousnessConfig,
+                 reflexion: ReflexionEngine | None = None):
         self.repo_path = repo_path
         self.config = config
         # _round_count is per-process-lifetime: resets to 0 on daemon restart.
         self._round_count = 0
+        self._recent_events: list[dict] = []
+
+        # Reflexion integration (additive, optional)
+        if reflexion is not None:
+            self.reflexion = reflexion
+        else:
+            self.reflexion = self._load_reflexion_engine()
+
+    @property
+    def _reflection_memory_path(self) -> Path:
+        return self.repo_path / 'consciousness' / 'reflection_memory.json'
+
+    def _load_reflexion_engine(self) -> ReflexionEngine | None:
+        """Load persisted reflection memory if it exists."""
+        path = self._reflection_memory_path
+        if path.exists():
+            try:
+                data = json.loads(path.read_text(encoding='utf-8'))
+                memory = ReflectionMemory.from_dict(data)
+                return ReflexionEngine(memory=memory)
+            except (json.JSONDecodeError, KeyError, OSError) as e:
+                logger.warning('Failed to load reflection memory: %s', e)
+        return None
+
+    def _save_reflection_memory(self) -> None:
+        """Persist reflection memory to disk."""
+        if self.reflexion is None:
+            return
+        path = self._reflection_memory_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        data = self.reflexion.memory.to_dict()
+        path.write_text(json.dumps(data, indent=2), encoding='utf-8')
+
+    def add_events(self, events: list[dict]) -> None:
+        """Feed events for the next reflexion cycle."""
+        self._recent_events.extend(events)
 
     @property
     def scratchpad_path(self) -> Path:
@@ -76,6 +116,25 @@ class ConsciousnessLoop:
             f'**Timestamp:** {ts}\n\n'
             f'*Awaiting LLM reflection...*\n'
         )
+        # Run reflexion cycle if engine is available and there are events
+        if self.reflexion is not None and self._recent_events:
+            try:
+                entry = self.reflexion.run_cycle(self._recent_events, health_score=0.5)
+                content += (
+                    f'\n## Reflexion\n\n'
+                    f'**Score:** {entry.score:.3f}\n\n'
+                    f'**Observation:** {entry.observation}\n\n'
+                    f'**Reflection:** {entry.reflection}\n\n'
+                )
+                if entry.action_items:
+                    content += '**Action Items:**\n'
+                    for item in entry.action_items:
+                        content += f'- {item}\n'
+                self._recent_events.clear()
+                self._save_reflection_memory()
+            except Exception:
+                logger.exception('Reflexion cycle failed; continuing without reflection.')
+
         self._write_scratchpad(content)
         self._write_round_record(self._round_count, content)
         return content
