@@ -3,7 +3,7 @@ description: 知识图谱索引 - 管理所有知识条目的元信息
 version: 1.0
 last_updated: 2026-02-27
 entries: 60
-cycle: 9
+cycle: 10
 ---
 
 # Knowledge Base (知识图谱索引)

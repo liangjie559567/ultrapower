@@ -1,3 +1,13 @@
+# ultrapower v5.2.6
+
+### 测试
+
+- **自动发布工作流测试**：新增 `release-steps.test.ts`，覆盖 `validateBuild`、`publishNpm`、`createGithubRelease`、`syncMarketplace`、`runReleasePipeline` 的 dry-run 路径及失败路径（9 个测试）
+- **自动更新插件工作流测试**：扩展 `auto-update.test.ts`，新增 `performUpdate` 插件模式、`syncMarketplaceClone` 4 分支、`silentAutoUpdate` 速率限制与退避逻辑（13 个测试）
+- 全套测试：4698 passed, 0 failed
+
+---
+
 # ultrapower v5.2.2
 
 ### 修复

@@ -313,7 +313,28 @@ export function getInstalledVersion(): VersionMetadata | null {
 
   try {
     const content = readFileSync(VERSION_FILE, 'utf-8');
-    return JSON.parse(content) as VersionMetadata;
+    const metadata = JSON.parse(content) as VersionMetadata;
+
+    // Cross-check with actual runtime package version to detect stale VERSION_FILE.
+    // This happens when npm updates the package but VERSION_FILE wasn't refreshed
+    // (e.g. manual npm install, or update interrupted before saveVersionMetadata).
+    try {
+      const runtimeVersion = getRuntimePackageVersion();
+      if (runtimeVersion && runtimeVersion !== 'unknown' && runtimeVersion !== metadata.version) {
+        const updated: VersionMetadata = {
+          ...metadata,
+          version: runtimeVersion,
+          installedAt: metadata.installedAt,
+          installMethod: metadata.installMethod,
+        };
+        saveVersionMetadata(updated);
+        return updated;
+      }
+    } catch {
+      // getRuntimePackageVersion failed (e.g. running from source) — use VERSION_FILE as-is
+    }
+
+    return metadata;
   } catch (error) {
     console.error('Error reading version file:', error);
     return null;
@@ -564,9 +585,9 @@ export async function performUpdate(options?: {
     try {
       execSync('npm install -g @liangjie559567/ultrapower@latest', {
         encoding: 'utf-8',
-        stdio: options?.verbose ? 'inherit' : 'pipe',
+        stdio: (options?.verbose ? 'inherit' : 'pipe') as 'inherit' | 'pipe',
         timeout: 120000, // 2 minute timeout for npm
-        ...(process.platform === 'win32' ? { windowsHide: true } : {})
+        shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/sh',
       });
 
       // Sync Claude Code marketplace clone so plugin cache picks up new version (#506)
