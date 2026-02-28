@@ -235,11 +235,11 @@ node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR
 
 ```bash
 # 完整清洁重装（5.0.20+ postinstall 会自动修复残留嵌套）
-claude plugin uninstall ultrapower
+claude plugin uninstall omc@ultrapower
 rm -rf ~/.claude/plugins/npm-cache
-rm -rf ~/.claude/plugins/cache/ultrapower
-claude plugin marketplace update ultrapower
-claude plugin install ultrapower
+rm -rf ~/.claude/plugins/cache/omc
+claude plugin marketplace update omc
+claude plugin install omc@ultrapower
 ```
 
 > ✅ 安装 5.0.20+ 后，`postinstall` 脚本会自动检测并修复任意深度嵌套，无需手动干预。
@@ -250,11 +250,11 @@ claude plugin install ultrapower
 
 ```bash
 # 完整清洁重装（必须同时清除 npm-cache）
-claude plugin uninstall ultrapower
+claude plugin uninstall omc@ultrapower
 rm -rf ~/.claude/plugins/npm-cache        # 关键：清除 semver 范围缓存
-rm -rf ~/.claude/plugins/cache/ultrapower
-claude plugin marketplace update ultrapower
-claude plugin install ultrapower
+rm -rf ~/.claude/plugins/cache/omc
+claude plugin marketplace update omc
+claude plugin install omc@ultrapower
 ```
 
 > ⚠️ 仅清除插件缓存不够——npm-cache 中的 `^` semver 范围会导致安装器继续复用旧内容。

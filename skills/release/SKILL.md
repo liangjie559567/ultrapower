@@ -72,7 +72,7 @@ npm run release:local -- --start-from=publish  # 从 publish 步骤重试
 
 ### 5. 刷新本地 marketplace 缓存（CI 已自动完成，手动备用）
 ```bash
-claude plugin marketplace update ultrapower
+claude plugin marketplace update omc
 ```
 > 推送到 GitHub 后必须执行此步，否则本地安装器仍读取旧版 `marketplace.json`。
 
@@ -115,7 +115,7 @@ gh release create v<version> --title "v<version> - <title>" --notes "<release no
 
 - 发布前始终运行测试
 - 创建总结变更的发布说明
-- 推送到 GitHub 后必须运行 `claude plugin marketplace update ultrapower` 刷新本地缓存
+- 推送到 GitHub 后必须运行 `claude plugin marketplace update omc` 刷新本地缓存
 - npm 不允许覆盖已发布版本，每次发布前必须升级版本号
 - `.npmignore` 必须排除缓存目录（`ultrapower/`、`*.tgz`、`.claude/`），防止安装时产生无限嵌套
 
@@ -141,16 +141,16 @@ dist/
 
 检查插件缓存路径是否正确：
 ```bash
-ls ~/.claude/plugins/cache/ultrapower/ultrapower/<version>/skills/
+ls ~/.claude/plugins/cache/omc/ultrapower/<version>/skills/
 ```
 正确路径应直接包含 `skills/`、`dist/` 等目录。
 
 ### 缓存目录无限嵌套
 
-症状：`cache/ultrapower/ultrapower/5.x.x/ultrapower/5.x.x/ultrapower/...`
+症状：`cache/omc/ultrapower/5.x.x/ultrapower/5.x.x/ultrapower/...`
 
 **根本原因（已确认）**：Claude Code 安装器的 `xF6(src, dest)` 函数存在 bug：
-1. 先执行 `mkdir -p dest`（`dest = cache/ultrapower/ultrapower/5.x.x`）
+1. 先执行 `mkdir -p dest`（`dest = cache/omc/ultrapower/5.x.x`）
 2. 再执行 `readdir(src)`（`src = cache/ultrapower`）
 3. 由于 `dest` 是 `src` 的子目录，`readdir` 结果包含刚创建的 `ultrapower/` 子目录
 4. 递归复制时把自身也复制进去，产生无限嵌套
@@ -162,16 +162,16 @@ ls ~/.claude/plugins/cache/ultrapower/ultrapower/<version>/skills/
 手动修复步骤：
 ```bash
 # 1. 清除嵌套的缓存目录
-rm -rf ~/.claude/plugins/cache/ultrapower
+rm -rf ~/.claude/plugins/cache/omc
 
 # 2. 清除 npm-cache（防止复用旧内容）
 rm -rf ~/.claude/plugins/npm-cache
 
 # 3. 刷新 marketplace 缓存
-claude plugin marketplace update ultrapower
+claude plugin marketplace update omc
 
 # 4. 重新安装（postinstall 会自动修复任何残留嵌套）
-claude plugin install ultrapower
+claude plugin install omc@ultrapower
 ```
 
 > ⚠️ `.npmignore` 中的 `ultrapower/` 排除项仍然必要，防止开发目录被打包进 npm 包。
@@ -182,9 +182,9 @@ claude plugin install ultrapower
 
 修复：
 ```bash
-claude plugin marketplace update ultrapower
-claude plugin uninstall ultrapower
-claude plugin install ultrapower
+claude plugin marketplace update omc
+claude plugin uninstall omc@ultrapower
+claude plugin install omc@ultrapower
 ```
 
 ### 安装后插件内容是旧版本（npm-cache 复用）
@@ -197,26 +197,26 @@ claude plugin install ultrapower
 ```bash
 cat ~/.claude/plugins/npm-cache/package.json
 # 如果看到 "^5.0.11" 之类的旧版本范围，即为此问题
-cat ~/.claude/plugins/cache/ultrapower/ultrapower/5.0.17/package.json
+cat ~/.claude/plugins/cache/omc/ultrapower/5.0.17/package.json
 # 如果 version 字段不是 5.0.17，确认是 npm-cache 复用导致
 ```
 
 修复（完整清洁重装）：
 ```bash
 # 1. 卸载插件
-claude plugin uninstall ultrapower
+claude plugin uninstall omc@ultrapower
 
 # 2. 清除 npm-cache（关键！仅清除插件缓存不够）
 rm -rf ~/.claude/plugins/npm-cache
 
 # 3. 清除插件缓存
-rm -rf ~/.claude/plugins/cache/ultrapower
+rm -rf ~/.claude/plugins/cache/omc
 
 # 4. 刷新 marketplace 缓存
-claude plugin marketplace update ultrapower
+claude plugin marketplace update omc
 
 # 5. 重新安装（此时会强制从 npm 下载最新版）
-claude plugin install ultrapower
+claude plugin install omc@ultrapower
 ```
 
 > ⚠️ 仅执行步骤 3（清除插件缓存）不够——npm-cache 仍会导致安装器复用旧内容。必须同时清除 npm-cache。
