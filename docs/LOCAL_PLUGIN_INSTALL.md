@@ -9,7 +9,7 @@
 claude plugin marketplace add /path/to/ultrapower
 
 # 2. 从本地 marketplace 安装插件
-claude plugin install ultrapower@ultrapower
+claude plugin install omc@ultrapower
 
 # 3. 重启 Claude Code 以加载插件
 ```
@@ -21,19 +21,19 @@ claude plugin install ultrapower@ultrapower
 claude plugin marketplace list
 
 # 更新 marketplace（从源重新读取）
-claude plugin marketplace update ultrapower
+claude plugin marketplace update omc
 
 # 更新已安装的插件
-claude plugin update ultrapower@ultrapower
+claude plugin update omc@ultrapower
 
 # 列出已安装的插件
 claude plugin list
 
 # 卸载
-claude plugin uninstall ultrapower@ultrapower
+claude plugin uninstall omc@ultrapower
 
 # 移除 marketplace
-claude plugin marketplace remove ultrapower
+claude plugin marketplace remove omc
 ```
 
 ## 插件结构
@@ -65,10 +65,10 @@ claude plugin marketplace remove ultrapower
 npm run build
 
 # 2. 更新 marketplace 缓存
-claude plugin marketplace update ultrapower
+claude plugin marketplace update omc
 
 # 3. 更新已安装的插件
-claude plugin update ultrapower@ultrapower
+claude plugin update omc@ultrapower
 
 # 4. 重启 Claude Code 会话
 ```

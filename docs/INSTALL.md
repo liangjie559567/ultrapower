@@ -153,7 +153,7 @@ npm run build
 ### 步骤 5：安装本地插件
 
 ```
-/plugin install ultrapower@ultrapower
+/plugin install omc@ultrapower
 ```
 
 ### 步骤 6：开发工作流
@@ -165,10 +165,10 @@ npm run build
 npm run build
 
 # 2. 更新 marketplace 缓存
-claude plugin marketplace update ultrapower
+claude plugin marketplace update omc
 
 # 3. 更新已安装插件
-claude plugin update ultrapower@ultrapower
+claude plugin update omc@ultrapower
 
 # 4. 重启 Claude Code 会话
 ```
@@ -446,7 +446,7 @@ ultrapower 支持多种 AI 工具，安装后自动生成适配器文件：
 /plugin uninstall ultrapower
 
 # 移除 marketplace（可选）
-/plugin marketplace remove ultrapower
+/plugin marketplace remove omc
 
 # 清理 Axiom 数据（可选，会删除知识库）
 rm -rf .omc/axiom/
@@ -473,18 +473,18 @@ claude plugin list
 
 ### 问题：Windows 上缓存目录无限嵌套
 
-**症状**：`C:\Users\<name>\.claude\plugins\marketplaces\ultrapower` 出现多层嵌套，Claude Code 无法启动
+**症状**：`C:\Users\<name>\.claude\plugins\marketplaces\omc` 出现多层嵌套，Claude Code 无法启动
 
 **解决**：
 ```powershell
 # 方法一：使用 robocopy 清空（推荐，适用于路径过深）
 mkdir C:\empty_temp
-robocopy C:\empty_temp "C:\Users\<name>\.claude\plugins\marketplaces\ultrapower" /MIR
-rmdir "C:\Users\<name>\.claude\plugins\marketplaces\ultrapower" /s /q
+robocopy C:\empty_temp "C:\Users\<name>\.claude\plugins\marketplaces\omc" /MIR
+rmdir "C:\Users\<name>\.claude\plugins\marketplaces\omc" /s /q
 rmdir C:\empty_temp
 
 # 方法二：直接删除（路径不太深时）
-Remove-Item -Recurse -Force "C:\Users\<name>\.claude\plugins\marketplaces\ultrapower"
+Remove-Item -Recurse -Force "C:\Users\<name>\.claude\plugins\marketplaces\omc"
 ```
 
 删除后重新安装插件，v5.2.2 已修复此问题，不会再次出现。
