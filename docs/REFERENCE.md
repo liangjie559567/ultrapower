@@ -434,7 +434,7 @@ omc config-stop-callback discord --show
 
 ## Hooks System
 
-ultrapower 包含 35 个生命周期 hooks，用于增强 Claude Code 的行为。
+ultrapower 包含 47 个生命周期 hooks，用于增强 Claude Code 的行为。
 
 ### 执行模式 Hooks
 
@@ -467,6 +467,13 @@ ultrapower 包含 35 个生命周期 hooks，用于增强 Claude Code 的行为�
 | `recovery` | 编辑错误、会话和上下文窗口恢复 |
 | `preemptive-compaction` | 监控上下文使用量以防止超限 |
 | `pre-compact` | 压缩前处理 |
+| `subagent-stop` | 子 agent 完成时触发，防止无限循环 |
+| `teammate-idle` | 团队成员空闲时触发，默认允许 |
+| `session-end` | 会话结束时触发，清理临时状态 |
+| `user-prompt-submit` | 用户提交提示词前触发，用于关键词检测 |
+| `permission-request` | 工具权限请求时触发 |
+| `task-completed` | 任务完成时触发 |
+| `config-change` | 配置变更时触发 |
 | `directory-readme-injector` | README 上下文注入 |
 
 ### 质量与验证 Hooks

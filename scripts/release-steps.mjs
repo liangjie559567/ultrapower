@@ -2,6 +2,7 @@
 import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { assertVersionsSync } from './bump-version.mjs';
 
 function getVersion() {
   const pkg = JSON.parse(readFileSync(resolve('package.json'), 'utf-8'));
@@ -14,6 +15,15 @@ function run(cmd, dryRun = false) {
     return '';
   }
   return execSync(cmd, { stdio: 'pipe', encoding: 'utf-8' });
+}
+
+export async function preflight(opts = {}) {
+  try {
+    assertVersionsSync();
+    return { success: true };
+  } catch (err) {
+    return { success: false, output: err.message };
+  }
 }
 
 export async function validateBuild(opts = {}) {
@@ -52,34 +62,15 @@ export async function createGithubRelease(opts = {}) {
 }
 
 export async function syncMarketplace(opts = {}) {
-  const { version, dryRun = false } = opts;
-  const v = version || getVersion();
-  try {
-    // Update marketplace.json version fields
-    const marketplacePath = resolve('.claude-plugin/marketplace.json');
-    const marketplace = JSON.parse(readFileSync(marketplacePath, 'utf-8'));
-    for (const plugin of marketplace.plugins ?? []) {
-      plugin.version = v;
-      if (plugin.source) plugin.source.version = v;
-    }
-    if (!dryRun) {
-      const { writeFileSync } = await import('node:fs');
-      writeFileSync(marketplacePath, JSON.stringify(marketplace, null, 2) + '\n');
-    } else {
-      console.log(`[dry-run] Would write marketplace.json version -> ${v}`);
-    }
-    run(`git add .claude-plugin/marketplace.json`, dryRun);
-    run(`git commit -m "chore: sync marketplace version to v${v}" --allow-empty`, dryRun);
-    run(`git push origin HEAD`, dryRun);
-    return { success: true };
-  } catch (err) {
-    return { success: false, output: err.message };
-  }
+  const { dryRun = false } = opts;
+  // Version already in sync (bumped before tagging); no-op in CI (tag push is sufficient)
+  if (dryRun) { console.log('[dry-run] syncMarketplace: no-op'); }
+  return { success: true };
 }
 
 export async function runReleasePipeline(opts = {}) {
-  const { dryRun = false, skipTests = false, startFrom = 'validate', version } = opts;
-  const steps = ['validate', 'publish', 'release', 'sync'];
+  const { dryRun = false, skipTests = false, startFrom = 'preflight', version } = opts;
+  const steps = ['preflight', 'validate', 'publish', 'release', 'sync'];
   const startIdx = steps.indexOf(startFrom);
 
   if (startIdx === -1) {
@@ -88,30 +79,17 @@ export async function runReleasePipeline(opts = {}) {
   }
 
   const v = version || getVersion();
+  const run5 = async (label, fn, fnOpts) => {
+    console.log(label);
+    const r = await fn(fnOpts);
+    if (!r.success) { console.error(`${label} failed: ${r.output}`); process.exit(1); }
+  };
 
-  if (startIdx <= 0) {
-    console.log('Step 1/4: validateBuild...');
-    const r = await validateBuild({ skipTests, dryRun });
-    if (!r.success) { console.error(`validateBuild failed: ${r.output}`); process.exit(1); }
-  }
-
-  if (startIdx <= 1) {
-    console.log('Step 2/4: publishNpm...');
-    const r = await publishNpm({ dryRun });
-    if (!r.success) { console.error(`publishNpm failed: ${r.output}`); process.exit(1); }
-  }
-
-  if (startIdx <= 2) {
-    console.log('Step 3/4: createGithubRelease...');
-    const r = await createGithubRelease({ version: v, dryRun });
-    if (!r.success) { console.error(`createGithubRelease failed: ${r.output}`); process.exit(1); }
-  }
-
-  if (startIdx <= 3) {
-    console.log('Step 4/4: syncMarketplace...');
-    const r = await syncMarketplace({ version: v, dryRun });
-    if (!r.success) { console.error(`syncMarketplace failed: ${r.output}`); process.exit(1); }
-  }
+  if (startIdx <= 0) await run5('Step 1/5: preflight...', preflight, { dryRun });
+  if (startIdx <= 1) await run5('Step 2/5: validateBuild...', validateBuild, { skipTests, dryRun });
+  if (startIdx <= 2) await run5('Step 3/5: publishNpm...', publishNpm, { dryRun });
+  if (startIdx <= 3) await run5('Step 4/5: createGithubRelease...', createGithubRelease, { version: v, dryRun });
+  if (startIdx <= 4) await run5('Step 5/5: syncMarketplace...', syncMarketplace, { dryRun });
 
   console.log('Release pipeline completed successfully.');
   return { success: true };
@@ -119,15 +97,10 @@ export async function runReleasePipeline(opts = {}) {
 
 // CLI entry point (for direct GitHub Actions invocation)
 const cliStep = process.argv[2];
-if (cliStep && ['validate', 'publish', 'release', 'sync'].includes(cliStep)) {
+if (cliStep && ['preflight', 'validate', 'publish', 'release', 'sync'].includes(cliStep)) {
   const dryRun = process.argv.includes('--dry-run');
   const version = process.env.GITHUB_REF_NAME?.replace(/^v/, '') || undefined;
-  const stepMap = {
-    validate: validateBuild,
-    publish: publishNpm,
-    release: createGithubRelease,
-    sync: syncMarketplace,
-  };
+  const stepMap = { preflight, validate: validateBuild, publish: publishNpm, release: createGithubRelease, sync: syncMarketplace };
   stepMap[cliStep]({ dryRun, version }).then(r => {
     if (!r.success) { console.error(`Step ${cliStep} failed`); process.exit(1); }
   });
