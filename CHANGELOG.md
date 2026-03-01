@@ -1,3 +1,10 @@
+## [5.5.5] - 2026-03-02
+### Documentation
+- Comprehensive documentation update: REFERENCE.md (49 agents/71 skills/35 tools/35 hooks), ARCHITECTURE.md (611 lines), FEATURES.md (1238 lines)
+- docs/standards/ 10 files bumped to v5.5.5
+- Merge docs/shared/ into docs/partials/ (remove 6 duplicate files)
+- CHANGELOG: add v5.5.0–v5.5.4 entries
+
 ## [5.5.4] - 2026-03-02
 ### Code Quality
 - Expand `generatePromptId` entropy from 4 to 8 bytes
