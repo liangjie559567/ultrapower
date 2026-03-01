@@ -110,6 +110,32 @@ function convertToSdkModel(model: ModelType): 'sonnet' | 'opus' | 'haiku' {
 }
 
 /**
+ * Resolve model for tiered agent variants (-low, -high, -medium suffix convention).
+ * Returns the tier-appropriate model, or null if no tier suffix is detected.
+ *
+ * Tier rules:
+ *   -low    → haiku  (lightweight/fast work)
+ *   -high   → opus   (heavyweight/complex work)
+ *   -medium → base agent model (or sonnet fallback)
+ */
+function resolveTierModel(agentType: string): 'sonnet' | 'opus' | 'haiku' | null {
+  const tierMatch = agentType.match(/^(.+?)(-low|-high|-medium)$/);
+  if (!tierMatch) return null;
+
+  const [, baseType, tier] = tierMatch;
+
+  if (tier === '-low') return 'haiku';
+  if (tier === '-high') return 'opus';
+  if (tier === '-medium') {
+    const agentDefs = getAgentDefinitions();
+    const baseDef = agentDefs[baseType];
+    return baseDef?.model ? convertToSdkModel(baseDef.model) : 'sonnet';
+  }
+
+  return null;
+}
+
+/**
  * Check if tool input is an agent delegation call
  */
 export function isAgentCall(toolName: string, toolInput: unknown): toolInput is AgentInput {
@@ -146,17 +172,36 @@ export function processPreToolUse(
   }
 
   // Enforce model parameter
-  const result = enforceModel(toolInput);
+  try {
+    const result = enforceModel(toolInput);
 
-  // Log warning if debug mode is enabled and model was injected
-  if (result.warning) {
-    console.warn(result.warning);
+    // Log warning if debug mode is enabled and model was injected
+    if (result.warning) {
+      console.warn(result.warning);
+    }
+
+    return {
+      modifiedInput: result.modifiedInput,
+      warning: result.warning,
+    };
+  } catch {
+    // Unknown agent type: try tier-suffix resolution (-low → haiku, -high → opus)
+    const agentType = (toolInput as AgentInput).subagent_type.replace(/^ultrapower:/, '');
+    const tierModel = resolveTierModel(agentType);
+
+    if (tierModel !== null) {
+      const modifiedInput: AgentInput = { ...(toolInput as AgentInput), model: tierModel };
+      let warning: string | undefined;
+      if (process.env.OMC_DEBUG === 'true') {
+        warning = `[OMC] Auto-injecting model: ${tierModel} for ${agentType}`;
+        console.warn(warning);
+      }
+      return { modifiedInput, warning };
+    }
+
+    // Truly unknown agent type — pass through unchanged (robustness over strictness)
+    return { modifiedInput: toolInput };
   }
-
-  return {
-    modifiedInput: result.modifiedInput,
-    warning: result.warning,
-  };
 }
 
 /**
