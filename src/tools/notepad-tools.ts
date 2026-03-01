@@ -101,6 +101,7 @@ export const notepadReadTool: ToolDefinition<{
       };
     } catch (error) {
       return {
+        isError: true,
         content: [{
           type: 'text' as const,
           text: `Error reading notepad: ${error instanceof Error ? error.message : String(error)}`
@@ -157,6 +158,7 @@ export const notepadWritePriorityTool: ToolDefinition<{
       };
     } catch (error) {
       return {
+        isError: true,
         content: [{
           type: 'text' as const,
           text: `Error writing to Priority Context: ${error instanceof Error ? error.message : String(error)}`
@@ -208,6 +210,7 @@ export const notepadWriteWorkingTool: ToolDefinition<{
       };
     } catch (error) {
       return {
+        isError: true,
         content: [{
           type: 'text' as const,
           text: `Error writing to Working Memory: ${error instanceof Error ? error.message : String(error)}`
@@ -259,6 +262,7 @@ export const notepadWriteManualTool: ToolDefinition<{
       };
     } catch (error) {
       return {
+        isError: true,
         content: [{
           type: 'text' as const,
           text: `Error writing to MANUAL: ${error instanceof Error ? error.message : String(error)}`
@@ -297,6 +301,7 @@ export const notepadPruneTool: ToolDefinition<{
       };
     } catch (error) {
       return {
+        isError: true,
         content: [{
           type: 'text' as const,
           text: `Error pruning notepad: ${error instanceof Error ? error.message : String(error)}`
@@ -351,6 +356,7 @@ export const notepadStatsTool: ToolDefinition<{
       };
     } catch (error) {
       return {
+        isError: true,
         content: [{
           type: 'text' as const,
           text: `Error getting notepad stats: ${error instanceof Error ? error.message : String(error)}`

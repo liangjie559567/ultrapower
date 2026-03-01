@@ -19,7 +19,7 @@ let _dbInitAttempted = false;
 
 // In-memory index: provider:jobId → workingDirectory used at creation time.
 // Allows job management handlers to find JSON status files for cross-directory jobs.
-// Keyed by provider:jobId to avoid collisions (8-hex IDs are short).
+// Keyed by provider:jobId to avoid collisions (16-hex IDs).
 const jobWorkingDirs = new Map<string, string>();
 
 function ensureJobDb(workingDirectory?: string): void {
@@ -80,10 +80,10 @@ export function slugify(text: string): string {
 /**
  * Generate a short unique identifier
  *
- * @returns 8-character hex string
+ * @returns 16-character hex string
  */
 export function generatePromptId(): string {
-  return randomBytes(4).toString('hex');
+  return randomBytes(8).toString('hex');
 }
 
 /**

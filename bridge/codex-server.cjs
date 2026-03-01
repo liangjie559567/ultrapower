@@ -15074,7 +15074,7 @@ function slugify(text) {
   return slug || "prompt";
 }
 function generatePromptId() {
-  return (0, import_crypto.randomBytes)(4).toString("hex");
+  return (0, import_crypto.randomBytes)(8).toString("hex");
 }
 function getPromptsDir(workingDirectory) {
   const root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();
@@ -16539,11 +16539,15 @@ function validateModelName(model) {
     throw new Error(`Invalid model name: "${model}". Model names must match pattern: alphanumeric start, followed by alphanumeric, dots, hyphens, or underscores (max 64 chars).`);
   }
 }
+function parseEnvInt(envVal, fallback) {
+  const n = parseInt(envVal ?? "", 10);
+  return isNaN(n) ? fallback : n;
+}
 var CODEX_DEFAULT_MODEL = process.env.OMC_CODEX_DEFAULT_MODEL || "gpt-5.3-codex";
-var CODEX_TIMEOUT = Math.min(Math.max(5e3, parseInt(process.env.OMC_CODEX_TIMEOUT || "3600000", 10) || 36e5), 36e5);
-var RATE_LIMIT_RETRY_COUNT = Math.min(10, Math.max(1, parseInt(process.env.OMC_CODEX_RATE_LIMIT_RETRY_COUNT || "3", 10) || 3));
-var RATE_LIMIT_INITIAL_DELAY = Math.max(1e3, parseInt(process.env.OMC_CODEX_RATE_LIMIT_INITIAL_DELAY || "5000", 10) || 5e3);
-var RATE_LIMIT_MAX_DELAY = Math.max(5e3, parseInt(process.env.OMC_CODEX_RATE_LIMIT_MAX_DELAY || "60000", 10) || 6e4);
+var CODEX_TIMEOUT = Math.min(Math.max(5e3, parseEnvInt(process.env.OMC_CODEX_TIMEOUT, 36e5)), 36e5);
+var RATE_LIMIT_RETRY_COUNT = Math.min(10, Math.max(1, parseEnvInt(process.env.OMC_CODEX_RATE_LIMIT_RETRY_COUNT, 3)));
+var RATE_LIMIT_INITIAL_DELAY = Math.max(1e3, parseEnvInt(process.env.OMC_CODEX_RATE_LIMIT_INITIAL_DELAY, 5e3));
+var RATE_LIMIT_MAX_DELAY = Math.max(5e3, parseEnvInt(process.env.OMC_CODEX_RATE_LIMIT_MAX_DELAY, 6e4));
 var CODEX_RECOMMENDED_ROLES = ["architect", "planner", "critic", "analyst", "code-reviewer", "security-reviewer", "tdd-guide"];
 var VALID_REASONING_EFFORTS = ["minimal", "low", "medium", "high", "xhigh"];
 var MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -17321,8 +17325,13 @@ var spawnedPids2 = /* @__PURE__ */ new Set();
 function isSpawnedPid2(pid) {
   return spawnedPids2.has(pid);
 }
+function parseEnvInt2(envVal, fallback) {
+  const n = parseInt(envVal ?? "", 10);
+  return isNaN(n) ? fallback : n;
+}
 var GEMINI_DEFAULT_MODEL = process.env.OMC_GEMINI_DEFAULT_MODEL || "gemini-3-pro-preview";
-var GEMINI_TIMEOUT = Math.min(Math.max(5e3, parseInt(process.env.OMC_GEMINI_TIMEOUT || "3600000", 10) || 36e5), 36e5);
+var GEMINI_TIMEOUT = Math.min(Math.max(5e3, parseEnvInt2(process.env.OMC_GEMINI_TIMEOUT, 36e5)), 36e5);
+var _yoloEnv = process.env.OMC_GEMINI_YOLO;
 var MAX_FILE_SIZE2 = 5 * 1024 * 1024;
 var MAX_STDOUT_BYTES2 = 10 * 1024 * 1024;
 
@@ -17338,7 +17347,7 @@ function textResult(text, isError = false) {
   };
 }
 function findJobStatusFile(provider, jobId, workingDirectory) {
-  if (!/^[0-9a-f]{8}$/i.test(jobId)) {
+  if (!/^[0-9a-f]{16}$/i.test(jobId)) {
     return void 0;
   }
   const promptsDir = getPromptsDir(workingDirectory);
@@ -17388,7 +17397,7 @@ async function handleWaitForJob(provider, jobId, timeoutMs = 36e5) {
   if (!jobId || typeof jobId !== "string") {
     return textResult("job_id is required.", true);
   }
-  const effectiveTimeout = Math.max(1e3, Math.min(timeoutMs, 36e5));
+  const effectiveTimeout = Math.max(1e3, Math.min(timeoutMs, 6e4));
   const deadline = Date.now() + effectiveTimeout;
   let pollDelay = 500;
   let notFoundCount = 0;
@@ -17608,7 +17617,6 @@ async function handleKillJob(provider, jobId, signal = "SIGTERM") {
     ...status,
     killedByUser: true
   };
-  writeJobStatus(updated);
   try {
     if (process.platform !== "win32") {
       process.kill(-status.pid, signal);
@@ -17800,7 +17808,7 @@ function getJobManagementToolSchemas(_provider) {
           },
           timeout_ms: {
             type: "number",
-            description: "Maximum time to wait in milliseconds (default: 3600000, max: 3600000)."
+            description: "Maximum time to wait in milliseconds (default: 3600000, max: 60000)."
           }
         },
         required: ["job_id"]

@@ -62,7 +62,7 @@ describe('job-management', () => {
         expect(result).toBeUndefined();
       });
 
-      it('returns undefined for too-long jobId', () => {
+      it('returns undefined for wrong-length jobId (12 chars)', () => {
         const result = findJobStatusFile('codex', 'abc123def456');
         expect(result).toBeUndefined();
       });
@@ -72,30 +72,30 @@ describe('job-management', () => {
         expect(result).toBeUndefined();
       });
 
-      it('proceeds for valid 8-char hex jobId (lowercase)', async () => {
+      it('proceeds for valid 16-char hex jobId (lowercase)', async () => {
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify({
           status: 'running',
           spawnedAt: new Date().toISOString()
         }));
 
-        const result = findJobStatusFile('codex', 'ab12cd34');
+        const result = findJobStatusFile('codex', 'ab12cd34ef567890');
         expect(result).toBeDefined();
         expect(result?.slug).toBe('test-slug');
       });
 
-      it('proceeds for valid 8-char hex jobId (uppercase)', async () => {
+      it('proceeds for valid 16-char hex jobId (uppercase)', async () => {
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-AB12CD34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-AB12CD34EF567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify({
           status: 'running',
           spawnedAt: new Date().toISOString()
         }));
 
-        const result = findJobStatusFile('codex', 'AB12CD34');
+        const result = findJobStatusFile('codex', 'AB12CD34EF567890');
         expect(result).toBeDefined();
       });
     });
@@ -106,7 +106,7 @@ describe('job-management', () => {
       it('allows SIGTERM', async () => {
         const mockStatus = {
           provider: 'codex',
-          jobId: 'ab12cd34',
+          jobId: 'ab12cd34ef567890',
           slug: 'test',
           status: 'running',
           pid: 12345,
@@ -122,17 +122,17 @@ describe('job-management', () => {
 
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify(mockStatus));
 
-        const result = await handleKillJob('codex', 'ab12cd34', 'SIGTERM');
+        const result = await handleKillJob('codex', 'ab12cd34ef567890', 'SIGTERM');
         expect(result.isError).toBeFalsy();
       });
 
       it('allows SIGINT', async () => {
         const mockStatus = {
           provider: 'codex',
-          jobId: 'ab12cd34',
+          jobId: 'ab12cd34ef567890',
           slug: 'test',
           status: 'running',
           pid: 12345,
@@ -148,28 +148,28 @@ describe('job-management', () => {
 
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify(mockStatus));
 
-        const result = await handleKillJob('codex', 'ab12cd34', 'SIGINT');
+        const result = await handleKillJob('codex', 'ab12cd34ef567890', 'SIGINT');
         expect(result.isError).toBeFalsy();
       });
 
       it('rejects SIGKILL', async () => {
-        const result = await handleKillJob('codex', 'ab12cd34', 'SIGKILL');
+        const result = await handleKillJob('codex', 'ab12cd34ef567890', 'SIGKILL');
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('Invalid signal');
         expect(result.content[0].text).toContain('SIGKILL');
       });
 
       it('rejects arbitrary strings', async () => {
-        const result = await handleKillJob('codex', 'ab12cd34', 'rm -rf /');
+        const result = await handleKillJob('codex', 'ab12cd34ef567890', 'rm -rf /');
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('Invalid signal');
       });
 
       it('rejects SIGUSR1', async () => {
-        const result = await handleKillJob('codex', 'ab12cd34', 'SIGUSR1');
+        const result = await handleKillJob('codex', 'ab12cd34ef567890', 'SIGUSR1');
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('Invalid signal');
       });
@@ -179,7 +179,7 @@ describe('job-management', () => {
       it('preserves completed status when ESRCH', async () => {
         const mockStatus = {
           provider: 'codex',
-          jobId: 'ab12cd34',
+          jobId: 'ab12cd34ef567890',
           slug: 'test',
           status: 'running',
           pid: 12345,
@@ -194,7 +194,7 @@ describe('job-management', () => {
 
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify(mockStatus));
 
         // First call returns running (for initial check), subsequent calls return completed
@@ -211,7 +211,7 @@ describe('job-management', () => {
         esrchError.code = 'ESRCH';
         vi.spyOn(process, 'kill').mockImplementation(() => { throw esrchError; });
 
-        const result = await handleKillJob('codex', 'ab12cd34', 'SIGTERM');
+        const result = await handleKillJob('codex', 'ab12cd34ef567890', 'SIGTERM');
 
         // Should NOT overwrite to failed since job is completed
         const _failedWrites = writeJobStatusSpy.mock.calls.filter(
@@ -224,7 +224,7 @@ describe('job-management', () => {
       it('marks as failed when running and ESRCH', async () => {
         const mockStatus = {
           provider: 'codex',
-          jobId: 'ab12cd34',
+          jobId: 'ab12cd34ef567890',
           slug: 'test',
           status: 'running',
           pid: 12345,
@@ -237,7 +237,7 @@ describe('job-management', () => {
 
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify(mockStatus));
 
         vi.spyOn(promptPersistence, 'readJobStatus').mockReturnValue(mockStatus as any);
@@ -247,7 +247,7 @@ describe('job-management', () => {
         esrchError.code = 'ESRCH';
         vi.spyOn(process, 'kill').mockImplementation(() => { throw esrchError; });
 
-        await handleKillJob('codex', 'ab12cd34', 'SIGTERM');
+        await handleKillJob('codex', 'ab12cd34ef567890', 'SIGTERM');
 
         // Should write failed status
         const failedWrites = writeJobStatusSpy.mock.calls.filter(
@@ -263,7 +263,7 @@ describe('job-management', () => {
       it('clamps negative to 1000ms minimum', async () => {
         const runningStatus = {
           provider: 'codex',
-          jobId: 'ab12cd34',
+          jobId: 'ab12cd34ef567890',
           slug: 'test',
           status: 'running',
           pid: 12345,
@@ -276,14 +276,14 @@ describe('job-management', () => {
 
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify(runningStatus));
 
         // Always return running status so it waits until timeout
         vi.spyOn(promptPersistence, 'readJobStatus').mockReturnValue(runningStatus as any);
 
         const start = Date.now();
-        await handleWaitForJob('codex', 'ab12cd34', -1);
+        await handleWaitForJob('codex', 'ab12cd34ef567890', -1);
         const elapsed = Date.now() - start;
 
         // Should timeout after ~1000ms (the minimum clamped value), not immediately
@@ -294,7 +294,7 @@ describe('job-management', () => {
       it('clamps zero to 1000ms minimum', async () => {
         const runningStatus = {
           provider: 'codex',
-          jobId: 'ab12cd34',
+          jobId: 'ab12cd34ef567890',
           slug: 'test',
           status: 'running',
           pid: 12345,
@@ -307,13 +307,13 @@ describe('job-management', () => {
 
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify(runningStatus));
 
         vi.spyOn(promptPersistence, 'readJobStatus').mockReturnValue(runningStatus as any);
 
         const start = Date.now();
-        await handleWaitForJob('codex', 'ab12cd34', 0);
+        await handleWaitForJob('codex', 'ab12cd34ef567890', 0);
         const elapsed = Date.now() - start;
 
         expect(elapsed).toBeGreaterThanOrEqual(900);
@@ -323,7 +323,7 @@ describe('job-management', () => {
       it('accepts normal timeout values', async () => {
         const completedStatus = {
           provider: 'codex',
-          jobId: 'ab12cd34',
+          jobId: 'ab12cd34ef567890',
           slug: 'test',
           status: 'completed',
           promptFile: '/tmp/prompt.md',
@@ -335,7 +335,7 @@ describe('job-management', () => {
 
         const fs = await import('fs');
         (fs.existsSync as any).mockReturnValue(true);
-        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34.json']);
+        (fs.readdirSync as any).mockReturnValue(['codex-status-test-ab12cd34ef567890.json']);
         (fs.readFileSync as any).mockReturnValue(JSON.stringify(completedStatus));
 
         vi.spyOn(promptPersistence, 'readJobStatus').mockReturnValue(completedStatus as any);
@@ -344,7 +344,7 @@ describe('job-management', () => {
           status: completedStatus as any
         });
 
-        const result = await handleWaitForJob('codex', 'ab12cd34', 5000);
+        const result = await handleWaitForJob('codex', 'ab12cd34ef567890', 5000);
         expect(result.isError).toBeFalsy();
       });
     });
@@ -360,13 +360,13 @@ describe('job-management', () => {
         wd ? `${wd}/.omc/prompts` : '/tmp/test-prompts'
       );
       (fs.existsSync as any).mockReturnValue(true);
-      (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34.json']);
+      (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34ef567890.json']);
       (fs.readFileSync as any).mockReturnValue(JSON.stringify({
         status: 'running',
         spawnedAt: new Date().toISOString()
       }));
 
-      const result = findJobStatusFile('codex', 'ab12cd34', '/other/project');
+      const result = findJobStatusFile('codex', 'ab12cd34ef567890', '/other/project');
       expect(result).toBeDefined();
       expect(getPromptsDir).toHaveBeenCalledWith('/other/project');
     });
@@ -377,13 +377,13 @@ describe('job-management', () => {
 
       (getPromptsDir as any).mockReturnValue('/tmp/test-prompts');
       (fs.existsSync as any).mockReturnValue(true);
-      (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34.json']);
+      (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34ef567890.json']);
       (fs.readFileSync as any).mockReturnValue(JSON.stringify({
         status: 'running',
         spawnedAt: new Date().toISOString()
       }));
 
-      const result = findJobStatusFile('codex', 'ab12cd34');
+      const result = findJobStatusFile('codex', 'ab12cd34ef567890');
       expect(result).toBeDefined();
       expect(getPromptsDir).toHaveBeenCalledWith(undefined);
     });
@@ -399,7 +399,7 @@ describe('job-management', () => {
       (fs.readdirSync as any).mockImplementation(() => {
         callCount++;
         if (callCount <= 3) return []; // Not found for first 3 calls
-        return ['codex-status-test-slug-ab12cd34.json'];
+        return ['codex-status-test-slug-ab12cd34ef567890.json'];
       });
       (fs.readFileSync as any).mockReturnValue(JSON.stringify({
         status: 'completed',
@@ -409,7 +409,7 @@ describe('job-management', () => {
 
       const completedStatus = {
         provider: 'codex',
-        jobId: 'ab12cd34',
+        jobId: 'ab12cd34ef567890',
         slug: 'test-slug',
         status: 'completed',
         promptFile: '/tmp/prompt.md',
@@ -426,7 +426,7 @@ describe('job-management', () => {
         status: completedStatus as any,
       });
 
-      const result = await handleWaitForJob('codex', 'ab12cd34', 30000);
+      const result = await handleWaitForJob('codex', 'ab12cd34ef567890', 30000);
       expect(result.isError).toBeFalsy();
       expect(result.content[0].text).toContain('completed');
       // Should have retried (callCount > 1)
@@ -441,7 +441,7 @@ describe('job-management', () => {
       (fs.readdirSync as any).mockReturnValue([]);
 
       const start = Date.now();
-      const result = await handleWaitForJob('codex', 'ab12cd34', 60000);
+      const result = await handleWaitForJob('codex', 'ab12cd34ef567890', 60000);
       const elapsed = Date.now() - start;
 
       expect(result.isError).toBe(true);
@@ -462,11 +462,11 @@ describe('job-management', () => {
         wd ? `${wd}/.omc/prompts` : '/tmp/test-prompts'
       );
       (fs.existsSync as any).mockReturnValue(true);
-      (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34.json']);
+      (fs.readdirSync as any).mockReturnValue(['codex-status-test-slug-ab12cd34ef567890.json']);
 
       const mockStatus = {
         provider: 'codex',
-        jobId: 'ab12cd34',
+        jobId: 'ab12cd34ef567890',
         slug: 'test-slug',
         status: 'running',
         pid: 12345,
@@ -480,9 +480,9 @@ describe('job-management', () => {
       (fs.readFileSync as any).mockReturnValue(JSON.stringify(mockStatus));
       vi.spyOn(promptPersistence, 'readJobStatus').mockReturnValue(mockStatus as any);
 
-      const result = await handleCheckJobStatus('codex', 'ab12cd34');
+      const result = await handleCheckJobStatus('codex', 'ab12cd34ef567890');
       expect(result.isError).toBeFalsy();
-      expect(result.content[0].text).toContain('ab12cd34');
+      expect(result.content[0].text).toContain('ab12cd34ef567890');
       expect(getPromptsDir).toHaveBeenCalledWith('/other/project');
     });
   });

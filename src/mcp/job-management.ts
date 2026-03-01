@@ -62,8 +62,8 @@ export function findJobStatusFile(
   jobId: string,
   workingDirectory?: string,
 ): { statusPath: string; slug: string } | undefined {
-  // Validate jobId format: must be 8-char hex (from generatePromptId)
-  if (!/^[0-9a-f]{8}$/i.test(jobId)) {
+  // Validate jobId format: must be 16-char hex (from generatePromptId)
+  if (!/^[0-9a-f]{16}$/i.test(jobId)) {
     return undefined;
   }
 
@@ -146,7 +146,7 @@ export async function handleWaitForJob(
     return textResult('job_id is required.', true);
   }
 
-  const effectiveTimeout = Math.max(1000, Math.min(timeoutMs, 3_600_000));
+  const effectiveTimeout = Math.max(1000, Math.min(timeoutMs, 60_000));
   const deadline = Date.now() + effectiveTimeout;
   let pollDelay = 500;
   let notFoundCount = 0;
@@ -429,12 +429,10 @@ export async function handleKillJob(
     );
   }
 
-  // Mark killedByUser before sending signal so the close handler can see it
   const updated: JobStatus = {
     ...status,
     killedByUser: true,
   };
-  writeJobStatus(updated);
 
   try {
     // On POSIX, background jobs are spawned detached as process-group leaders.
@@ -675,7 +673,7 @@ export function getJobManagementToolSchemas(_provider?: 'codex' | 'gemini') {
           },
           timeout_ms: {
             type: 'number',
-            description: 'Maximum time to wait in milliseconds (default: 3600000, max: 3600000).',
+            description: 'Maximum time to wait in milliseconds (default: 3600000, max: 60000).',
           },
         },
         required: ['job_id'],

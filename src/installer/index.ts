@@ -21,6 +21,7 @@ import {
 } from './hooks.js';
 import { getRuntimePackageVersion } from '../lib/version.js';
 import { getConfigDir } from '../utils/config-dir.js';
+import { atomicWriteFileSync, atomicWriteJsonSync } from '../lib/atomic-write.js';
 
 /** Claude Code configuration directory */
 export const CLAUDE_CONFIG_DIR = getConfigDir();
@@ -529,13 +530,13 @@ export function install(options: InstallOptions = {}): InstallResult {
         if (existingContent !== null) {
           const timestamp = new Date().toISOString().replace(/:/g, '-').split('.')[0]; // YYYY-MM-DDTHH-MM-SS
           const backupPath = join(CLAUDE_CONFIG_DIR, `CLAUDE.md.backup.${timestamp}`);
-          writeFileSync(backupPath, existingContent);
+          atomicWriteFileSync(backupPath, existingContent);
           log(`Backed up existing CLAUDE.md to ${backupPath}`);
         }
 
         // Merge OMC content with existing content
         const mergedContent = mergeClaudeMd(existingContent, omcContent, options.version ?? VERSION);
-        writeFileSync(claudeMdPath, mergedContent);
+        atomicWriteFileSync(claudeMdPath, mergedContent);
 
         if (existingContent) {
           log('Updated CLAUDE.md (merged with existing content)');
@@ -844,7 +845,7 @@ export function install(options: InstallOptions = {}): InstallResult {
       }
 
       // 3. Single atomic write
-      writeFileSync(SETTINGS_FILE, JSON.stringify(existingSettings, null, 2));
+      atomicWriteJsonSync(SETTINGS_FILE, existingSettings);
       log('  settings.json updated');
     } catch (_e) {
       log('  Warning: Could not configure settings.json (non-fatal)');
@@ -859,7 +860,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         installMethod: 'npm' as const,
         lastCheckAt: new Date().toISOString()
       };
-      writeFileSync(VERSION_FILE, JSON.stringify(versionMetadata, null, 2));
+      atomicWriteJsonSync(VERSION_FILE, versionMetadata);
       log('Saved version metadata');
     } else {
       log('Skipping version metadata (project-scoped plugin)');

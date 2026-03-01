@@ -50,9 +50,15 @@ function validateModelName(model: string): void {
   }
 }
 
+/** Parse an environment variable as an integer, returning fallback if undefined/NaN/empty */
+function parseEnvInt(envVal: string | undefined, fallback: number): number {
+  const n = parseInt(envVal ?? '', 10);
+  return isNaN(n) ? fallback : n;
+}
+
 // Default model can be overridden via environment variable
 export const GEMINI_DEFAULT_MODEL = process.env.OMC_GEMINI_DEFAULT_MODEL || 'gemini-3-pro-preview';
-export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseInt(process.env.OMC_GEMINI_TIMEOUT || '3600000', 10) || 3600000), 3600000);
+export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseEnvInt(process.env.OMC_GEMINI_TIMEOUT, 3600000)), 3600000);
 
 // OMC_GEMINI_YOLO controls whether --yolo is passed to the Gemini CLI.
 // --yolo is a NON-INTERACTIVE MODE flag that suppresses all confirmation
@@ -95,6 +101,11 @@ export function isGeminiRetryableError(stdout: string, stderr: string = ''): { i
 export function executeGemini(prompt: string, model?: string, cwd?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     if (model) validateModelName(model);
+    const MAX_PROMPT_BYTES = 4 * 1024 * 1024; // 4MB
+    const promptBytes = Buffer.byteLength(prompt, 'utf-8');
+    if (promptBytes > MAX_PROMPT_BYTES) {
+      return reject(new Error(`Prompt size (${promptBytes} bytes) exceeds 4MB limit`));
+    }
     let settled = false;
     const args = ['-p=.', ...(GEMINI_YOLO ? ['--yolo'] : [])];
     if (model) {
@@ -185,6 +196,11 @@ export function executeGeminiBackground(
   workingDirectory?: string
 ): { pid: number } | { error: string } {
   try {
+    const MAX_PROMPT_BYTES = 4 * 1024 * 1024; // 4MB
+    const promptBytes = Buffer.byteLength(fullPrompt, 'utf-8');
+    if (promptBytes > MAX_PROMPT_BYTES) {
+      return { error: `Prompt size (${promptBytes} bytes) exceeds 4MB limit` };
+    }
     const modelExplicit = modelInput !== undefined && modelInput !== null && modelInput !== '';
     const effectiveModel = modelInput || GEMINI_DEFAULT_MODEL;
 

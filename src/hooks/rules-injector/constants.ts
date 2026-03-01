@@ -46,3 +46,6 @@ export const RULE_EXTENSIONS = ['.md', '.mdc'];
 
 /** Tools that trigger rule injection */
 export const TRACKED_TOOLS = ['read', 'write', 'edit', 'multiedit'];
+
+/** Maximum number of directory levels to traverse upward when searching for rules or project root */
+export const MAX_TRAVERSAL_DEPTH = 30;

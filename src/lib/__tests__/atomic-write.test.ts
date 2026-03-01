@@ -207,7 +207,7 @@ describe('场景 6: 特殊字符路径', () => {
 });
 
 // ============================================================================
-// 加分场景：safeReadJson 对不存在文件返回 null，对损坏 JSON 也返回 null
+// 加分场景：safeReadJson 对不存在文件返回 null，对损坏 JSON 抛出错误
 // ============================================================================
 
 describe('加分场景: safeReadJson', () => {
@@ -216,12 +216,11 @@ describe('加分场景: safeReadJson', () => {
     expect(result).toBeNull();
   });
 
-  it('对损坏的 JSON 内容返回 null', async () => {
+  it('对损坏的 JSON 内容抛出错误（区别于文件不存在）', async () => {
     const filePath = path.join(tmpDir, 'corrupt.json');
     fs.writeFileSync(filePath, '{ invalid json !!!', 'utf-8');
 
-    const result = await safeReadJson(filePath);
-    expect(result).toBeNull();
+    await expect(safeReadJson(filePath)).rejects.toThrow();
   });
 
   it('对合法 JSON 文件正确返回解析后数据', async () => {

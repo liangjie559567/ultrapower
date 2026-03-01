@@ -15,6 +15,7 @@ import {
 import { dirname, join, relative } from 'path';
 import {
   GITHUB_INSTRUCTIONS_PATTERN,
+  MAX_TRAVERSAL_DEPTH,
   PROJECT_MARKERS,
   PROJECT_RULE_FILES,
   PROJECT_RULE_SUBDIRS,
@@ -46,6 +47,7 @@ function isValidRuleFile(fileName: string, dir: string): boolean {
  */
 export function findProjectRoot(startPath: string): string | null {
   let current: string;
+  let depth = 0;
 
   try {
     const stat = statSync(startPath);
@@ -54,7 +56,7 @@ export function findProjectRoot(startPath: string): string | null {
     current = dirname(startPath);
   }
 
-  while (true) {
+  while (depth < MAX_TRAVERSAL_DEPTH) {
     for (const marker of PROJECT_MARKERS) {
       const markerPath = join(current, marker);
       if (existsSync(markerPath)) {
@@ -67,7 +69,9 @@ export function findProjectRoot(startPath: string): string | null {
       return null;
     }
     current = parent;
+    depth++;
   }
+  return null;
 }
 
 /**
@@ -168,6 +172,8 @@ export function findRuleFiles(
   let distance = 0;
 
   while (true) {
+    if (distance >= MAX_TRAVERSAL_DEPTH) break;
+
     // Search rule directories in current directory
     for (const [parent, subdir] of PROJECT_RULE_SUBDIRS) {
       const ruleDir = join(currentDir, parent, subdir);
