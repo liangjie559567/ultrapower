@@ -50,8 +50,24 @@ const LOCK_TIMEOUT_MS = 2000;
 const LOCK_RETRY_MS = 20;
 const LOCK_STALE_MS = 10000;
 
-// Shared array for Atomics.wait-based synchronous sleep
+// Shared array for Atomics.wait-based synchronous sleep (used in Worker thread path only)
 const SLEEP_ARRAY = new Int32Array(new SharedArrayBuffer(4));
+
+/**
+ * Detect whether the current code is running on the Node.js main thread.
+ * Uses worker_threads module (Node 12+, ultrapower requires Node 18+).
+ * Returns true if on main thread or if worker_threads is unavailable.
+ */
+function detectIsMainThread(): boolean {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const wt = require('worker_threads') as { isMainThread: boolean };
+    return wt.isMainThread === true;
+  } catch {
+    // worker_threads unavailable — treat as main thread (safe fallback)
+    return true;
+  }
+}
 
 interface RegistryLockHandle {
   fd: number;
@@ -95,9 +111,25 @@ function ensureRegistryDir(): void {
 
 /**
  * Synchronous sleep helper used while waiting for lock acquisition.
+ *
+ * - Worker thread: uses Atomics.wait() (efficient, non-busy)
+ * - Main thread:  uses a busy-wait loop (Atomics.wait is prohibited on
+ *   the main thread in Node.js). Intervals here are ≤20 ms, so CPU
+ *   impact is negligible.
  */
 function sleepMs(ms: number): void {
-  Atomics.wait(SLEEP_ARRAY, 0, 0, ms);
+  if (detectIsMainThread()) {
+    // Main thread: Atomics.wait() is prohibited; use busy-wait instead.
+    const deadline = Date.now() + ms;
+    while (Date.now() < deadline) {
+      // intentional busy-wait; ms is small (≤20 ms)
+    }
+  } else {
+    // SAFETY: This code path executes only in a Worker thread context.
+    // Atomics.wait() is prohibited on the main thread (Node.js restriction).
+    // Context verified via: require('worker_threads').isMainThread === false
+    Atomics.wait(SLEEP_ARRAY, 0, 0, ms);
+  }
 }
 
 /**

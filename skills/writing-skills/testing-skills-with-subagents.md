@@ -10,7 +10,7 @@
 
 **核心原则：** 如果你没有看到 agent 在没有 skill 的情况下失败，你就不知道 skill 是否防止了正确的失败。
 
-**必要背景：** 使用此 skill 前，你必须理解 superpowers:test-driven-development。该 skill 定义了基本的 RED-GREEN-REFACTOR 循环。此 skill 提供 skill 特定的测试格式（压力场景、合理化表格）。
+**必要背景：** 使用此 skill 前，你必须理解 ultrapower:test-driven-development。该 skill 定义了基本的 RED-GREEN-REFACTOR 循环。此 skill 提供 skill 特定的测试格式（压力场景、合理化表格）。
 
 **完整示例：** 参见 examples/CLAUDE_MD_TESTING.md，其中有测试 CLAUDE.md 文档变体的完整测试活动。
 

@@ -21,6 +21,7 @@ import { resolveToWorktreeRoot } from "../lib/worktree-paths.js";
 // Hot-path imports: needed on every/most hook invocations (keyword-detector, pre/post-tool-use)
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
 import { processOrchestratorPreTool, processOrchestratorPostTool } from "./omc-orchestrator/index.js";
+import { processPreToolUse as enforceDelegationModel } from "../features/delegation-enforcer.js";
 import { normalizeHookInput } from "./bridge-normalize.js";
 import {
   addBackgroundTask,
@@ -874,6 +875,12 @@ function processPreToolUse(input: HookInput): HookOutput {
     }
   }
 
+  // Enforce model parameter for Task/Agent calls
+  const delegationResult = enforceDelegationModel(
+    input.toolName || '',
+    input.toolInput,
+  );
+
   // Inject agent dashboard for Task tool calls (debugging parallel agents)
   if (input.toolName === "Task") {
     const dashboard = getAgentDashboard(directory);
@@ -883,6 +890,7 @@ function processPreToolUse(input: HookInput): HookOutput {
         : dashboard;
       return {
         continue: true,
+        modifiedInput: delegationResult.modifiedInput,
         message: combined,
       };
     }
@@ -890,6 +898,7 @@ function processPreToolUse(input: HookInput): HookOutput {
 
   return {
     continue: true,
+    modifiedInput: delegationResult.modifiedInput,
     ...(enforcementResult.message ? { message: enforcementResult.message } : {}),
   };
 }

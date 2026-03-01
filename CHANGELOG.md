@@ -1,9 +1,31 @@
-## [5.5.5] - 2026-03-02
-### Documentation
+# ultrapower v5.5.6
+
+### 文档
 - Comprehensive documentation update: REFERENCE.md (49 agents/71 skills/35 tools/35 hooks), ARCHITECTURE.md (611 lines), FEATURES.md (1238 lines)
-- docs/standards/ 10 files bumped to v5.5.5
+- docs/standards/ 10 files bumped to v5.5.6
 - Merge docs/shared/ into docs/partials/ (remove 6 duplicate files)
-- CHANGELOG: add v5.5.0–v5.5.4 entries
+- Sync OMC:VERSION in docs/CLAUDE.md and version reference in CLAUDE.md
+
+---
+
+# ultrapower v5.5.5
+
+### 修复
+
+- **fix(python-repl): `handleReset` 和 `handleInterrupt` 中调用 `resetExecutionCounter`**
+  - 重置/中断操作后同步执行计数器，避免状态不一致
+  - 涵盖 success 和 fallback 两条路径
+- **fix(python-repl): `safeReadJson()` 添加 `.catch(() => null)` 保护**
+  - `ensureBridge`、`killBridgeWithEscalation`、`cleanupBridgeSessions`、`cleanupStaleBridges` 中防止文件缺失引发 unhandled rejection
+- **fix(subagent-tracker): `recordFileOwnership` 使用 `relative()` 规范化路径**
+  - 替换字符串 replace 方案，正确处理跨平台路径分隔符
+
+### 文档
+
+- 更新 3 个 skill 内容（requesting-code-review、subagent-driven-development、testing-skills-with-subagents）
+- 标记 `manifest_test_coverage.md` T-01~T-04 为完成状态（13 个测试随 v5.5.4 发布）
+
+---
 
 ## [5.5.4] - 2026-03-02
 ### Code Quality

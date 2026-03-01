@@ -17913,9 +17913,12 @@ var LSP_SERVERS = {
   }
 };
 function commandExists(command) {
+  if (!command || !command.trim()) {
+    return false;
+  }
   try {
     const checkCommand = process.platform === "win32" ? "where" : "which";
-    (0, import_child_process.execSync)(`${checkCommand} ${command}`, { stdio: "ignore" });
+    (0, import_child_process.execFileSync)(checkCommand, [command], { stdio: "ignore" });
     return true;
   } catch {
     return false;
@@ -17938,6 +17941,7 @@ function getAllServers() {
 }
 
 // src/tools/lsp/client.ts
+var MAX_BUFFER_BYTES = 64 * 1024 * 1024;
 function fileUri(filePath) {
   return (0, import_url.pathToFileURL)((0, import_path2.resolve)(filePath)).href;
 }
@@ -18011,6 +18015,10 @@ Install with: ${this.serverConfig.installHint}`
     this.process.kill();
     this.process = null;
     this.initialized = false;
+    for (const [, pending] of this.pendingRequests) {
+      clearTimeout(pending.timeout);
+      pending.reject(new Error("LSP client disconnected"));
+    }
     this.pendingRequests.clear();
     this.openDocuments.clear();
     this.diagnostics.clear();
@@ -18019,6 +18027,14 @@ Install with: ${this.serverConfig.installHint}`
    * Handle incoming data from the server
    */
   handleData(data) {
+    if (this.buffer.length + data.length > MAX_BUFFER_BYTES) {
+      console.error(
+        `[ultrapower] \u9519\u8BEF\uFF1ALSP \u7F13\u51B2\u533A\u8D85\u8FC7 ${MAX_BUFFER_BYTES} \u5B57\u8282\uFF0864MB\uFF09\u4E0A\u9650\uFF0C\u6B63\u5728\u65AD\u5F00\u8FDE\u63A5`
+      );
+      this.disconnect().catch(() => {
+      });
+      return;
+    }
     this.buffer += data;
     while (true) {
       const headerEnd = this.buffer.indexOf("\r\n\r\n");
@@ -19885,7 +19901,6 @@ function atomicWriteJsonSync(filePath, data) {
 }
 async function safeReadJson(filePath) {
   try {
-    await fs2.access(filePath);
     const content = await fs2.readFile(filePath, "utf-8");
     return JSON.parse(content);
   } catch (err) {
@@ -19893,7 +19908,7 @@ async function safeReadJson(filePath) {
     if (error2.code === "ENOENT") {
       return null;
     }
-    return null;
+    throw err;
   }
 }
 
@@ -20596,7 +20611,7 @@ async function spawnBridgeServer(sessionId, projectDir) {
 async function ensureBridge(sessionId, projectDir) {
   const metaPath = getBridgeMetaPath(sessionId);
   const expectedSocketPath = getBridgeSocketPath(sessionId);
-  const meta = await safeReadJson(metaPath);
+  const meta = await safeReadJson(metaPath).catch(() => null);
   if (meta && isValidBridgeMeta(meta)) {
     if (meta.sessionId !== sessionId) {
       await deleteBridgeMeta(sessionId);
@@ -20625,7 +20640,7 @@ async function killBridgeWithEscalation(sessionId, options) {
   const gracePeriod = options?.gracePeriodMs ?? DEFAULT_GRACE_PERIOD_MS;
   const startTime = Date.now();
   const metaPath = getBridgeMetaPath(sessionId);
-  const meta = await safeReadJson(metaPath);
+  const meta = await safeReadJson(metaPath).catch(() => null);
   if (!meta || !isValidBridgeMeta(meta)) {
     return { terminated: true };
   }
@@ -20909,9 +20924,11 @@ async function handleExecute(sessionId, socketPath, code, executionTimeout, exec
 async function handleReset(sessionId, socketPath) {
   try {
     const result = await sendSocketRequest(socketPath, "reset", {}, 1e4);
+    resetExecutionCounter(sessionId);
     return formatResetResult(result, sessionId);
   } catch (_error) {
     await killBridgeWithEscalation(sessionId);
+    resetExecutionCounter(sessionId);
     return [
       "=== Bridge Restarted ===",
       `Session: ${sessionId}`,
@@ -20951,6 +20968,7 @@ async function handleInterrupt(sessionId, socketPath, gracePeriodMs = 5e3) {
       {},
       Math.min(gracePeriodMs, 5e3)
     );
+    resetExecutionCounter(sessionId);
     return formatInterruptResult(
       {
         ...result,
@@ -20961,6 +20979,7 @@ async function handleInterrupt(sessionId, socketPath, gracePeriodMs = 5e3) {
     );
   } catch {
     const escalationResult = await killBridgeWithEscalation(sessionId, { gracePeriodMs });
+    resetExecutionCounter(sessionId);
     return formatInterruptResult(
       {
         status: "force_killed",
@@ -21113,6 +21132,9 @@ var pythonReplTool = {
     };
   }
 };
+function resetExecutionCounter(sessionId) {
+  executionCounters.delete(sessionId);
+}
 
 // src/tools/state-tools.ts
 var import_fs8 = require("fs");
@@ -21491,8 +21513,33 @@ function getActiveSessionsForMode(mode, cwd) {
   return sessionIds.filter((sid) => isJsonModeActive(cwd, mode, sid));
 }
 
+// src/lib/validateMode.ts
+var VALID_MODES = [
+  "autopilot",
+  "ultrapilot",
+  "team",
+  "pipeline",
+  "ralph",
+  "ultrawork",
+  "ultraqa",
+  "swarm"
+];
+function validateMode(mode) {
+  return typeof mode === "string" && VALID_MODES.includes(mode);
+}
+function assertValidMode(mode) {
+  if (!validateMode(mode)) {
+    const raw = typeof mode === "string" ? mode : String(mode);
+    const display = raw.length > 50 ? `${raw.slice(0, 50)}...(truncated)` : raw;
+    throw new Error(
+      `Invalid mode: "${display}". Valid modes are: ${VALID_MODES.join(", ")}`
+    );
+  }
+  return mode;
+}
+
 // src/tools/state-tools.ts
-var EXECUTION_MODES = [
+var STATE_TOOL_MODES = [
   "autopilot",
   "ultrapilot",
   "swarm",
@@ -21500,9 +21547,9 @@ var EXECUTION_MODES = [
   "team",
   "ralph",
   "ultrawork",
-  "ultraqa"
+  "ultraqa",
+  "ralplan"
 ];
-var STATE_TOOL_MODES = [...EXECUTION_MODES, "ralplan"];
 function getStatePath(mode, root) {
   if (MODE_CONFIGS[mode]) {
     return getStateFilePath(root, mode);
@@ -21520,6 +21567,16 @@ var stateReadTool = {
   handler: async (args) => {
     const { mode, workingDirectory, session_id } = args;
     try {
+      if (mode !== "ralplan") {
+        try {
+          assertValidMode(mode);
+        } catch {
+          return {
+            content: [{ type: "text", text: `[ultrapower] \u9519\u8BEF\uFF1A\u65E0\u6548\u7684\u72B6\u6001\u6A21\u5F0F\uFF1A${mode}` }],
+            isError: true
+          };
+        }
+      }
       const root = validateWorkingDirectory(workingDirectory);
       const sessionId = session_id;
       if (mode === "swarm") {
@@ -21696,6 +21753,16 @@ var stateWriteTool = {
       session_id
     } = args;
     try {
+      if (mode !== "ralplan") {
+        try {
+          assertValidMode(mode);
+        } catch {
+          return {
+            content: [{ type: "text", text: `[ultrapower] \u9519\u8BEF\uFF1A\u65E0\u6548\u7684\u72B6\u6001\u6A21\u5F0F\uFF1A${mode}` }],
+            isError: true
+          };
+        }
+      }
       const root = validateWorkingDirectory(workingDirectory);
       const sessionId = session_id;
       if (mode === "swarm") {
@@ -21778,6 +21845,16 @@ var stateClearTool = {
   handler: async (args) => {
     const { mode, workingDirectory, session_id } = args;
     try {
+      if (mode !== "ralplan") {
+        try {
+          assertValidMode(mode);
+        } catch {
+          return {
+            content: [{ type: "text", text: `[ultrapower] \u9519\u8BEF\uFF1A\u65E0\u6548\u7684\u72B6\u6001\u6A21\u5F0F\uFF1A${mode}` }],
+            isError: true
+          };
+        }
+      }
       const root = validateWorkingDirectory(workingDirectory);
       const sessionId = session_id;
       if (sessionId) {
@@ -22482,6 +22559,7 @@ ${sectionContent}`
       };
     } catch (error2) {
       return {
+        isError: true,
         content: [{
           type: "text",
           text: `Error reading notepad: ${error2 instanceof Error ? error2.message : String(error2)}`
@@ -22525,6 +22603,7 @@ var notepadWritePriorityTool = {
       };
     } catch (error2) {
       return {
+        isError: true,
         content: [{
           type: "text",
           text: `Error writing to Priority Context: ${error2 instanceof Error ? error2.message : String(error2)}`
@@ -22562,6 +22641,7 @@ var notepadWriteWorkingTool = {
       };
     } catch (error2) {
       return {
+        isError: true,
         content: [{
           type: "text",
           text: `Error writing to Working Memory: ${error2 instanceof Error ? error2.message : String(error2)}`
@@ -22599,6 +22679,7 @@ var notepadWriteManualTool = {
       };
     } catch (error2) {
       return {
+        isError: true,
         content: [{
           type: "text",
           text: `Error writing to MANUAL: ${error2 instanceof Error ? error2.message : String(error2)}`
@@ -22631,6 +22712,7 @@ var notepadPruneTool = {
       };
     } catch (error2) {
       return {
+        isError: true,
         content: [{
           type: "text",
           text: `Error pruning notepad: ${error2 instanceof Error ? error2.message : String(error2)}`
@@ -22674,6 +22756,7 @@ var notepadStatsTool = {
       };
     } catch (error2) {
       return {
+        isError: true,
         content: [{
           type: "text",
           text: `Error getting notepad stats: ${error2 instanceof Error ? error2.message : String(error2)}`

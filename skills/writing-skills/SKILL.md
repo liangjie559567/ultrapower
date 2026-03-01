@@ -15,7 +15,7 @@ description: 创建新 skill、编辑现有 skill 或在部署前验证 skill �
 
 **核心原则：** 如果你没有观察过 agent 在没有 skill 的情况下失败，你就不知道 skill 是否教了正确的东西。
 
-**必需背景：** 使用本 skill 前，你必须理解 superpowers:test-driven-development。该 skill 定义了基本的 RED-GREEN-REFACTOR 循环。本 skill 将 TDD 适配到文档。
+**必需背景：** 使用本 skill 前，你必须理解 ultrapower:test-driven-development。该 skill 定义了基本的 RED-GREEN-REFACTOR 循环。本 skill 将 TDD 适配到文档。
 
 **官方指导：** 关于 Anthropic 官方 skill 编写最佳实践，请参阅 anthropic-best-practices.md。该文档提供了补充本 skill TDD 方法的额外模式和指南。
 
@@ -278,8 +278,8 @@ wc -w skills/path/SKILL.md
 **编写引用其他 skill 的文档时：**
 
 仅使用 skill 名称，带明确的要求标记：
-- 好：`**REQUIRED SUB-SKILL:** Use superpowers:test-driven-development`
-- 好：`**REQUIRED BACKGROUND:** You MUST understand superpowers:systematic-debugging`
+- 好：`**REQUIRED SUB-SKILL:** Use ultrapower:test-driven-development`
+- 好：`**REQUIRED BACKGROUND:** You MUST understand ultrapower:systematic-debugging`
 - 差：`See skills/testing/test-driven-development`（不清楚是否必需）
 - 差：`@skills/testing/test-driven-development/SKILL.md`（强制加载，消耗上下文）
 
@@ -388,7 +388,7 @@ NO SKILL WITHOUT A FAILING TEST FIRST
 - 不要在运行测试时"适配"
 - 删除意味着删除
 
-**必需背景：** superpowers:test-driven-development skill 解释了为何重要。同样的原则适用于文档。
+**必需背景：** ultrapower:test-driven-development skill 解释了为何重要。同样的原则适用于文档。
 
 ## 测试所有 Skill 类型
 

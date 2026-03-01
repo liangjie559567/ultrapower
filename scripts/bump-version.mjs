@@ -34,7 +34,7 @@ export function assertVersionsSync() {
 }
 
 export function bumpVersion(newVersion) {
-  if (!/^\d+\.\d+\.\d+/.test(newVersion)) {
+  if (!/^\d+\.\d+\.\d+$/.test(newVersion)) {
     throw new Error(`Invalid version format: ${newVersion}`);
   }
   // package.json

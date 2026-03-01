@@ -46,7 +46,7 @@ description: 当你有书面实现计划需要在独立会话中执行并设置�
 
 所有任务完成并验证后：
 - 宣布："I'm using the finishing-a-development-branch skill to complete this work."
-- **必需子 skill：** 使用 superpowers:finishing-a-development-branch
+- **必需子 skill：** 使用 ultrapower:finishing-a-development-branch
 - 遵循该 skill 验证测试、呈现选项、执行选择
 
 ## 何时停止并寻求帮助
@@ -79,9 +79,9 @@ description: 当你有书面实现计划需要在独立会话中执行并设置�
 ## 集成
 
 **必需工作流 skill：**
-- **superpowers:using-git-worktrees** —— 必需：开始前设置隔离工作区
-- **superpowers:writing-plans** —— 创建此 skill 执行的计划
-- **superpowers:finishing-a-development-branch** —— 所有任务完成后完成开发
+- **ultrapower:using-git-worktrees** —— 必需：开始前设置隔离工作区
+- **ultrapower:writing-plans** —— 创建此 skill 执行的计划
+- **ultrapower:finishing-a-development-branch** —— 所有任务完成后完成开发
 
 ## 路由触发
 

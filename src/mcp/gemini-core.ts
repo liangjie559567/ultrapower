@@ -50,9 +50,25 @@ function validateModelName(model: string): void {
   }
 }
 
+/** Parse an environment variable as an integer, returning fallback if undefined/NaN/empty */
+function parseEnvInt(envVal: string | undefined, fallback: number): number {
+  const n = parseInt(envVal ?? '', 10);
+  return isNaN(n) ? fallback : n;
+}
+
 // Default model can be overridden via environment variable
 export const GEMINI_DEFAULT_MODEL = process.env.OMC_GEMINI_DEFAULT_MODEL || 'gemini-3-pro-preview';
-export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseInt(process.env.OMC_GEMINI_TIMEOUT || '3600000', 10) || 3600000), 3600000);
+export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseEnvInt(process.env.OMC_GEMINI_TIMEOUT, 3600000)), 3600000);
+
+// OMC_GEMINI_YOLO controls whether --yolo is passed to the Gemini CLI.
+// --yolo is a NON-INTERACTIVE MODE flag that suppresses all confirmation
+// prompts from the Gemini CLI. It is NOT a security bypass flag.
+// Default: true — required in CI, hooks, and background bridge processes
+// to prevent Gemini CLI from blocking indefinitely waiting for user input.
+// Set OMC_GEMINI_YOLO=false only in interactive development contexts where
+// you want Gemini to prompt before taking destructive actions.
+const _yoloEnv = process.env.OMC_GEMINI_YOLO;
+export const GEMINI_YOLO: boolean = _yoloEnv === 'false' || _yoloEnv === '0' ? false : true;
 
 // Gemini is best for design review and implementation tasks (recommended, not enforced)
 export const GEMINI_RECOMMENDED_ROLES = ['designer', 'writer', 'vision'] as const;
@@ -85,8 +101,13 @@ export function isGeminiRetryableError(stdout: string, stderr: string = ''): { i
 export function executeGemini(prompt: string, model?: string, cwd?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     if (model) validateModelName(model);
+    const MAX_PROMPT_BYTES = 4 * 1024 * 1024; // 4MB
+    const promptBytes = Buffer.byteLength(prompt, 'utf-8');
+    if (promptBytes > MAX_PROMPT_BYTES) {
+      return reject(new Error(`Prompt size (${promptBytes} bytes) exceeds 4MB limit`));
+    }
     let settled = false;
-    const args = ['-p=.', '--yolo'];
+    const args = ['-p=.', ...(GEMINI_YOLO ? ['--yolo'] : [])];
     if (model) {
       args.push('--model', model);
     }
@@ -175,6 +196,11 @@ export function executeGeminiBackground(
   workingDirectory?: string
 ): { pid: number } | { error: string } {
   try {
+    const MAX_PROMPT_BYTES = 4 * 1024 * 1024; // 4MB
+    const promptBytes = Buffer.byteLength(fullPrompt, 'utf-8');
+    if (promptBytes > MAX_PROMPT_BYTES) {
+      return { error: `Prompt size (${promptBytes} bytes) exceeds 4MB limit` };
+    }
     const modelExplicit = modelInput !== undefined && modelInput !== null && modelInput !== '';
     const effectiveModel = modelInput || GEMINI_DEFAULT_MODEL;
 
@@ -188,7 +214,7 @@ export function executeGeminiBackground(
     // Helper to try spawning with a specific model
     const trySpawnWithModel = (tryModel: string, remainingModels: string[]): { pid: number } | { error: string } => {
       validateModelName(tryModel);
-      const args = ['-p=.', '--yolo', '--model', tryModel];
+      const args = ['-p=.', ...(GEMINI_YOLO ? ['--yolo'] : []), '--model', tryModel];
       const child = spawn('gemini', args, {
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],

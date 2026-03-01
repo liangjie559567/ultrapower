@@ -15,7 +15,7 @@ description: "/ax-status — Axiom 状态仪表盘：显示当前任务状态、
 
 并行读取：
 - `.omc/axiom/active_context.md` — 当前任务状态
-- `.omc/state/axiom-context.json` — 状态机状态
+- `.omc/axiom/state_machine.md` — 状态机状态
 - `.omc/axiom/evolution/learning_queue.md` — 待处理学习素材数量
 - `.omc/axiom/evolution/workflow_metrics.md` — 工作流指标
 

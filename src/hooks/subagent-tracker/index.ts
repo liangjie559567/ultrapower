@@ -17,7 +17,7 @@ import {
   unlinkSync,
   statSync,
 } from "fs";
-import { join } from "path";
+import { join, relative } from "path";
 import { recordAgentStart, recordAgentStop } from './session-replay.js';
 
 // ============================================================================
@@ -161,13 +161,44 @@ function isProcessAlive(pid: number): boolean {
 }
 
 /**
- * Synchronous sleep using Atomics.wait
- * Avoids CPU-spinning busy-wait loops
+ * Detect whether the current code is running on the Node.js main thread.
+ * Uses worker_threads module (Node 12+, ultrapower requires Node 18+).
+ * Returns true if on main thread or if worker_threads is unavailable.
+ */
+function detectIsMainThread(): boolean {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const wt = require('worker_threads') as { isMainThread: boolean };
+    return wt.isMainThread === true;
+  } catch {
+    // worker_threads unavailable — treat as main thread (safe fallback)
+    return true;
+  }
+}
+
+/**
+ * Synchronous sleep helper.
+ *
+ * - Worker thread: uses Atomics.wait() (efficient, non-busy)
+ * - Main thread:  uses a busy-wait loop (Atomics.wait is prohibited on
+ *   the main thread in Node.js). Intervals here are ≤50 ms, so CPU
+ *   impact is negligible.
  */
 function syncSleep(ms: number): void {
-  const buffer = new SharedArrayBuffer(4);
-  const view = new Int32Array(buffer);
-  Atomics.wait(view, 0, 0, ms);
+  if (detectIsMainThread()) {
+    // Main thread: Atomics.wait() is prohibited; use busy-wait instead.
+    const deadline = Date.now() + ms;
+    while (Date.now() < deadline) {
+      // intentional busy-wait; ms is small (≤50 ms)
+    }
+  } else {
+    // SAFETY: This code path executes only in a Worker thread context.
+    // Atomics.wait() is prohibited on the main thread (Node.js restriction).
+    // Context verified via: require('worker_threads').isMainThread === false
+    const buffer = new SharedArrayBuffer(4);
+    const view = new Int32Array(buffer);
+    Atomics.wait(view, 0, 0, ms);
+  }
 }
 
 // ============================================================================
@@ -1125,7 +1156,7 @@ export function recordFileOwnership(
     if (agent) {
       if (!agent.file_ownership) agent.file_ownership = [];
       // Normalize and deduplicate
-      const normalized = filePath.replace(directory, "").replace(/^\//, "");
+      const normalized = relative(directory, filePath);
       if (!agent.file_ownership.includes(normalized)) {
         agent.file_ownership.push(normalized);
         // Cap at 100 files per agent

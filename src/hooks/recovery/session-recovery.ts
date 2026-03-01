@@ -108,7 +108,7 @@ export function detectErrorType(error: unknown): RecoveryErrorType {
     message.includes('thinking') &&
     (message.includes('first block') ||
       message.includes('must start with') ||
-      message.includes('preceeding') ||
+      message.includes('preceding') ||
       message.includes('final block') ||
       message.includes('cannot be thinking') ||
       (message.includes('expected') && message.includes('found')))
@@ -186,7 +186,7 @@ async function recoverToolResultMissing(
   // This is a placeholder showing the recovery intent.
   // A full implementation would require access to the SDK client.
 
-  return true; // Indicate recovery was attempted
+  return false; // Placeholder: no actual recovery performed
 }
 
 /**

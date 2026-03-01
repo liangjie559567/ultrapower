@@ -608,9 +608,11 @@ export async function performUpdate(options?: {
         process.env.OMC_UPDATE_RECONCILE = '1';
 
         // Find the omc binary path
-        const omcPath = execSync('which omc 2>/dev/null || where omc 2>NUL', {
+        const whichCmd = process.platform === 'win32' ? 'where omc' : 'which omc';
+        const omcPath = execSync(whichCmd, {
           encoding: 'utf-8',
           stdio: 'pipe',
+          shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/sh',
         }).trim().split('\n')[0];
 
         // Re-exec with reconcile subcommand

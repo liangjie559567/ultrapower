@@ -5,7 +5,7 @@
  * Supports auto-detection and installation hints.
  */
 
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { extname } from 'path';
 
 export interface LspServerConfig {
@@ -150,12 +150,23 @@ export const LSP_SERVERS: Record<string, LspServerConfig> = {
 };
 
 /**
- * Check if a command exists in PATH
+ * Check if a command exists in PATH.
+ *
+ * SECURITY: Uses execFileSync with argument array (not execSync with shell
+ * interpolation) to prevent shell injection. The `command` parameter is
+ * sourced exclusively from the static LSP_SERVERS constant defined in this
+ * module. If user-configurable LSP commands are added in the future, callers
+ * MUST validate `command` against an allowlist before calling this function.
  */
 export function commandExists(command: string): boolean {
+  // Guard: reject empty or whitespace-only command to avoid ambiguous behavior
+  if (!command || !command.trim()) {
+    return false;
+  }
   try {
     const checkCommand = process.platform === 'win32' ? 'where' : 'which';
-    execSync(`${checkCommand} ${command}`, { stdio: 'ignore' });
+    // Pass command as a separate array element — never interpolated into a shell string
+    execFileSync(checkCommand, [command], { stdio: 'ignore' });
     return true;
   } catch {
     return false;

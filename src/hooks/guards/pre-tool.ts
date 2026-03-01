@@ -4,6 +4,9 @@
  * 注册 PreToolUse 事件，执行权限检查和范围验证。
  */
 
+import path from 'path';
+import os from 'os';
+
 export interface PreToolContext {
   toolName: string;
   toolInput: Record<string, unknown>;
@@ -48,9 +51,15 @@ export function checkPreTool(ctx: PreToolContext): PreToolResult {
   }
 
   // Write 路径范围检查
+  // 使用 path.resolve() 规范化路径，防止路径遍历攻击（T-2b）
   if (toolName === 'Write') {
-    const filePath = String(toolInput['file_path'] ?? '');
-    if (filePath.includes('~/.claude') || filePath.includes('node_modules')) {
+    const rawPath = String(toolInput['file_path'] ?? '');
+    const filePath = path.resolve(rawPath);
+    const homeClaudeDir = path.join(os.homedir(), '.claude');
+    if (
+      filePath.startsWith(homeClaudeDir) ||
+      filePath.includes('node_modules')
+    ) {
       return {
         allowed: false,
         reason: `Write to restricted path: ${filePath}`,

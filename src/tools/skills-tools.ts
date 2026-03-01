@@ -12,8 +12,10 @@ import { loadAllSkills } from '../hooks/learner/loader.js';
 import { MAX_SKILL_CONTENT_LENGTH } from '../hooks/learner/constants.js';
 import type { LearnedSkill } from '../hooks/learner/types.js';
 
-/** Allowed boundary directories for projectRoot validation */
-const ALLOWED_BOUNDARIES = [process.cwd(), homedir()];
+/** Allowed boundary directories for projectRoot validation (evaluated lazily per call) */
+function getAllowedBoundaries(): string[] {
+  return [process.cwd(), homedir()];
+}
 
 /** Role boundary tags that could be used for prompt injection */
 const ROLE_BOUNDARY_PATTERN = /^<\s*\/?\s*(system|human|assistant|user|tool_use|tool_result)\b[^>]*>/i;
@@ -29,7 +31,7 @@ function validateProjectRoot(input: string): string {
     throw new Error('Invalid project root: path traversal not allowed');
   }
   // Positive boundary validation: resolved path must be under cwd or HOME
-  const isWithinAllowed = ALLOWED_BOUNDARIES.some(boundary => {
+  const isWithinAllowed = getAllowedBoundaries().some(boundary => {
     const normalizedBoundary = normalize(boundary);
     return normalized === normalizedBoundary ||
            normalized.startsWith(normalizedBoundary + sep);

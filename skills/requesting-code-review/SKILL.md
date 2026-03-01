@@ -5,7 +5,7 @@ description: 完成任务、实施主要功能或合并前使用，以验证工�
 
 # 请求代码审查
 
-派遣 superpowers:code-reviewer 子 agent 在问题扩散前捕获它们。
+派遣 ultrapower:code-reviewer 子 agent 在问题扩散前捕获它们。
 
 **核心原则：** 尽早审查，频繁审查。
 
@@ -31,7 +31,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 **2. 派遣 code-reviewer 子 agent：**
 
-使用 Task 工具，类型为 superpowers:code-reviewer，填写 `code-reviewer.md` 中的模板
+使用 Task 工具，类型为 ultrapower:code-reviewer，填写 `code-reviewer.md` 中的模板
 
 **占位符：**
 - `{WHAT_WAS_IMPLEMENTED}` - 刚构建的内容
@@ -56,7 +56,7 @@ You: Let me request code review before proceeding.
 BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
 HEAD_SHA=$(git rev-parse HEAD)
 
-[Dispatch superpowers:code-reviewer subagent]
+[Dispatch ultrapower:code-reviewer subagent]
   WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
   PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
   BASE_SHA: a7981ec

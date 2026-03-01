@@ -239,24 +239,21 @@ export function atomicWriteJsonSync(filePath: string, data: unknown): void {
 
 export async function safeReadJson<T>(filePath: string): Promise<T | null> {
   try {
-    // Check if file exists
-    await fs.access(filePath);
-
-    // Read file content
+    // Read file content (throws ENOENT if file doesn't exist)
     const content = await fs.readFile(filePath, "utf-8");
 
-    // Parse JSON
+    // Parse JSON (throws SyntaxError if content is corrupted)
     return JSON.parse(content) as T;
   } catch (err) {
     const error = err as NodeJS.ErrnoException;
 
-    // File doesn't exist - return null
+    // File doesn't exist - expected absence, return null silently
     if (error.code === "ENOENT") {
       return null;
     }
 
-    // Parse error or read error - return null
-    // In production, you might want to log these errors
-    return null;
+    // File exists but is corrupted (parse error, permission error, etc.)
+    // Re-throw so callers can distinguish corruption from absence
+    throw err;
   }
 }

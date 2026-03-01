@@ -33,7 +33,7 @@ description: 在有规格或需求的多步骤任务时使用，在接触代码�
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For Claude:** REQUIRED SUB-SKILL: Use ultrapower:executing-plans to implement this plan task-by-task.
 
 **Goal:** [一句话描述构建内容]
 
@@ -107,13 +107,13 @@ git commit -m "feat: add specific feature"
 **选择哪种方式？"**
 
 **如果选择 Subagent 驱动：**
-- **必需子 skill：** 使用 superpowers:subagent-driven-development
+- **必需子 skill：** 使用 ultrapower:subagent-driven-development
 - 保持在本 session
 - 每个任务新 subagent + 代码审查
 
 **如果选择并行 Session：**
 - 引导他们在 worktree 中打开新 session
-- **必需子 skill：** 新 session 使用 superpowers:executing-plans
+- **必需子 skill：** 新 session 使用 ultrapower:executing-plans
 
 ## 路由触发
 

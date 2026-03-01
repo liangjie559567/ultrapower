@@ -538,7 +538,9 @@ describe('Normalization Fast-Path', () => {
     expect(normalized.toolName).toBe('SnakeTool');
   });
 
-  it('should apply sensitive filtering on fast-path too', () => {
+  it('should apply sensitive filtering via Zod path (sensitive hooks no longer use fast path)', () => {
+    // After the security fix, sensitive hooks always go through Zod.
+    // The filtering result must still be correct: unknown fields dropped, known fields kept.
     const camelInput = {
       sessionId: 'abc',
       directory: '/tmp',
@@ -548,5 +550,123 @@ describe('Normalization Fast-Path', () => {
     const normalized = normalizeHookInput(camelInput, 'permission-request') as Record<string, unknown>;
     expect(normalized.sessionId).toBe('abc');
     expect(normalized.injected).toBeUndefined();
+  });
+});
+
+// ============================================================================
+// Fast-Path Security Regression Tests (T-1e)
+// ============================================================================
+
+describe('Fast-Path Security Regression (T-1e)', () => {
+  it('case 1: sensitive hook with malicious camelCase input forces Zod path', () => {
+    const safeParseSpy = vi.spyOn(HookInputSchema, 'safeParse');
+
+    for (const hookType of SENSITIVE_HOOKS) {
+      safeParseSpy.mockClear();
+
+      const input = {
+        sessionId: 'x',
+        toolName: 'y',
+        directory: '/t',
+        __injected__: 'evil',
+        maliciousField: 'payload',
+      };
+
+      const normalized = normalizeHookInput(input, hookType) as Record<string, unknown>;
+
+      // Zod must have been called — fast path was NOT taken
+      expect(safeParseSpy).toHaveBeenCalledTimes(1);
+      // Malicious fields must be dropped by the whitelist
+      expect(normalized.__injected__).toBeUndefined();
+      expect(normalized.maliciousField).toBeUndefined();
+      // Legitimate fields must pass through
+      expect(normalized.sessionId).toBe('x');
+    }
+
+    safeParseSpy.mockRestore();
+  });
+
+  it('case 2: sensitive hook with type-confusion sessionId goes through Zod without throwing', () => {
+    // HookInputSchema uses .passthrough() so Zod does not coerce field values;
+    // the key security property is that Zod IS invoked (fast path skipped) and
+    // the function does not throw an uncaught exception.
+    const safeParseSpy = vi.spyOn(HookInputSchema, 'safeParse');
+
+    const input = {
+      sessionId: { __proto__: { polluted: true } } as unknown as string,
+      toolName: 'Read',
+      directory: '/t',
+    };
+
+    expect(() => {
+      normalizeHookInput(input, 'permission-request');
+    }).not.toThrow();
+
+    // Zod must have been invoked — fast path must NOT have been taken
+    expect(safeParseSpy).toHaveBeenCalledTimes(1);
+
+    safeParseSpy.mockRestore();
+  });
+
+  it('case 3: non-sensitive hook with camelCase input still takes fast path (no perf regression)', () => {
+    // Create a single spy and use mockClear() between hookType iterations
+    // to avoid stale call-count accumulation from restore+respying in a loop.
+    const safeParseSpy = vi.spyOn(HookInputSchema, 'safeParse');
+
+    const nonSensitiveHooks = ['pre-tool-use', 'post-tool-use', 'keyword-detector'];
+
+    for (const hookType of nonSensitiveHooks) {
+      safeParseSpy.mockClear();
+
+      const input = { sessionId: 'abc', toolName: 'Read', directory: '/tmp' };
+      const normalized = normalizeHookInput(input, hookType);
+
+      // fast path taken — Zod NOT called
+      expect(safeParseSpy).not.toHaveBeenCalled();
+      expect(normalized.sessionId).toBe('abc');
+      expect(normalized.toolName).toBe('Read');
+    }
+
+    safeParseSpy.mockRestore();
+  });
+
+  it('case 4: all four SENSITIVE_HOOKS members disable fast path', () => {
+    const expectedSensitiveHooks = ['permission-request', 'setup-init', 'setup-maintenance', 'session-end'];
+    // Confirm the set matches expectations (guard against accidental shrinkage)
+    expect(SENSITIVE_HOOKS.size).toBe(expectedSensitiveHooks.length);
+    for (const h of expectedSensitiveHooks) {
+      expect(SENSITIVE_HOOKS.has(h)).toBe(true);
+    }
+
+    // Single spy with mockClear() between iterations to avoid call-count bleed.
+    const safeParseSpy = vi.spyOn(HookInputSchema, 'safeParse');
+
+    for (const hookType of expectedSensitiveHooks) {
+      safeParseSpy.mockClear();
+
+      const input = { sessionId: 'x', directory: '/t' };
+      normalizeHookInput(input, hookType);
+
+      // Zod called exactly once per sensitive hook invocation
+      expect(safeParseSpy).toHaveBeenCalledTimes(1);
+    }
+
+    safeParseSpy.mockRestore();
+  });
+
+  it('case 5: snake_case input for sensitive hook continues to work correctly', () => {
+    const input = {
+      session_id: 'snake',
+      cwd: '/tmp',
+      injected_evil: 'bad',
+    };
+
+    const normalized = normalizeHookInput(input, 'session-end') as Record<string, unknown>;
+
+    // Legitimate snake_case fields normalise correctly
+    expect(normalized.sessionId).toBe('snake');
+    expect(normalized.directory).toBe('/tmp');
+    // Unknown field must be dropped by whitelist
+    expect(normalized.injected_evil).toBeUndefined();
   });
 });
