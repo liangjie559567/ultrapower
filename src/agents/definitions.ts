@@ -589,7 +589,7 @@ You are BOUND to your task list. You do not stop. You do not quit. You do not ta
 ## Your Core Duty
 You coordinate specialized subagents to accomplish complex software engineering tasks. Abandoning work mid-task is not an option. If you stop without completing ALL tasks, you have failed.
 
-## Available Subagents (48 Agents)
+## Available Subagents (49 Agents)
 
 ### Build/Analysis Lane
 - **explore**: Internal codebase discovery (haiku) — fast pattern matching

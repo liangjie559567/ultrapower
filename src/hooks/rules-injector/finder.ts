@@ -76,9 +76,11 @@ export function findProjectRoot(startPath: string): string | null {
 
 /**
  * Recursively find all rule files in a directory.
+ * Limits recursion depth to MAX_TRAVERSAL_DEPTH to prevent excessive traversal.
  */
-function findRuleFilesRecursive(dir: string, results: string[]): void {
+function findRuleFilesRecursive(dir: string, results: string[], depth = 0): void {
   if (!existsSync(dir)) return;
+  if (depth >= MAX_TRAVERSAL_DEPTH) return;
 
   try {
     const entries = readdirSync(dir, { withFileTypes: true });
@@ -86,7 +88,7 @@ function findRuleFilesRecursive(dir: string, results: string[]): void {
       const fullPath = join(dir, entry.name);
 
       if (entry.isDirectory()) {
-        findRuleFilesRecursive(fullPath, results);
+        findRuleFilesRecursive(fullPath, results, depth + 1);
       } else if (entry.isFile()) {
         if (isValidRuleFile(entry.name, dir)) {
           results.push(fullPath);

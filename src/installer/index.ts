@@ -8,7 +8,7 @@
  * Bash hook scripts were removed in v3.9.0.
  */
 
-import { existsSync, mkdirSync, writeFileSync, readFileSync, chmodSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, chmodSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { homedir } from 'os';
@@ -477,7 +477,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         if (existsSync(filepath) && !options.force) {
           log(`  Skipping ${filename} (already exists)`);
         } else {
-          writeFileSync(filepath, content);
+          atomicWriteFileSync(filepath, content);
           result.installedAgents.push(filename);
           log(`  Installed ${filename}`);
         }
@@ -504,7 +504,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         if (existsSync(filepath) && !options.force) {
           log(`  Skipping ${filename} (already exists)`);
         } else {
-          writeFileSync(filepath, content);
+          atomicWriteFileSync(filepath, content);
           result.installedCommands.push(filename);
           log(`  Installed ${filename}`);
         }
@@ -561,7 +561,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         if (existsSync(filepath) && !options.force) {
           log(`  Skipping ${filename} (already exists)`);
         } else {
-          writeFileSync(filepath, content);
+          atomicWriteFileSync(filepath, content);
           // Make script executable (skip on Windows - not needed)
           if (!isWindows()) {
             chmodSync(filepath, 0o755);
@@ -585,7 +585,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         if (!existsSync(dir)) {
           mkdirSync(dir, { recursive: true });
         }
-        writeFileSync(filepath, content);
+        atomicWriteFileSync(filepath, content);
         if (!isWindows()) {
           chmodSync(filepath, 0o755);
         }
@@ -729,7 +729,7 @@ export function install(options: InstallOptions = {}): InstallResult {
       ];
       const hudScript = hudScriptLines.join('\n');
 
-      writeFileSync(hudScriptPath, hudScript);
+      atomicWriteFileSync(hudScriptPath, hudScript);
       if (!isWindows()) {
         chmodSync(hudScriptPath, 0o755);
       }
