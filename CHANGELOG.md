@@ -1,3 +1,13 @@
+# ultrapower v5.5.6
+
+### 文档
+- Comprehensive documentation update: REFERENCE.md (49 agents/71 skills/35 tools/35 hooks), ARCHITECTURE.md (611 lines), FEATURES.md (1238 lines)
+- docs/standards/ 10 files bumped to v5.5.6
+- Merge docs/shared/ into docs/partials/ (remove 6 duplicate files)
+- Sync OMC:VERSION in docs/CLAUDE.md and version reference in CLAUDE.md
+
+---
+
 # ultrapower v5.5.5
 
 ### 修复
