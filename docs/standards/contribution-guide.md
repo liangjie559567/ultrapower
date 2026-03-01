@@ -1,6 +1,6 @@
 # 贡献规范
 
-> **ultrapower-version**: 5.0.21
+> **ultrapower-version**: 5.5.5
 > **优先级**: P1（推荐遵守）
 > **真理之源**: `docs/standards/audit-report.md`
 > **覆盖范围**: T-10（贡献者工作流 + 质量门禁）

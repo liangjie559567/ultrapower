@@ -1,6 +1,6 @@
 # 用户指南：Skill 决策树与 Agent 路由
 
-> **ultrapower-version**: 5.0.21
+> **ultrapower-version**: 5.5.5
 > **优先级**: P1（推荐遵守）
 > **真理之源**: `docs/standards/audit-report.md`
 > **覆盖范围**: T-08（Skill 决策树 + Agent 路由指南）

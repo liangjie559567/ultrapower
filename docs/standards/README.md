@@ -1,11 +1,11 @@
 # ultrapower 全链路规范体系
 
-> **ultrapower-version**: 5.0.22
+> **ultrapower-version**: 5.5.5
 > **状态**: 正式发布
-> **最后更新**: 2026-02-26
+> **最后更新**: 2026-03-02
 > **真理之源**: `docs/standards/audit-report.md`
 
-ultrapower v5.0.22 具备 49 个 agents、70 个 skills、35 个 hooks 的完整体系。本规范体系从现有代码反向提取，覆盖运行时防护、Hook 执行顺序、状态机、Agent 生命周期、用户使用指南和贡献规范，使 ultrapower 从"能用"升级为"可靠、易用、可扩展"。
+ultrapower v5.5.5 具备 49 个 agents、70 个 skills、35 个 hooks 的完整体系。本规范体系从现有代码反向提取，覆盖运行时防护、Hook 执行顺序、状态机、Agent 生命周期、用户使用指南和贡献规范，使 ultrapower 从"能用"升级为"可靠、易用、可扩展"。
 
 ---
 
