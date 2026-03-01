@@ -1,6 +1,6 @@
 # 运行时防护规范
 
-> **ultrapower-version**: 5.0.21
+> **ultrapower-version**: 5.5.5
 > **优先级**: P0（必须遵守）
 > **真理之源**: `docs/standards/audit-report.md`
 > **覆盖范围**: T-03a（Hook 输入防护）+ T-03b（State/Mode 防护）

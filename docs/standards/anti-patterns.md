@@ -1,6 +1,6 @@
 # 反模式清单
 
-> **ultrapower-version**: 5.0.21
+> **ultrapower-version**: 5.5.5
 > **优先级**: P0（必须遵守）
 > **真理之源**: `docs/standards/audit-report.md`
 > **覆盖范围**: T-09（已知反模式 + 正确替代方案）

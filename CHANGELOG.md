@@ -17,6 +17,43 @@
 
 ---
 
+## [5.5.4] - 2026-03-02
+### Code Quality
+- Expand `generatePromptId` entropy from 4 to 8 bytes
+- Add 4MB prompt size limit to `executeGemini`
+- Unify catch blocks to return `isError: true` consistently
+- Dynamic `ALLOWED_BOUNDARIES` calculation in skills-tools
+
+## [5.5.3] - 2026-03-02
+### Documentation & Namespace
+- Replace all `superpowers:` prefix residuals with `ultrapower:`
+- Add deprecation notice for legacy namespace with migration hints
+- Sync AGENTS.md version and agent count with package.json
+- Add `$` anchor to bump-version.mjs regex; fix ax-status/ax-export paths
+- Add GitHub Actions windows-latest CI matrix
+
+## [5.5.2] - 2026-03-02
+### Feature
+- Add delegation-enforcer: auto-inject model for Task/Agent calls
+  (explore→haiku, executor→sonnet when model unspecified)
+
+## [5.5.1] - 2026-03-02
+### Fix (Windows & Features)
+- Fix `which`/`where` platform branch in auto-update
+- Fix path handling: use `path.relative()` + `path.resolve()` normalization
+- Fix `wait_for_job` max wait timeout (60s cap)
+- Fix `handleKillJob` order: kill process before writing status
+
+## [5.5.0] - 2026-03-02
+### Security
+- Add `assertValidMode()` path traversal guard at state_read/state_write entry
+- Replace `execSync` with `execFileSync` in LSP servers (shell injection fix)
+- Disable fast path for SENSITIVE_HOOKS in bridge-normalize
+- Fix `Atomics.wait()` main-thread crash: fall back to setTimeout
+- Fix Windows ESM import: use `pathToFileURL()` for daemon module loading
+- Replace config JSON.stringify injection with tmp-file + env-var pattern
+- Add 64MB buffer cap + `clearTimeout` on disconnect in LSP client
+
 # ultrapower v5.3.1
 
 ### 修复

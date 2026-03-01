@@ -1,6 +1,6 @@
 # 状态机规范
 
-> **ultrapower-version**: 5.0.21
+> **ultrapower-version**: 5.5.5
 > **优先级**: P0（必须遵守）
 > **真理之源**: `docs/standards/audit-report.md`
 > **覆盖范围**: T-05（Agent 状态机 + Team Pipeline 转换矩阵）

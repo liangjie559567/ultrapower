@@ -1,6 +1,6 @@
 # Agent 生命周期规范
 
-> **ultrapower-version**: 5.0.21
+> **ultrapower-version**: 5.5.5
 > **优先级**: P0（必须遵守）
 > **真理之源**: `docs/standards/audit-report.md`
 > **覆盖范围**: T-06（Agent 边界情况矩阵 + SubagentStopInput.success 废弃说明 + 孤儿 Agent 检测）

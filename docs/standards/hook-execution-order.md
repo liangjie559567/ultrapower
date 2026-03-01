@@ -1,6 +1,6 @@
 # Hook 执行顺序规范
 
-> **ultrapower-version**: 5.0.21
+> **ultrapower-version**: 5.5.5
 > **优先级**: P0（必须遵守）
 > **真理之源**: `docs/standards/audit-report.md`
 > **覆盖范围**: T-04a（HookType 枚举与路由）+ T-04b（执行顺序与优先级）
