@@ -14,10 +14,10 @@ description: "/ax-export — Axiom 系统导出：将 Axiom 配置打包为可�
 ### 模板模式（template）
 
 导出干净的 Axiom 框架，不含项目特定数据：
-- 工作流文件（`.agent/workflows/*.md`）
-- Skill 文件（`.agent/skills/*/SKILL.md`）
-- 规则文件（`.agent/rules/*.rule`）
-- 配置模板（不含实际数据）
+- Axiom Skill 文件（`skills/ax-*/SKILL.md`）
+- Agent 提示词（`agents/axiom-*.md`）
+- 规则模板（`templates/rules/`）
+- 配置模板（`.mcp.json`，不含实际数据）
 
 **适用场景：** 在新项目中复用 Axiom 框架
 
@@ -49,11 +49,10 @@ description: "/ax-export — Axiom 系统导出：将 Axiom 配置打包为可�
 
 **模板模式文件清单：**
 ```
-.agent/workflows/
-.agent/skills/
-.agent/rules/
-.agent/config/
 skills/ax-*/SKILL.md
+agents/axiom-*.md
+templates/rules/
+.mcp.json
 ```
 
 **完整模式额外包含：**
@@ -64,15 +63,17 @@ skills/ax-*/SKILL.md
 
 ### Step 3: 生成导出包
 
+**macOS / Linux (bash)：**
+
 ```bash
-# 创建临时目录
-mkdir -p /tmp/axiom-export-[timestamp]
+# 创建临时目录（使用 $TMPDIR 兼容 macOS；Linux 回退到 /tmp）
+mkdir -p ${TMPDIR:-/tmp}/axiom-export-[timestamp]
 
 # 复制文件
-cp -r [文件列表] /tmp/axiom-export-[timestamp]/
+cp -r [文件列表] ${TMPDIR:-/tmp}/axiom-export-[timestamp]/
 
 # 生成 README
-cat > /tmp/axiom-export-[timestamp]/README.md << 'EOF'
+cat > ${TMPDIR:-/tmp}/axiom-export-[timestamp]/README.md << 'EOF'
 # Axiom Export
 - 导出时间: [timestamp]
 - 导出模式: [template/full]
@@ -85,7 +86,38 @@ cat > /tmp/axiom-export-[timestamp]/README.md << 'EOF'
 EOF
 
 # 打包
-cd /tmp && zip -r axiom-export-[timestamp].zip axiom-export-[timestamp]/
+cd ${TMPDIR:-/tmp} && zip -r axiom-export-[timestamp].zip axiom-export-[timestamp]/
+```
+
+**Windows (PowerShell)：**
+
+```powershell
+# 获取系统临时目录（$env:TEMP 或 GetTempPath()）
+$tmpDir = [System.IO.Path]::GetTempPath()
+$exportDir = Join-Path $tmpDir "axiom-export-[timestamp]"
+
+# 创建临时目录
+New-Item -ItemType Directory -Path $exportDir -Force
+
+# 复制文件
+Copy-Item -Recurse [文件列表] $exportDir
+
+# 生成 README
+@"
+# Axiom Export
+- 导出时间: [timestamp]
+- 导出模式: [template/full]
+- 源项目: [project-name]
+
+## 安装说明
+1. 解压到目标项目根目录
+2. 运行 /ultrapower:deepinit 初始化
+3. 运行 /ax-status 验证安装
+"@ | Set-Content -Path (Join-Path $exportDir "README.md") -Encoding UTF8
+
+# 打包（使用 Compress-Archive 替代 zip）
+$zipPath = Join-Path $tmpDir "axiom-export-[timestamp].zip"
+Compress-Archive -Path $exportDir -DestinationPath $zipPath -Force
 ```
 
 ### Step 4: 输出结果
@@ -93,7 +125,7 @@ cd /tmp && zip -r axiom-export-[timestamp].zip axiom-export-[timestamp]/
 ```
 ✓ 导出完成
 
-文件: /tmp/axiom-export-[timestamp].zip
+文件: ${TMPDIR:-/tmp}/axiom-export-[timestamp].zip（Windows: %TEMP%\axiom-export-[timestamp].zip）
 大小: [X] KB
 包含:
   - 工作流: X 个

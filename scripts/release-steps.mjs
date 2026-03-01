@@ -81,7 +81,7 @@ export async function syncMarketplace(opts = {}) {
   writeFileSync(marketplacePath, JSON.stringify(market, null, 2) + '\n');
   run(`git add .claude-plugin/marketplace.json`, dryRun);
   run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
-  run(`git push origin main`, dryRun);
+  run(`git push origin HEAD`, dryRun);
 
   console.log(`syncMarketplace: updated to v${version} and pushed`);
   return { success: true };
