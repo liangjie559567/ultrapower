@@ -7,7 +7,7 @@
 **仅在规格合规审查通过后才派发。**
 
 ```
-Task tool (superpowers:code-reviewer):
+Task tool (ultrapower:code-reviewer):
   Use template at requesting-code-review/code-reviewer.md
 
   WHAT_WAS_IMPLEMENTED: [来自实现者的报告]
