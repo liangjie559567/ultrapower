@@ -223,6 +223,63 @@ function copyTemplatesToCache() {
 
 copyTemplatesToCache();
 
+// Fix: Claude Code's _8Y() function uses a VERSION-AGNOSTIC npm-cache path:
+//   ~/.claude/plugins/cache/npm-cache/node_modules/@liangjie559567/ultrapower/
+// If this dir was populated by an old bad install (v5.3.x with hooks/agents in plugin.json),
+// ALL subsequent installs for ANY version reuse the stale cache without running npm install
+// or postinstall — causing "hooks: Invalid input, agents: Invalid input" validation errors.
+// This function proactively repairs the npm-cache plugin.json so the next install works.
+function fixNpmCache() {
+  try {
+    const npmCacheDir = join(CLAUDE_DIR, 'plugins', 'cache', 'npm-cache', 'node_modules', '@liangjie559567', 'ultrapower');
+    if (!existsSync(npmCacheDir)) return;
+
+    const npmPluginJsonDir = join(npmCacheDir, '.claude-plugin');
+    const npmPluginJsonPath = join(npmPluginJsonDir, 'plugin.json');
+
+    // Read version from npm-cache's own package.json
+    let cacheVersion = '0.0.0';
+    try {
+      const cachePkg = JSON.parse(readFileSync(join(npmCacheDir, 'package.json'), 'utf-8'));
+      cacheVersion = cachePkg.version || cacheVersion;
+    } catch { /* use default */ }
+
+    // Detect if repair is needed: hooks as object/array OR agents as non-.md path
+    function cacheNeedsRepair() {
+      try {
+        const content = JSON.parse(readFileSync(npmPluginJsonPath, 'utf-8'));
+        if (content.agents && (typeof content.agents !== 'string' || !content.agents.endsWith('.md'))) return true;
+        if (content.hooks && typeof content.hooks === 'object') return true;
+        return false;
+      } catch (e) {
+        if (e.code === 'ENOENT') return false; // file absent is OK
+        return false;
+      }
+    }
+
+    if (!cacheNeedsRepair()) return;
+
+    // Build clean metadata-only plugin.json using the npm-cache's own version.
+    // Do NOT include hooks or agents fields — they cause Zod validation failures.
+    const cleanPluginJson = {
+      name: 'ultrapower',
+      description: 'Disciplined multi-agent orchestration: workflow enforcement + parallel execution',
+      version: cacheVersion,
+      homepage: 'https://github.com/liangjie559567/ultrapower#readme',
+      repository: 'git+https://github.com/liangjie559567/ultrapower.git',
+      license: 'MIT',
+      keywords: ['claude', 'claude-code', 'ai', 'agent', 'multi-agent', 'orchestration', 'omc'],
+    };
+    mkdirSync(npmPluginJsonDir, { recursive: true });
+    writeFileSync(npmPluginJsonPath, JSON.stringify(cleanPluginJson, null, 2));
+    console.log(`[OMC] Repaired stale npm-cache plugin.json (v${cacheVersion}) — old install had invalid hooks/agents fields`);
+  } catch (e) {
+    console.log('[OMC] Warning: Could not repair npm-cache plugin.json:', e.message);
+  }
+}
+
+fixNpmCache();
+
 // Fix: npm install strips hidden directories (starting with '.'), so .claude-plugin/plugin.json
 // is never extracted to the plugin cache. We recreate it directly in the plugin cache.
 // The postinstall script runs from the npm-cache node_modules dir, so we must target the
@@ -273,11 +330,12 @@ function fixMissingPluginJson() {
     // Also overwrite if existing file has missing or incorrectly formatted component paths.
     const localPluginJsonDir = join(pluginRoot, '.claude-plugin');
     const localPluginJsonPath = join(localPluginJsonDir, 'plugin.json');
-    if (!existsSync(localPluginJsonPath) || needsRepair(localPluginJsonPath)) {
-      mkdirSync(localPluginJsonDir, { recursive: true });
-      writeFileSync(localPluginJsonPath, pluginJsonStr);
-      console.log('[OMC] Wrote .claude-plugin/plugin.json with correct component paths in install dir');
-    }
+    // Always write clean plugin.json to the install dir (npm-cache node_modules) unconditionally.
+    // This ensures the npm-cache always has a valid manifest after postinstall runs,
+    // so future installs that reuse the cache get correct data.
+    mkdirSync(localPluginJsonDir, { recursive: true });
+    writeFileSync(localPluginJsonPath, pluginJsonStr);
+    console.log('[OMC] Wrote .claude-plugin/plugin.json in install dir');
 
     // 2. Write directly to plugin cache (marketplace: omc, plugin: ultrapower)
     // Claude Code copies from npm-cache but skips hidden dirs, so we patch the cache directly.
