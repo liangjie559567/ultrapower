@@ -421,10 +421,12 @@ async function handleExecute(
 async function handleReset(sessionId: string, socketPath: string): Promise<string> {
   try {
     const result = await sendSocketRequest<ResetResult>(socketPath, 'reset', {}, 10000);
+    resetExecutionCounter(sessionId);
     return formatResetResult(result, sessionId);
   } catch (_error) {
     // If reset fails, try to kill and restart the bridge
     await killBridgeWithEscalation(sessionId);
+    resetExecutionCounter(sessionId);
 
     return [
       '=== Bridge Restarted ===',
@@ -481,6 +483,7 @@ async function handleInterrupt(
       Math.min(gracePeriodMs, 5000)
     );
 
+    resetExecutionCounter(sessionId);
     return formatInterruptResult(
       {
         ...result,
@@ -492,6 +495,7 @@ async function handleInterrupt(
   } catch {
     // Graceful interrupt failed - escalate with signals
     const escalationResult = await killBridgeWithEscalation(sessionId, { gracePeriodMs });
+    resetExecutionCounter(sessionId);
 
     return formatInterruptResult(
       {

@@ -17,7 +17,7 @@ import {
   unlinkSync,
   statSync,
 } from "fs";
-import { join } from "path";
+import { join, relative } from "path";
 import { recordAgentStart, recordAgentStop } from './session-replay.js';
 
 // ============================================================================
@@ -1156,7 +1156,7 @@ export function recordFileOwnership(
     if (agent) {
       if (!agent.file_ownership) agent.file_ownership = [];
       // Normalize and deduplicate
-      const normalized = filePath.replace(directory, "").replace(/^\//, "");
+      const normalized = relative(directory, filePath);
       if (!agent.file_ownership.includes(normalized)) {
         agent.file_ownership.push(normalized);
         // Cap at 100 files per agent

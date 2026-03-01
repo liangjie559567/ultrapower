@@ -406,7 +406,7 @@ export async function ensureBridge(sessionId: string, projectDir?: string): Prom
   const metaPath = getBridgeMetaPath(sessionId);
   const expectedSocketPath = getBridgeSocketPath(sessionId);
 
-  const meta = await safeReadJson<BridgeMeta>(metaPath);
+  const meta = await safeReadJson<BridgeMeta>(metaPath).catch(() => null);
 
   if (meta && isValidBridgeMeta(meta)) {
     // Security validation 1: Anti-poisoning - verify sessionId matches
@@ -469,7 +469,7 @@ export async function killBridgeWithEscalation(
   const startTime = Date.now();
 
   const metaPath = getBridgeMetaPath(sessionId);
-  const meta = await safeReadJson<BridgeMeta>(metaPath);
+  const meta = await safeReadJson<BridgeMeta>(metaPath).catch(() => null);
 
   if (!meta || !isValidBridgeMeta(meta)) {
     return { terminated: true }; // Already dead or no metadata
@@ -564,7 +564,7 @@ export async function cleanupBridgeSessions(
 
       result.foundSessions++;
 
-      const meta = await safeReadJson<BridgeMeta>(metaPath);
+      const meta = await safeReadJson<BridgeMeta>(metaPath).catch(() => null);
       if (meta && isValidBridgeMeta(meta)) {
         const escalation = await killBridgeWithEscalation(sessionId);
         if (escalation.terminatedBy) {
@@ -649,7 +649,7 @@ export async function cleanupStaleBridges(): Promise<StaleBridgeCleanupResult> {
         continue;
       }
 
-      const meta = await safeReadJson<BridgeMeta>(metaPath);
+      const meta = await safeReadJson<BridgeMeta>(metaPath).catch(() => null);
       if (!meta || !isValidBridgeMeta(meta)) {
         result.staleSessions++;
         const metaRemoved = await removeFileIfExists(metaPath);
