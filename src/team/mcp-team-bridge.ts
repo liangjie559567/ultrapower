@@ -18,6 +18,7 @@ import {
   checkShutdownSignal, deleteShutdownSignal, checkDrainSignal, deleteDrainSignal
 } from './inbox-outbox.js';
 import { unregisterMcpWorker } from './team-registration.js';
+import { GEMINI_YOLO } from '../mcp/gemini-core.js';
 import { writeHeartbeat, deleteHeartbeat } from './heartbeat.js';
 import { killSession } from './tmux-session.js';
 import { logAuditEvent } from './audit-log.js';
@@ -344,7 +345,7 @@ function spawnCliProcess(
     args = ['exec', '-m', model || 'gpt-5.3-codex', '--json', '--full-auto'];
   } else {
     cmd = 'gemini';
-    args = ['--yolo'];
+    args = [...(GEMINI_YOLO ? ['--yolo'] : [])];
     if (model) args.push('--model', model);
   }
 

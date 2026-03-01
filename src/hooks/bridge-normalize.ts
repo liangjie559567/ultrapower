@@ -147,8 +147,11 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
 
   const rawObj = raw as Record<string, unknown>;
 
-  // Fast path: if input is already camelCase, skip Zod parse entirely
-  if (isAlreadyCamelCase(rawObj)) {
+  // Fast path: if input is already camelCase, skip Zod parse entirely.
+  // Sensitive hooks must always go through Zod for structural validation
+  // (type checking, format verification) regardless of key casing.
+  const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
+  if (isAlreadyCamelCase(rawObj) && !isSensitive) {
     return {
       sessionId: rawObj.sessionId as string | undefined,
       toolName: rawObj.toolName as string | undefined,

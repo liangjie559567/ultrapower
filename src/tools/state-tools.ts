@@ -28,15 +28,19 @@ import {
   type ExecutionMode
 } from '../hooks/mode-registry/index.js';
 import { ToolDefinition } from './types.js';
+import { assertValidMode } from '../lib/validateMode.js';
 
 // ExecutionMode from mode-registry (8 modes - NO ralplan)
-const EXECUTION_MODES: [string, ...string[]] = [
+const EXECUTION_MODES = [
   'autopilot', 'ultrapilot', 'swarm', 'pipeline', 'team',
   'ralph', 'ultrawork', 'ultraqa'
-];
+] as const;
 
 // Extended type for state tools - includes ralplan which has state but isn't in mode-registry
-const STATE_TOOL_MODES: [string, ...string[]] = [...EXECUTION_MODES, 'ralplan'];
+const STATE_TOOL_MODES = [
+  'autopilot', 'ultrapilot', 'swarm', 'pipeline', 'team',
+  'ralph', 'ultrawork', 'ultraqa', 'ralplan'
+] as const;
 type StateToolMode = typeof STATE_TOOL_MODES[number];
 
 /**
@@ -60,14 +64,14 @@ function getStatePath(mode: StateToolMode, root: string): string {
 // ============================================================================
 
 export const stateReadTool: ToolDefinition<{
-  mode: z.ZodEnum<typeof STATE_TOOL_MODES>;
+  mode: z.ZodEnum<[StateToolMode, ...StateToolMode[]]>;
   workingDirectory: z.ZodOptional<z.ZodString>;
   session_id: z.ZodOptional<z.ZodString>;
 }> = {
   name: 'state_read',
   description: 'Read the current state for a specific mode (ralph, ultrawork, autopilot, etc.). Returns the JSON state data or indicates if no state exists.',
   schema: {
-    mode: z.enum(STATE_TOOL_MODES).describe('The mode to read state for'),
+    mode: z.enum(STATE_TOOL_MODES as unknown as [StateToolMode, ...StateToolMode[]]).describe('The mode to read state for'),
     workingDirectory: z.string().optional().describe('Working directory (defaults to cwd)'),
     session_id: z.string().optional().describe('Session ID for session-scoped state isolation. When provided, the tool operates only within that session. When omitted, the tool aggregates legacy state plus all session-scoped state (may include other sessions).'),
   },
@@ -75,6 +79,19 @@ export const stateReadTool: ToolDefinition<{
     const { mode, workingDirectory, session_id } = args;
 
     try {
+      // P0 安全校验：外部接口层路径遍历防护
+      // ralplan 由 Zod enum 白名单保护，不在 VALID_MODES 中但属于合法扩展值
+      if (mode !== 'ralplan') {
+        try {
+          assertValidMode(mode);
+        } catch {
+          return {
+            content: [{ type: 'text' as const, text: `[ultrapower] 错误：无效的状态模式：${mode}` }],
+            isError: true
+          };
+        }
+      }
+
       const root = validateWorkingDirectory(workingDirectory);
       const sessionId = session_id as string | undefined;
 
@@ -203,7 +220,7 @@ export const stateReadTool: ToolDefinition<{
 // ============================================================================
 
 export const stateWriteTool: ToolDefinition<{
-  mode: z.ZodEnum<typeof STATE_TOOL_MODES>;
+  mode: z.ZodEnum<[StateToolMode, ...StateToolMode[]]>;
   active: z.ZodOptional<z.ZodBoolean>;
   iteration: z.ZodOptional<z.ZodNumber>;
   max_iterations: z.ZodOptional<z.ZodNumber>;
@@ -220,7 +237,7 @@ export const stateWriteTool: ToolDefinition<{
   name: 'state_write',
   description: 'Write/update state for a specific mode. Creates the state file and directories if they do not exist. Common fields (active, iteration, phase, etc.) can be set directly as parameters. Additional custom fields can be passed via the optional `state` parameter. Note: swarm uses SQLite and cannot be written via this tool.',
   schema: {
-    mode: z.enum(STATE_TOOL_MODES).describe('The mode to write state for'),
+    mode: z.enum(STATE_TOOL_MODES as unknown as [StateToolMode, ...StateToolMode[]]).describe('The mode to write state for'),
     active: z.boolean().optional().describe('Whether the mode is currently active'),
     iteration: z.number().optional().describe('Current iteration number'),
     max_iterations: z.number().optional().describe('Maximum iterations allowed'),
@@ -252,6 +269,19 @@ export const stateWriteTool: ToolDefinition<{
     } = args;
 
     try {
+      // P0 安全校验：外部接口层路径遍历防护
+      // ralplan 由 Zod enum 白名单保护，不在 VALID_MODES 中但属于合法扩展值
+      if (mode !== 'ralplan') {
+        try {
+          assertValidMode(mode);
+        } catch {
+          return {
+            content: [{ type: 'text' as const, text: `[ultrapower] 错误：无效的状态模式：${mode}` }],
+            isError: true
+          };
+        }
+      }
+
       const root = validateWorkingDirectory(workingDirectory);
       const sessionId = session_id as string | undefined;
 
@@ -340,14 +370,14 @@ export const stateWriteTool: ToolDefinition<{
 // ============================================================================
 
 export const stateClearTool: ToolDefinition<{
-  mode: z.ZodEnum<typeof STATE_TOOL_MODES>;
+  mode: z.ZodEnum<[StateToolMode, ...StateToolMode[]]>;
   workingDirectory: z.ZodOptional<z.ZodString>;
   session_id: z.ZodOptional<z.ZodString>;
 }> = {
   name: 'state_clear',
   description: 'Clear/delete state for a specific mode. Removes the state file and any associated marker files.',
   schema: {
-    mode: z.enum(STATE_TOOL_MODES).describe('The mode to clear state for'),
+    mode: z.enum(STATE_TOOL_MODES as unknown as [StateToolMode, ...StateToolMode[]]).describe('The mode to clear state for'),
     workingDirectory: z.string().optional().describe('Working directory (defaults to cwd)'),
     session_id: z.string().optional().describe('Session ID for session-scoped state isolation. When provided, the tool operates only within that session. When omitted, the tool aggregates legacy state plus all session-scoped state (may include other sessions).'),
   },
@@ -355,6 +385,19 @@ export const stateClearTool: ToolDefinition<{
     const { mode, workingDirectory, session_id } = args;
 
     try {
+      // P0 安全校验：外部接口层路径遍历防护
+      // ralplan 由 Zod enum 白名单保护，不在 VALID_MODES 中但属于合法扩展值
+      if (mode !== 'ralplan') {
+        try {
+          assertValidMode(mode);
+        } catch {
+          return {
+            content: [{ type: 'text' as const, text: `[ultrapower] 错误：无效的状态模式：${mode}` }],
+            isError: true
+          };
+        }
+      }
+
       const root = validateWorkingDirectory(workingDirectory);
       const sessionId = session_id as string | undefined;
 
@@ -638,14 +681,14 @@ export const stateListActiveTool: ToolDefinition<{
 // ============================================================================
 
 export const stateGetStatusTool: ToolDefinition<{
-  mode: z.ZodOptional<z.ZodEnum<typeof STATE_TOOL_MODES>>;
+  mode: z.ZodOptional<z.ZodEnum<[StateToolMode, ...StateToolMode[]]>>;
   workingDirectory: z.ZodOptional<z.ZodString>;
   session_id: z.ZodOptional<z.ZodString>;
 }> = {
   name: 'state_get_status',
   description: 'Get detailed status for a specific mode or all modes. Shows active status, file paths, and state contents.',
   schema: {
-    mode: z.enum(STATE_TOOL_MODES).optional().describe('Specific mode to check (omit for all modes)'),
+    mode: z.enum(STATE_TOOL_MODES as unknown as [StateToolMode, ...StateToolMode[]]).optional().describe('Specific mode to check (omit for all modes)'),
     workingDirectory: z.string().optional().describe('Working directory (defaults to cwd)'),
     session_id: z.string().optional().describe('Session ID for session-scoped state isolation. When provided, the tool operates only within that session. When omitted, the tool aggregates legacy state plus all session-scoped state (may include other sessions).'),
   },

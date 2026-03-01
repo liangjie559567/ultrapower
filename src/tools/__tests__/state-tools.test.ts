@@ -460,4 +460,98 @@ describe('state-tools', () => {
       expect(existsSync(legacyPath)).toBe(true);
     });
   });
+
+  describe('路径遍历防护（P0 安全回归）', () => {
+    it('state_read 应拒绝路径遍历攻击载荷并返回错误响应', async () => {
+      const result = await stateReadTool.handler({
+        mode: '../../etc/passwd' as any,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+
+    it('state_write 应拒绝路径遍历攻击载荷并返回错误响应', async () => {
+      const result = await stateWriteTool.handler({
+        mode: '../state/evil' as any,
+        state: { active: true },
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+
+    it('state_read 应拒绝空字符串 mode', async () => {
+      const result = await stateReadTool.handler({
+        mode: '' as any,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+
+    it('state_read 应接受 ralplan 作为合法模式（不被 assertValidMode 阻断）', async () => {
+      const result = await stateReadTool.handler({
+        mode: 'ralplan',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBeFalsy();
+      expect(result.content[0].text).toContain('No state found');
+    });
+
+    it('state_write 应拒绝含 null 字节的 mode 参数', async () => {
+      const result = await stateWriteTool.handler({
+        mode: 'ralph\x00../../etc' as any,
+        state: { active: true },
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+
+    it('state_clear 应拒绝路径遍历攻击载荷并返回错误响应', async () => {
+      const result = await stateClearTool.handler({
+        mode: '../../../evil' as any,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+
+    it('state_clear 应拒绝空字符串 mode', async () => {
+      const result = await stateClearTool.handler({
+        mode: '' as any,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+
+    it('state_clear 应接受 ralplan 作为合法模式（不被 assertValidMode 阻断）', async () => {
+      const result = await stateClearTool.handler({
+        mode: 'ralplan',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBeFalsy();
+      expect(result.content[0].text).toContain('No state found');
+    });
+
+    it('state_read 应拒绝含路径分隔符的恶意 mode', async () => {
+      const result = await stateReadTool.handler({
+        mode: 'ralph/../../../etc/shadow' as any,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+  });
 });

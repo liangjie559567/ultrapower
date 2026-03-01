@@ -12,6 +12,9 @@ import { pathToFileURL } from 'url';
 import type { LspServerConfig } from './servers.js';
 import { getServerForFile, commandExists } from './servers.js';
 
+/** Maximum receive buffer size: 64 MB. Exceeding this disconnects the client. */
+const MAX_BUFFER_BYTES = 64 * 1024 * 1024;
+
 /** Convert a file path to a valid file:// URI (cross-platform) */
 function fileUri(filePath: string): string {
   return pathToFileURL(resolve(filePath)).href;
@@ -201,6 +204,12 @@ export class LspClient {
     this.process.kill();
     this.process = null;
     this.initialized = false;
+
+    // Clear pending request timers before clearing the map to prevent timer leaks
+    for (const [, pending] of this.pendingRequests) {
+      clearTimeout(pending.timeout);
+      pending.reject(new Error('LSP client disconnected'));
+    }
     this.pendingRequests.clear();
     this.openDocuments.clear();
     this.diagnostics.clear();
@@ -210,6 +219,16 @@ export class LspClient {
    * Handle incoming data from the server
    */
   private handleData(data: string): void {
+    // Guard: disconnect if buffer grows beyond limit (prevents OOM from runaway servers)
+    if (this.buffer.length + data.length > MAX_BUFFER_BYTES) {
+      console.error(
+        `[ultrapower] 错误：LSP 缓冲区超过 ${MAX_BUFFER_BYTES} 字节（64MB）上限，正在断开连接`
+      );
+      this.disconnect().catch(() => {
+        // Ignore errors during emergency disconnect
+      });
+      return;
+    }
     this.buffer += data;
 
     while (true) {

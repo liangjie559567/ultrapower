@@ -14,8 +14,9 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync, chmodSync, statSync, appendFileSync, renameSync } from 'fs';
 import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { homedir } from 'os';
+import { fileURLToPath, pathToFileURL } from 'url';
+import { homedir, tmpdir } from 'os';
+import { randomUUID } from 'crypto';
 import { spawn } from 'child_process';
 import { checkRateLimitStatus, formatRateLimitStatus } from './rate-limit-monitor.js';
 import {
@@ -75,6 +76,18 @@ const DAEMON_ENV_ALLOWLIST = [
   // Windows system
   'SystemRoot', 'SYSTEMROOT', 'windir', 'COMSPEC',
 ] as const;
+
+/**
+ * Write daemon config to a temporary file for secure IPC.
+ * Returns the temp file path. Caller must add the path to daemon env
+ * as OMC_DAEMON_CONFIG_FILE. The daemon subprocess deletes the file after reading.
+ */
+function writeDaemonConfigFile(cfg: Required<DaemonConfig>): string {
+  const uuid = randomUUID();
+  const tmpPath = join(tmpdir(), `omc-daemon-cfg-${uuid}.json`);
+  writeFileSync(tmpPath, JSON.stringify(cfg), { encoding: 'utf-8', mode: 0o600 });
+  return tmpPath;
+}
 
 /**
  * Create a minimal environment for daemon child processes.
@@ -422,21 +435,39 @@ export function startDaemon(config?: DaemonConfig): DaemonResponse {
   // Fork a new process for the daemon using dynamic import() for ESM compatibility.
   // The project uses "type": "module", so require() would fail with ERR_REQUIRE_ESM.
   const modulePath = __filename.replace(/\.ts$/, '.js');
+  const moduleUrl = pathToFileURL(modulePath).href;
+
+  // Write config to temp file for safe IPC (avoids code injection via JSON.stringify)
+  const configFilePath = writeDaemonConfigFile(cfg);
+
   const daemonScript = `
-    import('${modulePath}').then(({ pollLoop }) => {
-      const config = ${JSON.stringify(cfg)};
-      return pollLoop(config);
+    import { readFileSync as _rfs, unlinkSync as _uls } from 'fs';
+    const _cfgPath = process.env.OMC_DAEMON_CONFIG_FILE;
+    let _config;
+    try {
+      _config = JSON.parse(_rfs(_cfgPath, 'utf-8'));
+    } catch(_e) {
+      console.error('[daemon] config read failed:', _e.message);
+      process.exit(1);
+    } finally {
+      try { _uls(_cfgPath); } catch {}
+    }
+    import('${moduleUrl}').then(({ pollLoop }) => {
+      return pollLoop(_config);
     }).catch((err) => { console.error(err); process.exit(1); });
   `;
 
   try {
     // Use node to run the daemon in background
     // Note: Using minimal env to prevent leaking sensitive credentials
+    const daemonEnv = createMinimalDaemonEnv();
+    daemonEnv['OMC_DAEMON_CONFIG_FILE'] = configFilePath;
+
     const child = spawn('node', ['-e', daemonScript], {
       detached: true,
       stdio: 'ignore',
       cwd: process.cwd(),
-      env: createMinimalDaemonEnv(),
+      env: daemonEnv,
     });
 
     child.unref();
@@ -461,6 +492,9 @@ export function startDaemon(config?: DaemonConfig): DaemonResponse {
       message: 'Failed to start daemon process',
     };
   } catch (error) {
+    if (configFilePath) {
+      try { unlinkSync(configFilePath); } catch {}
+    }
     return {
       success: false,
       message: 'Failed to start daemon',
