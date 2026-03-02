@@ -127,6 +127,6 @@ if (cliStep && ['preflight', 'validate', 'publish', 'release', 'sync'].includes(
   const version = process.env.GITHUB_REF_NAME?.replace(/^v/, '') || undefined;
   const stepMap = { preflight, validate: validateBuild, publish: publishNpm, release: createGithubRelease, sync: syncMarketplace };
   stepMap[cliStep]({ dryRun, version }).then(r => {
-    if (!r.success) { console.error(`Step ${cliStep} failed`); process.exit(1); }
+    if (!r.success) { console.error(`Step ${cliStep} failed: ${r.output ?? ''}`); process.exit(1); }
   });
 }
