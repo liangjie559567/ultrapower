@@ -71,3 +71,25 @@ description: "/ax-status — Axiom 状态仪表盘：显示当前任务状态、
 - `.omc/axiom/evolution/knowledge_base.md`
 
 若文件缺失，提示用户运行 `/ax-context init` 初始化。
+
+### Step 4: 可观测性摘要
+
+调用 `queryEngine` 查询本 session 的可观测性数据并追加到报告末尾：
+
+```typescript
+import { queryEngine } from 'src/hooks/observability/query-engine.js';
+const runs  = queryEngine.getAgentRuns({ last: 5 });
+const tools = queryEngine.getToolCalls({ last: 5 });
+const costs = queryEngine.getCostSummary();
+```
+
+输出格式（追加在报告末尾）：
+
+```markdown
+## 可观测性快照
+- Top agents: [agent_type(avg_ms)] ...
+- Top tools:  [tool_name(p95_ms, failure_rate)] ...
+- 本次成本:   $X.XXXX USD
+```
+
+若数据库无数据则跳过此节。
