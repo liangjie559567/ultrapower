@@ -1,5 +1,8 @@
 import { getDb } from './db.js';
 
+const ALLOWED_TABLES = new Set(['agent_runs', 'tool_calls', 'cost_records']);
+const VALID_COL = /^[a-z_]+$/;
+
 export interface WriteOp {
   table: string;
   row: Record<string, unknown>;
@@ -30,7 +33,9 @@ export class WriteQueue {
     }
     db.transaction(() => {
       for (const [table, tableOps] of byTable) {
+        if (!ALLOWED_TABLES.has(table)) throw new Error(`Invalid table: ${table}`);
         const cols = Object.keys(tableOps[0]!.row);
+        for (const c of cols) if (!VALID_COL.test(c)) throw new Error(`Invalid column: ${c}`);
         const stmt = db.prepare(
           `INSERT OR IGNORE INTO ${table} (${cols.join(', ')}) VALUES (${cols.map(() => '?').join(', ')})`
         );

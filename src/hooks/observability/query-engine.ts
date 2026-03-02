@@ -40,19 +40,20 @@ export class QueryEngine {
     sql += ' ORDER BY start_time DESC LIMIT 1000';
     const rows = db.prepare(sql).all(...params) as { tool_name: string; success: number; duration_ms: number | null }[];
 
-    const byTool = new Map<string, { durations: number[]; failures: number }>();
+    const byTool = new Map<string, { durations: number[]; failures: number; total: number }>();
     for (const r of rows) {
-      const e = byTool.get(r.tool_name) ?? { durations: [], failures: 0 };
+      const e = byTool.get(r.tool_name) ?? { durations: [], failures: 0, total: 0 };
+      e.total++;
       if (r.duration_ms != null) e.durations.push(r.duration_ms);
       if (!r.success) e.failures++;
       byTool.set(r.tool_name, e);
     }
 
     let results: ToolCallSummary[] = [];
-    for (const [tool_name, { durations, failures }] of byTool) {
+    for (const [tool_name, { durations, failures, total }] of byTool) {
       const count = durations.length;
       const avg_ms = count ? Math.round(durations.reduce((a, b) => a + b, 0) / count) : 0;
-      results.push({ tool_name, count, avg_ms, p95_ms: p95(durations), failure_rate: count ? failures / count : 0 });
+      results.push({ tool_name, count, avg_ms, p95_ms: p95(durations), failure_rate: total ? failures / total : 0 });
     }
     if (opts.last) results = results.slice(0, opts.last);
     return results;

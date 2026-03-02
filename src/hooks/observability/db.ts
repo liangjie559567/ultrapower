@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import * as path from 'path';
 import * as os from 'os';
+import { mkdirSync } from 'fs';
 
 let _db: InstanceType<typeof Database> | null = null;
 
@@ -49,6 +50,7 @@ CREATE INDEX IF NOT EXISTS idx_cost_records_session ON cost_records(session_id);
 export function getDb(dbPath?: string): InstanceType<typeof Database> {
   if (!_db) {
     const p = dbPath ?? path.join(os.homedir(), '.claude', '.omc', 'observability.db');
+    mkdirSync(path.dirname(p), { recursive: true });
     _db = new Database(p);
     _db.exec(SCHEMA);
   }
