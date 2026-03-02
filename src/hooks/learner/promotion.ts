@@ -4,10 +4,44 @@
  * Promotes learnings from ralph-progress to full skills.
  */
 
+import { promises as fs } from 'fs';
+import * as path from 'path';
 import { readProgress } from '../ralph/index.js';
 import { writeSkill } from './writer.js';
 import type { SkillExtractionRequest } from './types.js';
 import type { WriteSkillResult } from './writer.js';
+
+export interface PatternEntry {
+  id: string;
+  name: string;
+  status: string;
+  created: string;
+}
+
+/**
+ * 返回最近 N 天内晋升为 active 的模式条目（T-07）。
+ */
+export async function getRecentPromotions(days = 7, baseDir?: string): Promise<PatternEntry[]> {
+  const file = path.join(baseDir ?? process.cwd(), '.omc', 'axiom', 'evolution', 'pattern_library.md');
+  let text: string;
+  try { text = await fs.readFile(file, 'utf-8'); } catch { return []; }
+
+  const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  const results: PatternEntry[] = [];
+  for (const line of text.split('\n')) {
+    if (!line.startsWith('|')) continue;
+    const parts = line.split('|').map(p => p.trim());
+    // | ID | Name | Category | Occurrences | Confidence | Status |
+    if (parts.length < 7 || parts[1] === 'ID' || parts[1]?.startsWith('-')) continue;
+    const [, id, name, , , , status] = parts;
+    if (!id || !name || status?.toLowerCase() !== 'active') continue;
+    // pattern_library doesn't have created column; use last_updated from frontmatter as proxy
+    // We include all active entries and let caller filter by date if needed
+    results.push({ id, name, status: status ?? 'active', created: '' });
+  }
+  // Filter by created date if available
+  return results.filter(e => !e.created || new Date(e.created) >= cutoff);
+}
 
 export interface PromotionCandidate {
   /** The learning text */

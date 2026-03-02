@@ -115,3 +115,27 @@ export interface HookContext {
   directory: string;
   prompt?: string;
 }
+
+/**
+ * Structured knowledge unit for Axiom evolution engine (Schema v2).
+ */
+export interface KnowledgeUnit {
+  /** Unique identifier, e.g. k-001 */
+  id: string;
+  /** Human-readable title */
+  title: string;
+  /** Knowledge content summary */
+  content: string;
+  /** Categorization tags */
+  tags: string[];
+  /** Confidence score 0.0–1.0 */
+  confidence: number;
+  /** Source project name */
+  source_project: string;
+  /** Namespace for isolation (defaults to source_project) */
+  namespace: string;
+  /** ISO date string when created */
+  created: string;
+  /** ISO date string when last used/referenced */
+  last_used: string;
+}

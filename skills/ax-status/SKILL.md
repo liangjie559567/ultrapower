@@ -52,6 +52,17 @@ description: "/ax-status — Axiom 状态仪表盘：显示当前任务状态、
 - [基于当前状态的建议]
 ```
 
+### Step 2b: 最近模式晋升记录
+
+调用 `getRecentPromotions(7)` 读取 `pattern_library.md` 中最近 7 天内 `status: active` 的条目，输出：
+
+```markdown
+## 最近晋升模式（7天内）
+- [P-xxx] [模式名称] — [category]
+```
+
+若无晋升条目，输出 `（近7天无新晋升）`。
+
 ### Step 3: 健康检查
 
 检查以下文件是否存在且格式正确：
@@ -60,3 +71,25 @@ description: "/ax-status — Axiom 状态仪表盘：显示当前任务状态、
 - `.omc/axiom/evolution/knowledge_base.md`
 
 若文件缺失，提示用户运行 `/ax-context init` 初始化。
+
+### Step 4: 可观测性摘要
+
+调用 `queryEngine` 查询本 session 的可观测性数据并追加到报告末尾：
+
+```typescript
+import { queryEngine } from 'src/hooks/observability/query-engine.js';
+const runs  = queryEngine.getAgentRuns({ last: 5 });
+const tools = queryEngine.getToolCalls({ last: 5 });
+const costs = queryEngine.getCostSummary();
+```
+
+输出格式（追加在报告末尾）：
+
+```markdown
+## 可观测性快照
+- Top agents: [agent_type(avg_ms)] ...
+- Top tools:  [tool_name(p95_ms, failure_rate)] ...
+- 本次成本:   $X.XXXX USD
+```
+
+若数据库无数据则跳过此节。

@@ -1,9 +1,10 @@
 ---
 description: 知识图谱索引 - 管理所有知识条目的元信息
+schema_version: 2
 version: 1.0
-last_updated: 2026-02-28
-entries: 62
-cycle: 11
+last_updated: 2026-03-02
+entries: 67
+cycle: 13
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -76,16 +77,21 @@ cycle: 11
 | k-060 | GitHub Actions 4-Job Dependency Graph (build-test→publish→parallel) | workflow | 0.9 | 2026-02-27 | active |
 | k-061 | execSync Does Not Support windowsHide Option (only spawn/fork/exec do) | tooling | 0.95 | 2026-02-28 | active |
 | k-062 | getRuntimePackageVersion() Returns 'unknown' String Requires Explicit Guard | debugging | 0.95 | 2026-02-28 | active |
+| k-063 | Learning Queue Block Format: Block-First Parser with Table Fallback | pattern | 0.95 | 2026-03-02 | active |
+| k-064 | Queue Archiver ID Deduplication (loadArchiveIds before append) | pattern | 0.9 | 2026-03-02 | active |
+| k-065 | Archive Scroll-Window Retention: done > 10 triggers, keep newest 10 | architecture | 0.95 | 2026-03-02 | active |
+| k-066 | actions/setup-node@v4 registry-url NODE_AUTH_TOKEN Override Behavior | tooling | 0.95 | 2026-03-02 | active |
+| k-067 | GitHub Actions Default GITHUB_TOKEN Lacks contents:write Permission | workflow | 0.95 | 2026-03-02 | active |
 
 ## 2. 分类统计 (Category Stats)
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| architecture | 19 | 架构相关知识 |
+| architecture | 20 | 架构相关知识 |
 | debugging | 6 | 调试技巧 |
-| pattern | 6 | 代码模式 |
-| workflow | 16 | 工作流相关 |
-| tooling | 8 | 工具使用 |
+| pattern | 8 | 代码模式 |
+| workflow | 17 | 工作流相关 |
+| tooling | 9 | 工具使用 |
 | security | 3 | 安全相关知识 |
 | platform | 1 | 平台兼容性 |
 

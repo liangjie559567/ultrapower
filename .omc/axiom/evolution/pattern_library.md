@@ -1,7 +1,7 @@
 ---
 description: 代码模式库 - 存储可复用的代码模式和模板
 version: 1.0
-last_updated: 2026-02-27
+last_updated: 2026-03-02
 ---
 
 # Pattern Library (代码模式库)
@@ -23,6 +23,8 @@ last_updated: 2026-02-27
 | P-009 | omc install Flag Validation (no --refresh-hooks) | tooling | 1 | 0.95 | active |
 | P-010 | deepinit AGENTS.md Exclusion from Agent Definition Loaders | workflow-def | 1 | 0.95 | active |
 | P-011 | Windows Bash Hook Path: Shell Syntax Mismatch Anti-Pattern | platform | 1 | 0.95 | pending |
+| P-012 | Block-First-with-Fallback Format Parser | architecture | 1 | 0.9 | pending |
+| P-013 | GitHub Actions CI Permission and Secret Configuration Anti-Pattern | ci-cd | 2 | 0.95 | active |
 
 ## 2. 模式分类 (Categories)
 
@@ -37,6 +39,7 @@ last_updated: 2026-02-27
 | debugging | 调试反模式 | 1 |
 | architecture | 架构设计模式 | 1 |
 | platform | 平台兼容性反模式 | 1 |
+| ci-cd | CI/CD 配置反模式 | 1 |
 
 ---
 

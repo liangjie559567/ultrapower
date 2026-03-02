@@ -157,3 +157,28 @@ async function setConfidence(filePath: string, content: string, value: number): 
   const updated = content.replace(/(confidence:\s*)\S+/, `$1${value}`);
   await fs.writeFile(filePath, updated, 'utf-8');
 }
+
+import type { KnowledgeUnit } from './types.js';
+
+/**
+ * Decay confidence of a KnowledgeUnit if last_used is >= decayDays ago.
+ * @param unit - The knowledge unit to potentially decay
+ * @param decayDays - Days threshold (default 30)
+ * @param decayFactor - Multiplier applied when decaying (default 0.9)
+ * @param minConfidence - Floor value (default 0.1)
+ * @param nowMs - Current time in ms (injectable for testing)
+ */
+export function decayConfidence(
+  unit: KnowledgeUnit,
+  decayDays = 30,
+  decayFactor = 0.9,
+  minConfidence = 0.1,
+  nowMs?: number
+): KnowledgeUnit {
+  const now = nowMs ?? Date.now();
+  const lastUsed = new Date(unit.last_used).getTime();
+  const daysDiff = (now - lastUsed) / (1000 * 60 * 60 * 24);
+  if (daysDiff < decayDays) return unit;
+  const newConfidence = Math.max(minConfidence, Math.round(unit.confidence * decayFactor * 100) / 100);
+  return { ...unit, confidence: newConfidence };
+}

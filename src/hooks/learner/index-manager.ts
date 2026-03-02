@@ -208,6 +208,47 @@ export class KnowledgeIndexManager {
   }
 }
 
+export interface ImportResult {
+  imported: number;
+  skipped: number;
+  namespace: string;
+}
+
+/**
+ * 从外部 JSON 文件导入知识条目，以 namespace 隔离追加到索引。
+ * 重复 id（同 namespace）跳过。
+ */
+export async function importKnowledge(
+  filePath: string,
+  namespace: string,
+  baseDir?: string
+): Promise<ImportResult> {
+  const raw = await fs.readFile(filePath, 'utf-8');
+  const units: Array<{ id: string; title: string; category?: string; confidence?: number; created?: string }> =
+    JSON.parse(raw);
+
+  const manager = new KnowledgeIndexManager(baseDir);
+  const existing = await manager.loadIndex();
+  const existingIds = new Set(existing.map(e => e.id));
+
+  let imported = 0;
+  let skipped = 0;
+  for (const u of units) {
+    const nsId = `${namespace}::${u.id}`;
+    if (existingIds.has(nsId)) { skipped++; continue; }
+    await manager.addToIndex({
+      id: nsId,
+      title: u.title,
+      category: u.category ?? 'general',
+      confidence: u.confidence ?? 0.7,
+      created: u.created ?? new Date().toISOString().slice(0, 10),
+      file: `${nsId}.md`,
+    });
+    imported++;
+  }
+  return { imported, skipped, namespace };
+}
+
 function parseFrontmatter(text: string): Record<string, string> | null {
   if (!text.startsWith('---\n')) return null;
   const end = text.indexOf('\n---\n', 4);

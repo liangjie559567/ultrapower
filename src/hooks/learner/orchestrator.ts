@@ -80,9 +80,16 @@ export class EvolutionOrchestrator {
   async evolve(options: EvolveOptions = {}): Promise<EvolveResult> {
     const { diffText = '' } = options;
 
-    // 1. 处理学习队列（对齐 Python learning_queue.process_queue）
+    // 1. 处理学习队列（P0 优先，IDLE 时补充处理 P1）
     const nextBatch = await this.learningQueue.getNextBatch(3);
     for (const item of nextBatch) {
+      await this.learningQueue.updateStatus(item.id, 'processing');
+      await this.learningQueue.updateStatus(item.id, 'done');
+    }
+    // IDLE 补充：处理 P1 条目
+    const p1Batch = (await this.learningQueue.getNextBatch(5))
+      .filter(i => i.priority === 'P1');
+    for (const item of p1Batch) {
       await this.learningQueue.updateStatus(item.id, 'processing');
       await this.learningQueue.updateStatus(item.id, 'done');
     }
