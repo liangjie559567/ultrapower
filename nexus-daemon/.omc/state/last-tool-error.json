@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /c/Users/ljyih/Desktop/ultrapower/nexus-daemon && python -c \\\"\\nfrom bottleneck_analyzer import BottleneckAnalyzer\\nevents = [{'sessionId': 'test-0', 'agentsSpawned': 1, 'agentTypes': [...",
+  "error": "Exit code 1\nTraceback (most recent call last):\r\n  File \"<string>\", line 5, in <module>\r\n    r = a.analyze(events)\r\n  File \"C:\\Users\\ljyih\\Desktop\\ultrapower\\nexus-daemon\\bottleneck_analyzer.py\", line 68, in analyze\r\n    bottlenecks.extend(self._analyze_tool_errors(events))\r\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\r\n  File \"C:\\Users\\ljyih\\Desktop\\ultrapower\\nexus-daemon\\bottleneck_analyzer.py\", line 190, in _analyze_tool_errors\r\n    for call in event.get(\"toolCalls\", []):\r\n       ...",
+  "timestamp": "2026-02-28T16:57:49.473Z",
+  "retry_count": 2
+}

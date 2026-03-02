@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "gitRemote": "https://github.com/liangjie559567/ultrapower.git",
+  "autoApplyThreshold": 80,
+  "consciousnessInterval": 300,
+  "consciousnessBudgetPercent": 10
+}

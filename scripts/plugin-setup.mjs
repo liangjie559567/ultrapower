@@ -280,6 +280,33 @@ function fixNpmCache() {
 
 fixNpmCache();
 
+// Fix: Claude Code's npm-cache/package.json stores a semver range (e.g. "^5.2.3") after first install.
+// On subsequent "Update now" clicks, the installer sees the range is satisfied by the cached version
+// and skips re-downloading — so users stay on the old version forever.
+// We overwrite the range with the exact current version to force a fresh download on next update.
+function fixNpmCacheVersion() {
+  try {
+    const npmCachePkgPath = join(CLAUDE_DIR, 'plugins', 'npm-cache', 'package.json');
+    if (!existsSync(npmCachePkgPath)) return;
+    const cachePkg = JSON.parse(readFileSync(npmCachePkgPath, 'utf-8'));
+    const dep = cachePkg?.dependencies?.['@liangjie559567/ultrapower'];
+    if (!dep) return;
+    // Read current version from this package's own package.json
+    const selfPkgPath = join(__dirname, '..', 'package.json');
+    if (!existsSync(selfPkgPath)) return;
+    const selfPkg = JSON.parse(readFileSync(selfPkgPath, 'utf-8'));
+    const currentVersion = selfPkg.version;
+    if (!currentVersion || dep === currentVersion) return;
+    cachePkg.dependencies['@liangjie559567/ultrapower'] = currentVersion;
+    writeFileSync(npmCachePkgPath, JSON.stringify(cachePkg, null, 2));
+    console.log(`[OMC] Updated npm-cache version range: ${dep} -> ${currentVersion} (fixes "Update now" skipping re-download)`);
+  } catch (e) {
+    console.log('[OMC] Warning: Could not fix npm-cache version:', e.message);
+  }
+}
+
+fixNpmCacheVersion();
+
 // Fix: npm install strips hidden directories (starting with '.'), so .claude-plugin/plugin.json
 // is never extracted to the plugin cache. We recreate it directly in the plugin cache.
 // The postinstall script runs from the npm-cache node_modules dir, so we must target the
