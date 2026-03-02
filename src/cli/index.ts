@@ -1639,5 +1639,9 @@ program
     }
   });
 
+// Plugin management commands
+import { pluginCommand } from './commands/plugin.js';
+program.addCommand(pluginCommand());
+
 // Parse arguments
 program.parse();
