@@ -81,6 +81,27 @@ export class LearningQueue {
     } catch {
       return;
     }
+
+    // 优先尝试多行块格式：逐行找到 ### id: 开头的块，修改其 - 状态: 行
+    const lines = text.split('\n');
+    let inTargetBlock = false;
+    let statusUpdated = false;
+    for (let i = 0; i < lines.length; i++) {
+      const headerMatch = lines[i]?.match(/^### ([A-Za-z0-9-]+):/);
+      if (headerMatch) {
+        inTargetBlock = headerMatch[1] === id;
+      }
+      if (inTargetBlock && !statusUpdated && /^- 状态:\s*/.test(lines[i] ?? '')) {
+        lines[i] = `- 状态: ${status}`;
+        statusUpdated = true;
+      }
+    }
+    if (statusUpdated) {
+      await fs.writeFile(this.queueFile, lines.join('\n'), 'utf-8');
+      return;
+    }
+
+    // 降级：旧表格格式替换
     const escapedId = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const updated = text.replace(
       new RegExp(`(\\| ${escapedId} \\|[^|]+\\|[^|]+\\|[^|]+\\|)\\s*pending\\s*(\\|)`),
@@ -114,6 +135,10 @@ export class LearningQueue {
     } catch {
       return [];
     }
+    // 优先尝试块格式
+    const blockItems = this.parseBlockFormat(text);
+    if (blockItems.length > 0) return blockItems;
+    // 降级：旧表格格式
     const items: QueueItem[] = [];
     let inTable = false;
     for (const line of text.split('\n')) {
@@ -139,6 +164,50 @@ export class LearningQueue {
     return items;
   }
 
+  private parseBlockFormat(text: string): QueueItem[] {
+    const items: QueueItem[] = [];
+    const lines = text.split('\n');
+    let currentId = '';
+    let currentTitle = '';
+    const fields: Record<string, string> = {};
+
+    const flush = (): void => {
+      if (!currentId) return;
+      items.push({
+        id: currentId,
+        sourceType: fields['来源类型'] ?? '',
+        sourceId: currentTitle,
+        priority: (['P0', 'P1', 'P2', 'P3'].includes(fields['优先级'] ?? '')
+          ? fields['优先级']
+          : 'P2') as QueuePriority,
+        created: fields['添加时间'] ?? '',
+        status: (['pending', 'processing', 'done'].includes(fields['状态'] ?? '')
+          ? fields['状态']
+          : 'pending') as QueueStatus,
+        description: fields['内容'] ?? '',
+      });
+    };
+
+    for (const line of lines) {
+      const headerMatch = line.match(/^### ([A-Za-z0-9-]+):\s*(.*)/);
+      if (headerMatch) {
+        flush();
+        currentId = headerMatch[1] ?? '';
+        currentTitle = (headerMatch[2] ?? '').trim();
+        Object.keys(fields).forEach(k => delete fields[k]);
+        continue;
+      }
+      if (currentId) {
+        const fieldMatch = line.match(/^- ([^:]+):\s*(.*)/);
+        if (fieldMatch) {
+          fields[fieldMatch[1]?.trim() ?? ''] = (fieldMatch[2] ?? '').trim();
+        }
+      }
+    }
+    flush();
+    return items;
+  }
+
   private async appendItem(item: QueueItem): Promise<void> {
     let text: string;
     try {
@@ -146,6 +215,25 @@ export class LearningQueue {
     } catch {
       return;
     }
+
+    const block = [
+      `### ${item.id}: ${item.sourceId}`,
+      `- 优先级: ${item.priority}`,
+      `- 来源类型: ${item.sourceType}`,
+      `- 状态: ${item.status}`,
+      `- 添加时间: ${item.created}`,
+      `- 内容: ${item.description}`,
+      '',
+    ].join('\n');
+
+    // 块格式：追加到文件末尾（确保前面有空行分隔）
+    if (this.parseBlockFormat(text).length > 0 || text.includes('### ')) {
+      const separator = text.endsWith('\n\n') ? '' : text.endsWith('\n') ? '\n' : '\n\n';
+      await fs.writeFile(this.queueFile, text + separator + block, 'utf-8');
+      return;
+    }
+
+    // 降级：旧表格格式插入行
     const row = `| ${item.id} | ${item.sourceType} | ${item.sourceId} | ${item.priority} | ${item.created} | ${item.status} | ${item.description} |`;
     const lines = text.split('\n');
     let insertPos = -1;

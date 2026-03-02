@@ -6,6 +6,8 @@
 
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { parseReflectionLog } from './reflection-parser.js';
+import { archiveReflections } from './reflection-archiver.js';
 
 export interface ReflectionReport {
   sessionName: string;
@@ -21,9 +23,11 @@ export interface ReflectionReport {
 
 export class ReflectionEngine {
   private readonly reflectionLog: string;
+  private readonly baseDir: string;
 
   constructor(baseDir?: string) {
     const base = baseDir ?? process.cwd();
+    this.baseDir = base;
     this.reflectionLog = path.join(base, '.omc', 'axiom', 'reflection_log.md');
   }
 
@@ -38,7 +42,7 @@ export class ReflectionEngine {
       learnings?: string[];
       actionItems?: string[];
     } = {}
-  ): Promise<ReflectionReport> {
+  ): Promise<ReflectionReport & { archiveResult?: { archived: number; kept: number; warning?: string } }> {
     const report: ReflectionReport = {
       sessionName,
       date: new Date().toISOString().slice(0, 10),
@@ -51,8 +55,8 @@ export class ReflectionEngine {
       actionItems: options.actionItems ?? [],
     };
 
-    await this.appendToLog(report);
-    return report;
+    const archiveResult = await this.appendToLog(report);
+    return { ...report, archiveResult };
   }
 
   async getRecentReflections(limit = 5): Promise<string[]> {
@@ -90,7 +94,7 @@ export class ReflectionEngine {
     return items;
   }
 
-  private async appendToLog(report: ReflectionReport): Promise<void> {
+  private async appendToLog(report: ReflectionReport): Promise<{ archived: number; kept: number; warning?: string } | undefined> {
     const content = reportToMarkdown(report);
     let existing = '';
     try {
@@ -100,6 +104,19 @@ export class ReflectionEngine {
     }
     const separator = existing.endsWith('\n') ? '' : '\n';
     await fs.writeFile(this.reflectionLog, existing + separator + content, 'utf-8');
+
+    // 写入后检查条目数，count > 10 时自动归档
+    // 归档路径不可来自文件内容，由 archiveReflections 内部硬编码
+    try {
+      const updatedText = await fs.readFile(this.reflectionLog, 'utf-8');
+      const blocks = parseReflectionLog(updatedText);
+      if (blocks.length > 10) {
+        return await archiveReflections(this.baseDir);
+      }
+    } catch {
+      // 归档失败不阻断主流程
+    }
+    return undefined;
   }
 }
 

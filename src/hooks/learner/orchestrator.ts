@@ -13,6 +13,7 @@ import { LearningQueue } from './learning-queue.js';
 import { ReflectionEngine } from './reflection.js';
 import { KnowledgeIndexManager } from './index-manager.js';
 import { SeedKnowledge } from './seed-knowledge.js';
+import { QueueArchiver, type ArchiveResult } from './queue-archiver.js';
 
 export interface EvolveOptions {
   diffText?: string;
@@ -31,6 +32,7 @@ export interface EvolveResult {
   queueStats: { pending: number; done: number; total: number };
   reflectionSummary: string;
   pendingActionItems: string[];
+  archiveResult?: ArchiveResult;
 }
 
 export interface ReflectOptions {
@@ -53,6 +55,7 @@ export class EvolutionOrchestrator {
   private readonly reflection: ReflectionEngine;
   private readonly indexManager: KnowledgeIndexManager;
   private readonly seedKnowledge: SeedKnowledge;
+  private readonly queueArchiver: QueueArchiver;
 
   constructor(baseDir?: string, config?: Partial<AxiomConfig['evolution']>) {
     const base = baseDir ?? process.cwd();
@@ -64,6 +67,7 @@ export class EvolutionOrchestrator {
     this.reflection = new ReflectionEngine(base);
     this.indexManager = new KnowledgeIndexManager(base);
     this.seedKnowledge = new SeedKnowledge(base);
+    this.queueArchiver = new QueueArchiver(base);
   }
 
   /** 初始化：加载种子知识（首次运行时） */
@@ -115,7 +119,10 @@ export class EvolutionOrchestrator {
     // 9. 清理 7 天前的已完成队列条目
     await this.learningQueue.cleanup(7);
 
-    // 10. 获取队列统计
+    // 10. 自动检查并触发队列归档
+    const archiveResult = await this.queueArchiver.archive();
+
+    // 11. 获取队列统计
     const queueStats = await this.learningQueue.getStats();
 
     return {
@@ -127,11 +134,17 @@ export class EvolutionOrchestrator {
       queueStats,
       reflectionSummary,
       pendingActionItems,
+      archiveResult,
     };
   }
 
+  /** 手动触发队列归档（对应 --archive-queue 参数） */
+  async archiveQueue(): Promise<ArchiveResult> {
+    return this.queueArchiver.archive();
+  }
+
   /** /reflect 入口：生成反思报告 */
-  async reflect(options: ReflectOptions) {
+  async reflect(options: ReflectOptions): Promise<import('./reflection.js').ReflectionReport & { archiveResult?: { archived: number; kept: number; warning?: string } }> {
     return this.reflection.reflect(options.sessionName, {
       durationMin: options.durationMin,
       tasksCompleted: options.tasksCompleted,

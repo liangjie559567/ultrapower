@@ -15,7 +15,12 @@ description: "/ax-knowledge — Axiom 知识查询：搜索知识库和模式库
 
 搜索 `.omc/axiom/evolution/knowledge_base.md` 索引，返回匹配的知识条目。
 
-**触发词：** `ax-knowledge [关键词]`
+**触发词：** `ax-knowledge [--filter <keyword>] [--category <category>] [关键词]`
+
+**参数说明：**
+- `--filter <keyword>`：按关键词过滤，Title 或 Category 包含关键词（大小写不敏感，最多 256 字符）
+- `--category <category>`：按分类精确过滤，Category 字段完整匹配（大小写不敏感）
+- 无参数：返回全量知识条目
 
 ### 模式库查询
 
@@ -32,13 +37,23 @@ description: "/ax-knowledge — Axiom 知识查询：搜索知识库和模式库
 - 其他 → 知识条目查询
 - 两者都包含 → 并行查询两个库
 
+解析过滤参数：
+- 检查是否含 `--filter <keyword>`，提取关键词（超出 256 字符时返回错误提示）
+- 检查是否含 `--category <category>`，提取分类名
+- 两个参数均无时，执行全量查询
+
 ### Step 2: 搜索索引
 
-**知识库查询：**
-读取 `.omc/axiom/evolution/knowledge_base.md`，按关键词匹配：
-- 标题匹配（权重高）
-- 标签匹配（权重中）
-- 描述匹配（权重低）
+**知识库查询（无参数 — 全量返回）：**
+调用 `KnowledgeIndexManager.loadIndex()`，返回全量条目。
+
+**知识库查询（--filter）：**
+调用 `KnowledgeIndexManager.filterByKeyword(keyword)`：
+- Title 或 Category 包含关键词（includes，大小写不敏感）
+
+**知识库查询（--category）：**
+调用 `KnowledgeIndexManager.filterByCategory(category)`：
+- Category 字段精确匹配（大小写不敏感）
 
 **模式库查询：**
 读取 `.omc/axiom/evolution/pattern_library.md`，按关键词匹配：
@@ -55,7 +70,7 @@ description: "/ax-knowledge — Axiom 知识查询：搜索知识库和模式库
 ### Step 4: 格式化输出
 
 ```markdown
-## 知识查询结果：[关键词]
+## 知识查询结果：[关键词/参数]
 
 ### 知识条目（X 条）
 
@@ -72,6 +87,9 @@ description: "/ax-knowledge — Axiom 知识查询：搜索知识库和模式库
 - **触发条件**: [何时使用]
 - **解决方案**: [简要描述]
 [查看完整内容: .omc/axiom/evolution/patterns/[name].md]
+
+---
+显示 X/Y 条，使用无参数调用查看全部
 ```
 
 ### Step 5: 无结果处理

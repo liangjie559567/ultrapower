@@ -87,6 +87,36 @@ export class KnowledgeIndexManager {
     }
   }
 
+  /**
+   * 按关键词过滤知识库条目（对齐 --filter 参数）。
+   *
+   * 匹配规则：title 或 category 包含关键词（includes，大小写不敏感）。
+   * 关键词长度超过 256 字符时抛出 Error。
+   */
+  async filterByKeyword(keyword: string): Promise<{ entries: IndexEntry[]; total: number }> {
+    if (keyword.length > 256) {
+      throw new Error(`[index-manager] --filter 关键词超过 256 字符限制（当前 ${keyword.length} 字符）`);
+    }
+    const all = await this.loadIndex();
+    const kw = keyword.toLowerCase();
+    const entries = all.filter(
+      e => e.title.toLowerCase().includes(kw) || e.category.toLowerCase().includes(kw)
+    );
+    return { entries, total: all.length };
+  }
+
+  /**
+   * 按分类精确过滤知识库条目（对齐 --category 参数）。
+   *
+   * 匹配规则：category 字段精确匹配（大小写不敏感）。
+   */
+  async filterByCategory(category: string): Promise<{ entries: IndexEntry[]; total: number }> {
+    const all = await this.loadIndex();
+    const cat = category.toLowerCase();
+    const entries = all.filter(e => e.category.toLowerCase() === cat);
+    return { entries, total: all.length };
+  }
+
   async loadIndex(): Promise<IndexEntry[]> {
     let text: string;
     try {
