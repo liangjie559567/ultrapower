@@ -115,6 +115,20 @@ description: "/ax-knowledge — Axiom 知识查询：搜索知识库和模式库
     └── [name].md          # 模式条目
 ```
 
+## ax-knowledge import
+
+**命令：** `ax-knowledge import <file>`
+
+导入外部 JSON 知识文件到知识库，以 `namespace` 隔离。
+
+**执行步骤：**
+1. 读取 `<file>`（JSON 数组，每项含 `id`、`title`，可选 `category`/`confidence`/`created`）
+2. 显示确认提示：`导入 X 条条目，source_project: <namespace>，是否继续？(Yes/No)`
+3. 用户确认后调用 `importKnowledge(file, namespace)` 追加到索引
+4. 输出结果：`已导入 X 条，跳过 Y 条（重复）`
+
+**namespace 规则：** 条目 id 以 `<namespace>::<id>` 格式存储，防止跨项目污染。
+
 ## 与 learner skill 的关系
 
 - `ax-knowledge`：查询已有知识

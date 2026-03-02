@@ -1,7 +1,8 @@
 ---
 description: 知识图谱索引 - 管理所有知识条目的元信息
+schema_version: 2
 version: 1.0
-last_updated: 2026-01-21
+last_updated: 2026-03-02
 entries: 67
 cycle: 13
 ---

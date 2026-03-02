@@ -52,6 +52,17 @@ description: "/ax-status — Axiom 状态仪表盘：显示当前任务状态、
 - [基于当前状态的建议]
 ```
 
+### Step 2b: 最近模式晋升记录
+
+调用 `getRecentPromotions(7)` 读取 `pattern_library.md` 中最近 7 天内 `status: active` 的条目，输出：
+
+```markdown
+## 最近晋升模式（7天内）
+- [P-xxx] [模式名称] — [category]
+```
+
+若无晋升条目，输出 `（近7天无新晋升）`。
+
 ### Step 3: 健康检查
 
 检查以下文件是否存在且格式正确：
