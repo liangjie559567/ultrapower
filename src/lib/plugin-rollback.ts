@@ -7,7 +7,9 @@ import { join } from 'path';
 import { homedir } from 'os';
 import { atomicWriteJsonSync } from './atomic-write.js';
 
-const SNAPSHOTS_DIR = join(homedir(), '.claude', 'plugins', 'snapshots');
+function getSnapshotsDir(): string {
+  return process.env['OMC_SNAPSHOTS_DIR'] ?? join(homedir(), '.claude', 'plugins', 'snapshots');
+}
 
 export interface SnapshotMeta {
   plugin: string;
@@ -17,7 +19,7 @@ export interface SnapshotMeta {
 }
 
 function snapshotDir(plugin: string, version: string): string {
-  return join(SNAPSHOTS_DIR, `${plugin}@${version}`);
+  return join(getSnapshotsDir(), `${plugin}@${version}`);
 }
 
 /**
@@ -55,11 +57,11 @@ export function restoreSnapshot(plugin: string, version: string, installPath: st
  * List available snapshots for a plugin.
  */
 export function listSnapshots(plugin: string): SnapshotMeta[] {
-  if (!existsSync(SNAPSHOTS_DIR)) return [];
+  if (!existsSync(getSnapshotsDir())) return [];
   const results: SnapshotMeta[] = [];
-  for (const entry of readdirSync(SNAPSHOTS_DIR)) {
+  for (const entry of readdirSync(getSnapshotsDir())) {
     if (!entry.startsWith(`${plugin}@`)) continue;
-    const metaPath = join(SNAPSHOTS_DIR, entry, '_meta.json');
+    const metaPath = join(getSnapshotsDir(), entry, '_meta.json');
     if (!existsSync(metaPath)) continue;
     try {
       const meta = JSON.parse(readFileSync(metaPath, 'utf-8')) as SnapshotMeta;

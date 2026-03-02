@@ -6,7 +6,9 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 
-const REGISTRY_PATH = join(homedir(), '.claude', 'plugins', 'installed_plugins.json');
+function getRegistryPath(): string {
+  return process.env['OMC_REGISTRY_PATH'] ?? join(homedir(), '.claude', 'plugins', 'installed_plugins.json');
+}
 const MARKETPLACE_THRESHOLD = 5;
 
 interface InstalledPluginsJson {
@@ -18,9 +20,12 @@ interface InstalledPluginsJson {
  * Count third-party plugins (excludes 'ultrapower@*').
  */
 export function countThirdPartyPlugins(): number {
-  if (!existsSync(REGISTRY_PATH)) return 0;
+  const registryPath = getRegistryPath();
+  if (!existsSync(registryPath)) return 0;
   try {
-    const registry = JSON.parse(readFileSync(REGISTRY_PATH, 'utf-8')) as InstalledPluginsJson;
+    const raw = JSON.parse(readFileSync(registryPath, 'utf-8')) as unknown;
+    if (!raw || typeof raw !== 'object' || !('plugins' in raw) || typeof (raw as Record<string, unknown>).plugins !== 'object') return 0;
+    const registry = raw as InstalledPluginsJson;
     return Object.keys(registry.plugins).filter(k => !k.startsWith('ultrapower@')).length;
   } catch {
     return 0;

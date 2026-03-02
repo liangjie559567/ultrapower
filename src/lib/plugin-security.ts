@@ -10,7 +10,7 @@ import { join } from 'path';
 const DANGEROUS_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
   { pattern: /\brequire\s*\(\s*['"]child_process['"]\s*\)/, label: 'child_process' },
   { pattern: /\bimport\s+.*from\s+['"]child_process['"]/, label: 'child_process' },
-  { pattern: /\bexecSync\b|\bspawnSync\b|\bexec\b|\bspawn\b/, label: 'shell execution' },
+  { pattern: /\bexecSync\s*\(|\bspawnSync\s*\(|\bexec\s*\(|\bspawn\s*\(/, label: 'shell execution' },
   { pattern: /\beval\s*\(/, label: 'eval' },
   { pattern: /\bnew\s+Function\s*\(/, label: 'Function constructor' },
   { pattern: /\bprocess\.env\b/, label: 'process.env access' },
@@ -44,18 +44,20 @@ function scanFile(filePath: string): SecurityViolation[] {
     return violations;
   }
   const lines = content.split('\n');
+  // Per-line scan (precise line numbers)
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]!;
     for (const { pattern, label } of DANGEROUS_PATTERNS) {
       if (pattern.test(line)) {
-        violations.push({
-          file: filePath,
-          line: i + 1,
-          label,
-          snippet: line.trim().slice(0, 120),
-        });
-        break; // one violation per line
+        violations.push({ file: filePath, line: i + 1, label, snippet: line.trim().slice(0, 120) });
+        break;
       }
+    }
+  }
+  // Full-content scan catches multi-line patterns (e.g. split across lines)
+  for (const { pattern, label } of DANGEROUS_PATTERNS) {
+    if (pattern.test(content) && !violations.some(v => v.label === label && v.file === filePath)) {
+      violations.push({ file: filePath, line: 0, label, snippet: '(multi-line pattern)' });
     }
   }
   return violations;
@@ -69,7 +71,8 @@ function collectFiles(dir: string, depth = 0): string[] {
   const files: string[] = [];
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
-    const st = statSync(full);
+    let st: ReturnType<typeof statSync>;
+    try { st = statSync(full); } catch { continue; }
     if (st.isDirectory() && entry !== 'node_modules' && !entry.startsWith('.')) {
       files.push(...collectFiles(full, depth + 1));
     } else if (st.isFile() && /\.(js|ts|mjs|cjs)$/.test(entry)) {
