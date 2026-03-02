@@ -135,6 +135,48 @@ node_modules/
 dist/
 ```
 
+## 首次配置 CI Secrets（新仓库必读）
+
+GitHub Actions 自动发布依赖以下 secrets，**首次使用前必须手动配置**：
+
+### NPM_TOKEN（必须手动配置）
+
+`GITHUB_TOKEN` 是 Actions 内置的，但 `NPM_TOKEN` **不会自动注入**，必须手动添加到仓库 Secrets。
+
+```bash
+# 1. 获取 npm token（从本地 .npmrc 读取）
+cat ~/.npmrc | grep "_authToken=" | cut -d= -f2
+
+# 2. 设置到 GitHub Secrets
+gh secret set NPM_TOKEN -R <owner>/<repo>
+# 粘贴上一步输出的 token，回车确认
+```
+
+> ⚠️ `actions/setup-node@v4` 配置 `registry-url` 后会注入 `NODE_AUTH_TOKEN=github.token`。若 workflow 显式覆盖为 `${{ secrets.NPM_TOKEN }}` 而该 secret 未设置，npm publish 会静默失败（k-066）。
+
+### GITHUB_TOKEN 权限（job 级声明）
+
+默认 `GITHUB_TOKEN` 无 `contents: write` 权限，`gh release create` 和 `git push` 会返回 HTTP 403。需在对应 job 级声明：
+
+```yaml
+jobs:
+  github-release:
+    permissions:
+      contents: write   # gh release create 需要
+  marketplace-sync:
+    permissions:
+      contents: write   # git push 需要
+```
+
+> ⚠️ 遵循最小权限原则，在 job 级而非 workflow 级声明（k-067）。
+
+### 验证 Secrets 配置
+
+```bash
+gh secret list -R <owner>/<repo>
+# 应看到 NPM_TOKEN 在列表中
+```
+
 ## 故障排查
 
 ### 安装后 skill 无法识别

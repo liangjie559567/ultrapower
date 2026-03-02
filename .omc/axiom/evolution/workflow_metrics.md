@@ -55,22 +55,22 @@
 - 备注: Phase 1 Passive Learning MVP + Phase 2 Active Learning（nexus 系统，14 任务，205 测试通过）
 
 ### WF-006: release（版本发布）
-- 执行次数: 5
-- 成功次数: 5
+- 执行次数: 8
+- 成功次数: 8
 - 失败次数: 0
 - 成功率: 100%
-- 平均耗时: ~15 分钟（含测试、tag、npm publish、GitHub release）
-- 最后执行: 2026-02-27
-- 备注: v5.1.0 → v5.2.0 → v5.2.1 → v5.2.4 → v5.2.5，GitHub Actions 4-job CI 首次生产验证，4685 测试通过
+- 平均耗时: ~3 分钟（CI 全自动）/ ~15 分钟（含本地 fallback）
+- 最后执行: 2026-03-02
+- 备注: v5.5.7 本地发布（CI 修复中）→ v5.5.8 CI publish 成功（首次）→ v5.5.9 CI 4-job 全程自动（Build+Test 1m15s / Publish 48s / GitHub Release 24s / Sync Marketplace 25s）；已修复：isMain 守卫 + NPM_TOKEN secret + contents:write permission
 
 ### WF-007: ax-evolve（进化引擎）
-- 执行次数: 12
-- 成功次数: 12
+- 执行次数: 13
+- 成功次数: 13
 - 失败次数: 0
 - 成功率: 100%
 - 平均耗时: ~10 分钟
-- 最后执行: 2026-02-28
-- 备注: cycle 11 — LQ-029/LQ-030 处理完成，知识库 62 条，模式库 11 个；v5.2.7 指标同步
+- 最后执行: 2026-01-21
+- 备注: cycle 13 — LQ-031/LQ-032 处理完成，知识库 67 条，模式库 13 个（P-013 提升为 active）；Action Item [EVOLVE] 已完成
 
 ## 自动修复指标
 - 总修复尝试: 0
@@ -79,6 +79,6 @@
 - 平均修复耗时: -
 
 ## 系统健康
-- 上次健康检查: 2026-02-28
+- 上次健康检查: 2026-03-02
 - 状态: 正常
-- 备注: v5.2.7 已发布，LQ-001~LQ-030 全部处理，知识库 62 条，模式库 11 个，GitHub Actions CI 生产验证通过
+- 备注: v5.5.9 CI 全流程首次完整通过（4-job pipeline）；NPM_TOKEN + permissions 修复完成；下次推 tag 全自动发布
