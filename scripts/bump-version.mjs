@@ -58,13 +58,17 @@ export function bumpVersion(newVersion) {
   console.log(`Bumped all version files to ${newVersion}`);
 }
 
-// CLI
-const newVersion = process.argv[2];
-if (newVersion) {
-  bumpVersion(newVersion);
-} else {
-  const v = readVersions();
-  console.log('Current versions:', v);
-  try { assertVersionsSync(); console.log('✓ All in sync'); }
-  catch (e) { console.error('✗', e.message); process.exit(1); }
+// CLI - only run when executed directly, not when imported as a module
+import { fileURLToPath } from 'node:url';
+const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+if (isMain) {
+  const newVersion = process.argv[2];
+  if (newVersion) {
+    bumpVersion(newVersion);
+  } else {
+    const v = readVersions();
+    console.log('Current versions:', v);
+    try { assertVersionsSync(); console.log('✓ All in sync'); }
+    catch (e) { console.error('✗', e.message); process.exit(1); }
+  }
 }
