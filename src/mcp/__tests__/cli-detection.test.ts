@@ -1,0 +1,62 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { detectCodexCli, detectGeminiCli } from '../cli-detection.js';
+import { execSync } from 'child_process';
+
+vi.mock('child_process');
+
+describe('CLI Detection', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('detectCodexCli', () => {
+    it('detects installed CLI', () => {
+      vi.mocked(execSync).mockReturnValueOnce('/usr/bin/codex\n' as any);
+      vi.mocked(execSync).mockReturnValueOnce('1.0.0\n' as any);
+
+      const result = detectCodexCli(false);
+      expect(result.available).toBe(true);
+      expect(result.path).toBe('/usr/bin/codex');
+      expect(result.version).toBe('1.0.0');
+    });
+
+    it('handles missing CLI', () => {
+      vi.mocked(execSync).mockImplementation(() => {
+        throw new Error('not found');
+      });
+
+      const result = detectCodexCli(false);
+      expect(result.available).toBe(false);
+      expect(result.error).toContain('not found');
+    });
+
+    it('caches results', () => {
+      vi.mocked(execSync).mockReturnValue('/usr/bin/codex\n' as any);
+
+      detectCodexCli(false);
+      const cached = detectCodexCli(true);
+
+      expect(cached.available).toBe(true);
+      expect(vi.mocked(execSync)).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('detectGeminiCli', () => {
+    it('detects installed CLI', () => {
+      vi.mocked(execSync).mockReturnValueOnce('/usr/bin/gemini\n' as any);
+      vi.mocked(execSync).mockReturnValueOnce('2.0.0\n' as any);
+
+      const result = detectGeminiCli(false);
+      expect(result.available).toBe(true);
+    });
+
+    it('handles missing CLI', () => {
+      vi.mocked(execSync).mockImplementation(() => {
+        throw new Error('not found');
+      });
+
+      const result = detectGeminiCli(false);
+      expect(result.available).toBe(false);
+    });
+  });
+});
