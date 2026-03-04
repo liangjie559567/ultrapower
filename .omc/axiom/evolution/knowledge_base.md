@@ -2,9 +2,9 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 schema_version: 2
 version: 1.0
-last_updated: 2026-03-02
-entries: 67
-cycle: 13
+last_updated: 2026-03-04
+entries: 71
+cycle: 17
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -82,6 +82,10 @@ cycle: 13
 | k-065 | Archive Scroll-Window Retention: done > 10 triggers, keep newest 10 | architecture | 0.95 | 2026-03-02 | active |
 | k-066 | actions/setup-node@v4 registry-url NODE_AUTH_TOKEN Override Behavior | tooling | 0.95 | 2026-03-02 | active |
 | k-067 | GitHub Actions Default GITHUB_TOKEN Lacks contents:write Permission | workflow | 0.95 | 2026-03-02 | active |
+| k-068 | Agent Timeout Protection Three-Layer Architecture | architecture | 0.9 | 2026-03-04 | active |
+| k-069 | DFS Cycle Detection with Three-Color Marking | pattern | 0.9 | 2026-03-04 | active |
+| k-070 | ESM Import Path Must Include .js Extension | tooling | 0.95 | 2026-03-04 | active |
+| k-071 | Vitest Mock Completeness: Poll Loop Functions Must Be Mocked | testing | 0.95 | 2026-03-04 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -94,6 +98,7 @@ cycle: 13
 | tooling | 9 | 工具使用 |
 | security | 3 | 安全相关知识 |
 | platform | 1 | 平台兼容性 |
+| testing | 1 | 测试相关知识 |
 
 
 ## 3. 标签云 (Tag Cloud)

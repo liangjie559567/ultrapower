@@ -143,4 +143,45 @@
 
 ## 处理中
 
+### LQ-036: Vitest 测试超时 — Mock 完整性检查清单扩展
+- 优先级: P1
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-04
+- 处理时间: 2026-03-04
+- 内容: 测试超时（30s）的根因是 mock 不完整：测试 mock 了 `spawn()` 但未 mock `isSocket()` 函数，导致 `spawnBridgeServer` 中的轮询循环（`while (!isSocket(socketPath))`）一直等待直到超时。修复方案：使用 `vi.spyOn(module, 'function').mockReturnValue(value)` mock 导出函数。这是 Cycle 15 中 TEST-MOCK-001 模式的扩展：除了 mock fs 方法，还需 mock 业务逻辑中的轮询/等待函数。检查清单新增项：识别被测函数中的所有轮询循环（while/for + sleep/await），mock 循环条件函数使其立即满足退出条件。
+- 元数据: 文件=bridge-manager.test.ts, 修复前=4/17 超时(30s), 修复后=17/17 通过(25s), 模式=TEST-MOCK-001 扩展
+- 知识产出: k-071
+
 ## 已完成
+
+### LQ-033: 超时保护三层架构模式
+- 优先级: P1
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-04
+- 处理时间: 2026-03-04
+- 内容: Agent 超时保护的三层架构模式：配置层（timeout-config.ts，优先级 env>type>model>default）+ 管理层（timeout-manager.ts，生命周期管理 start/cleanup/getElapsed）+ 包装层（agent-wrapper.ts，重试策略 maxRetries + 指数退避）。使用 AbortController 原生 API，零依赖，性能 <5ms。适用于任何需要超时控制的异步操作（API 调用、Agent 执行、数据库查询）。
+- 元数据: 来源=T10 实现，代码=src/agents/timeout-*.ts，测试覆盖率=100%
+- 知识产出: k-068
+
+### LQ-034: DFS 循环检测标准实现
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-04
+- 处理时间: 2026-03-04
+- 内容: 使用 DFS + 三色标记法检测有向图循环：Unvisited（白色，未访问）、Visiting（灰色，当前路径中）、Visited（黑色，已完成）。当遇到 Visiting 状态节点时发现循环。路径栈记录循环路径用于诊断。时间复杂度 O(V+E)，空间复杂度 O(V)。适用于任务依赖、资源锁、状态机验证、构建系统。
+- 元数据: 来源=T11 实现，代码=src/team/deadlock-detector.ts，性能=<10ms(1000节点)
+- 知识产出: k-069
+
+### LQ-035: ESM 导入路径规范
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-04
+- 处理时间: 2026-03-04
+- 内容: TypeScript + ESM 项目中，相对导入必须包含 `.js` 扩展名（如 `from './types.js'`）。TypeScript 编译器不会自动添加扩展名，违反此规则会导致 TS2835 错误："The file extension must be '.ts' or '.tsx'"。这是 TypeScript 对 ESM 规范的严格遵守。适用于所有使用 `"type": "module"` 的 TypeScript 项目。
+- 元数据: 来源=T10/T11 实现，错误=TS2835，修复=添加 .js 扩展名
+- 知识产出: k-070
+
