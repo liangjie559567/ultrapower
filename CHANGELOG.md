@@ -1,3 +1,29 @@
+# ultrapower v5.5.13
+
+### 修复
+
+- **fix(workflow-recommender): 添加中文语言支持到意图分类器**
+  - 移除 `\b` 单词边界符（不支持中文字符）
+  - 为所有 7 种意图类型添加中文关键词：修复/错误/问题/故障、重构/优化/改进、审查/检查/评审、规划/设计/架构、探索/分析/调查、添加/实现/创建/构建/功能
+  - 保持基于优先级的匹配算法（bug-fix:10 > refactor:9 > review:8 > plan:7 > explore:6 > feature-multiple:5 > feature-single:1）
+  - 验证：中文和英文查询均正确分类，完整测试套件通过（5783 passed, 10 skipped）
+
+- **fix(hud): 解决 types.ts 和 autopilot.ts 的循环依赖**
+
+### 测试
+
+- **test(python-repl): 修复 bridge-manager 超时测试失败**
+
+### CI/CD
+
+- **ci: 集成状态清理协议到 CI teardown 流程**
+
+### Axiom
+
+- **feat(axiom): 完成 Cycle 17 进化 - 添加 k-071 Vitest mock 完整性模式**
+
+---
+
 # ultrapower v5.5.6
 
 ### 文档
