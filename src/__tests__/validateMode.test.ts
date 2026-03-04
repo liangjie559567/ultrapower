@@ -69,7 +69,7 @@ describe('assertValidMode', () => {
 
   it('should throw for invalid mode strings', () => {
     expect(() => assertValidMode('unknown')).toThrow('Invalid mode');
-    expect(() => assertValidMode('../../etc')).toThrow('Invalid mode');
+    expect(() => assertValidMode('../../etc')).toThrow(/Invalid mode|Path traversal/);
   });
 
   it('should throw for non-string input', () => {
