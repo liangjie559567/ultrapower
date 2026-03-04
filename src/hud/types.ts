@@ -6,9 +6,6 @@
 
 import type { AutopilotStateForHud } from './elements/autopilot.js';
 
-// Re-export for convenience
-export type { AutopilotStateForHud };
-
 // ============================================================================
 // HUD State
 // ============================================================================
