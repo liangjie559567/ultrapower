@@ -33,3 +33,15 @@ jobs:
 
       - name: Test
         run: npm test
+
+      - name: Hooks Coverage Check
+        run: npm run test:coverage -- src/hooks
+
+      - name: State Cleanup (Teardown)
+        if: always()
+        run: |
+          if [ -d ".omc/state" ]; then
+            rm -rf .omc/state
+            echo "✓ Cleaned up .omc/state directory"
+          fi
+        shell: bash
