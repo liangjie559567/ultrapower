@@ -10,7 +10,6 @@ import { join } from 'path';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import type { OmcHudState, BackgroundTask, HudConfig } from './types.js';
 import { DEFAULT_HUD_CONFIG, PRESET_CONFIGS } from './types.js';
-import { cleanupStaleBackgroundTasks, markOrphanedTasksAsStale } from './background-cleanup.js';
 
 // ============================================================================
 // Path Helpers
@@ -260,3 +259,97 @@ export async function initializeHUDState(): Promise<void> {
     console.error(`HUD cleanup: removed ${removedStale} stale tasks, marked ${markedOrphaned} orphaned tasks`);
   }
 }
+
+// ============================================================================
+// Background Task Cleanup (moved from background-cleanup.ts)
+// ============================================================================
+
+const STALE_TASK_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes default
+
+/**
+ * Clean up stale background tasks from HUD state.
+ */
+async function cleanupStaleBackgroundTasks(
+  thresholdMs: number = STALE_TASK_THRESHOLD_MS
+): Promise<number> {
+  const state = readHudState();
+
+  if (!state || !state.backgroundTasks) {
+    return 0;
+  }
+
+  const now = Date.now();
+  const originalCount = state.backgroundTasks.length;
+
+  state.backgroundTasks = state.backgroundTasks.filter(task => {
+    const taskAge = now - new Date(task.startedAt).getTime();
+    return task.status === 'completed' || taskAge < thresholdMs;
+  });
+
+  if (state.backgroundTasks.length > 20) {
+    state.backgroundTasks = state.backgroundTasks.slice(-20);
+  }
+
+  const removedCount = originalCount - state.backgroundTasks.length;
+
+  if (removedCount > 0) {
+    writeHudState(state);
+  }
+
+  return removedCount;
+}
+
+/**
+ * Detect orphaned background tasks.
+ */
+async function detectOrphanedTasks(): Promise<BackgroundTask[]> {
+  const state = readHudState();
+
+  if (!state || !state.backgroundTasks) {
+    return [];
+  }
+
+  const orphaned: BackgroundTask[] = [];
+
+  for (const task of state.backgroundTasks) {
+    if (task.status === 'running') {
+      const taskAge = Date.now() - new Date(task.startedAt).getTime();
+      const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
+
+      if (taskAge > TWO_HOURS_MS) {
+        orphaned.push(task);
+      }
+    }
+  }
+
+  return orphaned;
+}
+
+/**
+ * Mark orphaned tasks as stale/completed.
+ */
+async function markOrphanedTasksAsStale(): Promise<number> {
+  const state = readHudState();
+
+  if (!state || !state.backgroundTasks) {
+    return 0;
+  }
+
+  const orphaned = await detectOrphanedTasks();
+  let marked = 0;
+
+  for (const orphanedTask of orphaned) {
+    const task = state.backgroundTasks.find(t => t.id === orphanedTask.id);
+    if (task && task.status === 'running') {
+      task.status = 'completed';
+      marked++;
+    }
+  }
+
+  if (marked > 0) {
+    writeHudState(state);
+  }
+
+  return marked;
+}
+

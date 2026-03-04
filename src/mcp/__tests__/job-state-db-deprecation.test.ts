@@ -8,6 +8,11 @@ import {
   isJobDbInitialized,
   upsertJob,
   getJob,
+  getJobsByStatus,
+  getActiveJobs,
+  updateJobStatus,
+  deleteJob,
+  getJobStats,
 } from '../job-state-db.js';
 import type { JobStatus } from '../prompt-persistence.js';
 
@@ -160,6 +165,70 @@ describe('job-state-db deprecation warnings', () => {
       )).toBe(true);
 
       warnSpy.mockRestore();
+    });
+  });
+
+  describe('job status queries', () => {
+    it('should query jobs by status', async () => {
+      await initJobDb(TEST_DIR_A);
+
+      upsertJob(createTestJob({ jobId: 'job-1', status: 'spawned' }), TEST_DIR_A);
+      upsertJob(createTestJob({ jobId: 'job-2', status: 'running' }), TEST_DIR_A);
+      upsertJob(createTestJob({ jobId: 'job-3', status: 'completed' }), TEST_DIR_A);
+
+      const spawned = getJobsByStatus('codex', 'spawned', TEST_DIR_A);
+      expect(spawned.length).toBe(1);
+      expect(spawned[0].jobId).toBe('job-1');
+    });
+
+    it('should get active jobs', async () => {
+      await initJobDb(TEST_DIR_A);
+
+      upsertJob(createTestJob({ jobId: 'active-1', status: 'running' }), TEST_DIR_A);
+      upsertJob(createTestJob({ jobId: 'active-2', status: 'spawned' }), TEST_DIR_A);
+      upsertJob(createTestJob({ jobId: 'done', status: 'completed' }), TEST_DIR_A);
+
+      const active = getActiveJobs('codex', TEST_DIR_A);
+      expect(active.length).toBe(2);
+    });
+  });
+
+  describe('job updates', () => {
+    it('should update job status', async () => {
+      await initJobDb(TEST_DIR_A);
+
+      const job = createTestJob({ jobId: 'update-test', status: 'spawned' });
+      upsertJob(job, TEST_DIR_A);
+
+      updateJobStatus('codex', 'update-test', { status: 'running' }, TEST_DIR_A);
+
+      const updated = getJob('codex', 'update-test', TEST_DIR_A);
+      expect(updated?.status).toBe('running');
+    });
+
+    it('should delete job', async () => {
+      await initJobDb(TEST_DIR_A);
+
+      const job = createTestJob({ jobId: 'delete-test' });
+      upsertJob(job, TEST_DIR_A);
+
+      deleteJob('codex', 'delete-test', TEST_DIR_A);
+
+      expect(getJob('codex', 'delete-test', TEST_DIR_A)).toBeNull();
+    });
+  });
+
+  describe('job statistics', () => {
+    it('should return job stats', async () => {
+      await initJobDb(TEST_DIR_A);
+
+      upsertJob(createTestJob({ status: 'completed' }), TEST_DIR_A);
+      upsertJob(createTestJob({ status: 'failed' }), TEST_DIR_A);
+
+      const stats = getJobStats(TEST_DIR_A);
+      expect(stats.total).toBe(2);
+      expect(stats.completed).toBe(1);
+      expect(stats.failed).toBe(1);
     });
   });
 });

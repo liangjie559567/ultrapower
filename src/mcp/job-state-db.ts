@@ -17,7 +17,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync } from "fs";
 import { join, resolve } from "path";
 import type BetterSqlite3 from "better-sqlite3";
-import type { JobStatus } from "./prompt-persistence.js";
+import type { JobStatus } from "../core/job-types.js";
 
 // Schema version - bump when adding migrations
 const DB_SCHEMA_VERSION = 1;

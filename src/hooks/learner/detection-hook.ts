@@ -5,7 +5,7 @@
  */
 
 import { detectExtractableMoment, shouldPromptExtraction, generateExtractionPrompt } from './detector.js';
-import { isLearnerEnabled } from './index.js';
+import { loadConfig } from './config.js';
 import type { DetectionResult } from './detector.js';
 
 /**
@@ -63,7 +63,7 @@ export function processResponseForDetection(
 ): string | null {
   const mergedConfig = { ...DEFAULT_CONFIG, ...config };
 
-  if (!mergedConfig.enabled || !isLearnerEnabled()) {
+  if (!mergedConfig.enabled || !loadConfig().enabled) {
     return null;
   }
 

@@ -128,7 +128,12 @@ async function rebuildSummaryIncremental(
   for (const line of lines) {
     if (!line.trim()) continue;
 
-    const record: TokenUsage = JSON.parse(line);
+    let record: TokenUsage;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue; // skip corrupted line
+    }
     if (record.sessionId !== sessionId) continue;
 
     // Update totals

@@ -17,12 +17,14 @@ import { pathToFileURL } from 'url';
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { resolveToWorktreeRoot } from "../lib/worktree-paths.js";
+import { auditLogger } from "../audit/logger.js";
 
 // Hot-path imports: needed on every/most hook invocations (keyword-detector, pre/post-tool-use)
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
 import { processOrchestratorPreTool, processOrchestratorPostTool } from "./omc-orchestrator/index.js";
 import { processPreToolUse as enforceDelegationModel } from "../features/delegation-enforcer.js";
 import { normalizeHookInput } from "./bridge-normalize.js";
+import type { HookInput, HookOutput, HookType } from "./bridge-types.js";
 import {
   addBackgroundTask,
   getRunningTaskCount,
@@ -201,66 +203,7 @@ function validateHookInput<T>(
   return true;
 }
 
-/**
- * Input format from Claude Code hooks (via stdin)
- */
-export interface HookInput {
-  /** Session identifier */
-  sessionId?: string;
-  /** User prompt text */
-  prompt?: string;
-  /** Message content (alternative to prompt) */
-  message?: {
-    content?: string;
-  };
-  /** Message parts (alternative structure) */
-  parts?: Array<{
-    type: string;
-    text?: string;
-  }>;
-  /** Tool name (for tool hooks) */
-  toolName?: string;
-  /** Tool input parameters */
-  toolInput?: unknown;
-  /** Tool output (for post-tool hooks) */
-  toolOutput?: unknown;
-  /** Working directory */
-  directory?: string;
-}
-
-/**
- * Output format for Claude Code hooks (to stdout)
- */
-export interface HookOutput {
-  /** Whether to continue with the operation */
-  continue: boolean;
-  /** Optional message to inject into context */
-  message?: string;
-  /** Reason for blocking (when continue=false) */
-  reason?: string;
-  /** Modified tool input (for pre-tool hooks) */
-  modifiedInput?: unknown;
-}
-
-/**
- * Hook types that can be processed
- */
-export type HookType =
-  | "keyword-detector"
-  | "stop-continuation"
-  | "ralph"
-  | "persistent-mode"
-  | "session-start"
-  | "session-end" // NEW: Cleanup and metrics on session end
-  | "pre-tool-use"
-  | "post-tool-use"
-  | "autopilot"
-  | "subagent-start" // NEW: Track agent spawns
-  | "subagent-stop" // NEW: Verify agent completion
-  | "pre-compact" // NEW: Save state before compaction
-  | "setup-init" // NEW: One-time initialization
-  | "setup-maintenance" // NEW: Periodic maintenance
-  | "permission-request"; // NEW: Smart auto-approval
+// Types moved to bridge-types.ts to break circular dependency
 
 /**
  * Extract prompt text from various input formats
@@ -590,7 +533,13 @@ async function processSessionStart(input: HookInput): Promise<HookOutput> {
         ...replyConfig,
         ...platformConfig,
       });
-    }).catch(() => {});
+    }).catch((err: unknown) => {
+      // reply listener setup failed — non-critical, notifications disabled
+      const msg = err instanceof Error ? err.message : String(err);
+      if (process.env.OMC_DEBUG) {
+        process.stderr.write(`[bridge] reply-listener setup error: ${msg}\n`);
+      }
+    });
   }
 
   const messages: string[] = [];
@@ -1198,7 +1147,18 @@ export async function processHook(
           permission_mode: (normalized.permissionMode ?? normalized.permission_mode) as string,
           hook_event_name: 'PermissionRequest',
         };
-        return await handlePermissionRequest(permInput);
+
+        const result = await handlePermissionRequest(permInput);
+
+        auditLogger.log({
+          actor: 'agent',
+          action: 'permission_request',
+          resource: permInput.tool_name,
+          result: result.continue ? 'success' : 'failure',
+          metadata: { tool_use_id: permInput.tool_use_id, permission_mode: permInput.permission_mode }
+        }).catch(() => {});
+
+        return result;
       }
 
       default:

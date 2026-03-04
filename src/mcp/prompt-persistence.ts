@@ -10,6 +10,10 @@ import { join } from 'path';
 import { randomBytes } from 'crypto';
 import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { initJobDb, isJobDbInitialized, upsertJob, getJob, getActiveJobs as getActiveJobsFromDb, cleanupOldJobs as cleanupOldJobsInDb } from './job-state-db.js';
+import type { JobStatus } from '../core/job-types.js';
+
+// Re-export JobStatus for backward compatibility
+export type { JobStatus } from '../core/job-types.js';
 
 // Lazy-init guard: fires initJobDb at most once per process.
 // initJobDb is async (dynamic import of better-sqlite3). If it hasn't resolved
@@ -126,24 +130,6 @@ export interface PersistPromptResult {
 /**
  * Job status for background execution tracking
  */
-export interface JobStatus {
-  provider: 'codex' | 'gemini';
-  jobId: string;
-  slug: string;
-  status: 'spawned' | 'running' | 'completed' | 'failed' | 'timeout';
-  pid?: number;
-  promptFile: string;
-  responseFile: string;
-  model: string;
-  agentRole: string;
-  spawnedAt: string;
-  completedAt?: string;
-  error?: string;
-  usedFallback?: boolean;
-  fallbackModel?: string;
-  killedByUser?: boolean;
-}
-
 /**
  * Metadata passed to background execution functions
  */

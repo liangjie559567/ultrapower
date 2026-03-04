@@ -82,12 +82,34 @@ describe('Prompt Generation', () => {
   });
 
   describe('getPhasePrompt', () => {
-    it('should dispatch to correct phase', () => {
+    it('should dispatch to expansion phase', () => {
       const expansion = getPhasePrompt('expansion', { idea: 'test' });
       expect(expansion).toContain('EXPANSION');
+    });
 
+    it('should dispatch to planning phase', () => {
+      const planning = getPhasePrompt('planning', { specPath: 'spec.md' });
+      expect(planning).toContain('DIRECT PLANNING');
+    });
+
+    it('should dispatch to execution phase', () => {
+      const execution = getPhasePrompt('execution', { planPath: 'plan.md' });
+      expect(execution).toContain('Ralph');
+    });
+
+    it('should dispatch to qa phase', () => {
       const qa = getPhasePrompt('qa', {});
       expect(qa).toContain('QA');
+    });
+
+    it('should dispatch to validation phase', () => {
+      const validation = getPhasePrompt('validation', { specPath: 'spec.md' });
+      expect(validation).toContain('parallel');
+    });
+
+    it('should return empty string for unknown phase', () => {
+      const unknown = getPhasePrompt('unknown' as any, {});
+      expect(unknown).toBe('');
     });
   });
 });

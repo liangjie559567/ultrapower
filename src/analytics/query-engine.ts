@@ -109,7 +109,12 @@ export class QueryEngine {
       const byDay: Record<string, number> = {};
 
       for (const line of lines) {
-        const record = JSON.parse(line);
+        let record: ReturnType<typeof JSON.parse>;
+        try {
+          record = JSON.parse(line);
+        } catch {
+          continue; // skip corrupted line
+        }
 
         // Filter by time range
         if (record.timestamp < range.start || record.timestamp > range.end) {
@@ -171,7 +176,12 @@ export class QueryEngine {
       const lines = content.trim().split('\n').filter(l => l.length > 0);
 
       for (const line of lines) {
-        const record = JSON.parse(line);
+        let record: ReturnType<typeof JSON.parse>;
+        try {
+          record = JSON.parse(line);
+        } catch {
+          continue; // skip corrupted line
+        }
 
         // Filter by time range
         if (record.timestamp < range.start || record.timestamp > range.end) {
@@ -210,7 +220,12 @@ export class QueryEngine {
       const operationCosts: Record<string, number> = {};
 
       for (const line of lines) {
-        const record = JSON.parse(line);
+        let record: ReturnType<typeof JSON.parse>;
+        try {
+          record = JSON.parse(line);
+        } catch {
+          continue; // skip corrupted line
+        }
 
         // Track peak hours
         const hour = new Date(record.timestamp).getHours();

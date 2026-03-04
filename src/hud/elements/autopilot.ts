@@ -4,7 +4,7 @@
  * Renders autopilot phase and progress display.
  */
 
-import type { HudThresholds } from '../types.js';
+import type { HudThresholds } from '../../core/hud-config.js';
 import { RESET } from '../colors.js';
 
 // ANSI color codes

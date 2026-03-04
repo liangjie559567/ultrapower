@@ -8,7 +8,7 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 import { homedir } from 'os';
-import type { SessionMetrics } from './index.js';
+import type { SessionMetrics } from './types.js';
 import {
   getOMCConfig,
   type StopCallbackFileConfig,

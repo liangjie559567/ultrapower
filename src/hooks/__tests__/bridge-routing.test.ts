@@ -71,7 +71,10 @@ describe('processHook - Routing Matrix', () => {
 
     for (const hookType of hookTypes) {
       it(`should route "${hookType}" and return a valid HookOutput`, async () => {
-        const result = await processHook(hookType, baseInput);
+        const input = hookType === 'permission-request'
+          ? { ...baseInput, toolName: 'test-tool' }
+          : baseInput;
+        const result = await processHook(hookType, input);
 
         // Every hook must return an object with a boolean "continue" field
         expect(result).toBeDefined();
@@ -519,21 +522,12 @@ describe('processHook - Routing Matrix', () => {
     });
 
     it('should fail validation when required camelCase keys are missing', async () => {
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
       // Missing sessionId and directory
       const input = { prompt: 'hello' } as unknown as HookInput;
 
-      const result = await processHook('session-end', input);
-      expect(result).toEqual({ continue: true });
-
-      // Should have logged the missing keys
-      const missingKeysLogs = spy.mock.calls.filter(
-        (args) => typeof args[0] === 'string' && args[0].includes('missing keys'),
+      await expect(processHook('session-end', input)).rejects.toThrow(
+        /Missing required keys for session-end/
       );
-      expect(missingKeysLogs.length).toBeGreaterThan(0);
-
-      spy.mockRestore();
     });
 
     it('snake_case input should be normalized and pass validation', async () => {

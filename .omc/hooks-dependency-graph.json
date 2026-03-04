@@ -1,0 +1,191 @@
+{
+  "nodes": [
+    {
+      "hookType": "pre-tool-use",
+      "reads": [],
+      "writes": [],
+      "callsTools": []
+    },
+    {
+      "hookType": "post-tool-use",
+      "reads": [],
+      "writes": [
+        ".omc/state/last-tool-error.json"
+      ],
+      "callsTools": []
+    },
+    {
+      "hookType": "permission-request",
+      "reads": [],
+      "writes": [],
+      "callsTools": []
+    },
+    {
+      "hookType": "setup-init",
+      "reads": [],
+      "writes": [
+        ".omc/notepad.md",
+        ".omc/project-memory.json"
+      ],
+      "callsTools": [
+        "notepad_read",
+        "project_memory_read"
+      ]
+    },
+    {
+      "hookType": "setup-maintenance",
+      "reads": [
+        ".omc/notepad.md"
+      ],
+      "writes": [],
+      "callsTools": [
+        "notepad_prune"
+      ]
+    },
+    {
+      "hookType": "session-end",
+      "reads": [
+        ".omc/state/*.json"
+      ],
+      "writes": [],
+      "callsTools": [
+        "state_clear"
+      ]
+    },
+    {
+      "hookType": "keyword-detector",
+      "reads": [],
+      "writes": [],
+      "callsTools": []
+    },
+    {
+      "hookType": "autopilot",
+      "reads": [
+        ".omc/state/autopilot-state.json"
+      ],
+      "writes": [
+        ".omc/state/autopilot-state.json"
+      ],
+      "callsTools": [
+        "state_read",
+        "state_write"
+      ]
+    },
+    {
+      "hookType": "ralph",
+      "reads": [
+        ".omc/state/ralph-state.json"
+      ],
+      "writes": [
+        ".omc/state/ralph-state.json"
+      ],
+      "callsTools": [
+        "state_read",
+        "state_write"
+      ]
+    },
+    {
+      "hookType": "ultrawork",
+      "reads": [
+        ".omc/state/ultrawork-state.json"
+      ],
+      "writes": [
+        ".omc/state/ultrawork-state.json"
+      ],
+      "callsTools": [
+        "state_read",
+        "state_write"
+      ]
+    },
+    {
+      "hookType": "learner",
+      "reads": [],
+      "writes": [
+        "skills/*.md"
+      ],
+      "callsTools": []
+    },
+    {
+      "hookType": "recovery",
+      "reads": [
+        ".omc/state/last-tool-error.json"
+      ],
+      "writes": [],
+      "callsTools": []
+    },
+    {
+      "hookType": "rules-injector",
+      "reads": [
+        "templates/rules/*.md"
+      ],
+      "writes": [],
+      "callsTools": []
+    },
+    {
+      "hookType": "think-mode",
+      "reads": [],
+      "writes": [],
+      "callsTools": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "post-tool-use",
+      "to": "session-end",
+      "reason": "write-read: .omc/state/last-tool-error.json"
+    },
+    {
+      "from": "post-tool-use",
+      "to": "recovery",
+      "reason": "write-read: .omc/state/last-tool-error.json"
+    },
+    {
+      "from": "setup-init",
+      "to": "setup-maintenance",
+      "reason": "write-read: .omc/notepad.md"
+    },
+    {
+      "from": "autopilot",
+      "to": "session-end",
+      "reason": "write-read: .omc/state/autopilot-state.json"
+    },
+    {
+      "from": "ralph",
+      "to": "session-end",
+      "reason": "write-read: .omc/state/ralph-state.json"
+    },
+    {
+      "from": "ultrawork",
+      "to": "session-end",
+      "reason": "write-read: .omc/state/ultrawork-state.json"
+    }
+  ],
+  "parallelGroups": [
+    [
+      "pre-tool-use",
+      "post-tool-use",
+      "permission-request",
+      "setup-init",
+      "setup-maintenance",
+      "session-end",
+      "keyword-detector",
+      "autopilot",
+      "ralph",
+      "ultrawork",
+      "learner",
+      "recovery",
+      "rules-injector",
+      "think-mode"
+    ]
+  ],
+  "serialChains": [
+    [
+      "post-tool-use",
+      "session-end"
+    ],
+    [
+      "setup-init",
+      "setup-maintenance"
+    ]
+  ]
+}

@@ -5,30 +5,9 @@ import { triggerStopCallbacks } from './callbacks.js';
 import { notify } from '../../notifications/index.js';
 import { cleanupBridgeSessions } from '../../tools/python-repl/bridge-manager.js';
 import { resolveToWorktreeRoot } from '../../lib/worktree-paths.js';
+import type { SessionEndInput, SessionMetrics, HookOutput } from './types.js';
 
-export interface SessionEndInput {
-  session_id: string;
-  transcript_path: string;
-  cwd: string;
-  permission_mode: string;
-  hook_event_name: 'SessionEnd';
-  reason: 'clear' | 'logout' | 'prompt_input_exit' | 'other';
-}
-
-export interface SessionMetrics {
-  session_id: string;
-  started_at?: string;
-  ended_at: string;
-  reason: string;
-  duration_ms?: number;
-  agents_spawned: number;
-  agents_completed: number;
-  modes_used: string[];
-}
-
-export interface HookOutput {
-  continue: boolean;
-}
+export type { SessionEndInput, SessionMetrics, HookOutput };
 
 /**
  * Read agent tracking to get spawn/completion counts

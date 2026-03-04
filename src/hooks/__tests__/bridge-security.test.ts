@@ -22,7 +22,14 @@ import {
   PermissionRequestInput,
 } from '../permission-handler/index.js';
 import { validatePath } from '../../lib/worktree-paths.js';
-import { normalizeHookInput, SENSITIVE_HOOKS, isAlreadyCamelCase, HookInputSchema } from '../bridge-normalize.js';
+import {
+  normalizeHookInput,
+  SENSITIVE_HOOKS,
+  STRICT_WHITELIST,
+  REQUIRED_KEYS,
+  isAlreadyCamelCase,
+  HookInputSchema
+} from '../bridge-normalize.js';
 import { readAutopilotState } from '../autopilot/state.js';
 
 // ============================================================================
@@ -150,7 +157,7 @@ describe('State Poisoning Resilience', () => {
   it('should return null for completely invalid JSON state', () => {
     writeFileSync(
       join(testDir, '.omc', 'state', 'autopilot-state.json'),
-      'THIS IS NOT JSON {{{}}}'
+      'THIS IS NOT JSON {{{}}}}'
     );
 
     const state = readAutopilotState(testDir);
@@ -400,25 +407,39 @@ describe('Input Normalization Security', () => {
 
 describe('Sensitive Hook Field Filtering', () => {
   it('should drop unknown fields for sensitive hooks', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     for (const hookType of SENSITIVE_HOOKS) {
-      const raw = {
+      warnSpy.mockClear();
+
+      const raw: Record<string, unknown> = {
         session_id: 'test-session',
         cwd: '/tmp/project',
         injected_evil: 'malicious-payload',
         __proto_pollute__: 'bad',
       };
 
+      // permission-request requires toolName
+      if (hookType === 'permission-request') {
+        raw.tool_name = 'Read';
+      }
+
+      // T3: Pre-filter drops unknown fields before Zod validation
       const normalized = normalizeHookInput(raw, hookType) as Record<string, unknown>;
-      expect(normalized.sessionId).toBe('test-session');
-      expect(normalized.directory).toBe('/tmp/project');
       expect(normalized.injected_evil).toBeUndefined();
       expect(normalized.__proto_pollute__).toBeUndefined();
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`Dropped unknown fields for sensitive hook "${hookType}"`)
+      );
     }
+
+    warnSpy.mockRestore();
   });
 
   it('should allow known fields through for sensitive hooks', () => {
     const raw = {
       session_id: 'test-session',
+      tool_name: 'Read',
       cwd: '/tmp/project',
       agent_id: 'agent-1',       // in KNOWN_FIELDS
       permission_mode: 'default', // in KNOWN_FIELDS
@@ -426,6 +447,7 @@ describe('Sensitive Hook Field Filtering', () => {
 
     const normalized = normalizeHookInput(raw, 'permission-request') as Record<string, unknown>;
     expect(normalized.sessionId).toBe('test-session');
+    expect(normalized.toolName).toBe('Read');
     expect(normalized.agent_id).toBe('agent-1');
     expect(normalized.permission_mode).toBe('default');
   });
@@ -539,17 +561,23 @@ describe('Normalization Fast-Path', () => {
   });
 
   it('should apply sensitive filtering via Zod path (sensitive hooks no longer use fast path)', () => {
-    // After the security fix, sensitive hooks always go through Zod.
-    // The filtering result must still be correct: unknown fields dropped, known fields kept.
+    // After T3 fix, sensitive hooks pre-filter unknown fields before Zod validation
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     const camelInput = {
       sessionId: 'abc',
+      toolName: 'Read',
       directory: '/tmp',
       injected: 'evil',
     };
 
     const normalized = normalizeHookInput(camelInput, 'permission-request') as Record<string, unknown>;
-    expect(normalized.sessionId).toBe('abc');
     expect(normalized.injected).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Dropped unknown fields for sensitive hook "permission-request"')
+    );
+
+    warnSpy.mockRestore();
   });
 });
 
@@ -559,10 +587,10 @@ describe('Normalization Fast-Path', () => {
 
 describe('Fast-Path Security Regression (T-1e)', () => {
   it('case 1: sensitive hook with malicious camelCase input forces Zod path', () => {
-    const safeParseSpy = vi.spyOn(HookInputSchema, 'safeParse');
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     for (const hookType of SENSITIVE_HOOKS) {
-      safeParseSpy.mockClear();
+      warnSpy.mockClear();
 
       const input = {
         sessionId: 'x',
@@ -572,40 +600,30 @@ describe('Fast-Path Security Regression (T-1e)', () => {
         maliciousField: 'payload',
       };
 
+      // T3: Pre-filter drops unknown fields before Zod validation
       const normalized = normalizeHookInput(input, hookType) as Record<string, unknown>;
-
-      // Zod must have been called — fast path was NOT taken
-      expect(safeParseSpy).toHaveBeenCalledTimes(1);
-      // Malicious fields must be dropped by the whitelist
       expect(normalized.__injected__).toBeUndefined();
       expect(normalized.maliciousField).toBeUndefined();
-      // Legitimate fields must pass through
-      expect(normalized.sessionId).toBe('x');
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`Dropped unknown fields for sensitive hook "${hookType}"`)
+      );
     }
 
-    safeParseSpy.mockRestore();
+    warnSpy.mockRestore();
   });
 
-  it('case 2: sensitive hook with type-confusion sessionId goes through Zod without throwing', () => {
-    // HookInputSchema uses .passthrough() so Zod does not coerce field values;
-    // the key security property is that Zod IS invoked (fast path skipped) and
-    // the function does not throw an uncaught exception.
-    const safeParseSpy = vi.spyOn(HookInputSchema, 'safeParse');
-
+  it('case 2: sensitive hook with type-confusion sessionId throws error (T2 security)', () => {
+    // T2: Sensitive hooks now use strict schema and throw on validation failures
     const input = {
       sessionId: { __proto__: { polluted: true } } as unknown as string,
       toolName: 'Read',
       directory: '/t',
     };
 
+    // Strict schema rejects type-confused fields
     expect(() => {
       normalizeHookInput(input, 'permission-request');
-    }).not.toThrow();
-
-    // Zod must have been invoked — fast path must NOT have been taken
-    expect(safeParseSpy).toHaveBeenCalledTimes(1);
-
-    safeParseSpy.mockRestore();
+    }).toThrow(/Zod validation failed.*Expected string, received object/);
   });
 
   it('case 3: non-sensitive hook with camelCase input still takes fast path (no perf regression)', () => {
@@ -630,7 +648,7 @@ describe('Fast-Path Security Regression (T-1e)', () => {
     safeParseSpy.mockRestore();
   });
 
-  it('case 4: all four SENSITIVE_HOOKS members disable fast path', () => {
+  it('case 4: all four SENSITIVE_HOOKS members use strict schema (T2 security)', () => {
     const expectedSensitiveHooks = ['permission-request', 'setup-init', 'setup-maintenance', 'session-end'];
     // Confirm the set matches expectations (guard against accidental shrinkage)
     expect(SENSITIVE_HOOKS.size).toBe(expectedSensitiveHooks.length);
@@ -638,27 +656,27 @@ describe('Fast-Path Security Regression (T-1e)', () => {
       expect(SENSITIVE_HOOKS.has(h)).toBe(true);
     }
 
-    // Single spy with mockClear() between iterations to avoid call-count bleed.
-    const safeParseSpy = vi.spyOn(HookInputSchema, 'safeParse');
-
+    // T2: Sensitive hooks now use StrictHookInputSchema, not HookInputSchema
     for (const hookType of expectedSensitiveHooks) {
-      safeParseSpy.mockClear();
+      // permission-request requires toolName, others don't
+      const input = hookType === 'permission-request'
+        ? { sessionId: 'x', toolName: 'Read', directory: '/t' }
+        : { sessionId: 'x', directory: '/t' };
+      const normalized = normalizeHookInput(input, hookType);
 
-      const input = { sessionId: 'x', directory: '/t' };
-      normalizeHookInput(input, hookType);
-
-      // Zod called exactly once per sensitive hook invocation
-      expect(safeParseSpy).toHaveBeenCalledTimes(1);
+      // Valid input normalizes correctly
+      expect(normalized.sessionId).toBe('x');
+      expect(normalized.directory).toBe('/t');
+      if (hookType === 'permission-request') {
+        expect(normalized.toolName).toBe('Read');
+      }
     }
-
-    safeParseSpy.mockRestore();
   });
 
   it('case 5: snake_case input for sensitive hook continues to work correctly', () => {
     const input = {
       session_id: 'snake',
       cwd: '/tmp',
-      injected_evil: 'bad',
     };
 
     const normalized = normalizeHookInput(input, 'session-end') as Record<string, unknown>;
@@ -666,7 +684,124 @@ describe('Fast-Path Security Regression (T-1e)', () => {
     // Legitimate snake_case fields normalise correctly
     expect(normalized.sessionId).toBe('snake');
     expect(normalized.directory).toBe('/tmp');
-    // Unknown field must be dropped by whitelist
-    expect(normalized.injected_evil).toBeUndefined();
+  });
+});
+
+// ============================================================================
+// T003: Hook Input Whitelist Enforcement
+// ============================================================================
+
+describe('T003: Hook Input Whitelist Enforcement', () => {
+  it('should have strict whitelist for all sensitive hooks', () => {
+    for (const hookType of SENSITIVE_HOOKS) {
+      expect(STRICT_WHITELIST[hookType]).toBeDefined();
+      expect(Array.isArray(STRICT_WHITELIST[hookType])).toBe(true);
+    }
+  });
+
+  it('should drop unknown fields for permission-request', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const raw = {
+      session_id: 'test',
+      tool_name: 'Read',
+      cwd: '/tmp',
+      malicious_field: 'evil',
+    };
+
+    const normalized = normalizeHookInput(raw, 'permission-request') as Record<string, unknown>;
+    expect(normalized.sessionId).toBe('test');
+    expect(normalized.toolName).toBe('Read');
+    expect(normalized.malicious_field).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Dropped unknown fields for sensitive hook "permission-request"')
+    );
+
+    warnSpy.mockRestore();
+  });
+
+  it('should drop unknown fields for session-end', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const raw = {
+      session_id: 'test',
+      cwd: '/tmp',
+      injected: 'payload',
+    };
+
+    const normalized = normalizeHookInput(raw, 'session-end') as Record<string, unknown>;
+    expect(normalized.sessionId).toBe('test');
+    expect(normalized.directory).toBe('/tmp');
+    expect(normalized.injected).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Dropped unknown fields for sensitive hook "session-end"')
+    );
+
+    warnSpy.mockRestore();
+  });
+
+  it('should validate required keys for session-end', () => {
+    expect(REQUIRED_KEYS['session-end']).toEqual(['sessionId', 'directory']);
+
+    const missingSessionId = { cwd: '/tmp' };
+    expect(() => normalizeHookInput(missingSessionId, 'session-end')).toThrow(
+      /Missing required keys.*sessionId/
+    );
+
+    const missingDirectory = { session_id: 'test' };
+    expect(() => normalizeHookInput(missingDirectory, 'session-end')).toThrow(
+      /Missing required keys.*directory/
+    );
+  });
+
+  it('should validate required keys for permission-request', () => {
+    expect(REQUIRED_KEYS['permission-request']).toEqual(['toolName']);
+
+    const missingToolName = { session_id: 'test', cwd: '/tmp' };
+    expect(() => normalizeHookInput(missingToolName, 'permission-request')).toThrow(
+      /Missing required keys.*toolName/
+    );
+  });
+
+  it('should allow whitelisted fields through for permission-request', () => {
+    const raw = {
+      session_id: 'test',
+      tool_name: 'Bash',
+      tool_input: { command: 'ls' },
+      cwd: '/tmp',
+      permission_mode: 'default',
+      tool_use_id: 'id-123',
+      transcript_path: '/path/to/transcript',
+    };
+
+    const normalized = normalizeHookInput(raw, 'permission-request') as Record<string, unknown>;
+    expect(normalized.sessionId).toBe('test');
+    expect(normalized.toolName).toBe('Bash');
+    expect(normalized.permission_mode).toBe('default');
+    expect(normalized.tool_use_id).toBe('id-123');
+    expect(normalized.transcript_path).toBe('/path/to/transcript');
+  });
+
+  it('should test all HookTypes in SENSITIVE_HOOKS', () => {
+    const testedHooks = ['permission-request', 'setup-init', 'setup-maintenance', 'session-end'];
+
+    for (const hookType of SENSITIVE_HOOKS) {
+      expect(testedHooks).toContain(hookType);
+
+      const raw = { session_id: 'test', cwd: '/tmp', unknown: 'field' };
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      try {
+        normalizeHookInput(raw, hookType);
+      } catch (e) {
+        // Some hooks may throw due to missing required keys, that's expected
+      }
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`Dropped unknown fields for sensitive hook "${hookType}"`)
+      );
+
+      warnSpy.mockRestore();
+    }
   });
 });

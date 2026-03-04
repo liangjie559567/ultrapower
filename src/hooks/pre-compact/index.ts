@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- JSON state files have dynamic shape */
 /**
  * PreCompact Hook - State Preservation Before Context Compaction
  *
@@ -34,6 +33,55 @@ export interface PreCompactInput {
   hook_event_name: "PreCompact";
   trigger: "manual" | "auto";
   custom_instructions?: string;
+}
+
+// State file type definitions
+interface AutopilotState {
+  active: boolean;
+  phase?: string;
+  originalIdea?: string;
+}
+
+interface RalphState {
+  active: boolean;
+  iteration?: number;
+  originalPrompt?: string;
+  prompt?: string;
+}
+
+interface UltraworkState {
+  active: boolean;
+  original_prompt?: string;
+  prompt?: string;
+}
+
+interface SwarmState {
+  active: boolean;
+  session_id?: string;
+  task_count?: number;
+}
+
+interface UltrapilotState {
+  active: boolean;
+  session_id?: string;
+  worker_count?: number;
+}
+
+interface PipelineState {
+  active: boolean;
+  preset?: string;
+  current_stage?: number;
+}
+
+interface UltraQAState {
+  active: boolean;
+  cycle?: number;
+  original_prompt?: string;
+  prompt?: string;
+}
+
+interface TodoItem {
+  status: string;
 }
 
 export interface CompactCheckpoint {
@@ -174,7 +222,7 @@ export async function saveModeSummary(
     {
       file: "autopilot-state.json",
       key: "autopilot",
-      extract: (s: any) =>
+      extract: (s: AutopilotState) =>
         s.active
           ? { phase: s.phase || "unknown", originalIdea: s.originalIdea || "" }
           : null,
@@ -182,7 +230,7 @@ export async function saveModeSummary(
     {
       file: "ralph-state.json",
       key: "ralph",
-      extract: (s: any) =>
+      extract: (s: RalphState) =>
         s.active
           ? {
               iteration: s.iteration || 0,
@@ -193,7 +241,7 @@ export async function saveModeSummary(
     {
       file: "ultrawork-state.json",
       key: "ultrawork",
-      extract: (s: any) =>
+      extract: (s: UltraworkState) =>
         s.active
           ? { original_prompt: s.original_prompt || s.prompt || "" }
           : null,
@@ -201,7 +249,7 @@ export async function saveModeSummary(
     {
       file: "swarm-summary.json",
       key: "swarm",
-      extract: (s: any) =>
+      extract: (s: SwarmState) =>
         s.active
           ? {
               session_id: s.session_id || "active",
@@ -212,7 +260,7 @@ export async function saveModeSummary(
     {
       file: "ultrapilot-state.json",
       key: "ultrapilot",
-      extract: (s: any) =>
+      extract: (s: UltrapilotState) =>
         s.active
           ? {
               session_id: s.session_id || "",
@@ -223,7 +271,7 @@ export async function saveModeSummary(
     {
       file: "pipeline-state.json",
       key: "pipeline",
-      extract: (s: any) =>
+      extract: (s: PipelineState) =>
         s.active
           ? {
               preset: s.preset || "custom",
@@ -234,7 +282,7 @@ export async function saveModeSummary(
     {
       file: "ultraqa-state.json",
       key: "ultraqa",
-      extract: (s: any) =>
+      extract: (s: UltraQAState) =>
         s.active
           ? { cycle: s.cycle || 0, prompt: s.original_prompt || s.prompt || "" }
           : null,
@@ -289,10 +337,10 @@ function readTodoSummary(directory: string): {
 
         if (Array.isArray(todos)) {
           return {
-            pending: todos.filter((t: any) => t.status === "pending").length,
-            in_progress: todos.filter((t: any) => t.status === "in_progress")
+            pending: todos.filter((t: TodoItem) => t.status === "pending").length,
+            in_progress: todos.filter((t: TodoItem) => t.status === "in_progress")
               .length,
-            completed: todos.filter((t: any) => t.status === "completed")
+            completed: todos.filter((t: TodoItem) => t.status === "completed")
               .length,
           };
         }

@@ -206,11 +206,16 @@ describe('bridge-manager', () => {
       vi.mocked(child_process.spawn).mockImplementation(mockSpawn as any);
       vi.mocked(getProcessStartTime).mockResolvedValue(1000);
 
+      // Mock isSocket to return true immediately to avoid 30s timeout
+      const mockIsSocket = vi.spyOn(bridgeManager, 'isSocket').mockReturnValue(true);
+
       const result = await spawnBridgeServer('test-session');
 
       expect(result.pid).toBe(12345);
       expect(result.sessionId).toBe('test-session');
       expect(mockSpawn).toHaveBeenCalled();
+
+      mockIsSocket.mockRestore();
     });
 
     it('throws error when spawn fails', async () => {
@@ -222,7 +227,12 @@ describe('bridge-manager', () => {
       });
       vi.mocked(child_process.spawn).mockImplementation(mockSpawn as any);
 
+      // Mock isSocket to avoid timeout (though this test should fail before socket check)
+      const mockIsSocket = vi.spyOn(bridgeManager, 'isSocket').mockReturnValue(true);
+
       await expect(spawnBridgeServer('test-session')).rejects.toThrow('Failed to spawn bridge server: no PID assigned');
+
+      mockIsSocket.mockRestore();
     });
   });
 
@@ -241,10 +251,15 @@ describe('bridge-manager', () => {
       vi.mocked(isProcessAlive).mockReturnValue(true);
       vi.mocked(getProcessStartTime).mockResolvedValue(1000);
 
+      // Mock isSocket to avoid timeout
+      const mockIsSocket = vi.spyOn(bridgeManager, 'isSocket').mockReturnValue(true);
+
       const result = await ensureBridge('test-session');
 
       expect(result.pid).toBe(12345);
       expect(result.sessionId).toBe('test-session');
+
+      mockIsSocket.mockRestore();
     });
 
     it('spawns new bridge when meta file does not exist', async () => {
@@ -257,10 +272,15 @@ describe('bridge-manager', () => {
       vi.mocked(child_process.spawn).mockImplementation(mockSpawn as any);
       vi.mocked(getProcessStartTime).mockResolvedValue(1000);
 
+      // Mock isSocket to return true immediately to avoid 30s timeout
+      const mockIsSocket = vi.spyOn(bridgeManager, 'isSocket').mockReturnValue(true);
+
       const result = await ensureBridge('test-session');
 
       expect(result.pid).toBe(12345);
       expect(mockSpawn).toHaveBeenCalled();
+
+      mockIsSocket.mockRestore();
     });
   });
 

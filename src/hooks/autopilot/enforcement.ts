@@ -21,7 +21,7 @@ import {
 } from './state.js';
 import { getPhasePrompt } from './prompts.js';
 import type { AutopilotState, AutopilotPhase, AutopilotSignal } from './types.js';
-import { readLastToolError, getToolErrorRetryGuidance, type ToolErrorState } from '../persistent-mode/index.js';
+import { readLastToolError, getToolErrorRetryGuidance, type ToolErrorState } from '../persistent-mode/tool-error.js';
 
 export interface AutopilotEnforcementResult {
   /** Whether to block the stop event */

@@ -17,6 +17,10 @@ import * as path from "path";
 import * as os from "os";
 import { atomicWriteJsonSync } from "../../lib/atomic-write.js";
 import { OmcPaths } from "../../lib/worktree-paths.js";
+import { assertValidMode } from "../../lib/validateMode.js";
+import { readEncryptedState, encryptState } from "./encryption.js";
+import { auditLogger } from "../../audit/logger.js";
+import { WriteAheadLog } from "./wal.js";
 import {
   StateLocation,
   StateConfig,
@@ -45,6 +49,38 @@ const MAX_STATE_AGE_MS = 4 * 60 * 60 * 1000;
 
 // Read cache: avoids re-reading unchanged state files within TTL
 const STATE_CACHE_TTL_MS = 5_000; // 5 seconds
+
+// WAL instance (lazy init)
+let walInstance: WriteAheadLog | null = null;
+function getWAL(): WriteAheadLog {
+  if (!walInstance) {
+    walInstance = new WriteAheadLog(process.cwd());
+    // Auto-recover on first access
+    recoverFromWAL();
+  }
+  return walInstance;
+}
+
+function recoverFromWAL(): void {
+  if (!walInstance) return;
+
+  const uncommitted = walInstance.recover();
+  if (uncommitted.length === 0) return;
+
+  console.log(`[WAL] Recovering ${uncommitted.length} uncommitted entries...`);
+
+  for (const entry of uncommitted) {
+    try {
+      writeState(entry.mode, entry.data, StateLocation.LOCAL);
+      walInstance.commit(entry.id);
+      console.log(`[WAL] Recovered: ${entry.mode}`);
+    } catch (error) {
+      console.error(`[WAL] Failed to recover ${entry.mode}:`, error);
+    }
+  }
+
+  walInstance.cleanup();
+}
 interface CacheEntry {
   data: unknown;
   mtime: number;
@@ -80,9 +116,11 @@ const LEGACY_LOCATIONS: Record<string, string[]> = {
  * Get the standard path for a state file
  */
 export function getStatePath(name: string, location: StateLocation): string {
+  // Validate mode name to prevent path traversal attacks
+  const validatedName = assertValidMode(name);
   const baseDir =
     location === StateLocation.LOCAL ? LOCAL_STATE_DIR : GLOBAL_STATE_DIR;
-  return path.join(baseDir, `${name}.json`);
+  return path.join(baseDir, `${validatedName}.json`);
 }
 
 /**
@@ -126,6 +164,14 @@ export function readState<T = StateData>(
       const mtime = stat.mtimeMs;
       const cached = stateCache.get(standardPath);
       if (cached && cached.mtime === mtime && (Date.now() - cached.cachedAt) < STATE_CACHE_TTL_MS) {
+        auditLogger.log({
+          actor: 'system',
+          action: 'state_access',
+          resource: name,
+          result: 'success',
+          metadata: { operation: 'read', location, cached: true }
+        }).catch(() => {});
+
         return {
           exists: true,
           data: structuredClone(cached.data) as T,
@@ -139,7 +185,15 @@ export function readState<T = StateData>(
 
     try {
       const content = fs.readFileSync(standardPath, "utf-8");
-      const data = JSON.parse(content) as T;
+      const data = readEncryptedState(content) as T;
+
+      auditLogger.log({
+        actor: 'system',
+        action: 'state_access',
+        resource: name,
+        result: 'success',
+        metadata: { operation: 'read', location, cached: false }
+      }).catch(() => {});
 
       // Update cache with a defensive clone so callers cannot corrupt it
       try {
@@ -172,7 +226,7 @@ export function readState<T = StateData>(
       if (fs.existsSync(resolvedPath)) {
         try {
           const content = fs.readFileSync(resolvedPath, "utf-8");
-          const data = JSON.parse(content) as T;
+          const data = readEncryptedState(content) as T;
           return {
             exists: true,
             data: structuredClone(data) as T,
@@ -213,19 +267,48 @@ export function writeState<T = StateData>(
   // Invalidate cache on write
   stateCache.delete(statePath);
 
+  // Write to WAL first
+  const wal = getWAL();
+  const walId = wal.writeEntry(name, data);
+
   try {
     // Ensure directory exists
     if (createDirs) {
       ensureStateDir(location);
     }
 
-    atomicWriteJsonSync(statePath, data);
+    // Encrypt if OMC_ENCRYPTION_KEY is set
+    if (process.env.OMC_ENCRYPTION_KEY) {
+      const encrypted = encryptState(data);
+      fs.writeFileSync(statePath, encrypted, "utf-8");
+    } else {
+      atomicWriteJsonSync(statePath, data);
+    }
+
+    // Commit WAL after successful write
+    wal.commit(walId);
+
+    auditLogger.log({
+      actor: 'system',
+      action: 'state_access',
+      resource: name,
+      result: 'success',
+      metadata: { operation: 'write', location, encrypted: !!process.env.OMC_ENCRYPTION_KEY }
+    }).catch(() => {});
 
     return {
       success: true,
       path: statePath,
     };
   } catch (error) {
+    auditLogger.log({
+      actor: 'system',
+      action: 'state_access',
+      resource: name,
+      result: 'failure',
+      metadata: { operation: 'write', location, error: String(error) }
+    }).catch(() => {});
+
     return {
       success: false,
       path: statePath,
@@ -382,7 +465,10 @@ export function listStates(options?: ListStatesOptions): StateFileInfo[] {
   const matchesPattern = (name: string): boolean => {
     if (!pattern) return true;
     // Simple glob: * matches anything
-    const regex = new RegExp("^" + pattern.replace(/\*/g, ".*") + "$");
+    const escapedPattern = pattern
+      .replace(/[+()[\]{}^$|\\]/g, '\\$&')
+      .replace(/\*/g, '.*');
+    const regex = new RegExp("^" + escapedPattern + "$");
     return regex.test(name);
   };
 
@@ -464,7 +550,10 @@ export function cleanupOrphanedStates(options?: CleanupOptions): CleanupResult {
     // Skip excluded patterns
     if (
       exclude.some((pattern) => {
-        const regex = new RegExp("^" + pattern.replace(/\*/g, ".*") + "$");
+      const escapedPattern = pattern
+          .replace(/[+()[\]{}^$|\\]/g, '\\$&')
+          .replace(/\*/g, '.*');
+        const regex = new RegExp("^" + escapedPattern + "$");
         return regex.test(state.name);
       })
     ) {
@@ -667,6 +756,14 @@ export type {
   CleanupResult,
   StateData,
 };
+
+/**
+ * Clean up committed WAL entries
+ */
+export function cleanupWAL(): void {
+  const wal = getWAL();
+  wal.cleanup();
+}
 
 // Re-export enum, constants, and functions from types
 export {

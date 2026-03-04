@@ -11,8 +11,9 @@ import { join } from 'path';
 import { runTscDiagnostics, TscDiagnostic, TscResult } from './tsc-runner.js';
 import { runLspAggregatedDiagnostics, LspDiagnosticWithFile, LspAggregationResult } from './lsp-aggregator.js';
 import { formatDiagnostics } from '../lsp/utils.js';
+import { LSP_DIAGNOSTICS_WAIT_MS } from './constants.js';
 
-export const LSP_DIAGNOSTICS_WAIT_MS = 300;
+export { LSP_DIAGNOSTICS_WAIT_MS };
 
 export type DiagnosticsStrategy = 'tsc' | 'lsp' | 'auto';
 

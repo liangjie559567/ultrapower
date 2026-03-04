@@ -1,0 +1,100 @@
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m308:23[22m[39m
+    [90m306| [39m
+    [90m307| [39m    [90m// Simulate continuation message construction[39m
+    [90m308| [39m    [35mconst[39m toolError [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m309| [39m    [35mconst[39m errorGuidance [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m310| [39m    const baseMessage = '[ULTRAWORK #5/50] Mode active. Continue worki…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mIntegration: Continuation message with tool error[2m > [22mcontinuation message is normal when no tool error
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m324:23[22m[39m
+    [90m322| [39m
+    [90m323| [39m    [90m// Simulate continuation message construction[39m
+    [90m324| [39m    [35mconst[39m toolError [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m325| [39m    [35mconst[39m errorGuidance [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m326| [39m    const baseMessage = '[ULTRAWORK #5/50] Mode active. Continue worki…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mIntegration: Continuation message with tool error[2m > [22merror state is cleared after reading
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m350:23[22m[39m
+    [90m348| [39m
+    [90m349| [39m    [90m// Read error and generate message[39m
+    [90m350| [39m    [35mconst[39m toolError [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m351| [39m    [34mexpect[39m(toolError)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m352| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state with retry_count at boundary (exactly 5)
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m375:20[22m[39m
+    [90m373| [39m    }[33m;[39m
+    [90m374| [39m
+    [90m375| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m376| [39m
+    [90m377| [39m    expect(result).toContain('[TOOL ERROR - ALTERNATIVE APPROACH NEEDE…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state with retry_count at boundary (exactly 3)
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m389:20[22m[39m
+    [90m387| [39m    }[33m;[39m
+    [90m388| [39m
+    [90m389| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m390| [39m
+    [90m391| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'[TOOL ERROR - RETRY REQUIRED]'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state with very high retry_count
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m403:20[22m[39m
+    [90m401| [39m    }[33m;[39m
+    [90m402| [39m
+    [90m403| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m404| [39m
+    [90m405| [39m    expect(result).toContain('[TOOL ERROR - ALTERNATIVE APPROACH NEEDE…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state at exact 60 second boundary (not stale)
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m423:20[22m[39m
+    [90m421| [39m    )[33m;[39m
+    [90m422| [39m
+    [90m423| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m([32m'/test'[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m424| [39m
+    [90m425| [39m    [34mexpect[39m(result)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state just past 60 second boundary (stale)
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m443:20[22m[39m
+    [90m441| [39m    )[33m;[39m
+    [90m442| [39m
+    [90m443| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m([32m'/test'[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m444| [39m
+    [90m445| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/26]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m305 passed[39m[22m[90m (306)[39m
+[2m      Tests [22m [1m[31m26 failed[39m[22m[2m | [22m[1m[32m5658 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (5694)[39m
+[2m   Start at [22m 21:41:06
+[2m   Duration [22m 31.61s[2m (transform 58.02s, setup 0ms, import 95.67s, tests 191.47s, environment 89ms)[22m
+

@@ -111,7 +111,7 @@ export class TokenTracker {
     // Try to restore existing session stats before initializing fresh (Bug #4 fix)
     if (!skipRestore) {
       const existing = readState<SessionTokenStats>(
-        "session-token-stats",
+        "ultrawork",
         StateLocation.GLOBAL,
       );
       if (
@@ -195,7 +195,7 @@ export class TokenTracker {
   }
 
   private async saveSessionStats(): Promise<void> {
-    writeState("session-token-stats", this.sessionStats, StateLocation.GLOBAL);
+    writeState("ultrawork", this.sessionStats, StateLocation.GLOBAL);
   }
 
   async loadSessionStats(
@@ -205,7 +205,7 @@ export class TokenTracker {
 
     // Try to load from state
     const result = readState<SessionTokenStats>(
-      "session-token-stats",
+      "ultrawork",
       StateLocation.GLOBAL,
     );
 

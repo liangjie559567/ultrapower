@@ -11,12 +11,12 @@
  */
 
 import { z } from 'zod';
-import type { HookInput } from './bridge.js';
+import type { HookInput } from './bridge-types.js';
 
 // --- Zod schemas for hook input validation ---
 
-/** Schema for the common hook input structure (supports both snake_case and camelCase) */
-const HookInputSchema = z.object({
+/** Base schema fields */
+const baseSchemaFields = {
   // snake_case fields from Claude Code
   tool_name: z.string().optional(),
   tool_input: z.unknown().optional(),
@@ -44,7 +44,31 @@ const HookInputSchema = z.object({
   stopReason: z.string().optional(),
   user_requested: z.boolean().optional(),
   userRequested: z.boolean().optional(),
-}).passthrough();
+
+  // Permission hook fields
+  permission_mode: z.string().optional(),
+  tool_use_id: z.string().optional(),
+  transcript_path: z.string().optional(),
+
+  // Subagent fields
+  agent_id: z.string().optional(),
+  agent_name: z.string().optional(),
+  agent_type: z.string().optional(),
+  parent_session_id: z.string().optional(),
+
+  // Common extra fields
+  input: z.unknown().optional(),
+  output: z.unknown().optional(),
+  result: z.unknown().optional(),
+  error: z.unknown().optional(),
+  status: z.string().optional(),
+};
+
+/** Schema for non-sensitive hooks (allows unknown fields) */
+const HookInputSchema = z.object(baseSchemaFields).passthrough();
+
+/** Strict schema for sensitive hooks (rejects unknown fields) */
+const StrictHookInputSchema = z.object(baseSchemaFields).strict();
 
 /**
  * Raw hook input as received from Claude Code (snake_case fields)
@@ -85,6 +109,20 @@ const SENSITIVE_HOOKS = new Set([
   'setup-maintenance',
   'session-end',
 ]);
+
+/** Strict whitelist: allowed fields per HookType (camelCase, post-normalization) */
+const STRICT_WHITELIST: Record<string, string[]> = {
+  'permission-request': ['sessionId', 'toolName', 'toolInput', 'directory', 'permission_mode', 'tool_use_id', 'transcript_path', 'agent_id'],
+  'setup-init': ['sessionId', 'directory'],
+  'setup-maintenance': ['sessionId', 'directory'],
+  'session-end': ['sessionId', 'directory'],
+};
+
+/** Required keys per HookType (camelCase, post-normalization) */
+const REQUIRED_KEYS: Record<string, string[]> = {
+  'session-end': ['sessionId', 'directory'],
+  'permission-request': ['toolName'],
+};
 
 /** All known camelCase field names the system uses (post-normalization) */
 const KNOWN_FIELDS = new Set([
@@ -152,7 +190,7 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
   // (type checking, format verification) regardless of key casing.
   const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
   if (isAlreadyCamelCase(rawObj) && !isSensitive) {
-    return {
+    const normalized = {
       sessionId: rawObj.sessionId as string | undefined,
       toolName: rawObj.toolName as string | undefined,
       toolInput: rawObj.toolInput,
@@ -163,18 +201,37 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
       parts: rawObj.parts as HookInput['parts'],
       ...filterPassthrough(rawObj, hookType),
     } as HookInput;
+
+    // Validate required keys even on fast path
+    if (hookType && REQUIRED_KEYS[hookType]) {
+      validateRequiredKeys(normalized as Record<string, unknown>, hookType);
+    }
+
+    return normalized;
   }
 
-  // Validate with Zod - use safeParse so malformed input doesn't throw
-  const parsed = HookInputSchema.safeParse(raw);
+  // For sensitive hooks, pre-filter unknown fields before Zod validation
+  let inputToValidate = raw;
+  if (isSensitive) {
+    inputToValidate = preFilterSensitiveInput(raw as Record<string, unknown>, hookType!);
+  }
+
+  // Validate with Zod - use strict schema for sensitive hooks
+  const schema = isSensitive ? StrictHookInputSchema : HookInputSchema;
+  const parsed = schema.safeParse(inputToValidate);
   if (!parsed.success) {
-    // Log validation issues but don't block - fall through to best-effort mapping
-    console.error('[bridge-normalize] Zod validation warning:', parsed.error.issues.map(i => i.message).join(', '));
+    const errorMsg = `[bridge-normalize] Zod validation failed: ${parsed.error.issues.map(i => i.message).join(', ')}`;
+    // Sensitive hooks must fail fast on validation errors
+    if (isSensitive) {
+      throw new Error(`${errorMsg} (hook: ${hookType})`);
+    }
+    // Non-sensitive hooks log warning and continue
+    console.error(errorMsg);
   }
 
-  const input = (parsed.success ? parsed.data : raw) as RawHookInput;
+  const input = (parsed.success ? parsed.data : inputToValidate) as RawHookInput;
 
-  return {
+  const normalized = {
     sessionId: input.session_id ?? input.sessionId,
     toolName: input.tool_name ?? input.toolName,
     toolInput: input.tool_input ?? input.toolInput,
@@ -187,12 +244,63 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
     // Pass through extra fields with sensitivity filtering
     ...filterPassthrough(input, hookType),
   } as HookInput;
+
+  // Validate required keys for sensitive hooks
+  if (hookType && SENSITIVE_HOOKS.has(hookType)) {
+    validateRequiredKeys(normalized as Record<string, unknown>, hookType);
+  }
+
+  return normalized;
+}
+
+/**
+ * Validate required keys for sensitive hooks (post-normalization).
+ * Throws if any required key is missing.
+ */
+function validateRequiredKeys(normalized: Record<string, unknown>, hookType: string): void {
+  const required = REQUIRED_KEYS[hookType];
+  if (!required) return;
+
+  const missing = required.filter(key => !(key in normalized) || normalized[key] === undefined);
+  if (missing.length > 0) {
+    throw new Error(`[bridge-normalize] Missing required keys for ${hookType}: ${missing.join(', ')}`);
+  }
+}
+
+/**
+ * Pre-filter sensitive hook input to remove unknown fields before Zod validation.
+ * This prevents Zod strict mode from throwing on unknown fields.
+ */
+function preFilterSensitiveInput(input: Record<string, unknown>, hookType: string): Record<string, unknown> {
+  const whitelist = STRICT_WHITELIST[hookType] || [];
+  const filtered: Record<string, unknown> = {};
+  const droppedKeys: string[] = [];
+
+  // Include all base schema fields (both snake_case and camelCase)
+  const allowedKeys = new Set([
+    ...Object.keys(baseSchemaFields),
+    ...whitelist,
+  ]);
+
+  for (const [key, value] of Object.entries(input)) {
+    if (allowedKeys.has(key)) {
+      filtered[key] = value;
+    } else {
+      droppedKeys.push(key);
+    }
+  }
+
+  if (droppedKeys.length > 0) {
+    console.warn(`[bridge-normalize] Dropped unknown fields for sensitive hook "${hookType}": ${droppedKeys.join(', ')}`);
+  }
+
+  return filtered;
 }
 
 /**
  * Filter passthrough fields based on hook sensitivity.
  *
- * - Sensitive hooks: only allow KNOWN_FIELDS (drop everything else)
+ * - Sensitive hooks: only allow STRICT_WHITELIST (drop everything else)
  * - Other hooks: pass through unknown fields with a debug warning
  */
 function filterPassthrough(input: Record<string, unknown>, hookType?: string): Record<string, unknown> {
@@ -213,11 +321,14 @@ function filterPassthrough(input: Record<string, unknown>, hookType?: string): R
     if (MAPPED_KEYS.has(key) || value === undefined) continue;
 
     if (isSensitive) {
-      // Strict: only allow known fields
-      if (KNOWN_FIELDS.has(key)) {
+      // Strict: only allow whitelisted fields for this specific hook type
+      const whitelist = STRICT_WHITELIST[hookType!] || [];
+      if (whitelist.includes(key)) {
         extra[key] = value;
+      } else {
+        // Log dropped unknown fields for sensitive hooks
+        console.warn(`[bridge-normalize] Dropped unknown field "${key}" for sensitive hook "${hookType}"`);
       }
-      // Unknown fields silently dropped for sensitive hooks
     } else {
       // Conservative: pass through but warn on truly unknown fields
       extra[key] = value;
@@ -230,4 +341,4 @@ function filterPassthrough(input: Record<string, unknown>, hookType?: string): R
 }
 
 // --- Test helpers (exported for testing only) ---
-export { SENSITIVE_HOOKS, KNOWN_FIELDS, isAlreadyCamelCase, HookInputSchema };
+export { SENSITIVE_HOOKS, KNOWN_FIELDS, STRICT_WHITELIST, REQUIRED_KEYS, isAlreadyCamelCase, HookInputSchema };

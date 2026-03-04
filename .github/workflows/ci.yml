@@ -34,6 +34,9 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Performance Regression Test
+        run: npx tsx scripts/performance-regression.ts
+
       - name: Hooks Coverage Check
         run: npm run test:coverage -- src/hooks
 

@@ -10,21 +10,12 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { getClaudeConfigDir } from '../utils/paths.js';
-import type { WorkerBackend, WorkerCapability } from './types.js';
+import type { WorkerBackend, WorkerCapability, UnifiedTeamMember } from './types.js';
 import { listMcpWorkers } from './team-registration.js';
 import { readHeartbeat, isWorkerAlive } from './heartbeat.js';
 import { getDefaultCapabilities } from './capabilities.js';
 
-export interface UnifiedTeamMember {
-  name: string;
-  agentId: string;
-  backend: WorkerBackend;
-  model: string;
-  capabilities: WorkerCapability[];
-  joinedAt: number;
-  status: 'active' | 'idle' | 'dead' | 'quarantined' | 'unknown';
-  currentTaskId: string | null;
-}
+export type { UnifiedTeamMember };
 
 /**
  * Get all team members from both Claude native teams and MCP workers.

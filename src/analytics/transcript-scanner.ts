@@ -266,6 +266,7 @@ function matchesPattern(path: string, pattern?: string): boolean {
 
   // Convert glob pattern to regex
   const regexPattern = pattern
+    .replace(/[+()[\]{}^$|\\]/g, '\\$&')  // escape RegExp special chars first
     .replace(/\./g, '\\.')
     .replace(/\*/g, '.*')
     .replace(/\?/g, '.');

@@ -7,8 +7,7 @@
  * scoring functions for task-worker matching.
  */
 
-import type { WorkerBackend, WorkerCapability } from './types.js';
-import type { UnifiedTeamMember } from './unified-team.js';
+import type { WorkerBackend, WorkerCapability, UnifiedTeamMember } from './types.js';
 
 /** Default capabilities by worker backend */
 const DEFAULT_CAPABILITIES: Record<WorkerBackend, WorkerCapability[]> = {

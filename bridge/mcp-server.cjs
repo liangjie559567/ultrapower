@@ -2245,8 +2245,8 @@ var require_resolve = __commonJS({
       }
       return count;
     }
-    function getFullPath(resolver, id = "", normalize2) {
-      if (normalize2 !== false)
+    function getFullPath(resolver, id = "", normalize3) {
+      if (normalize3 !== false)
         id = normalizeId(id);
       const p = resolver.parse(id);
       return _getFullPath(resolver, p);
@@ -3236,8 +3236,8 @@ var require_utils = __commonJS({
       }
       return ind;
     }
-    function removeDotSegments(path10) {
-      let input = path10;
+    function removeDotSegments(path12) {
+      let input = path12;
       const output = [];
       let nextSlash = -1;
       let len = 0;
@@ -3436,8 +3436,8 @@ var require_schemes = __commonJS({
         wsComponent.secure = void 0;
       }
       if (wsComponent.resourceName) {
-        const [path10, query] = wsComponent.resourceName.split("?");
-        wsComponent.path = path10 && path10 !== "/" ? path10 : void 0;
+        const [path12, query] = wsComponent.resourceName.split("?");
+        wsComponent.path = path12 && path12 !== "/" ? path12 : void 0;
         wsComponent.query = query;
         wsComponent.resourceName = void 0;
       }
@@ -3586,7 +3586,7 @@ var require_fast_uri = __commonJS({
     "use strict";
     var { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizeComponentEncoding, isIPv4, nonSimpleDomain } = require_utils();
     var { SCHEMES, getSchemeHandler } = require_schemes();
-    function normalize2(uri, options) {
+    function normalize3(uri, options) {
       if (typeof uri === "string") {
         uri = /** @type {T} */
         serialize(parse5(uri, options), options);
@@ -3822,7 +3822,7 @@ var require_fast_uri = __commonJS({
     }
     var fastUri = {
       SCHEMES,
-      normalize: normalize2,
+      normalize: normalize3,
       resolve: resolve5,
       resolveComponent,
       equal,
@@ -6799,12 +6799,12 @@ var require_dist = __commonJS({
         throw new Error(`Unknown format "${name}"`);
       return f;
     };
-    function addFormats(ajv, list, fs8, exportName) {
+    function addFormats(ajv, list, fs10, exportName) {
       var _a;
       var _b;
       (_a = (_b = ajv.opts.code).formats) !== null && _a !== void 0 ? _a : _b.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`;
       for (const f of list)
-        ajv.addFormat(f, fs8[f]);
+        ajv.addFormat(f, fs10[f]);
     }
     module2.exports = exports2 = formatsPlugin;
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -7290,8 +7290,8 @@ function getErrorMap() {
 
 // node_modules/zod/v3/helpers/parseUtil.js
 var makeIssue = (params) => {
-  const { data, path: path10, errorMaps, issueData } = params;
-  const fullPath = [...path10, ...issueData.path || []];
+  const { data, path: path12, errorMaps, issueData } = params;
+  const fullPath = [...path12, ...issueData.path || []];
   const fullIssue = {
     ...issueData,
     path: fullPath
@@ -7407,11 +7407,11 @@ var errorUtil;
 
 // node_modules/zod/v3/types.js
 var ParseInputLazyPath = class {
-  constructor(parent, value, path10, key) {
+  constructor(parent, value, path12, key) {
     this._cachedPath = [];
     this.parent = parent;
     this.data = value;
-    this._path = path10;
+    this._path = path12;
     this._key = key;
   }
   get path() {
@@ -11048,15 +11048,15 @@ function assignProp(target, prop, value) {
     configurable: true
   });
 }
-function getElementAtPath(obj, path10) {
-  if (!path10)
+function getElementAtPath(obj, path12) {
+  if (!path12)
     return obj;
-  return path10.reduce((acc, key) => acc?.[key], obj);
+  return path12.reduce((acc, key) => acc?.[key], obj);
 }
 function promiseAllObject(promisesObj) {
   const keys = Object.keys(promisesObj);
-  const promises = keys.map((key) => promisesObj[key]);
-  return Promise.all(promises).then((results) => {
+  const promises2 = keys.map((key) => promisesObj[key]);
+  return Promise.all(promises2).then((results) => {
     const resolvedObj = {};
     for (let i = 0; i < keys.length; i++) {
       resolvedObj[keys[i]] = results[i];
@@ -11371,11 +11371,11 @@ function aborted(x, startIndex = 0) {
   }
   return false;
 }
-function prefixIssues(path10, issues) {
+function prefixIssues(path12, issues) {
   return issues.map((iss) => {
     var _a;
     (_a = iss).path ?? (_a.path = []);
-    iss.path.unshift(path10);
+    iss.path.unshift(path12);
     return iss;
   });
 }
@@ -18548,11 +18548,12 @@ function formatRange(range) {
 function formatLocation(location) {
   const uri = location.uri || location.targetUri;
   if (!uri) return "Unknown location";
-  const path10 = uriToPath(uri);
-  const locationRange = location.range || location.targetRange || location.targetSelectionRange;
-  if (!locationRange) return path10;
+  const path12 = uriToPath(uri);
+  const loc = location;
+  const locationRange = loc.range || loc.targetRange || loc.targetSelectionRange;
+  if (!locationRange) return path12;
   const range = formatRange(locationRange);
-  return `${path10}:${range}`;
+  return `${path12}:${range}`;
 }
 function formatHover(hover) {
   if (!hover) return "No hover information available";
@@ -18638,8 +18639,8 @@ function formatWorkspaceEdit(edit) {
   const lines = [];
   if (edit.changes) {
     for (const [uri, changes] of Object.entries(edit.changes)) {
-      const path10 = uriToPath(uri);
-      lines.push(`File: ${path10}`);
+      const path12 = uriToPath(uri);
+      lines.push(`File: ${path12}`);
       for (const change of changes) {
         const range = formatRange(change.range);
         const preview = change.newText.length > 50 ? change.newText.slice(0, 50) + "..." : change.newText;
@@ -18649,8 +18650,8 @@ function formatWorkspaceEdit(edit) {
   }
   if (edit.documentChanges) {
     for (const docChange of edit.documentChanges) {
-      const path10 = uriToPath(docChange.textDocument.uri);
-      lines.push(`File: ${path10}`);
+      const path12 = uriToPath(docChange.textDocument.uri);
+      lines.push(`File: ${path12}`);
       for (const change of docChange.edits) {
         const range = formatRange(change.range);
         const preview = change.newText.length > 50 ? change.newText.slice(0, 50) + "..." : change.newText;
@@ -18738,6 +18739,11 @@ function parseTscOutput(output) {
 // src/tools/diagnostics/lsp-aggregator.ts
 var import_fs3 = require("fs");
 var import_path4 = require("path");
+
+// src/tools/diagnostics/constants.ts
+var LSP_DIAGNOSTICS_WAIT_MS = 300;
+
+// src/tools/diagnostics/lsp-aggregator.ts
 function findFiles(directory, extensions, ignoreDirs = []) {
   const results = [];
   const ignoreDirSet = new Set(ignoreDirs);
@@ -18803,7 +18809,6 @@ async function runLspAggregatedDiagnostics(directory, extensions = [".ts", ".tsx
 }
 
 // src/tools/diagnostics/index.ts
-var LSP_DIAGNOSTICS_WAIT_MS = 300;
 async function runDirectoryDiagnostics(directory, strategy = "auto") {
   const tsconfigPath = (0, import_path5.join)(directory, "tsconfig.json");
   const hasTsconfig = (0, import_fs4.existsSync)(tsconfigPath);
@@ -19440,7 +19445,7 @@ Note: Patterns must be valid AST nodes for the language.`,
     const {
       pattern,
       language,
-      path: path10 = ".",
+      path: path12 = ".",
       context = 2,
       maxResults = 20
     } = args;
@@ -19457,13 +19462,13 @@ Error: ${sgLoadError}`
           ]
         };
       }
-      const files = getFilesForLanguage(path10, language);
+      const files = getFilesForLanguage(path12, language);
       if (files.length === 0) {
         return {
           content: [
             {
               type: "text",
-              text: `No ${language} files found in ${path10}`
+              text: `No ${language} files found in ${path12}`
             }
           ]
         };
@@ -19503,7 +19508,7 @@ Error: ${sgLoadError}`
               type: "text",
               text: `No matches found for pattern: ${pattern}
 
-Searched ${files.length} ${language} file(s) in ${path10}
+Searched ${files.length} ${language} file(s) in ${path12}
 
 Tip: Ensure the pattern is a valid AST node. For example:
 - Use "function $NAME" not just "$NAME"
@@ -19563,7 +19568,7 @@ IMPORTANT: dryRun=true (default) only previews changes. Set dryRun=false to appl
     dryRun: external_exports.boolean().optional().describe("Preview only, don't apply changes (default: true)")
   },
   handler: async (args) => {
-    const { pattern, replacement, language, path: path10 = ".", dryRun = true } = args;
+    const { pattern, replacement, language, path: path12 = ".", dryRun = true } = args;
     try {
       const sg = await getSgModule();
       if (!sg) {
@@ -19577,13 +19582,13 @@ Error: ${sgLoadError}`
           ]
         };
       }
-      const files = getFilesForLanguage(path10, language);
+      const files = getFilesForLanguage(path12, language);
       if (files.length === 0) {
         return {
           content: [
             {
               type: "text",
-              text: `No ${language} files found in ${path10}`
+              text: `No ${language} files found in ${path12}`
             }
           ]
         };
@@ -19651,7 +19656,7 @@ Error: ${sgLoadError}`
               type: "text",
               text: `No matches found for pattern: ${pattern}
 
-Searched ${files.length} ${language} file(s) in ${path10}`
+Searched ${files.length} ${language} file(s) in ${path12}`
             }
           ]
         };
@@ -20566,6 +20571,9 @@ async function spawnBridgeServer(sessionId, projectDir) {
     env: { ...process.env, PYTHONUNBUFFERED: "1" },
     detached: true
   });
+  if (!proc.pid) {
+    throw new Error("Failed to spawn bridge server: no PID assigned");
+  }
   proc.unref();
   const MAX_STDERR_CHARS = 64 * 1024;
   let stderrBuffer = "";
@@ -21513,6 +21521,84 @@ function getActiveSessionsForMode(mode, cwd) {
   return sessionIds.filter((sid) => isJsonModeActive(cwd, mode, sid));
 }
 
+// src/audit/logger.ts
+var import_crypto2 = require("crypto");
+var fs5 = __toESM(require("fs"), 1);
+var path6 = __toESM(require("path"), 1);
+var AuditLogger = class {
+  logPath;
+  secretKey;
+  maxSize = 10 * 1024 * 1024;
+  constructor(logDir) {
+    this.logPath = path6.join(logDir, "audit.log");
+    this.secretKey = this.deriveSecretKey();
+    this.ensureLogDir(logDir);
+  }
+  deriveSecretKey() {
+    const seed = process.env.OMC_AUDIT_SECRET || "default-seed";
+    return Buffer.from((0, import_crypto2.createHmac)("sha256", "omc-audit").update(seed).digest("hex"));
+  }
+  sign(entry) {
+    const payload = JSON.stringify(entry);
+    return (0, import_crypto2.createHmac)("sha256", this.secretKey).update(payload).digest("hex");
+  }
+  async log(entry) {
+    const fullEntry = {
+      ...entry,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    fullEntry.signature = this.sign(fullEntry);
+    await this.appendLog(JSON.stringify(fullEntry) + "\n");
+    await this.rotateIfNeeded();
+  }
+  async appendLog(line) {
+    await fs5.promises.appendFile(this.logPath, line, "utf8");
+  }
+  async rotateIfNeeded() {
+    try {
+      const stats = await fs5.promises.stat(this.logPath);
+      if (stats.size >= this.maxSize) {
+        const rotatedPath = `${this.logPath}.${Date.now()}`;
+        await fs5.promises.rename(this.logPath, rotatedPath);
+      }
+    } catch (err) {
+      if (err.code !== "ENOENT") throw err;
+    }
+  }
+  async verify() {
+    try {
+      const content = await fs5.promises.readFile(this.logPath, "utf8");
+      const lines = content.split("\n").filter(Boolean);
+      let valid = 0, invalid = 0;
+      for (const line of lines) {
+        const entry = JSON.parse(line);
+        const { signature, ...payload } = entry;
+        const expectedSig = this.sign(payload);
+        if (signature === expectedSig) {
+          valid++;
+        } else {
+          invalid++;
+          console.error(`[audit] Invalid signature at ${entry.timestamp}`);
+        }
+      }
+      return { valid, invalid };
+    } catch (err) {
+      if (err.code === "ENOENT") return { valid: 0, invalid: 0 };
+      throw err;
+    }
+  }
+  ensureLogDir(dir) {
+    if (!fs5.existsSync(dir)) {
+      fs5.mkdirSync(dir, { recursive: true });
+    }
+  }
+};
+var auditLogger = new AuditLogger(".omc/logs");
+
+// src/lib/path-validator.ts
+var path7 = __toESM(require("path"), 1);
+var fs6 = __toESM(require("fs"), 1);
+
 // src/lib/validateMode.ts
 var VALID_MODES = [
   "autopilot",
@@ -21531,6 +21617,27 @@ function assertValidMode(mode) {
   if (!validateMode(mode)) {
     const raw = typeof mode === "string" ? mode : String(mode);
     const display = raw.length > 50 ? `${raw.slice(0, 50)}...(truncated)` : raw;
+    if (typeof mode === "string" && (mode.includes("..") || mode.includes("/") || mode.includes("\\") || mode.startsWith(".") || /^[a-zA-Z]:/.test(mode))) {
+      auditLogger.log({
+        actor: "system",
+        action: "path_validation_failed",
+        resource: display,
+        result: "failure",
+        metadata: { reason: "path_traversal_attempt" }
+      }).catch(() => {
+      });
+      throw new Error(
+        `Path traversal attempt detected: "${display}". Valid modes are: ${VALID_MODES.join(", ")}`
+      );
+    }
+    auditLogger.log({
+      actor: "system",
+      action: "path_validation_failed",
+      resource: display,
+      result: "failure",
+      metadata: { reason: "invalid_mode" }
+    }).catch(() => {
+    });
     throw new Error(
       `Invalid mode: "${display}". Valid modes are: ${VALID_MODES.join(", ")}`
     );

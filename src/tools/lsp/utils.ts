@@ -81,8 +81,9 @@ export function formatLocation(location: Location): string {
   const uri = location.uri || (location as { targetUri?: string }).targetUri;
   if (!uri) return 'Unknown location';
   const path = uriToPath(uri);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- LSP Location subtypes have optional fields not in base type
-  const locationRange = location.range || (location as any).targetRange || (location as any).targetSelectionRange;
+  type MaybeLocationLink = { range?: Range; targetRange?: Range; targetSelectionRange?: Range };
+  const loc = location as MaybeLocationLink;
+  const locationRange = loc.range || loc.targetRange || loc.targetSelectionRange;
   if (!locationRange) return path;
   const range = formatRange(locationRange);
   return `${path}:${range}`;

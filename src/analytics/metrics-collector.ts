@@ -38,7 +38,14 @@ export class MetricsCollector {
       const content = await fs.readFile(logPath, 'utf-8');
       const lines = content.trim().split('\n').filter(l => l.length > 0);
 
-      let events: MetricEvent[] = lines.map(line => JSON.parse(line));
+      let events: MetricEvent[] = [];
+      for (const line of lines) {
+        try {
+          events.push(JSON.parse(line));
+        } catch {
+          continue; // skip corrupted line
+        }
+      }
 
       // Apply filters
       if (query.type) {

@@ -198,7 +198,7 @@ export async function verifyProcessIdentity(meta: BridgeMeta): Promise<boolean> 
 /**
  * Check if a path points to a Unix socket.
  */
-function isSocket(socketPath: string): boolean {
+export function isSocket(socketPath: string): boolean {
   try {
     const stat = fs.lstatSync(socketPath);
     return stat.isSocket();
@@ -325,6 +325,10 @@ export async function spawnBridgeServer(
     env: { ...process.env, PYTHONUNBUFFERED: '1' },
     detached: true,
   });
+
+  if (!proc.pid) {
+    throw new Error('Failed to spawn bridge server: no PID assigned');
+  }
 
   proc.unref();
 

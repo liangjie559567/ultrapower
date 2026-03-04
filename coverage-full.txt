@@ -1,0 +1,1983 @@
+
+> @liangjie559567/ultrapower@5.5.12 test
+> vitest --coverage --run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/ljyih/Desktop/ultrapower[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2minitJobDb[2m > [22m[2mshould initialize the database successfully
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2minitJobDb[2m > [22m[2mshould create the jobs.db file
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[task-file-ops] WARN: could not acquire lock for task 1, updating without lock
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2minitJobDb[2m > [22m[2mshould be idempotent
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcloseJobDb[2m > [22m[2mshould close the database
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2misJobDbInitialized[2m > [22m[2mshould return true after init
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+ [32m✓[39m src/hooks/persistent-mode/__tests__/error-handling.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 444[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2misJobDbInitialized[2m > [22m[2mshould return false after close
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobDb[2m > [22m[2mshould return database instance when initialized
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobDb[2m > [22m[2mshould return database instance when initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould insert a new job
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould insert a new job
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+ [31m❯[39m src/hooks/persistent-mode/__tests__/tool-error.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m26 failed[39m[2m)[22m[32m 29[2mms[22m[39m
+[31m     [31m×[31m returns valid ToolErrorState when file exists with recent timestamp[39m[32m 8[2mms[22m[39m
+[31m     [31m×[31m returns null when file does not exist[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m returns null when error is stale (>60 seconds old)[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m returns null when file contains malformed JSON[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m handles missing timestamp field gracefully[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles readFileSync throwing error[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m removes state file when it exists[39m[32m 2[2mms[22m[39m
+[31m     [31m×[31m does not throw when file does not exist[39m[32m 6[2mms[22m[39m
+[31m     [31m×[31m handles permission errors gracefully[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m handles unlinkSync throwing ENOENT error[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m returns empty string for null input[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m returns retry message with error context for normal errors (retry_count < 5)[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m returns alternative approach message when retry_count >= 5[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m includes tool name and error in message[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m shows retry message after 3+ failures[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m shows retry message for less than 3 failures[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles missing tool_name gracefully[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles missing error field gracefully[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m continuation message includes error context when tool error present[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m continuation message is normal when no tool error[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m error state is cleared after reading[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles error state with retry_count at boundary (exactly 5)[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles error state with retry_count at boundary (exactly 3)[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles error state with very high retry_count[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles error state at exact 60 second boundary (not stale)[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m handles error state just past 60 second boundary (stale)[39m[32m 0[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould update an existing job
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould update an existing job
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould return false when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with all optional fields
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/team/__tests__/task-file-ops.test.ts [2m([22m[2m45 tests[22m[2m)[22m[33m 714[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with all optional fields
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/session-end/__tests__/session-end-bridge-cleanup.test.ts[2m > [22m[2mprocessSessionEnd python bridge cleanup[2m > [22m[2mpasses extracted python_repl sessions to cleanupBridgeSessions
+[22m[39m[worktree] non-git directory provided, falling back to process root {
+  directory: [32m'C:\\Users\\ljyih\\AppData\\Local\\Temp\\omc-session-end-bridge-gVxZkS'[39m
+}
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with undefined optional fields
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with undefined optional fields
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/session-end/__tests__/nexus-integration.test.ts[2m > [22m[2mprocessSessionEnd nexus integration[2m > [22m[2mprocessSessionEnd completes without throwing when nexus enabled
+[22m[39m[worktree] non-git directory provided, falling back to process root {
+  directory: [32m'C:\\Users\\ljyih\\AppData\\Local\\Temp\\nexus-int-uMgBUx'[39m
+}
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return a job by provider and jobId
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/hooks/autopilot/__tests__/cancel.test.ts [2m([22m[2m55 tests[22m[2m)[22m[33m 652[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return a job by provider and jobId
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return null for non-existent job
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return null for non-existent job
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/session-end/__tests__/nexus-integration.test.ts[2m > [22m[2mprocessSessionEnd nexus integration[2m > [22m[2mprocessSessionEnd completes without throwing when nexus enabled
+[22m[39m[worktree] non-git directory provided, falling back to process root {
+  directory: [32m'C:\\Users\\ljyih\\AppData\\Local\\Temp\\nexus-int-uMgBUx'[39m
+}
+
+ [32m✓[39m src/hooks/project-memory/__tests__/integration.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 534[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould handle both providers independently
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/session-end/__tests__/session-end-bridge-cleanup.test.ts[2m > [22m[2mprocessSessionEnd python bridge cleanup[2m > [22m[2mpasses extracted python_repl sessions to cleanupBridgeSessions
+[22m[39m[worktree] non-git directory provided, falling back to process root {
+  directory: [32m'C:\\Users\\ljyih\\AppData\\Local\\Temp\\omc-session-end-bridge-gVxZkS'[39m
+}
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould handle both providers independently
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleCheckJobStatus - SQLite path[2m > [22m[2mreturns job data from SQLite when no JSON file exists
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould correctly map boolean fields
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould correctly map boolean fields
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleCheckJobStatus - SQLite path[2m > [22m[2mreturns job data from SQLite when no JSON file exists
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return null when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleCheckJobStatus - SQLite path[2m > [22m[2mreturns error when job not found in SQLite or JSON
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleCheckJobStatus - SQLite path[2m > [22m[2mreturns error when job not found in SQLite or JSON
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by status for all providers
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by status for all providers
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleCheckJobStatus - SQLite path[2m > [22m[2mshows fallback metadata when present
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by provider and status
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleCheckJobStatus - SQLite path[2m > [22m[2mshows fallback metadata when present
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by provider and status
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould return empty array when no matches
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould return empty array when no matches
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists active jobs from SQLite
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists active jobs from SQLite
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould return empty array when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists completed jobs from SQLite
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists completed jobs from SQLite
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return spawned and running jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/hooks/session-end/__tests__/session-end-bridge-cleanup.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1263[2mms[22m[39m
+     [33m[2m✓[22m[39m passes extracted python_repl sessions to cleanupBridgeSessions [33m 1260[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return spawned and running jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists failed and timeout jobs under failed filter
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould filter by provider
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists failed and timeout jobs under failed filter
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould filter by provider
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "ralph" and return a valid HookOutput
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return empty array when no active jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/__tests__/notepad.test.ts [2m([22m[2m40 tests[22m[2m)[22m[33m 1261[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists all jobs with deduplication
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return empty array when no active jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mlists all jobs with deduplication
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return empty array when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mrespects limit parameter
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mrespects limit parameter
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould include timeout status as not active
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould include timeout status as not active
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mfilters by provider
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould return jobs within time window
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleListJobs - SQLite path[2m > [22m[2mfilters by provider
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould return jobs within time window
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould filter by provider
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mkills a running job found only in SQLite
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mkills a running job found only in SQLite
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould filter by provider
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mkills a running job found only in SQLite
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+ [32m✓[39m src/lib/__tests__/worktree-paths.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 1526[2mms[22m[39m
+       [33m[2m✓[22m[39m should reject a workingDirectory that resolves to a different git root [33m 402[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould use default time window of 1 hour
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "persistent-mode" and return a valid HookOutput
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould use default time window of 1 hour
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mhandles ESRCH (process already exited) via SQLite path
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mhandles ESRCH (process already exited) via SQLite path
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould return empty array when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mhandles ESRCH (process already exited) via SQLite path
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mdoes NOT update DB status on non-ESRCH kill errors
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mdoes NOT update DB status on non-ESRCH kill errors
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/team/__tests__/edge-cases.test.ts [2m([22m[2m67 tests[22m[2m)[22m[33m 1253[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update specific fields
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mdoes NOT update DB status on non-ESRCH kill errors
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update specific fields
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould return true even if no fields to update
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould return true even if no fields to update
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mrejects killing a terminal-state job in SQLite
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mrejects killing a terminal-state job in SQLite
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update pid field
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update pid field
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mrejects killing a job with no valid PID in SQLite
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mhandleKillJob - SQLite fallback path[2m > [22m[2mrejects killing a job with no valid PID in SQLite
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update error field
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update error field
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update fallback fields
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mJSON fallback when SQLite not initialized[2m > [22m[2mreturns not found when both SQLite and JSON are unavailable
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update fallback fields
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update killedByUser field
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update killedByUser field
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-management-sqlite.test.ts[2m > [22m[2mjob-management SQLite integration[2m > [22m[2mJSON fallback when SQLite not initialized[2m > [22m[2mhandleListJobs returns empty when no source available
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update slug, model, and agentRole fields
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update slug, model, and agentRole fields
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+ [32m✓[39m src/hooks/autopilot/__tests__/validation.test.ts [2m([22m[2m47 tests[22m[2m)[22m[33m 512[2mms[22m[39m
+ [32m✓[39m src/__tests__/job-management-sqlite.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 613[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould return false when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "session-start" and return a valid HookOutput
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould delete a job
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould delete a job
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould succeed even if job does not exist
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould succeed even if job does not exist
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould only delete the specified provider job
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould only delete the specified provider job
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould return false when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import valid status JSON files
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import valid status JSON files
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "session-end" and return a valid HookOutput
+[22m[39m[hook-bridge] Error in session-end: TypeError: The "path" argument must be of type string. Received undefined
+[90m    at Proxy.join (node:path:513:7)[39m
+    at getSessionStartTime (C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/index.ts:102:25)
+    at recordSessionMetrics (C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/index.ts:157:21)
+    at processSessionEnd (C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/index.ts:421:19)
+    at handleSessionEnd (C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/index.ts:522:10)
+    at processHook (C:/Users/ljyih/Desktop/ultrapower/src/hooks/bridge.ts:1111:22)
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/__tests__/bridge-routing.test.ts:77:24
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:20 {
+  code: [32m'ERR_INVALID_ARG_TYPE'[39m
+}
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip malformed files
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip malformed files
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould return zero counts for empty directory
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould return zero counts for empty directory
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import multiple files in a transaction
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import multiple files in a transaction
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip files missing required fields
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/__tests__/analytics/transcript-parser.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 480[2mms[22m[39m
+       [33m[2m✓[22m[39m streams large files efficiently without loading all into memory [33m 389[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip files missing required fields
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould handle non-existent directory gracefully
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "pre-tool-use" and return a valid HookOutput
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould handle non-existent directory gracefully
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould return zero counts when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove old terminal jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove old terminal jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+ [32m✓[39m src/hooks/project-memory/__tests__/detector.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 455[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould not remove active jobs regardless of age
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould not remove active jobs regardless of age
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove timeout status jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "post-tool-use" and return a valid HookOutput
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove timeout status jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould use default max age of 24 hours
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould use default max age of 24 hours
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "autopilot" and return a valid HookOutput
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould return 0 when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould return 0 when no jobs to clean
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould return 0 when no jobs to clean
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return correct counts
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/__tests__/mnemosyne/loader.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 424[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return correct counts
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return all zeros for empty db
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return all zeros for empty db
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould count both providers together
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould count both providers together
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+ [32m✓[39m src/tools/diagnostics/__tests__/lsp-aggregator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1884[2mms[22m[39m
+       [33m[2m✓[22m[39m finds and checks TypeScript files [33m 314[2mms[22m[39m
+       [33m[2m✓[22m[39m aggregates diagnostics from multiple files [33m 634[2mms[22m[39m
+       [33m[2m✓[22m[39m skips ignored directories [33m 316[2mms[22m[39m
+       [33m[2m✓[22m[39m continues on LSP client errors [33m 303[2mms[22m[39m
+       [33m[2m✓[22m[39m filters files by extensions [33m 309[2mms[22m[39m
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return null when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "pre-compact" and return a valid HookOutput
+[22m[39m[hook-bridge] Error in pre-compact: TypeError: The "path" argument must be of type string. Received undefined
+[90m    at join (node:path:513:7)[39m
+    at saveModeSummary (C:/Users/ljyih/Desktop/ultrapower/src/hooks/pre-compact/index.ts:170:20)
+    at createCompactCheckpoint (C:/Users/ljyih/Desktop/ultrapower/src/hooks/pre-compact/index.ts:363:29)
+    at doProcessPreCompact (C:/Users/ljyih/Desktop/ultrapower/src/hooks/pre-compact/index.ts:517:28)
+    at processPreCompact (C:/Users/ljyih/Desktop/ultrapower/src/hooks/pre-compact/index.ts:587:29)
+    at processHook (C:/Users/ljyih/Desktop/ultrapower/src/hooks/bridge.ts:1172:22)
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/__tests__/bridge-routing.test.ts:77:24
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:20 {
+  code: [32m'ERR_INVALID_ARG_TYPE'[39m
+}
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould return empty string when no jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould return empty string when no jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include active jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include active jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include recent completed jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include recent completed jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include job stats
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include job stats
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show elapsed time for active jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show elapsed time for active jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show fallback information
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show fallback information
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mwrites initial heartbeat and exits on shutdown signal
+[22m[39m2026-03-04T13:43:12.152Z [bridge] w1@test-team starting (codex)
+2026-03-04T13:43:12.154Z [bridge] Shutdown signal received: test
+2026-03-04T13:43:12.154Z [bridge] Shutdown complete. Goodbye.
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2msends idle outbox when no tasks available
+[22m[39m2026-03-04T13:43:12.155Z [bridge] w1@test-team starting (codex)
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show error messages
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show error messages
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould truncate long error messages
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould truncate long error messages
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould limit recent jobs to 10
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould limit recent jobs to 10
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2msends idle outbox when no tasks available
+[22m[39m2026-03-04T13:43:12.257Z [bridge] Shutdown signal received: test
+2026-03-04T13:43:12.257Z [bridge] Shutdown complete. Goodbye.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould only show recent jobs from last hour
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
+[22m[39m2026-03-04T13:43:12.258Z [bridge] w1@test-team starting (codex)
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
+[22m[39m2026-03-04T13:43:12.259Z [bridge] Executing task task-99: Do work
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
+[22m[39m2026-03-04T13:43:12.259Z [bridge] Task task-99 completed
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould only show recent jobs from last hour
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show both codex and gemini jobs
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show both codex and gemini jobs
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+[90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould return empty string when db is not initialized
+[22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+
+ [32m✓[39m src/__tests__/job-state-db.test.ts [2m([22m[2m74 tests[22m[2m)[22m[33m 2518[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle keyword-detector with a keyword prompt
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
+[22m[39m2026-03-04T13:43:12.366Z [bridge] Shutdown signal received: done
+2026-03-04T13:43:12.366Z [bridge] Shutdown complete. Goodbye.
+
+ [32m✓[39m src/__tests__/mnemosyne/finder.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 339[2mms[22m[39m
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
+[22m[39m2026-03-04T13:43:12.371Z [bridge] w1@test-team starting (codex)
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
+[22m[39m2026-03-04T13:43:12.373Z [bridge] Executing task task-fail: Test task
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
+[22m[39m2026-03-04T13:43:12.373Z [bridge] Task task-fail failed (attempt 1): CLI exited with code 1: CLI crashed
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle pre-tool-use with Bash tool input
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
+[22m[39m2026-03-04T13:43:12.473Z [bridge] Shutdown signal received: done
+2026-03-04T13:43:12.473Z [bridge] Shutdown complete. Goodbye.
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
+[22m[39m2026-03-04T13:43:12.474Z [bridge] w1@test-team starting (codex)
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
+[22m[39m2026-03-04T13:43:12.475Z [bridge] Executing task task-perm: Test task
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
+[22m[39m2026-03-04T13:43:12.475Z [bridge] Task task-perm permanently failed after 5 attempts
+
+ [32m✓[39m src/team/__tests__/bridge-integration.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 355[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould complete successfully for a single call
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle post-tool-use with tool output
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould serialize concurrent calls for the same directory
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
+[22m[39m2026-03-04T13:43:12.581Z [bridge] Shutdown signal received: done
+2026-03-04T13:43:12.581Z [bridge] Shutdown complete. Goodbye.
+
+ [32m✓[39m src/__tests__/consensus-execution-handoff.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 286[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/mcp-team-bridge.test.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 476[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould only create one checkpoint file per coalesced batch
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mcalls enforcement before HUD tracking
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-project'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould not report in-progress after completion
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mblocks propagated from enforcement
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-project'[39m }
+
+[90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mwarnings propagated from enforcement
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-project'[39m }
+
+[90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mTask tool tracking still works when enforcement passes
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-project'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould allow sequential compactions for the same directory
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould allow sequential compactions for the same directory
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould handle concurrent calls for different directories independently
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/__tests__/delegation-enforcement-levels.test.ts [2m([22m[2m63 tests[22m[2m)[22m[33m 409[2mms[22m[39m
+       [33m[2m✓[22m[39m calls enforcement before HUD tracking [33m 340[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould handle concurrent calls for different directories independently
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/index.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 412[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/compaction-concurrency.test.ts[2m > [22m[2mprocessPreCompact - Compaction Mutex (issue #453)[2m > [22m[2mshould propagate rejection to all coalesced callers and clear mutex
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/hooks/recovery/__tests__/storage.test.ts [2m([22m[2m33 tests[22m[2m)[22m[33m 768[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/compaction-concurrency.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 324[2mms[22m[39m
+[90mstderr[2m | src/__tests__/hooks.test.ts[2m > [22m[2mMutual Exclusion - UltraQA and Ralph[2m > [22m[2mRalph mutual exclusion[2m > [22m[2mshould fail to start Ralph when UltraQA is active
+[22m[39mCannot start Ralph Loop while UltraQA is active. Cancel UltraQA first with /ultrapower:cancel.
+
+ [32m✓[39m src/hooks/ultrawork/session-isolation.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 352[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/learner/bridge.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 664[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle session-start and return continue:true
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+ [32m✓[39m src/__tests__/hooks.test.ts [2m([22m[2m141 tests[22m[2m)[22m[33m 1895[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2minput normalization[2m > [22m[2mshould normalize snake_case tool_name to camelCase toolName
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2minput normalization[2m > [22m[2mshould normalize tool_response to toolOutput
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2minput normalization[2m > [22m[2mshould handle already-camelCase input without breaking
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-routing'[39m }
+
+[90mstderr[2m | src/__tests__/delegation-enforcer-integration.test.ts[2m > [22m[2mdelegation-enforcer integration[2m > [22m[2mpre-tool-use hook with Task calls[2m > [22m[2mlogs warning when OMC_DEBUG=true
+[22m[39m[OMC] Auto-injecting model: sonnet for executor
+
+ [32m✓[39m src/__tests__/delegation-enforcer-integration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/session-registry.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 3584[2mms[22m[39m
+       [33m[2m✓[22m[39m does not drop writes under contention (eventually appends) [33m 414[2mms[22m[39m
+       [33m[2m✓[22m[39m retries across lock-timeout windows and eventually appends [33m 2388[2mms[22m[39m
+       [33m[2m✓[22m[39m does not reap stale lock when owner pid is still alive [33m 542[2mms[22m[39m
+[90mstderr[2m | src/__tests__/delegation-enforcer.test.ts[2m > [22m[2mdelegation-enforcer[2m > [22m[2mprocessPreToolUse[2m > [22m[2mlogs warning only when OMC_DEBUG=true and model injected
+[22m[39m[OMC] Auto-injecting model: sonnet for executor
+
+ [32m✓[39m src/team/__tests__/summary-report.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/state-tools.test.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 320[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge-routing.test.ts [2m([22m[2m60 tests[22m[2m)[22m[33m 2396[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/job-state-db-deprecation.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 374[2mms[22m[39m
+ [32m✓[39m src/__tests__/tools/skills-tools.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 253[2mms[22m[39m
+ [32m✓[39m src/__tests__/delegation-enforcer.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 390[2mms[22m[39m
+ [32m✓[39m src/hooks/persistent-mode/__tests__/ralph-max-iteration.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 258[2mms[22m[39m
+ [32m✓[39m src/hooks/mode-registry/__tests__/session-isolation.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 235[2mms[22m[39m
+ [32m✓[39m src/__tests__/tools/trace-tools.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 289[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/lsp-tools.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 334[2mms[22m[39m
+       [33m[2m✓[22m[39m returns diagnostics when found [33m 315[2mms[22m[39m
+ [32m✓[39m src/__tests__/agent-registry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 299[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/inbox-outbox.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 384[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/audit-log.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/queue-archiver.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 220[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/transitions.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 450[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/transcript-scanner.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 227[2mms[22m[39m
+[90mstderr[2m | src/hooks/ralph/__tests__/loop.test.ts[2m > [22m[2mRalph Loop[2m > [22m[2mHook Interface[2m > [22m[2mprevents start when UltraQA active
+[22m[39mCannot start Ralph Loop while UltraQA is active. Cancel UltraQA first with /ultrapower:cancel.
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时 archived=1，kept=10
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时，最旧的块（2026-01-01）出现在归档文件中
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时，最新的 10 块保留在主文件中，最旧块不在主文件
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstderr[2m | src/hooks/ralph/__tests__/loop.test.ts[2m > [22m[2mRalph Loop[2m > [22m[2mError Handling[2m > [22m[2mhandles corrupted state file gracefully
+[22m[39m[ralph] Failed to read state file: SyntaxError: Unexpected token 'i', "invalid json" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at readRalphState (C:/Users/ljyih/Desktop/ultrapower/src/hooks/ralph/loop.ts:174:17)
+    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/ralph/__tests__/loop.test.ts:316:14
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:145:11
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:26
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
+    at Traces.$ [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m15 条时 archived=5，kept=10，主文件只含 10 条 ## 反思 块
+[22m[39m[归档] reflection_log: 已移动 5 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m两次归档调用均追加到归档文件
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/hooks/ralph/__tests__/loop.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/atomic-write.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 210[2mms[22m[39m
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m两次归档调用均追加到归档文件
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档文件超过 5000 行时 result.warning 存在
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档完成后锁已释放，可立即再次调用
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档完成后锁已释放，可立即再次调用
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/hooks/learner/__tests__/reflection-archiver.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 184[2mms[22m[39m
+ [32m✓[39m src/__tests__/skills.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 282[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/index-manager-filter.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 116[2mms[22m[39m
+ [32m✓[39m src/hooks/project-memory/__tests__/learner.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/outbox-reader.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 135[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/summary.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+ [32m✓[39m src/__tests__/directory-context-injector.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 80[2mms[22m[39m
+ [32m✓[39m src/__tests__/ralph-progress.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 274[2mms[22m[39m
+ [32m✓[39m src/hooks/guards/__tests__/post-tool.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 302[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/backfill-engine.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/windows-platform.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 115[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/gemini-yolo-env.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/heartbeat.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/worker-health.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 117[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/nexus-integration.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 5944[2mms[22m[39m
+     [33m[2m✓[22m[39m processSessionEnd completes without throwing when nexus enabled [33m 5942[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/codex-reasoning-effort.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 198[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mTask tool with run_in_background=true[2m > [22m[2mshould allow background Task when under limit
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mTask tool with run_in_background=true[2m > [22m[2mshould block background Task when at limit
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mTask tool with run_in_background=true[2m > [22m[2mshould block background Task when over limit
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/session-replay.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mTask tool with run_in_background=true[2m > [22m[2mshould allow foreground Task (no run_in_background)
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mTask tool with run_in_background=true[2m > [22m[2mshould allow foreground Task when run_in_background=false
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mBash tool with run_in_background=true[2m > [22m[2mshould block background Bash when at limit
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mBash tool with run_in_background=true[2m > [22m[2mshould allow foreground Bash even when at limit
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mconfigurable limits[2m > [22m[2mshould respect custom maxBackgroundTasks from config
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mconfigurable limits[2m > [22m[2mshould allow up to limit - 1 tasks
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mconfigurable limits[2m > [22m[2mshould default to 5 when config has no maxBackgroundTasks
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+ [32m✓[39m src/team/__tests__/worker-restart.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mnon-background tools unaffected[2m > [22m[2mshould not block Read tool
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+ [32m✓[39m src/team/__tests__/task-router.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 229[2mms[22m[39m
+[90mstderr[2m | src/hooks/ultrawork/__tests__/index.test.ts[2m > [22m[2multrawork state management[2m > [22m[2merror handling[2m > [22m[2mshould return null for corrupted state file
+[22m[39m[ultrawork] Failed to read session state file: SyntaxError: Unexpected token 'i', "invalid json{{{" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at readUltraworkState (C:/Users/ljyih/Desktop/ultrapower/src/hooks/ultrawork/index.ts:84:42)
+    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/ultrawork/__tests__/index.test.ts:76:21
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:145:11
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:26
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
+    at Traces.$ [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+
+[90mstderr[2m | src/hooks/__tests__/background-process-guard.test.ts[2m > [22m[2mBackground Process Guard (issue #302)[2m > [22m[2mnon-background tools unaffected[2m > [22m[2mshould not block Write tool
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test'[39m }
+
+ [32m✓[39m src/hooks/__tests__/background-process-guard.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 306[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/prd.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 163[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrawork/__tests__/index.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 227[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud-axiom.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 201[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/token-tracker.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 243[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/askuserquestion-lifecycle.test.ts[2m > [22m[2mAskUserQuestion notification lifecycle (issue #597)[2m > [22m[2mpre-tool-use should dispatch ask-user-question notification
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-issue-597'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/askuserquestion-lifecycle.test.ts[2m > [22m[2mAskUserQuestion notification lifecycle (issue #597)[2m > [22m[2mpost-tool-use should NOT dispatch ask-user-question notification
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-issue-597'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/askuserquestion-lifecycle.test.ts[2m > [22m[2mAskUserQuestion notification lifecycle (issue #597)[2m > [22m[2mpre-tool-use should skip notification when sessionId is missing
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-issue-597'[39m }
+
+[90mstderr[2m | src/hooks/__tests__/askuserquestion-lifecycle.test.ts[2m > [22m[2mAskUserQuestion notification lifecycle (issue #597)[2m > [22m[2mnon-AskUserQuestion tools should not trigger notification
+[22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'C:\\tmp\\test-issue-597'[39m }
+
+ [32m✓[39m src/hooks/__tests__/askuserquestion-lifecycle.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m src/__tests__/learner/auto-learner.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/flush-race.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 106[2mms[22m[39m
+[90mstderr[2m | src/hooks/__tests__/bridge-security.test.ts[2m > [22m[2mMCP Prompt Injection Boundaries[2m > [22m[2mshould return undefined for non-existent but valid-format agent roles
+[22m[39m[loadAgentPrompt] Agent prompt file not found
+[prompt-injection] Agent role "nonexistent-agent-xyz" prompt not found, skipping injection
+
+ [32m✓[39m src/__tests__/analytics/backfill-dedup.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+[90mstdout[2m | src/hooks/__tests__/bridge-security.test.ts[2m > [22m[2mInput Normalization Security[2m > [22m[2mshould pass through unknown fields for non-sensitive hooks
+[22m[39m[bridge-normalize] Unknown field "custom_field" passed through for hook "pre-tool-use"
+
+ [32m✓[39m src/__tests__/ralph-prd.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 153[2mms[22m[39m
+ [32m✓[39m src/__tests__/task-continuation.test.ts [2m([22m[2m93 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m src/__tests__/compatibility.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge-security.test.ts [2m([22m[2m89 tests[22m[2m)[22m[32m 96[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/team-registration.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 148[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/syncSleep.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 144[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/session-duration.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 121[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/message-router.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/team-status.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m src/__tests__/inline-prompt-integration.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 154[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/reply-config.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 205[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/file-lock.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-rollback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/progress.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/learning-queue-parser.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 83[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/unified-team.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m src/hooks/project-memory/__tests__/storage.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge-pkill.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+[90mstderr[2m | src/hooks/pre-compact/__tests__/index.test.ts[2m > [22m[2mpre-compact hook[2m > [22m[2mshould create compact checkpoint
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+[90mstderr[2m | src/hooks/pre-compact/__tests__/index.test.ts[2m > [22m[2mpre-compact hook[2m > [22m[2mshould format compact summary
+[22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+
+ [32m✓[39m src/hooks/pre-compact/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 191[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/writer.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/index-manager-import.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/codex-integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mvalidateBuild: dry-run returns success without executing
+[22m[39m[dry-run] tsc --noEmit
+[dry-run] npm run build
+[dry-run] npm run test:run
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mpublishNpm: dry-run prints command without executing
+[22m[39m[dry-run] npm publish --access public --tag latest
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mcreateGithubRelease: dry-run returns success
+[22m[39m[dry-run] gh release create v5.3.0 --generate-notes
+
+ [32m✓[39m src/hooks/autopilot/__tests__/transition.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2msyncMarketplace: dry-run returns success
+[22m[39msyncMarketplace: versions already in sync
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mrunReleasePipeline: startFrom skips earlier steps
+[22m[39mStep 4/5: createGithubRelease...
+[dry-run] gh release create v5.3.0 --generate-notes
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mrunReleasePipeline: startFrom skips earlier steps
+[22m[39mStep 5/5: syncMarketplace...
+syncMarketplace: versions already in sync
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mrunReleasePipeline: startFrom skips earlier steps
+[22m[39mRelease pipeline completed successfully.
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 1/5: preflight...
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 2/5: validateBuild...
+
+[90mstderr[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 2/5: validateBuild... failed: command failed
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 3/5: publishNpm...
+
+[90mstderr[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 3/5: publishNpm... failed: command failed
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 4/5: createGithubRelease...
+
+[90mstderr[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 4/5: createGithubRelease... failed: command failed
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mStep 5/5: syncMarketplace...
+syncMarketplace: versions already in sync
+
+[90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
+[22m[39mRelease pipeline completed successfully.
+
+ [32m✓[39m src/__tests__/release-steps.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/state.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m src/hooks/team-pipeline/__tests__/state.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/tokscale-adapter.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m src/hooks/permission-handler/__tests__/index.test.ts [2m([22m[2m116 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/git-worktree.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 8770[2mms[22m[39m
+       [33m[2m✓[22m[39m creates worktree at correct path [33m 1015[2mms[22m[39m
+       [33m[2m✓[22m[39m branch name is properly sanitized [33m 1078[2mms[22m[39m
+       [33m[2m✓[22m[39m handles recreation of stale worktree [33m 1410[2mms[22m[39m
+       [33m[2m✓[22m[39m removes worktree and branch [33m 1142[2mms[22m[39m
+       [33m[2m✓[22m[39m does not throw for non-existent worktree [33m 661[2mms[22m[39m
+       [33m[2m✓[22m[39m returns empty for team with no worktrees [33m 435[2mms[22m[39m
+       [33m[2m✓[22m[39m lists created worktrees [33m 1588[2mms[22m[39m
+       [33m[2m✓[22m[39m removes all worktrees for a team [33m 1438[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/sleepMs.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/top-agents.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/__tests__/doctor-conflicts.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m src/__tests__/rate-limit-wait/daemon.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/dispatcher.test.ts [2m([22m[2m55 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/promotion.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+[90mstderr[2m | src/__tests__/rate-limit-wait/integration.test.ts[2m > [22m[2mRate Limit Wait Integration Tests[2m > [22m[2mScenario: Error handling and edge cases[2m > [22m[2mshould handle API timeout gracefully
+[22m[39m[RateLimitMonitor] Error checking rate limit: Error: ETIMEDOUT
+    at C:/Users/ljyih/Desktop/ultrapower/src/__tests__/rate-limit-wait/integration.test.ts:327:45
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:145:11
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:26
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
+    at Traces.$ [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+    at runTest [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:12[90m)[39m
+
+ [32m✓[39m src/__tests__/rate-limit-wait/integration.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/flow-tracer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/bridge-manager-cleanup.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/hooks/notepad/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/hooks/ultraqa/__tests__/index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m src/hooks/keyword-detector/__tests__/index.test.ts [2m([22m[2m165 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m src/hooks/setup/__tests__/prune.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/notify-registry-integration.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-win32-spawn.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/__tests__/installer.test.ts [2m([22m[2m35 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 40[2mms[22m[39m
+[90mstderr[2m | src/features/delegation-routing/__tests__/resolver.test.ts[2m > [22m[2mresolveDelegation provider/tool mismatch correction[2m > [22m[2mshould correct provider/tool mismatch
+[22m[39m[delegation-routing] Provider/tool mismatch: claude with ask_codex. Correcting to Task.
+
+ [32m✓[39m src/features/state-manager/__tests__/cache.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+ [32m✓[39m src/features/delegation-routing/__tests__/resolver.test.ts [2m([22m[2m57 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/gemini-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/context-window.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/path-validator.test.ts [2m([22m[2m25 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/activity-log.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+[1/2] Syncing marketplace... ✓
+[1/2] Syncing marketplace... ✓
+[1/2] Syncing marketplace... ✓
+[1/2] Syncing marketplace... ⚠
+[1/2] Syncing marketplace... ⚠
+[1/2] Syncing marketplace... ✓
+ [32m✓[39m src/__tests__/auto-update.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/config.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/usage-tracker.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m src/features/model-routing/__tests__/external-model-policy.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mwrites file when file callback is enabled
+[22m[39m[stop-callback] Session summary written to /tmp/test-test-session-123.md
+
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mwrites JSON format when configured
+[22m[39m[stop-callback] Session summary written to /tmp/test.json
+
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2msends Telegram notification when enabled
+[22m[39m[stop-callback] Telegram notification sent
+
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mprefixes Telegram messages with normalized tags from tagList
+[22m[39m[stop-callback] Telegram notification sent
+
+[90mstderr[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mskips Telegram when missing credentials
+[22m[39m[stop-callback] Telegram: missing botToken or chatId
+
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2msends Discord notification when enabled
+[22m[39m[stop-callback] Discord notification sent
+
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mprefixes Discord messages with normalized tags from tagList
+[22m[39m[stop-callback] Discord notification sent
+
+[90mstderr[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mskips Discord when missing webhook URL
+[22m[39m[stop-callback] Discord: missing webhookUrl
+
+[90mstderr[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mhandles file write errors gracefully
+[22m[39m[stop-callback] File write failed: Error: Permission denied
+    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/__tests__/callbacks.test.ts:377:13
+    at Mock [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:285:34[90m)[39m
+    at writeToFile (C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/callbacks.ts:120:5)
+    at Module.triggerStopCallbacks (C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/callbacks.ts:247:19)
+    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/session-end/__tests__/callbacks.test.ts:392:18
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:145:11
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:26
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
+
+[90mstderr[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mhandles Telegram API errors gracefully
+[22m[39m[stop-callback] Telegram send failed: Telegram API error: 401 - undefined
+
+[90mstderr[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mhandles network errors gracefully
+[22m[39m[stop-callback] Discord send failed: Network error
+
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mexecutes multiple callbacks in parallel
+[22m[39m[stop-callback] Session summary written to /tmp/test.md
+
+[90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mexecutes multiple callbacks in parallel
+[22m[39m[stop-callback] Telegram notification sent
+[stop-callback] Discord notification sent
+
+ [32m✓[39m src/__tests__/live-data.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/callbacks.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/hooks/memory/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/fs-utils.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+[90mstderr[2m | src/mcp/__tests__/shared-exec.test.ts[2m > [22m[2msafeWriteOutputFile[2m > [22m[2mshould return error response on write failure
+[22m[39m[mcp] E_WRITE_FAILED: Failed to write output file 'is-a-dir': EISDIR: illegal operation on a directory, open 'C:\Users\ljyih\Desktop\ultrapower\.test-safe-write-58428\is-a-dir'
+
+ [32m✓[39m src/hooks/persistent-mode/session-isolation.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 9838[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block when no ultrawork state exists [33m 349[2mms[22m[39m
+       [33m[2m✓[22m[39m should block when sessionId matches ultrawork state [33m 388[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block when sessionId does not match ultrawork state [33m 358[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block for legacy state when sessionId is provided (session isolation) [33m 409[2mms[22m[39m
+       [33m[2m✓[22m[39m should ignore invalid sessionId when reading session-scoped state [33m 426[2mms[22m[39m
+       [33m[2m✓[22m[39m should not block legacy state when invalid sessionId is provided [33m 437[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block for legacy autopilot state when sessionId is provided [33m 343[2mms[22m[39m
+       [33m[2m✓[22m[39m should block for legacy state when no sessionId provided (backward compat) [33m 430[2mms[22m[39m
+       [33m[2m✓[22m[39m should block for legacy autopilot state when no sessionId provided [33m 327[2mms[22m[39m
+       [33m[2m✓[22m[39m should accept sessionId (camelCase) for session identification [33m 313[2mms[22m[39m
+       [33m[2m✓[22m[39m should accept session_id (snake_case) for session identification [33m 544[2mms[22m[39m
+       [33m[2m✓[22m[39m should accept sessionid (lowercase) for session identification [33m 365[2mms[22m[39m
+       [33m[2m✓[22m[39m should prefer sessionId over session_id when both provided [33m 410[2mms[22m[39m
+       [33m[2m✓[22m[39m should prefer session_id over sessionid when both provided [33m 443[2mms[22m[39m
+       [33m[2m✓[22m[39m should prefer sessionId over sessionid when both provided [33m 425[2mms[22m[39m
+       [33m[2m✓[22m[39m should fall back to session_id when sessionId is empty [33m 444[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block when project_path does not match current directory [33m 312[2mms[22m[39m
+       [33m[2m✓[22m[39m should ignore invalid sessionId when checking session-scoped state [33m 443[2mms[22m[39m
+       [33m[2m✓[22m[39m should not block legacy state when invalid sessionId is provided (project isolation) [33m 334[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/shared-exec.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/__tests__/prompt-file-only.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-security.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/__tests__/omc-tools-contract.test.ts [2m([22m[2m172 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-deps.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/model-routing.test.ts [2m([22m[2m95 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m src/hooks/observability/__tests__/observability.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/verifier.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/merge-coordinator.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 10797[2mms[22m[39m
+       [33m[2m✓[22m[39m returns empty for non-conflicting branches [33m 1510[2mms[22m[39m
+       [33m[2m✓[22m[39m detects potentially conflicting files [33m 1787[2mms[22m[39m
+       [33m[2m✓[22m[39m succeeds for clean merge [33m 1833[2mms[22m[39m
+       [33m[2m✓[22m[39m fails and aborts on conflict [33m 2493[2mms[22m[39m
+       [33m[2m✓[22m[39m returns empty for team with no worktrees [33m 575[2mms[22m[39m
+       [33m[2m✓[22m[39m merges multiple worker branches [33m 2596[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/bitbucket.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/session-catalog.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/hooks/think-mode/__tests__/index.test.ts [2m([22m[2m107 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+[90mstderr[2m | src/__tests__/load-agent-prompt.test.ts[2m > [22m[2mloadAgentPrompt[2m > [22m[2msecurity: path traversal prevention[2m > [22m[2mallows valid agent names only
+[22m[39m[loadAgentPrompt] Agent prompt file not found
+
+[90mstderr[2m | src/__tests__/load-agent-prompt.test.ts[2m > [22m[2mloadAgentPrompt[2m > [22m[2mprovider-aware loading[2m > [22m[2mloadAgentPrompt with codex provider falls back for nonexistent agent
+[22m[39m[loadAgentPrompt] Agent prompt file not found
+
+[90mstderr[2m | src/__tests__/load-agent-prompt.test.ts[2m > [22m[2mloadAgentPrompt[2m > [22m[2merror handling[2m > [22m[2mreturns fallback for nonexistent agent
+[22m[39m[loadAgentPrompt] Agent prompt file not found
+
+[90mstderr[2m | src/__tests__/load-agent-prompt.test.ts[2m > [22m[2mloadAgentPrompt[2m > [22m[2merror handling[2m > [22m[2mfallback does not leak internal paths
+[22m[39m[loadAgentPrompt] Agent prompt file not found
+
+ [32m✓[39m src/__tests__/lsp-servers.test.ts [2m([22m[2m83 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/load-agent-prompt.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-marketplace.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/config-merge.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/python-repl-cleanup.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+[90mstderr[2m | src/__tests__/inline-success-shape.test.ts[2m > [22m[2mInline success response shape[2m > [22m[2mCodex inline success returns two content blocks with untrusted wrapper
+[22m[39mWarning: Parse errors in C:\Users\ljyih\AppData\Roaming\claude-sisyphus\config.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+Warning: Parse errors in C:\Users\ljyih\Desktop\ultrapower\.claude\sisyphus.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+
+[90mstderr[2m | src/__tests__/inline-success-shape.test.ts[2m > [22m[2mInline success response shape[2m > [22m[2mCodex inline success metadata should not duplicate "Resolved Working Directory" key
+[22m[39mWarning: Parse errors in C:\Users\ljyih\AppData\Roaming\claude-sisyphus\config.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+Warning: Parse errors in C:\Users\ljyih\Desktop\ultrapower\.claude\sisyphus.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+
+[90mstderr[2m | src/__tests__/inline-success-shape.test.ts[2m > [22m[2mInline success response shape[2m > [22m[2mGemini inline success returns two content blocks with untrusted wrapper
+[22m[39mWarning: Parse errors in C:\Users\ljyih\AppData\Roaming\claude-sisyphus\config.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+Warning: Parse errors in C:\Users\ljyih\Desktop\ultrapower\.claude\sisyphus.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+
+[90mstderr[2m | src/__tests__/inline-success-shape.test.ts[2m > [22m[2mInline success response shape[2m > [22m[2mGemini inline success metadata should not duplicate "Resolved Working Directory" key
+[22m[39mWarning: Parse errors in C:\Users\ljyih\AppData\Roaming\claude-sisyphus\config.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+Warning: Parse errors in C:\Users\ljyih\Desktop\ultrapower\.claude\sisyphus.jsonc: [
+  { error: [33m1[39m, offset: [33m0[39m, length: [33m4[39m },
+  { error: [33m1[39m, offset: [33m5[39m, length: [33m3[39m },
+  { error: [33m1[39m, offset: [33m9[39m, length: [33m8[39m },
+  { error: [33m1[39m, offset: [33m18[39m, length: [33m6[39m }
+]
+
+ [32m✓[39m src/features/state-manager/__tests__/index.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/__tests__/inline-success-shape.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/formatter.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/hooks/axiom-boot/__tests__/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/hooks/auto-slash-command/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud-windows.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/reply-listener.test.ts [2m([22m[2m48 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/audit/__tests__/logger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+[90mstdout[2m | src/hooks/__tests__/bridge-normalize.test.ts[2m > [22m[2mbridge-normalize[2m > [22m[2mT2: permission-request error handling[2m > [22m[2mshould allow unknown fields for non-sensitive hooks
+[22m[39m[bridge-normalize] Unknown field "unknown_field" passed through for hook "tool-use"
+
+ [32m✓[39m src/hooks/__tests__/bridge-normalize.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/data-collector.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/validateMode.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/socket-client.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/__tests__/prompt-injection.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/safe-installer.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/tmux.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/finder.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/__tests__/learner/matcher.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/hooks/auto-slash-command/__tests__/executor.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/github.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/plugin-registry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/detector.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/session-end-hook.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/utils.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-timer-buffer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/schema-conversion.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/hooks/omc-orchestrator/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+[90mstderr[2m | src/tools/lsp/__tests__/client-eviction.test.ts[2m > [22m[2mLspClientManager eviction and disconnectAll[2m > [22m[2mdisconnectAll resilience[2m > [22m[2mshould continue disconnecting when one client throws
+[22m[39mLSP disconnectAll: failed to disconnect client "key2": Error: connection reset
+
+[90mstderr[2m | src/tools/lsp/__tests__/client-eviction.test.ts[2m > [22m[2mLspClientManager eviction and disconnectAll[2m > [22m[2mdisconnectAll resilience[2m > [22m[2mshould clear all maps after disconnectAll even with failures
+[22m[39mLSP disconnectAll: failed to disconnect client "key1": Error: timeout
+
+ [32m✓[39m src/hooks/empty-message-sanitizer/__tests__/index.test.ts [2m([22m[2m60 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/__tests__/disable-tools.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/learner/parser.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/agents/__tests__/timeout-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/usage-api.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/validateMode.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-eviction.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/encryption.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+[90mstderr[2m | src/__tests__/rate-limit-wait/rate-limit-monitor.test.ts[2m > [22m[2mrate-limit-monitor[2m > [22m[2mcheckRateLimitStatus[2m > [22m[2mshould handle API errors gracefully
+[22m[39m[RateLimitMonitor] Error checking rate limit: Error: API error
+    at C:/Users/ljyih/Desktop/ultrapower/src/__tests__/rate-limit-wait/rate-limit-monitor.test.ts:116:45
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:145:11
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:26
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
+    at Traces.$ [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/traces.CCmnQaNT.js:142:27[90m)[39m
+    at trace [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/test.B8ej_ZHS.js:239:21[90m)[39m
+    at runTest [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:12[90m)[39m
+
+ [32m✓[39m src/__tests__/hud-agents.test.ts [2m([22m[2m73 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/matcher.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/rate-limit-wait/rate-limit-monitor.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/session-recovery.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/codex-backoff.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/azure-devops.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/matcher.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/profiles.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/tools/diagnostics/__tests__/index.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/validator.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/capabilities.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/detection.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/codex-core.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-registry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/gitea.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/tiered-writer.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/post-tool-verifier.test.mjs [2m([22m[2m21 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/tools/diagnostics/__tests__/tsc-runner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/multi-model-mcp.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/gemini-core.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/improvement-puller.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/command-exists.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/hooks/setup/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/index.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 89[2mms[22m[39m
+ [32m✓[39m src/__tests__/permission-enforcement.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/render.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/sanitize.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/multi-model-mcp-integration.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud-suggestions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/string-width.test.ts [2m([22m[2m41 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/hooks.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/ast-tools.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/gitlab.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/hooks/project-memory/__tests__/formatter.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+[90mstdout[2m | src/__tests__/session-migration.test.ts[2m > [22m[2mSessionManager migration[2m > [22m[2mmigrates local history to global when only local exists
+[22m[39m[session-manager] Migrated session history from local to global state
+
+ [32m✓[39m src/team/__tests__/permissions.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+[90mstdout[2m | src/__tests__/session-migration.test.ts[2m > [22m[2mSessionManager migration[2m > [22m[2mmerges and deduplicates when both exist
+[22m[39m[session-manager] Merged 1 sessions from local to global state
+
+[90mstdout[2m | src/__tests__/session-migration.test.ts[2m > [22m[2mSessionManager migration[2m > [22m[2moverwrites global current-session when local is newer
+[22m[39m[session-manager] Migrated session history from local to global state
+
+[90mstdout[2m | src/__tests__/session-migration.test.ts[2m > [22m[2mSessionManager migration[2m > [22m[2mcleans up local current-session when global is newer
+[22m[39m[session-manager] Migrated session history from local to global state
+
+ [32m✓[39m src/__tests__/session-migration.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/paths.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/omc-tools-server.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/model.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/git.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/installer-hooks-merge.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/rate-limit-wait/tmux-detector.test.ts [2m([22m[2m20 tests[22m[2m | [22m[33m5 skipped[39m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/edit-error.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/version.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/prompt-sanitization.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/compatibility-security.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 14228[2mms[22m[39m
+     [33m[2m✓[22m[39m should block LD_PRELOAD environment variable [33m 1141[2mms[22m[39m
+     [33m[2m✓[22m[39m should block LD_LIBRARY_PATH environment variable [33m 1181[2mms[22m[39m
+     [33m[2m✓[22m[39m should block DYLD_INSERT_LIBRARIES environment variable [33m 1154[2mms[22m[39m
+     [33m[2m✓[22m[39m should block DYLD_LIBRARY_PATH environment variable [33m 1156[2mms[22m[39m
+     [33m[2m✓[22m[39m should block NODE_OPTIONS environment variable [33m 1218[2mms[22m[39m
+     [33m[2m✓[22m[39m should block PYTHONSTARTUP environment variable [33m 1205[2mms[22m[39m
+     [33m[2m✓[22m[39m should block PYTHONPATH environment variable [33m 1151[2mms[22m[39m
+     [33m[2m✓[22m[39m should block RUBYOPT environment variable [33m 1215[2mms[22m[39m
+     [33m[2m✓[22m[39m should block PERL5OPT environment variable [33m 1185[2mms[22m[39m
+     [33m[2m✓[22m[39m should block BASH_ENV environment variable [33m 1158[2mms[22m[39m
+     [33m[2m✓[22m[39m should allow safe environment variables [33m 1148[2mms[22m[39m
+     [33m[2m✓[22m[39m should not leave zombie connections on spawn failure [33m 1149[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/confidence.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/context-warning.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/hooks/beads-context/__tests__/index.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/transcript-token-extractor.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/verification/tier-selector.test.ts [2m([22m[2m45 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/detector.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/hooks/agent-usage-reminder/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/deadlock-detector.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/encryption-performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/tmux-session.test.ts [2m([22m[2m11 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/skills.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/claude-md-merge.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/example.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/features/wizard/__tests__/engine.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/analytics-display.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/output-estimator.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrapilot/__tests__/index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks-json-paths.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/__tests__/standalone-server.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+[90mstderr[2m | src/__tests__/mcp-server-workflows.test.ts
+[22m[39m[prompt-injection] CRITICAL: Could not scan agents/ directory for role discovery: Error: [vitest] No "readdirSync" export is defined on the "fs" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/startModuleRunner.DEj0jb3e.js:311:17[90m)[39m
+    at Object.get [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/chunks/startModuleRunner.DEj0jb3e.js:384:16[90m)[39m
+    at getValidAgentRoles (C:/Users/ljyih/Desktop/ultrapower/src/mcp/prompt-injection.ts:88:19)
+    at C:/Users/ljyih/Desktop/ultrapower/src/mcp/prompt-injection.ts:106:53
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at VitestModuleEvaluator._runInlinedModule [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/module-evaluator.js:196:4[90m)[39m
+    at VitestModuleRunner.directRequest [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvite[24m/dist/node/module-runner.js:1146:59[90m)[39m
+    at VitestModuleRunner.cachedRequest [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvite[24m/dist/node/module-runner.js:1053:73[90m)[39m
+    at C:/Users/ljyih/Desktop/ultrapower/src/mcp/codex-core.ts:18:1
+    at VitestModuleEvaluator._runInlinedModule [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4mvitest[24m/dist/module-evaluator.js:196:4[90m)[39m {
+  codeFrame: [32m'vi.mock(import("fs"), async (importOriginal) => {\n'[39m +
+    [32m'  const actual = await importOriginal()\n'[39m +
+    [32m'  return {\n'[39m +
+    [32m'    ...actual,\n'[39m +
+    [32m'    // your mocked methods\n'[39m +
+    [32m'  }\n'[39m +
+    [32m'})'[39m
+}
+
+ [32m✓[39m src/__tests__/mcp-fallback-429.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/bash-history.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/reflection-parser.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/version-helper.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/hooks/directory-readme-injector/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/bridge-entry.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/mcp-server-workflows.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/validator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/hooks/team-pipeline/__tests__/transitions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/skills/__tests__/mingw-escape.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/agents/__tests__/agent-wrapper.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/hooks/todo-continuation/__tests__/isUserAbort.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/omc-tools-server.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/token-extractor.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/state.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/skills/__tests__/ax-context-init.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/parser.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/parser.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/installer-hud-skip.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/hooks/guards/__tests__/pre-tool.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/prompt-injection.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/cli-detection.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/defaults.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/types.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/cli/commands/__tests__/cleanup.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/call-counts.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/dependency-graph.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/hooks/auto-slash-command/__tests__/detector.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/cwd.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/validate-and-read-file.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/auto-upgrade-prompt.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/version-display.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/features/wizard/__tests__/recommendation-engine.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/prompts.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/config.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/agents/__tests__/timeout-config.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/hooks/thinking-block-validator/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/consciousness-sync.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli-config-stop-callback.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 17401[2mms[22m[39m
+     [33m[2m✓[22m[39m updates telegram tagList options and preserves existing config fields [33m 9983[2mms[22m[39m
+     [33m[2m✓[22m[39m applies and clears discord tags and ignores tag options for file callback [33m 7416[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/thinking.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/hooks/axiom-guards/__tests__/index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/hooks/plugin-patterns/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/hooks/comment-checker/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/hooks/non-interactive-env/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/hooks/background-notification/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/hooks/preemptive-compaction/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/release-local.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/job-management.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 19457[2mms[22m[39m
+         [33m[2m✓[22m[39m clamps negative to 1000ms minimum [33m 1284[2mms[22m[39m
+         [33m[2m✓[22m[39m clamps zero to 1000ms minimum [33m 1260[2mms[22m[39m
+       [33m[2m✓[22m[39m retries when job is not found initially then succeeds [33m 2407[2mms[22m[39m
+       [33m[2m✓[22m[39m gives up after 10 not-found retries [33m 14133[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli-notify-profile.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 21254[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a discord profile and stores it in notificationProfiles [33m 2264[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a telegram profile [33m 2660[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a discord-bot profile with --channel-id [33m 2987[2mms[22m[39m
+     [33m[2m✓[22m[39m adds multiple platforms to the same profile [33m 4280[2mms[22m[39m
+     [33m[2m✓[22m[39m does not affect legacy stopHookCallbacks when using --profile [33m 2101[2mms[22m[39m
+     [33m[2m✓[22m[39m shows profile config with --show [33m 3250[2mms[22m[39m
+     [33m[2m✓[22m[39m lists all profiles [33m 1162[2mms[22m[39m
+     [33m[2m✓[22m[39m shows a specific profile [33m 804[2mms[22m[39m
+     [33m[2m✓[22m[39m deletes a profile [33m 840[2mms[22m[39m
+     [33m[2m✓[22m[39m shows helpful message when no profiles exist [33m 901[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/bridge-manager.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 26676[2mms[22m[39m
+       [33m[2m✓[22m[39m kills bridge with SIGINT first [33m 498[2mms[22m[39m
+       [33m[2m✓[22m[39m escalates to SIGTERM when SIGINT fails [33m 6588[2mms[22m[39m
+       [33m[2m✓[22m[39m escalates to SIGKILL when SIGTERM fails [33m 9760[2mms[22m[39m
+       [33m[2m✓[22m[39m returns failure when all signals fail [33m 9755[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 26 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mreadLastToolError[2m > [22mreturns valid ToolErrorState when file exists with recent timestamp
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m50:20[22m[39m
+    [90m 48| [39m    )[33m;[39m
+    [90m 49| [39m
+    [90m 50| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 51| [39m
+    [90m 52| [39m    [34mexpect[39m(result)[33m.[39m[34mtoEqual[39m(recentError)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mreadLastToolError[2m > [22mreturns null when file does not exist
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m60:20[22m[39m
+    [90m 58| [39m    (existsSync as unknown as ReturnType<typeof vi.fn>).mockReturnValu…
+    [90m 59| [39m
+    [90m 60| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 61| [39m
+    [90m 62| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mreadLastToolError[2m > [22mreturns null when error is stale (>60 seconds old)
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m81:20[22m[39m
+    [90m 79| [39m    )[33m;[39m
+    [90m 80| [39m
+    [90m 81| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 82| [39m
+    [90m 83| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mreadLastToolError[2m > [22mreturns null when file contains malformed JSON
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m92:20[22m[39m
+    [90m 90| [39m    )[33m;[39m
+    [90m 91| [39m
+    [90m 92| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 93| [39m
+    [90m 94| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mreadLastToolError[2m > [22mhandles missing timestamp field gracefully
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m110:20[22m[39m
+    [90m108| [39m    )[33m;[39m
+    [90m109| [39m
+    [90m110| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m111| [39m
+    [90m112| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mreadLastToolError[2m > [22mhandles readFileSync throwing error
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m121:20[22m[39m
+    [90m119| [39m    })[33m;[39m
+    [90m120| [39m
+    [90m121| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m122| [39m
+    [90m123| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mclearToolErrorState[2m > [22mremoves state file when it exists
+[31m[1mTypeError[22m: __vi_import_2__.clearToolErrorState is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m139:5[22m[39m
+    [90m137| [39m    (unlinkSync as unknown as ReturnType<typeof vi.fn>).mockReturnValu…
+    [90m138| [39m
+    [90m139| [39m    [34mclearToolErrorState[39m(testDir)[33m;[39m
+    [90m   | [39m    [31m^[39m
+    [90m140| [39m
+    [90m141| [39m    [34mexpect[39m(existsSync)[33m.[39m[34mtoHaveBeenCalledWith[39m(errorPath)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mclearToolErrorState[2m > [22mdoes not throw when file does not exist
+[31m[1mAssertionError[22m: expected [Function] to not throw an error but 'TypeError: __vi_import_2__.clearToolE…' was thrown[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+"TypeError: __vi_import_2__.clearToolErrorState is not a function"
+
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m148:52[22m[39m
+    [90m146| [39m    (existsSync as unknown as ReturnType<typeof vi.fn>).mockReturnValu…
+    [90m147| [39m
+    [90m148| [39m    [34mexpect[39m(() [33m=>[39m [34mclearToolErrorState[39m(testDir))[33m.[39mnot[33m.[39m[34mtoThrow[39m()[33m;[39m
+    [90m   | [39m                                                   [31m^[39m
+    [90m149| [39m    [34mexpect[39m(existsSync)[33m.[39m[34mtoHaveBeenCalledWith[39m(errorPath)[33m;[39m
+    [90m150| [39m    [34mexpect[39m(unlinkSync)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mclearToolErrorState[2m > [22mhandles permission errors gracefully
+[31m[1mAssertionError[22m: expected [Function] to not throw an error but 'TypeError: __vi_import_2__.clearToolE…' was thrown[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+"TypeError: __vi_import_2__.clearToolErrorState is not a function"
+
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m159:52[22m[39m
+    [90m157| [39m    })[33m;[39m
+    [90m158| [39m
+    [90m159| [39m    [34mexpect[39m(() [33m=>[39m [34mclearToolErrorState[39m(testDir))[33m.[39mnot[33m.[39m[34mtoThrow[39m()[33m;[39m
+    [90m   | [39m                                                   [31m^[39m
+    [90m160| [39m    [34mexpect[39m(unlinkSync)[33m.[39m[34mtoHaveBeenCalledWith[39m(errorPath)[33m;[39m
+    [90m161| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mclearToolErrorState[2m > [22mhandles unlinkSync throwing ENOENT error
+[31m[1mAssertionError[22m: expected [Function] to not throw an error but 'TypeError: __vi_import_2__.clearToolE…' was thrown[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+"TypeError: __vi_import_2__.clearToolErrorState is not a function"
+
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m171:52[22m[39m
+    [90m169| [39m    })[33m;[39m
+    [90m170| [39m
+    [90m171| [39m    [34mexpect[39m(() [33m=>[39m [34mclearToolErrorState[39m(testDir))[33m.[39mnot[33m.[39m[34mtoThrow[39m()[33m;[39m
+    [90m   | [39m                                                   [31m^[39m
+    [90m172| [39m  })[33m;[39m
+    [90m173| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mreturns empty string for null input
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m177:20[22m[39m
+    [90m175| [39m[34mdescribe[39m([32m'getToolErrorRetryGuidance'[39m[33m,[39m () [33m=>[39m {
+    [90m176| [39m  [34mit[39m([32m'returns empty string for null input'[39m[33m,[39m () [33m=>[39m {
+    [90m177| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m([35mnull[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m178| [39m
+    [90m179| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mreturns retry message with error context for normal errors (retry_count < 5)
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m190:20[22m[39m
+    [90m188| [39m    }[33m;[39m
+    [90m189| [39m
+    [90m190| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m191| [39m
+    [90m192| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'[TOOL ERROR - RETRY REQUIRED]'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mreturns alternative approach message when retry_count >= 5
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m208:20[22m[39m
+    [90m206| [39m    }[33m;[39m
+    [90m207| [39m
+    [90m208| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m209| [39m
+    [90m210| [39m    expect(result).toContain('[TOOL ERROR - ALTERNATIVE APPROACH NEEDE…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mincludes tool name and error in message
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m226:20[22m[39m
+    [90m224| [39m    }[33m;[39m
+    [90m225| [39m
+    [90m226| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m227| [39m
+    [90m228| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'"Edit" operation failed'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mshows retry message after 3+ failures
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m240:20[22m[39m
+    [90m238| [39m    }[33m;[39m
+    [90m239| [39m
+    [90m240| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m241| [39m
+    [90m242| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'[TOOL ERROR - RETRY REQUIRED]'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mshows retry message for less than 3 failures
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m254:20[22m[39m
+    [90m252| [39m    }[33m;[39m
+    [90m253| [39m
+    [90m254| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m255| [39m
+    [90m256| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'[TOOL ERROR - RETRY REQUIRED]'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mhandles missing tool_name gracefully
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m268:20[22m[39m
+    [90m266| [39m    }[33m;[39m
+    [90m267| [39m
+    [90m268| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m269| [39m
+    [90m270| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'"unknown" operation failed'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mgetToolErrorRetryGuidance[2m > [22mhandles missing error field gracefully
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m281:20[22m[39m
+    [90m279| [39m    }[33m;[39m
+    [90m280| [39m
+    [90m281| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m282| [39m
+    [90m283| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'Error: Unknown error'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mIntegration: Continuation message with tool error[2m > [22mcontinuation message includes error context when tool error present
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m308:23[22m[39m
+    [90m306| [39m
+    [90m307| [39m    [90m// Simulate continuation message construction[39m
+    [90m308| [39m    [35mconst[39m toolError [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m309| [39m    [35mconst[39m errorGuidance [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m310| [39m    const baseMessage = '[ULTRAWORK #5/50] Mode active. Continue worki…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mIntegration: Continuation message with tool error[2m > [22mcontinuation message is normal when no tool error
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m324:23[22m[39m
+    [90m322| [39m
+    [90m323| [39m    [90m// Simulate continuation message construction[39m
+    [90m324| [39m    [35mconst[39m toolError [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m325| [39m    [35mconst[39m errorGuidance [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m326| [39m    const baseMessage = '[ULTRAWORK #5/50] Mode active. Continue worki…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mIntegration: Continuation message with tool error[2m > [22merror state is cleared after reading
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m350:23[22m[39m
+    [90m348| [39m
+    [90m349| [39m    [90m// Read error and generate message[39m
+    [90m350| [39m    [35mconst[39m toolError [33m=[39m [34mreadLastToolError[39m(testDir)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m351| [39m    [34mexpect[39m(toolError)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m352| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state with retry_count at boundary (exactly 5)
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m375:20[22m[39m
+    [90m373| [39m    }[33m;[39m
+    [90m374| [39m
+    [90m375| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m376| [39m
+    [90m377| [39m    expect(result).toContain('[TOOL ERROR - ALTERNATIVE APPROACH NEEDE…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state with retry_count at boundary (exactly 3)
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m389:20[22m[39m
+    [90m387| [39m    }[33m;[39m
+    [90m388| [39m
+    [90m389| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m390| [39m
+    [90m391| [39m    [34mexpect[39m(result)[33m.[39m[34mtoContain[39m([32m'[TOOL ERROR - RETRY REQUIRED]'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state with very high retry_count
+[31m[1mTypeError[22m: __vi_import_2__.getToolErrorRetryGuidance is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m403:20[22m[39m
+    [90m401| [39m    }[33m;[39m
+    [90m402| [39m
+    [90m403| [39m    [35mconst[39m result [33m=[39m [34mgetToolErrorRetryGuidance[39m(toolError)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m404| [39m
+    [90m405| [39m    expect(result).toContain('[TOOL ERROR - ALTERNATIVE APPROACH NEEDE…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state at exact 60 second boundary (not stale)
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m423:20[22m[39m
+    [90m421| [39m    )[33m;[39m
+    [90m422| [39m
+    [90m423| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m([32m'/test'[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m424| [39m
+    [90m425| [39m    [34mexpect[39m(result)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/hooks/persistent-mode/__tests__/tool-error.test.ts[2m > [22mEdge cases and error handling[2m > [22mhandles error state just past 60 second boundary (stale)
+[31m[1mTypeError[22m: __vi_import_2__.readLastToolError is not a function[39m
+[36m [2m❯[22m src/hooks/persistent-mode/__tests__/tool-error.test.ts:[2m443:20[22m[39m
+    [90m441| [39m    )[33m;[39m
+    [90m442| [39m
+    [90m443| [39m    [35mconst[39m result [33m=[39m [34mreadLastToolError[39m([32m'/test'[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m444| [39m
+    [90m445| [39m    [34mexpect[39m(result)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/26]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m305 passed[39m[22m[90m (306)[39m
+[2m      Tests [22m [1m[31m26 failed[39m[22m[2m | [22m[1m[32m5658 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (5694)[39m
+[2m   Start at [22m 21:43:08
+[2m   Duration [22m 31.15s[2m (transform 52.26s, setup 0ms, import 89.61s, tests 178.36s, environment 81ms)[22m
+

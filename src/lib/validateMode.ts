@@ -8,7 +8,13 @@
  *
  * Source of truth: src/hooks/mode-registry/index.ts
  * Spec: docs/standards/runtime-protection.md §2.4
+ *
+ * For general path validation, use validatePath() from ./path-validator.ts
  */
+
+import { auditLogger } from '../audit/logger.js';
+
+export { validatePath, SecurityError } from './path-validator.js';
 
 /**
  * All valid execution mode names (8 total).
@@ -62,10 +68,39 @@ export function validateMode(mode: unknown): mode is ValidMode {
  */
 export function assertValidMode(mode: unknown): ValidMode {
   if (!validateMode(mode)) {
-    // Truncate input to prevent DoS via memory amplification and avoid
-    // leaking large attacker-controlled payloads into logs/notifications.
     const raw = typeof mode === 'string' ? mode : String(mode);
     const display = raw.length > 50 ? `${raw.slice(0, 50)}...(truncated)` : raw;
+
+    // Additional path traversal detection
+    if (typeof mode === 'string' && (
+      mode.includes('..') ||
+      mode.includes('/') ||
+      mode.includes('\\') ||
+      mode.startsWith('.') ||
+      /^[a-zA-Z]:/.test(mode) // Windows absolute path
+    )) {
+      auditLogger.log({
+        actor: 'system',
+        action: 'path_validation_failed',
+        resource: display,
+        result: 'failure',
+        metadata: { reason: 'path_traversal_attempt' }
+      }).catch(() => {}); // Non-blocking
+
+      throw new Error(
+        `Path traversal attempt detected: "${display}". ` +
+        `Valid modes are: ${VALID_MODES.join(', ')}`
+      );
+    }
+
+    auditLogger.log({
+      actor: 'system',
+      action: 'path_validation_failed',
+      resource: display,
+      result: 'failure',
+      metadata: { reason: 'invalid_mode' }
+    }).catch(() => {}); // Non-blocking
+
     throw new Error(
       `Invalid mode: "${display}". ` +
         `Valid modes are: ${VALID_MODES.join(', ')}`

@@ -110,10 +110,10 @@ export {
 
 export {
   // Hook Bridge (main entry point for shell scripts)
-  processHook,
-  type HookInput,
-  type HookOutput
+  processHook
 } from './bridge.js';
+
+export type { HookInput, HookOutput } from './bridge-types.js';
 
 // Edit Error Recovery - now part of unified recovery module
 // See exports from './recovery/index.js' above

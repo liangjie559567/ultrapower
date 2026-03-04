@@ -108,6 +108,11 @@ export {
   axiomSubPrdWriterAgent
 } from './definitions.js';
 
+// Timeout protection
+export { getAgentTimeout, DEFAULT_TIMEOUT_CONFIG } from './timeout-config.js';
+export { TimeoutManager, timeoutManager } from './timeout-manager.js';
+export { callAgentWithTimeout } from './agent-wrapper.js';
+
 // Core exports (getAgentDefinitions and omcSystemPrompt)
 export {
   getAgentDefinitions,

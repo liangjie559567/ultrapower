@@ -5,6 +5,7 @@
  */
 
 import type { AutopilotStateForHud } from './elements/autopilot.js';
+import type { HudThresholds } from '../core/hud-config.js';
 
 // ============================================================================
 // HUD State
@@ -349,20 +350,8 @@ export interface HudElementConfig {
   safeMode: boolean;          // Strip ANSI codes and use ASCII-only output to prevent terminal rendering corruption (Issue #346)
 }
 
-export interface HudThresholds {
-  /** Context percentage that triggers warning color (default: 70) */
-  contextWarning: number;
-  /** Context percentage that triggers compact suggestion (default: 80) */
-  contextCompactSuggestion: number;
-  /** Context percentage that triggers critical color (default: 85) */
-  contextCritical: number;
-  /** Ralph iteration that triggers warning color (default: 7) */
-  ralphWarning: number;
-  /** Session cost ($) that triggers budget warning (default: 2.0) */
-  budgetWarning: number;
-  /** Session cost ($) that triggers budget critical alert (default: 5.0) */
-  budgetCritical: number;
-}
+// HudThresholds moved to src/core/hud-config.ts to break circular dependency
+export type { HudThresholds } from '../core/hud-config.js';
 
 export interface ContextLimitWarningConfig {
   /** Context percentage threshold that triggers the warning banner (default: 80) */

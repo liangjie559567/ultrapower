@@ -9,6 +9,25 @@ import { CustomNote } from './types.js';
 import { trackAccess } from './hot-path-tracker.js';
 import { detectDirectivesFromMessage, addDirective } from './directive-detector.js';
 
+// Tool input types
+type FileToolInput = { file_path?: string; filePath?: string };
+type PathToolInput = { path?: string };
+type BashToolInput = { command?: string };
+type ToolInput = FileToolInput | PathToolInput | BashToolInput | Record<string, unknown>;
+
+// Type guards
+function isFileToolInput(input: ToolInput): input is FileToolInput {
+  return 'file_path' in input || 'filePath' in input;
+}
+
+function isPathToolInput(input: ToolInput): input is PathToolInput {
+  return 'path' in input;
+}
+
+function isBashToolInput(input: ToolInput): input is BashToolInput {
+  return 'command' in input;
+}
+
 /**
  * Learn from tool output and update project memory
  *
@@ -20,8 +39,7 @@ import { detectDirectivesFromMessage, addDirective } from './directive-detector.
  */
 export async function learnFromToolOutput(
   toolName: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- hook input has dynamic shape from Claude Code
-  toolInput: any,
+  toolInput: ToolInput,
   toolOutput: string,
   projectRoot: string,
   userMessage?: string
@@ -36,19 +54,23 @@ export async function learnFromToolOutput(
 
   // Track file accesses from Read/Edit/Write tools
   if (toolName === 'Read' || toolName === 'Edit' || toolName === 'Write') {
-    const filePath = toolInput?.file_path || toolInput?.filePath;
-    if (filePath) {
-      memory.hotPaths = trackAccess(memory.hotPaths, filePath, projectRoot, 'file');
-      updated = true;
+    if (isFileToolInput(toolInput)) {
+      const filePath = toolInput.file_path || toolInput.filePath;
+      if (filePath) {
+        memory.hotPaths = trackAccess(memory.hotPaths, filePath, projectRoot, 'file');
+        updated = true;
+      }
     }
   }
 
   // Track directory accesses from Glob/Grep
   if (toolName === 'Glob' || toolName === 'Grep') {
-    const dirPath = toolInput?.path;
-    if (dirPath) {
-      memory.hotPaths = trackAccess(memory.hotPaths, dirPath, projectRoot, 'directory');
-      updated = true;
+    if (isPathToolInput(toolInput)) {
+      const dirPath = toolInput.path;
+      if (dirPath) {
+        memory.hotPaths = trackAccess(memory.hotPaths, dirPath, projectRoot, 'directory');
+        updated = true;
+      }
     }
   }
 
@@ -69,7 +91,7 @@ export async function learnFromToolOutput(
     return;
   }
 
-  const command = toolInput?.command || '';
+  const command = isBashToolInput(toolInput) ? toolInput.command || '' : '';
   if (!command) {
     return;
   }

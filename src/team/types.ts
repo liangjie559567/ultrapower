@@ -1,3 +1,31 @@
+/** Worker backend type */
+export type WorkerBackend = 'claude-native' | 'mcp-codex' | 'mcp-gemini';
+
+/** Worker capability tags for task matching */
+export type WorkerCapability =
+  | 'code-edit'
+  | 'testing'
+  | 'general'
+  | 'code-review'
+  | 'security-review'
+  | 'architecture'
+  | 'refactoring'
+  | 'ui-design'
+  | 'documentation'
+  | 'research';
+
+/** Unified team member view across Claude native and MCP workers */
+export interface UnifiedTeamMember {
+  name: string;
+  agentId: string;
+  backend: WorkerBackend;
+  model: string;
+  capabilities: WorkerCapability[];
+  joinedAt: number;
+  status: 'active' | 'idle' | 'dead' | 'quarantined' | 'unknown';
+  currentTaskId: string | null;
+}
+
 // src/team/types.ts
 
 /**
@@ -131,19 +159,3 @@ export interface TaskFailureSidecar {
   retryCount: number;
   lastFailedAt: string;
 }
-
-/** Worker backend type */
-export type WorkerBackend = 'claude-native' | 'mcp-codex' | 'mcp-gemini';
-
-/** Worker capability tag */
-export type WorkerCapability =
-  | 'code-edit'
-  | 'code-review'
-  | 'security-review'
-  | 'architecture'
-  | 'testing'
-  | 'documentation'
-  | 'ui-design'
-  | 'refactoring'
-  | 'research'
-  | 'general';
