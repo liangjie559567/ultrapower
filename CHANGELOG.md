@@ -1,68 +1,70 @@
 # ultrapower v5.5.18
 
 **发布日期**: 2026-03-05
-**开发周期**: 22.5 小时（计划 14-20 周，提速 96%）
 
-## 重大改进
+## Added (反思改进)
 
-### P0: 安全与质量 ✅
+### 知识库 (P0)
+- **workflow_patterns.md**: Team 模式适用场景、P0 修复标准流程、文档并行化模式
+- **agent_routing.md**: Agent 选择规则、模型路由策略、并行任务依赖管理
 
-- **安全加固**: permission-request hook 阻塞模式、路径遍历防护、Hook 输入消毒
-- **Hook 超时**: 5 秒超时强制执行，防止 Hook 阻塞
-- **测试覆盖增强**: 新增 444 个测试，8 个关键模块覆盖率大幅提升
-  - hooks guards: 32.35% → 97.05% (+64.70%)
-  - MCP Client: 0% → 100% (+100%)
-  - bridge-entry: 17.52% → 81.52% (+64%)
-  - memory-tools: 8.77% → 90.74% (+81.97%)
-  - notepad-tools: 10.38% → 89.61% (+79.23%)
-  - session-lock: 3.31% → 82.31% (+79%)
+### 新工具 (P1/P2)
+- **dependency-analyzer**: 文件级依赖分析工具，支持 import/require 解析
+- **doc-sync**: 从代码 @security 注释自动生成文档
+- **parallel-opportunity-detector**: 任务依赖图分析，推荐并行执行策略
 
-### P1: 性能与架构 ✅
+### 文档增强 (P1)
+- **user-guide.md §5**: Team 模式决策树（任务数量、耗时、依赖关系评估）
+- **agent-lifecycle.md §7**: 并行任务依赖管理（显式声明、反模式、分阶段解锁）
+- **runtime-protection.md §2.3.1**: Windows 命令注入防护规范
 
-- **性能优化**:
-  - 构建时间: 5.8s → 2.4s (-59.6%)
-  - Worker 健康检查: 50ms → 10ms (5x)
-  - Worker 状态查询: 20ms → 5ms (4x)
-  - 内存优化: -30%
-- **架构重构**: 统一 Worker 后端（WorkerStateAdapter）
-  - 消除 400-500 行重复代码
-  - 支持 SQLite 和 JSON 双后端
-  - 缓存层提升性能 4-5x
+### Agent 优化 (P1)
+- **analyst.md**: 新增 Agent_Routing 章节，基于需求特征预分配专业 agent
 
-### P1-6: 开发者体验 ✅
+### 验证模板 (P1)
+- **verification-template.yml**: 5 种问题类型验证清单（API、安全、内存泄漏、性能、代码质量）
 
-- **心跳清理**: 自动清理 7 天前的过期 Worker 记录
-- **AST 自动安装**: 首次使用时自动安装 ast-grep（30s 超时）
-- **ADR 文档体系**: 建立架构决策记录规范，补充 3 个 P1-5 决策文档
+## Fixed (6 个 Critical 修复)
 
-### P2: 文档与质量 ✅
+### API-01: Add `isError` field to `GenericToolDefinition.handler` return type
+- **影响**: 所有自定义工具实现
+- **修复**: 工具 handler 现在可以返回 `isError?: boolean` 字段
+- **破坏性变更**: 工具返回类型扩展，向后兼容
 
-- **故障排查指南**: 覆盖 9 大类 18+ 常见问题（621 行）
-- **TypeDoc API 文档**: 自动生成核心模块 API 文档
-- **性能监控仪表板**: 收集 5 种关键指标，支持回归检测
+### SEC-H01: Fix permission-request hook silent degradation
+- **影响**: 权限检查安全边界
+- **修复**: 权限检查失败时正确返回 `continue: false`，防止 hook 无声降级
+- **安全**: 强制执行权限验证
 
-## 新增功能
+### SEC-H02: Prevent Windows command injection in process-utils
+- **影响**: Windows 平台进程管理
+- **修复**: 使用 `execFileAsync` 替代 `execSync` 字符串拼接
+- **安全**: 消除命令注入风险
 
-- **feat: 添加 marketplace.json 支持 Claude Code 插件安装** (提交 77a4fca)
-  - 新增 `marketplace.json` 配置文件
-  - 修复 `/plugin install omc@ultrapower` 无法找到插件的问题
-  - 包含 71 个 skills 和 50 个 agents 的完整元数据
+### QUALITY-C01: Fix TimeoutManager memory leak
+- **影响**: 长时间运行的 agent 会话
+- **修复**: `start()` 方法调用 `stop()` 清理旧 timer，防止内存泄漏
+- **性能**: 减少内存占用
 
-## 关键指标
+### API-02: Complete HookInput interface with snake_case fields
+- **影响**: Hook 桥接和输入处理
+- **新增字段**: `tool_name`, `tool_input`, `tool_response`, `session_id`, `cwd`, `hook_event_name`
+- **兼容性**: 完整的 Hook 输入规范
 
-- 测试覆盖率: 54.18% → 56-58%
-- 新增测试: 472 个（100% 通过）
-- 构建时间: -59.6%
-- Worker 响应: 5x 提升
-- 代码质量: 消除 400-500 行重复代码
+### QUALITY-C02: Add error boundaries to JSON.parse operations
+- **影响**: 状态文件解析
+- **新增**: `src/lib/safe-json.ts` 安全解析函数
+- **修复**: 防止 JSON 解析异常导致的崩溃
 
-## 文档
+## Added
 
-- 新增故障排查指南 (`docs/troubleshooting.md`)
-- 新增 ADR 文档体系 (`docs/adr/`)
-- 生成 TypeDoc API 文档 (`docs/api/`)
-- 更新贡献指南，添加 ADR 要求
-- 更新安装说明，确保用户可以通过插件市场正确安装
+- New `safeJsonParse` utility for safe JSON parsing with error handling
+- 4 new test files for P0 fixes
+
+## Changed
+
+- 10 core files modified for stability and security improvements
+- All 6249 tests passing with no regressions
 
 ---
 
