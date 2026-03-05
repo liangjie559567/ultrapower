@@ -1,100 +1,92 @@
-<!-- Parent: ../AGENTS.md -->
-<!-- Generated: 2026-01-31 | Updated: 2026-02-24 -->
+<!-- Generated: 2026-01-28 | Updated: 2026-03-05 -->
 
-# docs
+# docs/ - 文档结构
 
-ultrapower 的用户文档和技术指南。
+**用途：** 用户文档、指南、参考资料和架构说明。
 
-## 目的
-
-本目录包含面向终端用户和开发者的文档：
-
-- **终端用户指南**：如何使用 ultrapower 功能
-- **技术参考**：架构、兼容性、迁移
-- **设计文档**：功能设计规范
+**版本：** 5.5.14
 
 ## 关键文件
 
-| 文件 | 说明 |
-|------|-------------|
+| 文件 | 描述 |
+|------|------|
+| `README.md` | 项目主文档 |
+| `REFERENCE.md` | 完整 API 参考（智能体、skills、hooks、工具） |
+| `ARCHITECTURE.md` | 系统架构和设计决策 |
+| `FEATURES.md` | 功能列表和说明 |
 | `CLAUDE.md` | 终端用户编排说明（安装到用户项目） |
-| `FEATURES.md` | 内部功能的开发者 API 参考 |
-| `REFERENCE.md` | API 参考和配置选项 |
-| `ARCHITECTURE.md` | 系统架构概览 |
 | `MIGRATION.md` | 版本迁移指南 |
-| `COMPATIBILITY.md` | 兼容性矩阵和系统要求 |
-| `TIERED_AGENTS_V2.md` | 模型路由和分层 agent 设计 |
-| `DELEGATION-ENFORCER.md` | 委派协议文档 |
-| `SYNC-SYSTEM.md` | 状态同步系统 |
-| `ANALYTICS-SYSTEM.md` | 分析数据收集文档 |
-| `LOCAL_PLUGIN_INSTALL.md` | 插件安装指南 |
+| `COMPATIBILITY.md` | 兼容性矩阵 |
+| `INSTALL.md` | 安装说明 |
+| `testing.md` | 测试策略和覆盖率 |
 
-## 子目录
+## 子目录表
 
-| 目录 | 用途 |
-|-----------|---------|
-| `design/` | 功能设计规范 |
+| 目录 | 用途 | 文件数 |
+|------|------|--------|
+| `standards/` | 规范体系（P0/P1 文档） | 10+ |
+| `guides/` | 用户指南和教程 | 8+ |
+| `design/` | 设计文档和决策记录 | 5+ |
+| `prd/` | 产品需求文档 | 10+ |
+| `reviews/` | 审查报告和分析 | 15+ |
+| `tasks/` | 任务规划和分解 | 20+ |
+| `troubleshooting/` | 故障排查指南 | 8+ |
+| `superpowers/` | 超级功能说明 | 5+ |
+| `windows/` | Windows 特定文档 | 3+ |
+| `partials/` | 文档片段（用于组合） | 10+ |
+| `shared/` | 共享文档资源 | 5+ |
 
-## 面向 AI Agents
+## 面向 AI 智能体
 
-### 在本目录中工作
+### 在此目录中工作
 
-1. **终端用户视角**：CLAUDE.md 会安装到用户项目——面向终端用户而非开发者编写
-2. **保持链接可访问**：CLAUDE.md 中的链接使用原始 GitHub URL（agents 无法导航 GitHub UI）
-3. **版本一致性**：发布时更新所有文档中的版本号
+1. **更新参考文档**
+   - 修改 `REFERENCE.md` 时更新智能体/skills/hooks/工具列表
+   - 保持版本号和日期同步
 
-### 何时更新各文件
+2. **编写用户指南**
+   - 在 `guides/` 中创建新指南
+   - 包含代码示例和验证步骤
+   - 链接到相关参考文档
 
-| 触发条件 | 需更新的文件 |
-|---------|---------------|
-| Agent 数量或列表变更 | `REFERENCE.md`（Agents 章节） |
-| Skill 数量或列表变更 | `REFERENCE.md`（Skills 章节） |
-| Hook 数量或列表变更 | `REFERENCE.md`（Hooks System 章节） |
-| Magic keywords 变更 | `REFERENCE.md`（Magic Keywords 章节） |
-| Agent 工具分配变更 | `CLAUDE.md`（Agent Tool Matrix） |
-| Skill 组合或架构变更 | `ARCHITECTURE.md` |
-| 新增内部 API 或功能 | `FEATURES.md` |
-| 破坏性变更或迁移 | `MIGRATION.md` |
-| 分层 agent 设计更新 | `TIERED_AGENTS_V2.md` |
-| 平台或版本支持变更 | `COMPATIBILITY.md` |
-| 终端用户说明变更 | `CLAUDE.md` |
-| 主要面向用户的功能 | `../README.md` |
+3. **维护架构文档**
+   - 修改 `ARCHITECTURE.md` 时记录设计决策
+   - 更新系统图表和流程图
+   - 保持与实现代码同步
 
-### 测试要求
+### 修改检查清单
 
-- 验证 markdown 渲染正确
-- 检查所有内部链接可解析
-- 验证文档中的代码示例
+| 修改位置 | 更新文档 |
+|---------|---------|
+| 智能体数量/列表变化 | `REFERENCE.md` |
+| Skills 数量/列表变化 | `REFERENCE.md` |
+| Hooks 数量/列表变化 | `REFERENCE.md` |
+| 工具数量/列表变化 | `REFERENCE.md` |
+| 架构或设计变化 | `ARCHITECTURE.md` |
+| 新功能 | `FEATURES.md` |
+| 破坏性变化 | `MIGRATION.md` |
+| 兼容性问题 | `COMPATIBILITY.md` |
 
-### 常见模式
+### 常见任务
 
-#### 链接到原始内容
+```bash
+# 查看参考文档
+cat docs/REFERENCE.md
 
-使用原始 GitHub URL 以确保外部可访问：
+# 查看架构
+cat docs/ARCHITECTURE.md
 
-[Migration Guide](https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/MIGRATION.md)
+# 查看用户指南
+ls -la docs/guides/
 
-#### 版本引用
-
-使用一致的版本标题格式，标题后留空行：
-
-```markdown
-## v3.8.17 Changes
-
-- Feature A
-- Feature B
+# 查看规范
+ls -la docs/standards/
 ```
 
-## 依赖
+### 文档更新规则
 
-### 内部依赖
-
-- 引用 `agents/` 中的 agents
-- 引用 `skills/` 中的 skills
-- 引用 `src/tools/` 中的工具
-
-### 外部依赖
-
-无——纯 markdown 文件。
-
-<!-- MANUAL: -->
+- 保留 "Generated" 日期不变
+- 更新 "Updated" 日期为当前日期
+- 版本号与 package.json 同步
+- 所有代码示例必须经过测试
+- 链接必须指向有效的文件或 URL
