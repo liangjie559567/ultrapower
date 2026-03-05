@@ -10,6 +10,7 @@ import {
   synthesizeBridgeConfig,
 } from '../worker-restart.js';
 import type { McpWorkerMember } from '../types.js';
+import { createWorkerAdapter } from '../../workers/factory.js';
 
 describe('worker-restart', () => {
   let testDir: string;
@@ -20,82 +21,113 @@ describe('worker-restart', () => {
     testDir = mkdtempSync(join(tmpdir(), 'worker-restart-test-'));
   });
 
-  afterEach(() => {
-    rmSync(testDir, { recursive: true, force: true });
+  async function registerWorker(name: string) {
+    const adapter = await createWorkerAdapter('auto', testDir);
+    if (!adapter) throw new Error('Failed to create adapter');
+    await adapter.upsert({
+      workerId: `team:${teamName}:${name}`,
+      workerType: 'team',
+      name,
+      status: 'running',
+      pid: process.pid,
+      spawnedAt: new Date().toISOString(),
+      lastHeartbeatAt: new Date().toISOString(),
+      teamName,
+    });
+    await adapter.close();
+  }
+
+  afterEach(async () => {
+    // Give time for SQLite to close
+    await new Promise(resolve => setTimeout(resolve, 200));
+    try {
+      rmSync(testDir, { recursive: true, force: true });
+    } catch (e) {
+      // Ignore cleanup errors on Windows
+    }
   });
 
   describe('shouldRestart', () => {
-    it('returns base backoff for first restart', () => {
-      const delay = shouldRestart(testDir, teamName, workerName);
+    it('returns base backoff for first restart', async () => {
+      await registerWorker(workerName);
+      const delay = await shouldRestart(testDir, teamName, workerName);
       expect(delay).toBe(5000); // default base
     });
 
-    it('returns exponential backoff values', () => {
-      recordRestart(testDir, teamName, workerName);
-      const delay = shouldRestart(testDir, teamName, workerName);
+    it('returns exponential backoff values', async () => {
+      await registerWorker(workerName);
+      await recordRestart(testDir, teamName, workerName);
+      const delay = await shouldRestart(testDir, teamName, workerName);
       expect(delay).toBe(10000); // 5000 * 2^1
     });
 
-    it('caps backoff at backoffMaxMs', () => {
+    it('caps backoff at backoffMaxMs', async () => {
+      await registerWorker(workerName);
       const policy = { maxRestarts: 10, backoffBaseMs: 5000, backoffMaxMs: 15000, backoffMultiplier: 2 };
-      recordRestart(testDir, teamName, workerName, policy);
-      recordRestart(testDir, teamName, workerName, policy);
-      recordRestart(testDir, teamName, workerName, policy); // count=3, would be 5000*2^3=40000
-      const delay = shouldRestart(testDir, teamName, workerName, policy);
+      await recordRestart(testDir, teamName, workerName, policy);
+      await recordRestart(testDir, teamName, workerName, policy);
+      await recordRestart(testDir, teamName, workerName, policy); // count=3, would be 5000*2^3=40000
+      const delay = await shouldRestart(testDir, teamName, workerName, policy);
       expect(delay).toBe(15000); // capped
     });
 
-    it('returns null after max restarts', () => {
+    it('returns null after max restarts', async () => {
+      await registerWorker(workerName);
       const policy = { maxRestarts: 2, backoffBaseMs: 1000, backoffMaxMs: 60000, backoffMultiplier: 2 };
-      recordRestart(testDir, teamName, workerName, policy);
-      recordRestart(testDir, teamName, workerName, policy);
-      const delay = shouldRestart(testDir, teamName, workerName, policy);
+      await recordRestart(testDir, teamName, workerName, policy);
+      await recordRestart(testDir, teamName, workerName, policy);
+      const delay = await shouldRestart(testDir, teamName, workerName, policy);
       expect(delay).toBeNull();
     });
 
-    it('uses custom policy', () => {
+    it('uses custom policy', async () => {
+      await registerWorker(workerName);
       const policy = { maxRestarts: 5, backoffBaseMs: 1000, backoffMaxMs: 30000, backoffMultiplier: 3 };
-      const delay = shouldRestart(testDir, teamName, workerName, policy);
+      const delay = await shouldRestart(testDir, teamName, workerName, policy);
       expect(delay).toBe(1000); // base
     });
   });
 
   describe('recordRestart', () => {
-    it('creates restart state on first call', () => {
-      recordRestart(testDir, teamName, workerName);
-      const state = readRestartState(testDir, teamName, workerName);
+    it('creates restart state on first call', async () => {
+      await registerWorker(workerName);
+      await recordRestart(testDir, teamName, workerName);
+      const state = await readRestartState(testDir, teamName, workerName);
       expect(state).not.toBeNull();
       expect(state!.restartCount).toBe(1);
       expect(state!.workerName).toBe(workerName);
     });
 
-    it('increments restart count', () => {
-      recordRestart(testDir, teamName, workerName);
-      recordRestart(testDir, teamName, workerName);
-      const state = readRestartState(testDir, teamName, workerName);
+    it('increments restart count', async () => {
+      await registerWorker(workerName);
+      await recordRestart(testDir, teamName, workerName);
+      await recordRestart(testDir, teamName, workerName);
+      const state = await readRestartState(testDir, teamName, workerName);
       expect(state!.restartCount).toBe(2);
     });
 
-    it('updates lastRestartAt timestamp', () => {
-      recordRestart(testDir, teamName, workerName);
-      const _state1 = readRestartState(testDir, teamName, workerName);
+    it('updates lastRestartAt timestamp', async () => {
+      await registerWorker(workerName);
+      await recordRestart(testDir, teamName, workerName);
+      const _state1 = await readRestartState(testDir, teamName, workerName);
       // Small delay to ensure different timestamp
-      recordRestart(testDir, teamName, workerName);
-      const state2 = readRestartState(testDir, teamName, workerName);
+      await recordRestart(testDir, teamName, workerName);
+      const state2 = await readRestartState(testDir, teamName, workerName);
       expect(state2!.lastRestartAt).not.toBe('');
     });
   });
 
   describe('clearRestartState', () => {
-    it('removes restart state', () => {
-      recordRestart(testDir, teamName, workerName);
-      expect(readRestartState(testDir, teamName, workerName)).not.toBeNull();
-      clearRestartState(testDir, teamName, workerName);
-      expect(readRestartState(testDir, teamName, workerName)).toBeNull();
+    it('removes restart state', async () => {
+      await registerWorker(workerName);
+      await recordRestart(testDir, teamName, workerName);
+      expect(await readRestartState(testDir, teamName, workerName)).not.toBeNull();
+      await clearRestartState(testDir, teamName, workerName);
+      expect(await readRestartState(testDir, teamName, workerName)).toBeNull();
     });
 
-    it('does not throw for non-existent state', () => {
-      expect(() => clearRestartState(testDir, teamName, 'nonexistent')).not.toThrow();
+    it('does not throw for non-existent state', async () => {
+      await expect(clearRestartState(testDir, teamName, 'nonexistent')).resolves.not.toThrow();
     });
   });
 
