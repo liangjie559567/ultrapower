@@ -153,6 +153,26 @@
 - 元数据: 文件=bridge-manager.test.ts, 修复前=4/17 超时(30s), 修复后=17/17 通过(25s), 模式=TEST-MOCK-001 扩展
 - 知识产出: k-071
 
+### LQ-037: 发布流程标准化模板
+- 优先级: P1
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-05
+- 处理时间: 2026-03-05
+- 内容: v5.5.14 发布流程可作为标准模板：8步检查清单（版本同步8个文件 → 测试验证 → Git 提交 → Tag 推送 → CI 监控三阶段 → npm/GitHub 验证 → dev→main 合并 → 清理）。关键点：1) 版本同步必须包含 package.json、plugin.json、marketplace.json（两处）、docs/CLAUDE.md、CLAUDE.md、README.md、src/installer/index.ts；2) CI 自动接管 npm 发布、GitHub Release 创建、marketplace.json 同步；3) dev→main 合并使用 --no-ff 保留完整历史；4) 遇到未提交更改使用 git stash 三步法。
+- 元数据: session=2026-03-05, files=8个版本文件, commits=2, CI=3阶段
+- 知识产出: k-072
+
+### LQ-038: Git stash 三步法
+- 优先级: P2
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-05
+- 处理时间: 2026-03-05
+- 内容: 处理未提交更改的标准模式：`git stash push -m "描述"` → 执行操作（切换分支/合并/变基） → `git stash pop` 恢复更改。适用场景：分支切换前有未提交更改、合并前需要清理工作区、临时保存工作状态。优势：保留更改内容、操作可逆、支持描述信息。注意事项：stash pop 可能产生冲突，需要手动解决。
+- 元数据: session=2026-03-05, commands=git stash push/pop, use_case=branch_merge
+- 知识产出: k-073
+
 ## 已完成
 
 ### LQ-033: 超时保护三层架构模式

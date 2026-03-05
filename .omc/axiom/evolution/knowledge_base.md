@@ -86,6 +86,8 @@ cycle: 17
 | k-069 | DFS Cycle Detection with Three-Color Marking | pattern | 0.9 | 2026-03-04 | active |
 | k-070 | ESM Import Path Must Include .js Extension | tooling | 0.95 | 2026-03-04 | active |
 | k-071 | Vitest Mock Completeness: Poll Loop Functions Must Be Mocked | testing | 0.95 | 2026-03-04 | active |
+| k-072 | Release Workflow Standard Template (8-Step Checklist) | workflow | 0.95 | 2026-03-05 | active |
+| k-073 | Git Stash Three-Step Pattern for Uncommitted Changes | workflow | 0.9 | 2026-03-05 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -94,7 +96,7 @@ cycle: 17
 | architecture | 20 | 架构相关知识 |
 | debugging | 6 | 调试技巧 |
 | pattern | 8 | 代码模式 |
-| workflow | 17 | 工作流相关 |
+| workflow | 19 | 工作流相关 |
 | tooling | 9 | 工具使用 |
 | security | 3 | 安全相关知识 |
 | platform | 1 | 平台兼容性 |
@@ -186,3 +188,108 @@ cycle: 17
 
 ### 4.2 清理规则
 - Confidence < 0.5 且超过 30 天未使用 → 标记为 `deprecated`
+
+---
+
+## 5. 知识条目详情
+
+### k-072: Release Workflow Standard Template (8-Step Checklist)
+
+**分类**: workflow
+**置信度**: 0.95
+**创建时间**: 2026-03-05
+**标签**: release, git, ci-cd, npm, github-actions
+
+**描述**:
+v5.5.14 发布流程标准化模板，包含完整的 8 步检查清单，适用于所有后续版本发布。
+
+**适用场景**:
+- npm 包版本发布
+- GitHub Release 创建
+- 多文件版本同步
+- CI/CD 自动化发布
+
+**关键步骤**:
+1. **版本同步**（8 个文件必须同步）:
+   - package.json
+   - plugin.json
+   - marketplace.json（两处 version 字段）
+   - docs/CLAUDE.md（OMC:VERSION 注释）
+   - CLAUDE.md（版本引用）
+   - README.md（版本徽章）
+   - src/installer/index.ts（VERSION 常量）
+
+2. **测试验证**: `npm run test:run` 全部通过
+
+3. **Git 提交**: `git commit -m "chore: bump version to X.Y.Z"`
+
+4. **Tag 推送**: `git tag vX.Y.Z && git push origin main && git push origin vX.Y.Z`
+
+5. **CI 监控三阶段**:
+   - publish job（npm 发布）
+   - github-release job（创建 Release）
+   - marketplace-sync job（同步 marketplace.json）
+
+6. **验证**:
+   - npm: https://www.npmjs.com/package/@liangjie559567/ultrapower
+   - GitHub: https://github.com/liangjie559567/ultrapower/releases
+
+7. **dev→main 合并**: `git merge dev --no-ff`
+
+8. **清理**: 删除临时分支、检查未提交更改
+
+**注意事项**:
+- marketplace.json 版本不同步会导致用户安装旧版本
+- CI 自动接管 npm 发布，无需手动执行
+- 遇到未提交更改使用 git stash 三步法（见 k-073）
+
+**相关知识**: k-073, k-045, k-060, k-066, k-067
+
+---
+
+### k-073: Git Stash Three-Step Pattern for Uncommitted Changes
+
+**分类**: workflow
+**置信度**: 0.9
+**创建时间**: 2026-03-05
+**标签**: git, stash, workflow, branch-management
+
+**描述**:
+处理未提交更改的标准三步模式，确保操作可逆且不丢失工作内容。
+
+**适用场景**:
+- 分支切换前有未提交更改
+- 合并前需要清理工作区
+- 临时保存工作状态
+- 需要在干净工作区执行操作
+
+**标准流程**:
+```bash
+# Step 1: 暂存更改（带描述信息）
+git stash push -m "描述性信息"
+
+# Step 2: 执行操作（切换分支/合并/变基等）
+git checkout main
+git merge dev --no-ff
+git push origin main
+
+# Step 3: 恢复更改
+git checkout dev
+git stash pop
+```
+
+**优势**:
+- 保留更改内容，操作可逆
+- 支持描述信息，便于追溯
+- 适用于所有 git 操作场景
+
+**注意事项**:
+- `stash pop` 可能产生冲突，需手动解决
+- 使用 `git stash list` 查看所有 stash
+- 使用 `git stash apply` 保留 stash 副本
+- 避免长期依赖 stash，应及时提交
+
+**实际案例**:
+v5.5.14 发布时，dev→main 合并前遇到 `.omc/notepad.md` 未提交更改，使用此模式成功完成合并并恢复更改。
+
+**相关知识**: k-072, k-021, k-038, k-045
