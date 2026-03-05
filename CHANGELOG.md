@@ -1,21 +1,20 @@
 # ultrapower v5.5.15
 
+### 修复
+
+- **docs: 修复安装文档中的包名和命令错误**
+  - 修复 npm 包名：`ultrapower` → `@liangjie559567/ultrapower`
+  - 修复插件安装命令：`/plugin install ultrapower` → `/plugin install omc@ultrapower`
+  - 修复插件更新命令：`/plugin update ultrapower` → `/plugin update omc@ultrapower`
+  - 更新 5 个文档文件：README.md、docs/INSTALL.md、docs/LOCAL_INSTALL_VERIFICATION.md、docs/PLUGIN_MARKETPLACE_VERIFICATION.md、docs/UPGRADE_VERIFICATION.md
+  - 同步版本号到 5.5.15：.claude-plugin/plugin.json、.claude-plugin/marketplace.json
+  - 新增安装验证脚本：scripts/verify-install.sh
+  - 新增验证报告：docs/INSTALL_FIX_SUMMARY.md、docs/INSTALL_FIX_VERIFICATION.md、docs/INSTALL_VERIFICATION_REPORT.md
+  - 修复用户报告的 404 错误问题
+
 ### 新增
 
 - **feat(mcp): MCP 全面采用计划完成（42 个原子任务）**
-  - **Phase 1: MCP 服务器包装器**（17 任务）
-    - MCP 服务器框架（stdio 传输层 + 日志系统）
-    - 35 个工具转换适配器（8 类：LSP×12、AST×2、Python REPL×1、Notepad×6、State×5、ProjectMemory×4、Trace×2、Skills×3）
-    - 工具调用路由系统（超时保护 + 错误处理）
-    - 完整集成测试套件
-    - CI/CD 流水线配置（`.github/workflows/mcp-tests.yml`）
-  - **Phase 2: 社区 MCP 服务器集成**（14 任务）
-    - MCP 客户端实现（`src/mcp/client/MCPClient.ts`）：连接/重试/超时机制
-    - 配置系统（`src/mcp/config/`）：Zod schema + 环境变量替换（`${VAR_NAME}` 语法）
-    - 命名空间管理器（`src/mcp/namespace-manager.ts`）：工具注册 + 冲突检测
-    - 社区服务器兼容性测试（filesystem、github、slack）
-    - 兼容性矩阵文档（`docs/compatibility-matrix.md`）
-  - **Phase 3: 协议标准化**（11 任务）
     - 工具前缀迁移系统（`src/tools/tool-prefix-migration.ts`）：双注册 + 废弃警告
     - npm 包发布（`@liangjie559567/ultrapower-mcp-server@5.5.15`）
     - 自动迁移脚本（`scripts/migrate-tool-names.js`）
