@@ -11,19 +11,17 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 ## 安装
 
-### 方式一：Claude Code 插件市场（推荐）
+### 方式一：Claude Code 插件（推荐）
 
 在 Claude Code 会话中运行：
 
 ```bash
-# 第一步：添加插件市场
+# 添加 marketplace 并安装
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin install ultrapower
 
-# 第二步：安装插件
-/plugin install omc@ultrapower
-
-# 第三步：运行安装向导
-/ultrapower:omc-setup
+# 运行安装向导
+/omc-setup
 ```
 
 ### 方式二：npm 全局安装
