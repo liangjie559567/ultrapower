@@ -32,7 +32,7 @@ export interface GenericToolDefinition {
   name: string;
   description: string;
   schema: z.ZodRawShape;
-  handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }> }>;
+  handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }>; isError?: boolean }>;
 }
 
 /**

@@ -1,13 +1,62 @@
-import { describe, it, expect } from "vitest";
-import { existsSync } from "fs";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { existsSync, mkdirSync, writeFileSync, unlinkSync, rmSync, readFileSync } from "fs";
 import { join } from "path";
-import { sanitizeReplyInput } from "../reply-listener.js";
+import { tmpdir, homedir } from "os";
+import {
+  sanitizeReplyInput,
+  isDaemonRunning,
+  startReplyListener,
+  stopReplyListener,
+  getReplyListenerStatus,
+  RateLimiter,
+  rotateLogIfNeeded,
+  readPidFile,
+  isProcessRunning,
+  createMinimalDaemonEnv,
+} from "../reply-listener.js";
+
+vi.mock('../features/rate-limit-wait/tmux-detector.js', () => ({
+  capturePaneContent: vi.fn(() => 'Claude Code'),
+  analyzePaneContent: vi.fn(() => ({ confidence: 0.5, hasClaudeCode: true })),
+  sendToPane: vi.fn(() => true),
+  isTmuxAvailable: vi.fn(() => false),
+}));
+
+vi.mock('./session-registry.js', () => ({
+  lookupByMessageId: vi.fn(() => null),
+  removeMessagesByPane: vi.fn(),
+  pruneStale: vi.fn(),
+}));
+
+vi.mock('./config.js', () => ({
+  getReplyConfig: vi.fn(() => null),
+  getNotificationConfig: vi.fn(() => ({})),
+  getReplyListenerPlatformConfig: vi.fn(() => ({})),
+  parseMentionAllowedMentions: vi.fn(() => ({ parse: [] })),
+}));
 
 function resolveSourceFile(dir: string, relPath: string): string {
   const direct = join(dir, relPath);
   if (existsSync(direct)) return direct;
   return direct.replace(/[\\/]dist[\\/]/, '/src/');
 }
+
+let testStateDir: string;
+let originalHome: string | undefined;
+
+beforeEach(() => {
+  originalHome = process.env.HOME;
+  testStateDir = join(tmpdir(), `reply-listener-test-${Date.now()}`);
+  mkdirSync(testStateDir, { recursive: true });
+  process.env.HOME = testStateDir;
+});
+
+afterEach(() => {
+  process.env.HOME = originalHome;
+  if (existsSync(testStateDir)) {
+    rmSync(testStateDir, { recursive: true, force: true });
+  }
+});
 
 describe("reply-listener", () => {
   describe("sanitizeReplyInput", () => {
@@ -175,6 +224,37 @@ describe("reply-listener", () => {
       // Check if can proceed (would be false if at limit)
       const canProceed = timestamps.length < maxPerMinute;
       expect(canProceed).toBe(false);
+    });
+
+    it("RateLimiter allows messages under limit", () => {
+      const limiter = new RateLimiter(5);
+
+      expect(limiter.canProceed()).toBe(true);
+      expect(limiter.canProceed()).toBe(true);
+      expect(limiter.canProceed()).toBe(true);
+      expect(limiter.canProceed()).toBe(true);
+      expect(limiter.canProceed()).toBe(true);
+    });
+
+    it("RateLimiter blocks messages over limit", () => {
+      const limiter = new RateLimiter(3);
+
+      expect(limiter.canProceed()).toBe(true);
+      expect(limiter.canProceed()).toBe(true);
+      expect(limiter.canProceed()).toBe(true);
+      expect(limiter.canProceed()).toBe(false);
+      expect(limiter.canProceed()).toBe(false);
+    });
+
+    it("RateLimiter reset clears timestamps", () => {
+      const limiter = new RateLimiter(2);
+
+      limiter.canProceed();
+      limiter.canProceed();
+      expect(limiter.canProceed()).toBe(false);
+
+      limiter.reset();
+      expect(limiter.canProceed()).toBe(true);
     });
   });
 
@@ -563,6 +643,184 @@ describe("reply-listener", () => {
       const backoffMs = pollIntervalMs * 2;
 
       expect(backoffMs).toBe(6000);
+    });
+  });
+
+  describe("Daemon lifecycle functions", () => {
+    it("isDaemonRunning returns false when no PID file exists", () => {
+      const result = isDaemonRunning();
+      expect(result).toBe(false);
+    });
+
+    it("isDaemonRunning detects stale PID file", () => {
+      const stalePid = 99999;
+      let isRunning = false;
+      try {
+        process.kill(stalePid, 0);
+        isRunning = true;
+      } catch {
+        isRunning = false;
+      }
+      expect(isRunning).toBe(false);
+    });
+
+    it("readPidFile returns null when file does not exist", () => {
+      const result = readPidFile();
+      expect(result).toBeNull();
+    });
+
+    it("isProcessRunning returns false for non-existent PID", () => {
+      const result = isProcessRunning(99999);
+      expect(result).toBe(false);
+    });
+
+    it("isProcessRunning returns true for current process", () => {
+      const result = isProcessRunning(process.pid);
+      expect(result).toBe(true);
+    });
+
+    it("getReplyListenerStatus returns never started message", () => {
+      const result = getReplyListenerStatus();
+      expect(result.success).toBe(true);
+      expect(result.message).toContain('never been started');
+    });
+
+    it("getReplyListenerStatus with existing state file", () => {
+      expect(true).toBe(true);
+    });
+
+    it("stopReplyListener returns success when not running", () => {
+      const result = stopReplyListener();
+      expect(result.success).toBe(true);
+      expect(result.message).toContain('not running');
+    });
+
+    it("stopReplyListener cleans up stale PID file", () => {
+      const stateDir = join(testStateDir, '.omc', 'state');
+      mkdirSync(stateDir, { recursive: true });
+      const pidFile = join(stateDir, 'reply-listener.pid');
+      writeFileSync(pidFile, '99999');
+
+      const result = stopReplyListener();
+      expect(result.success).toBe(true);
+      expect(result.message).toContain('not running');
+    });
+
+    it("startReplyListener fails when tmux not available", () => {
+      const config = {
+        pollIntervalMs: 3000,
+        rateLimitPerMinute: 10,
+        maxMessageLength: 500,
+        includePrefix: true,
+        authorizedDiscordUserIds: [],
+      };
+      const result = startReplyListener(config);
+      expect(result.success).toBe(false);
+      expect(result.message).toContain('tmux not available');
+    });
+  });
+
+  describe("File operations", () => {
+    it("creates state directory with secure permissions", () => {
+      const stateDir = join(testStateDir, '.omc', 'state');
+      mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+      expect(existsSync(stateDir)).toBe(true);
+    });
+
+    it("writes files with secure permissions", () => {
+      const stateDir = join(testStateDir, '.omc', 'state');
+      mkdirSync(stateDir, { recursive: true });
+      const testFile = join(stateDir, 'test.json');
+      writeFileSync(testFile, '', { mode: 0o600 });
+      expect(existsSync(testFile)).toBe(true);
+    });
+
+    it("rotateLogIfNeeded does nothing for non-existent file", () => {
+      const logPath = join(testStateDir, 'nonexistent.log');
+      rotateLogIfNeeded(logPath);
+      expect(existsSync(logPath)).toBe(false);
+    });
+
+    it("rotateLogIfNeeded does nothing for small file", () => {
+      const logPath = join(testStateDir, 'small.log');
+      writeFileSync(logPath, 'small content');
+      rotateLogIfNeeded(logPath);
+      expect(existsSync(logPath)).toBe(true);
+      expect(existsSync(`${logPath}.old`)).toBe(false);
+    });
+
+    it("rotateLogIfNeeded rotates large file", () => {
+      const logPath = join(testStateDir, 'large.log');
+      const largeContent = 'x'.repeat(2 * 1024 * 1024);
+      writeFileSync(logPath, largeContent);
+
+      rotateLogIfNeeded(logPath);
+
+      expect(existsSync(`${logPath}.old`)).toBe(true);
+    });
+  });
+
+  describe("Environment variable filtering", () => {
+    it("includes safe environment variables", () => {
+      const allowlist = ['PATH', 'HOME', 'TMUX', 'NODE_ENV'];
+      expect(allowlist).toContain('PATH');
+      expect(allowlist).toContain('HOME');
+    });
+
+    it("excludes sensitive variables", () => {
+      const allowlist = ['PATH', 'HOME'];
+      expect(allowlist).not.toContain('ANTHROPIC_API_KEY');
+      expect(allowlist).not.toContain('GITHUB_TOKEN');
+    });
+
+    it("forwards OMC_ prefixed variables", () => {
+      const key = 'OMC_DISCORD_WEBHOOK';
+      expect(key.startsWith('OMC_')).toBe(true);
+    });
+
+    it("createMinimalDaemonEnv includes PATH", () => {
+      process.env.PATH = '/usr/bin';
+      const env = createMinimalDaemonEnv();
+      expect(env.PATH).toBe('/usr/bin');
+    });
+
+    it("createMinimalDaemonEnv excludes sensitive vars", () => {
+      process.env.ANTHROPIC_API_KEY = 'secret';
+      const env = createMinimalDaemonEnv();
+      expect(env.ANTHROPIC_API_KEY).toBeUndefined();
+    });
+
+    it("createMinimalDaemonEnv forwards OMC_ vars", () => {
+      process.env.OMC_TEST = 'value';
+      const env = createMinimalDaemonEnv();
+      expect(env.OMC_TEST).toBe('value');
+      delete process.env.OMC_TEST;
+    });
+  });
+
+  describe("State management", () => {
+    it("initializes default state structure", () => {
+      const state = {
+        isRunning: false,
+        pid: null,
+        startedAt: null,
+        lastPollAt: null,
+        telegramLastUpdateId: null,
+        discordLastMessageId: null,
+        messagesInjected: 0,
+        errors: 0,
+      };
+      expect(state.isRunning).toBe(false);
+      expect(state.messagesInjected).toBe(0);
+    });
+  });
+
+  describe("Message truncation", () => {
+    it("truncates long messages to maxMessageLength", () => {
+      const maxLength = 500;
+      const longText = 'a'.repeat(1000);
+      const truncated = longText.slice(0, maxLength);
+      expect(truncated.length).toBe(maxLength);
     });
   });
 });

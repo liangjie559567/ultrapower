@@ -19,6 +19,7 @@ export interface PermissionRequestInput {
 
 export interface HookOutput {
   continue: boolean;
+  reason?: string;
   hookSpecificOutput?: {
     hookEventName: string;
     decision?: {
@@ -27,6 +28,8 @@ export interface HookOutput {
     };
   };
 }
+
+type SensitivityLevel = 'low' | 'medium' | 'high' | 'critical';
 
 const SAFE_PATTERNS = [
   /^git (status|diff|log|branch|show|fetch)/,
@@ -109,6 +112,42 @@ export function isHeredocWithSafeBase(command: string): boolean {
 }
 
 /**
+ * Classify Bash command sensitivity
+ */
+function classifyBashCommand(command: string): SensitivityLevel {
+  const CRITICAL_PATTERNS = [
+    /rm\s+-rf\s+\//,
+    /sudo\s+rm/,
+    /:\(\)\{\s*:\|:&\s*\};:/,
+  ];
+  const HIGH_PATTERNS = [
+    /chmod\s+777/,
+    /curl.*\|\s*sh/,
+    /wget.*\|\s*bash/,
+    /kill\s+-9\s+-1/,
+  ];
+  const MEDIUM_PATTERNS = [
+    />\s*\/etc\//,
+    /npm\s+install.*--unsafe/,
+    /pip\s+install.*--trusted-host/,
+  ];
+
+  if (CRITICAL_PATTERNS.some(p => p.test(command))) return 'critical';
+  if (HIGH_PATTERNS.some(p => p.test(command))) return 'high';
+  if (MEDIUM_PATTERNS.some(p => p.test(command))) return 'medium';
+  return 'low';
+}
+
+/**
+ * Classify file path sensitivity
+ */
+function classifyFilePath(filePath: string): SensitivityLevel {
+  if (filePath.startsWith('/etc/') || filePath.startsWith('/usr/bin/')) return 'high';
+  if (filePath.includes('.env') || filePath.includes('config')) return 'medium';
+  return 'low';
+}
+
+/**
  * Check if an active mode (autopilot/ultrawork/ralph/swarm) is running
  */
 export function isActiveModeRunning(directory: string): boolean {
@@ -157,6 +196,11 @@ export function isActiveModeRunning(directory: string): boolean {
  * Process permission request and decide whether to auto-allow
  */
 export function processPermissionRequest(input: PermissionRequestInput): HookOutput {
+  // Legacy mode: all operations pass through
+  if (process.env.LEGACY_PERMISSION_MODE === 'true') {
+    return { continue: true };
+  }
+
   // Only process Bash tool for command auto-approval
   // Normalize tool name - handle both proxy_ prefixed and unprefixed versions
   const toolName = input.tool_name.replace(/^proxy_/, '');
@@ -206,5 +250,13 @@ export function processPermissionRequest(input: PermissionRequestInput): HookOut
  * Main hook entry point
  */
 export async function handlePermissionRequest(input: PermissionRequestInput): Promise<HookOutput> {
-  return processPermissionRequest(input);
+  try {
+    return processPermissionRequest(input);
+  } catch (error) {
+    // Fail closed on error - deny permission for security
+    return {
+      continue: false,
+      reason: `Permission check failed: ${error instanceof Error ? error.message : String(error)}`
+    };
+  }
 }

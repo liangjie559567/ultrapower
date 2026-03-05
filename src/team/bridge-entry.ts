@@ -61,7 +61,7 @@ export function validateConfigPath(configPath: string, homeDir: string, claudeCo
  * - Must resolve (via realpathSync) to a path under the user's home directory
  * - Must be inside a git worktree
  */
-function validateBridgeWorkingDirectory(workingDirectory: string): void {
+export function validateBridgeWorkingDirectory(workingDirectory: string): void {
   // Check exists and is directory
   let stat;
   try {
@@ -74,8 +74,8 @@ function validateBridgeWorkingDirectory(workingDirectory: string): void {
   }
 
   // Resolve symlinks and verify under homedir
-  const resolved = realpathSync(workingDirectory);
-  const home = homedir();
+  const resolved = realpathSync(workingDirectory).replace(/\\/g, '/');
+  const home = homedir().replace(/\\/g, '/');
   if (!resolved.startsWith(home + '/') && resolved !== home) {
     throw new Error(`workingDirectory is outside home directory: ${resolved}`);
   }
@@ -87,39 +87,16 @@ function validateBridgeWorkingDirectory(workingDirectory: string): void {
   }
 }
 
-function main(): void {
-  // Parse --config flag
-  const configIdx = process.argv.indexOf('--config');
-  if (configIdx === -1 || !process.argv[configIdx + 1]) {
-    console.error('Usage: node bridge-entry.js --config <path-to-config.json>');
-    process.exit(1);
-  }
-
-  const configPath = resolve(process.argv[configIdx + 1]);
-
-  // Validate config path is from a trusted location
-  const home = homedir();
-  const claudeConfigDir = getClaudeConfigDir();
-  if (!validateConfigPath(configPath, home, claudeConfigDir)) {
-    console.error(`Config path must be under ~/ with ${claudeConfigDir} or ~/.omc/ subpath: ${configPath}`);
-    process.exit(1);
-  }
-
-  let config: BridgeConfig;
-  try {
-    const raw = readFileSync(configPath, 'utf-8');
-    config = JSON.parse(raw);
-  } catch (err) {
-    console.error(`Failed to read config from ${configPath}: ${(err as Error).message}`);
-    process.exit(1);
-  }
-
+/**
+ * Validate and normalize a bridge config object.
+ * Throws on validation errors.
+ */
+export function validateAndNormalizeConfig(config: BridgeConfig): BridgeConfig {
   // Validate required fields
   const required: (keyof BridgeConfig)[] = ['teamName', 'workerName', 'provider', 'workingDirectory'];
   for (const field of required) {
     if (!config[field]) {
-      console.error(`Missing required config field: ${field}`);
-      process.exit(1);
+      throw new Error(`Missing required config field: ${field}`);
     }
   }
 
@@ -129,48 +106,37 @@ function main(): void {
 
   // Validate provider
   if (config.provider !== 'codex' && config.provider !== 'gemini') {
-    console.error(`Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`);
-    process.exit(1);
+    throw new Error(`Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`);
   }
 
   // Validate working directory before use
-  try {
-    validateBridgeWorkingDirectory(config.workingDirectory);
-  } catch (err) {
-    console.error(`[bridge] Invalid workingDirectory: ${(err as Error).message}`);
-    process.exit(1);
-  }
+  validateBridgeWorkingDirectory(config.workingDirectory);
 
   // Validate permission enforcement config
   if (config.permissionEnforcement) {
     const validModes = ['off', 'audit', 'enforce'];
     if (!validModes.includes(config.permissionEnforcement)) {
-      console.error(`Invalid permissionEnforcement: ${config.permissionEnforcement}. Must be 'off', 'audit', or 'enforce'.`);
-      process.exit(1);
+      throw new Error(`Invalid permissionEnforcement: ${config.permissionEnforcement}. Must be 'off', 'audit', or 'enforce'.`);
     }
 
     // Validate permissions shape when enforcement is active
     if (config.permissionEnforcement !== 'off' && config.permissions) {
       const p = config.permissions;
       if (p.allowedPaths && !Array.isArray(p.allowedPaths)) {
-        console.error('permissions.allowedPaths must be an array of strings');
-        process.exit(1);
+        throw new Error('permissions.allowedPaths must be an array of strings');
       }
       if (p.deniedPaths && !Array.isArray(p.deniedPaths)) {
-        console.error('permissions.deniedPaths must be an array of strings');
-        process.exit(1);
+        throw new Error('permissions.deniedPaths must be an array of strings');
       }
       if (p.allowedCommands && !Array.isArray(p.allowedCommands)) {
-        console.error('permissions.allowedCommands must be an array of strings');
-        process.exit(1);
+        throw new Error('permissions.allowedCommands must be an array of strings');
       }
 
       // Reject dangerous patterns that could defeat the deny-defaults
       const dangerousPatterns = ['**', '*', '!.git/**', '!.env*', '!**/.env*'];
       for (const pattern of (p.allowedPaths || [])) {
         if (dangerousPatterns.includes(pattern)) {
-          console.error(`Dangerous allowedPaths pattern rejected: "${pattern}"`);
-          process.exit(1);
+          throw new Error(`Dangerous allowedPaths pattern rejected: "${pattern}"`);
         }
       }
     }
@@ -183,6 +149,57 @@ function main(): void {
   config.outboxMaxLines = config.outboxMaxLines || 500;
   config.maxRetries = config.maxRetries || 5;
   config.permissionEnforcement = config.permissionEnforcement || 'off';
+
+  return config;
+}
+
+/**
+ * Parse and validate config file path from command line arguments.
+ * Returns the validated config path.
+ */
+export function parseAndValidateConfigPath(argv: string[]): string {
+  const configIdx = argv.indexOf('--config');
+  if (configIdx === -1 || !argv[configIdx + 1]) {
+    throw new Error('Usage: node bridge-entry.js --config <path-to-config.json>');
+  }
+
+  const configPath = resolve(argv[configIdx + 1]);
+
+  // Validate config path is from a trusted location
+  const home = homedir();
+  const claudeConfigDir = getClaudeConfigDir();
+  if (!validateConfigPath(configPath, home, claudeConfigDir)) {
+    throw new Error(`Config path must be under ~/ with ${claudeConfigDir} or ~/.omc/ subpath: ${configPath}`);
+  }
+
+  return configPath;
+}
+
+/**
+ * Load and validate config from file.
+ */
+export function loadConfigFromFile(configPath: string): BridgeConfig {
+  let config: BridgeConfig;
+  try {
+    const raw = readFileSync(configPath, 'utf-8');
+    config = JSON.parse(raw);
+  } catch (err) {
+    throw new Error(`Failed to read config from ${configPath}: ${(err as Error).message}`);
+  }
+
+  return validateAndNormalizeConfig(config);
+}
+
+function main(): void {
+  let config: BridgeConfig;
+
+  try {
+    const configPath = parseAndValidateConfigPath(process.argv);
+    config = loadConfigFromFile(configPath);
+  } catch (err) {
+    console.error(`[bridge] ${(err as Error).message}`);
+    process.exit(1);
+  }
 
   // Signal handlers for graceful cleanup on external termination
   for (const sig of ['SIGINT', 'SIGTERM'] as const) {

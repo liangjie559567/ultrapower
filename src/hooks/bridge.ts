@@ -18,6 +18,7 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { resolveToWorktreeRoot } from "../lib/worktree-paths.js";
 import { auditLogger } from "../audit/logger.js";
+import { safeJsonParse } from "../lib/safe-json.js";
 
 // Hot-path imports: needed on every/most hook invocations (keyword-detector, pre/post-tool-use)
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
@@ -108,21 +109,19 @@ function readTeamStagedState(
       continue;
     }
 
-    try {
-      const parsed = JSON.parse(readFileSync(statePath, "utf-8")) as TeamStagedState;
-      if (typeof parsed !== "object" || parsed === null) {
-        continue;
-      }
+    const content = readFileSync(statePath, "utf-8");
+    const result = safeJsonParse<TeamStagedState>(content, statePath);
 
-      const stateSessionId = parsed.session_id || parsed.sessionId;
-      if (sessionId && stateSessionId && stateSessionId !== sessionId) {
-        continue;
-      }
-
-      return parsed;
-    } catch {
+    if (!result.success || typeof result.data !== "object" || result.data === null) {
       continue;
     }
+
+    const stateSessionId = result.data.session_id || result.data.sessionId;
+    if (sessionId && stateSessionId && stateSessionId !== sessionId) {
+      continue;
+    }
+
+    return result.data;
   }
 
   return null;
@@ -1219,11 +1218,8 @@ export async function main(): Promise<void> {
   const inputStr = Buffer.concat(chunks).toString("utf-8");
 
   let input: HookInput;
-  try {
-    input = JSON.parse(inputStr);
-  } catch {
-    input = {};
-  }
+  const result = safeJsonParse<HookInput>(inputStr);
+  input = result.success ? result.data! : {};
 
   // Process hook
   const output = await processHook(hookType, input);

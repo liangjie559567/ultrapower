@@ -115,4 +115,41 @@ describe('bridge-normalize', () => {
       expect(result.directory).toBe('/test/dir');
     });
   });
+
+  describe('field mapping', () => {
+    it('should map tool_name to toolName', () => {
+      const result = normalizeHookInput({ tool_name: 'test-tool' });
+      expect(result.toolName).toBe('test-tool');
+    });
+
+    it('should map tool_input to toolInput', () => {
+      const input = { a: 1 };
+      const result = normalizeHookInput({ tool_input: input });
+      expect(result.toolInput).toEqual(input);
+    });
+
+    it('should map tool_response to toolOutput', () => {
+      const output = { result: 'success' };
+      const result = normalizeHookInput({ tool_response: output });
+      expect(result.toolOutput).toEqual(output);
+    });
+
+    it('should map session_id to sessionId', () => {
+      const result = normalizeHookInput({ session_id: 'test-123' });
+      expect(result.sessionId).toBe('test-123');
+    });
+
+    it('should map cwd to directory', () => {
+      const result = normalizeHookInput({ cwd: '/test/path' });
+      expect(result.directory).toBe('/test/path');
+    });
+
+    it('should prefer snake_case over camelCase', () => {
+      const result = normalizeHookInput({
+        tool_name: 'snake',
+        toolName: 'camel',
+      });
+      expect(result.toolName).toBe('snake');
+    });
+  });
 });

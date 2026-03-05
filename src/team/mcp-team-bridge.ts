@@ -26,6 +26,7 @@ import type { AuditEvent } from './audit-log.js';
 import { getEffectivePermissions, findPermissionViolations } from './permissions.js';
 import type { WorkerPermissions, PermissionViolation } from './permissions.js';
 import { createWorkerAdapter } from '../workers/factory.js';
+import { safeJsonParse } from '../lib/safe-json.js';
 
 /** Simple logger */
 function log(message: string): void {
@@ -298,30 +299,31 @@ function parseCodexOutput(output: string): string {
       messages.push('[output truncated]');
       break;
     }
-    try {
-      const event = JSON.parse(line);
-      if (event.type === 'item.completed' && event.item?.type === 'agent_message' && event.item.text) {
-        messages.push(event.item.text);
-        totalSize += event.item.text.length;
-      }
-      if (event.type === 'message' && event.content) {
-        if (typeof event.content === 'string') {
-          messages.push(event.content);
-          totalSize += event.content.length;
-        } else if (Array.isArray(event.content)) {
-          for (const part of event.content) {
-            if (part.type === 'text' && part.text) {
-              messages.push(part.text);
-              totalSize += part.text.length;
-            }
+    const result = safeJsonParse(line);
+    if (!result.success) continue;
+
+    const event = result.data as any;
+    if (event.type === 'item.completed' && event.item?.type === 'agent_message' && event.item.text) {
+      messages.push(event.item.text);
+      totalSize += event.item.text.length;
+    }
+    if (event.type === 'message' && event.content) {
+      if (typeof event.content === 'string') {
+        messages.push(event.content);
+        totalSize += event.content.length;
+      } else if (Array.isArray(event.content)) {
+        for (const part of event.content) {
+          if (part.type === 'text' && part.text) {
+            messages.push(part.text);
+            totalSize += part.text.length;
           }
         }
       }
-      if (event.type === 'output_text' && event.text) {
-        messages.push(event.text);
-        totalSize += event.text.length;
-      }
-    } catch { /* skip non-JSON lines */ }
+    }
+    if (event.type === 'output_text' && event.text) {
+      messages.push(event.text);
+      totalSize += event.text.length;
+    }
   }
 
   return messages.join('\n') || output;

@@ -21,6 +21,8 @@ export class TimeoutManager {
    * 启动超时监控
    */
   start(taskId: string, agentType: string, model?: string): AbortController {
+    this.stop(taskId);
+
     const controller = new AbortController();
     const timeoutMs = getAgentTimeout(agentType, model);
     const startTime = Date.now();
