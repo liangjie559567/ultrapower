@@ -30,9 +30,16 @@ vi.mock('fs', async () => {
     lstatSync: mockLstatSync,
     readdirSync: mockReaddirSync,
     promises: {
+      ...actual.promises,
       readFile: mockReadFile,
       unlink: vi.fn(),
-      readdir: vi.fn()
+      readdir: vi.fn(),
+      open: vi.fn().mockResolvedValue({
+        write: vi.fn().mockResolvedValue(undefined),
+        sync: vi.fn().mockResolvedValue(undefined),
+        close: vi.fn().mockResolvedValue(undefined)
+      }),
+      rename: vi.fn().mockResolvedValue(undefined)
     }
   };
 });
@@ -102,6 +109,13 @@ describe('bridge-manager', () => {
     mockExecSync.mockReset();
     mockSafeReadJson.mockReset();
     mockLstatSync.mockReset();
+
+    // Ensure test directory exists for atomicWriteJson
+    const realFs = require('fs');
+    const sessionDir = '/tmp/.omc/python-repl/test-session';
+    if (!realFs.existsSync(sessionDir)) {
+      realFs.mkdirSync(sessionDir, { recursive: true });
+    }
 
     mockExistsSync.mockReturnValue(true);
     mockLstatSync.mockReturnValue({

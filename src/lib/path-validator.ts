@@ -40,6 +40,11 @@ export function validatePath(userPath: string, baseDir: string): string {
     throw new SecurityError('Absolute paths not allowed');
   }
 
+  // Block Windows absolute paths (C:\, D:\, etc.) on all platforms
+  if (/^[a-zA-Z]:[/\\]/.test(userPath)) {
+    throw new SecurityError('Absolute paths not allowed');
+  }
+
   // Block UNC paths (\\server\share)
   if (userPath.startsWith('\\\\') || userPath.startsWith('//')) {
     throw new SecurityError('UNC paths not allowed');
@@ -58,6 +63,10 @@ export function validatePath(userPath: string, baseDir: string): string {
   let normalized = decoded.normalize('NFC');
   // Replace fullwidth dots and slashes with ASCII equivalents
   normalized = normalized.replace(/\uFF0E/g, '.').replace(/\uFF0F/g, '/');
+
+  // Cross-platform: normalize backslashes to forward slashes before path.join
+  // This ensures Windows-style paths (..\..\) are detected as traversal on all platforms
+  normalized = normalized.replace(/\\/g, '/');
 
   // Vector 1: Path normalization (handles ../, ./, etc)
   const joined = path.join(baseDir, normalized);

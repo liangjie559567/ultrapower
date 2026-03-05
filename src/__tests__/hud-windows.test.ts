@@ -42,6 +42,9 @@ describe('HUD Windows Compatibility', () => {
   });
 
   describe('pathToFileURL for Dynamic Import', () => {
+    // Get actual drive letter dynamically for Windows tests
+    const driveLetter = process.platform === 'win32' ? process.cwd().slice(0, 2) : '';
+
     it('installer HUD script should import pathToFileURL', () => {
       const installerPath = join(packageRoot, 'src', 'installer', 'index.ts');
       const content = readFileSync(installerPath, 'utf-8');
@@ -70,7 +73,7 @@ describe('HUD Windows Compatibility', () => {
       const unixPath = '/home/user/test.js';
       expect(pathToFileURL(unixPath).href).toBe(
         process.platform === 'win32'
-          ? 'file:///C:/home/user/test.js'
+          ? `file:///${driveLetter}/home/user/test.js`
           : 'file:///home/user/test.js'
       );
     });
@@ -79,7 +82,7 @@ describe('HUD Windows Compatibility', () => {
       const spacePath = '/path/with spaces/file.js';
       expect(pathToFileURL(spacePath).href).toBe(
         process.platform === 'win32'
-          ? 'file:///C:/path/with%20spaces/file.js'
+          ? `file:///${driveLetter}/path/with%20spaces/file.js`
           : 'file:///path/with%20spaces/file.js'
       );
     });

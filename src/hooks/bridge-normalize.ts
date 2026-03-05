@@ -243,6 +243,8 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
     parts: input.parts,
     // Pass through extra fields with sensitivity filtering
     ...filterPassthrough(input, hookType),
+    // Preserve cwd for hooks that expect it (session-end, pre-compact)
+    cwd: input.cwd ?? input.directory,
   } as HookInput;
 
   // Validate required keys for sensitive hooks
