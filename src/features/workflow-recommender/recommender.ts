@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-interface Recommendation {
+export interface WorkflowRecommendation {
   id: string;
   name: string;
   workflow: string;
@@ -10,7 +10,7 @@ interface Recommendation {
 }
 
 interface RecommenderConfig {
-  recommendations: Recommendation[];
+  recommendations: WorkflowRecommendation[];
 }
 
 export function getWorkflowRecommendation(context: {
@@ -18,7 +18,7 @@ export function getWorkflowRecommendation(context: {
   taskType?: string;
   keywords?: string[];
   priority?: string;
-}): Recommendation | null {
+}): WorkflowRecommendation | null {
   const configPath = join(process.cwd(), '.omc/axiom/knowledge/recommendations/workflow_recommender.json');
   const config: RecommenderConfig = JSON.parse(readFileSync(configPath, 'utf-8'));
 
