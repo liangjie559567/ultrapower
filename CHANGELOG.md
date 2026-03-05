@@ -1,3 +1,19 @@
+# ultrapower v5.5.14
+
+### 修复
+
+- **fix(ci): 修复 Windows 兼容性测试失败**
+  - 解决路径分隔符和换行符差异导致的测试失败
+  - 完整测试套件通过（5783 passed, 10 skipped）
+
+### 安全
+
+- **security(state): 加强路径遍历防护**
+  - `assertValidMode()` 添加字符串截断保护，防止超长输入绕过验证
+  - 所有状态文件操作强制通过 `assertValidMode()` 校验
+
+---
+
 # ultrapower v5.5.13
 
 ### 修复
