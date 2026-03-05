@@ -24,6 +24,7 @@ import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
 import { processOrchestratorPreTool, processOrchestratorPostTool } from "./omc-orchestrator/index.js";
 import { processPreToolUse as enforceDelegationModel } from "../features/delegation-enforcer.js";
 import { normalizeHookInput } from "./bridge-normalize.js";
+import { withTimeout } from "./timeout-wrapper.js";
 import type { HookInput, HookOutput, HookType } from "./bridge-types.js";
 import {
   addBackgroundTask,
@@ -712,16 +713,23 @@ export const _notify = {
  * Process pre-tool-use hook
  * Checks delegation enforcement and tracks background tasks
  */
-function processPreToolUse(input: HookInput): HookOutput {
+async function processPreToolUse(input: HookInput): Promise<HookOutput> {
   const directory = resolveToWorktreeRoot(input.directory);
 
-  // Check delegation enforcement FIRST
-  const enforcementResult = processOrchestratorPreTool({
-    toolName: input.toolName || "",
-    toolInput: (input.toolInput as Record<string, unknown>) || {},
-    sessionId: input.sessionId,
-    directory,
-  });
+  // Check delegation enforcement with timeout
+  const enforcementResult = await withTimeout(
+    () => Promise.resolve(processOrchestratorPreTool({
+      toolName: input.toolName || "",
+      toolInput: (input.toolInput as Record<string, unknown>) || {},
+      sessionId: input.sessionId,
+      directory,
+    })),
+    {
+      timeoutMs: 3000,
+      label: 'orchestrator-pre-tool',
+      fallback: () => ({ continue: true })
+    }
+  ) || { continue: true };
 
   // If enforcement blocks, return immediately
   if (!enforcementResult.continue) {
@@ -900,16 +908,23 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
     }
   }
 
-  // Run orchestrator post-tool processing (remember tags, verification reminders, etc.)
-  const orchestratorResult = processOrchestratorPostTool(
+  // Run orchestrator post-tool processing with timeout
+  const orchestratorResult = await withTimeout(
+    () => Promise.resolve(processOrchestratorPostTool(
+      {
+        toolName: input.toolName || "",
+        toolInput: (input.toolInput as Record<string, unknown>) || {},
+        sessionId: input.sessionId,
+        directory,
+      },
+      String(input.toolOutput ?? ""),
+    )),
     {
-      toolName: input.toolName || "",
-      toolInput: (input.toolInput as Record<string, unknown>) || {},
-      sessionId: input.sessionId,
-      directory,
-    },
-    String(input.toolOutput ?? ""),
-  );
+      timeoutMs: 3000,
+      label: 'orchestrator-post-tool',
+      fallback: () => ({ continue: true })
+    }
+  ) || { continue: true };
 
   if (orchestratorResult.message) {
     messages.push(orchestratorResult.message);

@@ -39,7 +39,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc && node scripts/build-skill-bridge.mjs && node scripts/build-mcp-server.mjs && node scripts/build-codex-server.mjs && node scripts/build-gemini-server.mjs && node scripts/build-bridge-entry.mjs && npm run compose-docs",
+    "build": "tsc && node scripts/parallel-build.mjs && npm run compose-docs",
     "build:bridge": "node scripts/build-skill-bridge.mjs",
     "build:codex": "node scripts/build-codex-server.mjs",
     "build:gemini": "node scripts/build-gemini-server.mjs",

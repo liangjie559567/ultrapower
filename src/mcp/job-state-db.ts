@@ -33,6 +33,7 @@ let Database: DatabaseConstructor | null = null;
 
 // Map of resolved worktree root path -> database instance (replaces singleton)
 const dbMap = new Map<string, BetterSqlite3.Database>();
+const MAX_DB_INSTANCES = 3;
 
 // Track the last cwd used for backward-compatible no-arg calls
 let _lastCwd: string | null = null;
@@ -145,6 +146,16 @@ export async function initJobDb(cwd: string): Promise<boolean> {
     if (dbMap.has(resolvedCwd)) {
       _lastCwd = resolvedCwd;
       return true;
+    }
+
+    // Limit DB instances to prevent memory bloat
+    if (dbMap.size >= MAX_DB_INSTANCES) {
+      const oldestKey = dbMap.keys().next().value;
+      if (oldestKey) {
+        const oldDb = dbMap.get(oldestKey);
+        oldDb?.close();
+        dbMap.delete(oldestKey);
+      }
     }
 
     ensureStateDir(cwd);
