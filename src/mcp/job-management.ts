@@ -25,9 +25,60 @@ import { join } from 'path';
 import { isSpawnedPid as isCodexSpawnedPid } from './codex-core.js';
 import { isSpawnedPid as isGeminiSpawnedPid } from './gemini-core.js';
 import { isJobDbInitialized, getJob, getActiveJobs as getActiveJobsFromDb, getJobsByStatus, updateJobStatus } from './job-state-db.js';
+import { createWorkerAdapter } from '../workers/factory.js';
+import type { WorkerStateAdapter } from '../workers/adapter.js';
+import type { WorkerState } from '../workers/types.js';
 
 /** Signals allowed for kill_job. SIGKILL excluded - too dangerous for process groups. */
 const ALLOWED_SIGNALS: ReadonlySet<string> = new Set(['SIGTERM', 'SIGINT']);
+
+/** Worker adapter instance (lazy initialized) */
+let adapterInstance: WorkerStateAdapter | null = null;
+
+/**
+ * Get or create worker adapter instance
+ * Uses environment variable WORKER_BACKEND to control backend selection
+ */
+async function getAdapter(cwd?: string): Promise<WorkerStateAdapter | null> {
+  if (adapterInstance) return adapterInstance;
+
+  const backend = process.env.WORKER_BACKEND || 'auto';
+  const workingDir = cwd || process.cwd();
+
+  if (backend === 'sqlite' || backend === 'json' || backend === 'auto') {
+    adapterInstance = await createWorkerAdapter(backend, workingDir);
+  }
+
+  return adapterInstance;
+}
+
+/**
+ * Convert JobStatus to WorkerState
+ */
+function jobStatusToWorkerState(job: JobStatus): WorkerState {
+  return {
+    workerId: `${job.provider}:${job.jobId}`,
+    workerType: 'mcp',
+    name: job.jobId,
+    status: job.status as any,
+    pid: job.pid,
+    spawnedAt: job.spawnedAt,
+    lastHeartbeatAt: job.completedAt,
+    completedAt: job.completedAt,
+    provider: job.provider,
+    model: job.model,
+    agentRole: job.agentRole,
+    promptFile: job.promptFile,
+    responseFile: job.responseFile,
+    error: job.error,
+    metadata: {
+      slug: job.slug,
+      usedFallback: job.usedFallback,
+      fallbackModel: job.fallbackModel,
+      killedByUser: job.killedByUser,
+    },
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -152,7 +203,48 @@ export async function handleWaitForJob(
   let notFoundCount = 0;
 
   while (Date.now() < deadline) {
-    // Try SQLite first if available
+    // Try WorkerStateAdapter first
+    const adapter = await getAdapter();
+    if (adapter) {
+      const worker = await adapter.get(`${provider}:${jobId}`);
+      if (worker) {
+        if (worker.status === 'completed' || worker.status === 'failed' || worker.status === 'timeout') {
+          if (worker.status === 'completed') {
+            const slug = (worker.metadata?.slug as string) || '';
+            const completed = readCompletedResponse(provider, slug, jobId);
+            const responseSnippet = completed
+              ? completed.response.substring(0, 500) + (completed.response.length > 500 ? '...' : '')
+              : '(response file not found)';
+
+            return textResult([
+              `**Job ${jobId} completed.**`,
+              `**Provider:** ${worker.provider}`,
+              `**Model:** ${worker.model}`,
+              `**Agent Role:** ${worker.agentRole}`,
+              `**Response File:** ${worker.responseFile}`,
+              worker.metadata?.usedFallback ? `**Fallback Model:** ${worker.metadata.fallbackModel}` : null,
+              ``,
+              `**Response preview:**`,
+              responseSnippet,
+            ].filter(Boolean).join('\n'));
+          }
+
+          return textResult([
+            `**Job ${jobId} ${worker.status}.**`,
+            `**Provider:** ${worker.provider}`,
+            `**Model:** ${worker.model}`,
+            `**Agent Role:** ${worker.agentRole}`,
+            worker.error ? `**Error:** ${worker.error}` : null,
+          ].filter(Boolean).join('\n'), true);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, pollDelay));
+        pollDelay = Math.min(pollDelay * 1.5, 2000);
+        continue;
+      }
+    }
+
+    // Fallback to SQLite if adapter unavailable
     if (isJobDbInitialized()) {
       const status = getJob(provider, jobId);
       if (status) {
@@ -185,7 +277,6 @@ export async function handleWaitForJob(
           ].filter(Boolean).join('\n'), true);
         }
 
-        // Still running - continue polling
         await new Promise(resolve => setTimeout(resolve, pollDelay));
         pollDelay = Math.min(pollDelay * 1.5, 2000);
         continue;
@@ -266,7 +357,31 @@ export async function handleCheckJobStatus(
     return textResult('job_id is required.', true);
   }
 
-  // Try SQLite first if available
+  // Try WorkerStateAdapter first
+  const adapter = await getAdapter();
+  if (adapter) {
+    const worker = await adapter.get(`${provider}:${jobId}`);
+    if (worker) {
+      const lines = [
+        `**Job ID:** ${jobId}`,
+        `**Provider:** ${worker.provider}`,
+        `**Status:** ${worker.status}`,
+        `**Model:** ${worker.model}`,
+        `**Agent Role:** ${worker.agentRole}`,
+        `**Spawned At:** ${worker.spawnedAt}`,
+        worker.completedAt ? `**Completed At:** ${worker.completedAt}` : null,
+        worker.pid ? `**PID:** ${worker.pid}` : null,
+        `**Prompt File:** ${worker.promptFile}`,
+        `**Response File:** ${worker.responseFile}`,
+        worker.error ? `**Error:** ${worker.error}` : null,
+        worker.metadata?.usedFallback ? `**Fallback Model:** ${worker.metadata.fallbackModel}` : null,
+        worker.metadata?.killedByUser ? `**Killed By User:** yes` : null,
+      ];
+      return textResult(lines.filter(Boolean).join('\n'));
+    }
+  }
+
+  // Fallback to SQLite
   if (isJobDbInitialized()) {
     const status = getJob(provider, jobId);
     if (status) {
@@ -340,11 +455,56 @@ export async function handleKillJob(
     );
   }
 
+  // Try WorkerStateAdapter first
+  const adapter = await getAdapter();
+  if (adapter) {
+    const worker = await adapter.get(`${provider}:${jobId}`);
+    if (worker) {
+      if (worker.status !== 'spawned' && worker.status !== 'running') {
+        return textResult(`Job ${jobId} is already in terminal state: ${worker.status}. Cannot kill.`, true);
+      }
+      if (!worker.pid || !Number.isInteger(worker.pid) || worker.pid <= 0 || worker.pid > 4194304) {
+        return textResult(`Job ${jobId} has no valid PID recorded. Cannot send signal.`, true);
+      }
+      const isOurPid = provider === 'codex' ? isCodexSpawnedPid(worker.pid) : isGeminiSpawnedPid(worker.pid);
+      if (!isOurPid) {
+        return textResult(`Job ${jobId} PID ${worker.pid} was not spawned by this process. Refusing to send signal for safety.`, true);
+      }
+      try {
+        if (process.platform !== 'win32') {
+          process.kill(-worker.pid, signal as NodeJS.Signals);
+        } else {
+          process.kill(worker.pid, signal as NodeJS.Signals);
+        }
+        await adapter.upsert({
+          ...worker,
+          status: 'failed',
+          completedAt: new Date().toISOString(),
+          error: `Killed by user (signal: ${signal})`,
+          metadata: { ...worker.metadata, killedByUser: true },
+        });
+        return textResult(`Sent ${signal} to job ${jobId} (PID ${worker.pid}). Job marked as failed.`);
+      } catch (err) {
+        if ((err as NodeJS.ErrnoException).code === 'ESRCH') {
+          await adapter.upsert({
+            ...worker,
+            status: 'failed',
+            completedAt: new Date().toISOString(),
+            error: `Killed by user (process already exited, signal: ${signal})`,
+            metadata: { ...worker.metadata, killedByUser: true },
+          });
+          return textResult(`Process ${worker.pid} already exited. Job marked as failed.`);
+        }
+        return textResult(`Failed to kill process ${worker.pid}: ${(err as Error).message}`, true);
+      }
+    }
+  }
+
   const jobDir = getJobWorkingDir(provider, jobId);
   const found = findJobStatusFile(provider, jobId, jobDir);
 
   if (!found) {
-    // SQLite fallback: try to find job in database when JSON file is missing
+    // SQLite fallback
     if (isJobDbInitialized()) {
       const dbJob = getJob(provider, jobId);
       if (dbJob) {
@@ -508,7 +668,43 @@ export async function handleListJobs(
   statusFilter: 'active' | 'completed' | 'failed' | 'all' = 'active',
   limit: number = 50,
 ): Promise<{ content: Array<{ type: 'text'; text: string }>; isError?: boolean }> {
-  // For 'active' filter, use the optimized listActiveJobs helper
+  // Try WorkerStateAdapter first
+  const adapter = await getAdapter();
+  if (adapter) {
+    let statusArray: any[] = [];
+    if (statusFilter === 'active') {
+      statusArray = ['spawned', 'running'];
+    } else if (statusFilter === 'completed') {
+      statusArray = ['completed'];
+    } else if (statusFilter === 'failed') {
+      statusArray = ['failed', 'timeout'];
+    } else {
+      statusArray = ['spawned', 'running', 'completed', 'failed', 'timeout'];
+    }
+
+    const workers = await adapter.list({ workerType: 'mcp', provider, status: statusArray });
+
+    if (workers.length === 0) {
+      const filterDesc = statusFilter !== 'all' ? ` with status=${statusFilter}` : '';
+      return textResult(`No ${provider} jobs found${filterDesc}.`);
+    }
+
+    const limited = workers.slice(0, limit);
+    const lines = limited.map((worker) => {
+      const parts = [
+        `- **${worker.name}** [${worker.status}] ${worker.provider}/${worker.model} (${worker.agentRole})`,
+        `  Spawned: ${worker.spawnedAt}`,
+      ];
+      if (worker.completedAt) parts.push(`  Completed: ${worker.completedAt}`);
+      if (worker.error) parts.push(`  Error: ${worker.error}`);
+      if (worker.pid) parts.push(`  PID: ${worker.pid}`);
+      return parts.join('\n');
+    });
+
+    return textResult(`**${limited.length} ${provider} job(s) found:**\n\n${lines.join('\n\n')}`);
+  }
+
+  // Fallback to original implementation
   if (statusFilter === 'active') {
     // Try SQLite first
     if (isJobDbInitialized()) {
