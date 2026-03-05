@@ -6,11 +6,28 @@
   - 解决路径分隔符和换行符差异导致的测试失败
   - 完整测试套件通过（5783 passed, 10 skipped）
 
+- **fix(plugin): 修复插件安装和升级流程的 6 个已知问题**
+  - npm-cache 版本锁定：`fixNpmCacheVersion()` 强制精确版本号，防止 "Update now" 跳过下载
+  - plugin.json 缺失：`fixMissingPluginJson()` 重建元数据文件（npm 剥离隐藏目录）
+  - Windows 嵌套目录：`fixNestedCacheDir()` 扁平化无限嵌套结构
+  - templates/hooks/ 缺失：`copyTemplatesToCache()` 显式复制到所有缓存版本
+  - marketplace 名称迁移：`migrateMarketplaceName()` 自动从 `ultrapower` 迁移到 `omc`
+  - npm-cache plugin.json 损坏：`fixNpmCache()` 修复旧版本遗留的无效字段
+
 ### 安全
 
 - **security(state): 加强路径遍历防护**
   - `assertValidMode()` 添加字符串截断保护，防止超长输入绕过验证
   - 所有状态文件操作强制通过 `assertValidMode()` 校验
+
+### 验证
+
+- **验证完整升级流程**
+  - 构建验证：3524 文件打包，所有关键组件完整
+  - 插件市场验证：50 agents, 71 skills, 14 hook 事件类型
+  - 本地环境验证：tarball 解压、postinstall 执行、HUD 配置
+  - 自动化脚本：`scripts/verify-all.sh` 7 项检查全部通过
+  - 本地测试安装：npm install -g 成功，CLI 命令可用
 
 ---
 
