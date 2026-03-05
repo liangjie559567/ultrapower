@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git checkout main\",\"description\":\"切换到 main 分支\"}",
-  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by checkout:\n\t.github/workflows/ci.yml\n\tsrc/hud/types.ts\nPlease commit your changes or stash them before you switch branches.\nAborting\n\nerror: Your local changes to the following files would be overwritten by checkout:\n\t.github/workflows/ci.yml\n\tsrc/hud/types.ts\nPlease commit your changes or stash them before you switch branches.\nAborting",
-  "timestamp": "2026-03-04T22:20:52.989Z",
+  "tool_input_preview": "{\"command\":\"git checkout main && git pull origin main\",\"description\":\"Switch to main branch and update\"}",
+  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by checkout:\n\tREADME.md\nPlease commit your changes or stash them before you switch branches.\nAborting\n\nerror: Your local changes to the following files would be overwritten by checkout:\n\tREADME.md\nPlease commit your changes or stash them before you switch branches.\nAborting",
+  "timestamp": "2026-03-05T03:46:08.094Z",
   "retry_count": 1
 }
