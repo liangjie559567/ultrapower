@@ -1,0 +1,23 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/api",
+  "exclude": [
+    "**/*.test.ts",
+    "**/__tests__/**",
+    "**/node_modules/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": true,
+  "readme": "README.md",
+  "plugin": [],
+  "theme": "default",
+  "name": "ultrapower API Documentation",
+  "includeVersion": true,
+  "sort": ["source-order"],
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  }
+}
