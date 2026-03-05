@@ -1,3 +1,31 @@
+# ultrapower v5.5.17
+
+### 文档
+
+- **docs/troubleshooting/tool-name-length-error.md**: 新增工具名称过长错误的故障排查文档
+  - 说明 v5.5.16 中的工具名称缩短修复
+  - 提供用户升级指南
+
+### 向后兼容
+
+- 所有工具名称已在 v5.5.16 中缩短，确保不超过 API 限制
+- 用户需升级到 v5.5.16+ 以避免工具名称过长错误
+
+---
+
+# ultrapower v5.5.16
+
+### 修复
+
+- **fix(mcp): 缩短工具名称以避免 API 长度限制** (提交 f9f2967)
+  - `ultrapower_project_memory_read` → `mem_read`
+  - `ultrapower_project_memory_write` → `mem_write`
+  - `ultrapower_project_memory_add_note` → `mem_add_note`
+  - `ultrapower_project_memory_add_directive` → `mem_add_directive`
+  - 修复用户报告的 400 错误：工具名称过长
+
+---
+
 # ultrapower v5.5.15
 
 ### 修复

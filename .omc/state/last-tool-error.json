@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git checkout main && git pull origin main\",\"description\":\"Switch to main branch and update\"}",
-  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by checkout:\n\tREADME.md\nPlease commit your changes or stash them before you switch branches.\nAborting\n\nerror: Your local changes to the following files would be overwritten by checkout:\n\tREADME.md\nPlease commit your changes or stash them before you switch branches.\nAborting",
-  "timestamp": "2026-03-05T03:46:08.094Z",
-  "retry_count": 1
+  "tool_input_preview": "{\"command\":\"node /tmp/check-cache.js\"}",
+  "error": "Exit code 1\nnode:internal/modules/cjs/loader:1424\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\ljyih\\AppData\\Local\\Temp\\check-cache.js'\r\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1421:15)\r\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)\r\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)\r\n    at Module._load (node:internal/modules/cjs/loader:1227:37)\r\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\r\n...",
+  "timestamp": "2026-03-05T05:36:55.484Z",
+  "retry_count": 3
 }

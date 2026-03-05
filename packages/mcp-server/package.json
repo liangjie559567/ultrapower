@@ -1,0 +1,43 @@
+{
+  "name": "@liangjie559567/ultrapower-mcp-server",
+  "version": "5.5.15",
+  "description": "MCP server for ultrapower - exposes 32 custom tools for Claude Desktop and Cursor",
+  "type": "commonjs",
+  "main": "mcp-server.cjs",
+  "bin": {
+    "ultrapower-mcp": "mcp-server.cjs"
+  },
+  "files": [
+    "mcp-server.cjs",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "cp ../../bridge/mcp-server.cjs ./mcp-server.cjs",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liangjie559567/ultrapower.git",
+    "directory": "packages/mcp-server"
+  },
+  "homepage": "https://github.com/liangjie559567/ultrapower#readme",
+  "bugs": {
+    "url": "https://github.com/liangjie559567/ultrapower/issues"
+  },
+  "author": "liangjie559567",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "cursor",
+    "ultrapower",
+    "ai-tools"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

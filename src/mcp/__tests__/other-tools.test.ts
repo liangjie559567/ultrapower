@@ -31,8 +31,8 @@ describe('Other Tool Categories', () => {
   });
 
   describe('ProjectMemory Tools', () => {
-    it('exposes project_memory_read', () => {
-      expect(omcToolNames).toContain('mcp__t__project_memory_read');
+    it('exposes mem_read', () => {
+      expect(omcToolNames).toContain('mcp__t__mem_read');
     });
   });
 

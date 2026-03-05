@@ -1,0 +1,7 @@
+{
+  "tool_name": "Read",
+  "tool_input_preview": "{\"file_path\":\"CHANGELOG.md\"}",
+  "error": "File does not exist. Note: your current working directory is C:\\Users\\ljyih\\Desktop\\ultrapower\\packages\\mcp-server.",
+  "timestamp": "2026-03-05T03:31:34.445Z",
+  "retry_count": 1
+}

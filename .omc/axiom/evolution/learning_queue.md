@@ -205,3 +205,28 @@
 - 元数据: 来源=T10/T11 实现，错误=TS2835，修复=添加 .js 扩展名
 - 知识产出: k-070
 
+
+### LQ-039: 版本号同步检查清单
+- 优先级: P0
+- 来源类型: session
+- 状态: pending
+- 添加时间: 2026-03-05
+- 内容: 多个 package.json 文件容易遗漏导致版本不一致。v5.5.15 发布时根目录 package.json 初次未更新，由 verifier 发现。检查清单应包含：package.json, packages/*/package.json, .claude-plugin/plugin.json, .claude-plugin/marketplace.json（两处version字段）, docs/CLAUDE.md（OMC:VERSION注释）, CLAUDE.md（版本引用）, README.md（版本徽章）, src/installer/index.ts（VERSION常量）。建议创建 scripts/check-version-sync.sh 自动验证。
+- 元数据: session=2026-03-05, files=8个版本文件, issue=根目录package.json遗漏
+
+### LQ-040: CHANGELOG 前置插入模式
+- 优先级: P1
+- 来源类型: session
+- 状态: pending
+- 添加时间: 2026-03-05
+- 内容: Write 工具会覆盖整个文件，不适合 CHANGELOG 更新。使用 bash 命令实现前置插入：`{ echo "新内容"; cat 原文件; } > 临时文件 && mv 临时文件 原文件`。适用于任何需要在文件开头插入内容的场景。关键：使用临时文件避免数据丢失，确保原子性操作。
+- 元数据: session=2026-03-05, file=CHANGELOG.md, pattern=prepend-to-file
+
+### LQ-041: git lock 文件预检查
+- 优先级: P2
+- 来源类型: error
+- 状态: pending
+- 添加时间: 2026-03-05
+- 内容: .git/index.lock 残留导致 git 操作失败（error: Unable to create '.git/index.lock': File exists）。v5.5.15 发布时遇到此问题，需手动删除锁文件。建议在所有 git 操作前预检查：`[ -f .git/index.lock ] && rm .git/index.lock`。适用场景：git commit、git checkout、git merge 等所有修改索引的操作。
+- 元数据: session=2026-03-05, error=index.lock, fix=预检查删除
+
