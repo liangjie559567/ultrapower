@@ -1,6 +1,6 @@
 # ultrapower
 
-ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **50 个专业 agents**、**71 个 skills** 和完整的 TypeScript hooks 系统。
+ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **50 个专业 agents**、**70 个 skills** 和完整的 TypeScript hooks 系统。
 
 ## 核心能力
 
@@ -9,22 +9,30 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 - **完整工作流**：从头脑风暴到代码审查的端到端开发流程
 - **自动触发**：Skills 根据上下文自动激活，无需手动调用
 
-## 安装
+## 快速开始（10 分钟上手）
 
-### 方式一：Claude Code 插件（推荐）
+### 前置条件
+
+- Node.js >= 18
+- Claude Code >= v1.0.0
+- Git（用于插件安装）
+
+### 安装步骤
+
+**方式 1：通过 Claude Code 插件（推荐）**
 
 在 Claude Code 会话中运行：
 
 ```bash
-# 添加 marketplace 并安装
+# 1. 添加 marketplace 并安装
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 
-# 运行安装向导
-/omc-setup
+# 2. 运行安装向导
+/ultrapower:omc-setup
 ```
 
-### 方式二：npm 全局安装
+**方式 2：通过 npm 全局安装**
 
 ```bash
 npm install -g @liangjie559567/ultrapower
@@ -32,7 +40,21 @@ npm install -g @liangjie559567/ultrapower
 
 ### 验证安装
 
-启动新会话，说 "help me plan this feature"，agent 应自动调用相关 skill。
+```bash
+# 验证安装
+/ultrapower:omc-doctor
+```
+
+### 第一个示例
+
+```bash
+# 使用 autopilot 模式构建一个简单功能
+autopilot "创建一个 hello world 函数"
+```
+
+### 故障排查
+
+遇到问题？查看 [故障排查指南](docs/TROUBLESHOOTING.md)
 
 ---
 
