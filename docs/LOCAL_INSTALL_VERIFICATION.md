@@ -128,7 +128,7 @@ npm install -g @liangjie559567/ultrapower@5.5.14
 ### 方式二: 插件市场
 ```
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 ### 方式三: 本地 tarball

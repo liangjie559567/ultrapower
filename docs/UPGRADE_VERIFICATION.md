@@ -147,7 +147,7 @@ omc install --force
 
 # 方式 B: 插件市场安装
 /plugin marketplace add https://github.com/liangjie559567/ultrapower
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 **步骤 3: 运行安装向导**

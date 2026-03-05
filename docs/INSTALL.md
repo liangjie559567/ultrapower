@@ -74,7 +74,7 @@ git --version
 ### 步骤 2：安装插件
 
 ```
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 **预期输出：**
@@ -180,7 +180,7 @@ claude plugin update omc@ultrapower
 适合需要在多个项目间共享的场景。
 
 ```bash
-npm install -g ultrapower
+npm install -g @liangjie559567/ultrapower
 ```
 
 安装后文件会复制到：
@@ -423,14 +423,14 @@ ultrapower 支持多种 AI 工具，安装后自动生成适配器文件：
 ### 更新插件
 
 ```
-/plugin update ultrapower
+/plugin update omc@ultrapower
 ```
 
 或指定版本：
 
 ```bash
 # 在 Claude Code 中
-/plugin install ultrapower@5.2.2
+/plugin install omc@ultrapower@5.2.2
 ```
 
 ### 检查当前版本
@@ -521,7 +521,7 @@ where node  # Windows
 
 **解决**：升级到 v5.0.25+（已修复）：
 ```
-/plugin update ultrapower
+/plugin update omc@ultrapower
 ```
 
 ### 获取帮助
