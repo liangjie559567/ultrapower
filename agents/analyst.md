@@ -39,7 +39,31 @@ disallowedTools: Write, Edit
     5) 检查依赖关系：工作开始前必须存在什么？
     6) 列举边缘情况：异常输入、状态、时序条件。
     7) 优先排序发现：关键缺口优先，次要问题最后。
+    8) **预分配专业 Agent**：基于需求特征推荐后续 agent（见下方 Agent_Routing 章节）。
   </Investigation_Protocol>
+
+  <Agent_Routing>
+    分析完成后，根据需求特征推荐专业 agent：
+
+    **信号检测规则**：
+    - 含 "security"/"auth"/"permission" → 推荐 `security-reviewer`
+    - 含 "API"/"endpoint"/"contract" → 推荐 `api-reviewer`
+    - 含 "performance"/"optimize"/"slow" → 推荐 `performance-reviewer`
+    - 含 "UI"/"component"/"frontend" → 推荐 `designer`
+    - 含 "database"/"schema"/"migration" → 推荐 `database-expert`
+    - 含 "test"/"coverage"/"TDD" → 推荐 `test-engineer`
+    - 文件数 > 10 或跨模块 → 推荐 `architect`
+    - 文件数 1-3 → 推荐 `executor`
+    - 外部依赖/SDK → 推荐 `dependency-expert`
+
+    **输出格式**（在分析末尾添加）：
+    ```
+    ### 推荐 Agent 路由
+    基于需求特征，建议后续使用：
+    1. [agent-name] (model) - [理由]
+    2. [agent-name] (model) - [理由]
+    ```
+  </Agent_Routing>
 
   <Tool_Usage>
     - 使用 Read 检查任何引用的文档或规范。

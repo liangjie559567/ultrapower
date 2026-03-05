@@ -14,6 +14,9 @@ import { notepadTools } from './notepad-tools.js';
 import { memoryTools } from './memory-tools.js';
 import { traceTools } from './trace-tools.js';
 import { skillsTools } from './skills-tools.js';
+import { dependencyAnalyzerTool } from './dependency-analyzer.js';
+import { docSyncTool } from './doc-sync.js';
+import { parallelOpportunityDetectorTool } from './parallel-opportunity-detector.js';
 import { registerToolWithBothNames } from './tool-prefix-migration.js';
 
 export { lspTools } from './lsp-tools.js';
@@ -24,6 +27,9 @@ export { notepadTools } from './notepad-tools.js';
 export { memoryTools } from './memory-tools.js';
 export { traceTools } from './trace-tools.js';
 export { skillsTools } from './skills-tools.js';
+export { dependencyAnalyzerTool } from './dependency-analyzer.js';
+export { docSyncTool } from './doc-sync.js';
+export { parallelOpportunityDetectorTool } from './parallel-opportunity-detector.js';
 
 /**
  * Generic tool definition type
@@ -47,6 +53,9 @@ export const allCustomTools: GenericToolDefinition[] = [
   ...(notepadTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
   ...(memoryTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
   ...(traceTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
+  ...registerToolWithBothNames(dependencyAnalyzerTool as unknown as GenericToolDefinition),
+  ...registerToolWithBothNames(docSyncTool as unknown as GenericToolDefinition),
+  ...registerToolWithBothNames(parallelOpportunityDetectorTool as unknown as GenericToolDefinition),
   ...skillsTools as unknown as GenericToolDefinition[]
 ];
 
