@@ -111,7 +111,7 @@ export function rotateInboxIfNeeded(teamName: string, workerName: string, maxSiz
 
   try {
     const stat = statSync(filePath);
-    if (stat.size <= maxSizeBytes) return;
+    if (stat.size < maxSizeBytes) return;
 
     const content = readFileSync(filePath, 'utf-8');
     const lines = content.split('\n').filter(l => l.trim());
