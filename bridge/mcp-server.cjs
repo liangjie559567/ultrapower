@@ -2245,8 +2245,8 @@ var require_resolve = __commonJS({
       }
       return count;
     }
-    function getFullPath(resolver, id = "", normalize3) {
-      if (normalize3 !== false)
+    function getFullPath(resolver, id = "", normalize6) {
+      if (normalize6 !== false)
         id = normalizeId(id);
       const p = resolver.parse(id);
       return _getFullPath(resolver, p);
@@ -2994,7 +2994,7 @@ var require_compile = __commonJS({
       const schOrFunc = root.refs[ref];
       if (schOrFunc)
         return schOrFunc;
-      let _sch = resolve5.call(this, root, ref);
+      let _sch = resolve6.call(this, root, ref);
       if (_sch === void 0) {
         const schema = (_a = root.localRefs) === null || _a === void 0 ? void 0 : _a[ref];
         const { schemaId } = this.opts;
@@ -3021,7 +3021,7 @@ var require_compile = __commonJS({
     function sameSchemaEnv(s1, s2) {
       return s1.schema === s2.schema && s1.root === s2.root && s1.baseId === s2.baseId;
     }
-    function resolve5(root, ref) {
+    function resolve6(root, ref) {
       let sch;
       while (typeof (sch = this.refs[ref]) == "string")
         ref = sch;
@@ -3586,7 +3586,7 @@ var require_fast_uri = __commonJS({
     "use strict";
     var { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizeComponentEncoding, isIPv4, nonSimpleDomain } = require_utils();
     var { SCHEMES, getSchemeHandler } = require_schemes();
-    function normalize3(uri, options) {
+    function normalize6(uri, options) {
       if (typeof uri === "string") {
         uri = /** @type {T} */
         serialize(parse5(uri, options), options);
@@ -3596,55 +3596,55 @@ var require_fast_uri = __commonJS({
       }
       return uri;
     }
-    function resolve5(baseURI, relativeURI, options) {
+    function resolve6(baseURI, relativeURI, options) {
       const schemelessOptions = options ? Object.assign({ scheme: "null" }, options) : { scheme: "null" };
       const resolved = resolveComponent(parse5(baseURI, schemelessOptions), parse5(relativeURI, schemelessOptions), schemelessOptions, true);
       schemelessOptions.skipEscape = true;
       return serialize(resolved, schemelessOptions);
     }
-    function resolveComponent(base, relative3, options, skipNormalization) {
+    function resolveComponent(base, relative4, options, skipNormalization) {
       const target = {};
       if (!skipNormalization) {
         base = parse5(serialize(base, options), options);
-        relative3 = parse5(serialize(relative3, options), options);
+        relative4 = parse5(serialize(relative4, options), options);
       }
       options = options || {};
-      if (!options.tolerant && relative3.scheme) {
-        target.scheme = relative3.scheme;
-        target.userinfo = relative3.userinfo;
-        target.host = relative3.host;
-        target.port = relative3.port;
-        target.path = removeDotSegments(relative3.path || "");
-        target.query = relative3.query;
+      if (!options.tolerant && relative4.scheme) {
+        target.scheme = relative4.scheme;
+        target.userinfo = relative4.userinfo;
+        target.host = relative4.host;
+        target.port = relative4.port;
+        target.path = removeDotSegments(relative4.path || "");
+        target.query = relative4.query;
       } else {
-        if (relative3.userinfo !== void 0 || relative3.host !== void 0 || relative3.port !== void 0) {
-          target.userinfo = relative3.userinfo;
-          target.host = relative3.host;
-          target.port = relative3.port;
-          target.path = removeDotSegments(relative3.path || "");
-          target.query = relative3.query;
+        if (relative4.userinfo !== void 0 || relative4.host !== void 0 || relative4.port !== void 0) {
+          target.userinfo = relative4.userinfo;
+          target.host = relative4.host;
+          target.port = relative4.port;
+          target.path = removeDotSegments(relative4.path || "");
+          target.query = relative4.query;
         } else {
-          if (!relative3.path) {
+          if (!relative4.path) {
             target.path = base.path;
-            if (relative3.query !== void 0) {
-              target.query = relative3.query;
+            if (relative4.query !== void 0) {
+              target.query = relative4.query;
             } else {
               target.query = base.query;
             }
           } else {
-            if (relative3.path[0] === "/") {
-              target.path = removeDotSegments(relative3.path);
+            if (relative4.path[0] === "/") {
+              target.path = removeDotSegments(relative4.path);
             } else {
               if ((base.userinfo !== void 0 || base.host !== void 0 || base.port !== void 0) && !base.path) {
-                target.path = "/" + relative3.path;
+                target.path = "/" + relative4.path;
               } else if (!base.path) {
-                target.path = relative3.path;
+                target.path = relative4.path;
               } else {
-                target.path = base.path.slice(0, base.path.lastIndexOf("/") + 1) + relative3.path;
+                target.path = base.path.slice(0, base.path.lastIndexOf("/") + 1) + relative4.path;
               }
               target.path = removeDotSegments(target.path);
             }
-            target.query = relative3.query;
+            target.query = relative4.query;
           }
           target.userinfo = base.userinfo;
           target.host = base.host;
@@ -3652,7 +3652,7 @@ var require_fast_uri = __commonJS({
         }
         target.scheme = base.scheme;
       }
-      target.fragment = relative3.fragment;
+      target.fragment = relative4.fragment;
       return target;
     }
     function equal(uriA, uriB, options) {
@@ -3822,8 +3822,8 @@ var require_fast_uri = __commonJS({
     }
     var fastUri = {
       SCHEMES,
-      normalize: normalize3,
-      resolve: resolve5,
+      normalize: normalize6,
+      resolve: resolve6,
       resolveComponent,
       equal,
       serialize,
@@ -16674,7 +16674,7 @@ var Protocol = class {
           return;
         }
         const pollInterval = task2.pollInterval ?? this._options?.defaultTaskPollInterval ?? 1e3;
-        await new Promise((resolve5) => setTimeout(resolve5, pollInterval));
+        await new Promise((resolve6) => setTimeout(resolve6, pollInterval));
         options?.signal?.throwIfAborted();
       }
     } catch (error2) {
@@ -16691,7 +16691,7 @@ var Protocol = class {
    */
   request(request, resultSchema, options) {
     const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options ?? {};
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       const earlyReject = (error2) => {
         reject(error2);
       };
@@ -16769,7 +16769,7 @@ var Protocol = class {
           if (!parseResult.success) {
             reject(parseResult.error);
           } else {
-            resolve5(parseResult.data);
+            resolve6(parseResult.data);
           }
         } catch (error2) {
           reject(error2);
@@ -17030,12 +17030,12 @@ var Protocol = class {
       }
     } catch {
     }
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       if (signal.aborted) {
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
         return;
       }
-      const timeoutId = setTimeout(resolve5, interval);
+      const timeoutId = setTimeout(resolve6, interval);
       signal.addEventListener("abort", () => {
         clearTimeout(timeoutId);
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
@@ -17764,12 +17764,12 @@ var StdioServerTransport = class {
     this.onclose?.();
   }
   send(message) {
-    return new Promise((resolve5) => {
+    return new Promise((resolve6) => {
       const json = serializeMessage(message);
       if (this._stdout.write(json)) {
-        resolve5();
+        resolve6();
       } else {
-        this._stdout.once("drain", resolve5);
+        this._stdout.once("drain", resolve6);
       }
     });
   }
@@ -17972,7 +17972,7 @@ var LspClient = class {
 Install with: ${this.serverConfig.installHint}`
       );
     }
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       this.process = (0, import_child_process2.spawn)(this.serverConfig.command, this.serverConfig.args, {
         cwd: this.workspaceRoot,
         stdio: ["pipe", "pipe", "pipe"],
@@ -17998,7 +17998,7 @@ Install with: ${this.serverConfig.installHint}`
       });
       this.initialize().then(() => {
         this.initialized = true;
-        resolve5();
+        resolve6();
       }).catch(reject);
     });
   }
@@ -18106,13 +18106,13 @@ Install with: ${this.serverConfig.installHint}`
     const message = `Content-Length: ${Buffer.byteLength(content)}\r
 \r
 ${content}`;
-    return new Promise((resolve5, reject) => {
+    return new Promise((resolve6, reject) => {
       const timeoutHandle = setTimeout(() => {
         this.pendingRequests.delete(id);
         reject(new Error(`LSP request '${method}' timed out after ${timeout}ms`));
       }, timeout);
       this.pendingRequests.set(id, {
-        resolve: resolve5,
+        resolve: resolve6,
         reject,
         timeout: timeoutHandle
       });
@@ -18181,7 +18181,7 @@ ${content}`;
       }
     });
     this.openDocuments.add(uri);
-    await new Promise((resolve5) => setTimeout(resolve5, 100));
+    await new Promise((resolve6) => setTimeout(resolve6, 100));
   }
   /**
    * Close a document
@@ -18783,7 +18783,7 @@ async function runLspAggregatedDiagnostics(directory, extensions = [".ts", ".tsx
     try {
       await lspClientManager.runWithClientLease(file, async (client) => {
         await client.openDocument(file);
-        await new Promise((resolve5) => setTimeout(resolve5, LSP_DIAGNOSTICS_WAIT_MS));
+        await new Promise((resolve6) => setTimeout(resolve6, LSP_DIAGNOSTICS_WAIT_MS));
         const diagnostics = client.getDiagnostics(file);
         for (const diagnostic of diagnostics) {
           allDiagnostics.push({
@@ -19033,7 +19033,7 @@ var lspDiagnosticsTool = {
     const { file, severity } = args;
     return withLspClient(file, "diagnostics", async (client) => {
       await client.openDocument(file);
-      await new Promise((resolve5) => setTimeout(resolve5, LSP_DIAGNOSTICS_WAIT_MS));
+      await new Promise((resolve6) => setTimeout(resolve6, LSP_DIAGNOSTICS_WAIT_MS));
       let diagnostics = client.getDiagnostics(file);
       if (severity) {
         const severityMap = {
@@ -20287,7 +20287,7 @@ var SessionLock = class {
   }
 };
 function sleep(ms) {
-  return new Promise((resolve5) => setTimeout(resolve5, ms));
+  return new Promise((resolve6) => setTimeout(resolve6, ms));
 }
 
 // src/tools/python-repl/socket-client.ts
@@ -20317,7 +20317,7 @@ var JsonRpcError = class extends Error {
   }
 };
 async function sendSocketRequest(socketPath, method, params, timeout = 6e4) {
-  return new Promise((resolve5, reject) => {
+  return new Promise((resolve6, reject) => {
     const id = (0, import_crypto.randomUUID)();
     const request = {
       jsonrpc: "2.0",
@@ -20381,7 +20381,7 @@ async function sendSocketRequest(socketPath, method, params, timeout = 6e4) {
             ));
             return;
           }
-          resolve5(response.result);
+          resolve6(response.result);
         } catch (e) {
           reject(new Error(
             `Failed to parse JSON-RPC response: ${e.message}`
@@ -20702,7 +20702,7 @@ async function deleteBridgeMeta(sessionId) {
   }
 }
 function sleep2(ms) {
-  return new Promise((resolve5) => setTimeout(resolve5, ms));
+  return new Promise((resolve6) => setTimeout(resolve6, ms));
 }
 
 // src/tools/python-repl/tool.ts
@@ -21143,6 +21143,33 @@ var pythonReplTool = {
 function resetExecutionCounter(sessionId) {
   executionCounters.delete(sessionId);
 }
+
+// src/tools/python-repl/index.ts
+var pythonReplTool2 = {
+  name: "python_repl",
+  description: `Execute Python code in a persistent REPL environment with variable persistence across invocations.
+
+Actions:
+- execute: Run Python code (variables persist between calls)
+- reset: Clear namespace and reset environment
+- get_state: Get memory usage and list of defined variables
+- interrupt: Stop long-running execution
+
+Features:
+- Variables persist across tool calls within the same session
+- Structured output markers: [OBJECTIVE], [DATA], [FINDING], [STAT:*], [LIMITATION]
+- Memory tracking (RSS/VMS)
+- Automatic timeout handling (default 5 minutes)
+- Session locking for safe concurrent access
+
+Use this instead of Bash heredocs when you need:
+- Multi-step analysis with state persistence
+- Large datasets that shouldn't be reloaded
+- Iterative ML model training
+- Any workflow benefiting from Python state persistence`,
+  schema: pythonReplSchema,
+  handler: pythonReplHandler
+};
 
 // src/tools/state-tools.ts
 var import_fs8 = require("fs");
@@ -23840,16 +23867,573 @@ No events recorded.`
 };
 var traceTools = [traceTimelineTool, traceSummaryTool];
 
-// src/mcp/standalone-server.ts
-var allTools = [
-  ...lspTools,
-  ...astTools,
-  pythonReplTool,
-  ...stateTools,
-  ...notepadTools,
-  ...memoryTools,
-  ...traceTools
+// src/tools/skills-tools.ts
+var import_path22 = require("path");
+var import_os4 = require("os");
+
+// src/hooks/learner/loader.ts
+var import_fs15 = require("fs");
+var import_crypto3 = require("crypto");
+var import_path21 = require("path");
+
+// src/hooks/learner/finder.ts
+var import_fs14 = require("fs");
+var import_path20 = require("path");
+
+// src/hooks/learner/constants.ts
+var import_path19 = require("path");
+var import_os3 = require("os");
+
+// src/utils/paths.ts
+var import_path18 = require("path");
+var import_fs13 = require("fs");
+var import_os2 = require("os");
+
+// src/utils/config-dir.ts
+var import_node_os = require("node:os");
+var import_node_path = require("node:path");
+function getConfigDir() {
+  return process.env.CLAUDE_CONFIG_DIR || (0, import_node_path.join)((0, import_node_os.homedir)(), ".claude");
+}
+
+// src/utils/paths.ts
+function getClaudeConfigDir() {
+  return getConfigDir();
+}
+
+// src/hooks/learner/constants.ts
+var USER_SKILLS_DIR = (0, import_path19.join)(getClaudeConfigDir(), "skills", "omc-learned");
+var GLOBAL_SKILLS_DIR = (0, import_path19.join)((0, import_os3.homedir)(), ".omc", "skills");
+var PROJECT_SKILLS_SUBDIR = OmcPaths.SKILLS;
+var MAX_RECURSION_DEPTH = 10;
+var SKILL_EXTENSION = ".md";
+var DEBUG_ENABLED = process.env.OMC_DEBUG === "1";
+
+// src/hooks/learner/finder.ts
+function findSkillFilesRecursive(dir, results, depth = 0) {
+  if (!(0, import_fs14.existsSync)(dir)) return;
+  if (depth > MAX_RECURSION_DEPTH) return;
+  try {
+    const entries = (0, import_fs14.readdirSync)(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = (0, import_path20.join)(dir, entry.name);
+      if (entry.isDirectory()) {
+        findSkillFilesRecursive(fullPath, results, depth + 1);
+      } else if (entry.isFile() && entry.name.endsWith(SKILL_EXTENSION)) {
+        results.push(fullPath);
+      }
+    }
+  } catch (error2) {
+    if (DEBUG_ENABLED) {
+      console.error("[learner] Error scanning directory:", error2);
+    }
+  }
+}
+function safeRealpathSync(filePath) {
+  try {
+    return (0, import_fs14.realpathSync)(filePath);
+  } catch {
+    return filePath;
+  }
+}
+function isWithinBoundary(realPath, boundary) {
+  const normalizedReal = (0, import_path20.normalize)(realPath);
+  const normalizedBoundary = (0, import_path20.normalize)(boundary);
+  return normalizedReal === normalizedBoundary || normalizedReal.startsWith(normalizedBoundary + import_path20.sep);
+}
+function findSkillFiles(projectRoot, options) {
+  const candidates = [];
+  const seenRealPaths = /* @__PURE__ */ new Set();
+  const scope = options?.scope ?? "all";
+  if (projectRoot && (scope === "project" || scope === "all")) {
+    const projectSkillsDir = (0, import_path20.join)(projectRoot, PROJECT_SKILLS_SUBDIR);
+    const projectFiles = [];
+    findSkillFilesRecursive(projectSkillsDir, projectFiles);
+    for (const filePath of projectFiles) {
+      const realPath = safeRealpathSync(filePath);
+      if (seenRealPaths.has(realPath)) continue;
+      if (!isWithinBoundary(realPath, projectSkillsDir)) {
+        if (DEBUG_ENABLED) {
+          console.warn("[learner] Symlink escape blocked:", filePath);
+        }
+        continue;
+      }
+      seenRealPaths.add(realPath);
+      candidates.push({
+        path: filePath,
+        realPath,
+        scope: "project",
+        sourceDir: projectSkillsDir
+      });
+    }
+  }
+  if (scope === "user" || scope === "all") {
+    const userDirs = [GLOBAL_SKILLS_DIR, USER_SKILLS_DIR];
+    for (const userDir of userDirs) {
+      const userFiles = [];
+      findSkillFilesRecursive(userDir, userFiles);
+      for (const filePath of userFiles) {
+        const realPath = safeRealpathSync(filePath);
+        if (seenRealPaths.has(realPath)) continue;
+        if (!isWithinBoundary(realPath, userDir)) {
+          if (DEBUG_ENABLED) {
+            console.warn("[learner] Symlink escape blocked:", filePath);
+          }
+          continue;
+        }
+        seenRealPaths.add(realPath);
+        candidates.push({
+          path: filePath,
+          realPath,
+          scope: "user",
+          sourceDir: userDir
+        });
+      }
+    }
+  }
+  return candidates;
+}
+
+// src/hooks/learner/parser.ts
+function parseSkillFile(rawContent) {
+  const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/;
+  const match = rawContent.match(frontmatterRegex);
+  if (!match) {
+    return {
+      metadata: {},
+      content: rawContent,
+      valid: false,
+      errors: ["Missing YAML frontmatter"]
+    };
+  }
+  const yamlContent = match[1];
+  const content = match[2].trim();
+  const errors = [];
+  try {
+    const metadata = parseYamlMetadata(yamlContent);
+    if (!metadata.id && metadata.name) {
+      metadata.id = metadata.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    }
+    if (!metadata.source) {
+      metadata.source = "manual";
+    }
+    if (!metadata.name) errors.push("Missing required field: name");
+    if (!metadata.description) errors.push("Missing required field: description");
+    if (!metadata.triggers || metadata.triggers.length === 0) {
+      errors.push("Missing required field: triggers");
+    }
+    return {
+      metadata,
+      content,
+      valid: errors.length === 0,
+      errors
+    };
+  } catch (e) {
+    return {
+      metadata: {},
+      content: rawContent,
+      valid: false,
+      errors: [`YAML parse error: ${e}`]
+    };
+  }
+}
+function parseYamlMetadata(yamlContent) {
+  const lines = yamlContent.split("\n");
+  const metadata = {};
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const colonIndex = line.indexOf(":");
+    if (colonIndex === -1) {
+      i++;
+      continue;
+    }
+    const key = line.slice(0, colonIndex).trim();
+    const rawValue = line.slice(colonIndex + 1).trim();
+    switch (key) {
+      case "id":
+        metadata.id = parseStringValue(rawValue);
+        break;
+      case "name":
+        metadata.name = parseStringValue(rawValue);
+        break;
+      case "description":
+        metadata.description = parseStringValue(rawValue);
+        break;
+      case "source":
+        metadata.source = parseStringValue(rawValue);
+        break;
+      case "createdAt":
+        metadata.createdAt = parseStringValue(rawValue);
+        break;
+      case "sessionId":
+        metadata.sessionId = parseStringValue(rawValue);
+        break;
+      case "quality":
+        metadata.quality = parseInt(rawValue, 10) || void 0;
+        break;
+      case "usageCount":
+        metadata.usageCount = parseInt(rawValue, 10) || 0;
+        break;
+      case "triggers":
+      case "tags": {
+        const { value, consumed } = parseArrayValue(rawValue, lines, i);
+        if (key === "triggers") {
+          metadata.triggers = Array.isArray(value) ? value : [value];
+        } else {
+          metadata.tags = Array.isArray(value) ? value : [value];
+        }
+        i += consumed - 1;
+        break;
+      }
+    }
+    i++;
+  }
+  return metadata;
+}
+function parseStringValue(value) {
+  if (!value) return "";
+  if (value.startsWith('"') && value.endsWith('"') || value.startsWith("'") && value.endsWith("'")) {
+    return value.slice(1, -1);
+  }
+  return value;
+}
+function parseArrayValue(rawValue, lines, currentIndex) {
+  if (rawValue.startsWith("[")) {
+    const endIdx = rawValue.lastIndexOf("]");
+    if (endIdx === -1) return { value: [], consumed: 1 };
+    const content = rawValue.slice(1, endIdx).trim();
+    if (!content) return { value: [], consumed: 1 };
+    const items = content.split(",").map((s) => parseStringValue(s.trim())).filter(Boolean);
+    return { value: items, consumed: 1 };
+  }
+  if (!rawValue || rawValue === "") {
+    const items = [];
+    let consumed = 1;
+    for (let j = currentIndex + 1; j < lines.length; j++) {
+      const nextLine = lines[j];
+      const arrayMatch = nextLine.match(/^\s+-\s*(.*)$/);
+      if (arrayMatch) {
+        const itemValue = parseStringValue(arrayMatch[1].trim());
+        if (itemValue) items.push(itemValue);
+        consumed++;
+      } else if (nextLine.trim() === "") {
+        consumed++;
+      } else {
+        break;
+      }
+    }
+    if (items.length > 0) {
+      return { value: items, consumed };
+    }
+  }
+  return { value: parseStringValue(rawValue), consumed: 1 };
+}
+
+// src/hooks/learner/loader.ts
+function createContentHash(content) {
+  return (0, import_crypto3.createHash)("sha256").update(content).digest("hex").slice(0, 16);
+}
+function loadAllSkills(projectRoot) {
+  const candidates = findSkillFiles(projectRoot);
+  const seenIds = /* @__PURE__ */ new Map();
+  for (const candidate of candidates) {
+    try {
+      const rawContent = (0, import_fs15.readFileSync)(candidate.path, "utf-8");
+      const { metadata, content, valid, errors } = parseSkillFile(rawContent);
+      if (!valid) {
+        if (DEBUG_ENABLED) {
+          console.warn(`Invalid skill file ${candidate.path}: ${errors.join(", ")}`);
+        }
+        continue;
+      }
+      const skillId = metadata.id;
+      const relativePath = (0, import_path21.normalize)((0, import_path21.relative)(candidate.sourceDir, candidate.path));
+      const skill = {
+        path: candidate.path,
+        relativePath,
+        scope: candidate.scope,
+        metadata,
+        content,
+        contentHash: createContentHash(content),
+        priority: candidate.scope === "project" ? 1 : 0
+      };
+      const existing = seenIds.get(skillId);
+      if (!existing || skill.priority > existing.priority) {
+        seenIds.set(skillId, skill);
+      }
+    } catch (e) {
+      if (DEBUG_ENABLED) {
+        console.warn(`Error loading skill ${candidate.path}:`, e);
+      }
+    }
+  }
+  return Array.from(seenIds.values()).sort((a, b) => b.priority - a.priority);
+}
+
+// src/tools/skills-tools.ts
+function getAllowedBoundaries() {
+  return [process.cwd(), (0, import_os4.homedir)()];
+}
+function validateProjectRoot(input) {
+  const normalized = (0, import_path22.normalize)((0, import_path22.resolve)(input));
+  if (input.includes("..")) {
+    throw new Error("Invalid project root: path traversal not allowed");
+  }
+  const isWithinAllowed = getAllowedBoundaries().some((boundary) => {
+    const normalizedBoundary = (0, import_path22.normalize)(boundary);
+    return normalized === normalizedBoundary || normalized.startsWith(normalizedBoundary + import_path22.sep);
+  });
+  if (!isWithinAllowed) {
+    throw new Error("Invalid project root: path is outside allowed directories");
+  }
+  return normalized;
+}
+var loadLocalSchema = {
+  projectRoot: external_exports.string().max(500).optional().describe("Project root directory (defaults to cwd)")
+};
+var loadGlobalSchema = {};
+var listSkillsSchema = {
+  projectRoot: external_exports.string().max(500).optional().describe("Project root directory (defaults to cwd)")
+};
+function formatSkillOutput(skills) {
+  if (skills.length === 0) {
+    return "No skills found in the searched directories.";
+  }
+  const lines = [];
+  for (const skill of skills) {
+    lines.push(`### ${skill.metadata.id}`);
+    lines.push(`- **Name:** ${skill.metadata.name}`);
+    lines.push(`- **Description:** ${skill.metadata.description}`);
+    lines.push(`- **Triggers:** ${skill.metadata.triggers.join(", ")}`);
+    if (skill.metadata.tags?.length) {
+      lines.push(`- **Tags:** ${skill.metadata.tags.join(", ")}`);
+    }
+    lines.push(`- **Scope:** ${skill.scope}`);
+    lines.push(`- **Path:** ${skill.relativePath}`);
+    lines.push("");
+  }
+  return lines.join("\n");
+}
+var loadLocalTool = {
+  name: "load_omc_skills_local",
+  description: "Load and list skills from the project-local .omc/skills/ directory. Returns skill metadata (id, name, description, triggers, tags) for all discovered project-scoped skills.",
+  schema: loadLocalSchema,
+  handler: async (args) => {
+    const projectRoot = args.projectRoot ? validateProjectRoot(args.projectRoot) : process.cwd();
+    const allSkills = loadAllSkills(projectRoot);
+    const projectSkills = allSkills.filter((s) => s.scope === "project");
+    return {
+      content: [{
+        type: "text",
+        text: `## Project Skills (${projectSkills.length})
+
+${formatSkillOutput(projectSkills)}`
+      }]
+    };
+  }
+};
+var loadGlobalTool = {
+  name: "load_omc_skills_global",
+  description: "Load and list skills from global user directories (~/.omc/skills/ and ~/.claude/skills/omc-learned/). Returns skill metadata for all discovered user-scoped skills.",
+  schema: loadGlobalSchema,
+  handler: async (_args) => {
+    const allSkills = loadAllSkills(null);
+    const userSkills = allSkills.filter((s) => s.scope === "user");
+    return {
+      content: [{
+        type: "text",
+        text: `## Global User Skills (${userSkills.length})
+
+${formatSkillOutput(userSkills)}`
+      }]
+    };
+  }
+};
+var listSkillsTool = {
+  name: "list_omc_skills",
+  description: "List all available skills (both project-local and global user skills). Project skills take priority over user skills with the same ID.",
+  schema: listSkillsSchema,
+  handler: async (args) => {
+    const projectRoot = args.projectRoot ? validateProjectRoot(args.projectRoot) : process.cwd();
+    const skills = loadAllSkills(projectRoot);
+    const projectSkills = skills.filter((s) => s.scope === "project");
+    const userSkills = skills.filter((s) => s.scope === "user");
+    let output = `## All Available Skills (${skills.length} total)
+
+`;
+    if (projectSkills.length > 0) {
+      output += `### Project Skills (${projectSkills.length})
+
+${formatSkillOutput(projectSkills)}
+`;
+    }
+    if (userSkills.length > 0) {
+      output += `### User Skills (${userSkills.length})
+
+${formatSkillOutput(userSkills)}`;
+    }
+    if (skills.length === 0) {
+      output = "## No Skills Found\n\nNo skill files were discovered in any searched directories.\n\nSearched:\n- Project: .omc/skills/\n- Global: ~/.omc/skills/\n- Legacy: ~/.claude/skills/omc-learned/";
+    }
+    return {
+      content: [{
+        type: "text",
+        text: output
+      }]
+    };
+  }
+};
+var skillsTools = [loadLocalTool, loadGlobalTool, listSkillsTool];
+
+// src/tools/tool-prefix-migration.ts
+var DEPRECATION_MAP = {
+  // LSP Tools
+  "lsp_hover": { oldName: "lsp_hover", newName: "ultrapower:lsp_hover", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_goto_definition": { oldName: "lsp_goto_definition", newName: "ultrapower:lsp_goto_definition", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_find_references": { oldName: "lsp_find_references", newName: "ultrapower:lsp_find_references", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_document_symbols": { oldName: "lsp_document_symbols", newName: "ultrapower:lsp_document_symbols", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_workspace_symbols": { oldName: "lsp_workspace_symbols", newName: "ultrapower:lsp_workspace_symbols", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_diagnostics": { oldName: "lsp_diagnostics", newName: "ultrapower:lsp_diagnostics", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_servers": { oldName: "lsp_servers", newName: "ultrapower:lsp_servers", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_prepare_rename": { oldName: "lsp_prepare_rename", newName: "ultrapower:lsp_prepare_rename", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_rename": { oldName: "lsp_rename", newName: "ultrapower:lsp_rename", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_code_actions": { oldName: "lsp_code_actions", newName: "ultrapower:lsp_code_actions", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_code_action_resolve": { oldName: "lsp_code_action_resolve", newName: "ultrapower:lsp_code_action_resolve", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_diagnostics_directory": { oldName: "lsp_diagnostics_directory", newName: "ultrapower:lsp_diagnostics_directory", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // State Tools
+  "state_read": { oldName: "state_read", newName: "ultrapower:state_read", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "state_write": { oldName: "state_write", newName: "ultrapower:state_write", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "state_clear": { oldName: "state_clear", newName: "ultrapower:state_clear", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "state_list_active": { oldName: "state_list_active", newName: "ultrapower:state_list_active", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "state_get_status": { oldName: "state_get_status", newName: "ultrapower:state_get_status", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // Notepad Tools
+  "notepad_read": { oldName: "notepad_read", newName: "ultrapower:notepad_read", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_priority": { oldName: "notepad_write_priority", newName: "ultrapower:notepad_write_priority", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_working": { oldName: "notepad_write_working", newName: "ultrapower:notepad_write_working", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_manual": { oldName: "notepad_write_manual", newName: "ultrapower:notepad_write_manual", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_prune": { oldName: "notepad_prune", newName: "ultrapower:notepad_prune", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_stats": { oldName: "notepad_stats", newName: "ultrapower:notepad_stats", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // Memory Tools
+  "project_memory_read": { oldName: "project_memory_read", newName: "ultrapower:project_memory_read", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "project_memory_write": { oldName: "project_memory_write", newName: "ultrapower:project_memory_write", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "project_memory_add_note": { oldName: "project_memory_add_note", newName: "ultrapower:project_memory_add_note", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "project_memory_add_directive": { oldName: "project_memory_add_directive", newName: "ultrapower:project_memory_add_directive", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // AST Tools
+  "ast_grep_search": { oldName: "ast_grep_search", newName: "ultrapower:ast_grep_search", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "ast_grep_replace": { oldName: "ast_grep_replace", newName: "ultrapower:ast_grep_replace", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // Python REPL
+  "python_repl": { oldName: "python_repl", newName: "ultrapower:python_repl", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // Trace Tools
+  "trace_timeline": { oldName: "trace_timeline", newName: "ultrapower:trace_timeline", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "trace_summary": { oldName: "trace_summary", newName: "ultrapower:trace_summary", deprecatedSince: "5.6.0", removalVersion: "6.0.0" }
+};
+function createDeprecationWarning(info) {
+  return `\u26A0\uFE0F  DEPRECATED: Tool '${info.oldName}' is deprecated since v${info.deprecatedSince} and will be removed in v${info.removalVersion}.
+Please use '${info.newName}' instead.
+
+`;
+}
+function wrapWithDeprecation(tool) {
+  const deprecationInfo = DEPRECATION_MAP[tool.name];
+  if (!deprecationInfo) return tool;
+  const originalHandler = tool.handler;
+  return {
+    ...tool,
+    handler: async (args) => {
+      const result = await originalHandler(args);
+      const warning = createDeprecationWarning(deprecationInfo);
+      if (result.content && result.content[0]) {
+        result.content[0].text = warning + result.content[0].text;
+      }
+      return result;
+    }
+  };
+}
+function createPrefixedTool(tool) {
+  return {
+    ...tool,
+    name: `ultrapower:${tool.name}`
+  };
+}
+function registerToolWithBothNames(tool) {
+  const prefixedTool = createPrefixedTool(tool);
+  const deprecatedTool = wrapWithDeprecation(tool);
+  return [prefixedTool, deprecatedTool];
+}
+
+// src/tools/index.ts
+var allCustomTools = [
+  ...lspTools.flatMap(registerToolWithBothNames),
+  ...astTools.flatMap(registerToolWithBothNames),
+  ...registerToolWithBothNames(pythonReplTool2),
+  ...stateTools.flatMap(registerToolWithBothNames),
+  ...notepadTools.flatMap(registerToolWithBothNames),
+  ...memoryTools.flatMap(registerToolWithBothNames),
+  ...traceTools.flatMap(registerToolWithBothNames),
+  ...skillsTools
 ];
+
+// src/mcp/namespace-manager.ts
+function parseNamespace(namespacedName) {
+  const match = namespacedName.match(/^mcp__([^_]+)__(.+)$/);
+  if (!match) return null;
+  return { serverName: match[1], toolName: match[2] };
+}
+function isNamespaced(name) {
+  return /^mcp__[^_]+__.+$/.test(name);
+}
+
+// src/mcp/tool-resolver.ts
+function resolveTool(name) {
+  const directMatch = allCustomTools.find((t) => t.name === name);
+  if (directMatch) return directMatch;
+  if (isNamespaced(name)) {
+    const parsed = parseNamespace(name);
+    if (parsed) {
+      return allCustomTools.find((t) => t.name === parsed.toolName);
+    }
+  }
+  return void 0;
+}
+
+// src/mcp/timeout.ts
+var DEFAULT_TIMEOUT_MS = 3e4;
+async function withTimeout(fn, timeoutMs = DEFAULT_TIMEOUT_MS) {
+  return Promise.race([
+    fn(),
+    new Promise(
+      (_, reject) => setTimeout(() => reject(new Error(`Operation timed out after ${timeoutMs}ms`)), timeoutMs)
+    )
+  ]);
+}
+
+// src/mcp/tool-handler.ts
+async function handleToolCall(name, args) {
+  const tool = resolveTool(name);
+  if (!tool) {
+    return {
+      content: [{ type: "text", text: `Unknown tool: ${name}` }],
+      isError: true
+    };
+  }
+  try {
+    const result = await withTimeout(() => tool.handler(args ?? {}));
+    return {
+      content: result.content,
+      isError: false
+    };
+  } catch (error2) {
+    const message = error2 instanceof Error ? error2.message : String(error2);
+    return {
+      content: [{ type: "text", text: `Error executing ${name}: ${message}` }],
+      isError: true
+    };
+  }
+}
+
+// src/mcp/standalone-server.ts
+var allTools = allCustomTools;
 function zodToJsonSchema2(schema) {
   const rawShape = schema instanceof external_exports.ZodObject ? schema.shape : schema;
   const properties = {};
@@ -23931,26 +24515,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 });
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
-  const tool = allTools.find((t) => t.name === name);
-  if (!tool) {
-    return {
-      content: [{ type: "text", text: `Unknown tool: ${name}` }],
-      isError: true
-    };
-  }
-  try {
-    const result = await tool.handler(args ?? {});
-    return {
-      content: result.content,
-      isError: false
-    };
-  } catch (error2) {
-    const errorMessage = error2 instanceof Error ? error2.message : String(error2);
-    return {
-      content: [{ type: "text", text: `Error: ${errorMessage}` }],
-      isError: true
-    };
-  }
+  return handleToolCall(name, args);
 });
 async function main() {
   const transport = new StdioServerTransport();

@@ -9,10 +9,21 @@ import { z } from 'zod';
 import { lspTools } from './lsp-tools.js';
 import { astTools } from './ast-tools.js';
 import { pythonReplTool } from './python-repl/index.js';
+import { stateTools } from './state-tools.js';
+import { notepadTools } from './notepad-tools.js';
+import { memoryTools } from './memory-tools.js';
+import { traceTools } from './trace-tools.js';
+import { skillsTools } from './skills-tools.js';
+import { registerToolWithBothNames } from './tool-prefix-migration.js';
 
 export { lspTools } from './lsp-tools.js';
 export { astTools } from './ast-tools.js';
 export { pythonReplTool } from './python-repl/index.js';
+export { stateTools } from './state-tools.js';
+export { notepadTools } from './notepad-tools.js';
+export { memoryTools } from './memory-tools.js';
+export { traceTools } from './trace-tools.js';
+export { skillsTools } from './skills-tools.js';
 
 /**
  * Generic tool definition type
@@ -26,22 +37,40 @@ export interface GenericToolDefinition {
 
 /**
  * All custom tools available in the system
+ * Each tool is registered with both legacy (underscore) and new (ultrapower:) names
  */
 export const allCustomTools: GenericToolDefinition[] = [
-  ...lspTools as unknown as GenericToolDefinition[],
-  ...astTools as unknown as GenericToolDefinition[],
-  pythonReplTool as unknown as GenericToolDefinition
+  ...(lspTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
+  ...(astTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
+  ...registerToolWithBothNames(pythonReplTool as unknown as GenericToolDefinition),
+  ...(stateTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
+  ...(notepadTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
+  ...(memoryTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
+  ...(traceTools as unknown as GenericToolDefinition[]).flatMap(registerToolWithBothNames),
+  ...skillsTools as unknown as GenericToolDefinition[]
 ];
 
 /**
  * Get tools by category
  */
-export function getToolsByCategory(category: 'lsp' | 'ast' | 'all'): GenericToolDefinition[] {
+export function getToolsByCategory(category: 'lsp' | 'ast' | 'python' | 'state' | 'notepad' | 'memory' | 'trace' | 'skills' | 'all'): GenericToolDefinition[] {
   switch (category) {
     case 'lsp':
       return lspTools as unknown as GenericToolDefinition[];
     case 'ast':
       return astTools as unknown as GenericToolDefinition[];
+    case 'python':
+      return [pythonReplTool as unknown as GenericToolDefinition];
+    case 'state':
+      return stateTools as unknown as GenericToolDefinition[];
+    case 'notepad':
+      return notepadTools as unknown as GenericToolDefinition[];
+    case 'memory':
+      return memoryTools as unknown as GenericToolDefinition[];
+    case 'trace':
+      return traceTools as unknown as GenericToolDefinition[];
+    case 'skills':
+      return skillsTools as unknown as GenericToolDefinition[];
     case 'all':
       return allCustomTools;
   }

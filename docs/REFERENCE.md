@@ -765,6 +765,77 @@ If ToolSearch returns no results, the MCP server is not configured — fall back
 | `sequential-thinking` | Structured step-by-step reasoning — breaks complex problems into ordered thought chains |
 | `software-planning-tool` | Task planning and decomposition — structured task analysis, dependency graphs, execution tracking |
 
+### Custom Tools via MCP (32 total)
+
+ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin_ultrapower_t__` prefix.
+
+#### LSP Tools (12)
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| `lsp_hover` | `mcp__plugin_ultrapower_t__lsp_hover` | Get type information and documentation at cursor position |
+| `lsp_goto_definition` | `mcp__plugin_ultrapower_t__lsp_goto_definition` | Find definition location of a symbol |
+| `lsp_find_references` | `mcp__plugin_ultrapower_t__lsp_find_references` | Find all references to a symbol across codebase |
+| `lsp_document_symbols` | `mcp__plugin_ultrapower_t__lsp_document_symbols` | Get hierarchical outline of symbols in a file |
+| `lsp_workspace_symbols` | `mcp__plugin_ultrapower_t__lsp_workspace_symbols` | Search for symbols by name across workspace |
+| `lsp_diagnostics` | `mcp__plugin_ultrapower_t__lsp_diagnostics` | Get language server diagnostics for a file |
+| `lsp_diagnostics_directory` | `mcp__plugin_ultrapower_t__lsp_diagnostics_directory` | Run project-level diagnostics on a directory |
+| `lsp_servers` | `mcp__plugin_ultrapower_t__lsp_servers` | List all known language servers and installation status |
+| `lsp_prepare_rename` | `mcp__plugin_ultrapower_t__lsp_prepare_rename` | Check if a symbol can be renamed |
+| `lsp_rename` | `mcp__plugin_ultrapower_t__lsp_rename` | Rename a symbol across all files in project |
+| `lsp_code_actions` | `mcp__plugin_ultrapower_t__lsp_code_actions` | Get available code actions (refactorings, quick fixes) |
+| `lsp_code_action_resolve` | `mcp__plugin_ultrapower_t__lsp_code_action_resolve` | Get full edit details for a specific code action |
+
+#### AST Tools (2)
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| `ast_grep_search` | `mcp__plugin_ultrapower_t__ast_grep_search` | Search for code patterns using AST matching |
+| `ast_grep_replace` | `mcp__plugin_ultrapower_t__ast_grep_replace` | Replace code patterns using AST matching |
+
+#### Python REPL (1)
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| `python_repl` | `mcp__plugin_ultrapower_t__python_repl` | Execute Python code in persistent REPL environment |
+
+#### Notepad Tools (6)
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| `notepad_read` | `mcp__plugin_ultrapower_t__notepad_read` | Read notepad content (all/priority/working/manual sections) |
+| `notepad_write_priority` | `mcp__plugin_ultrapower_t__notepad_write_priority` | Write to Priority Context section (max 500 chars) |
+| `notepad_write_working` | `mcp__plugin_ultrapower_t__notepad_write_working` | Add entry to Working Memory section (auto-pruned after 7 days) |
+| `notepad_write_manual` | `mcp__plugin_ultrapower_t__notepad_write_manual` | Add entry to MANUAL section (never auto-pruned) |
+| `notepad_prune` | `mcp__plugin_ultrapower_t__notepad_prune` | Prune Working Memory entries older than N days |
+| `notepad_stats` | `mcp__plugin_ultrapower_t__notepad_stats` | Get statistics about the notepad |
+
+#### State Tools (5)
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| `state_read` | `mcp__plugin_ultrapower_t__state_read` | Read state for a specific mode |
+| `state_write` | `mcp__plugin_ultrapower_t__state_write` | Write/update state for a specific mode |
+| `state_clear` | `mcp__plugin_ultrapower_t__state_clear` | Clear/delete state for a specific mode |
+| `state_list_active` | `mcp__plugin_ultrapower_t__state_list_active` | List all currently active modes |
+| `state_get_status` | `mcp__plugin_ultrapower_t__state_get_status` | Get detailed status for a specific mode or all modes |
+
+#### Project Memory Tools (4)
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| `project_memory_read` | `mcp__plugin_ultrapower_t__project_memory_read` | Read project memory (techStack/build/conventions/structure/notes/directives) |
+| `project_memory_write` | `mcp__plugin_ultrapower_t__project_memory_write` | Write/update project memory with merge support |
+| `project_memory_add_note` | `mcp__plugin_ultrapower_t__project_memory_add_note` | Add a custom note to project memory |
+| `project_memory_add_directive` | `mcp__plugin_ultrapower_t__project_memory_add_directive` | Add a user directive to project memory |
+
+#### Trace Tools (2)
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| `trace_timeline` | `mcp__plugin_ultrapower_t__trace_timeline` | Show chronological agent flow trace timeline |
+| `trace_summary` | `mcp__plugin_ultrapower_t__trace_summary` | Show aggregate statistics for an agent flow trace session |
+
 ### MCP Path Boundary Rules
 
 MCP tools (`ask_codex`, `ask_gemini`) enforce strict path boundaries. Both `prompt_file` and `output_file` are resolved relative to `working_directory`.

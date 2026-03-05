@@ -14,16 +14,9 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { lspTools } from '../tools/lsp-tools.js';
-import { astTools } from '../tools/ast-tools.js';
-// IMPORTANT: Import from tool.js, NOT index.js!
-// tool.js exports pythonReplTool with wrapped handler returning { content: [...] }
-// index.js exports pythonReplTool with raw handler returning string
-import { pythonReplTool } from '../tools/python-repl/tool.js';
-import { stateTools } from '../tools/state-tools.js';
-import { notepadTools } from '../tools/notepad-tools.js';
-import { memoryTools } from '../tools/memory-tools.js';
-import { traceTools } from '../tools/trace-tools.js';
+import { handleToolCall } from './tool-handler.js';
+import { getAllToolNames } from './tool-resolver.js';
+import { allCustomTools } from '../tools/index.js';
 import { z } from 'zod';
 
 // Tool interface matching our tool definitions
@@ -34,16 +27,8 @@ interface ToolDef {
   handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }> }>;
 }
 
-// Aggregate all tools - AST tools gracefully degrade if @ast-grep/napi is unavailable
-const allTools: ToolDef[] = [
-  ...(lspTools as unknown as ToolDef[]),
-  ...(astTools as unknown as ToolDef[]),
-  pythonReplTool as unknown as ToolDef,
-  ...(stateTools as unknown as ToolDef[]),
-  ...(notepadTools as unknown as ToolDef[]),
-  ...(memoryTools as unknown as ToolDef[]),
-  ...(traceTools as unknown as ToolDef[]),
-];
+// Use all custom tools from unified adapter
+const allTools: ToolDef[] = allCustomTools as unknown as ToolDef[];
 
 // Convert Zod schema to JSON Schema for MCP
 function zodToJsonSchema(schema: z.ZodRawShape | z.ZodObject<z.ZodRawShape>): {
@@ -158,28 +143,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // Handle tool calls
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
-
-  const tool = allTools.find(t => t.name === name);
-  if (!tool) {
-    return {
-      content: [{ type: 'text', text: `Unknown tool: ${name}` }],
-      isError: true,
-    };
-  }
-
-  try {
-    const result = await tool.handler((args ?? {}) as unknown);
-    return {
-      content: result.content,
-      isError: false,
-    };
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    return {
-      content: [{ type: 'text', text: `Error: ${errorMessage}` }],
-      isError: true,
-    };
-  }
+  return handleToolCall(name, args);
 });
 
 // Start the server
