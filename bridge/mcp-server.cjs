@@ -23117,7 +23117,7 @@ async function addCustomNote(projectRoot, category, content) {
 
 // src/tools/memory-tools.ts
 var projectMemoryReadTool = {
-  name: "project_memory_read",
+  name: "mem_read",
   description: "Read the project memory. Can read the full memory or a specific section.",
   schema: {
     section: external_exports.enum(["all", "techStack", "build", "conventions", "structure", "notes", "directives"]).optional().describe("Section to read (default: all)"),
@@ -23184,7 +23184,7 @@ ${JSON.stringify(data, null, 2)}
   }
 };
 var projectMemoryWriteTool = {
-  name: "project_memory_write",
+  name: "mem_write",
   description: "Write/update project memory. Can replace entirely or merge with existing memory.",
   schema: {
     memory: external_exports.record(external_exports.string(), external_exports.unknown()).describe("The memory object to write"),
@@ -23229,7 +23229,7 @@ Path: ${getWorktreeProjectMemoryPath(root)}`
   }
 };
 var projectMemoryAddNoteTool = {
-  name: "project_memory_add_note",
+  name: "mem_add_note",
   description: "Add a custom note to project memory. Notes are categorized and persisted across sessions.",
   schema: {
     category: external_exports.string().max(50).describe('Note category (e.g., "build", "test", "deploy", "env", "architecture")'),
@@ -23270,7 +23270,7 @@ var projectMemoryAddNoteTool = {
   }
 };
 var projectMemoryAddDirectiveTool = {
-  name: "project_memory_add_directive",
+  name: "mem_add_directive",
   description: "Add a user directive to project memory. Directives are instructions that persist across sessions and survive compaction.",
   schema: {
     directive: external_exports.string().max(500).describe('The directive (e.g., "Always use TypeScript strict mode")'),
