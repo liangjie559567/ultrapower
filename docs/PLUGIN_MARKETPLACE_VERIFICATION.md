@@ -111,7 +111,7 @@ mcp-server.cjs, codex-server.cjs, gemini-server.cjs, team-bridge.cjs
 
 **步骤 2: 安装插件**
 ```
-/plugin install ultrapower
+/plugin install omc@ultrapower
 ```
 
 **步骤 3: 重启 Claude Code**
