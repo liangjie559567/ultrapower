@@ -47,6 +47,15 @@ async function getAdapter(cwd?: string): Promise<WorkerStateAdapter | null> {
 
   if (backend === 'sqlite' || backend === 'json' || backend === 'auto') {
     adapterInstance = await createWorkerAdapter(backend, workingDir);
+
+    // Auto-cleanup expired worker heartbeats on initialization
+    if (adapterInstance) {
+      const cleanupDays = parseInt(process.env.WORKER_CLEANUP_DAYS || '7', 10);
+      const maxAgeMs = cleanupDays * 24 * 60 * 60 * 1000;
+      adapterInstance.cleanup(maxAgeMs).catch(err => {
+        console.error('[MCP] Worker cleanup failed:', err);
+      });
+    }
   }
 
   return adapterInstance;

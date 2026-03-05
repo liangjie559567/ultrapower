@@ -25,6 +25,7 @@ import { logAuditEvent } from './audit-log.js';
 import type { AuditEvent } from './audit-log.js';
 import { getEffectivePermissions, findPermissionViolations } from './permissions.js';
 import type { WorkerPermissions, PermissionViolation } from './permissions.js';
+import { createWorkerAdapter } from '../workers/factory.js';
 
 /** Simple logger */
 function log(message: string): void {
@@ -476,6 +477,17 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
 
   log(`[bridge] ${workerName}@${teamName} starting (${provider})`);
   audit(config, 'bridge_start');
+
+  // Auto-cleanup expired worker heartbeats on startup
+  const cleanupDays = parseInt(process.env.WORKER_CLEANUP_DAYS || '7', 10);
+  const maxAgeMs = cleanupDays * 24 * 60 * 60 * 1000;
+  createWorkerAdapter('auto', workingDirectory).then(adapter => {
+    if (adapter) {
+      adapter.cleanup(maxAgeMs).catch(err => {
+        log(`[bridge] Worker cleanup failed: ${err}`);
+      });
+    }
+  }).catch(() => {});
 
   // Write initial heartbeat (protected so startup I/O failure doesn't prevent loop entry)
   try {
