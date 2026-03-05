@@ -1,3 +1,18 @@
+# ultrapower v5.5.18
+
+### 新增
+
+- **feat: 添加 marketplace.json 支持 Claude Code 插件安装** (提交 77a4fca)
+  - 新增 `marketplace.json` 配置文件
+  - 修复 `/plugin install omc@ultrapower` 无法找到插件的问题
+  - 包含 71 个 skills 和 50 个 agents 的完整元数据
+
+### 文档
+
+- 更新安装说明，确保用户可以通过插件市场正确安装
+
+---
+
 # ultrapower v5.5.17
 
 ### 文档
