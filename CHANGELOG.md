@@ -1,3 +1,57 @@
+# ultrapower v5.5.15
+
+### 新增
+
+- **feat(mcp): MCP 全面采用计划完成（42 个原子任务）**
+  - **Phase 1: MCP 服务器包装器**（17 任务）
+    - MCP 服务器框架（stdio 传输层 + 日志系统）
+    - 35 个工具转换适配器（8 类：LSP×12、AST×2、Python REPL×1、Notepad×6、State×5、ProjectMemory×4、Trace×2、Skills×3）
+    - 工具调用路由系统（超时保护 + 错误处理）
+    - 完整集成测试套件
+    - CI/CD 流水线配置（`.github/workflows/mcp-tests.yml`）
+  - **Phase 2: 社区 MCP 服务器集成**（14 任务）
+    - MCP 客户端实现（`src/mcp/client/MCPClient.ts`）：连接/重试/超时机制
+    - 配置系统（`src/mcp/config/`）：Zod schema + 环境变量替换（`${VAR_NAME}` 语法）
+    - 命名空间管理器（`src/mcp/namespace-manager.ts`）：工具注册 + 冲突检测
+    - 社区服务器兼容性测试（filesystem、github、slack）
+    - 兼容性矩阵文档（`docs/compatibility-matrix.md`）
+  - **Phase 3: 协议标准化**（11 任务）
+    - 工具前缀迁移系统（`src/tools/tool-prefix-migration.ts`）：双注册 + 废弃警告
+    - npm 包发布（`@liangjie559567/ultrapower-mcp-server@5.5.15`）
+    - 自动迁移脚本（`scripts/migrate-tool-names.js`）
+    - 完整 MCP 生态文档（`docs/mcp/`）：README、overview、server-guide、client-guide、configuration、performance
+    - 迁移指南（`docs/guides/tool-name-migration.md`）
+
+### 文档
+
+- **docs/mcp/**: 新增 6 个 MCP 文档文件
+  - `README.md`：MCP 总览
+  - `overview.md`：架构概览
+  - `server-guide.md`：服务器使用指南
+  - `client-guide.md`：客户端集成指南
+  - `configuration.md`：配置系统说明
+  - `performance.md`：性能基准测试
+- **docs/guides/tool-name-migration.md**：工具名称迁移指南（含完整映射表）
+- **docs/compatibility-matrix.md**：社区 MCP 服务器兼容性矩阵
+
+### 向后兼容
+
+- **工具前缀三种格式支持**：
+  - 新格式：`ultrapower:lsp_hover`（推荐）
+  - 兼容格式：`lsp_hover`
+  - 废弃格式：`mcp__plugin_ultrapower_t__lsp_hover`（6 个月后移除，触发废弃警告）
+- **双注册系统**：所有 35 个工具同时注册三种前缀，确保平滑迁移
+
+### 验证
+
+- 构建状态：✅ PASS
+- 测试结果：✅ 5851 个测试全部通过
+- npm 包发布：✅ v5.5.15 已发布到 npm registry
+- 工具数量：✅ 35 个工具全部可用
+- 向后兼容：✅ 三种前缀格式都支持
+
+---
+
 # ultrapower v5.5.14
 
 ### 修复
