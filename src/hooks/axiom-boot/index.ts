@@ -14,6 +14,8 @@ import {
   ensureConstitution,
 } from './storage.js';
 import type { AxiomBootInput, AxiomBootOutput } from './types.js';
+import { collectSessionData } from '../../features/reflection/data-collector.js';
+import { generateReflectionReport } from '../../features/reflection/report-generator.js';
 
 export * from './types.js';
 export * from './storage.js';
@@ -63,4 +65,15 @@ export function buildAxiomBootContext(workingDirectory: string): string {
   if (preferences) parts.push(`### 用户偏好\n${preferences}`);
 
   return parts.join('\n\n');
+}
+
+export function generateSessionReflection(workingDirectory: string): string | null {
+  const sessionData = collectSessionData(workingDirectory);
+  if (!sessionData) return null;
+
+  try {
+    return generateReflectionReport(sessionData, workingDirectory);
+  } catch {
+    return null;
+  }
 }
