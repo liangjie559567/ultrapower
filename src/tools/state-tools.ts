@@ -17,6 +17,7 @@ import {
   validateSessionId,
 } from '../lib/worktree-paths.js';
 import { atomicWriteJsonSync } from '../lib/atomic-write.js';
+import { acquireLock } from '../lib/file-lock.js';
 import {
   isModeActive,
   getActiveModes,
@@ -40,7 +41,7 @@ interface CacheEntry {
 
 const stateCache = new Map<string, CacheEntry>();
 const CACHE_MAX_SIZE = 50;
-const CACHE_TTL_MS = 5000;
+const CACHE_TTL_MS = 1000;  // Reduced from 5000ms to minimize stale data window
 let cacheHits = 0;
 let cacheMisses = 0;
 
@@ -409,11 +410,19 @@ export const stateWriteTool: ToolDefinition<{
         }
       };
 
-      atomicWriteJsonSync(statePath, stateWithMeta);
+      // Acquire lock to prevent concurrent write race conditions
+      const lockPath = `${statePath}.lock`;
+      const unlock = await acquireLock(lockPath, 30000);
 
-      // Invalidate cache on write
-      const cacheKey = getCacheKey(mode, root, sessionId);
-      invalidateCache(cacheKey);
+      try {
+        atomicWriteJsonSync(statePath, stateWithMeta);
+
+        // Invalidate cache on write
+        const cacheKey = getCacheKey(mode, root, sessionId);
+        invalidateCache(cacheKey);
+      } finally {
+        await unlock();
+      }
 
       const sessionInfo = sessionId ? ` (session: ${sessionId})` : ' (legacy path)';
       const warningMessage = sessionId ? '' : '\n\nWARNING: No session_id provided. State written to legacy shared path which may leak across parallel sessions. Pass session_id for session-scoped isolation.';

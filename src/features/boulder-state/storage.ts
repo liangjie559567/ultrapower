@@ -11,6 +11,7 @@ import { dirname, join, basename } from 'path';
 import type { BoulderState, PlanProgress, PlanSummary } from './types.js';
 import { BOULDER_DIR, BOULDER_FILE, PLANNER_PLANS_DIR, PLAN_EXTENSION } from './constants.js';
 import { atomicWriteSync } from '../../lib/atomic-write.js';
+import { acquireLock } from '../../lib/file-lock.js';
 
 /**
  * Get the full path to the boulder state file
@@ -58,19 +59,27 @@ export function writeBoulderState(directory: string, state: BoulderState): boole
 
 /**
  * Append a session ID to the boulder state
+ * Uses file lock to prevent concurrent modification race conditions
  */
-export function appendSessionId(directory: string, sessionId: string): BoulderState | null {
-  const state = readBoulderState(directory);
-  if (!state) return null;
+export async function appendSessionId(directory: string, sessionId: string): Promise<BoulderState | null> {
+  const lockPath = join(directory, BOULDER_DIR, '.lock');
+  const unlock = await acquireLock(lockPath, 30000);
 
-  if (!state.session_ids.includes(sessionId)) {
-    state.session_ids.push(sessionId);
-    if (writeBoulderState(directory, state)) {
-      return state;
+  try {
+    const state = readBoulderState(directory);
+    if (!state) return null;
+
+    if (!state.session_ids.includes(sessionId)) {
+      state.session_ids.push(sessionId);
+      if (!writeBoulderState(directory, state)) {
+        return null;
+      }
     }
-  }
 
-  return state;
+    return state;
+  } finally {
+    await unlock();
+  }
 }
 
 /**
