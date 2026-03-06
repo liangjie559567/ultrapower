@@ -27,9 +27,10 @@ describe('git-utils', () => {
     expect(root1).toBe(root2);
   });
 
-  it('should get current branch', () => {
+  it('should get current branch or null in detached HEAD', () => {
     const branch = getCurrentBranch();
-    expect(branch).toBeTruthy();
+    // In CI detached HEAD state (tag checkout), branch can be null
+    expect(branch === null || typeof branch === 'string').toBe(true);
   });
 
   it('should get repo name', () => {
@@ -40,6 +41,7 @@ describe('git-utils', () => {
   it('should batch fetch git info', () => {
     const info = getGitInfo();
     expect(info.root).toBeTruthy();
-    expect(info.branch).toBeTruthy();
+    // In CI detached HEAD state (tag checkout), branch can be null
+    expect(info.branch === null || typeof info.branch === 'string').toBe(true);
   });
 });
