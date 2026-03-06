@@ -2,6 +2,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { existsSync, mkdirSync, writeFileSync, unlinkSync, rmSync, readFileSync } from "fs";
 import { join } from "path";
 import { tmpdir, homedir } from "os";
+
+vi.mock('../../features/rate-limit-wait/tmux-detector.js', () => ({
+  capturePaneContent: vi.fn(() => 'Claude Code'),
+  analyzePaneContent: vi.fn(() => ({ confidence: 0.5, hasClaudeCode: true })),
+  sendToPane: vi.fn(() => true),
+  isTmuxAvailable: vi.fn(() => false),
+}));
+
 import {
   sanitizeReplyInput,
   isDaemonRunning,
@@ -14,13 +22,6 @@ import {
   isProcessRunning,
   createMinimalDaemonEnv,
 } from "../reply-listener.js";
-
-vi.mock('../features/rate-limit-wait/tmux-detector.js', () => ({
-  capturePaneContent: vi.fn(() => 'Claude Code'),
-  analyzePaneContent: vi.fn(() => ({ confidence: 0.5, hasClaudeCode: true })),
-  sendToPane: vi.fn(() => true),
-  isTmuxAvailable: vi.fn(() => false),
-}));
 
 vi.mock('./session-registry.js', () => ({
   lookupByMessageId: vi.fn(() => null),
