@@ -14528,26 +14528,60 @@ function detectCodexCli(useCache = true) {
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
-var import_child_process2 = require("child_process");
 var import_fs2 = require("fs");
 var import_path2 = require("path");
-var worktreeCache = null;
-function getWorktreeRoot(cwd) {
-  const effectiveCwd = cwd || process.cwd();
-  if (worktreeCache && worktreeCache.cwd === effectiveCwd) {
-    return worktreeCache.root || null;
-  }
-  try {
-    const root = (0, import_child_process2.execSync)("git rev-parse --show-toplevel", {
-      cwd: effectiveCwd,
-      encoding: "utf-8",
-      stdio: ["pipe", "pipe", "pipe"]
-    }).trim();
-    worktreeCache = { cwd: effectiveCwd, root };
-    return root;
-  } catch {
+
+// src/lib/git-utils.ts
+init_define_AGENT_PROMPTS_CODEX();
+init_define_AGENT_PROMPTS();
+init_define_AGENT_ROLES();
+var import_child_process2 = require("child_process");
+var GIT_TIMEOUT = 5e3;
+var CACHE_TTL = 1e3;
+var cache = /* @__PURE__ */ new Map();
+function getCached(key) {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    cache.delete(key);
     return null;
   }
+  return entry.value;
+}
+function setCache(key, value) {
+  cache.set(key, { value, timestamp: Date.now() });
+}
+function execGit(command, cwd) {
+  try {
+    return (0, import_child_process2.execSync)(`git --no-pager ${command}`, {
+      cwd,
+      encoding: "utf-8",
+      timeout: GIT_TIMEOUT,
+      stdio: ["pipe", "pipe", "pipe"],
+      shell: process.platform === "win32" ? "cmd.exe" : void 0
+    }).trim();
+  } catch {
+    return "";
+  }
+}
+function getWorktreeRoot(cwd) {
+  const key = `root:${cwd || process.cwd()}`;
+  const cached2 = getCached(key);
+  if (cached2) return cached2;
+  try {
+    const root = execGit("rev-parse --show-toplevel", cwd);
+    if (root) {
+      setCache(key, root);
+      return root;
+    }
+  } catch {
+  }
+  return null;
+}
+
+// src/lib/worktree-paths.ts
+function getWorktreeRoot2(cwd) {
+  return getWorktreeRoot(cwd);
 }
 
 // src/mcp/prompt-injection.ts
@@ -14748,7 +14782,7 @@ init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
 var import_fs5 = require("fs");
 var import_path5 = require("path");
-var DB_SCHEMA_VERSION = 1;
+var DB_SCHEMA_VERSION = 2;
 var DEFAULT_CLEANUP_MAX_AGE_MS = 24 * 60 * 60 * 1e3;
 var Database = null;
 var dbMap = /* @__PURE__ */ new Map();
@@ -14869,12 +14903,20 @@ async function initJobDb(cwd) {
       CREATE INDEX IF NOT EXISTS idx_jobs_provider ON jobs(provider);
       CREATE INDEX IF NOT EXISTS idx_jobs_spawned_at ON jobs(spawned_at);
       CREATE INDEX IF NOT EXISTS idx_jobs_provider_status ON jobs(provider, status);
+      CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+      CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
     `);
     const versionStmt = db.prepare(
       "SELECT value FROM schema_info WHERE key = 'version'"
     );
     const versionRow = versionStmt.get();
-    const __currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    const currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    if (currentVersion > 0 && currentVersion < 2) {
+      db.exec(`
+        CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+        CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
+      `);
+    }
     const setVersion = db.prepare(
       "INSERT OR REPLACE INTO schema_info (key, value) VALUES (?, ?)"
     );
@@ -15054,7 +15096,7 @@ var jobWorkingDirs = /* @__PURE__ */ new Map();
 function ensureJobDb(workingDirectory) {
   if (_dbInitAttempted || isJobDbInitialized()) return;
   _dbInitAttempted = true;
-  const root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();
+  const root = getWorktreeRoot2(workingDirectory) || workingDirectory || process.cwd();
   initJobDb(root).catch(() => {
   });
 }
@@ -15086,7 +15128,7 @@ function generatePromptId() {
   return (0, import_crypto.randomBytes)(8).toString("hex");
 }
 function getPromptsDir(workingDirectory) {
-  const root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();
+  const root = getWorktreeRoot2(workingDirectory) || workingDirectory || process.cwd();
   return (0, import_path6.join)(root, ".omc", "prompts");
 }
 function buildPromptFrontmatter(options) {
@@ -16277,6 +16319,35 @@ function getConfigDir2() {
   return process.env.XDG_CONFIG_HOME || (0, import_path7.join)((0, import_os.homedir)(), ".config");
 }
 
+// src/lib/constants.ts
+init_define_AGENT_PROMPTS_CODEX();
+init_define_AGENT_PROMPTS();
+init_define_AGENT_ROLES();
+var SIZE_LIMIT = {
+  AUDIT_LOG_MAX: 10 * 1024 * 1024,
+  // 审计日志最大 10MB
+  MAX_CONCURRENT_TASKS: 1e3,
+  // 最大并发任务数
+  MAX_TASKS_PER_CONFIG: 100,
+  // 配置中最大任务数
+  TELEGRAM_MESSAGE_MAX: 500,
+  // Telegram 消息最大长度
+  SANITIZE_DEFAULT: 30
+  // 默认清理长度
+};
+var TIME_THRESHOLD = {
+  DURATION_WARNING: 2 * 60 * 1e3,
+  // 2分钟警告
+  DURATION_CRITICAL: 5 * 60 * 1e3,
+  // 5分钟严重
+  SESSION_STALE: 24 * 60 * 60 * 1e3,
+  // 24小时过期
+  WORKING_MEMORY_TTL: 7,
+  // 工作记忆保留天数
+  UPDATE_CHECK_INTERVAL: 24
+  // 更新检查间隔(小时)
+};
+
 // src/config/loader.ts
 function isValidModelName(name) {
   return /^[a-zA-Z0-9.\-]{1,100}$/.test(name);
@@ -16447,7 +16518,7 @@ function loadEnvConfig() {
   }
   if (process.env.OMC_MAX_BACKGROUND_TASKS) {
     const maxTasks = parseInt(process.env.OMC_MAX_BACKGROUND_TASKS, 10);
-    if (!isNaN(maxTasks) && maxTasks > 0 && maxTasks <= 100) {
+    if (!isNaN(maxTasks) && maxTasks > 0 && maxTasks <= SIZE_LIMIT.MAX_TASKS_PER_CONFIG) {
       config2.permissions = {
         ...config2.permissions,
         maxBackgroundTasks: maxTasks
@@ -17096,7 +17167,7 @@ Path policy: ${pathPolicy}
 Suggested: ensure the working directory exists and is accessible`);
   }
   if (pathPolicy === "strict") {
-    const worktreeRoot = getWorktreeRoot(baseDirReal);
+    const worktreeRoot = getWorktreeRoot2(baseDirReal);
     if (worktreeRoot) {
       let worktreeReal;
       try {
