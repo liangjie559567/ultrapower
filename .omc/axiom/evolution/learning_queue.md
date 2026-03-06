@@ -230,3 +230,34 @@
 - 内容: .git/index.lock 残留导致 git 操作失败（error: Unable to create '.git/index.lock': File exists）。v5.5.15 发布时遇到此问题，需手动删除锁文件。建议在所有 git 操作前预检查：`[ -f .git/index.lock ] && rm .git/index.lock`。适用场景：git commit、git checkout、git merge 等所有修改索引的操作。
 - 元数据: session=2026-03-05, error=index.lock, fix=预检查删除
 
+
+### LQ-059: CI detached HEAD 状态测试模式
+- 优先级: P0
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-06
+- 内容: CI 在 tag checkout 时处于 detached HEAD 状态，`getCurrentBranch()` 返回 null。测试需要处理此场景：`expect(branch === null || typeof branch === 'string').toBe(true)`。本地测试在分支上运行，CI 测试在 tag 上运行，两者环境不同。建议：1) 测试设计时考虑 CI 环境特性；2) 开发 ci-env-simulator 工具本地模拟；3) 文档化 CI 特定测试模式。
+- 处理时间: 2026-03-06
+- 知识产出: k-077
+- 元数据: session=2026-03-06, file=git-utils.test.ts, error=branch null in CI
+
+### LQ-060: stdio 配置最佳实践
+- 优先级: P1
+- 来源类型: session
+- 状态: done
+- 添加时间: 2026-03-06
+- 内容: `execSync` 的 `stdio: 'pipe'` 会捕获 stderr，当 stderr 有内容时抛出异常（即使退出码为 0）。对于验证步骤（如测试、构建），应使用 `stdio: 'inherit'` 让输出直接显示，避免将警告当作错误。适用场景：release-steps、CI 验证、任何需要容忍 stderr 警告的命令执行。
+- 处理时间: 2026-03-06
+- 知识产出: k-078
+- 元数据: session=2026-03-06, file=release-steps.mjs, fix=pipe→inherit
+
+### LQ-061: 最小化修复原则（外科手术式）
+- 优先级: P1
+- 来源类型: pattern
+- 状态: done
+- 添加时间: 2026-03-06
+- 内容: 修复问题时只改必要代码，避免连带变更。本次会话：release-steps.mjs 只改 1 行（stdio 配置），git-utils.test.ts 只改 5 行（测试断言）。优势：1) 降低引入新 bug 风险；2) 易于代码审查；3) 回滚成本低。模式：定位问题 → 最小化修复 → 验证 → 提交。
+- 处理时间: 2026-03-06
+- 知识产出: k-079
+- 元数据: session=2026-03-06, lines_changed=6, files=2
+

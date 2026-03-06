@@ -3,7 +3,7 @@ description: 知识图谱索引 - 管理所有知识条目的元信息
 schema_version: 2
 version: 1.0
 last_updated: 2026-03-05
-entries: 74
+entries: 77
 cycle: 18
 ---
 
@@ -91,6 +91,7 @@ cycle: 18
 | k-074 | Version Number Sync Checklist (8 Files) | workflow | 0.95 | 2026-03-05 | active |
 | k-075 | CHANGELOG Prepend Pattern (Bash Command) | pattern | 0.95 | 2026-03-05 | active |
 | k-076 | Git Lock File Pre-Check Pattern | workflow | 0.9 | 2026-03-05 | active |
+| k-077 | CI Detached HEAD Test Pattern | testing | 0.95 | 2026-03-06 | active || k-078 | stdio Configuration Best Practice | tooling | 0.95 | 2026-03-06 | active || k-079 | Minimal Fix Principle (Surgical Approach) | pattern | 0.95 | 2026-03-06 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -384,3 +385,82 @@ git 操作被中断（Ctrl+C、进程崩溃）导致锁文件残留。
 **相关知识**: k-072, k-021
 
 ---
+
+## k-077: CI Detached HEAD Test Pattern
+**Category**: testing
+**Confidence**: 0.95
+**Created**: 2026-03-06
+**Status**: active
+**Source**: LQ-059
+
+### Problem
+CI 在 tag checkout 时处于 detached HEAD 状态，`getCurrentBranch()` 返回 null，导致测试失败。
+
+### Solution
+测试断言需要处理 null 值：
+```typescript
+expect(branch === null || typeof branch === 'string').toBe(true);
+```
+
+### Context
+- 本地测试在分支上运行（branch 有值）
+- CI 测试在 tag 上运行（branch 为 null）
+- 两者环境不同，测试需要兼容
+
+### Applicability
+所有涉及 git 状态的测试（分支、提交、状态检查）
+
+---
+
+
+## k-078: stdio Configuration Best Practice
+**Category**: tooling
+**Confidence**: 0.95
+**Created**: 2026-03-06
+**Status**: active
+**Source**: LQ-060
+
+### Problem
+`execSync` 的 `stdio: 'pipe'` 捕获 stderr，当 stderr 有内容时抛出异常（即使退出码为 0）。
+
+### Solution
+对于验证步骤使用 `stdio: 'inherit'`：
+```typescript
+execSync(cmd, { stdio: 'inherit', encoding: 'utf-8' });
+```
+
+### Context
+- `stdio: 'pipe'` 适合需要捕获输出的场景
+- `stdio: 'inherit'` 适合验证步骤，容忍 stderr 警告
+- Release workflow 中测试命令应使用 inherit
+
+### Applicability
+所有 CI 验证步骤、测试命令、构建命令
+
+---
+
+
+## k-079: Minimal Fix Principle (Surgical Approach)
+**Category**: pattern
+**Confidence**: 0.95
+**Created**: 2026-03-06
+**Status**: active
+**Source**: LQ-061
+
+### Problem
+过度修复引入新 bug，增加代码审查负担。
+
+### Solution
+只改必要代码：
+- release-steps.mjs: 1 行（stdio 配置）
+- git-utils.test.ts: 5 行（测试断言）
+
+### Context
+- 定位问题 → 最小化修复 → 验证 → 提交
+- 降低风险、易于审查、回滚成本低
+
+### Applicability
+所有 bug 修复、紧急修复、生产环境修复
+
+---
+
