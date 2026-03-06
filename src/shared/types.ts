@@ -98,6 +98,11 @@ export interface PluginConfig {
 
   // Delegation routing configuration
   delegationRouting?: DelegationRoutingConfig;
+
+  // Hook configuration
+  hooks?: {
+    allowHighSeverityFailure?: boolean;
+  };
 }
 
 export interface SessionState {

@@ -228,9 +228,7 @@ export function executeCodex(prompt: string, model: string, cwd?: string, reason
     const child = spawn('codex', args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...(cwd ? { cwd } : {}),
-      // shell: true needed on Windows for .cmd/.bat executables.
-      // Safe: args are array-based and model names are regex-validated.
-      ...(process.platform === 'win32' ? { shell: true } : {})
+      shell: false
     });
 
     // Manual timeout handling to ensure proper cleanup
@@ -408,9 +406,7 @@ export function executeCodexBackground(
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],
         ...(workingDirectory ? { cwd: workingDirectory } : {}),
-        // shell: true needed on Windows for .cmd/.bat executables.
-        // Safe: args are array-based and model names are regex-validated.
-        ...(process.platform === 'win32' ? { shell: true } : {})
+        shell: false
       });
 
       if (!child.pid) {

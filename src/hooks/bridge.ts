@@ -562,8 +562,16 @@ async function processPersistentMode(input: HookInput): Promise<HookOutput> {
             sessionId,
             projectPath: directory,
             profileName: process.env.OMC_NOTIFY_PROFILE,
-          }).catch(() => {})
-        ).catch(() => {});
+          }).catch((err) => {
+            if (process.env.OMC_DEBUG) {
+              console.error(`[bridge] session-idle notification failed: ${err.message}`);
+            }
+          })
+        ).catch((err) => {
+          if (process.env.OMC_DEBUG) {
+            console.error(`[bridge] notification import failed: ${err.message}`);
+          }
+        });
       }
 
       // IMPORTANT: Do NOT clean up reply-listener/session-registry on Stop hooks.
@@ -622,8 +630,16 @@ async function processSessionStart(input: HookInput): Promise<HookOutput> {
         sessionId,
         projectPath: directory,
         profileName: process.env.OMC_NOTIFY_PROFILE,
-      }).catch(() => {})
-    ).catch(() => {});
+      }).catch((err) => {
+        if (process.env.OMC_DEBUG) {
+          console.error(`[bridge] session-start notification failed: ${err.message}`);
+        }
+      })
+    ).catch((err) => {
+      if (process.env.OMC_DEBUG) {
+        console.error(`[bridge] notification import failed: ${err.message}`);
+      }
+    });
   }
 
   // Start reply listener daemon if configured (non-blocking, swallows errors)
@@ -810,8 +826,16 @@ export function dispatchAskUserQuestionNotification(
       projectPath: directory,
       question: questionText,
       profileName: process.env.OMC_NOTIFY_PROFILE,
-    }).catch(() => {})
-  ).catch(() => {});
+    }).catch((err) => {
+      if (process.env.OMC_DEBUG) {
+        console.error(`[bridge] ask-user-question notification failed: ${err.message}`);
+      }
+    })
+  ).catch((err) => {
+    if (process.env.OMC_DEBUG) {
+      console.error(`[bridge] notification import failed: ${err.message}`);
+    }
+  });
 }
 
 /** @internal Object wrapper so tests can spy on the dispatch call. */

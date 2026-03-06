@@ -153,8 +153,13 @@ export async function initJobDb(cwd: string): Promise<boolean> {
       const oldestKey = dbMap.keys().next().value;
       if (oldestKey) {
         const oldDb = dbMap.get(oldestKey);
-        oldDb?.close();
-        dbMap.delete(oldestKey);
+        try {
+          oldDb?.close();
+        } catch (err) {
+          console.error(`[job-state-db] Failed to close connection: ${err}`);
+        } finally {
+          dbMap.delete(oldestKey);
+        }
       }
     }
 

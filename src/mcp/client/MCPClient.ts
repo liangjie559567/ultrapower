@@ -38,6 +38,7 @@ export class MCPClient {
         return;
       } catch (error) {
         console.error(`Connection attempt ${attempt + 1}/${maxRetries} failed:`, error);
+        this.process?.kill();
 
         if (attempt < maxRetries - 1) {
           await new Promise(resolve => setTimeout(resolve, delays[attempt]));
