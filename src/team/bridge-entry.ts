@@ -58,7 +58,8 @@ export function validateConfigPath(configPath: string, homeDir: string, claudeCo
 /**
  * Validate the bridge working directory is safe:
  * - Must exist and be a directory
- * - Must resolve (via realpathSync) to a path under the user's home directory
+ * - Production: Must resolve to a path under the user's home directory
+ * - CI: Must resolve to a path under the CI workspace (GITHUB_WORKSPACE or CI_PROJECT_DIR)
  * - Must be inside a git worktree
  */
 export function validateBridgeWorkingDirectory(workingDirectory: string): void {
@@ -73,13 +74,29 @@ export function validateBridgeWorkingDirectory(workingDirectory: string): void {
     throw new Error(`workingDirectory is not a directory: ${workingDirectory}`);
   }
 
-  // Resolve symlinks and verify under homedir (skip in CI environments)
-  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+  // Resolve symlinks and verify path constraints
+  const isCI = process.env.CI === 'true' || process.env.CI === '1' ||
+               process.env.GITHUB_ACTIONS === 'true' ||
+               process.env.GITLAB_CI === 'true' ||
+               process.env.CIRCLECI === 'true' ||
+               !!process.env.JENKINS_HOME;
+
+  const resolved = realpathSync(workingDirectory).replace(/\\/g, '/');
+
   if (!isCI) {
-    const resolved = realpathSync(workingDirectory).replace(/\\/g, '/');
+    // Production: strict home directory check
     const home = homedir().replace(/\\/g, '/');
     if (!resolved.startsWith(home + '/') && resolved !== home) {
       throw new Error(`workingDirectory is outside home directory: ${resolved}`);
+    }
+  } else {
+    // CI: validate against workspace
+    const workspace = process.env.GITHUB_WORKSPACE || process.env.CI_PROJECT_DIR;
+    if (workspace) {
+      const wsResolved = realpathSync(workspace).replace(/\\/g, '/');
+      if (!resolved.startsWith(wsResolved + '/') && resolved !== wsResolved) {
+        throw new Error(`workingDirectory is outside CI workspace: ${resolved}`);
+      }
     }
   }
 
