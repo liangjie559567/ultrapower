@@ -6,6 +6,8 @@
  * file ownership and dependency tracking.
  */
 
+import { safeJsonParse } from '../../lib/safe-json.js';
+
 /**
  * Agent type for task execution, determines model complexity
  */
@@ -264,13 +266,13 @@ export function parseDecompositionResult(response: string): DecompositionResult 
   }
 
   let parsed: unknown;
-  try {
-    parsed = JSON.parse(jsonStr);
-  } catch (e) {
+  const parseResult = safeJsonParse(jsonStr);
+  if (!parseResult.success) {
     throw new Error(
-      `Could not parse decomposition result: invalid JSON - ${e instanceof Error ? e.message : 'unknown error'}`
+      `Could not parse decomposition result: invalid JSON - ${parseResult.error}`
     );
   }
+  parsed = parseResult.data;
 
   // Validate structure
   if (!parsed || typeof parsed !== 'object') {

@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { NexusConfig } from './types.js';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 const DEBUG_ENABLED = process.env.OMC_DEBUG === '1';
 
@@ -21,11 +22,11 @@ export function loadNexusConfig(directory: string): NexusConfig {
   }
   try {
     const raw = readFileSync(configPath, 'utf-8');
-    const parsed = JSON.parse(raw) as unknown;
-    if (typeof parsed !== 'object' || parsed === null) {
+    const result = safeJsonParse(raw, configPath);
+    if (!result.success || typeof result.data !== 'object' || result.data === null) {
       return { ...DEFAULT_NEXUS_CONFIG };
     }
-    return { ...DEFAULT_NEXUS_CONFIG, ...(parsed as Partial<NexusConfig>) };
+    return { ...DEFAULT_NEXUS_CONFIG, ...(result.data as Partial<NexusConfig>) };
   } catch (error) {
     if (DEBUG_ENABLED) {
       console.error('[nexus] Error loading config:', error);

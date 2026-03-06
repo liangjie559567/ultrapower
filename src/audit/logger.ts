@@ -1,6 +1,7 @@
 import { createHmac } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
+import { safeJsonParse } from '../lib/safe-json.js';
 
 interface AuditEntry {
   timestamp: string;
@@ -67,7 +68,13 @@ class AuditLogger {
       let valid = 0, invalid = 0;
 
       for (const line of lines) {
-        const entry: AuditEntry = JSON.parse(line);
+        const result = safeJsonParse<AuditEntry>(line);
+        if (!result.success) {
+          invalid++;
+          console.error(`[audit] Failed to parse entry: ${result.error}`);
+          continue;
+        }
+        const entry = result.data!;
         const { signature, ...payload } = entry;
         const expectedSig = this.sign(payload);
 

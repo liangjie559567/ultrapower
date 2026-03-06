@@ -21669,6 +21669,19 @@ function getActiveSessionsForMode(mode, cwd) {
 var import_crypto2 = require("crypto");
 var fs5 = __toESM(require("fs"), 1);
 var path6 = __toESM(require("path"), 1);
+
+// src/lib/safe-json.ts
+function safeJsonParse(content, filePath) {
+  try {
+    const data = JSON.parse(content);
+    return { success: true, data };
+  } catch (error2) {
+    const errorMsg = filePath ? `Failed to parse JSON from ${filePath}: ${error2 instanceof Error ? error2.message : String(error2)}` : `Failed to parse JSON: ${error2 instanceof Error ? error2.message : String(error2)}`;
+    return { success: false, error: errorMsg };
+  }
+}
+
+// src/audit/logger.ts
 var AuditLogger = class {
   logPath;
   secretKey;
@@ -21715,7 +21728,13 @@ var AuditLogger = class {
       const lines = content.split("\n").filter(Boolean);
       let valid = 0, invalid = 0;
       for (const line of lines) {
-        const entry = JSON.parse(line);
+        const result = safeJsonParse(line);
+        if (!result.success) {
+          invalid++;
+          console.error(`[audit] Failed to parse entry: ${result.error}`);
+          continue;
+        }
+        const entry = result.data;
         const { signature, ...payload } = entry;
         const expectedSig = this.sign(payload);
         if (signature === expectedSig) {
@@ -21787,17 +21806,6 @@ function assertValidMode(mode) {
     );
   }
   return mode;
-}
-
-// src/lib/safe-json.ts
-function safeJsonParse(content, filePath) {
-  try {
-    const data = JSON.parse(content);
-    return { success: true, data };
-  } catch (error2) {
-    const errorMsg = filePath ? `Failed to parse JSON from ${filePath}: ${error2 instanceof Error ? error2.message : String(error2)}` : `Failed to parse JSON: ${error2 instanceof Error ? error2.message : String(error2)}`;
-    return { success: false, error: errorMsg };
-  }
 }
 
 // src/tools/state-tools.ts
