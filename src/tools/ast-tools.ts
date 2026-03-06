@@ -221,9 +221,10 @@ async function readFileStream(
     let bytesRead = 0;
     const stream = createReadStream(filePath, { encoding: "utf-8" });
 
-    stream.on("data", (chunk: string) => {
-      chunks.push(chunk);
-      bytesRead += Buffer.byteLength(chunk, "utf-8");
+    stream.on("data", (chunk: string | Buffer) => {
+      const str = typeof chunk === 'string' ? chunk : chunk.toString('utf-8');
+      chunks.push(str);
+      bytesRead += Buffer.byteLength(str, "utf-8");
       onProgress?.(bytesRead, fileSize);
     });
 
