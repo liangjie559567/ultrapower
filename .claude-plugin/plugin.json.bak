@@ -1,0 +1,23 @@
+{
+  "name": "ultrapower",
+  "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
+  "version": "5.5.22",
+  "author": {
+    "name": "liangjie559567"
+  },
+  "homepage": "https://github.com/liangjie559567/ultrapower#readme",
+  "repository": "git+https://github.com/liangjie559567/ultrapower.git",
+  "license": "MIT",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "agent",
+    "multi-agent",
+    "orchestration",
+    "omc",
+    "claudecode",
+    "anthropic",
+    "llm"
+  ]
+}

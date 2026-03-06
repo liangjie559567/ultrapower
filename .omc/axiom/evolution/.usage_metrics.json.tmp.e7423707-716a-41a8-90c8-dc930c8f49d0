@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-03-06T13:06:14.355Z",
+  "agents": {},
+  "skills": {},
+  "tools": {
+    "": {
+      "totalCalls": 10,
+      "lastUsed": "2026-02-26T13:06:26.991Z"
+    },
+    "Bash": {
+      "totalCalls": 70,
+      "lastUsed": "2026-03-06T01:57:25.321Z"
+    },
+    "AskUserQuestion": {
+      "totalCalls": 167,
+      "lastUsed": "2026-03-06T13:01:50.220Z"
+    },
+    "Read": {
+      "totalCalls": 105,
+      "lastUsed": "2026-03-06T13:06:14.355Z"
+    }
+  }
+}

@@ -16,6 +16,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
+      - run: node scripts/validate-versions.mjs
       - run: node scripts/release-steps.mjs preflight
       - run: node scripts/release-steps.mjs validate
 

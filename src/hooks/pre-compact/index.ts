@@ -559,7 +559,7 @@ export function formatCompactSummary(checkpoint: CompactCheckpoint): string {
 async function doProcessPreCompact(
   input: PreCompactInput,
 ): Promise<HookOutput> {
-  const directory = input.cwd;
+  const directory = input.cwd || process.cwd();
 
   // Create checkpoint
   const checkpoint = await createCompactCheckpoint(directory, input.trigger);

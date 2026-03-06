@@ -293,11 +293,29 @@ describe('bridge-entry config validation', () => {
 // ═══════════════════════════════════════════════════════════════
 
 describe('validateAndNormalizeConfig', () => {
+  const testDir = join(homedir(), '.omc', 'test-bridge-config');
+
+  beforeEach(() => {
+    mkdirSync(testDir, { recursive: true });
+    // Initialize git repo to satisfy worktree check
+    try {
+      require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
+    } catch (e) {
+      // Ignore if git init fails
+    }
+  });
+
+  afterEach(() => {
+    if (existsSync(testDir)) {
+      rmSync(testDir, { recursive: true, force: true });
+    }
+  });
+
   const validConfig: BridgeConfig = {
     teamName: 'test-team',
     workerName: 'worker1',
     provider: 'codex',
-    workingDirectory: process.cwd(),
+    workingDirectory: testDir,
   };
 
   it('throws if teamName is missing', () => {
@@ -511,6 +529,11 @@ describe('loadConfigFromFile', () => {
 
   beforeEach(() => {
     mkdirSync(testDir, { recursive: true });
+    try {
+      require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
+    } catch (e) {
+      // Ignore if git init fails
+    }
   });
 
   afterEach(() => {
@@ -540,7 +563,7 @@ describe('loadConfigFromFile', () => {
       teamName: 'test-team',
       workerName: 'worker1',
       provider: 'codex',
-      workingDirectory: process.cwd()
+      workingDirectory: testDir
     };
     writeFileSync(configPath, JSON.stringify(config));
     const result = loadConfigFromFile(configPath);
@@ -554,7 +577,7 @@ describe('loadConfigFromFile', () => {
       teamName: 'test-team',
       workerName: 'worker1',
       provider: 'gemini',
-      workingDirectory: process.cwd()
+      workingDirectory: testDir
     };
     writeFileSync(configPath, JSON.stringify(config));
     const result = loadConfigFromFile(configPath);
@@ -568,7 +591,7 @@ describe('loadConfigFromFile', () => {
       teamName: 'test-team',
       workerName: 'worker1',
       provider: 'invalid',
-      workingDirectory: process.cwd()
+      workingDirectory: testDir
     };
     writeFileSync(configPath, JSON.stringify(config));
     expect(() => loadConfigFromFile(configPath)).toThrow("Invalid provider");
@@ -592,11 +615,28 @@ describe('loadConfigFromFile', () => {
 // ═══════════════════════════════════════════════════════════════
 
 describe('validateAndNormalizeConfig — permission edge cases', () => {
+  const testDir = join(homedir(), '.omc', 'test-permission-edge');
+
+  beforeEach(() => {
+    mkdirSync(testDir, { recursive: true });
+    try {
+      require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
+    } catch (e) {
+      // Ignore if git init fails
+    }
+  });
+
+  afterEach(() => {
+    if (existsSync(testDir)) {
+      rmSync(testDir, { recursive: true, force: true });
+    }
+  });
+
   const validConfig: BridgeConfig = {
     teamName: 'test-team',
     workerName: 'worker1',
     provider: 'codex',
-    workingDirectory: process.cwd(),
+    workingDirectory: testDir,
   };
 
   it('skips permission validation when permissionEnforcement is off', () => {
@@ -669,6 +709,11 @@ describe('full config loading flow', () => {
 
   beforeEach(() => {
     mkdirSync(testDir, { recursive: true });
+    try {
+      require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
+    } catch (e) {
+      // Ignore if git init fails
+    }
   });
 
   afterEach(() => {
@@ -681,7 +726,7 @@ describe('full config loading flow', () => {
       teamName: 'test@team!',
       workerName: 'work$er#1',
       provider: 'codex',
-      workingDirectory: process.cwd(),
+      workingDirectory: testDir,
       pollIntervalMs: 2000,
       taskTimeoutMs: 300_000,
       maxConsecutiveErrors: 5,
@@ -712,7 +757,7 @@ describe('full config loading flow', () => {
       teamName: 'minimal',
       workerName: 'worker',
       provider: 'gemini',
-      workingDirectory: process.cwd()
+      workingDirectory: testDir
     };
     writeFileSync(configPath, JSON.stringify(config));
 

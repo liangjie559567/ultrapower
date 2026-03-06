@@ -67,6 +67,8 @@ export async function syncMarketplace(opts = {}) {
   if (!/^\d+\.\d+\.\d+$/.test(version)) {
     throw new Error(`syncMarketplace: invalid version format: ${version}`);
   }
+
+  // Sync marketplace.json
   const marketplacePath = resolve('.claude-plugin/marketplace.json');
   const market = JSON.parse(readFileSync(marketplacePath, 'utf-8'));
 
@@ -76,17 +78,35 @@ export async function syncMarketplace(opts = {}) {
     if (p.source?.version !== version) { p.source.version = version; changed = true; }
   }
 
+  // Sync plugin.json
+  const pluginPath = resolve('.claude-plugin/plugin.json');
+  const plugin = JSON.parse(readFileSync(pluginPath, 'utf-8'));
+  if (plugin.version !== version) {
+    plugin.version = version;
+    changed = true;
+  }
+
   if (!changed) {
     console.log('syncMarketplace: versions already in sync');
     return { success: true };
   }
 
   writeFileSync(marketplacePath, JSON.stringify(market, null, 2) + '\n');
-  run(`git add .claude-plugin/marketplace.json`, dryRun);
-  run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
-  run(`git push origin HEAD:main`, dryRun);
+  writeFileSync(pluginPath, JSON.stringify(plugin, null, 2) + '\n');
+  run(`git add .claude-plugin/marketplace.json .claude-plugin/plugin.json`, dryRun);
 
-  console.log(`syncMarketplace: updated to v${version} and pushed to main`);
+  try {
+    run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
+    run(`git push origin HEAD:dev`, dryRun);
+    console.log(`syncMarketplace: updated to v${version} and pushed to dev`);
+  } catch (err) {
+    if (err.message?.includes('nothing to commit')) {
+      console.log(`syncMarketplace: no changes to commit (already at v${version})`);
+    } else {
+      throw err;
+    }
+  }
+
   return { success: true };
 }
 

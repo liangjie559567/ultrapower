@@ -60,6 +60,14 @@ export const allCustomTools: GenericToolDefinition[] = [
 ];
 
 /**
+ * Tools for MCP server (without ultrapower: prefix to avoid name length issues)
+ * Filter out tools with ultrapower: prefix to prevent exceeding API name length limits
+ */
+export const mcpServerTools: GenericToolDefinition[] = allCustomTools.filter(
+  tool => !tool.name.startsWith('ultrapower:')
+);
+
+/**
  * Get tools by category
  */
 export function getToolsByCategory(category: 'lsp' | 'ast' | 'python' | 'state' | 'notepad' | 'memory' | 'trace' | 'skills' | 'all'): GenericToolDefinition[] {

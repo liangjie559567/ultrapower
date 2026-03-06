@@ -16,7 +16,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { handleToolCall } from './tool-handler.js';
 import { getAllToolNames } from './tool-resolver.js';
-import { allCustomTools } from '../tools/index.js';
+import { mcpServerTools } from '../tools/index.js';
 import { z } from 'zod';
 
 // Tool interface matching our tool definitions
@@ -27,8 +27,8 @@ interface ToolDef {
   handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }> }>;
 }
 
-// Use all custom tools from unified adapter
-const allTools: ToolDef[] = allCustomTools as unknown as ToolDef[];
+// Use MCP server tools (without ultrapower: prefix to avoid name length issues)
+const allTools: ToolDef[] = mcpServerTools as unknown as ToolDef[];
 
 // Convert Zod schema to JSON Schema for MCP
 function zodToJsonSchema(schema: z.ZodRawShape | z.ZodObject<z.ZodRawShape>): {

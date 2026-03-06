@@ -1,3 +1,51 @@
+# ultrapower v5.5.30
+
+**发布日期**: 2026-03-06
+
+## Bug Fixes
+
+- **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
+  - 修复 `mcpServerTools` 导出逻辑，自动过滤掉带 `ultrapower:` 前缀的工具
+  - 解决 `/ultrapower:swarm` 报错：`mcp__plugin_ultrapower_t__ultrapower_parallel_opportunity_detector` 名称过长
+  - 现在 MCP 服务器只暴露短名称版本（如 `parallel_detector`），避免重复前缀
+
+---
+
+# ultrapower v5.5.29
+
+**发布日期**: 2026-03-06
+
+## Bug Fixes
+
+- **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
+  - 修复 `mcpServerTools` 导出逻辑，自动过滤掉带 `ultrapower:` 前缀的工具
+  - 解决 `/ultrapower:swarm` 报错：`mcp__plugin_ultrapower_t__ultrapower_parallel_opportunity_detector` 名称过长
+  - 现在 MCP 服务器只暴露短名称版本（如 `parallel_detector`），避免重复前缀
+
+---
+
+# ultrapower v5.5.28
+
+**发布日期**: 2026-03-06
+
+## Bug Fixes
+
+- **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
+  - 移除 MCP 服务器中的 `ultrapower:` 前缀（导致重复前缀：`mcp__plugin_ultrapower_t__ultrapower_*`）
+  - 缩短过长的工具名称：
+    - `parallel_opportunity_detector` → `parallel_detector`
+    - `lsp_diagnostics_directory` → `lsp_diag_dir`
+    - `lsp_code_action_resolve` → `lsp_action_resolve`
+    - `notepad_write_priority` → `notepad_priority`
+    - `notepad_write_working` → `notepad_working`
+    - `notepad_write_manual` → `notepad_manual`
+    - `load_omc_skills_local` → `load_skills_local`
+    - `load_omc_skills_global` → `load_skills_global`
+    - `list_omc_skills` → `list_skills`
+  - 新增 `mcpServerTools` 导出，仅包含原始工具名称（不带前缀）
+  - 所有 MCP 工具名称现在都在 64 字符以内（最长 47 字符）
+
+---
 # ultrapower v5.5.23
 
 **发布日期**: 2026-03-06

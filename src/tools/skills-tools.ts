@@ -103,7 +103,7 @@ function formatSkillOutput(skills: LearnedSkill[]): string {
 
 // Tool 1: load_omc_skills_local
 export const loadLocalTool = {
-  name: 'load_omc_skills_local',
+  name: 'load_skills_local',
   description: 'Load and list skills from the project-local .omc/skills/ directory. Returns skill metadata (id, name, description, triggers, tags) for all discovered project-scoped skills.',
   schema: loadLocalSchema,
   handler: async (args: { projectRoot?: string }) => {
@@ -122,7 +122,7 @@ export const loadLocalTool = {
 
 // Tool 2: load_omc_skills_global
 export const loadGlobalTool = {
-  name: 'load_omc_skills_global',
+  name: 'load_skills_global',
   description: 'Load and list skills from global user directories (~/.omc/skills/ and ~/.claude/skills/omc-learned/). Returns skill metadata for all discovered user-scoped skills.',
   schema: loadGlobalSchema,
   handler: async (_args: Record<string, never>) => {
@@ -140,7 +140,7 @@ export const loadGlobalTool = {
 
 // Tool 3: list_omc_skills
 export const listSkillsTool = {
-  name: 'list_omc_skills',
+  name: 'list_skills',
   description: 'List all available skills (both project-local and global user skills). Project skills take priority over user skills with the same ID.',
   schema: listSkillsSchema,
   handler: async (args: { projectRoot?: string }) => {

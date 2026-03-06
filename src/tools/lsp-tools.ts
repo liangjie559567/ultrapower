@@ -389,7 +389,7 @@ export const lspCodeActionResolveTool: ToolDefinition<{
   endCharacter: z.ZodNumber;
   actionIndex: z.ZodNumber;
 }> = {
-  name: 'lsp_code_action_resolve',
+  name: 'lsp_action_resolve',
   description: 'Get the full edit details for a specific code action. Use after lsp_code_actions to see what changes an action would make.',
   schema: {
     file: z.string().describe('Path to the source file'),
@@ -442,7 +442,7 @@ export const lspDiagnosticsDirectoryTool: ToolDefinition<{
   directory: z.ZodString;
   strategy: z.ZodOptional<z.ZodEnum<['tsc', 'lsp', 'auto']>>;
 }> = {
-  name: 'lsp_diagnostics_directory',
+  name: 'lsp_diag_dir',
   description: 'Run project-level diagnostics on a directory using tsc --noEmit (preferred) or LSP iteration (fallback). Useful for checking the entire codebase for errors.',
   schema: {
     directory: z.string().describe('Project directory to check'),

@@ -19209,7 +19209,7 @@ var lspCodeActionsTool = {
   }
 };
 var lspCodeActionResolveTool = {
-  name: "lsp_code_action_resolve",
+  name: "lsp_action_resolve",
   description: "Get the full edit details for a specific code action. Use after lsp_code_actions to see what changes an action would make.",
   schema: {
     file: external_exports.string().describe("Path to the source file"),
@@ -19254,7 +19254,7 @@ Command: ${action.command.title} (${action.command.command})`;
   }
 };
 var lspDiagnosticsDirectoryTool = {
-  name: "lsp_diagnostics_directory",
+  name: "lsp_diag_dir",
   description: "Run project-level diagnostics on a directory using tsc --noEmit (preferred) or LSP iteration (fallback). Useful for checking the entire codebase for errors.",
   schema: {
     directory: external_exports.string().describe("Project directory to check"),
@@ -19459,6 +19459,27 @@ var EXT_TO_LANG = {
   ".yaml": "yaml",
   ".yml": "yaml"
 };
+async function readFileStream(filePath, onProgress) {
+  const stat = (0, import_fs5.statSync)(filePath);
+  const fileSize = stat.size;
+  const LARGE_FILE_THRESHOLD = 10 * 1024 * 1024;
+  if (fileSize < LARGE_FILE_THRESHOLD) {
+    return (0, import_fs5.readFileSync)(filePath, "utf-8");
+  }
+  return new Promise((resolve6, reject) => {
+    const chunks = [];
+    let bytesRead = 0;
+    const stream = (0, import_fs5.createReadStream)(filePath, { encoding: "utf-8" });
+    stream.on("data", (chunk) => {
+      const str = typeof chunk === "string" ? chunk : chunk.toString("utf-8");
+      chunks.push(str);
+      bytesRead += Buffer.byteLength(str, "utf-8");
+      onProgress?.(bytesRead, fileSize);
+    });
+    stream.on("end", () => resolve6(chunks.join("")));
+    stream.on("error", reject);
+  });
+}
 function getFilesForLanguage(dirPath, language, maxFiles = 1e3) {
   const files = [];
   const extensions = Object.entries(EXT_TO_LANG).filter(([_, lang]) => lang === language).map(([ext]) => ext);
@@ -19584,7 +19605,7 @@ Error: ${sgLoadError}`;
       for (const filePath of files) {
         if (totalMatches >= maxResults) break;
         try {
-          const content = (0, import_fs5.readFileSync)(filePath, "utf-8");
+          const content = await readFileStream(filePath);
           const root = sg.parse(toLangEnum(sg, language), content).root();
           const matches = root.findAll(pattern);
           for (const match of matches) {
@@ -19714,7 +19735,7 @@ Error: ${sgLoadError}`;
       let totalReplacements = 0;
       for (const filePath of files) {
         try {
-          const content = (0, import_fs5.readFileSync)(filePath, "utf-8");
+          const content = await readFileStream(filePath);
           const root = sg.parse(toLangEnum(sg, language), content).root();
           const matches = root.findAll(pattern);
           if (matches.length === 0) continue;
@@ -21292,9 +21313,55 @@ Use this instead of Bash heredocs when you need:
 var import_fs8 = require("fs");
 
 // src/lib/worktree-paths.ts
-var import_child_process9 = require("child_process");
 var import_fs6 = require("fs");
 var import_path7 = require("path");
+
+// src/lib/git-utils.ts
+var import_child_process9 = require("child_process");
+var GIT_TIMEOUT = 5e3;
+var CACHE_TTL = 1e3;
+var cache = /* @__PURE__ */ new Map();
+function getCached(key) {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    cache.delete(key);
+    return null;
+  }
+  return entry.value;
+}
+function setCache(key, value) {
+  cache.set(key, { value, timestamp: Date.now() });
+}
+function execGit(command, cwd) {
+  try {
+    return (0, import_child_process9.execSync)(`git --no-pager ${command}`, {
+      cwd,
+      encoding: "utf-8",
+      timeout: GIT_TIMEOUT,
+      stdio: ["pipe", "pipe", "pipe"],
+      shell: process.platform === "win32" ? "cmd.exe" : void 0
+    }).trim();
+  } catch {
+    return "";
+  }
+}
+function getWorktreeRoot(cwd) {
+  const key = `root:${cwd || process.cwd()}`;
+  const cached2 = getCached(key);
+  if (cached2) return cached2;
+  try {
+    const root = execGit("rev-parse --show-toplevel", cwd);
+    if (root) {
+      setCache(key, root);
+      return root;
+    }
+  } catch {
+  }
+  return null;
+}
+
+// src/lib/worktree-paths.ts
 var OmcPaths = {
   ROOT: ".omc",
   STATE: ".omc/state",
@@ -21310,23 +21377,8 @@ var OmcPaths = {
   AUTOPILOT: ".omc/autopilot",
   SKILLS: ".omc/skills"
 };
-var worktreeCache = null;
-function getWorktreeRoot(cwd) {
-  const effectiveCwd = cwd || process.cwd();
-  if (worktreeCache && worktreeCache.cwd === effectiveCwd) {
-    return worktreeCache.root || null;
-  }
-  try {
-    const root = (0, import_child_process9.execSync)("git rev-parse --show-toplevel", {
-      cwd: effectiveCwd,
-      encoding: "utf-8",
-      stdio: ["pipe", "pipe", "pipe"]
-    }).trim();
-    worktreeCache = { cwd: effectiveCwd, root };
-    return root;
-  } catch {
-    return null;
-  }
+function getWorktreeRoot2(cwd) {
+  return getWorktreeRoot(cwd);
 }
 function validatePath(inputPath) {
   if (inputPath.includes("..")) {
@@ -21338,7 +21390,7 @@ function validatePath(inputPath) {
 }
 function resolveOmcPath(relativePath, worktreeRoot) {
   validatePath(relativePath);
-  const root = worktreeRoot || getWorktreeRoot() || process.cwd();
+  const root = worktreeRoot || getWorktreeRoot2() || process.cwd();
   const omcDir = (0, import_path7.join)(root, OmcPaths.ROOT);
   const fullPath = (0, import_path7.normalize)((0, import_path7.resolve)(omcDir, relativePath));
   const relativeToRoot = (0, import_path7.relative)(root, fullPath);
@@ -21362,11 +21414,11 @@ function ensureOmcDir(relativePath, worktreeRoot) {
   return fullPath;
 }
 function getWorktreeNotepadPath(worktreeRoot) {
-  const root = worktreeRoot || getWorktreeRoot() || process.cwd();
+  const root = worktreeRoot || getWorktreeRoot2() || process.cwd();
   return (0, import_path7.join)(root, OmcPaths.NOTEPAD);
 }
 function getWorktreeProjectMemoryPath(worktreeRoot) {
-  const root = worktreeRoot || getWorktreeRoot() || process.cwd();
+  const root = worktreeRoot || getWorktreeRoot2() || process.cwd();
   return (0, import_path7.join)(root, OmcPaths.PROJECT_MEMORY);
 }
 var SESSION_ID_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,255}$/;
@@ -21391,11 +21443,11 @@ function resolveSessionStatePath(stateName, sessionId, worktreeRoot) {
 }
 function getSessionStateDir(sessionId, worktreeRoot) {
   validateSessionId(sessionId);
-  const root = worktreeRoot || getWorktreeRoot() || process.cwd();
+  const root = worktreeRoot || getWorktreeRoot2() || process.cwd();
   return (0, import_path7.join)(root, OmcPaths.SESSIONS, sessionId);
 }
 function listSessionIds(worktreeRoot) {
-  const root = worktreeRoot || getWorktreeRoot() || process.cwd();
+  const root = worktreeRoot || getWorktreeRoot2() || process.cwd();
   const sessionsDir = (0, import_path7.join)(root, OmcPaths.SESSIONS);
   if (!(0, import_fs6.existsSync)(sessionsDir)) {
     return [];
@@ -21415,7 +21467,7 @@ function ensureSessionStateDir(sessionId, worktreeRoot) {
   return sessionDir;
 }
 function validateWorkingDirectory(workingDirectory) {
-  const trustedRoot = getWorktreeRoot(process.cwd()) || process.cwd();
+  const trustedRoot = getWorktreeRoot2(process.cwd()) || process.cwd();
   if (!workingDirectory) {
     return trustedRoot;
   }
@@ -21426,7 +21478,7 @@ function validateWorkingDirectory(workingDirectory) {
   } catch {
     trustedRootReal = trustedRoot;
   }
-  const providedRoot = getWorktreeRoot(resolved);
+  const providedRoot = getWorktreeRoot2(resolved);
   if (providedRoot) {
     let providedRootReal;
     try {
@@ -21681,11 +21733,37 @@ function safeJsonParse(content, filePath) {
   }
 }
 
+// src/lib/constants.ts
+var SIZE_LIMIT = {
+  AUDIT_LOG_MAX: 10 * 1024 * 1024,
+  // 审计日志最大 10MB
+  MAX_CONCURRENT_TASKS: 1e3,
+  // 最大并发任务数
+  MAX_TASKS_PER_CONFIG: 100,
+  // 配置中最大任务数
+  TELEGRAM_MESSAGE_MAX: 500,
+  // Telegram 消息最大长度
+  SANITIZE_DEFAULT: 30
+  // 默认清理长度
+};
+var TIME_THRESHOLD = {
+  DURATION_WARNING: 2 * 60 * 1e3,
+  // 2分钟警告
+  DURATION_CRITICAL: 5 * 60 * 1e3,
+  // 5分钟严重
+  SESSION_STALE: 24 * 60 * 60 * 1e3,
+  // 24小时过期
+  WORKING_MEMORY_TTL: 7,
+  // 工作记忆保留天数
+  UPDATE_CHECK_INTERVAL: 24
+  // 更新检查间隔(小时)
+};
+
 // src/audit/logger.ts
 var AuditLogger = class {
   logPath;
   secretKey;
-  maxSize = 10 * 1024 * 1024;
+  maxSize = SIZE_LIMIT.AUDIT_LOG_MAX;
   constructor(logDir) {
     this.logPath = path6.join(logDir, "audit.log");
     this.secretKey = this.deriveSecretKey();
@@ -21808,7 +21886,47 @@ function assertValidMode(mode) {
   return mode;
 }
 
+// src/lib/memory-utils.ts
+function pruneMap(map, maxSize) {
+  if (map.size <= maxSize) return;
+  const toDelete = map.size - maxSize;
+  let count = 0;
+  for (const key of map.keys()) {
+    if (count++ >= toDelete) break;
+    map.delete(key);
+  }
+}
+
 // src/tools/state-tools.ts
+var stateCache = /* @__PURE__ */ new Map();
+var CACHE_MAX_SIZE = 50;
+var CACHE_TTL_MS = 5e3;
+var cacheHits = 0;
+var cacheMisses = 0;
+function getCacheKey(mode, root, sessionId) {
+  return `${mode}:${root}:${sessionId || "legacy"}`;
+}
+function getCached2(key) {
+  const entry = stateCache.get(key);
+  if (!entry) {
+    cacheMisses++;
+    return null;
+  }
+  if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
+    stateCache.delete(key);
+    cacheMisses++;
+    return null;
+  }
+  cacheHits++;
+  return entry.data;
+}
+function setCache2(key, data) {
+  stateCache.set(key, { data, timestamp: Date.now() });
+  pruneMap(stateCache, CACHE_MAX_SIZE);
+}
+function invalidateCache(key) {
+  stateCache.delete(key);
+}
 var STATE_TOOL_MODES = [
   "autopilot",
   "ultrapilot",
@@ -21883,13 +22001,19 @@ Expected path: ${statePath2}`
             }]
           };
         }
-        const content = (0, import_fs8.readFileSync)(statePath2, "utf-8");
-        const result = safeJsonParse(content, statePath2);
-        if (!result.success) {
-          return {
-            content: [{ type: "text", text: result.error }],
-            isError: true
-          };
+        const cacheKey = getCacheKey(mode, root, sessionId);
+        let data = getCached2(cacheKey);
+        if (!data) {
+          const content = (0, import_fs8.readFileSync)(statePath2, "utf-8");
+          const result = safeJsonParse(content, statePath2);
+          if (!result.success) {
+            return {
+              content: [{ type: "text", text: result.error }],
+              isError: true
+            };
+          }
+          data = result.data;
+          setCache2(cacheKey, data);
         }
         return {
           content: [{
@@ -21899,7 +22023,7 @@ Expected path: ${statePath2}`
 Path: ${statePath2}
 
 \`\`\`json
-${JSON.stringify(result.data, null, 2)}
+${JSON.stringify(data, null, 2)}
 \`\`\``
           }]
         };
@@ -22086,6 +22210,8 @@ var stateWriteTool = {
         }
       };
       atomicWriteJsonSync(statePath, stateWithMeta);
+      const cacheKey = getCacheKey(mode, root, sessionId);
+      invalidateCache(cacheKey);
       const sessionInfo = sessionId ? ` (session: ${sessionId})` : " (legacy path)";
       const warningMessage = sessionId ? "" : "\n\nWARNING: No session_id provided. State written to legacy shared path which may leak across parallel sessions. Pass session_id for session-scoped isolation.";
       return {
@@ -22135,6 +22261,8 @@ var stateClearTool = {
       const sessionId = session_id;
       if (sessionId) {
         validateSessionId(sessionId);
+        const cacheKey = getCacheKey(mode, root, sessionId);
+        invalidateCache(cacheKey);
         if (MODE_CONFIGS[mode]) {
           const success = clearModeState(mode, root, sessionId);
           if (success) {
@@ -22821,7 +22949,7 @@ ${sectionContent}`
   }
 };
 var notepadWritePriorityTool = {
-  name: "notepad_write_priority",
+  name: "notepad_priority",
   description: "Write to the Priority Context section. This REPLACES the existing content. Keep under 500 chars - this is always loaded at session start.",
   schema: {
     content: external_exports.string().max(2e3).describe("Content to write (recommend under 500 chars)"),
@@ -22865,7 +22993,7 @@ var notepadWritePriorityTool = {
   }
 };
 var notepadWriteWorkingTool = {
-  name: "notepad_write_working",
+  name: "notepad_working",
   description: "Add an entry to Working Memory section. Entries are timestamped and auto-pruned after 7 days.",
   schema: {
     content: external_exports.string().max(4e3).describe("Content to add as a new entry"),
@@ -22903,7 +23031,7 @@ var notepadWriteWorkingTool = {
   }
 };
 var notepadWriteManualTool = {
-  name: "notepad_write_manual",
+  name: "notepad_manual",
   description: "Add an entry to the MANUAL section. Content in this section is never auto-pruned.",
   schema: {
     content: external_exports.string().max(4e3).describe("Content to add as a new entry"),
@@ -24334,7 +24462,7 @@ function formatSkillOutput(skills) {
   return lines.join("\n");
 }
 var loadLocalTool = {
-  name: "load_omc_skills_local",
+  name: "load_skills_local",
   description: "Load and list skills from the project-local .omc/skills/ directory. Returns skill metadata (id, name, description, triggers, tags) for all discovered project-scoped skills.",
   schema: loadLocalSchema,
   handler: async (args) => {
@@ -24352,7 +24480,7 @@ ${formatSkillOutput(projectSkills)}`
   }
 };
 var loadGlobalTool = {
-  name: "load_omc_skills_global",
+  name: "load_skills_global",
   description: "Load and list skills from global user directories (~/.omc/skills/ and ~/.claude/skills/omc-learned/). Returns skill metadata for all discovered user-scoped skills.",
   schema: loadGlobalSchema,
   handler: async (_args) => {
@@ -24369,7 +24497,7 @@ ${formatSkillOutput(userSkills)}`
   }
 };
 var listSkillsTool = {
-  name: "list_omc_skills",
+  name: "list_skills",
   description: "List all available skills (both project-local and global user skills). Project skills take priority over user skills with the same ID.",
   schema: listSkillsSchema,
   handler: async (args) => {
@@ -24537,7 +24665,7 @@ var ParallelOpportunitySchema = external_exports.object({
   })).describe("Task list with dependencies")
 });
 var parallelOpportunityDetectorTool = {
-  name: "parallel_opportunity_detector",
+  name: "parallel_detector",
   description: "Analyze task dependency graph and recommend parallel strategies",
   schema: ParallelOpportunitySchema.shape,
   handler: async (args) => {
@@ -24604,8 +24732,8 @@ var DEPRECATION_MAP = {
   "lsp_prepare_rename": { oldName: "lsp_prepare_rename", newName: "ultrapower:lsp_prepare_rename", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "lsp_rename": { oldName: "lsp_rename", newName: "ultrapower:lsp_rename", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "lsp_code_actions": { oldName: "lsp_code_actions", newName: "ultrapower:lsp_code_actions", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "lsp_code_action_resolve": { oldName: "lsp_code_action_resolve", newName: "ultrapower:lsp_code_action_resolve", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "lsp_diagnostics_directory": { oldName: "lsp_diagnostics_directory", newName: "ultrapower:lsp_diagnostics_directory", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_code_action_resolve": { oldName: "lsp_code_action_resolve", newName: "ultrapower:lsp_action_resolve", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_diagnostics_directory": { oldName: "lsp_diagnostics_directory", newName: "ultrapower:lsp_diag_dir", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // State Tools
   "state_read": { oldName: "state_read", newName: "ultrapower:state_read", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "state_write": { oldName: "state_write", newName: "ultrapower:state_write", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
@@ -24614,9 +24742,9 @@ var DEPRECATION_MAP = {
   "state_get_status": { oldName: "state_get_status", newName: "ultrapower:state_get_status", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // Notepad Tools
   "notepad_read": { oldName: "notepad_read", newName: "ultrapower:notepad_read", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "notepad_write_priority": { oldName: "notepad_write_priority", newName: "ultrapower:notepad_write_priority", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "notepad_write_working": { oldName: "notepad_write_working", newName: "ultrapower:notepad_write_working", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "notepad_write_manual": { oldName: "notepad_write_manual", newName: "ultrapower:notepad_write_manual", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_priority": { oldName: "notepad_write_priority", newName: "ultrapower:notepad_priority", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_working": { oldName: "notepad_write_working", newName: "ultrapower:notepad_working", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_manual": { oldName: "notepad_write_manual", newName: "ultrapower:notepad_manual", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "notepad_prune": { oldName: "notepad_prune", newName: "ultrapower:notepad_prune", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "notepad_stats": { oldName: "notepad_stats", newName: "ultrapower:notepad_stats", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // Memory Tools
@@ -24631,7 +24759,17 @@ var DEPRECATION_MAP = {
   "python_repl": { oldName: "python_repl", newName: "ultrapower:python_repl", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // Trace Tools
   "trace_timeline": { oldName: "trace_timeline", newName: "ultrapower:trace_timeline", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "trace_summary": { oldName: "trace_summary", newName: "ultrapower:trace_summary", deprecatedSince: "5.6.0", removalVersion: "6.0.0" }
+  "trace_summary": { oldName: "trace_summary", newName: "ultrapower:trace_summary", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // New shortened names (5.5.28+)
+  "lsp_action_resolve": { oldName: "lsp_action_resolve", newName: "ultrapower:lsp_action_resolve", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_diag_dir": { oldName: "lsp_diag_dir", newName: "ultrapower:lsp_diag_dir", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_priority": { oldName: "notepad_priority", newName: "ultrapower:notepad_priority", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_working": { oldName: "notepad_working", newName: "ultrapower:notepad_working", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_manual": { oldName: "notepad_manual", newName: "ultrapower:notepad_manual", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "parallel_detector": { oldName: "parallel_detector", newName: "ultrapower:parallel_detector", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "load_skills_local": { oldName: "load_skills_local", newName: "ultrapower:load_skills_local", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "load_skills_global": { oldName: "load_skills_global", newName: "ultrapower:load_skills_global", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "list_skills": { oldName: "list_skills", newName: "ultrapower:list_skills", deprecatedSince: "5.6.0", removalVersion: "6.0.0" }
 };
 function createDeprecationWarning(info) {
   return `\u26A0\uFE0F  DEPRECATED: Tool '${info.oldName}' is deprecated since v${info.deprecatedSince} and will be removed in v${info.removalVersion}.
@@ -24681,6 +24819,9 @@ var allCustomTools = [
   ...registerToolWithBothNames(parallelOpportunityDetectorTool),
   ...skillsTools
 ];
+var mcpServerTools = allCustomTools.filter(
+  (tool) => !tool.name.startsWith("ultrapower:")
+);
 
 // src/mcp/namespace-manager.ts
 function parseNamespace(namespacedName) {
@@ -24741,7 +24882,7 @@ async function handleToolCall(name, args) {
 }
 
 // src/mcp/standalone-server.ts
-var allTools = allCustomTools;
+var allTools = mcpServerTools;
 function zodToJsonSchema2(schema) {
   const rawShape = schema instanceof external_exports.ZodObject ? schema.shape : schema;
   const properties = {};
