@@ -1,3 +1,13 @@
+# ultrapower v5.5.21
+
+**发布日期**: 2026-03-06
+
+## Bug Fixes
+
+- **config loader import path** (a77eb5e) - 修复 `src/config/loader.ts` 中错误的导入路径，从 `../utils/paths.js` 更正为 `../utils/config-dir.js`，解决 v5.5.20 中 `omc install` 等命令无法运行的问题
+
+---
+
 # ultrapower v5.5.18
 
 **发布日期**: 2026-03-06
