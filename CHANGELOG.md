@@ -1,3 +1,27 @@
+# ultrapower v5.5.23
+
+**发布日期**: 2026-03-06
+
+## Bug Fixes
+
+- **Release pipeline fixes** - 修复阻止版本正确分发的关键发布流程 bug
+  - 移除 package.json 中的循环依赖 (@liangjie559567/ultrapower)
+  - 修复 marketplace.json 同步逻辑，直接推送到 main 分支
+  - 修复 ast-tools.ts 中的 TypeScript 类型错误（Buffer 处理）
+
+- **CI test fixes** - 解决 CI 环境特定的测试失败
+  - priority-chain.test.ts: 移除对可选 message 字段的断言
+  - reply-listener.test.ts: 修正 vi.mock 声明顺序（必须在导入之前）
+
+## Verification
+
+- ✅ 所有 360 个测试文件通过（6273 个测试）
+- ✅ CI 构建成功
+- ✅ v5.5.23 已发布到 npm 和 GitHub releases
+- ✅ marketplace.json 已同步到 main 分支
+
+---
+
 # ultrapower v5.5.18
 
 **发布日期**: 2026-03-06
