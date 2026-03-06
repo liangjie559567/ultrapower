@@ -28,6 +28,7 @@ import { processPreToolUse as enforceDelegationModel } from "../features/delegat
 import { normalizeHookInput } from "./bridge-normalize.js";
 import { withTimeout } from "./timeout-wrapper.js";
 import type { HookInput, HookOutput, HookType } from "./bridge-types.js";
+import { HookSeverity, HOOK_SEVERITY } from "./bridge-types.js";
 import {
   addBackgroundTask,
   getRunningTaskCount,
@@ -1278,12 +1279,32 @@ export async function processHook(
         return { continue: true };
     }
   } catch (error) {
-    // Log error but don't block execution
     console.error(`[hook-bridge] Error in ${hookType}:`, error);
-    // For permission-request, fail closed on error (security default)
-    if (hookType === "permission-request") {
-      return { continue: false };
+
+    const severity = HOOK_SEVERITY[hookType];
+
+    // CRITICAL hooks must block on error (security default)
+    if (severity === HookSeverity.CRITICAL) {
+      return {
+        continue: false,
+        reason: `Critical hook ${hookType} failed: ${error instanceof Error ? error.message : String(error)}`
+      };
     }
+
+    // HIGH severity hooks block by default (can be overridden via config)
+    if (severity === HookSeverity.HIGH) {
+      const config = loadConfig();
+      const allowHighFailure = config?.hooks?.allowHighSeverityFailure ?? false;
+
+      if (!allowHighFailure) {
+        return {
+          continue: false,
+          reason: `High-severity hook ${hookType} failed: ${error instanceof Error ? error.message : String(error)}`
+        };
+      }
+    }
+
+    // LOW severity hooks continue on error
     return { continue: true };
   }
 }

@@ -77,3 +77,33 @@ export type HookType =
   | "setup-init"
   | "setup-maintenance"
   | "permission-request";
+
+/**
+ * Hook severity levels for error handling
+ */
+export enum HookSeverity {
+  CRITICAL = 'critical',  // Failure must block operation
+  HIGH = 'high',          // Failure should block (configurable)
+  LOW = 'low'             // Failure can continue
+}
+
+/**
+ * Severity mapping for each hook type
+ */
+export const HOOK_SEVERITY: Record<HookType, HookSeverity> = {
+  'permission-request': HookSeverity.CRITICAL,
+  'setup-init': HookSeverity.HIGH,
+  'setup-maintenance': HookSeverity.HIGH,
+  'pre-tool-use': HookSeverity.HIGH,
+  'post-tool-use': HookSeverity.LOW,
+  'subagent-start': HookSeverity.LOW,
+  'subagent-stop': HookSeverity.LOW,
+  'session-start': HookSeverity.LOW,
+  'session-end': HookSeverity.LOW,
+  'pre-compact': HookSeverity.LOW,
+  'keyword-detector': HookSeverity.LOW,
+  'stop-continuation': HookSeverity.LOW,
+  'ralph': HookSeverity.LOW,
+  'persistent-mode': HookSeverity.LOW,
+  'autopilot': HookSeverity.LOW,
+};
