@@ -9,6 +9,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from '
 import { join } from 'path';
 import { readRalphState } from '../ralph/index.js';
 import { resolveSessionStatePath, ensureSessionStateDir } from '../../lib/worktree-paths.js';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 export type UltraQAGoalType = 'tests' | 'build' | 'lint' | 'typecheck' | 'custom';
 
@@ -91,7 +92,13 @@ export function readUltraQAState(directory: string, sessionId?: string): UltraQA
     }
     try {
       const content = readFileSync(sessionFile, 'utf-8');
-      const state: UltraQAState = JSON.parse(content);
+      const result = safeJsonParse<UltraQAState>(content, sessionFile);
+
+      if (!result.success) {
+        return null;
+      }
+
+      const state = result.data!;
       // Validate session identity
       if (state.session_id && state.session_id !== sessionId) {
         return null;
@@ -110,7 +117,13 @@ export function readUltraQAState(directory: string, sessionId?: string): UltraQA
 
   try {
     const content = readFileSync(stateFile, 'utf-8');
-    return JSON.parse(content);
+    const result = safeJsonParse<UltraQAState>(content, stateFile);
+
+    if (!result.success) {
+      return null;
+    }
+
+    return result.data!;
   } catch {
     return null;
   }

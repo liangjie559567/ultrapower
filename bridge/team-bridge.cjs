@@ -574,7 +574,7 @@ function rotateInboxIfNeeded(teamName, workerName, maxSizeBytes) {
   if (!(0, import_fs4.existsSync)(filePath)) return;
   try {
     const stat = (0, import_fs4.statSync)(filePath);
-    if (stat.size <= maxSizeBytes) return;
+    if (stat.size < maxSizeBytes) return;
     const content = (0, import_fs4.readFileSync)(filePath, "utf-8");
     const lines = content.split("\n").filter((l) => l.trim());
     const keepCount = Math.max(1, Math.floor(lines.length / 2));

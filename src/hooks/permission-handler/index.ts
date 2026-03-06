@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 export interface PermissionRequestInput {
   session_id: string;
@@ -176,11 +177,14 @@ export function isActiveModeRunning(directory: string): boolean {
       // JSON state files: check active/status fields
       try {
         const content = fs.readFileSync(statePath, 'utf-8');
-        const state = JSON.parse(content);
+        const result = safeJsonParse(content, statePath);
 
-        // Check if mode is active
-        if (state.active === true || state.status === 'running' || state.status === 'active') {
-          return true;
+        if (result.success && result.data) {
+          const state = result.data as any;
+          // Check if mode is active
+          if (state.active === true || state.status === 'running' || state.status === 'active') {
+            return true;
+          }
         }
       } catch (_error) {
         // Ignore parse errors, continue checking

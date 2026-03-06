@@ -9,6 +9,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { resolveSessionStatePath, ensureSessionStateDir } from '../../lib/worktree-paths.js';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 export interface UltraworkState {
   /** Whether ultrawork mode is currently active */
@@ -81,8 +82,14 @@ export function readUltraworkState(directory?: string, sessionId?: string): Ultr
     }
     try {
       const content = readFileSync(sessionFile, 'utf-8');
-      const state: UltraworkState = JSON.parse(content);
+      const result = safeJsonParse<UltraworkState>(content, sessionFile);
 
+      if (!result.success) {
+        console.error('[ultrawork] Failed to parse session state file:', result.error);
+        return null;
+      }
+
+      const state = result.data!;
       // Validate session identity: state must belong to this session
       if (state.session_id && state.session_id !== sessionId) {
         return null;
@@ -100,7 +107,14 @@ export function readUltraworkState(directory?: string, sessionId?: string): Ultr
   if (existsSync(localStateFile)) {
     try {
       const content = readFileSync(localStateFile, 'utf-8');
-      return JSON.parse(content);
+      const result = safeJsonParse<UltraworkState>(content, localStateFile);
+
+      if (!result.success) {
+        console.error('[ultrawork] Failed to parse state file:', result.error);
+        return null;
+      }
+
+      return result.data!;
     } catch (error) {
       console.error('[ultrawork] Failed to read state file:', error);
       return null;
@@ -175,11 +189,14 @@ export function deactivateUltrawork(directory?: string, sessionId?: string): boo
     if (existsSync(legacyFile)) {
       try {
         const content = readFileSync(legacyFile, 'utf-8');
-        const legacyState = JSON.parse(content);
+        const result = safeJsonParse(content, legacyFile);
 
-        // Only remove if it belongs to this session or is unowned (no session_id)
-        if (!legacyState.session_id || legacyState.session_id === sessionId) {
-          unlinkSync(legacyFile);
+        if (result.success) {
+          const legacyState = result.data as any;
+          // Only remove if it belongs to this session or is unowned (no session_id)
+          if (!legacyState.session_id || legacyState.session_id === sessionId) {
+            unlinkSync(legacyFile);
+          }
         }
         // Do NOT delete another session's legacy data
       } catch {

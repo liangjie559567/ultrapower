@@ -28,6 +28,7 @@ function debugLog(message: string, ...args: unknown[]): void {
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 /**
  * Validates that a session ID is safe to use in file paths.
@@ -210,7 +211,13 @@ function getTodoFilePaths(sessionId?: string, directory?: string): string[] {
 function parseTodoFile(filePath: string): Todo[] {
   try {
     const content = readFileSync(filePath, 'utf-8');
-    const data = JSON.parse(content);
+    const result = safeJsonParse(content, filePath);
+
+    if (!result.success) {
+      return [];
+    }
+
+    const data = result.data;
 
     // Handle array format
     if (Array.isArray(data)) {
@@ -222,8 +229,8 @@ function parseTodoFile(filePath: string): Todo[] {
     }
 
     // Handle object format with todos array
-    if (data.todos && Array.isArray(data.todos)) {
-      return data.todos.filter((item: unknown) => {
+    if (data && typeof data === 'object' && 'todos' in data && Array.isArray((data as any).todos)) {
+      return (data as any).todos.filter((item: unknown) => {
         const todo = item as Record<string, unknown>;
         return (
           todo &&
@@ -296,8 +303,10 @@ export function readTaskFiles(sessionId: string): Task[] {
       if (!file.endsWith('.json') || file === '.lock') continue;
       try {
         const content = readFileSync(join(taskDir, file), 'utf-8');
-        const parsed = JSON.parse(content);
-        if (isValidTask(parsed)) tasks.push(parsed);
+        const result = safeJsonParse(content, file);
+        if (result.success && isValidTask(result.data)) {
+          tasks.push(result.data as Task);
+        }
       } catch (err) {
         debugLog('Failed to parse task file:', file, err);
       }

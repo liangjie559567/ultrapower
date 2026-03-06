@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git add .omc/axiom/evolution/usage_metrics.json .omc/notepad.md .omc/state/last-tool-error.json\",\"description\":\"Stage state and tracking files\"}",
+  "tool_input_preview": "{\"command\":\"git add .omc/axiom/evolution/.usage_metrics.json.tmp.* .omc/state/last-tool-error.json\",\"description\":\"Stage remaining state files\"}",
   "error": "Exit code 1\nThe following paths are ignored by one of your .gitignore files:\n.omc/state\nhint: Use -f if you really want to add them.\nhint: Disable this message with \"git config set advice.addIgnoredFile false\"\n\nThe following paths are ignored by one of your .gitignore files:\n.omc/state\nhint: Use -f if you really want to add them.\nhint: Disable this message with \"git config set advice.addIgnoredFile false\"",
-  "timestamp": "2026-03-06T00:26:08.299Z",
-  "retry_count": 1
+  "timestamp": "2026-03-06T00:27:01.686Z",
+  "retry_count": 2
 }
