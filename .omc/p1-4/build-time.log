@@ -1,0 +1,18 @@
+
+> @liangjie559567/ultrapower@5.5.18 build
+> tsc && node scripts/build-skill-bridge.mjs && node scripts/build-mcp-server.mjs && node scripts/build-codex-server.mjs && node scripts/build-gemini-server.mjs && node scripts/build-bridge-entry.mjs && npm run compose-docs
+
+Built dist/hooks/skill-bridge.cjs
+Built bridge/mcp-server.cjs
+Embedding 50 agent roles + prompts into bridge/codex-server.cjs
+Embedding 51 Codex agent prompts
+Built bridge/codex-server.cjs
+Embedding 50 agent roles + prompts into bridge/gemini-server.cjs
+Built bridge/gemini-server.cjs
+Built bridge/team-bridge.cjs
+
+> @liangjie559567/ultrapower@5.5.18 compose-docs
+> node scripts/compose-docs.mjs
+
+Synced 6 partials to shared/
+Documentation composition complete.
