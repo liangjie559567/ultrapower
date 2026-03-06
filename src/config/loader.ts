@@ -11,7 +11,7 @@ import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import * as jsonc from 'jsonc-parser';
 import type { PluginConfig, ExternalModelsConfig } from '../shared/types.js';
-import { getConfigDir } from '../utils/paths.js';
+import { getConfigDir } from '../utils/config-dir.js';
 import { SIZE_LIMIT } from '../lib/constants.js';
 
 /**
