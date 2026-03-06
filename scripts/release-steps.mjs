@@ -97,8 +97,8 @@ export async function syncMarketplace(opts = {}) {
 
   try {
     run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
-    run(`git push origin HEAD:main`, dryRun);
-    console.log(`syncMarketplace: updated to v${version} and pushed to main`);
+    run(`git push origin HEAD:dev`, dryRun);
+    console.log(`syncMarketplace: updated to v${version} and pushed to dev`);
   } catch (err) {
     if (err.message?.includes('nothing to commit')) {
       console.log(`syncMarketplace: no changes to commit (already at v${version})`);

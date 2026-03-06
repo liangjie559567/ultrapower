@@ -9,6 +9,7 @@ const files = [
   { path: 'package.json', extract: (c) => JSON.parse(c).version },
   { path: '.claude-plugin/plugin.json', extract: (c) => JSON.parse(c).version },
   { path: '.claude-plugin/marketplace.json', extract: (c) => JSON.parse(c).plugins?.[0]?.version },
+  { path: 'marketplace.json', extract: (c) => JSON.parse(c).version },
 ];
 
 function validateVersions() {

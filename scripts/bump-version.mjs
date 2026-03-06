@@ -10,6 +10,7 @@ const FILES = {
   pkg: resolve('package.json'),
   plugin: resolve('.claude-plugin/plugin.json'),
   marketplace: resolve('.claude-plugin/marketplace.json'),
+  rootMarketplace: resolve('marketplace.json'),
 };
 
 export function readVersions() {
@@ -62,6 +63,11 @@ export function bumpVersion(newVersion) {
     if (p.source) p.source.version = newVersion;
   }
   writeFileSync(FILES.marketplace, JSON.stringify(market, null, 2) + '\n');
+
+  // root marketplace.json
+  const rootMarket = JSON.parse(readFileSync(FILES.rootMarketplace, 'utf-8'));
+  rootMarket.version = newVersion;
+  writeFileSync(FILES.rootMarketplace, JSON.stringify(rootMarket, null, 2) + '\n');
 
   console.log(`Bumped all version files to ${newVersion}`);
 }
