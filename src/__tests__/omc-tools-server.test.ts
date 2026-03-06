@@ -55,11 +55,11 @@ describe('omc-tools-server', () => {
     it('should filter out skills tools', () => {
       const names = getOmcToolNames({ includeSkills: false });
       expect(names).toHaveLength(32);
-      expect(names.every(n => !n.includes('load_omc_skills') && !n.includes('list_omc_skills'))).toBe(true);
+      expect(names.every(n => !n.includes('load_skills') && !n.includes('list_skills'))).toBe(true);
     });
 
     it('should have 3 skills tools', () => {
-      const skillsTools = omcToolNames.filter(n => n.includes('load_omc_skills') || n.includes('list_omc_skills'));
+      const skillsTools = omcToolNames.filter(n => n.includes('load_skills') || n.includes('list_skills'));
       expect(skillsTools).toHaveLength(3);
     });
   });

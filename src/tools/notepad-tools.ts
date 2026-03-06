@@ -119,7 +119,7 @@ export const notepadWritePriorityTool: ToolDefinition<{
   content: z.ZodString;
   workingDirectory: z.ZodOptional<z.ZodString>;
 }> = {
-  name: 'notepad_write_priority',
+  name: 'notepad_priority',
   description: 'Write to the Priority Context section. This REPLACES the existing content. Keep under 500 chars - this is always loaded at session start.',
   schema: {
     content: z.string().max(2000).describe('Content to write (recommend under 500 chars)'),
@@ -176,7 +176,7 @@ export const notepadWriteWorkingTool: ToolDefinition<{
   content: z.ZodString;
   workingDirectory: z.ZodOptional<z.ZodString>;
 }> = {
-  name: 'notepad_write_working',
+  name: 'notepad_working',
   description: 'Add an entry to Working Memory section. Entries are timestamped and auto-pruned after 7 days.',
   schema: {
     content: z.string().max(4000).describe('Content to add as a new entry'),
@@ -228,7 +228,7 @@ export const notepadWriteManualTool: ToolDefinition<{
   content: z.ZodString;
   workingDirectory: z.ZodOptional<z.ZodString>;
 }> = {
-  name: 'notepad_write_manual',
+  name: 'notepad_manual',
   description: 'Add an entry to the MANUAL section. Content in this section is never auto-pruned.',
   schema: {
     content: z.string().max(4000).describe('Content to add as a new entry'),

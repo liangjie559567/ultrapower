@@ -43,8 +43,8 @@ describe('Other Tool Categories', () => {
   });
 
   describe('Skills Tools', () => {
-    it('exposes list_omc_skills', () => {
-      expect(omcToolNames).toContain('mcp__t__list_omc_skills');
+    it('exposes list_skills', () => {
+      expect(omcToolNames).toContain('mcp__t__list_skills');
     });
   });
 });

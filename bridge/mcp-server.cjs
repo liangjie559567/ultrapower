@@ -19209,7 +19209,7 @@ var lspCodeActionsTool = {
   }
 };
 var lspCodeActionResolveTool = {
-  name: "lsp_code_action_resolve",
+  name: "lsp_action_resolve",
   description: "Get the full edit details for a specific code action. Use after lsp_code_actions to see what changes an action would make.",
   schema: {
     file: external_exports.string().describe("Path to the source file"),
@@ -19254,7 +19254,7 @@ Command: ${action.command.title} (${action.command.command})`;
   }
 };
 var lspDiagnosticsDirectoryTool = {
-  name: "lsp_diagnostics_directory",
+  name: "lsp_diag_dir",
   description: "Run project-level diagnostics on a directory using tsc --noEmit (preferred) or LSP iteration (fallback). Useful for checking the entire codebase for errors.",
   schema: {
     directory: external_exports.string().describe("Project directory to check"),
@@ -22949,7 +22949,7 @@ ${sectionContent}`
   }
 };
 var notepadWritePriorityTool = {
-  name: "notepad_write_priority",
+  name: "notepad_priority",
   description: "Write to the Priority Context section. This REPLACES the existing content. Keep under 500 chars - this is always loaded at session start.",
   schema: {
     content: external_exports.string().max(2e3).describe("Content to write (recommend under 500 chars)"),
@@ -22993,7 +22993,7 @@ var notepadWritePriorityTool = {
   }
 };
 var notepadWriteWorkingTool = {
-  name: "notepad_write_working",
+  name: "notepad_working",
   description: "Add an entry to Working Memory section. Entries are timestamped and auto-pruned after 7 days.",
   schema: {
     content: external_exports.string().max(4e3).describe("Content to add as a new entry"),
@@ -23031,7 +23031,7 @@ var notepadWriteWorkingTool = {
   }
 };
 var notepadWriteManualTool = {
-  name: "notepad_write_manual",
+  name: "notepad_manual",
   description: "Add an entry to the MANUAL section. Content in this section is never auto-pruned.",
   schema: {
     content: external_exports.string().max(4e3).describe("Content to add as a new entry"),
@@ -24462,7 +24462,7 @@ function formatSkillOutput(skills) {
   return lines.join("\n");
 }
 var loadLocalTool = {
-  name: "load_omc_skills_local",
+  name: "load_skills_local",
   description: "Load and list skills from the project-local .omc/skills/ directory. Returns skill metadata (id, name, description, triggers, tags) for all discovered project-scoped skills.",
   schema: loadLocalSchema,
   handler: async (args) => {
@@ -24480,7 +24480,7 @@ ${formatSkillOutput(projectSkills)}`
   }
 };
 var loadGlobalTool = {
-  name: "load_omc_skills_global",
+  name: "load_skills_global",
   description: "Load and list skills from global user directories (~/.omc/skills/ and ~/.claude/skills/omc-learned/). Returns skill metadata for all discovered user-scoped skills.",
   schema: loadGlobalSchema,
   handler: async (_args) => {
@@ -24497,7 +24497,7 @@ ${formatSkillOutput(userSkills)}`
   }
 };
 var listSkillsTool = {
-  name: "list_omc_skills",
+  name: "list_skills",
   description: "List all available skills (both project-local and global user skills). Project skills take priority over user skills with the same ID.",
   schema: listSkillsSchema,
   handler: async (args) => {
@@ -24665,7 +24665,7 @@ var ParallelOpportunitySchema = external_exports.object({
   })).describe("Task list with dependencies")
 });
 var parallelOpportunityDetectorTool = {
-  name: "parallel_opportunity_detector",
+  name: "parallel_detector",
   description: "Analyze task dependency graph and recommend parallel strategies",
   schema: ParallelOpportunitySchema.shape,
   handler: async (args) => {
@@ -24732,8 +24732,8 @@ var DEPRECATION_MAP = {
   "lsp_prepare_rename": { oldName: "lsp_prepare_rename", newName: "ultrapower:lsp_prepare_rename", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "lsp_rename": { oldName: "lsp_rename", newName: "ultrapower:lsp_rename", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "lsp_code_actions": { oldName: "lsp_code_actions", newName: "ultrapower:lsp_code_actions", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "lsp_code_action_resolve": { oldName: "lsp_code_action_resolve", newName: "ultrapower:lsp_code_action_resolve", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "lsp_diagnostics_directory": { oldName: "lsp_diagnostics_directory", newName: "ultrapower:lsp_diagnostics_directory", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_code_action_resolve": { oldName: "lsp_code_action_resolve", newName: "ultrapower:lsp_action_resolve", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_diagnostics_directory": { oldName: "lsp_diagnostics_directory", newName: "ultrapower:lsp_diag_dir", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // State Tools
   "state_read": { oldName: "state_read", newName: "ultrapower:state_read", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "state_write": { oldName: "state_write", newName: "ultrapower:state_write", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
@@ -24742,9 +24742,9 @@ var DEPRECATION_MAP = {
   "state_get_status": { oldName: "state_get_status", newName: "ultrapower:state_get_status", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // Notepad Tools
   "notepad_read": { oldName: "notepad_read", newName: "ultrapower:notepad_read", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "notepad_write_priority": { oldName: "notepad_write_priority", newName: "ultrapower:notepad_write_priority", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "notepad_write_working": { oldName: "notepad_write_working", newName: "ultrapower:notepad_write_working", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "notepad_write_manual": { oldName: "notepad_write_manual", newName: "ultrapower:notepad_write_manual", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_priority": { oldName: "notepad_write_priority", newName: "ultrapower:notepad_priority", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_working": { oldName: "notepad_write_working", newName: "ultrapower:notepad_working", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_write_manual": { oldName: "notepad_write_manual", newName: "ultrapower:notepad_manual", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "notepad_prune": { oldName: "notepad_prune", newName: "ultrapower:notepad_prune", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   "notepad_stats": { oldName: "notepad_stats", newName: "ultrapower:notepad_stats", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // Memory Tools
@@ -24759,7 +24759,17 @@ var DEPRECATION_MAP = {
   "python_repl": { oldName: "python_repl", newName: "ultrapower:python_repl", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
   // Trace Tools
   "trace_timeline": { oldName: "trace_timeline", newName: "ultrapower:trace_timeline", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
-  "trace_summary": { oldName: "trace_summary", newName: "ultrapower:trace_summary", deprecatedSince: "5.6.0", removalVersion: "6.0.0" }
+  "trace_summary": { oldName: "trace_summary", newName: "ultrapower:trace_summary", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  // New shortened names (5.5.28+)
+  "lsp_action_resolve": { oldName: "lsp_action_resolve", newName: "ultrapower:lsp_action_resolve", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "lsp_diag_dir": { oldName: "lsp_diag_dir", newName: "ultrapower:lsp_diag_dir", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_priority": { oldName: "notepad_priority", newName: "ultrapower:notepad_priority", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_working": { oldName: "notepad_working", newName: "ultrapower:notepad_working", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "notepad_manual": { oldName: "notepad_manual", newName: "ultrapower:notepad_manual", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "parallel_detector": { oldName: "parallel_detector", newName: "ultrapower:parallel_detector", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "load_skills_local": { oldName: "load_skills_local", newName: "ultrapower:load_skills_local", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "load_skills_global": { oldName: "load_skills_global", newName: "ultrapower:load_skills_global", deprecatedSince: "5.6.0", removalVersion: "6.0.0" },
+  "list_skills": { oldName: "list_skills", newName: "ultrapower:list_skills", deprecatedSince: "5.6.0", removalVersion: "6.0.0" }
 };
 function createDeprecationWarning(info) {
   return `\u26A0\uFE0F  DEPRECATED: Tool '${info.oldName}' is deprecated since v${info.deprecatedSince} and will be removed in v${info.removalVersion}.
@@ -24807,6 +24817,19 @@ var allCustomTools = [
   ...registerToolWithBothNames(dependencyAnalyzerTool),
   ...registerToolWithBothNames(docSyncTool),
   ...registerToolWithBothNames(parallelOpportunityDetectorTool),
+  ...skillsTools
+];
+var mcpServerTools = [
+  ...lspTools,
+  ...astTools,
+  pythonReplTool2,
+  ...stateTools,
+  ...notepadTools,
+  ...memoryTools,
+  ...traceTools,
+  dependencyAnalyzerTool,
+  docSyncTool,
+  parallelOpportunityDetectorTool,
   ...skillsTools
 ];
 
@@ -24869,7 +24892,7 @@ async function handleToolCall(name, args) {
 }
 
 // src/mcp/standalone-server.ts
-var allTools = allCustomTools;
+var allTools = mcpServerTools;
 function zodToJsonSchema2(schema) {
   const rawShape = schema instanceof external_exports.ZodObject ? schema.shape : schema;
   const properties = {};

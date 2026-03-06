@@ -8,7 +8,7 @@ const ParallelOpportunitySchema = z.object({
 });
 
 export const parallelOpportunityDetectorTool = {
-  name: 'parallel_opportunity_detector',
+  name: 'parallel_detector',
   description: 'Analyze task dependency graph and recommend parallel strategies',
   schema: ParallelOpportunitySchema.shape,
   handler: async (args: z.infer<typeof ParallelOpportunitySchema>) => {
