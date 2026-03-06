@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git push origin main\",\"description\":\"重试推送到远程仓库\"}",
-  "error": "Exit code 128\nfatal: unable to access 'https://github.com/liangjie559567/ultrapower.git/': schannel: server closed abruptly (missing close_notify)\n\nfatal: unable to access 'https://github.com/liangjie559567/ultrapower.git/': schannel: server closed abruptly (missing close_notify)",
-  "timestamp": "2026-03-05T16:29:57.366Z",
-  "retry_count": 2
+  "tool_input_preview": "{\"command\":\"git add .omc/axiom/evolution/usage_metrics.json .omc/notepad.md .omc/state/last-tool-error.json\",\"description\":\"Stage state and tracking files\"}",
+  "error": "Exit code 1\nThe following paths are ignored by one of your .gitignore files:\n.omc/state\nhint: Use -f if you really want to add them.\nhint: Disable this message with \"git config set advice.addIgnoredFile false\"\n\nThe following paths are ignored by one of your .gitignore files:\n.omc/state\nhint: Use -f if you really want to add them.\nhint: Disable this message with \"git config set advice.addIgnoredFile false\"",
+  "timestamp": "2026-03-06T00:26:08.299Z",
+  "retry_count": 1
 }
