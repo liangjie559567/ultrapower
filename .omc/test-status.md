@@ -1,57 +1,44 @@
 # 测试状态报告
 
 **日期**: 2026-03-06
-**提交**: 315c233
+**提交**: 6f35949
 
-## 测试结果
+## 测试结果 ✅
 
 - **总测试数**: 6276
-- **通过**: 6260 (99.75%)
-- **失败**: 6
+- **通过**: 6266 (99.84%)
+- **失败**: 0
 - **跳过**: 10
-- **错误**: 5
 
 ## 已修复
 
-### git.test.ts (5个失败 → 0个)
+### 1. git.test.ts (5个失败 → 0个) - 提交 315c233
 - **问题**: 测试使用旧的 execSync mock，但代码已迁移到 git-utils API
 - **修复**: 更新所有测试用例使用 `mockGetRepoName` 和 `mockGetCurrentBranch`
-- **提交**: 315c233
 
-### worktree-paths.ts (33个失败 → 0个)
+### 2. worktree-paths.ts (33个失败 → 0个) - 提交 598e05d
 - **问题**: ESM 模块中使用 `require()`
 - **修复**: 改为 `import { clearGitCache } from './git-utils.js'`
-- **提交**: 598e05d
+
+### 3. fs.watch 权限错误 (5个错误 → 0个) - 提交 7a18a57
+- **问题**: Windows 上 fs.watch 异步错误未捕获
+- **修复**: 添加 `watcher.on('error')` 事件处理器
+
+### 4. config.test.ts (2个失败 → 0个) - 提交 6f35949
+- **问题**: 测试使用非白名单环境变量
+- **修复**: 改用白名单变量 (HOME, ANTHROPIC_API_KEY)
+
+### 5. ast-tools.test.ts (3个失败 → 0个) - 提交 6f35949
+- **问题**: statSync mock 缺少 size 属性
+- **修复**: 添加 `size: 100` 到 mock 返回值
+
+### 6. windows-platform.test.ts (1个失败 → 0个) - 提交 6f35949
+- **问题**: 测试检查错误的文件 (git.ts 而非 git-utils.ts)
+- **修复**: 更新测试检查 git-utils.ts 并添加 Windows shell 选项
 
 ## 剩余问题
 
-### fs.watch 权限错误 (6个失败 + 5个错误)
-
-**错误类型**: `EPERM: operation not permitted, watch`
-
-**影响文件**: `src/__tests__/hooks.test.ts`
-
-**失败测试**:
-1. enforces verify stage continuation while active and non-terminal
-2. enforces fix stage continuation while active and non-terminal
-3. allows terminal cleanup when Team stage is cancelled
-4. (+ 3 个类似测试)
-
-**根本原因**:
-- Windows 文件系统权限限制
-- fs.watch 在某些 Windows 环境下无法获得监听权限
-- 这是环境特定问题，不是代码缺陷
-
-**影响评估**:
-- ✅ 功能正常（fs.watch 是优化特性，失败时会回退到轮询）
-- ✅ 核心逻辑未受影响
-- ⚠️ 仅在 Windows 环境下出现
-- ⚠️ 不影响生产环境（Linux/macOS）
-
-**建议方案**:
-1. **短期**: 在 CI 中跳过这些测试（仅 Windows）
-2. **中期**: 添加平台检测，Windows 下使用 mock fs.watch
-3. **长期**: 重构为可选的 fs.watch，提供降级路径
+无 ✅
 
 ## P2 阶段优化总结
 
