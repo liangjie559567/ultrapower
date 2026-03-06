@@ -83,10 +83,19 @@ export async function syncMarketplace(opts = {}) {
 
   writeFileSync(marketplacePath, JSON.stringify(market, null, 2) + '\n');
   run(`git add .claude-plugin/marketplace.json`, dryRun);
-  run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
-  run(`git push origin HEAD:main`, dryRun);
 
-  console.log(`syncMarketplace: updated to v${version} and pushed to main`);
+  try {
+    run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
+    run(`git push origin HEAD:main`, dryRun);
+    console.log(`syncMarketplace: updated to v${version} and pushed to main`);
+  } catch (err) {
+    if (err.message?.includes('nothing to commit')) {
+      console.log(`syncMarketplace: no changes to commit (already at v${version})`);
+    } else {
+      throw err;
+    }
+  }
+
   return { success: true };
 }
 
