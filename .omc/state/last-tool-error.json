@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git tag v5.5.27\",\"description\":\"创建 v5.5.27 标签\"}",
-  "error": "Exit code 128\nfatal: tag 'v5.5.27' already exists\n\nfatal: tag 'v5.5.27' already exists",
-  "timestamp": "2026-03-06T15:17:53.661Z",
+  "tool_input_preview": "{\"command\":\"claude plugin uninstall omc@ultrapower\",\"description\":\"卸载当前插件\"}",
+  "error": "Exit code 1",
+  "timestamp": "2026-03-06T16:24:45.223Z",
   "retry_count": 1
 }

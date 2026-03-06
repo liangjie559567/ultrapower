@@ -24819,19 +24819,9 @@ var allCustomTools = [
   ...registerToolWithBothNames(parallelOpportunityDetectorTool),
   ...skillsTools
 ];
-var mcpServerTools = [
-  ...lspTools,
-  ...astTools,
-  pythonReplTool2,
-  ...stateTools,
-  ...notepadTools,
-  ...memoryTools,
-  ...traceTools,
-  dependencyAnalyzerTool,
-  docSyncTool,
-  parallelOpportunityDetectorTool,
-  ...skillsTools
-];
+var mcpServerTools = allCustomTools.filter(
+  (tool) => !tool.name.startsWith("ultrapower:")
+);
 
 // src/mcp/namespace-manager.ts
 function parseNamespace(namespacedName) {

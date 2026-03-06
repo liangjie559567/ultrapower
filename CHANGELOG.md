@@ -1,3 +1,16 @@
+# ultrapower v5.5.30
+
+**发布日期**: 2026-03-06
+
+## Bug Fixes
+
+- **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
+  - 修复 `mcpServerTools` 导出逻辑，自动过滤掉带 `ultrapower:` 前缀的工具
+  - 解决 `/ultrapower:swarm` 报错：`mcp__plugin_ultrapower_t__ultrapower_parallel_opportunity_detector` 名称过长
+  - 现在 MCP 服务器只暴露短名称版本（如 `parallel_detector`），避免重复前缀
+
+---
+
 # ultrapower v5.5.29
 
 **发布日期**: 2026-03-06
