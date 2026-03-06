@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"node scripts/release-steps.mjs preflight\",\"description\":\"Run preflight check\"}",
-  "error": "Exit code 1\nStep preflight failed: Version mismatch: {\"pkg\":\"5.5.25\",\"plugin\":\"5.5.24\",\"marketplace\":\"5.5.24\",\"marketplaceSource\":\"5.5.24\"}\n\nStep preflight failed: Version mismatch: {\"pkg\":\"5.5.25\",\"plugin\":\"5.5.24\",\"marketplace\":\"5.5.24\",\"marketplaceSource\":\"5.5.24\"}",
-  "timestamp": "2026-03-06T13:38:35.557Z",
-  "retry_count": 2
+  "tool_input_preview": "{\"command\":\"git tag v5.5.27\",\"description\":\"创建 v5.5.27 标签\"}",
+  "error": "Exit code 128\nfatal: tag 'v5.5.27' already exists\n\nfatal: tag 'v5.5.27' already exists",
+  "timestamp": "2026-03-06T15:17:53.661Z",
+  "retry_count": 1
 }
