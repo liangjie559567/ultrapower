@@ -77,7 +77,8 @@ describe('ast-tools', () => {
       vi.mocked(path.resolve).mockReturnValue('/test/dir');
       vi.mocked(path.join).mockReturnValue('/test/dir/test.js');
       vi.mocked(path.extname).mockReturnValue('.js');
-      vi.mocked(fs.statSync).mockReturnValue({ isFile: () => false, isDirectory: () => true } as any);
+      vi.mocked(fs.statSync).mockReturnValueOnce({ isFile: () => false, isDirectory: () => true } as any)
+        .mockReturnValue({ isFile: () => true, isDirectory: () => false, size: 100 } as any);
       vi.mocked(fs.readdirSync).mockReturnValue([
         { name: 'test.js', isFile: () => true, isDirectory: () => false }
       ] as any);
@@ -117,7 +118,8 @@ describe('ast-tools', () => {
       vi.mocked(path.resolve).mockReturnValue('/test/dir');
       vi.mocked(path.join).mockReturnValue('/test/dir/test.js');
       vi.mocked(path.extname).mockReturnValue('.js');
-      vi.mocked(fs.statSync).mockReturnValue({ isFile: () => false, isDirectory: () => true } as any);
+      vi.mocked(fs.statSync).mockReturnValueOnce({ isFile: () => false, isDirectory: () => true } as any)
+        .mockReturnValue({ isFile: () => true, isDirectory: () => false, size: 100 } as any);
       vi.mocked(fs.readdirSync).mockReturnValue([
         { name: 'test.js', isFile: () => true, isDirectory: () => false }
       ] as any);
@@ -159,7 +161,8 @@ describe('ast-tools', () => {
       vi.mocked(path.resolve).mockReturnValue('/test/dir');
       vi.mocked(path.join).mockReturnValue('/test/dir/test.js');
       vi.mocked(path.extname).mockReturnValue('.js');
-      vi.mocked(fs.statSync).mockReturnValue({ isFile: () => false, isDirectory: () => true } as any);
+      vi.mocked(fs.statSync).mockReturnValueOnce({ isFile: () => false, isDirectory: () => true } as any)
+        .mockReturnValue({ isFile: () => true, isDirectory: () => false, size: 100 } as any);
       vi.mocked(fs.readdirSync).mockReturnValue([
         { name: 'test.js', isFile: () => true, isDirectory: () => false }
       ] as any);

@@ -1,4 +1,4 @@
-import { getValidatedEnv } from '../../lib/env-validator.js';
+import { validateEnvName, validateEnvValue } from '../../lib/env-validator.js';
 
 /**
  * Replace environment variables in string
@@ -6,11 +6,16 @@ import { getValidatedEnv } from '../../lib/env-validator.js';
  */
 export function replaceEnvVars(value: string): string {
   return value.replace(/\$\{([^}]+)\}/g, (_, varName) => {
-    try {
-      return getValidatedEnv(varName) || '';
-    } catch {
-      return ''; // Silently skip invalid vars
-    }
+    // Validate variable name (whitelist check)
+    const nameValidation = validateEnvName(varName);
+    if (!nameValidation.valid) return '';
+
+    const envValue = process.env[varName];
+    if (!envValue) return '';
+
+    // Validate value for injection patterns
+    const valueValidation = validateEnvValue(envValue, varName);
+    return valueValidation.valid ? envValue : '';
   });
 }
 

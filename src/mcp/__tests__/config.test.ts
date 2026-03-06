@@ -44,9 +44,9 @@ describe('Config System', () => {
 
   describe('replaceEnvVars', () => {
     it('should replace environment variables', () => {
-      process.env.TEST_VAR = 'test-value';
-      expect(replaceEnvVars('${TEST_VAR}')).toBe('test-value');
-      delete process.env.TEST_VAR;
+      process.env.HOME = '/home/test';
+      expect(replaceEnvVars('${HOME}')).toBe('/home/test');
+      delete process.env.HOME;
     });
 
     it('should handle missing variables', () => {
@@ -56,11 +56,11 @@ describe('Config System', () => {
 
   describe('replaceEnvVarsInObject', () => {
     it('should replace in nested objects', () => {
-      process.env.TEST_KEY = 'secret';
-      const obj = { env: { API_KEY: '${TEST_KEY}' } };
+      process.env.ANTHROPIC_API_KEY = 'secret';
+      const obj = { env: { API_KEY: '${ANTHROPIC_API_KEY}' } };
       const result = replaceEnvVarsInObject(obj);
       expect(result.env.API_KEY).toBe('secret');
-      delete process.env.TEST_KEY;
+      delete process.env.ANTHROPIC_API_KEY;
     });
   });
 });

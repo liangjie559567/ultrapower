@@ -178,9 +178,9 @@ describe('Windows HUD Platform Fixes (#739)', () => {
   // P1: Git shell option on Windows
   // =========================================================================
   describe('P1: Git execSync shell option', () => {
-    it('git.ts should use conditional shell option', () => {
+    it('git-utils.ts should use conditional shell option', () => {
       const content = readFileSync(
-        join(packageRoot, 'src', 'hud', 'elements', 'git.ts'),
+        join(packageRoot, 'src', 'lib', 'git-utils.ts'),
         'utf-8',
       );
       expect(content).toContain("shell: process.platform === 'win32' ? 'cmd.exe' : undefined");

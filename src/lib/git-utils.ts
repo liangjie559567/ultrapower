@@ -47,6 +47,7 @@ function execGit(command: string, cwd?: string): string {
       encoding: 'utf-8',
       timeout: GIT_TIMEOUT,
       stdio: ['pipe', 'pipe', 'pipe'],
+      shell: process.platform === 'win32' ? 'cmd.exe' : undefined,
     }).trim();
   } catch {
     return '';
