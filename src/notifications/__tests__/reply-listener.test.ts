@@ -15,7 +15,7 @@ import {
   createMinimalDaemonEnv,
 } from "../reply-listener.js";
 
-vi.mock('../../features/rate-limit-wait/tmux-detector.js', () => ({
+vi.mock('../features/rate-limit-wait/tmux-detector.js', () => ({
   capturePaneContent: vi.fn(() => 'Claude Code'),
   analyzePaneContent: vi.fn(() => ({ confidence: 0.5, hasClaudeCode: true })),
   sendToPane: vi.fn(() => true),
