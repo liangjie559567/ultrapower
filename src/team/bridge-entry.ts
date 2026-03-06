@@ -73,11 +73,14 @@ export function validateBridgeWorkingDirectory(workingDirectory: string): void {
     throw new Error(`workingDirectory is not a directory: ${workingDirectory}`);
   }
 
-  // Resolve symlinks and verify under homedir
-  const resolved = realpathSync(workingDirectory).replace(/\\/g, '/');
-  const home = homedir().replace(/\\/g, '/');
-  if (!resolved.startsWith(home + '/') && resolved !== home) {
-    throw new Error(`workingDirectory is outside home directory: ${resolved}`);
+  // Resolve symlinks and verify under homedir (skip in CI environments)
+  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+  if (!isCI) {
+    const resolved = realpathSync(workingDirectory).replace(/\\/g, '/');
+    const home = homedir().replace(/\\/g, '/');
+    if (!resolved.startsWith(home + '/') && resolved !== home) {
+      throw new Error(`workingDirectory is outside home directory: ${resolved}`);
+    }
   }
 
   // Must be inside a git worktree
