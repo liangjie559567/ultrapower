@@ -117,6 +117,9 @@ function watchFile(path: string): void {
     const watcher = watch(path, () => {
       fileCache.delete(path);
     });
+    watcher.on('error', () => {
+      watchers.delete(path);
+    });
     watchers.set(path, watcher);
   } catch {
     // Ignore watch errors
