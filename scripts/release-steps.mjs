@@ -82,14 +82,13 @@ export async function syncMarketplace(opts = {}) {
   }
 
   writeFileSync(marketplacePath, JSON.stringify(market, null, 2) + '\n');
-  const branchName = `chore/sync-marketplace-v${version}`;
-  run(`git checkout -b ${branchName}`, dryRun);
+
+  // 直接提交到当前分支并推送到 main
   run(`git add .claude-plugin/marketplace.json`, dryRun);
   run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
-  run(`git push origin ${branchName}`, dryRun);
-  run(`gh pr create --base dev --title "chore: sync marketplace.json to v${version}" --body "Automated: sync marketplace.json to v${version}"`, dryRun);
+  run(`git push origin HEAD:main`, dryRun);
 
-  console.log(`syncMarketplace: updated to v${version} and created PR`);
+  console.log(`syncMarketplace: updated to v${version} and pushed to main`);
   return { success: true };
 }
 
