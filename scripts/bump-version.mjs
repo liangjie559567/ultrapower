@@ -30,6 +30,14 @@ export function assertVersionsSync() {
   if (new Set(versions).size !== 1) {
     throw new Error(`Version mismatch: ${JSON.stringify(v)}`);
   }
+
+  // 检查循环依赖
+  const pkg = JSON.parse(readFileSync(FILES.pkg, 'utf-8'));
+  const selfDep = pkg.dependencies?.['@liangjie559567/ultrapower'];
+  if (selfDep) {
+    throw new Error(`Circular dependency detected: package depends on itself (${selfDep})`);
+  }
+
   return versions[0];
 }
 
