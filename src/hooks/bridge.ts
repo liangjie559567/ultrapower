@@ -271,9 +271,20 @@ export function requiredKeysForHook(hookType: string): string[] {
     case "pre-compact":
     case "setup-init":
     case "setup-maintenance":
+    case "ralph":
+    case "persistent-mode":
+    case "session-start":
       return ["sessionId", "directory"];
     case "permission-request":
       return ["sessionId", "directory", "toolName"];
+    case "pre-tool-use":
+    case "post-tool-use":
+      return ["directory", "toolName"];
+    case "autopilot":
+      return ["directory"];
+    case "keyword-detector":
+    case "stop-continuation":
+      return [];
     default:
       return [];
   }
