@@ -704,6 +704,11 @@ describe('full config loading flow', () => {
 
   beforeEach(() => {
     mkdirSync(testDir, { recursive: true });
+    try {
+      require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
+    } catch (e) {
+      // Ignore if git init fails
+    }
   });
 
   afterEach(() => {
