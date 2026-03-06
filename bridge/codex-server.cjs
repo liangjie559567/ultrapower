@@ -14293,8 +14293,8 @@ init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
 var import_child_process3 = require("child_process");
-var import_fs9 = require("fs");
-var import_path9 = require("path");
+var import_fs8 = require("fs");
+var import_path8 = require("path");
 
 // src/mcp/shared-exec.ts
 init_define_AGENT_PROMPTS_CODEX();
@@ -14528,26 +14528,60 @@ function detectCodexCli(useCache = true) {
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
-var import_child_process2 = require("child_process");
 var import_fs2 = require("fs");
 var import_path2 = require("path");
-var worktreeCache = null;
-function getWorktreeRoot(cwd) {
-  const effectiveCwd = cwd || process.cwd();
-  if (worktreeCache && worktreeCache.cwd === effectiveCwd) {
-    return worktreeCache.root || null;
-  }
-  try {
-    const root = (0, import_child_process2.execSync)("git rev-parse --show-toplevel", {
-      cwd: effectiveCwd,
-      encoding: "utf-8",
-      stdio: ["pipe", "pipe", "pipe"]
-    }).trim();
-    worktreeCache = { cwd: effectiveCwd, root };
-    return root;
-  } catch {
+
+// src/lib/git-utils.ts
+init_define_AGENT_PROMPTS_CODEX();
+init_define_AGENT_PROMPTS();
+init_define_AGENT_ROLES();
+var import_child_process2 = require("child_process");
+var GIT_TIMEOUT = 5e3;
+var CACHE_TTL = 1e3;
+var cache = /* @__PURE__ */ new Map();
+function getCached(key) {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    cache.delete(key);
     return null;
   }
+  return entry.value;
+}
+function setCache(key, value) {
+  cache.set(key, { value, timestamp: Date.now() });
+}
+function execGit(command, cwd) {
+  try {
+    return (0, import_child_process2.execSync)(`git --no-pager ${command}`, {
+      cwd,
+      encoding: "utf-8",
+      timeout: GIT_TIMEOUT,
+      stdio: ["pipe", "pipe", "pipe"],
+      shell: process.platform === "win32" ? "cmd.exe" : void 0
+    }).trim();
+  } catch {
+    return "";
+  }
+}
+function getWorktreeRoot(cwd) {
+  const key = `root:${cwd || process.cwd()}`;
+  const cached2 = getCached(key);
+  if (cached2) return cached2;
+  try {
+    const root = execGit("rev-parse --show-toplevel", cwd);
+    if (root) {
+      setCache(key, root);
+      return root;
+    }
+  } catch {
+  }
+  return null;
+}
+
+// src/lib/worktree-paths.ts
+function getWorktreeRoot2(cwd) {
+  return getWorktreeRoot(cwd);
 }
 
 // src/mcp/prompt-injection.ts
@@ -14748,7 +14782,7 @@ init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
 var import_fs5 = require("fs");
 var import_path5 = require("path");
-var DB_SCHEMA_VERSION = 1;
+var DB_SCHEMA_VERSION = 2;
 var DEFAULT_CLEANUP_MAX_AGE_MS = 24 * 60 * 60 * 1e3;
 var Database = null;
 var dbMap = /* @__PURE__ */ new Map();
@@ -14869,12 +14903,20 @@ async function initJobDb(cwd) {
       CREATE INDEX IF NOT EXISTS idx_jobs_provider ON jobs(provider);
       CREATE INDEX IF NOT EXISTS idx_jobs_spawned_at ON jobs(spawned_at);
       CREATE INDEX IF NOT EXISTS idx_jobs_provider_status ON jobs(provider, status);
+      CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+      CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
     `);
     const versionStmt = db.prepare(
       "SELECT value FROM schema_info WHERE key = 'version'"
     );
     const versionRow = versionStmt.get();
-    const __currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    const currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    if (currentVersion > 0 && currentVersion < 2) {
+      db.exec(`
+        CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+        CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
+      `);
+    }
     const setVersion = db.prepare(
       "INSERT OR REPLACE INTO schema_info (key, value) VALUES (?, ?)"
     );
@@ -15054,7 +15096,7 @@ var jobWorkingDirs = /* @__PURE__ */ new Map();
 function ensureJobDb(workingDirectory) {
   if (_dbInitAttempted || isJobDbInitialized()) return;
   _dbInitAttempted = true;
-  const root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();
+  const root = getWorktreeRoot2(workingDirectory) || workingDirectory || process.cwd();
   initJobDb(root).catch(() => {
   });
 }
@@ -15086,7 +15128,7 @@ function generatePromptId() {
   return (0, import_crypto.randomBytes)(8).toString("hex");
 }
 function getPromptsDir(workingDirectory) {
-  const root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();
+  const root = getWorktreeRoot2(workingDirectory) || workingDirectory || process.cwd();
   return (0, import_path6.join)(root, ".omc", "prompts");
 }
 function buildPromptFrontmatter(options) {
@@ -15370,8 +15412,8 @@ function buildFallbackChain(provider, resolvedModel, _config) {
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
-var import_fs8 = require("fs");
-var import_path8 = require("path");
+var import_fs7 = require("fs");
+var import_path7 = require("path");
 
 // node_modules/jsonc-parser/lib/esm/main.js
 init_define_AGENT_PROMPTS_CODEX();
@@ -16256,26 +16298,44 @@ var ParseErrorCode;
   ParseErrorCode2[ParseErrorCode2["InvalidCharacter"] = 16] = "InvalidCharacter";
 })(ParseErrorCode || (ParseErrorCode = {}));
 
-// src/utils/paths.ts
-init_define_AGENT_PROMPTS_CODEX();
-init_define_AGENT_PROMPTS();
-init_define_AGENT_ROLES();
-var import_path7 = require("path");
-var import_fs7 = require("fs");
-var import_os = require("os");
-
 // src/utils/config-dir.ts
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
-
-// src/utils/paths.ts
-function getConfigDir2() {
-  if (process.platform === "win32") {
-    return process.env.APPDATA || (0, import_path7.join)((0, import_os.homedir)(), "AppData", "Roaming");
-  }
-  return process.env.XDG_CONFIG_HOME || (0, import_path7.join)((0, import_os.homedir)(), ".config");
+var import_node_os = require("node:os");
+var import_node_path = require("node:path");
+function getConfigDir() {
+  return process.env.CLAUDE_CONFIG_DIR || (0, import_node_path.join)((0, import_node_os.homedir)(), ".claude");
 }
+
+// src/lib/constants.ts
+init_define_AGENT_PROMPTS_CODEX();
+init_define_AGENT_PROMPTS();
+init_define_AGENT_ROLES();
+var SIZE_LIMIT = {
+  AUDIT_LOG_MAX: 10 * 1024 * 1024,
+  // 审计日志最大 10MB
+  MAX_CONCURRENT_TASKS: 1e3,
+  // 最大并发任务数
+  MAX_TASKS_PER_CONFIG: 100,
+  // 配置中最大任务数
+  TELEGRAM_MESSAGE_MAX: 500,
+  // Telegram 消息最大长度
+  SANITIZE_DEFAULT: 30
+  // 默认清理长度
+};
+var TIME_THRESHOLD = {
+  DURATION_WARNING: 2 * 60 * 1e3,
+  // 2分钟警告
+  DURATION_CRITICAL: 5 * 60 * 1e3,
+  // 5分钟严重
+  SESSION_STALE: 24 * 60 * 60 * 1e3,
+  // 24小时过期
+  WORKING_MEMORY_TTL: 7,
+  // 工作记忆保留天数
+  UPDATE_CHECK_INTERVAL: 24
+  // 更新检查间隔(小时)
+};
 
 // src/config/loader.ts
 function isValidModelName(name) {
@@ -16383,18 +16443,18 @@ var DEFAULT_CONFIG = {
   }
 };
 function getConfigPaths() {
-  const userConfigDir = getConfigDir2();
+  const userConfigDir = getConfigDir();
   return {
-    user: (0, import_path8.join)(userConfigDir, "claude-sisyphus", "config.jsonc"),
-    project: (0, import_path8.join)(process.cwd(), ".claude", "sisyphus.jsonc")
+    user: (0, import_path7.join)(userConfigDir, "claude-sisyphus", "config.jsonc"),
+    project: (0, import_path7.join)(process.cwd(), ".claude", "sisyphus.jsonc")
   };
 }
 function loadJsoncFile(path) {
-  if (!(0, import_fs8.existsSync)(path)) {
+  if (!(0, import_fs7.existsSync)(path)) {
     return null;
   }
   try {
-    const content = (0, import_fs8.readFileSync)(path, "utf-8");
+    const content = (0, import_fs7.readFileSync)(path, "utf-8");
     const errors = [];
     const result = parse4(content, errors, {
       allowTrailingComma: true,
@@ -16447,7 +16507,7 @@ function loadEnvConfig() {
   }
   if (process.env.OMC_MAX_BACKGROUND_TASKS) {
     const maxTasks = parseInt(process.env.OMC_MAX_BACKGROUND_TASKS, 10);
-    if (!isNaN(maxTasks) && maxTasks > 0 && maxTasks <= 100) {
+    if (!isNaN(maxTasks) && maxTasks > 0 && maxTasks <= SIZE_LIMIT.MAX_TASKS_PER_CONFIG) {
       config2.permissions = {
         ...config2.permissions,
         maxBackgroundTasks: maxTasks
@@ -17043,25 +17103,25 @@ function validateAndReadFile(filePath, baseDir) {
   }
   try {
     const workingDir = baseDir || process.cwd();
-    const resolvedAbs = (0, import_path9.resolve)(workingDir, filePath);
-    const cwdReal = (0, import_fs9.realpathSync)(workingDir);
-    const relAbs = (0, import_path9.relative)(cwdReal, resolvedAbs);
-    if (relAbs === ".." || relAbs.startsWith(".." + import_path9.sep) || (0, import_path9.isAbsolute)(relAbs)) {
+    const resolvedAbs = (0, import_path8.resolve)(workingDir, filePath);
+    const cwdReal = (0, import_fs8.realpathSync)(workingDir);
+    const relAbs = (0, import_path8.relative)(cwdReal, resolvedAbs);
+    if (relAbs === ".." || relAbs.startsWith(".." + import_path8.sep) || (0, import_path8.isAbsolute)(relAbs)) {
       return `[BLOCKED] File '${filePath}' is outside the working directory. Only files within the project are allowed.`;
     }
-    const resolvedReal = (0, import_fs9.realpathSync)(resolvedAbs);
-    const relReal = (0, import_path9.relative)(cwdReal, resolvedReal);
-    if (relReal === ".." || relReal.startsWith(".." + import_path9.sep) || (0, import_path9.isAbsolute)(relReal)) {
+    const resolvedReal = (0, import_fs8.realpathSync)(resolvedAbs);
+    const relReal = (0, import_path8.relative)(cwdReal, resolvedReal);
+    if (relReal === ".." || relReal.startsWith(".." + import_path8.sep) || (0, import_path8.isAbsolute)(relReal)) {
       return `[BLOCKED] File '${filePath}' is outside the working directory. Only files within the project are allowed.`;
     }
-    const stats = (0, import_fs9.statSync)(resolvedReal);
+    const stats = (0, import_fs8.statSync)(resolvedReal);
     if (!stats.isFile()) {
       return `--- File: ${filePath} --- (Not a regular file)`;
     }
     if (stats.size > MAX_FILE_SIZE) {
       return `--- File: ${filePath} --- (File too large: ${(stats.size / 1024 / 1024).toFixed(1)}MB, max 5MB)`;
     }
-    return wrapUntrustedFileContent(filePath, (0, import_fs9.readFileSync)(resolvedReal, "utf-8"));
+    return wrapUntrustedFileContent(filePath, (0, import_fs8.readFileSync)(resolvedReal, "utf-8"));
   } catch {
     return `--- File: ${filePath} --- (Error reading file)`;
   }
@@ -17085,7 +17145,7 @@ async function handleAskCodex(args) {
   let baseDirReal;
   const pathPolicy = process.env.OMC_ALLOW_EXTERNAL_WORKDIR === "1" ? "permissive" : "strict";
   try {
-    baseDirReal = (0, import_fs9.realpathSync)(baseDir);
+    baseDirReal = (0, import_fs8.realpathSync)(baseDir);
     baseDir = baseDirReal;
   } catch (err) {
     const errorToken = "E_WORKDIR_INVALID";
@@ -17096,17 +17156,17 @@ Path policy: ${pathPolicy}
 Suggested: ensure the working directory exists and is accessible`);
   }
   if (pathPolicy === "strict") {
-    const worktreeRoot = getWorktreeRoot(baseDirReal);
+    const worktreeRoot = getWorktreeRoot2(baseDirReal);
     if (worktreeRoot) {
       let worktreeReal;
       try {
-        worktreeReal = (0, import_fs9.realpathSync)(worktreeRoot);
+        worktreeReal = (0, import_fs8.realpathSync)(worktreeRoot);
       } catch {
         worktreeReal = "";
       }
       if (worktreeReal) {
-        const relToWorktree = (0, import_path9.relative)(worktreeReal, baseDirReal);
-        if (relToWorktree.startsWith("..") || (0, import_path9.isAbsolute)(relToWorktree)) {
+        const relToWorktree = (0, import_path8.relative)(worktreeReal, baseDirReal);
+        if (relToWorktree.startsWith("..") || (0, import_path8.isAbsolute)(relToWorktree)) {
           const errorToken = "E_WORKDIR_INVALID";
           return singleErrorBlock(`${errorToken}: working_directory '${args.working_directory}' is outside the project worktree (${worktreeRoot}).
 Requested: ${args.working_directory}
@@ -17152,12 +17212,12 @@ Suggested: use a working_directory within the project worktree, or set OMC_ALLOW
     inlineRequestId = generatePromptId();
     try {
       const promptsDir = getPromptsDir(baseDir);
-      (0, import_fs9.mkdirSync)(promptsDir, { recursive: true });
+      (0, import_fs8.mkdirSync)(promptsDir, { recursive: true });
       const slug = slugify(inlinePrompt);
-      const inlinePromptFile = (0, import_path9.join)(promptsDir, `codex-inline-${slug}-${inlineRequestId}.md`);
-      (0, import_fs9.writeFileSync)(inlinePromptFile, inlinePrompt, { encoding: "utf-8", mode: 384 });
+      const inlinePromptFile = (0, import_path8.join)(promptsDir, `codex-inline-${slug}-${inlineRequestId}.md`);
+      (0, import_fs8.writeFileSync)(inlinePromptFile, inlinePrompt, { encoding: "utf-8", mode: 384 });
       const resolvedPromptFileLocal = inlinePromptFile;
-      const resolvedOutputFileLocal = !resolvedOutputFile || !resolvedOutputFile.trim() ? (0, import_path9.join)(promptsDir, `codex-inline-response-${slug}-${inlineRequestId}.md`) : resolvedOutputFile;
+      const resolvedOutputFileLocal = !resolvedOutputFile || !resolvedOutputFile.trim() ? (0, import_path8.join)(promptsDir, `codex-inline-response-${slug}-${inlineRequestId}.md`) : resolvedOutputFile;
       resolvedPromptFile = resolvedPromptFileLocal;
       resolvedOutputFile = resolvedOutputFileLocal;
     } catch (err) {
@@ -17175,10 +17235,10 @@ Suggested: use a working_directory within the project worktree, or set OMC_ALLOW
   }
   let resolvedPrompt;
   const promptFile = effectivePromptFile;
-  const resolvedPath = (0, import_path9.resolve)(baseDir, promptFile);
-  const cwdReal = (0, import_fs9.realpathSync)(baseDir);
-  const relPath = (0, import_path9.relative)(cwdReal, resolvedPath);
-  if (!isExternalPromptAllowed() && (relPath === ".." || relPath.startsWith(".." + import_path9.sep) || (0, import_path9.isAbsolute)(relPath))) {
+  const resolvedPath = (0, import_path8.resolve)(baseDir, promptFile);
+  const cwdReal = (0, import_fs8.realpathSync)(baseDir);
+  const relPath = (0, import_path8.relative)(cwdReal, resolvedPath);
+  if (!isExternalPromptAllowed() && (relPath === ".." || relPath.startsWith(".." + import_path8.sep) || (0, import_path8.isAbsolute)(relPath))) {
     const errorToken = "E_PATH_OUTSIDE_WORKDIR_PROMPT";
     return singleErrorBlock(`${errorToken}: prompt_file '${promptFile}' resolves outside working_directory '${baseDirReal}'.
 Requested: ${promptFile}
@@ -17189,7 +17249,7 @@ Suggested: place the prompt file within the working directory or set working_dir
   }
   let resolvedReal;
   try {
-    resolvedReal = (0, import_fs9.realpathSync)(resolvedPath);
+    resolvedReal = (0, import_fs8.realpathSync)(resolvedPath);
   } catch (err) {
     const errorToken = "E_PATH_RESOLUTION_FAILED";
     return singleErrorBlock(`${errorToken}: Failed to resolve prompt_file '${promptFile}'.
@@ -17198,8 +17258,8 @@ Resolved working directory: ${baseDirReal}
 Path policy: ${pathPolicy}
 Suggested: ensure the prompt file exists and is accessible`);
   }
-  const relReal = (0, import_path9.relative)(cwdReal, resolvedReal);
-  if (!isExternalPromptAllowed() && (relReal === ".." || relReal.startsWith(".." + import_path9.sep) || (0, import_path9.isAbsolute)(relReal))) {
+  const relReal = (0, import_path8.relative)(cwdReal, resolvedReal);
+  if (!isExternalPromptAllowed() && (relReal === ".." || relReal.startsWith(".." + import_path8.sep) || (0, import_path8.isAbsolute)(relReal))) {
     const errorToken = "E_PATH_OUTSIDE_WORKDIR_PROMPT";
     return singleErrorBlock(`${errorToken}: prompt_file '${promptFile}' resolves to a path outside working_directory '${baseDirReal}'.
 Requested: ${promptFile}
@@ -17210,7 +17270,7 @@ Path policy: ${pathPolicy}
 Suggested: place the prompt file within the working directory or set working_directory to a common ancestor`);
   }
   try {
-    resolvedPrompt = (0, import_fs9.readFileSync)(resolvedReal, "utf-8");
+    resolvedPrompt = (0, import_fs8.readFileSync)(resolvedReal, "utf-8");
   } catch (err) {
     return singleErrorBlock(`Failed to read prompt_file '${promptFile}': ${err.message}`);
   }
@@ -17345,16 +17405,16 @@ Codex CLI error: ${err.message}`);
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
-var import_fs13 = require("fs");
-var import_path13 = require("path");
+var import_fs12 = require("fs");
+var import_path12 = require("path");
 
 // src/mcp/gemini-core.ts
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
 var import_child_process4 = require("child_process");
-var import_fs10 = require("fs");
-var import_path10 = require("path");
+var import_fs9 = require("fs");
+var import_path9 = require("path");
 var spawnedPids2 = /* @__PURE__ */ new Set();
 function isSpawnedPid2(pid) {
   return spawnedPids2.has(pid);
@@ -17378,8 +17438,8 @@ init_define_AGENT_ROLES();
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
-var import_fs11 = require("fs");
-var import_path11 = require("path");
+var import_fs10 = require("fs");
+var import_path10 = require("path");
 var SqliteWorkerAdapter = class {
   db = null;
   cwd;
@@ -17390,11 +17450,11 @@ var SqliteWorkerAdapter = class {
     try {
       const betterSqlite3Module = await import("better-sqlite3");
       const Database2 = betterSqlite3Module.default || betterSqlite3Module;
-      const stateDir = (0, import_path11.join)(this.cwd, ".omc", "state");
-      if (!(0, import_fs11.existsSync)(stateDir)) {
-        (0, import_fs11.mkdirSync)(stateDir, { recursive: true });
+      const stateDir = (0, import_path10.join)(this.cwd, ".omc", "state");
+      if (!(0, import_fs10.existsSync)(stateDir)) {
+        (0, import_fs10.mkdirSync)(stateDir, { recursive: true });
       }
-      const dbPath = (0, import_path11.join)(stateDir, "workers.db");
+      const dbPath = (0, import_path10.join)(stateDir, "workers.db");
       this.db = new Database2(dbPath);
       this.db.pragma("journal_mode = WAL");
       this.db.exec(`
@@ -17662,19 +17722,19 @@ var SqliteWorkerAdapter = class {
 init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
-var import_fs12 = require("fs");
-var import_path12 = require("path");
+var import_fs11 = require("fs");
+var import_path11 = require("path");
 var JsonWorkerAdapter = class {
   cwd;
   stateDir;
   constructor(cwd) {
     this.cwd = cwd;
-    this.stateDir = (0, import_path12.join)(cwd, ".omc", "state", "workers");
+    this.stateDir = (0, import_path11.join)(cwd, ".omc", "state", "workers");
   }
   async init() {
     try {
-      if (!(0, import_fs12.existsSync)(this.stateDir)) {
-        (0, import_fs12.mkdirSync)(this.stateDir, { recursive: true });
+      if (!(0, import_fs11.existsSync)(this.stateDir)) {
+        (0, import_fs11.mkdirSync)(this.stateDir, { recursive: true });
       }
       return true;
     } catch (error2) {
@@ -17686,12 +17746,12 @@ var JsonWorkerAdapter = class {
     try {
       const filePath = this.getWorkerFilePath(worker.workerId);
       const tempPath = `${filePath}.tmp`;
-      (0, import_fs12.writeFileSync)(tempPath, JSON.stringify(worker, null, 2), "utf-8");
-      if ((0, import_fs12.existsSync)(filePath)) {
-        (0, import_fs12.unlinkSync)(filePath);
+      (0, import_fs11.writeFileSync)(tempPath, JSON.stringify(worker, null, 2), "utf-8");
+      if ((0, import_fs11.existsSync)(filePath)) {
+        (0, import_fs11.unlinkSync)(filePath);
       }
-      (0, import_fs12.writeFileSync)(filePath, (0, import_fs12.readFileSync)(tempPath, "utf-8"));
-      (0, import_fs12.unlinkSync)(tempPath);
+      (0, import_fs11.writeFileSync)(filePath, (0, import_fs11.readFileSync)(tempPath, "utf-8"));
+      (0, import_fs11.unlinkSync)(tempPath);
       return true;
     } catch (error2) {
       console.error("[JsonWorkerAdapter] Upsert failed:", error2);
@@ -17701,8 +17761,8 @@ var JsonWorkerAdapter = class {
   async get(workerId) {
     try {
       const filePath = this.getWorkerFilePath(workerId);
-      if (!(0, import_fs12.existsSync)(filePath)) return null;
-      const content = (0, import_fs12.readFileSync)(filePath, "utf-8");
+      if (!(0, import_fs11.existsSync)(filePath)) return null;
+      const content = (0, import_fs11.readFileSync)(filePath, "utf-8");
       return JSON.parse(content);
     } catch (error2) {
       console.error("[JsonWorkerAdapter] Get failed:", error2);
@@ -17711,12 +17771,12 @@ var JsonWorkerAdapter = class {
   }
   async list(filter) {
     try {
-      if (!(0, import_fs12.existsSync)(this.stateDir)) return [];
-      const files = (0, import_fs12.readdirSync)(this.stateDir).filter((f) => f.endsWith(".json"));
+      if (!(0, import_fs11.existsSync)(this.stateDir)) return [];
+      const files = (0, import_fs11.readdirSync)(this.stateDir).filter((f) => f.endsWith(".json"));
       const workers = [];
       for (const file of files) {
         try {
-          const content = (0, import_fs12.readFileSync)((0, import_path12.join)(this.stateDir, file), "utf-8");
+          const content = (0, import_fs11.readFileSync)((0, import_path11.join)(this.stateDir, file), "utf-8");
           const worker = JSON.parse(content);
           if (this.matchesFilter(worker, filter)) {
             workers.push(worker);
@@ -17736,8 +17796,8 @@ var JsonWorkerAdapter = class {
   async delete(workerId) {
     try {
       const filePath = this.getWorkerFilePath(workerId);
-      if (!(0, import_fs12.existsSync)(filePath)) return false;
-      (0, import_fs12.unlinkSync)(filePath);
+      if (!(0, import_fs11.existsSync)(filePath)) return false;
+      (0, import_fs11.unlinkSync)(filePath);
       return true;
     } catch (error2) {
       console.error("[JsonWorkerAdapter] Delete failed:", error2);
@@ -17785,7 +17845,7 @@ var JsonWorkerAdapter = class {
   }
   getWorkerFilePath(workerId) {
     const safeId = workerId.replace(/[^a-zA-Z0-9_-]/g, "_");
-    return (0, import_path12.join)(this.stateDir, `${safeId}.json`);
+    return (0, import_path11.join)(this.stateDir, `${safeId}.json`);
   }
   matchesFilter(worker, filter) {
     if (!filter) return true;
@@ -17950,9 +18010,9 @@ function findJobStatusFile(provider, jobId, workingDirectory) {
     return void 0;
   }
   const promptsDir = getPromptsDir(workingDirectory);
-  if (!(0, import_fs13.existsSync)(promptsDir)) return void 0;
+  if (!(0, import_fs12.existsSync)(promptsDir)) return void 0;
   try {
-    const files = (0, import_fs13.readdirSync)(promptsDir);
+    const files = (0, import_fs12.readdirSync)(promptsDir);
     const escapedProvider = escapeRegex2(provider);
     const escapedJobId = escapeRegex2(jobId);
     const pattern = new RegExp(`^${escapedProvider}-status-(.+)-${escapedJobId}\\.json$`);
@@ -17963,7 +18023,7 @@ function findJobStatusFile(provider, jobId, workingDirectory) {
         matches.push({
           file: f,
           slug: m[1],
-          statusPath: (0, import_path13.join)(promptsDir, f)
+          statusPath: (0, import_path12.join)(promptsDir, f)
         });
       }
     }
@@ -17974,7 +18034,7 @@ function findJobStatusFile(provider, jobId, workingDirectory) {
     let best;
     for (const match of matches) {
       try {
-        const content = (0, import_fs13.readFileSync)(match.statusPath, "utf-8");
+        const content = (0, import_fs12.readFileSync)(match.statusPath, "utf-8");
         const status = JSON.parse(content);
         const isActive = status.status === "spawned" || status.status === "running";
         const spawnedAt = new Date(status.spawnedAt).getTime();
@@ -18482,18 +18542,18 @@ ${lines.join("\n\n")}`);
     }
   }
   const promptsDir = getPromptsDir();
-  if (!(0, import_fs13.existsSync)(promptsDir)) {
+  if (!(0, import_fs12.existsSync)(promptsDir)) {
     return textResult(`No ${provider} jobs found.`);
   }
   try {
-    const files = (0, import_fs13.readdirSync)(promptsDir);
+    const files = (0, import_fs12.readdirSync)(promptsDir);
     const statusFiles = files.filter(
       (f) => f.startsWith(`${provider}-status-`) && f.endsWith(".json")
     );
     const jobs = [];
     for (const file of statusFiles) {
       try {
-        const content = (0, import_fs13.readFileSync)((0, import_path13.join)(promptsDir, file), "utf-8");
+        const content = (0, import_fs12.readFileSync)((0, import_path12.join)(promptsDir, file), "utf-8");
         const job = JSON.parse(content);
         if (statusFilter === "completed" && job.status !== "completed") continue;
         if (statusFilter === "failed" && job.status !== "failed" && job.status !== "timeout") continue;
