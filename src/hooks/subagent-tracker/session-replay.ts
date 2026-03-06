@@ -9,6 +9,7 @@
 
 import { existsSync, appendFileSync, readFileSync, mkdirSync, readdirSync, unlinkSync, statSync } from 'fs';
 import { join } from 'path';
+import { assertValidSessionId, assertValidAgentId } from '../../lib/validateMode.js';
 
 // ============================================================================
 // Types
@@ -180,6 +181,13 @@ export function recordAgentStart(
   parentMode?: string,
   model?: string
 ): void {
+  try {
+    assertValidSessionId(sessionId);
+    assertValidAgentId(agentId);
+  } catch (err) {
+    // Validation failed - skip recording to prevent path traversal
+    return;
+  }
   appendReplayEvent(directory, sessionId, {
     agent: agentId.substring(0, 7),
     agent_type: agentType.replace('ultrapower:', ''),
@@ -201,6 +209,13 @@ export function recordAgentStop(
   success: boolean,
   durationMs?: number
 ): void {
+  try {
+    assertValidSessionId(sessionId);
+    assertValidAgentId(agentId);
+  } catch (err) {
+    // Validation failed - skip recording to prevent path traversal
+    return;
+  }
   appendReplayEvent(directory, sessionId, {
     agent: agentId.substring(0, 7),
     agent_type: agentType.replace('ultrapower:', ''),

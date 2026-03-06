@@ -92,14 +92,14 @@ export enum HookSeverity {
  */
 export const HOOK_SEVERITY: Record<HookType, HookSeverity> = {
   'permission-request': HookSeverity.CRITICAL,
+  'pre-tool-use': HookSeverity.CRITICAL,
+  'session-end': HookSeverity.HIGH,
+  'subagent-start': HookSeverity.HIGH,
+  'subagent-stop': HookSeverity.HIGH,
   'setup-init': HookSeverity.HIGH,
   'setup-maintenance': HookSeverity.HIGH,
-  'pre-tool-use': HookSeverity.HIGH,
   'post-tool-use': HookSeverity.LOW,
-  'subagent-start': HookSeverity.LOW,
-  'subagent-stop': HookSeverity.LOW,
   'session-start': HookSeverity.LOW,
-  'session-end': HookSeverity.LOW,
   'pre-compact': HookSeverity.LOW,
   'keyword-detector': HookSeverity.LOW,
   'stop-continuation': HookSeverity.LOW,

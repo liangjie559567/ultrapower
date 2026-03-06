@@ -20,6 +20,7 @@ import { join } from "path";
 import { resolveToWorktreeRoot } from "../lib/worktree-paths.js";
 import { auditLogger } from "../audit/logger.js";
 import { safeJsonParse } from "../lib/safe-json.js";
+import { assertValidDirectory } from "../lib/validateMode.js";
 
 // Hot-path imports: needed on every/most hook invocations (keyword-detector, pre/post-tool-use)
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";

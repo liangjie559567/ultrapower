@@ -287,6 +287,9 @@ export function validateSessionId(sessionId: string): void {
   if (sessionId.includes('..') || sessionId.includes('/') || sessionId.includes('\\')) {
     throw new Error(`Invalid session ID: path traversal not allowed (${sessionId})`);
   }
+  if (/^[a-zA-Z]:/.test(sessionId)) {
+    throw new Error(`Invalid session ID: absolute paths not allowed (${sessionId})`);
+  }
   if (!SESSION_ID_REGEX.test(sessionId)) {
     throw new Error(`Invalid session ID: must be alphanumeric with hyphens/underscores, max 256 chars (${sessionId})`);
   }

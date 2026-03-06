@@ -108,3 +108,117 @@ export function assertValidMode(mode: unknown): ValidMode {
   }
   return mode;
 }
+
+/**
+ * Validate sessionId parameter to prevent path traversal.
+ * SessionIds are used in paths like `.omc/state/sessions/${sessionId}/`.
+ *
+ * @param sessionId - Untrusted session identifier
+ * @returns The validated sessionId string
+ * @throws {Error} If sessionId contains path traversal sequences
+ */
+export function assertValidSessionId(sessionId: unknown): string {
+  if (typeof sessionId !== 'string' || sessionId.length === 0) {
+    throw new Error('Invalid sessionId: must be a non-empty string');
+  }
+
+  if (sessionId.length > 255) {
+    throw new Error('Invalid sessionId: exceeds 255 characters');
+  }
+
+  const display = sessionId.length > 50 ? `${sessionId.slice(0, 50)}...(truncated)` : sessionId;
+
+  if (
+    sessionId.includes('..') ||
+    sessionId.includes('/') ||
+    sessionId.includes('\\') ||
+    /^[a-zA-Z]:/.test(sessionId) ||
+    !/^[a-zA-Z0-9_-]+$/.test(sessionId)
+  ) {
+    auditLogger.log({
+      actor: 'system',
+      action: 'path_validation_failed',
+      resource: display,
+      result: 'failure',
+      metadata: { reason: 'invalid_session_id' }
+    }).catch(() => {});
+
+    throw new Error(`Invalid sessionId: "${display}". Must contain only alphanumeric, hyphens, and underscores`);
+  }
+
+  return sessionId;
+}
+
+/**
+ * Validate directory parameter to prevent path traversal.
+ * Directories are used in state operations and hook processing.
+ *
+ * @param directory - Untrusted directory path
+ * @returns The validated directory string
+ * @throws {Error} If directory contains path traversal sequences
+ */
+export function assertValidDirectory(directory: unknown): string {
+  if (typeof directory !== 'string' || directory.length === 0) {
+    throw new Error('Invalid directory: must be a non-empty string');
+  }
+
+  if (directory.length > 255) {
+    throw new Error('Invalid directory: exceeds 255 characters');
+  }
+
+  const display = directory.length > 50 ? `${directory.slice(0, 50)}...(truncated)` : directory;
+
+  if (directory.includes('..')) {
+    auditLogger.log({
+      actor: 'system',
+      action: 'path_validation_failed',
+      resource: display,
+      result: 'failure',
+      metadata: { reason: 'path_traversal_in_directory' }
+    }).catch(() => {});
+
+    throw new Error(`Path traversal detected in directory: "${display}"`);
+  }
+
+  return directory;
+}
+
+/**
+ * Validate agentId parameter to prevent path traversal.
+ * AgentIds are used in session replay paths.
+ *
+ * @param agentId - Untrusted agent identifier
+ * @returns The validated agentId string
+ * @throws {Error} If agentId contains path traversal sequences
+ */
+export function assertValidAgentId(agentId: unknown): string {
+  if (typeof agentId !== 'string' || agentId.length === 0) {
+    throw new Error('Invalid agentId: must be a non-empty string');
+  }
+
+  if (agentId.length > 255) {
+    throw new Error('Invalid agentId: exceeds 255 characters');
+  }
+
+  const display = agentId.length > 50 ? `${agentId.slice(0, 50)}...(truncated)` : agentId;
+
+  if (
+    agentId.includes('..') ||
+    agentId.includes('/') ||
+    agentId.includes('\\') ||
+    /^[a-zA-Z]:/.test(agentId) ||
+    !/^[a-zA-Z0-9_:-]+$/.test(agentId)
+  ) {
+    auditLogger.log({
+      actor: 'system',
+      action: 'path_validation_failed',
+      resource: display,
+      result: 'failure',
+      metadata: { reason: 'invalid_agent_id' }
+    }).catch(() => {});
+
+    throw new Error(`Invalid agentId: "${display}". Must contain only alphanumeric, hyphens, underscores, and colons`);
+  }
+
+  return agentId;
+}

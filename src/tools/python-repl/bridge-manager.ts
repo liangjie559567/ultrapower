@@ -337,7 +337,7 @@ export async function spawnBridgeServer(
   let stderrBuffer = '';
   let stderrTruncated = false;
 
-  proc.stderr?.on('data', (chunk: Buffer) => {
+  const stderrHandler = (chunk: Buffer) => {
     if (stderrTruncated) return;
     const text = chunk.toString();
     if (stderrBuffer.length + text.length > MAX_STDERR_CHARS) {
@@ -346,7 +346,8 @@ export async function spawnBridgeServer(
     } else {
       stderrBuffer += text;
     }
-  });
+  };
+  proc.stderr?.on('data', stderrHandler);
 
   // Wait for socket to appear
   const startTime = Date.now();

@@ -12,6 +12,7 @@ import type { BoulderState, PlanProgress, PlanSummary } from './types.js';
 import { BOULDER_DIR, BOULDER_FILE, PLANNER_PLANS_DIR, PLAN_EXTENSION } from './constants.js';
 import { atomicWriteSync } from '../../lib/atomic-write.js';
 import { acquireLock } from '../../lib/file-lock.js';
+import { assertValidSessionId } from '../../lib/validateMode.js';
 
 /**
  * Get the full path to the boulder state file
@@ -62,6 +63,13 @@ export function writeBoulderState(directory: string, state: BoulderState): boole
  * Uses file lock to prevent concurrent modification race conditions
  */
 export async function appendSessionId(directory: string, sessionId: string): Promise<BoulderState | null> {
+  try {
+    assertValidSessionId(sessionId);
+  } catch (err) {
+    console.error('[boulder-state] Invalid sessionId:', err);
+    return null;
+  }
+
   const lockPath = join(directory, BOULDER_DIR, '.lock');
   const unlock = await acquireLock(lockPath, 30000);
 

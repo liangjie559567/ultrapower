@@ -13,6 +13,7 @@ import { join, dirname } from "path";
 import { readFileSync, existsSync } from "fs";
 import { fileURLToPath } from "url";
 import { getConfigDir } from '../utils/config-dir.js';
+import { toForwardSlash } from '../utils/paths.js';
 
 // =============================================================================
 // TEMPLATE LOADER (loads hook scripts from templates/hooks/)
@@ -83,19 +84,17 @@ export function getClaudeConfigDir(): string {
   return getConfigDir();
 }
 
-/** Get the hooks directory path */
+/** Get the hooks directory path (with forward slashes for shell compatibility) */
 export function getHooksDir(): string {
-  return join(getClaudeConfigDir(), "hooks");
+  return toForwardSlash(join(getClaudeConfigDir(), "hooks"));
 }
 
 /**
- * Get the home directory environment variable for hook commands.
- * Returns the appropriate syntax for the current platform.
+ * Get the absolute path to a hook script.
+ * Uses Node.js path APIs and converts to forward slashes for cross-platform shell compatibility.
  */
-export function getHomeEnvVar(): string {
-  // On Windows, Claude Code runs hooks via bash (Git Bash / WSL).
-  // bash does NOT expand cmd.exe-style %USERPROFILE%, but DOES expand $USERPROFILE.
-  return isWindows() ? "$USERPROFILE" : "$HOME";
+function getHookScriptPath(scriptName: string): string {
+  return toForwardSlash(join(getClaudeConfigDir(), "hooks", scriptName));
 }
 
 /**
@@ -317,7 +316,7 @@ export const POST_TOOL_USE_SCRIPT_NODE = loadTemplate("post-tool-use.mjs");
 
 /**
  * Settings.json hooks configuration for Node.js (Cross-platform)
- * Uses node to run .mjs scripts directly
+ * Uses node to run .mjs scripts with absolute paths (no shell variables)
  */
 export const HOOKS_SETTINGS_CONFIG_NODE = {
   hooks: {
@@ -326,11 +325,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
         hooks: [
           {
             type: "command" as const,
-            // On Windows, Claude Code runs hooks via bash (Git Bash / WSL).
-            // bash expands $USERPROFILE but NOT cmd.exe-style %USERPROFILE%.
-            command: isWindows()
-              ? 'node "$USERPROFILE/.claude/hooks/keyword-detector.mjs"'
-              : 'node "$HOME/.claude/hooks/keyword-detector.mjs"',
+            command: `node "${getHookScriptPath("keyword-detector.mjs")}"`,
           },
         ],
       },
@@ -340,9 +335,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
         hooks: [
           {
             type: "command" as const,
-            command: isWindows()
-              ? 'node "$USERPROFILE/.claude/hooks/session-start.mjs"'
-              : 'node "$HOME/.claude/hooks/session-start.mjs"',
+            command: `node "${getHookScriptPath("session-start.mjs")}"`,
           },
         ],
       },
@@ -352,9 +345,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
         hooks: [
           {
             type: "command" as const,
-            command: isWindows()
-              ? 'node "$USERPROFILE/.claude/hooks/pre-tool-use.mjs"'
-              : 'node "$HOME/.claude/hooks/pre-tool-use.mjs"',
+            command: `node "${getHookScriptPath("pre-tool-use.mjs")}"`,
           },
         ],
       },
@@ -364,9 +355,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
         hooks: [
           {
             type: "command" as const,
-            command: isWindows()
-              ? 'node "$USERPROFILE/.claude/hooks/post-tool-use.mjs"'
-              : 'node "$HOME/.claude/hooks/post-tool-use.mjs"',
+            command: `node "${getHookScriptPath("post-tool-use.mjs")}"`,
           },
         ],
       },
@@ -376,9 +365,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
         hooks: [
           {
             type: "command" as const,
-            command: isWindows()
-              ? 'node "$USERPROFILE/.claude/hooks/post-tool-use-failure.mjs"'
-              : 'node "$HOME/.claude/hooks/post-tool-use-failure.mjs"',
+            command: `node "${getHookScriptPath("post-tool-use-failure.mjs")}"`,
           },
         ],
       },
@@ -388,9 +375,7 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
         hooks: [
           {
             type: "command" as const,
-            command: isWindows()
-              ? 'node "$USERPROFILE/.claude/hooks/persistent-mode.mjs"'
-              : 'node "$HOME/.claude/hooks/persistent-mode.mjs"',
+            command: `node "${getHookScriptPath("persistent-mode.mjs")}"`,
           },
         ],
       },
