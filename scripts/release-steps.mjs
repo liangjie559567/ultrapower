@@ -82,7 +82,11 @@ export async function syncMarketplace(opts = {}) {
 
   // 总是推送到 main（即使本地已同步，main 可能还是旧版本）
   run(`git add .claude-plugin/marketplace.json`, dryRun);
-  run(`git commit -m "chore: sync marketplace.json to v${version}" || true`, dryRun);
+  try {
+    run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
+  } catch (e) {
+    // 允许 commit 失败（如果没有变更）
+  }
   run(`git push origin HEAD:main`, dryRun);
 
   console.log(`syncMarketplace: pushed v${version} to main`);
