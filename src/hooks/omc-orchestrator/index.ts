@@ -167,19 +167,10 @@ export function isWriteEditTool(toolName: string): boolean {
  */
 export function getGitDiffStats(directory: string): GitFileStat[] {
   try {
-    const output = execSync('git diff --numstat HEAD', {
-      cwd: directory,
-      encoding: 'utf-8',
-      timeout: 5000,
-    }).trim();
+    const { getStatusAndDiff } = require('../../lib/git-utils.js');
+    const { status: statusOutput, diffStats: output } = getStatusAndDiff(directory);
 
     if (!output) return [];
-
-    const statusOutput = execSync('git status --porcelain', {
-      cwd: directory,
-      encoding: 'utf-8',
-      timeout: 5000,
-    }).trim();
 
     const statusMap = new Map<string, 'modified' | 'added' | 'deleted'>();
     for (const line of statusOutput.split('\n')) {

@@ -493,7 +493,7 @@ export function startDaemon(config?: DaemonConfig): DaemonResponse {
     };
   } catch (error) {
     if (configFilePath) {
-      try { unlinkSync(configFilePath); } catch {}
+      try { unlinkSync(configFilePath); } catch (_e) { /* Ignore cleanup errors */ }
     }
     return {
       success: false,

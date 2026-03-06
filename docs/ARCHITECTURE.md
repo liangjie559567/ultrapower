@@ -1,8 +1,8 @@
-<!-- ultrapower v5.5.5 | updated: 2026-03-02 -->
+<!-- ultrapower v5.5.18 | updated: 2026-03-05 -->
 
-# ultrapower Architecture — v5.5.5
+# ultrapower Architecture — v5.5.18
 
-> This document describes the internal architecture of ultrapower, the multi-agent orchestration layer for Claude Code. It reflects the system as implemented in v5.5.5.
+> This document describes the internal architecture of ultrapower, the multi-agent orchestration layer for Claude Code. It reflects the system as implemented in v5.5.18.
 
 ---
 
@@ -17,7 +17,7 @@ ultrapower transforms Claude Code into an intelligent orchestrator of specialize
                              │  hook events / tool calls
                              ▼
 ┌──────────────────────────────────────────────────────────────────┐
-│                    ultrapower v5.5.5                              │
+│                    ultrapower v5.5.18                             │
 │                                                                  │
 │  ┌─────────────────────────────────────────────────────────────┐ │
 │  │                 SECURITY LAYER (new v5.5.5)                 │ │

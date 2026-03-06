@@ -34,8 +34,7 @@ async function killProcessTreeWindows(pid: number, force: boolean): Promise<bool
     if (force) {
       args.unshift('/F');
     }
-    execSync(`taskkill ${args.join(' ')}`, {
-      stdio: 'ignore',
+    await execFileAsync('taskkill', args, {
       timeout: 5000,
       windowsHide: true
     });

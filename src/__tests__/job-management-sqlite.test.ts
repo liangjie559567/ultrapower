@@ -35,6 +35,11 @@ vi.mock('fs', async () => {
   };
 });
 
+// Mock WorkerStateAdapter to force fallback to legacy SQLite
+vi.mock('../workers/factory.js', () => ({
+  createWorkerAdapter: vi.fn(() => Promise.resolve(null)),
+}));
+
 // Mock codex-core and gemini-core PID registries
 vi.mock('../mcp/codex-core.js', async () => {
   const actual = await vi.importActual('../mcp/codex-core.js');

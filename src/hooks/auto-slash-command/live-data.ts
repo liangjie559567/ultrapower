@@ -297,7 +297,7 @@ function globToRegex(glob: string): RegExp {
 
 function checkIfModified(pattern: string): boolean {
   try {
-    const output = execSync("git diff --name-only 2>/dev/null || true", {
+    const output = execSync("git --no-pager diff --name-only 2>/dev/null || true", {
       timeout: 5000,
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"],
@@ -311,7 +311,7 @@ function checkIfModified(pattern: string): boolean {
 
 function checkIfBranch(pattern: string): boolean {
   try {
-    const branch = execSync("git branch --show-current 2>/dev/null || true", {
+    const branch = execSync("git --no-pager branch --show-current 2>/dev/null || true", {
       timeout: 5000,
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"],

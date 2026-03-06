@@ -7,8 +7,10 @@
  * Input format from Claude Code hooks (via stdin)
  */
 export interface HookInput {
-  /** Session identifier */
+  /** Session identifier (camelCase) */
   sessionId?: string;
+  /** Session identifier (snake_case from Claude Code) */
+  session_id?: string;
   /** User prompt text */
   prompt?: string;
   /** Message content (alternative to prompt) */
@@ -20,14 +22,26 @@ export interface HookInput {
     type: string;
     text?: string;
   }>;
-  /** Tool name (for tool hooks) */
+  /** Tool name (camelCase) */
   toolName?: string;
-  /** Tool input parameters */
+  /** Tool name (snake_case from Claude Code) */
+  tool_name?: string;
+  /** Tool input parameters (camelCase) */
   toolInput?: unknown;
-  /** Tool output (for post-tool hooks) */
+  /** Tool input parameters (snake_case from Claude Code) */
+  tool_input?: unknown;
+  /** Tool output (camelCase) */
   toolOutput?: unknown;
-  /** Working directory */
+  /** Tool response (snake_case from Claude Code) */
+  tool_response?: unknown;
+  /** Working directory (camelCase) */
   directory?: string;
+  /** Working directory (snake_case from Claude Code) */
+  cwd?: string;
+  /** Hook event name (snake_case from Claude Code) */
+  hook_event_name?: string;
+  /** Allow other fields to pass through */
+  [key: string]: unknown;
 }
 
 /**

@@ -2,9 +2,9 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 schema_version: 2
 version: 1.0
-last_updated: 2026-03-04
-entries: 71
-cycle: 17
+last_updated: 2026-03-05
+entries: 74
+cycle: 18
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -88,6 +88,9 @@ cycle: 17
 | k-071 | Vitest Mock Completeness: Poll Loop Functions Must Be Mocked | testing | 0.95 | 2026-03-04 | active |
 | k-072 | Release Workflow Standard Template (8-Step Checklist) | workflow | 0.95 | 2026-03-05 | active |
 | k-073 | Git Stash Three-Step Pattern for Uncommitted Changes | workflow | 0.9 | 2026-03-05 | active |
+| k-074 | Version Number Sync Checklist (8 Files) | workflow | 0.95 | 2026-03-05 | active |
+| k-075 | CHANGELOG Prepend Pattern (Bash Command) | pattern | 0.95 | 2026-03-05 | active |
+| k-076 | Git Lock File Pre-Check Pattern | workflow | 0.9 | 2026-03-05 | active |
 
 ## 2. 分类统计 (Category Stats)
 
@@ -95,8 +98,8 @@ cycle: 17
 |----------|-------|-------------|
 | architecture | 20 | 架构相关知识 |
 | debugging | 6 | 调试技巧 |
-| pattern | 8 | 代码模式 |
-| workflow | 19 | 工作流相关 |
+| pattern | 9 | 代码模式 |
+| workflow | 22 | 工作流相关 |
 | tooling | 9 | 工具使用 |
 | security | 3 | 安全相关知识 |
 | platform | 1 | 平台兼容性 |
@@ -293,3 +296,91 @@ git stash pop
 v5.5.14 发布时，dev→main 合并前遇到 `.omc/notepad.md` 未提交更改，使用此模式成功完成合并并恢复更改。
 
 **相关知识**: k-072, k-021, k-038, k-045
+
+### k-074: Version Number Sync Checklist (8 Files)
+
+**分类**: workflow
+**置信度**: 0.95
+**创建时间**: 2026-03-05
+**标签**: release, version, sync, checklist
+
+**描述**:
+多个 package.json 文件容易遗漏导致版本不一致。v5.5.15 发布时根目录 package.json 初次未更新，由 verifier 发现。
+
+**完整检查清单**（8 个文件）:
+1. package.json
+2. packages/*/package.json（所有子包）
+3. .claude-plugin/plugin.json
+4. .claude-plugin/marketplace.json（两处 version 字段）
+5. docs/CLAUDE.md（OMC:VERSION 注释）
+6. CLAUDE.md（版本引用）
+7. README.md（版本徽章）
+8. src/installer/index.ts（VERSION 常量）
+
+**自动化方案**:
+创建 scripts/check-version-sync.sh 脚本自动验证版本一致性。
+
+**相关知识**: k-072, k-036, k-037
+
+---
+
+### k-075: CHANGELOG Prepend Pattern (Bash Command)
+
+**分类**: pattern
+**置信度**: 0.95
+**创建时间**: 2026-03-05
+**标签**: changelog, file-operation, bash, atomic-write
+
+**描述**:
+Write 工具会覆盖整个文件，不适合 CHANGELOG 更新。使用 bash 命令实现前置插入。
+
+**标准命令**:
+```bash
+{ echo "新内容"; cat 原文件; } > 临时文件 && mv 临时文件 原文件
+```
+
+**适用场景**:
+- CHANGELOG.md 更新
+- 任何需要在文件开头插入内容的场景
+
+**关键点**:
+- 使用临时文件避免数据丢失
+- 确保原子性操作（&& 连接符）
+- 适用于所有文本文件
+
+**相关知识**: k-072, k-032
+
+---
+
+### k-076: Git Lock File Pre-Check Pattern
+
+**分类**: workflow
+**置信度**: 0.9
+**创建时间**: 2026-03-05
+**标签**: git, lock-file, error-prevention
+
+**描述**:
+.git/index.lock 残留导致 git 操作失败。v5.5.15 发布时遇到此问题。
+
+**预检查命令**:
+```bash
+[ -f .git/index.lock ] && rm .git/index.lock
+```
+
+**适用场景**:
+- git commit
+- git checkout
+- git merge
+- 所有修改索引的 git 操作
+
+**错误信息**:
+```
+error: Unable to create '.git/index.lock': File exists
+```
+
+**根因**:
+git 操作被中断（Ctrl+C、进程崩溃）导致锁文件残留。
+
+**相关知识**: k-072, k-021
+
+---

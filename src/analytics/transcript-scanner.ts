@@ -54,6 +54,9 @@ export interface ScanOptions {
  */
 const UUID_REGEX = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 
+// Cached regex for glob pattern matching
+const globPatternCache = new Map<string, RegExp>();
+
 /**
  * Decode project directory name back to original path.
  *
@@ -164,20 +167,19 @@ function decodeWindowsPath(dirName: string): string {
     if (part === '' && currentPath) {
       const pathParts = currentPath.split('/');
       const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-';
+      const newPath = [pathParts.join('/'), lastPart + '-'].join('/');
       generatePaths(parts, index + 1, newPath);
       return;
     }
 
     // Try adding next segment as a new directory
-    const newDir = currentPath + '/' + part;
-    generatePaths(parts, index + 1, newDir);
+    generatePaths(parts, index + 1, [currentPath, part].join('/'));
 
     // Try combining with previous segment using hyphen (if not first segment)
     if (index > 0 && currentPath) {
       const pathParts = currentPath.split('/');
       const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-' + part;
+      const newPath = [pathParts.join('/'), lastPart + '-' + part].join('/');
       generatePaths(parts, index + 1, newPath);
     }
   }
@@ -228,19 +230,19 @@ function decodeUnixPath(dirName: string): string {
     if (part === '' && currentPath) {
       const pathParts = currentPath.split('/');
       const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-';
+      const newPath = [pathParts.join('/'), lastPart + '-'].join('/');
       generatePaths(parts, index + 1, newPath);
       return;
     }
 
     // Try adding next segment as a new directory
-    generatePaths(parts, index + 1, currentPath + '/' + part);
+    generatePaths(parts, index + 1, [currentPath, part].join('/'));
 
     // Try combining with previous segment using hyphen (if not first segment)
     if (index > 0 && currentPath) {
       const pathParts = currentPath.split('/');
       const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-' + part;
+      const newPath = [pathParts.join('/'), lastPart + '-' + part].join('/');
       generatePaths(parts, index + 1, newPath);
     }
   }
@@ -264,14 +266,21 @@ function decodeUnixPath(dirName: string): string {
 function matchesPattern(path: string, pattern?: string): boolean {
   if (!pattern) return true;
 
-  // Convert glob pattern to regex
-  const regexPattern = pattern
-    .replace(/[+()[\]{}^$|\\]/g, '\\$&')  // escape RegExp special chars first
-    .replace(/\./g, '\\.')
-    .replace(/\*/g, '.*')
-    .replace(/\?/g, '.');
+  // Check cache first
+  let regex = globPatternCache.get(pattern);
 
-  const regex = new RegExp(`^${regexPattern}$`);
+  if (!regex) {
+    // Convert glob pattern to regex
+    const regexPattern = pattern
+      .replace(/[+()[\]{}^$|\\]/g, '\\$&')  // escape RegExp special chars first
+      .replace(/\./g, '\\.')
+      .replace(/\*/g, '.*')
+      .replace(/\?/g, '.');
+
+    regex = new RegExp(`^${regexPattern}$`);
+    globPatternCache.set(pattern, regex);
+  }
+
   return regex.test(path);
 }
 

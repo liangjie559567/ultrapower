@@ -14,16 +14,19 @@
  */
 
 import { pathToFileURL } from 'url';
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, watch } from "fs";
+import { readFile } from "fs/promises";
 import { join } from "path";
 import { resolveToWorktreeRoot } from "../lib/worktree-paths.js";
 import { auditLogger } from "../audit/logger.js";
+import { safeJsonParse } from "../lib/safe-json.js";
 
 // Hot-path imports: needed on every/most hook invocations (keyword-detector, pre/post-tool-use)
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
 import { processOrchestratorPreTool, processOrchestratorPostTool } from "./omc-orchestrator/index.js";
 import { processPreToolUse as enforceDelegationModel } from "../features/delegation-enforcer.js";
 import { normalizeHookInput } from "./bridge-normalize.js";
+import { withTimeout } from "./timeout-wrapper.js";
 import type { HookInput, HookOutput, HookType } from "./bridge-types.js";
 import {
   addBackgroundTask,
@@ -71,6 +74,68 @@ const TEAM_TERMINAL_VALUES = new Set([
   "done",
 ]);
 
+// LRU Cache for file reads
+class LRUCache<K, V> {
+  private cache = new Map<K, V>();
+  private maxSize: number;
+
+  constructor(maxSize: number) {
+    this.maxSize = maxSize;
+  }
+
+  get(key: K): V | undefined {
+    const value = this.cache.get(key);
+    if (value !== undefined) {
+      this.cache.delete(key);
+      this.cache.set(key, value);
+    }
+    return value;
+  }
+
+  set(key: K, value: V): void {
+    this.cache.delete(key);
+    this.cache.set(key, value);
+    if (this.cache.size > this.maxSize) {
+      const firstKey = this.cache.keys().next().value as K;
+      if (firstKey !== undefined) {
+        this.cache.delete(firstKey);
+      }
+    }
+  }
+
+  delete(key: K): void {
+    this.cache.delete(key);
+  }
+}
+
+const fileCache = new LRUCache<string, string>(50);
+const watchers = new Map<string, ReturnType<typeof watch>>();
+
+function watchFile(path: string): void {
+  if (watchers.has(path)) return;
+  try {
+    const watcher = watch(path, () => {
+      fileCache.delete(path);
+    });
+    watcher.on('error', () => {
+      watchers.delete(path);
+    });
+    watchers.set(path, watcher);
+  } catch {
+    // Ignore watch errors
+  }
+}
+
+async function readFileCached(path: string): Promise<string> {
+  const cached = fileCache.get(path);
+  if (cached !== undefined) return cached;
+
+  const content = await readFile(path, "utf-8");
+  fileCache.set(path, content);
+  watchFile(path);
+  return content;
+}
+
 interface TeamStagedState {
   active?: boolean;
   stage?: string;
@@ -90,7 +155,43 @@ interface TeamStagedState {
   terminal?: boolean;
 }
 
-function readTeamStagedState(
+async function readTeamStagedState(
+  directory: string,
+  sessionId?: string,
+): Promise<TeamStagedState | null> {
+  const stateDir = join(directory, ".omc", "state");
+  const statePaths = sessionId
+    ? [
+        join(stateDir, "sessions", sessionId, "team-state.json"),
+        join(stateDir, "team-state.json"),
+      ]
+    : [join(stateDir, "team-state.json")];
+
+  for (const statePath of statePaths) {
+    if (!existsSync(statePath)) {
+      continue;
+    }
+
+    const content = await readFileCached(statePath);
+    const result = safeJsonParse<TeamStagedState>(content, statePath);
+
+    if (!result.success || typeof result.data !== "object" || result.data === null) {
+      continue;
+    }
+
+    const stateSessionId = result.data.session_id || result.data.sessionId;
+    if (sessionId && stateSessionId && stateSessionId !== sessionId) {
+      continue;
+    }
+
+    return result.data;
+  }
+
+  return null;
+}
+
+// Backward compatibility: sync version for non-async contexts
+function readTeamStagedStateSync(
   directory: string,
   sessionId?: string,
 ): TeamStagedState | null {
@@ -107,21 +208,19 @@ function readTeamStagedState(
       continue;
     }
 
-    try {
-      const parsed = JSON.parse(readFileSync(statePath, "utf-8")) as TeamStagedState;
-      if (typeof parsed !== "object" || parsed === null) {
-        continue;
-      }
+    const content = readFileSync(statePath, "utf-8");
+    const result = safeJsonParse<TeamStagedState>(content, statePath);
 
-      const stateSessionId = parsed.session_id || parsed.sessionId;
-      if (sessionId && stateSessionId && stateSessionId !== sessionId) {
-        continue;
-      }
-
-      return parsed;
-    } catch {
+    if (!result.success || typeof result.data !== "object" || result.data === null) {
       continue;
     }
+
+    const stateSessionId = result.data.session_id || result.data.sessionId;
+    if (sessionId && stateSessionId && stateSessionId !== sessionId) {
+      continue;
+    }
+
+    return result.data;
   }
 
   return null;
@@ -438,7 +537,7 @@ async function processPersistentMode(input: HookInput): Promise<HookOutput> {
   const result = await checkPersistentModes(sessionId, directory, stopContext);
   const output = createHookOutput(result);
 
-  const teamState = readTeamStagedState(directory, sessionId);
+  const teamState = await readTeamStagedState(directory, sessionId);
   if (!teamState || teamState.active !== true || isTeamStateTerminal(teamState)) {
     // No persistent mode and no active team — Claude is truly idle.
     // Send session-idle notification (non-blocking) unless this was a user abort or context limit.
@@ -583,7 +682,7 @@ Continue working in ultrawork mode until all tasks are complete.
 `);
   }
 
-  const teamState = readTeamStagedState(directory, sessionId);
+  const teamState = await readTeamStagedState(directory, sessionId);
   if (teamState?.active) {
     const teamName = teamState.team_name || teamState.teamName || "team";
     const stage = getTeamStage(teamState);
@@ -624,7 +723,7 @@ Resume from this stage and continue the staged Team workflow.
   const agentsMdPath = join(directory, 'AGENTS.md');
   if (existsSync(agentsMdPath)) {
     try {
-      let agentsContent = readFileSync(agentsMdPath, 'utf-8').trim();
+      let agentsContent = (await readFileCached(agentsMdPath)).trim();
       if (agentsContent) {
         // Truncate to ~2500 tokens (10000 chars) to avoid context bloat
         const MAX_AGENTS_CHARS = 10000;
@@ -712,16 +811,23 @@ export const _notify = {
  * Process pre-tool-use hook
  * Checks delegation enforcement and tracks background tasks
  */
-function processPreToolUse(input: HookInput): HookOutput {
+async function processPreToolUse(input: HookInput): Promise<HookOutput> {
   const directory = resolveToWorktreeRoot(input.directory);
 
-  // Check delegation enforcement FIRST
-  const enforcementResult = processOrchestratorPreTool({
-    toolName: input.toolName || "",
-    toolInput: (input.toolInput as Record<string, unknown>) || {},
-    sessionId: input.sessionId,
-    directory,
-  });
+  // Check delegation enforcement with timeout
+  const enforcementResult = await withTimeout(
+    () => Promise.resolve(processOrchestratorPreTool({
+      toolName: input.toolName || "",
+      toolInput: (input.toolInput as Record<string, unknown>) || {},
+      sessionId: input.sessionId,
+      directory,
+    })),
+    {
+      timeoutMs: 3000,
+      label: 'orchestrator-pre-tool',
+      fallback: () => ({ continue: true })
+    }
+  ) || { continue: true };
 
   // If enforcement blocks, return immediately
   if (!enforcementResult.continue) {
@@ -900,16 +1006,23 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
     }
   }
 
-  // Run orchestrator post-tool processing (remember tags, verification reminders, etc.)
-  const orchestratorResult = processOrchestratorPostTool(
+  // Run orchestrator post-tool processing with timeout
+  const orchestratorResult = await withTimeout(
+    () => Promise.resolve(processOrchestratorPostTool(
+      {
+        toolName: input.toolName || "",
+        toolInput: (input.toolInput as Record<string, unknown>) || {},
+        sessionId: input.sessionId,
+        directory,
+      },
+      String(input.toolOutput ?? ""),
+    )),
     {
-      toolName: input.toolName || "",
-      toolInput: (input.toolInput as Record<string, unknown>) || {},
-      sessionId: input.sessionId,
-      directory,
-    },
-    String(input.toolOutput ?? ""),
-  );
+      timeoutMs: 3000,
+      label: 'orchestrator-post-tool',
+      fallback: () => ({ continue: true })
+    }
+  ) || { continue: true };
 
   if (orchestratorResult.message) {
     messages.push(orchestratorResult.message);
@@ -1204,11 +1317,8 @@ export async function main(): Promise<void> {
   const inputStr = Buffer.concat(chunks).toString("utf-8");
 
   let input: HookInput;
-  try {
-    input = JSON.parse(inputStr);
-  } catch {
-    input = {};
-  }
+  const result = safeJsonParse<HookInput>(inputStr);
+  input = result.success ? result.data! : {};
 
   // Process hook
   const output = await processHook(hookType, input);

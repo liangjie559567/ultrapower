@@ -498,4 +498,93 @@ try {
   console.log('[OMC] Warning: Could not configure settings.json:', e.message);
 }
 
-console.log('[OMC] Setup complete! Restart Claude Code to activate HUD.');
+// Post-install verification
+function verifyInstallation() {
+  const issues = [];
+  const pluginRoot = dirname(__dirname);
+
+  // Check 1: plugin.json created in install dir
+  const localPluginJsonPath = join(pluginRoot, '.claude-plugin/plugin.json');
+  if (!existsSync(localPluginJsonPath)) {
+    issues.push({
+      severity: 'ERROR',
+      component: 'plugin.json',
+      message: 'Plugin manifest not created in install directory',
+      fix: 'Check: 1) npm install completed 2) Write permissions 3) Disk space'
+    });
+  }
+
+  // Check 2: templates source exists
+  const srcTemplatesHooks = join(pluginRoot, 'templates', 'hooks');
+  if (!existsSync(srcTemplatesHooks)) {
+    issues.push({
+      severity: 'ERROR',
+      component: 'templates',
+      message: 'Source templates/hooks/ not found in package',
+      fix: 'Package integrity issue. Reinstall: npm install -g @liangjie559567/ultrapower@latest'
+    });
+  }
+
+  // Check 3: HUD script exists
+  if (!existsSync(hudScriptPath)) {
+    issues.push({
+      severity: 'ERROR',
+      component: 'HUD',
+      message: 'HUD wrapper script not created',
+      fix: `Expected at: ${hudScriptPath}`
+    });
+  }
+
+  // Check 4: settings.json configured
+  if (existsSync(SETTINGS_FILE)) {
+    try {
+      const settings = JSON.parse(readFileSync(SETTINGS_FILE, 'utf-8'));
+      if (!settings.statusLine || !settings.statusLine.command?.includes(hudScriptPath)) {
+        issues.push({
+          severity: 'WARN',
+          component: 'settings.json',
+          message: 'HUD script path not found in statusLine command',
+          fix: `Expected path: ${hudScriptPath}`
+        });
+      }
+    } catch (e) {
+      issues.push({
+        severity: 'WARN',
+        component: 'settings.json',
+        message: 'Cannot read settings.json',
+        fix: e.message
+      });
+    }
+  }
+
+  return issues;
+}
+
+const issues = verifyInstallation();
+
+if (issues.length === 0) {
+  console.log('[OMC] ✓ Setup complete! All checks passed.');
+  console.log('[OMC] Restart Claude Code to activate HUD.');
+} else {
+  const errors = issues.filter(i => i.severity === 'ERROR');
+  const warnings = issues.filter(i => i.severity === 'WARN');
+
+  if (errors.length > 0) {
+    console.log('[OMC] ✗ Setup completed with ERRORS:');
+    for (const err of errors) {
+      console.log(`  [ERROR] ${err.component}: ${err.message}`);
+      console.log(`    Fix: ${err.fix}`);
+    }
+    process.exit(1);
+  }
+
+  if (warnings.length > 0) {
+    console.log('[OMC] ⚠ Setup completed with warnings:');
+    for (const warn of warnings) {
+      console.log(`  [WARN] ${warn.component}: ${warn.message}`);
+      console.log(`    Note: ${warn.fix}`);
+    }
+  }
+
+  console.log('[OMC] Restart Claude Code to activate HUD.');
+}

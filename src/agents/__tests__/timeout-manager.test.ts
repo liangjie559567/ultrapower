@@ -47,4 +47,26 @@ describe('TimeoutManager', () => {
   it('未启动的任务返回 0', () => {
     expect(manager.getElapsed('unknown')).toBe(0);
   });
+
+  it('重复调用start()清理旧timer', () => {
+    const controller1 = manager.start('task-1', 'executor');
+    const controller2 = manager.start('task-1', 'executor');
+
+    vi.advanceTimersByTime(600000);
+
+    expect(controller1.signal.aborted).toBe(false);
+    expect(controller2.signal.aborted).toBe(true);
+  });
+
+  it('并发启动多个taskId', () => {
+    const c1 = manager.start('task-1', 'executor');
+    const c2 = manager.start('task-2', 'executor');
+    const c3 = manager.start('task-3', 'executor');
+
+    vi.advanceTimersByTime(600000);
+
+    expect(c1.signal.aborted).toBe(true);
+    expect(c2.signal.aborted).toBe(true);
+    expect(c3.signal.aborted).toBe(true);
+  });
 });

@@ -595,9 +595,53 @@ class LspClientManager {
   private lastUsed = new Map<string, number>();
   private inFlightCount = new Map<string, number>();
   private idleTimer: ReturnType<typeof setInterval> | null = null;
+  private warmupPromises = new Map<string, Promise<void>>();
+  private symbolCache = new Map<string, { symbols: SymbolInformation[] | null; timestamp: number }>();
 
   constructor() {
     this.startIdleCheck();
+    this.warmupCommonServers();
+  }
+
+  /**
+   * Warmup common language servers in background
+   */
+  private warmupCommonServers(): void {
+    const cwd = process.cwd();
+    const commonServers = ['typescript', 'python'];
+
+    for (const serverKey of commonServers) {
+      const config = (getServerForFile as any)(`.${serverKey === 'typescript' ? 'ts' : 'py'}`);
+      if (config && commandExists(config.command)) {
+        const key = `${cwd}:${config.command}`;
+        const warmup = (async () => {
+          try {
+            const client = new LspClient(cwd, config);
+            await client.connect();
+            this.clients.set(key, client);
+            this.lastUsed.set(key, Date.now());
+
+            // Cache workspace symbols
+            const symbols = await client.workspaceSymbols('');
+            this.symbolCache.set(key, { symbols, timestamp: Date.now() });
+          } catch {
+            // Ignore warmup failures
+          }
+        })();
+        this.warmupPromises.set(key, warmup);
+      }
+    }
+  }
+
+  /**
+   * Get cached workspace symbols if available
+   */
+  getCachedSymbols(key: string): SymbolInformation[] | null {
+    const cached = this.symbolCache.get(key);
+    if (cached && Date.now() - cached.timestamp < 300000) { // 5 min cache
+      return cached.symbols;
+    }
+    return null;
   }
 
   /**
@@ -612,6 +656,13 @@ class LspClientManager {
     // Find workspace root
     const workspaceRoot = this.findWorkspaceRoot(filePath);
     const key = `${workspaceRoot}:${serverConfig.command}`;
+
+    // Wait for warmup if in progress
+    const warmup = this.warmupPromises.get(key);
+    if (warmup) {
+      await warmup;
+      this.warmupPromises.delete(key);
+    }
 
     let client = this.clients.get(key);
     if (!client) {
@@ -639,6 +690,13 @@ class LspClientManager {
 
     const workspaceRoot = this.findWorkspaceRoot(filePath);
     const key = `${workspaceRoot}:${serverConfig.command}`;
+
+    // Wait for warmup if in progress
+    const warmup = this.warmupPromises.get(key);
+    if (warmup) {
+      await warmup;
+      this.warmupPromises.delete(key);
+    }
 
     let client = this.clients.get(key);
     if (!client) {
@@ -760,6 +818,8 @@ class LspClientManager {
     this.clients.clear();
     this.lastUsed.clear();
     this.inFlightCount.clear();
+    this.warmupPromises.clear();
+    this.symbolCache.clear();
   }
 
   /** Expose in-flight count for testing */

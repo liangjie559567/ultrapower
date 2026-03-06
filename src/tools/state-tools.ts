@@ -29,6 +29,57 @@ import {
 } from '../hooks/mode-registry/index.js';
 import { ToolDefinition } from './types.js';
 import { assertValidMode } from '../lib/validateMode.js';
+import { safeJsonParse } from '../lib/safe-json.js';
+import { pruneMap } from '../lib/memory-utils.js';
+
+// LRU Cache for state file reads
+interface CacheEntry {
+  data: unknown;
+  timestamp: number;
+}
+
+const stateCache = new Map<string, CacheEntry>();
+const CACHE_MAX_SIZE = 50;
+const CACHE_TTL_MS = 5000;
+let cacheHits = 0;
+let cacheMisses = 0;
+
+function getCacheKey(mode: string, root: string, sessionId?: string): string {
+  return `${mode}:${root}:${sessionId || 'legacy'}`;
+}
+
+function getCached(key: string): unknown | null {
+  const entry = stateCache.get(key);
+  if (!entry) {
+    cacheMisses++;
+    return null;
+  }
+  if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
+    stateCache.delete(key);
+    cacheMisses++;
+    return null;
+  }
+  cacheHits++;
+  return entry.data;
+}
+
+function setCache(key: string, data: unknown): void {
+  stateCache.set(key, { data, timestamp: Date.now() });
+  pruneMap(stateCache, CACHE_MAX_SIZE);
+}
+
+function invalidateCache(key: string): void {
+  stateCache.delete(key);
+}
+
+export function getCacheStats() {
+  return {
+    size: stateCache.size,
+    hits: cacheHits,
+    misses: cacheMisses,
+    hitRate: cacheMisses === 0 ? 0 : (cacheHits / (cacheHits + cacheMisses))
+  };
+}
 
 // ExecutionMode from mode-registry (8 modes - NO ralplan)
 const EXECUTION_MODES = [
@@ -130,13 +181,28 @@ export const stateReadTool: ToolDefinition<{
           };
         }
 
-        const content = readFileSync(statePath, 'utf-8');
-        const state = JSON.parse(content);
+        const cacheKey = getCacheKey(mode, root, sessionId);
+        let data = getCached(cacheKey);
+
+        if (!data) {
+          const content = readFileSync(statePath, 'utf-8');
+          const result = safeJsonParse(content, statePath);
+
+          if (!result.success) {
+            return {
+              content: [{ type: 'text' as const, text: result.error! }],
+              isError: true
+            };
+          }
+
+          data = result.data;
+          setCache(cacheKey, data);
+        }
 
         return {
           content: [{
             type: 'text' as const,
-            text: `## State for ${mode} (session: ${sessionId})\n\nPath: ${statePath}\n\n\`\`\`json\n${JSON.stringify(state, null, 2)}\n\`\`\``
+            text: `## State for ${mode} (session: ${sessionId})\n\nPath: ${statePath}\n\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``
           }]
         };
       }
@@ -170,12 +236,12 @@ export const stateReadTool: ToolDefinition<{
 
       // Show legacy state if exists
       if (legacyExists) {
-        try {
-          const content = readFileSync(statePath, 'utf-8');
-          const state = JSON.parse(content);
-          output += `### Legacy Path (shared)\nPath: ${statePath}\n\n\`\`\`json\n${JSON.stringify(state, null, 2)}\n\`\`\`\n\n`;
-        } catch {
-          output += `### Legacy Path (shared)\nPath: ${statePath}\n*Error reading state file*\n\n`;
+        const content = readFileSync(statePath, 'utf-8');
+        const result = safeJsonParse(content, statePath);
+        if (result.success) {
+          output += `### Legacy Path (shared)\nPath: ${statePath}\n\n\`\`\`json\n${JSON.stringify(result.data, null, 2)}\n\`\`\`\n\n`;
+        } else {
+          output += `### Legacy Path (shared)\nPath: ${statePath}\n*${result.error}*\n\n`;
         }
       }
 
@@ -187,12 +253,12 @@ export const stateReadTool: ToolDefinition<{
             ? getStateFilePath(root, mode as ExecutionMode, sid)
             : resolveSessionStatePath(mode, sid, root);
 
-          try {
-            const content = readFileSync(sessionStatePath, 'utf-8');
-            const state = JSON.parse(content);
-            output += `**Session: ${sid}**\nPath: ${sessionStatePath}\n\n\`\`\`json\n${JSON.stringify(state, null, 2)}\n\`\`\`\n\n`;
-          } catch {
-            output += `**Session: ${sid}**\nPath: ${sessionStatePath}\n*Error reading state file*\n\n`;
+          const content = readFileSync(sessionStatePath, 'utf-8');
+          const result = safeJsonParse(content, sessionStatePath);
+          if (result.success) {
+            output += `**Session: ${sid}**\nPath: ${sessionStatePath}\n\n\`\`\`json\n${JSON.stringify(result.data, null, 2)}\n\`\`\`\n\n`;
+          } else {
+            output += `**Session: ${sid}**\nPath: ${sessionStatePath}\n*${result.error}*\n\n`;
           }
         }
       }
@@ -345,6 +411,10 @@ export const stateWriteTool: ToolDefinition<{
 
       atomicWriteJsonSync(statePath, stateWithMeta);
 
+      // Invalidate cache on write
+      const cacheKey = getCacheKey(mode, root, sessionId);
+      invalidateCache(cacheKey);
+
       const sessionInfo = sessionId ? ` (session: ${sessionId})` : ' (legacy path)';
       const warningMessage = sessionId ? '' : '\n\nWARNING: No session_id provided. State written to legacy shared path which may leak across parallel sessions. Pass session_id for session-scoped isolation.';
       return {
@@ -404,6 +474,9 @@ export const stateClearTool: ToolDefinition<{
       // If session_id provided, clear only session-specific state
       if (sessionId) {
         validateSessionId(sessionId);
+
+        const cacheKey = getCacheKey(mode, root, sessionId);
+        invalidateCache(cacheKey);
 
         if (MODE_CONFIGS[mode as ExecutionMode]) {
           const success = clearModeState(mode as ExecutionMode, root, sessionId);
@@ -560,17 +633,13 @@ export const stateListActiveTool: ToolDefinition<{
         const activeModes: string[] = [...getActiveModes(root, sessionId)];
 
         // Also check ralplan for this session
-        try {
-          const ralplanPath = resolveSessionStatePath('ralplan', sessionId, root);
-          if (existsSync(ralplanPath)) {
-            const content = readFileSync(ralplanPath, 'utf-8');
-            const state = JSON.parse(content);
-            if (state.active) {
-              activeModes.push('ralplan');
-            }
+        const ralplanPath = resolveSessionStatePath('ralplan', sessionId, root);
+        if (existsSync(ralplanPath)) {
+          const content = readFileSync(ralplanPath, 'utf-8');
+          const result = safeJsonParse<{ active?: boolean }>(content, ralplanPath);
+          if (result.success && result.data?.active) {
+            activeModes.push('ralplan');
           }
-        } catch {
-          // Ignore parse errors
         }
 
         if (activeModes.length === 0) {
@@ -599,14 +668,10 @@ export const stateListActiveTool: ToolDefinition<{
       const legacyActiveModes: string[] = [...getActiveModes(root)];
       const ralplanPath = getStatePath('ralplan', root);
       if (existsSync(ralplanPath)) {
-        try {
-          const content = readFileSync(ralplanPath, 'utf-8');
-          const state = JSON.parse(content);
-          if (state.active) {
-            legacyActiveModes.push('ralplan');
-          }
-        } catch {
-          // Ignore parse errors
+        const content = readFileSync(ralplanPath, 'utf-8');
+        const result = safeJsonParse<{ active?: boolean }>(content, ralplanPath);
+        if (result.success && result.data?.active) {
+          legacyActiveModes.push('ralplan');
         }
       }
 
@@ -623,17 +688,13 @@ export const stateListActiveTool: ToolDefinition<{
         const sessionActiveModes: string[] = [...getActiveModes(root, sid)];
 
         // Also check ralplan for this session
-        try {
-          const ralplanSessionPath = resolveSessionStatePath('ralplan', sid, root);
-          if (existsSync(ralplanSessionPath)) {
-            const content = readFileSync(ralplanSessionPath, 'utf-8');
-            const state = JSON.parse(content);
-            if (state.active) {
-              sessionActiveModes.push('ralplan');
-            }
+        const ralplanSessionPath = resolveSessionStatePath('ralplan', sid, root);
+        if (existsSync(ralplanSessionPath)) {
+          const content = readFileSync(ralplanSessionPath, 'utf-8');
+          const result = safeJsonParse<{ active?: boolean }>(content, ralplanSessionPath);
+          if (result.success && result.data?.active) {
+            sessionActiveModes.push('ralplan');
           }
-        } catch {
-          // Ignore parse errors
         }
 
         for (const mode of sessionActiveModes) {
@@ -713,22 +774,20 @@ export const stateGetStatusTool: ToolDefinition<{
           const active = MODE_CONFIGS[mode as ExecutionMode]
             ? isModeActive(mode as ExecutionMode, root, sessionId)
             : existsSync(statePath) && (() => {
-                try {
-                  const content = readFileSync(statePath, 'utf-8');
-                  const state = JSON.parse(content);
-                  return state.active === true;
-                } catch { return false; }
+                const content = readFileSync(statePath, 'utf-8');
+                const result = safeJsonParse<{ active?: boolean }>(content, statePath);
+                return result.success && result.data?.active === true;
               })();
 
           let statePreview = 'No state file';
           if (existsSync(statePath)) {
-            try {
-              const content = readFileSync(statePath, 'utf-8');
-              const state = JSON.parse(content);
-              statePreview = JSON.stringify(state, null, 2).slice(0, 500);
+            const content = readFileSync(statePath, 'utf-8');
+            const result = safeJsonParse(content, statePath);
+            if (result.success) {
+              statePreview = JSON.stringify(result.data, null, 2).slice(0, 500);
               if (statePreview.length >= 500) statePreview += '\n...(truncated)';
-            } catch {
-              statePreview = 'Error reading state file';
+            } else {
+              statePreview = result.error!;
             }
           }
 
@@ -751,11 +810,9 @@ export const stateGetStatusTool: ToolDefinition<{
         const legacyActive = MODE_CONFIGS[mode as ExecutionMode]
           ? isModeActive(mode as ExecutionMode, root)
           : existsSync(legacyPath) && (() => {
-              try {
-                const content = readFileSync(legacyPath, 'utf-8');
-                const state = JSON.parse(content);
-                return state.active === true;
-              } catch { return false; }
+              const content = readFileSync(legacyPath, 'utf-8');
+              const result = safeJsonParse<{ active?: boolean }>(content, legacyPath);
+              return result.success && result.data?.active === true;
             })();
 
         lines.push(`### Legacy Path`);
@@ -767,17 +824,13 @@ export const stateGetStatusTool: ToolDefinition<{
         const activeSessions = MODE_CONFIGS[mode as ExecutionMode]
           ? getActiveSessionsForMode(mode as ExecutionMode, root)
           : listSessionIds(root).filter(sid => {
-              try {
-                const sessionPath = resolveSessionStatePath(mode, sid, root);
-                if (existsSync(sessionPath)) {
-                  const content = readFileSync(sessionPath, 'utf-8');
-                  const state = JSON.parse(content);
-                  return state.active === true;
-                }
-                return false;
-              } catch {
-                return false;
+              const sessionPath = resolveSessionStatePath(mode, sid, root);
+              if (existsSync(sessionPath)) {
+                const content = readFileSync(sessionPath, 'utf-8');
+                const result = safeJsonParse<{ active?: boolean }>(content, sessionPath);
+                return result.success && result.data?.active === true;
               }
+              return false;
             });
 
         if (activeSessions.length > 0) {
@@ -823,13 +876,9 @@ export const stateGetStatusTool: ToolDefinition<{
         : getStatePath('ralplan', root);
       let ralplanActive = false;
       if (existsSync(ralplanPath)) {
-        try {
-          const content = readFileSync(ralplanPath, 'utf-8');
-          const state = JSON.parse(content);
-          ralplanActive = state.active === true;
-        } catch {
-          // Ignore parse errors
-        }
+        const content = readFileSync(ralplanPath, 'utf-8');
+        const result = safeJsonParse<{ active?: boolean }>(content, ralplanPath);
+        ralplanActive = result.success && result.data?.active === true;
       }
       const ralplanIcon = ralplanActive ? '[ACTIVE]' : '[INACTIVE]';
       lines.push(`${ralplanIcon} **ralplan**: ${ralplanActive ? 'Active' : 'Inactive'}`);

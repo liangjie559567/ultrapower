@@ -47,6 +47,7 @@ import { agentsCommand } from './commands/agents.js';
 import { exportCommand } from './commands/export.js';
 import { cleanupCommand } from './commands/cleanup.js';
 import { backfillCommand } from './commands/backfill.js';
+import { perfCommand } from './commands/perf.js';
 import {
   launchTokscaleTUI,
   isTokscaleCLIAvailable,
@@ -368,6 +369,9 @@ Examples:
     }
     await backfillCommand(options);
   });
+
+// Performance monitoring command
+program.addCommand(perfCommand);
 
 // TUI command
 program

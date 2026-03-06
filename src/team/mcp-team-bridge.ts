@@ -25,6 +25,8 @@ import { logAuditEvent } from './audit-log.js';
 import type { AuditEvent } from './audit-log.js';
 import { getEffectivePermissions, findPermissionViolations } from './permissions.js';
 import type { WorkerPermissions, PermissionViolation } from './permissions.js';
+import { createWorkerAdapter } from '../workers/factory.js';
+import { safeJsonParse } from '../lib/safe-json.js';
 
 /** Simple logger */
 function log(message: string): void {
@@ -60,7 +62,7 @@ function captureFileSnapshot(cwd: string): Set<string> {
   const files = new Set<string>();
   try {
     // Get all tracked files that are modified, added, or staged
-    const statusOutput = execSync('git status --porcelain', { cwd, encoding: 'utf-8', timeout: 10000 });
+    const statusOutput = execSync('git --no-pager status --porcelain', { cwd, encoding: 'utf-8', timeout: 10000 });
     for (const line of statusOutput.split('\n')) {
       if (!line.trim()) continue;
       // Format: "XY filename" or "XY filename -> newname"
@@ -71,7 +73,7 @@ function captureFileSnapshot(cwd: string): Set<string> {
     }
 
     // Get untracked files
-    const untrackedOutput = execSync('git ls-files --others --exclude-standard', { cwd, encoding: 'utf-8', timeout: 10000 });
+    const untrackedOutput = execSync('git --no-pager ls-files --others --exclude-standard', { cwd, encoding: 'utf-8', timeout: 10000 });
     for (const line of untrackedOutput.split('\n')) {
       if (line.trim()) files.add(line.trim());
     }
@@ -297,30 +299,31 @@ function parseCodexOutput(output: string): string {
       messages.push('[output truncated]');
       break;
     }
-    try {
-      const event = JSON.parse(line);
-      if (event.type === 'item.completed' && event.item?.type === 'agent_message' && event.item.text) {
-        messages.push(event.item.text);
-        totalSize += event.item.text.length;
-      }
-      if (event.type === 'message' && event.content) {
-        if (typeof event.content === 'string') {
-          messages.push(event.content);
-          totalSize += event.content.length;
-        } else if (Array.isArray(event.content)) {
-          for (const part of event.content) {
-            if (part.type === 'text' && part.text) {
-              messages.push(part.text);
-              totalSize += part.text.length;
-            }
+    const result = safeJsonParse(line);
+    if (!result.success) continue;
+
+    const event = result.data as any;
+    if (event.type === 'item.completed' && event.item?.type === 'agent_message' && event.item.text) {
+      messages.push(event.item.text);
+      totalSize += event.item.text.length;
+    }
+    if (event.type === 'message' && event.content) {
+      if (typeof event.content === 'string') {
+        messages.push(event.content);
+        totalSize += event.content.length;
+      } else if (Array.isArray(event.content)) {
+        for (const part of event.content) {
+          if (part.type === 'text' && part.text) {
+            messages.push(part.text);
+            totalSize += part.text.length;
           }
         }
       }
-      if (event.type === 'output_text' && event.text) {
-        messages.push(event.text);
-        totalSize += event.text.length;
-      }
-    } catch { /* skip non-JSON lines */ }
+    }
+    if (event.type === 'output_text' && event.text) {
+      messages.push(event.text);
+      totalSize += event.text.length;
+    }
   }
 
   return messages.join('\n') || output;
@@ -476,6 +479,17 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
 
   log(`[bridge] ${workerName}@${teamName} starting (${provider})`);
   audit(config, 'bridge_start');
+
+  // Auto-cleanup expired worker heartbeats on startup
+  const cleanupDays = parseInt(process.env.WORKER_CLEANUP_DAYS || '7', 10);
+  const maxAgeMs = cleanupDays * 24 * 60 * 60 * 1000;
+  createWorkerAdapter('auto', workingDirectory).then(adapter => {
+    if (adapter) {
+      adapter.cleanup(maxAgeMs).catch(err => {
+        log(`[bridge] Worker cleanup failed: ${err}`);
+      });
+    }
+  }).catch(() => {});
 
   // Write initial heartbeat (protected so startup I/O failure doesn't prevent loop entry)
   try {

@@ -10,20 +10,30 @@ import { createHash } from 'crypto';
 import { relative } from 'path';
 import type { RuleMetadata, MatchResult } from './types.js';
 
+// Cached regex patterns for glob matching
+const globCache = new Map<string, RegExp>();
+
 /**
  * Simple glob pattern matcher.
  * Supports basic patterns like *.ts, **\/*.js, src/**\/*.py
  */
 function matchGlob(pattern: string, filePath: string): boolean {
-  // Convert glob pattern to regex
-  const regexStr = pattern
-    .replace(/\./g, '\\.')           // Escape dots
-    .replace(/\*\*/g, '<<<GLOBSTAR>>>')  // Temporarily replace **
-    .replace(/\*/g, '[^/]*')         // * matches any characters except /
-    .replace(/<<<GLOBSTAR>>>/g, '.*') // ** matches anything including /
-    .replace(/\?/g, '.');            // ? matches single character
+  // Check cache first
+  let regex = globCache.get(pattern);
 
-  const regex = new RegExp(`^${regexStr}$`);
+  if (!regex) {
+    // Convert glob pattern to regex
+    const regexStr = pattern
+      .replace(/\./g, '\\.')           // Escape dots
+      .replace(/\*\*/g, '<<<GLOBSTAR>>>')  // Temporarily replace **
+      .replace(/\*/g, '[^/]*')         // * matches any characters except /
+      .replace(/<<<GLOBSTAR>>>/g, '.*') // ** matches anything including /
+      .replace(/\?/g, '.');            // ? matches single character
+
+    regex = new RegExp(`^${regexStr}$`);
+    globCache.set(pattern, regex);
+  }
+
   return regex.test(filePath);
 }
 

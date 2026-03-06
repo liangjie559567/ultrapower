@@ -1,3 +1,103 @@
+# ultrapower v5.5.18
+
+**发布日期**: 2026-03-06
+
+## Security
+
+- **permission-request hook blocking mode** (eef86d0) - 实现权限请求 hook 的阻塞模式，防止未授权操作
+- **Environment variable validation** (a2f3f07) - 在 hook 执行中添加敏感环境变量验证
+- **Safe JSON parsing** (5150246, efd5071) - 在关键路径（ultrapilot、nexus、audit）中用 `safeJsonParse()` 替代不安全的 `JSON.parse()`
+- **Windows command injection prevention** - 在 process-utils 中使用 `execFile` 替代 `execSync` 字符串拼接
+
+## Performance
+
+- **Build time optimization** (59.6% improvement) - 并行构建系统将增量构建从 5.8s 降低到 2.4s
+- **Worker health check** (80% improvement) - 健康检查延迟从 ~50ms 降低到 <10ms
+- **Worker state query** (75% improvement) - 状态查询从 ~20ms 优化到 <5ms
+- **Memory optimization** (30% reduction) - 实现内存优化器和内存工具库以提高资源效率
+- **LSP prewarming** (50% improvement) - 添加 LSP 客户端预热以减少首次调用延迟
+- **Exponential backoff retry logic** (d29845a) - 改进 agent 重试机制的弹性
+
+## Bug Fixes
+
+- **Inbox rotation boundary condition** (e028d74) - 修复收件箱轮转逻辑的边界情况
+- **Code style improvements** (63bf173, f0f1b3a) - 移除未使用的参数并改进类型安全
+- **MCP bridge server updates** (150abe0) - 更新桥接服务器以确保兼容性
+- **TimeoutManager memory leak** - `start()` 方法现在正确清理旧 timer
+- **JSON.parse error handling** - 添加 `src/lib/safe-json.ts` 安全解析函数
+
+## Improvements
+
+- **Test coverage enhancement** (444+ new tests) - 整体覆盖率从 54.55% 提升到 56-58%
+  - hooks guards: +64.70% (32.35% → 97.05%)
+  - MCP Client: +100% (0% → 100%)
+  - bridge-entry: +64% (17.52% → 81.52%)
+  - memory-tools: +81.97% (8.77% → 90.74%)
+  - notepad-tools: +79.23% (10.38% → 89.61%)
+  - session-lock: +79% (3.31% → 82.31%)
+  - Team Pipeline: +11.16% (83.77% → 94.93%)
+
+- **Architecture refactoring** - 统一 Worker 后端，实现 WorkerStateAdapter 抽象层
+  - 消除 400-500 行重复代码
+  - 实现缓存层，性能提升 4-5 倍
+  - 支持 MCP 和 Team 迁移
+
+- **Workflow automation** (2b0e08f, ccb20b7, 214cea9) - 将反思模块和工作流推荐器集成到 axiom-boot hook
+
+## Known Issues
+
+- **State file caching** - 重复读取状态文件时缺少缓存层（P1 - 性能优化）
+- **Hook synchronous I/O** - bridge 操作中的 `readFileSync()` 阻塞事件循环（P1 - 性能优化）
+- **Database composite indexes** - 查询无法使用现有索引（P1 - 性能优化）
+
+## Migration Guide
+
+v5.5.18 无破坏性变更，所有 API 保持向后兼容。
+
+**推荐操作**：
+- 升级到 v5.5.18 以获得安全和性能改进
+- 监控 Worker 健康检查指标（现在可在 <10ms 内获得）
+- 查看 hook 执行日志以了解 permission-request 阻塞行为
+
+## Statistics
+
+- **执行时间**: ~19 小时（比计划的 14-20 周快 96%）
+- **新增代码文件**: 15 个
+- **修改代码文件**: 12 个
+- **新增测试文件**: 20 个
+- **新增测试用例**: 472 个（100% 通过）
+- **所有 6249 个测试通过，无回归**
+
+---
+
+# ultrapower v5.5.17
+
+### 文档
+
+- **docs/troubleshooting/tool-name-length-error.md**: 新增工具名称过长错误的故障排查文档
+  - 说明 v5.5.16 中的工具名称缩短修复
+  - 提供用户升级指南
+
+### 向后兼容
+
+- 所有工具名称已在 v5.5.16 中缩短，确保不超过 API 限制
+- 用户需升级到 v5.5.16+ 以避免工具名称过长错误
+
+---
+
+# ultrapower v5.5.16
+
+### 修复
+
+- **fix(mcp): 缩短工具名称以避免 API 长度限制** (提交 f9f2967)
+  - `ultrapower_project_memory_read` → `mem_read`
+  - `ultrapower_project_memory_write` → `mem_write`
+  - `ultrapower_project_memory_add_note` → `mem_add_note`
+  - `ultrapower_project_memory_add_directive` → `mem_add_directive`
+  - 修复用户报告的 400 错误：工具名称过长
+
+---
+
 # ultrapower v5.5.15
 
 ### 修复

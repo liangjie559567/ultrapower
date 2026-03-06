@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { ImprovementSuggestion } from './types.js';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 export interface PullResult {
   pulled: number;
@@ -28,8 +29,9 @@ export function loadPendingImprovements(directory: string): ImprovementSuggestio
     if (!file.endsWith('.json')) continue;
     try {
       const raw = readFileSync(join(improvementsDir, file), 'utf-8');
-      const imp = JSON.parse(raw) as unknown;
-      if (!isValidImprovementSuggestion(imp)) continue;
+      const result = safeJsonParse(raw, file);
+      if (!result.success || !isValidImprovementSuggestion(result.data)) continue;
+      const imp = result.data;
       if (imp.status === 'pending') results.push(imp);
     } catch (err) {
       if (!(err instanceof SyntaxError)) {

@@ -4,16 +4,18 @@ import { isNexusEnabled } from './config.js';
 import { collectSessionEvent } from './data-collector.js';
 import { syncToRemote } from './consciousness-sync.js';
 import type { SessionEvent, ToolCallRecord } from './types.js';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 function readToolCallsFromMetrics(directory: string): ToolCallRecord[] {
   try {
     const metricsPath = join(directory, '.omc', 'axiom', 'evolution', 'usage_metrics.json');
     const raw = readFileSync(metricsPath, 'utf-8');
-    const metrics = JSON.parse(raw) as {
-      tools?: Record<string, { totalCalls: number; lastUsed: string }>;
-    };
-    if (!metrics.tools) return [];
-    return Object.entries(metrics.tools)
+    const result = safeJsonParse<{ tools?: Record<string, { totalCalls: number; lastUsed: string }> }>(raw, metricsPath);
+    if (!result.success || !result.data?.tools) return [];
+    const metrics = result.data;
+    const tools = metrics.tools;
+    if (!tools) return [];
+    return Object.entries(tools)
       .filter(([key]) => key !== '')
       .sort(([, a], [, b]) => new Date(b.lastUsed).getTime() - new Date(a.lastUsed).getTime())
       .slice(0, 20)

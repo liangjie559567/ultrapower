@@ -8,9 +8,11 @@
  */
 
 import { z } from "zod";
-import { readFileSync, readdirSync, statSync, writeFileSync } from "fs";
+import { readFileSync, readdirSync, statSync, writeFileSync, createReadStream } from "fs";
 import { join, extname, resolve } from "path";
 import { createRequire } from "module";
+import { execSync } from "child_process";
+import { createInterface } from "readline";
 
 // Dynamic import for @ast-grep/napi
 // Graceful degradation: if the module is not available (e.g., in bundled/plugin context),
@@ -23,6 +25,33 @@ import { createRequire } from "module";
 let sgModule: typeof import("@ast-grep/napi") | null = null;
 let sgLoadFailed = false;
 let sgLoadError = '';
+let installAttempted = false;
+
+async function tryInstallAstGrep(): Promise<boolean> {
+  if (process.env.AST_AUTO_INSTALL === 'false') {
+    return false;
+  }
+
+  try {
+    execSync('npm --version', { stdio: 'ignore', timeout: 5000 });
+  } catch {
+    sgLoadError = 'npm not available';
+    return false;
+  }
+
+  try {
+    console.log('Installing @ast-grep/napi...');
+    execSync('npm install -g @ast-grep/napi --silent', {
+      stdio: 'inherit',
+      timeout: 30000,
+    });
+    console.log('Installation complete');
+    return true;
+  } catch (error) {
+    sgLoadError = `Installation failed: ${error instanceof Error ? error.message : String(error)}`;
+    return false;
+  }
+}
 
 async function getSgModule(): Promise<typeof import("@ast-grep/napi") | null> {
   if (sgLoadFailed) {
@@ -38,6 +67,26 @@ async function getSgModule(): Promise<typeof import("@ast-grep/napi") | null> {
       try {
         sgModule = await import("@ast-grep/napi");
       } catch (error) {
+        if (!installAttempted) {
+          installAttempted = true;
+          const installed = await tryInstallAstGrep();
+          if (installed) {
+            try {
+              const require = createRequire(import.meta.url || __filename || process.cwd() + '/');
+              sgModule = require("@ast-grep/napi") as typeof import("@ast-grep/napi");
+              return sgModule;
+            } catch {
+              try {
+                sgModule = await import("@ast-grep/napi");
+                return sgModule;
+              } catch (retryError) {
+                sgLoadFailed = true;
+                sgLoadError = retryError instanceof Error ? retryError.message : String(retryError);
+                return null;
+              }
+            }
+          }
+        }
         sgLoadFailed = true;
         sgLoadError = error instanceof Error ? error.message : String(error);
         return null;
@@ -151,6 +200,38 @@ const EXT_TO_LANG: Record<string, string> = {
   ".yaml": "yaml",
   ".yml": "yaml",
 };
+
+/**
+ * Read file with streaming for large files (>10MB)
+ */
+async function readFileStream(
+  filePath: string,
+  onProgress?: (bytesRead: number, totalBytes: number) => void,
+): Promise<string> {
+  const stat = statSync(filePath);
+  const fileSize = stat.size;
+  const LARGE_FILE_THRESHOLD = 10 * 1024 * 1024; // 10MB
+
+  if (fileSize < LARGE_FILE_THRESHOLD) {
+    return readFileSync(filePath, "utf-8");
+  }
+
+  return new Promise((resolve, reject) => {
+    const chunks: string[] = [];
+    let bytesRead = 0;
+    const stream = createReadStream(filePath, { encoding: "utf-8" });
+
+    stream.on("data", (chunk: string | Buffer) => {
+      const str = typeof chunk === 'string' ? chunk : chunk.toString('utf-8');
+      chunks.push(str);
+      bytesRead += Buffer.byteLength(str, "utf-8");
+      onProgress?.(bytesRead, fileSize);
+    });
+
+    stream.on("end", () => resolve(chunks.join("")));
+    stream.on("error", reject);
+  });
+}
 
 /**
  * Get files matching the language in a directory
@@ -300,11 +381,14 @@ Note: Patterns must be valid AST nodes for the language.`,
     try {
       const sg = await getSgModule();
       if (!sg) {
+        const errorMsg = installAttempted
+          ? `Auto-installation failed: ${sgLoadError}\n\nPlease install manually:\n  npm install -g @ast-grep/napi\n\nOr disable auto-install:\n  export AST_AUTO_INSTALL=false`
+          : `@ast-grep/napi is not available.\n\nInstall manually:\n  npm install -g @ast-grep/napi\n\nError: ${sgLoadError}`;
         return {
           content: [
             {
               type: "text" as const,
-              text: `@ast-grep/napi is not available. Install it with: npm install -g @ast-grep/napi\nError: ${sgLoadError}`,
+              text: errorMsg,
             },
           ],
         };
@@ -329,7 +413,7 @@ Note: Patterns must be valid AST nodes for the language.`,
         if (totalMatches >= maxResults) break;
 
         try {
-          const content = readFileSync(filePath, "utf-8");
+          const content = await readFileStream(filePath);
           const root = sg.parse(toLangEnum(sg, language), content).root();
           const matches = root.findAll(pattern);
 
@@ -434,11 +518,14 @@ IMPORTANT: dryRun=true (default) only previews changes. Set dryRun=false to appl
     try {
       const sg = await getSgModule();
       if (!sg) {
+        const errorMsg = installAttempted
+          ? `Auto-installation failed: ${sgLoadError}\n\nPlease install manually:\n  npm install -g @ast-grep/napi\n\nOr disable auto-install:\n  export AST_AUTO_INSTALL=false`
+          : `@ast-grep/napi is not available.\n\nInstall manually:\n  npm install -g @ast-grep/napi\n\nError: ${sgLoadError}`;
         return {
           content: [
             {
               type: "text" as const,
-              text: `@ast-grep/napi is not available. Install it with: npm install -g @ast-grep/napi\nError: ${sgLoadError}`,
+              text: errorMsg,
             },
           ],
         };
@@ -466,7 +553,7 @@ IMPORTANT: dryRun=true (default) only previews changes. Set dryRun=false to appl
 
       for (const filePath of files) {
         try {
-          const content = readFileSync(filePath, "utf-8");
+          const content = await readFileStream(filePath);
           const root = sg.parse(toLangEnum(sg, language), content).root();
           const matches = root.findAll(pattern);
 

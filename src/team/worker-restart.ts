@@ -11,6 +11,7 @@ import { existsSync, readFileSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { atomicWriteJson, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
 import type { BridgeConfig, McpWorkerMember } from './types.js';
+import { createWorkerAdapter } from '../workers/factory.js';
 
 export interface RestartPolicy {
   maxRestarts: number;        // default: 3
@@ -41,7 +42,29 @@ function getRestartStatePath(workingDirectory: string, teamName: string, workerN
  * Read the current restart state for a worker.
  * Returns null if no restart state exists.
  */
-export function readRestartState(
+export async function readRestartState(
+  workingDirectory: string,
+  teamName: string,
+  workerName: string
+): Promise<RestartState | null> {
+  const adapter = await createWorkerAdapter('auto', workingDirectory);
+  if (!adapter) {
+    return readRestartStateLegacy(workingDirectory, teamName, workerName);
+  }
+
+  const workerId = `team:${teamName}:${workerName}`;
+  const worker = await adapter.get(workerId);
+  if (!worker || !worker.metadata?.restartCount) return null;
+
+  return {
+    workerName,
+    restartCount: worker.metadata.restartCount as number,
+    lastRestartAt: worker.metadata.lastRestartAt as string,
+    nextBackoffMs: worker.metadata.nextBackoffMs as number,
+  };
+}
+
+function readRestartStateLegacy(
   workingDirectory: string,
   teamName: string,
   workerName: string
@@ -60,24 +83,22 @@ export function readRestartState(
  * Uses exponential backoff: base * multiplier^count, capped at max.
  * Returns backoff delay in ms if restart allowed, null if exhausted.
  */
-export function shouldRestart(
+export async function shouldRestart(
   workingDirectory: string,
   teamName: string,
   workerName: string,
   policy: RestartPolicy = DEFAULT_POLICY
-): number | null {
-  const state = readRestartState(workingDirectory, teamName, workerName);
+): Promise<number | null> {
+  const state = await readRestartState(workingDirectory, teamName, workerName);
 
   if (!state) {
-    // First restart: return base backoff
     return policy.backoffBaseMs;
   }
 
   if (state.restartCount >= policy.maxRestarts) {
-    return null; // Exhausted
+    return null;
   }
 
-  // Calculate exponential backoff
   const backoff = Math.min(
     policy.backoffBaseMs * Math.pow(policy.backoffMultiplier, state.restartCount),
     policy.backoffMaxMs
@@ -89,11 +110,46 @@ export function shouldRestart(
 /**
  * Record a restart attempt (updates sidecar state).
  */
-export function recordRestart(
+export async function recordRestart(
   workingDirectory: string,
   teamName: string,
   workerName: string,
   policy: RestartPolicy = DEFAULT_POLICY
+): Promise<void> {
+  const adapter = await createWorkerAdapter('auto', workingDirectory);
+  if (!adapter) {
+    return recordRestartLegacy(workingDirectory, teamName, workerName, policy);
+  }
+
+  const workerId = `team:${teamName}:${workerName}`;
+  const worker = await adapter.get(workerId);
+
+  if (!worker) {
+    // Worker not in adapter, use legacy
+    return recordRestartLegacy(workingDirectory, teamName, workerName, policy);
+  }
+
+  const existing = await readRestartState(workingDirectory, teamName, workerName);
+  const restartCount = (existing?.restartCount ?? 0) + 1;
+  const nextBackoffMs = Math.min(
+    policy.backoffBaseMs * Math.pow(policy.backoffMultiplier, restartCount),
+    policy.backoffMaxMs
+  );
+
+  worker.metadata = {
+    ...worker.metadata,
+    restartCount,
+    lastRestartAt: new Date().toISOString(),
+    nextBackoffMs,
+  };
+  await adapter.upsert(worker);
+}
+
+function recordRestartLegacy(
+  workingDirectory: string,
+  teamName: string,
+  workerName: string,
+  policy: RestartPolicy
 ): void {
   const statePath = getRestartStatePath(workingDirectory, teamName, workerName);
   validateResolvedPath(statePath, workingDirectory);
@@ -101,7 +157,7 @@ export function recordRestart(
   const dir = join(workingDirectory, '.omc', 'state', 'team-bridge', teamName);
   ensureDirWithMode(dir);
 
-  const existing = readRestartState(workingDirectory, teamName, workerName);
+  const existing = readRestartStateLegacy(workingDirectory, teamName, workerName);
 
   const newState: RestartState = {
     workerName,
@@ -119,7 +175,33 @@ export function recordRestart(
 /**
  * Clear restart state for a worker (e.g., after successful recovery).
  */
-export function clearRestartState(
+export async function clearRestartState(
+  workingDirectory: string,
+  teamName: string,
+  workerName: string
+): Promise<void> {
+  const adapter = await createWorkerAdapter('auto', workingDirectory);
+  if (!adapter) {
+    return clearRestartStateLegacy(workingDirectory, teamName, workerName);
+  }
+
+  const workerId = `team:${teamName}:${workerName}`;
+  const worker = await adapter.get(workerId);
+
+  if (!worker) {
+    // Worker not in adapter, use legacy
+    return clearRestartStateLegacy(workingDirectory, teamName, workerName);
+  }
+
+  if (worker.metadata) {
+    delete worker.metadata.restartCount;
+    delete worker.metadata.lastRestartAt;
+    delete worker.metadata.nextBackoffMs;
+    await adapter.upsert(worker);
+  }
+}
+
+function clearRestartStateLegacy(
   workingDirectory: string,
   teamName: string,
   workerName: string

@@ -51,6 +51,9 @@ export async function callAgentWithTimeout(
       if (error instanceof Error && error.name === 'AbortError') {
         // 超时
         if (attempt < maxRetries) {
+          const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
+          console.warn(`[agent-wrapper] Timeout on attempt ${attempt + 1}, retrying in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
           attempt++;
           continue;
         }

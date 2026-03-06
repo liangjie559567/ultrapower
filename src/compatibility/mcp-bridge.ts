@@ -19,6 +19,7 @@ import type {
   ToolCapability,
 } from './types.js';
 import { getRegistry } from './registry.js';
+import { TIMEOUT } from '../lib/constants.js';
 
 /**
  * Security Error for MCP bridge operations
@@ -372,7 +373,7 @@ export class McpBridge extends EventEmitter {
   /**
    * Wait for server to be ready
    */
-  private async waitForReady(serverName: string, timeout = 10000): Promise<void> {
+  private async waitForReady(serverName: string, timeout: number = TIMEOUT.MCP_READY): Promise<void> {
     const start = Date.now();
 
     while (Date.now() - start < timeout) {
@@ -383,7 +384,7 @@ export class McpBridge extends EventEmitter {
 
       // Try to ping the server
       try {
-        await this.sendRequest(serverName, 'ping', undefined, 1000);
+        await this.sendRequest(serverName, 'ping', undefined, TIMEOUT.MCP_PING);
         return;
       } catch {
         // Server not ready yet, wait and retry
@@ -441,7 +442,7 @@ export class McpBridge extends EventEmitter {
     serverName: string,
     method: string,
     params?: unknown,
-    timeout = 30000
+    timeout: number = TIMEOUT.MCP_CALL
   ): Promise<unknown> {
     const connection = this.connections.get(serverName);
     if (!connection) {

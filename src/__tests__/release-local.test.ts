@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-// @ts-ignore - .mjs runtime script outside rootDir
+// @ts-expect-error - .mjs runtime script outside rootDir
 import { parseArgs } from '../../scripts/release-local.mjs';
 
 describe('release-local parseArgs', () => {

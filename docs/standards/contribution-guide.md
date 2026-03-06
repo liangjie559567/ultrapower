@@ -142,9 +142,51 @@ npm test        # 所有测试通过
 
 ---
 
-## 5. 文档更新要求
+## 5. ADR 要求
 
-### 5.1 新增执行模式
+### 5.1 何时需要 ADR
+
+以下情况必须创建 ADR：
+
+- **重大架构变更**: 影响多个模块或系统设计的决策
+- **长期技术方向**: 可能影响未来 6 个月以上的决策
+- **权衡决策**: 需要在多个方案间做出选择
+- **性能优化**: 引入新的性能优化策略
+
+**不需要 ADR 的情况**:
+- Bug 修复
+- 小型功能增强
+- 文档更新
+- 依赖升级
+
+### 5.2 ADR 编号规则
+
+- 格式: `ADR-XXX: [决策名称]`
+- 编号递增，从 001 开始
+- 位置: `docs/adr/ADR-XXX.md`
+- 模板: 参考 `docs/adr/template.md`
+
+### 5.3 ADR 审查流程
+
+1. **创建**: 在 PR 中包含新 ADR
+2. **审查**: 至少 2 名 reviewer 批准
+3. **合并**: ADR 状态改为 "接受"
+4. **发布**: 在 CHANGELOG 中记录
+
+### 5.4 ADR 内容要求
+
+每个 ADR 必须包含：
+
+- **背景**: 问题陈述、约束条件
+- **决策**: 选择的方案、实施方式
+- **后果**: 正面影响、负面影响、权衡
+- **替代方案**: 至少 2 个未采用的方案及原因
+
+---
+
+## 6. 文档更新要求
+
+### 6.1 新增执行模式
 
 新增 mode 时必须同步更新：
 
@@ -154,7 +196,26 @@ npm test        # 所有测试通过
 4. `docs/CLAUDE.md` — 更新 `state_write` 支持的模式列表
 5. `AGENTS.md` — 更新执行模式表
 
-### 5.2 新增 Skill 或 Init/Setup 命令
+### 5.2 重大架构变更
+
+重大架构变更必须附带 ADR：
+
+1. 创建 `docs/adr/ADR-XXX.md`（使用下一个编号）
+2. 在 PR 描述中引用 ADR
+3. ADR 必须在 PR 合并前完成审查
+
+**示例**:
+```markdown
+## 架构决策
+
+本 PR 实现 ADR-001 中的 WorkerStateAdapter 抽象层。
+
+- 创建 `src/workers/` 目录
+- 实现 SQLite 和 JSON 适配器
+- 详见 `docs/adr/001-worker-state-adapter.md`
+```
+
+### 5.3 新增 Skill 或 Init/Setup 命令
 
 新增 skill 或 init/setup 类命令时，必须包含可执行指令：
 
@@ -173,7 +234,7 @@ npm test        # 所有测试通过
 初始化 Axiom 记忆系统。
 ```
 
-### 5.3 新增 Agent
+### 5.4 新增 Agent
 
 新增 agent 时必须同步更新：
 
@@ -182,7 +243,7 @@ npm test        # 所有测试通过
 3. `docs/REFERENCE.md` — agent 列表
 4. `AGENTS.md` — agent 概览表
 
-### 5.3 差异点记录
+### 5.5 差异点记录
 
 发现代码与规范不一致时：
 
@@ -241,38 +302,3 @@ git branch -a | grep feat/my-feature  # 应无输出
 - 禁止在已合并的特性分支上继续开发
 - 发布完成后：`dev` → `main`（tag + push），然后 `main` → `dev`（同步）
 
----
-
-## 7. PR 提交流程
-
-```bash
-# 1. 确保基于最新 dev
-git fetch origin
-git rebase origin/dev
-
-# 2. 运行质量门禁
-tsc --noEmit && npm run build && npm test
-
-# 3. 创建 PR（目标分支必须是 dev）
-gh pr create --base dev \
-  --title "feat(scope): description" \
-  --body "## 变更说明\n\n## 测试验证\n\n## 文档更新"
-```
-
-**PR 描述模板**：
-
-```markdown
-## 变更说明
-<!-- 简述本次变更的目的和内容 -->
-
-## 测试验证
-<!-- 列出运行的测试命令和结果 -->
-- [ ] `tsc --noEmit` 通过
-- [ ] `npm run build` 通过
-- [ ] `npm test` 通过
-
-## 文档更新
-<!-- 列出同步更新的文档 -->
-- [ ] 相关规范文档已更新
-- [ ] AGENTS.md 已更新（如适用）
-```

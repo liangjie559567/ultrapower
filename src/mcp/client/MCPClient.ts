@@ -80,7 +80,11 @@ export class MCPClient {
     if (this.toolsCache) return this.toolsCache;
 
     const response = await this.client.listTools();
-    this.toolsCache = response.tools as MCPTool[];
+    this.toolsCache = (response.tools as MCPTool[]).map(t => ({
+      name: t.name,
+      description: t.description,
+      inputSchema: t.inputSchema
+    }));
     return this.toolsCache;
   }
 

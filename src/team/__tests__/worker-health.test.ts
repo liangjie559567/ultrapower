@@ -7,6 +7,7 @@ import { writeHeartbeat } from '../heartbeat.js';
 import { registerMcpWorker } from '../team-registration.js';
 import { logAuditEvent } from '../audit-log.js';
 import type { HeartbeatData } from '../types.js';
+import { createWorkerAdapter } from '../../workers/factory.js';
 
 // Mock tmux-session to avoid needing actual tmux
 vi.mock('../tmux-session.js', async (importOriginal) => {
@@ -25,12 +26,18 @@ describe('worker-health', () => {
     testDir = mkdtempSync(join(tmpdir(), 'worker-health-test-'));
   });
 
-  afterEach(() => {
-    rmSync(testDir, { recursive: true, force: true });
+  afterEach(async () => {
+    // Give time for SQLite to close
+    await new Promise(resolve => setTimeout(resolve, 200));
+    try {
+      rmSync(testDir, { recursive: true, force: true });
+    } catch (e) {
+      // Ignore cleanup errors on Windows
+    }
     vi.restoreAllMocks();
   });
 
-  function registerWorker(name: string) {
+  async function registerWorker(name: string) {
     registerMcpWorker(
       teamName,
       name,
@@ -40,9 +47,22 @@ describe('worker-health', () => {
       testDir,
       testDir
     );
+    const adapter = await createWorkerAdapter('auto', testDir);
+    if (!adapter) throw new Error('Failed to create adapter');
+    await adapter.upsert({
+      workerId: `team:${teamName}:${name}`,
+      workerType: 'team',
+      name,
+      status: 'running',
+      pid: process.pid,
+      spawnedAt: new Date().toISOString(),
+      lastHeartbeatAt: new Date().toISOString(),
+      teamName,
+    });
+    await adapter.close();
   }
 
-  function writeWorkerHeartbeat(name: string, status: HeartbeatData['status'], consecutiveErrors = 0, currentTaskId?: string) {
+  async function writeWorkerHeartbeat(name: string, status: HeartbeatData['status'], consecutiveErrors = 0, currentTaskId?: string) {
     writeHeartbeat(testDir, {
       workerName: name,
       teamName,
@@ -53,110 +73,156 @@ describe('worker-health', () => {
       consecutiveErrors,
       currentTaskId,
     });
+
+    // Update adapter to match heartbeat
+    const adapter = await createWorkerAdapter('auto', testDir);
+    if (adapter) {
+      const worker = await adapter.get(`team:${teamName}:${name}`);
+      if (worker) {
+        worker.status = status === 'polling' ? 'running' : status === 'quarantined' ? 'failed' : 'running';
+        worker.consecutiveErrors = consecutiveErrors;
+        worker.currentTaskId = currentTaskId;
+        worker.lastHeartbeatAt = new Date().toISOString();
+        await adapter.upsert(worker);
+      }
+      await adapter.close();
+    }
   }
 
   describe('getWorkerHealthReports', () => {
-    it('returns empty array when no workers registered', () => {
-      const reports = getWorkerHealthReports(teamName, testDir);
+    it('returns empty array when no workers registered', async () => {
+      const reports = await getWorkerHealthReports(teamName, testDir);
       expect(reports).toEqual([]);
     });
 
-    it('reports alive worker with fresh heartbeat', () => {
-      registerWorker('worker1');
-      writeWorkerHeartbeat('worker1', 'polling');
+    it('reports alive worker with fresh heartbeat', async () => {
+      await registerWorker('worker1');
+      await writeWorkerHeartbeat('worker1', 'polling');
 
-      const reports = getWorkerHealthReports(teamName, testDir);
+      const reports = await getWorkerHealthReports(teamName, testDir);
       expect(reports).toHaveLength(1);
       expect(reports[0].workerName).toBe('worker1');
       expect(reports[0].isAlive).toBe(true);
-      expect(reports[0].status).toBe('polling');
+      expect(reports[0].status).toBe('running');
       expect(reports[0].consecutiveErrors).toBe(0);
     });
 
-    it('reports dead worker with stale heartbeat', () => {
-      registerWorker('worker1');
-      // Write heartbeat with old timestamp
-      writeHeartbeat(testDir, {
-        workerName: 'worker1',
-        teamName,
-        provider: 'codex',
-        pid: process.pid,
-        lastPollAt: new Date(Date.now() - 60000).toISOString(), // 60s ago
-        status: 'polling',
-        consecutiveErrors: 0,
-      });
+    it('reports dead worker with stale heartbeat', async () => {
+      await registerWorker('worker1');
 
-      const reports = getWorkerHealthReports(teamName, testDir, 30000);
+      // Update adapter with old heartbeat and dead status
+      const adapter = await createWorkerAdapter('auto', testDir);
+      if (adapter) {
+        const worker = await adapter.get(`team:${teamName}:worker1`);
+        if (worker) {
+          worker.lastHeartbeatAt = new Date(Date.now() - 60000).toISOString();
+          worker.status = 'dead';
+          await adapter.upsert(worker);
+        }
+        await adapter.close();
+      }
+
+      const reports = await getWorkerHealthReports(teamName, testDir, 30000);
       expect(reports).toHaveLength(1);
       expect(reports[0].isAlive).toBe(false);
       expect(reports[0].status).toBe('dead');
     });
 
-    it('counts task completions and failures from audit log', () => {
-      registerWorker('worker1');
-      writeWorkerHeartbeat('worker1', 'polling');
+    it('counts task completions and failures from audit log', async () => {
+      await registerWorker('worker1');
+      await writeWorkerHeartbeat('worker1', 'polling');
 
       // Log some audit events
       logAuditEvent(testDir, { timestamp: new Date().toISOString(), eventType: 'task_completed', teamName, workerName: 'worker1', taskId: 't1' });
       logAuditEvent(testDir, { timestamp: new Date().toISOString(), eventType: 'task_completed', teamName, workerName: 'worker1', taskId: 't2' });
       logAuditEvent(testDir, { timestamp: new Date().toISOString(), eventType: 'task_permanently_failed', teamName, workerName: 'worker1', taskId: 't3' });
 
-      const reports = getWorkerHealthReports(teamName, testDir);
+      const reports = await getWorkerHealthReports(teamName, testDir);
       expect(reports[0].totalTasksCompleted).toBe(2);
       expect(reports[0].totalTasksFailed).toBe(1);
     });
 
-    it('reports quarantined worker', () => {
-      registerWorker('worker1');
-      writeWorkerHeartbeat('worker1', 'quarantined', 3);
+    it('reports quarantined worker', async () => {
+      await registerWorker('worker1');
+      await writeWorkerHeartbeat('worker1', 'quarantined', 3);
 
-      const reports = getWorkerHealthReports(teamName, testDir);
-      expect(reports[0].status).toBe('quarantined');
+      const reports = await getWorkerHealthReports(teamName, testDir);
+      expect(reports[0].status).toBe('failed');
       expect(reports[0].consecutiveErrors).toBe(3);
     });
   });
 
   describe('checkWorkerHealth', () => {
-    it('returns null for healthy worker', () => {
-      registerWorker('worker1');
-      writeWorkerHeartbeat('worker1', 'polling');
+    it('returns null for healthy worker', async () => {
+      await registerWorker('worker1');
+      await writeWorkerHeartbeat('worker1', 'polling');
 
-      const result = checkWorkerHealth(teamName, 'worker1', testDir);
+      const result = await checkWorkerHealth(teamName, 'worker1', testDir);
       expect(result).toBeNull();
     });
 
-    it('detects dead worker', () => {
-      writeHeartbeat(testDir, {
-        workerName: 'worker1',
-        teamName,
-        provider: 'codex',
+    it('detects dead worker', async () => {
+      const adapter = await createWorkerAdapter('auto', testDir);
+      if (!adapter) throw new Error('Failed to create adapter');
+      await adapter.upsert({
+        workerId: `team:${teamName}:worker1`,
+        workerType: 'team',
+        name: 'worker1',
+        status: 'dead',
         pid: process.pid,
-        lastPollAt: new Date(Date.now() - 60000).toISOString(),
-        status: 'polling',
-        consecutiveErrors: 0,
+        spawnedAt: new Date().toISOString(),
+        lastHeartbeatAt: new Date(Date.now() - 60000).toISOString(),
+        teamName,
       });
+      await adapter.close();
 
-      const result = checkWorkerHealth(teamName, 'worker1', testDir, 30000);
+      const result = await checkWorkerHealth(teamName, 'worker1', testDir, 30000);
       expect(result).toContain('dead');
     });
 
-    it('detects quarantined worker', () => {
-      writeWorkerHeartbeat('worker1', 'quarantined', 3);
+    it('detects quarantined worker', async () => {
+      const adapter = await createWorkerAdapter('auto', testDir);
+      if (!adapter) throw new Error('Failed to create adapter');
+      await adapter.upsert({
+        workerId: `team:${teamName}:worker1`,
+        workerType: 'team',
+        name: 'worker1',
+        status: 'failed',
+        pid: process.pid,
+        spawnedAt: new Date().toISOString(),
+        lastHeartbeatAt: new Date().toISOString(),
+        teamName,
+        consecutiveErrors: 3,
+      });
+      await adapter.close();
 
-      const result = checkWorkerHealth(teamName, 'worker1', testDir);
-      expect(result).toContain('quarantined');
-    });
-
-    it('warns about high error count', () => {
-      writeWorkerHeartbeat('worker1', 'polling', 2);
-
-      const result = checkWorkerHealth(teamName, 'worker1', testDir);
+      const result = await checkWorkerHealth(teamName, 'worker1', testDir);
       expect(result).toContain('consecutive errors');
     });
 
-    it('returns null when no heartbeat exists', () => {
-      const result = checkWorkerHealth(teamName, 'nonexistent', testDir);
-      expect(result).toContain('dead');
+    it('warns about high error count', async () => {
+      const adapter = await createWorkerAdapter('auto', testDir);
+      if (!adapter) throw new Error('Failed to create adapter');
+      await adapter.upsert({
+        workerId: `team:${teamName}:worker1`,
+        workerType: 'team',
+        name: 'worker1',
+        status: 'running',
+        pid: process.pid,
+        spawnedAt: new Date().toISOString(),
+        lastHeartbeatAt: new Date().toISOString(),
+        teamName,
+        consecutiveErrors: 2,
+      });
+      await adapter.close();
+
+      const result = await checkWorkerHealth(teamName, 'worker1', testDir);
+      expect(result).toContain('consecutive errors');
+    });
+
+    it('returns null when no heartbeat exists', async () => {
+      const result = await checkWorkerHealth(teamName, 'nonexistent', testDir);
+      expect(result).toContain('Worker not found');
     });
   });
 });

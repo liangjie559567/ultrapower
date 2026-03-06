@@ -11,6 +11,7 @@ import type { UltrapilotState, UltrapilotConfig, WorkerState, FileOwnership } fr
 import { DEFAULT_CONFIG } from './types.js';
 import { canStartMode } from '../mode-registry/index.js';
 import { resolveSessionStatePath, ensureSessionStateDir } from '../../lib/worktree-paths.js';
+import { safeJsonParse } from '../../lib/safe-json.js';
 
 const STATE_FILE = 'ultrapilot-state.json';
 const OWNERSHIP_FILE = 'ultrapilot-ownership.json';
@@ -63,7 +64,10 @@ export function readUltrapilotState(directory: string, sessionId?: string): Ultr
     if (existsSync(sessionFile)) {
       try {
         const content = readFileSync(sessionFile, 'utf-8');
-        return JSON.parse(content);
+        const result = safeJsonParse<UltrapilotState>(content, sessionFile);
+        if (result.success) {
+          return result.data!;
+        }
       } catch {
         // Fall through to legacy path
       }
@@ -78,7 +82,8 @@ export function readUltrapilotState(directory: string, sessionId?: string): Ultr
 
   try {
     const content = readFileSync(stateFile, 'utf-8');
-    return JSON.parse(content);
+    const result = safeJsonParse<UltrapilotState>(content, stateFile);
+    return result.success ? result.data! : null;
   } catch {
     return null;
   }
@@ -272,7 +277,10 @@ export function readFileOwnership(directory: string, sessionId?: string): FileOw
     if (existsSync(sessionFile)) {
       try {
         const content = readFileSync(sessionFile, 'utf-8');
-        return JSON.parse(content);
+        const result = safeJsonParse<FileOwnership>(content, sessionFile);
+        if (result.success) {
+          return result.data!;
+        }
       } catch {
         // Fall through to legacy path
       }
@@ -287,7 +295,8 @@ export function readFileOwnership(directory: string, sessionId?: string): FileOw
 
   try {
     const content = readFileSync(ownershipFile, 'utf-8');
-    return JSON.parse(content);
+    const result = safeJsonParse<FileOwnership>(content, ownershipFile);
+    return result.success ? result.data! : null;
   } catch {
     return null;
   }

@@ -112,7 +112,7 @@ export interface DaemonResponse {
  * Create a minimal environment for daemon child processes.
  * Only includes allowlisted variables to prevent credential leakage.
  */
-function createMinimalDaemonEnv(): NodeJS.ProcessEnv {
+export function createMinimalDaemonEnv(): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = {};
   for (const key of DAEMON_ENV_ALLOWLIST) {
     if (process.env[key] !== undefined) {
@@ -153,7 +153,7 @@ function writeSecureFile(filePath: string, content: string): void {
 /**
  * Rotate log file if it exceeds maximum size
  */
-function rotateLogIfNeeded(logPath: string): void {
+export function rotateLogIfNeeded(logPath: string): void {
   try {
     if (!existsSync(logPath)) return;
 
@@ -231,7 +231,7 @@ async function buildDaemonConfig(): Promise<ReplyListenerDaemonConfig | null> {
 /**
  * Read PID file
  */
-function readPidFile(): number | null {
+export function readPidFile(): number | null {
   try {
     if (!existsSync(PID_FILE_PATH)) {
       return null;
@@ -262,7 +262,7 @@ function removePidFile(): void {
 /**
  * Check if a process is running
  */
-function isProcessRunning(pid: number): boolean {
+export function isProcessRunning(pid: number): boolean {
   try {
     process.kill(pid, 0);
     return true;
@@ -318,7 +318,7 @@ export function sanitizeReplyInput(text: string): string {
 // Rate Limiting
 // ============================================================================
 
-class RateLimiter {
+export class RateLimiter {
   private timestamps: number[] = [];
   private readonly windowMs = 60 * 1000; // 1 minute
 

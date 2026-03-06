@@ -28,7 +28,7 @@ export const projectMemoryReadTool: ToolDefinition<{
   section: z.ZodOptional<z.ZodEnum<['all', 'techStack', 'build', 'conventions', 'structure', 'notes', 'directives']>>;
   workingDirectory: z.ZodOptional<z.ZodString>;
 }> = {
-  name: 'project_memory_read',
+  name: 'mem_read',
   description: 'Read the project memory. Can read the full memory or a specific section.',
   schema: {
     section: z.enum(['all', 'techStack', 'build', 'conventions', 'structure', 'notes', 'directives']).optional()
@@ -101,7 +101,7 @@ export const projectMemoryWriteTool: ToolDefinition<{
   merge: z.ZodOptional<z.ZodBoolean>;
   workingDirectory: z.ZodOptional<z.ZodString>;
 }> = {
-  name: 'project_memory_write',
+  name: 'mem_write',
   description: 'Write/update project memory. Can replace entirely or merge with existing memory.',
   schema: {
     memory: z.record(z.string(), z.unknown()).describe('The memory object to write'),
@@ -163,7 +163,7 @@ export const projectMemoryAddNoteTool: ToolDefinition<{
   content: z.ZodString;
   workingDirectory: z.ZodOptional<z.ZodString>;
 }> = {
-  name: 'project_memory_add_note',
+  name: 'mem_add_note',
   description: 'Add a custom note to project memory. Notes are categorized and persisted across sessions.',
   schema: {
     category: z.string().max(50).describe('Note category (e.g., "build", "test", "deploy", "env", "architecture")'),
@@ -216,7 +216,7 @@ export const projectMemoryAddDirectiveTool: ToolDefinition<{
   priority: z.ZodOptional<z.ZodEnum<['high', 'normal']>>;
   workingDirectory: z.ZodOptional<z.ZodString>;
 }> = {
-  name: 'project_memory_add_directive',
+  name: 'mem_add_directive',
   description: 'Add a user directive to project memory. Directives are instructions that persist across sessions and survive compaction.',
   schema: {
     directive: z.string().max(500).describe('The directive (e.g., "Always use TypeScript strict mode")'),

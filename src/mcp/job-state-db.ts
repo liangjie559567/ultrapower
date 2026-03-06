@@ -20,7 +20,7 @@ import type BetterSqlite3 from "better-sqlite3";
 import type { JobStatus } from "../core/job-types.js";
 
 // Schema version - bump when adding migrations
-const DB_SCHEMA_VERSION = 1;
+const DB_SCHEMA_VERSION = 2;
 
 // Default max age for cleanup: 24 hours
 const DEFAULT_CLEANUP_MAX_AGE_MS = 24 * 60 * 60 * 1000;
@@ -33,6 +33,7 @@ let Database: DatabaseConstructor | null = null;
 
 // Map of resolved worktree root path -> database instance (replaces singleton)
 const dbMap = new Map<string, BetterSqlite3.Database>();
+const MAX_DB_INSTANCES = 3;
 
 // Track the last cwd used for backward-compatible no-arg calls
 let _lastCwd: string | null = null;
@@ -147,6 +148,16 @@ export async function initJobDb(cwd: string): Promise<boolean> {
       return true;
     }
 
+    // Limit DB instances to prevent memory bloat
+    if (dbMap.size >= MAX_DB_INSTANCES) {
+      const oldestKey = dbMap.keys().next().value;
+      if (oldestKey) {
+        const oldDb = dbMap.get(oldestKey);
+        oldDb?.close();
+        dbMap.delete(oldestKey);
+      }
+    }
+
     ensureStateDir(cwd);
     const dbPath = getDbPath(cwd);
 
@@ -188,17 +199,24 @@ export async function initJobDb(cwd: string): Promise<boolean> {
       CREATE INDEX IF NOT EXISTS idx_jobs_provider ON jobs(provider);
       CREATE INDEX IF NOT EXISTS idx_jobs_spawned_at ON jobs(spawned_at);
       CREATE INDEX IF NOT EXISTS idx_jobs_provider_status ON jobs(provider, status);
+      CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+      CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
     `);
 
-    // Check current schema version for future migrations
+    // Check current schema version and run migrations
     const versionStmt = db.prepare(
       "SELECT value FROM schema_info WHERE key = 'version'",
     );
     const versionRow = versionStmt.get() as { value: string } | undefined;
-    const __currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    const currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
 
-    // Future migrations would go here:
-    // if (_currentVersion > 0 && _currentVersion < 2) { ... }
+    // Migration from v1 to v2: Add composite indexes
+    if (currentVersion > 0 && currentVersion < 2) {
+      db.exec(`
+        CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+        CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
+      `);
+    }
 
     // Set schema version
     const setVersion = db.prepare(

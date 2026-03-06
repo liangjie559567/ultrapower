@@ -15,7 +15,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
-import { atomicWriteJsonSync } from "../../lib/atomic-write.js";
+import { atomicWriteJsonSync, atomicWriteFileSync } from "../../lib/atomic-write.js";
 import { OmcPaths } from "../../lib/worktree-paths.js";
 import { assertValidMode } from "../../lib/validateMode.js";
 import { readEncryptedState, encryptState } from "./encryption.js";
@@ -280,7 +280,7 @@ export function writeState<T = StateData>(
     // Encrypt if OMC_ENCRYPTION_KEY is set
     if (process.env.OMC_ENCRYPTION_KEY) {
       const encrypted = encryptState(data);
-      fs.writeFileSync(statePath, encrypted, "utf-8");
+      atomicWriteFileSync(statePath, encrypted);
     } else {
       atomicWriteJsonSync(statePath, data);
     }

@@ -231,6 +231,47 @@ try {
 - 在 Windows 上，如果目标文件被其他进程持有，`renameSync` 会失败
 - 所有涉及文件操作的代码必须考虑 Windows 平台行为差异
 
+#### 2.3.1 Windows 命令注入防护（SEC-H02）
+
+**来源**: v5.5.18 P0 修复 (2026-03-05)
+
+**安全边界（不可协商）**: Windows 平台的命令执行必须使用 `execFile` 而非 `execSync` 字符串拼接。
+
+**反模式（已修复）**:
+```typescript
+// ❌ 不安全：字符串拼接
+const args = ['/T', '/PID', String(pid)];
+execSync(`taskkill ${args.join(' ')}`);
+```
+
+**正确实现**:
+```typescript
+// ✅ 安全：使用 execFile，参数不经过 shell
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+const execFileAsync = promisify(execFile);
+
+async function killProcessTreeWindows(pid: number, force: boolean): Promise<boolean> {
+  const args = force
+    ? ['/F', '/T', '/PID', String(pid)]
+    : ['/T', '/PID', String(pid)];
+
+  await execFileAsync('taskkill', args, {
+    timeout: 5000,
+    windowsHide: true
+  });
+}
+```
+
+**规范要求**:
+- 所有 Windows 命令执行必须使用 `execFile` 或 `spawn`
+- 禁止使用 `execSync` 或 `exec` 进行字符串拼接
+- 参数必须通过数组传递，不经过 shell 解释
+- 必须设置 `timeout` 防止挂起
+- 必须设置 `windowsHide: true` 避免弹窗
+
+**参考实现**: `src/platform/process-utils.ts:31-47`
+
 ### 2.4 路径安全：mode 参数白名单
 
 **安全边界（不可协商）**：`mode` 参数必须通过白名单校验，禁止直接拼接到文件路径。

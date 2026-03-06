@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "recommendations": [
+    {
+      "id": "p0-fixes-parallel",
+      "name": "P0 修复并行执行",
+      "conditions": {
+        "taskCount": { "min": 3 },
+        "taskType": "bug-fix",
+        "priority": "P0",
+        "dependencies": "independent"
+      },
+      "workflow": "team",
+      "confidence": 0.95,
+      "evidence": "v5.5.18 (70% time savings)",
+      "agents": ["security-fixer", "memory-leak-fixer", "api-fixer"]
+    },
+    {
+      "id": "single-bug-fix",
+      "name": "单个 Bug 修复",
+      "conditions": {
+        "taskCount": { "max": 1 },
+        "taskType": "bug-fix"
+      },
+      "workflow": "executor",
+      "confidence": 0.90,
+      "agents": ["executor"]
+    },
+    {
+      "id": "security-review",
+      "name": "安全审查",
+      "conditions": {
+        "keywords": ["security", "auth", "permission"]
+      },
+      "workflow": "security-reviewer",
+      "confidence": 0.85,
+      "agents": ["security-reviewer"]
+    }
+  ]
+}

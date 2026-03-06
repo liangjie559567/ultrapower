@@ -4,6 +4,7 @@
  */
 
 import { getAgentTimeout } from './timeout-config.js';
+import { SIZE_LIMIT } from '../lib/constants.js';
 
 export interface TimeoutEvent {
   agentType: string;
@@ -16,11 +17,18 @@ export interface TimeoutEvent {
 export class TimeoutManager {
   private timers = new Map<string, NodeJS.Timeout>();
   private startTimes = new Map<string, number>();
+  private readonly MAX_CONCURRENT_TASKS = SIZE_LIMIT.MAX_CONCURRENT_TASKS;
 
   /**
    * 启动超时监控
    */
   start(taskId: string, agentType: string, model?: string): AbortController {
+    if (this.timers.size >= this.MAX_CONCURRENT_TASKS) {
+      throw new Error(`TimeoutManager: max concurrent tasks (${this.MAX_CONCURRENT_TASKS}) exceeded`);
+    }
+
+    this.stop(taskId);
+
     const controller = new AbortController();
     const timeoutMs = getAgentTimeout(agentType, model);
     const startTime = Date.now();

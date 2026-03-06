@@ -436,6 +436,85 @@ function writeTrackingStateImmediate(directory: string, state: SubagentTrackingS
 
 ---
 
+## 7. 并行任务依赖管理
+
+**来源**: v5.5.18 P0 修复会话反思 (2026-03-05)
+
+### 7.1 显式依赖声明
+
+Team 模式中，任务依赖通过 `TaskUpdate` 的 `addBlockedBy` 参数显式声明：
+
+```typescript
+// 任务 2 依赖任务 1 完成
+TaskUpdate({ taskId: "2", addBlockedBy: ["1"] });
+
+// 任务 4 依赖任务 2 和 3 完成
+TaskUpdate({ taskId: "4", addBlockedBy: ["2", "3"] });
+```
+
+**规范要求**：
+- 依赖关系必须在任务创建后立即声明
+- 禁止隐式依赖（agent 内部轮询其他任务状态）
+- 依赖图必须是 DAG（无环图），循环依赖会导致死锁
+
+### 7.2 反模式：Agent 内部轮询
+
+**❌ 禁止**：
+```typescript
+// agent 内部轮询其他任务状态
+while (true) {
+  const task1 = TaskGet({ taskId: "1" });
+  if (task1.status === "completed") break;
+  await sleep(1000);
+}
+```
+
+**✅ 正确**：
+```typescript
+// 使用 addBlockedBy 声明依赖
+TaskUpdate({ taskId: "2", addBlockedBy: ["1"] });
+// 系统自动在任务 1 完成后解锁任务 2
+```
+
+### 7.3 分阶段解锁策略
+
+对于复杂依赖图，使用分阶段解锁：
+
+```
+阶段 1（并行）：任务 1, 2, 3（无依赖）
+阶段 2（并行）：任务 4, 5（依赖阶段 1）
+阶段 3（顺序）：任务 6（依赖阶段 2）
+```
+
+实现：
+```typescript
+// 阶段 1：无依赖，立即可执行
+TaskCreate({ taskId: "1", subject: "..." });
+TaskCreate({ taskId: "2", subject: "..." });
+TaskCreate({ taskId: "3", subject: "..." });
+
+// 阶段 2：依赖阶段 1
+TaskCreate({ taskId: "4", subject: "..." });
+TaskUpdate({ taskId: "4", addBlockedBy: ["1", "2"] });
+
+TaskCreate({ taskId: "5", subject: "..." });
+TaskUpdate({ taskId: "5", addBlockedBy: ["3"] });
+
+// 阶段 3：依赖阶段 2
+TaskCreate({ taskId: "6", subject: "..." });
+TaskUpdate({ taskId: "6", addBlockedBy: ["4", "5"] });
+```
+
+### 7.4 预期收益
+
+| 场景 | 时间节省 | 证据 |
+|------|---------|------|
+| P0 修复（6 任务） | 70% | v5.5.18 (20h → 2h) |
+| 文档项目（10 任务） | 99.4% | v5.5.18 用户指南 (28h → 10min) |
+| 代码审查（5 维度） | 80% | v5.5.18 综合审查 |
+
+---
+
 ## 差异点说明
 
 | 差异点 | 描述 | 当前状态 | 规范要求 |

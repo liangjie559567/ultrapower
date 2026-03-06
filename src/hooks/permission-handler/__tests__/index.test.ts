@@ -333,16 +333,24 @@ describe('permission-handler', () => {
   describe('processPermissionRequest', () => {
     const testDir = '/tmp/omc-permission-test';
     const stateDir = path.join(testDir, '.omc', 'state');
+    let originalLegacyMode: string | undefined;
 
     beforeEach(() => {
       if (fs.existsSync(testDir)) {
         fs.rmSync(testDir, { recursive: true, force: true });
       }
+      originalLegacyMode = process.env.LEGACY_PERMISSION_MODE;
+      delete process.env.LEGACY_PERMISSION_MODE;
     });
 
     afterEach(() => {
       if (fs.existsSync(testDir)) {
         fs.rmSync(testDir, { recursive: true, force: true });
+      }
+      if (originalLegacyMode !== undefined) {
+        process.env.LEGACY_PERMISSION_MODE = originalLegacyMode;
+      } else {
+        delete process.env.LEGACY_PERMISSION_MODE;
       }
     });
 
@@ -435,6 +443,28 @@ describe('permission-handler', () => {
         input.tool_input.command = 123 as any;
         const result = processPermissionRequest(input);
         expect(result.continue).toBe(true);
+      });
+    });
+
+    describe('LEGACY_PERMISSION_MODE', () => {
+      it('should allow all operations when LEGACY_PERMISSION_MODE=true', () => {
+        process.env.LEGACY_PERMISSION_MODE = 'true';
+        const result = processPermissionRequest(createInput('rm -rf /'));
+        expect(result.continue).toBe(true);
+      });
+
+      it('should use normal classification when LEGACY_PERMISSION_MODE=false', () => {
+        process.env.LEGACY_PERMISSION_MODE = 'false';
+        const result = processPermissionRequest(createInput('git status'));
+        expect(result.continue).toBe(true);
+        expect(result.hookSpecificOutput?.decision?.behavior).toBe('allow');
+      });
+
+      it('should block dangerous commands when LEGACY_PERMISSION_MODE is not set', () => {
+        delete process.env.LEGACY_PERMISSION_MODE;
+        const result = processPermissionRequest(createInput('rm -rf /'));
+        expect(result.continue).toBe(true);
+        expect(result.hookSpecificOutput?.decision?.behavior).not.toBe('allow');
       });
     });
 

@@ -1,0 +1,843 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>ultrapower API Documentation - v5.5.18</title><meta name="description" content="Documentation for ultrapower API Documentation"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script><script async src="assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">ultrapower API Documentation - v5.5.18</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>ultrapower API Documentation - v5.5.18</h1></div><div class="tsd-panel tsd-typography"><h1 id="ultrapower" class="tsd-anchor-link">ultrapower<a href="#ultrapower" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 <strong>50 个专业 agents</strong>、<strong>71 个 skills</strong> 和完整的 TypeScript hooks 系统。</p>
+<h2 id="核心能力" class="tsd-anchor-link">核心能力<a href="#核心能力" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><strong>多 Agent 编排</strong>：Team、ultrawork、ralph、autopilot 等多种执行模式</li>
+<li><strong>Axiom 框架集成</strong>：LSP/AST 代码智能、持久记忆、MCP 路由</li>
+<li><strong>完整工作流</strong>：从头脑风暴到代码审查的端到端开发流程</li>
+<li><strong>自动触发</strong>：Skills 根据上下文自动激活，无需手动调用</li>
+</ul>
+<h2 id="安装" class="tsd-anchor-link">安装<a href="#安装" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="方式一：claude-code-插件（推荐）" class="tsd-anchor-link">方式一：Claude Code 插件（推荐）<a href="#方式一：claude-code-插件（推荐）" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>在 Claude Code 会话中运行：</p>
+<pre><code class="bash"><span class="hl-0"># 添加 marketplace 并安装</span><br/><span class="hl-1">/plugin</span><span class="hl-2"> </span><span class="hl-3">marketplace</span><span class="hl-2"> </span><span class="hl-3">add</span><span class="hl-2"> </span><span class="hl-3">https://github.com/liangjie559567/ultrapower</span><br/><span class="hl-1">/plugin</span><span class="hl-2"> </span><span class="hl-3">install</span><span class="hl-2"> </span><span class="hl-3">ultrapower</span><br/><br/><span class="hl-0"># 运行安装向导</span><br/><span class="hl-1">/omc-setup</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="方式二：npm-全局安装" class="tsd-anchor-link">方式二：npm 全局安装<a href="#方式二：npm-全局安装" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-1">npm</span><span class="hl-2"> </span><span class="hl-3">install</span><span class="hl-2"> </span><span class="hl-4">-g</span><span class="hl-2"> </span><span class="hl-3">@liangjie559567/ultrapower</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="验证安装" class="tsd-anchor-link">验证安装<a href="#验证安装" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>启动新会话，说 &quot;help me plan this feature&quot;，agent 应自动调用相关 skill。</p>
+<hr>
+<h2 id="基础工作流" class="tsd-anchor-link">基础工作流<a href="#基础工作流" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ol>
+<li>
+<p><strong>brainstorming</strong> — 代码前必须先设计。通过对话细化需求，探索 2-3 种方案，呈现设计并获批准，保存设计文档。</p>
+</li>
+<li>
+<p><strong>using-git-worktrees</strong> — 设计批准后创建隔离工作区，新建分支，运行项目初始化，验证测试基线。</p>
+</li>
+<li>
+<p><strong>writing-plans</strong> — 将工作拆解为 2-5 分钟的原子任务。每个任务包含精确文件路径、完整代码、验证步骤。</p>
+</li>
+<li>
+<p><strong>subagent-driven-development</strong> / <strong>executing-plans</strong> — 每个任务派发独立 subagent，两阶段审查（规格合规 + 代码质量），或批量执行带检查点。</p>
+</li>
+<li>
+<p><strong>test-driven-development</strong> — RED-GREEN-REFACTOR：先写失败测试，再写最小实现，再重构。</p>
+</li>
+<li>
+<p><strong>requesting-code-review</strong> — 任务间审查，按严重程度报告问题，关键问题阻塞进度。</p>
+</li>
+<li>
+<p><strong>finishing-a-development-branch</strong> — 验证测试，呈现选项（merge/PR/保留/丢弃），清理 worktree。</p>
+</li>
+</ol>
+<hr>
+<h2 id="agents（50-个）" class="tsd-anchor-link">Agents（50 个）<a href="#agents（50-个）" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="构建分析通道" class="tsd-anchor-link">构建/分析通道<a href="#构建分析通道" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>模型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>explore</code></td>
+<td>haiku</td>
+<td>代码库发现、符号/文件映射</td>
+</tr>
+<tr>
+<td><code>analyst</code></td>
+<td>opus</td>
+<td>需求澄清、验收标准</td>
+</tr>
+<tr>
+<td><code>planner</code></td>
+<td>opus</td>
+<td>任务排序、执行计划</td>
+</tr>
+<tr>
+<td><code>architect</code></td>
+<td>opus</td>
+<td>系统设计、接口、长期权衡</td>
+</tr>
+<tr>
+<td><code>debugger</code></td>
+<td>sonnet</td>
+<td>根因分析、回归隔离</td>
+</tr>
+<tr>
+<td><code>executor</code></td>
+<td>sonnet</td>
+<td>代码实现、重构、功能开发</td>
+</tr>
+<tr>
+<td><code>deep-executor</code></td>
+<td>opus</td>
+<td>复杂自主目标导向任务</td>
+</tr>
+<tr>
+<td><code>verifier</code></td>
+<td>sonnet</td>
+<td>完成证据、声明验证</td>
+</tr>
+</tbody>
+</table>
+<h3 id="审查通道" class="tsd-anchor-link">审查通道<a href="#审查通道" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>模型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>style-reviewer</code></td>
+<td>haiku</td>
+<td>格式、命名、惯用法</td>
+</tr>
+<tr>
+<td><code>quality-reviewer</code></td>
+<td>sonnet</td>
+<td>逻辑缺陷、可维护性</td>
+</tr>
+<tr>
+<td><code>api-reviewer</code></td>
+<td>sonnet</td>
+<td>API 契约、版本控制</td>
+</tr>
+<tr>
+<td><code>security-reviewer</code></td>
+<td>sonnet</td>
+<td>漏洞、信任边界</td>
+</tr>
+<tr>
+<td><code>performance-reviewer</code></td>
+<td>sonnet</td>
+<td>热点、复杂度优化</td>
+</tr>
+<tr>
+<td><code>code-reviewer</code></td>
+<td>opus</td>
+<td>跨关注点综合审查</td>
+</tr>
+</tbody>
+</table>
+<h3 id="领域专家" class="tsd-anchor-link">领域专家<a href="#领域专家" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>模型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dependency-expert</code></td>
+<td>sonnet</td>
+<td>外部 SDK/API/包评估</td>
+</tr>
+<tr>
+<td><code>test-engineer</code></td>
+<td>sonnet</td>
+<td>测试策略、覆盖率</td>
+</tr>
+<tr>
+<td><code>quality-strategist</code></td>
+<td>sonnet</td>
+<td>质量策略、发布就绪性</td>
+</tr>
+<tr>
+<td><code>build-fixer</code></td>
+<td>sonnet</td>
+<td>构建/工具链/类型失败</td>
+</tr>
+<tr>
+<td><code>designer</code></td>
+<td>sonnet</td>
+<td>UX/UI 架构、交互设计</td>
+</tr>
+<tr>
+<td><code>writer</code></td>
+<td>haiku</td>
+<td>文档、迁移说明</td>
+</tr>
+<tr>
+<td><code>qa-tester</code></td>
+<td>sonnet</td>
+<td>交互式 CLI/服务验证</td>
+</tr>
+<tr>
+<td><code>scientist</code></td>
+<td>sonnet</td>
+<td>数据/统计分析</td>
+</tr>
+<tr>
+<td><code>document-specialist</code></td>
+<td>sonnet</td>
+<td>外部文档查找</td>
+</tr>
+<tr>
+<td><code>git-master</code></td>
+<td>sonnet</td>
+<td>提交策略、历史整洁</td>
+</tr>
+<tr>
+<td><code>database-expert</code></td>
+<td>sonnet</td>
+<td>数据库设计、查询优化和迁移</td>
+</tr>
+<tr>
+<td><code>devops-engineer</code></td>
+<td>sonnet</td>
+<td>CI/CD、容器化、基础设施即代码</td>
+</tr>
+<tr>
+<td><code>i18n-specialist</code></td>
+<td>sonnet</td>
+<td>国际化、本地化和多语言支持</td>
+</tr>
+<tr>
+<td><code>accessibility-auditor</code></td>
+<td>sonnet</td>
+<td>Web 无障碍审查和 WCAG 合规</td>
+</tr>
+<tr>
+<td><code>api-designer</code></td>
+<td>sonnet</td>
+<td>REST/GraphQL API 设计和契约定义</td>
+</tr>
+</tbody>
+</table>
+<h3 id="产品通道" class="tsd-anchor-link">产品通道<a href="#产品通道" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>模型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>product-manager</code></td>
+<td>sonnet</td>
+<td>问题定义、PRD</td>
+</tr>
+<tr>
+<td><code>ux-researcher</code></td>
+<td>sonnet</td>
+<td>启发式审计、可用性</td>
+</tr>
+<tr>
+<td><code>information-architect</code></td>
+<td>sonnet</td>
+<td>分类、导航</td>
+</tr>
+<tr>
+<td><code>product-analyst</code></td>
+<td>sonnet</td>
+<td>产品指标、漏斗分析</td>
+</tr>
+</tbody>
+</table>
+<h3 id="协调" class="tsd-anchor-link">协调<a href="#协调" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>模型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>critic</code></td>
+<td>opus</td>
+<td>计划/设计批判性挑战</td>
+</tr>
+<tr>
+<td><code>vision</code></td>
+<td>sonnet</td>
+<td>图片/截图/图表分析</td>
+</tr>
+</tbody>
+</table>
+<h3 id="axiom-agents" class="tsd-anchor-link">Axiom Agents<a href="#axiom-agents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>模型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>axiom-requirement-analyst</code></td>
+<td>sonnet</td>
+<td>需求分析三态门（PASS/CLARIFY/REJECT）</td>
+</tr>
+<tr>
+<td><code>axiom-product-designer</code></td>
+<td>sonnet</td>
+<td>Draft PRD 生成，含 Mermaid 流程图</td>
+</tr>
+<tr>
+<td><code>axiom-review-aggregator</code></td>
+<td>sonnet</td>
+<td>5 专家并行审查聚合与冲突仲裁</td>
+</tr>
+<tr>
+<td><code>axiom-prd-crafter</code></td>
+<td>sonnet</td>
+<td>工程级 PRD，含门控验证</td>
+</tr>
+<tr>
+<td><code>axiom-system-architect</code></td>
+<td>sonnet</td>
+<td>原子任务 DAG 与 Manifest 生成</td>
+</tr>
+<tr>
+<td><code>axiom-evolution-engine</code></td>
+<td>sonnet</td>
+<td>知识收割、模式检测、工作流优化</td>
+</tr>
+<tr>
+<td><code>axiom-context-manager</code></td>
+<td>sonnet</td>
+<td>7 操作记忆系统（读/写/状态/检查点）</td>
+</tr>
+<tr>
+<td><code>axiom-worker</code></td>
+<td>sonnet</td>
+<td>PM→Worker 协议，三态输出</td>
+</tr>
+<tr>
+<td><code>axiom-ux-director</code></td>
+<td>sonnet</td>
+<td>UX/体验专家评审</td>
+</tr>
+<tr>
+<td><code>axiom-product-director</code></td>
+<td>sonnet</td>
+<td>产品战略专家评审</td>
+</tr>
+<tr>
+<td><code>axiom-domain-expert</code></td>
+<td>sonnet</td>
+<td>领域知识专家评审</td>
+</tr>
+<tr>
+<td><code>axiom-tech-lead</code></td>
+<td>sonnet</td>
+<td>技术可行性评审</td>
+</tr>
+<tr>
+<td><code>axiom-critic</code></td>
+<td>sonnet</td>
+<td>安全/质量/逻辑评审</td>
+</tr>
+<tr>
+<td><code>axiom-sub-prd-writer</code></td>
+<td>sonnet</td>
+<td>将 Manifest 任务拆解为可执行 Sub-PRD</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="skills（70-个）" class="tsd-anchor-link">Skills（70 个）<a href="#skills（70-个）" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="工作流-skills" class="tsd-anchor-link">工作流 Skills<a href="#工作流-skills" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>触发词</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>autopilot</code></td>
+<td>&quot;autopilot&quot;, &quot;build me&quot;</td>
+<td>从想法到可运行代码的全自主执行</td>
+</tr>
+<tr>
+<td><code>ralph</code></td>
+<td>&quot;ralph&quot;, &quot;don't stop&quot;</td>
+<td>带 verifier 验证的自引用循环</td>
+</tr>
+<tr>
+<td><code>ultrawork</code></td>
+<td>&quot;ulw&quot;, &quot;ultrawork&quot;</td>
+<td>并行 agent 编排最大并行度</td>
+</tr>
+<tr>
+<td><code>team</code></td>
+<td>&quot;team&quot;, &quot;coordinated team&quot;</td>
+<td>N 个协调 agents，阶段感知路由</td>
+</tr>
+<tr>
+<td><code>ultrapilot</code></td>
+<td>&quot;ultrapilot&quot;, &quot;parallel build&quot;</td>
+<td>带文件所有权分区的并行 autopilot</td>
+</tr>
+<tr>
+<td><code>pipeline</code></td>
+<td>&quot;pipeline&quot;, &quot;chain agents&quot;</td>
+<td>带数据传递的顺序 agent 链</td>
+</tr>
+<tr>
+<td><code>ultraqa</code></td>
+<td>由 autopilot 激活</td>
+<td>QA 循环：测试、验证、修复、重复</td>
+</tr>
+<tr>
+<td><code>plan</code></td>
+<td>&quot;plan this&quot;, &quot;plan the&quot;</td>
+<td>战略规划，支持 <code>--consensus</code>/<code>--review</code></td>
+</tr>
+<tr>
+<td><code>ralplan</code></td>
+<td>&quot;ralplan&quot;, &quot;consensus plan&quot;</td>
+<td>与 Planner/Architect/Critic 迭代规划</td>
+</tr>
+<tr>
+<td><code>swarm</code></td>
+<td>&quot;swarm&quot;</td>
+<td>Team 的兼容性外观</td>
+</tr>
+</tbody>
+</table>
+<h3 id="开发工作流-skills" class="tsd-anchor-link">开发工作流 Skills<a href="#开发工作流-skills" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brainstorming</code></td>
+<td>设计对话，代码前必须先设计</td>
+</tr>
+<tr>
+<td><code>writing-plans</code></td>
+<td>详细实现计划，原子任务</td>
+</tr>
+<tr>
+<td><code>executing-plans</code></td>
+<td>带检查点的批量执行</td>
+</tr>
+<tr>
+<td><code>subagent-driven-development</code></td>
+<td>每任务独立 subagent + 两阶段审查</td>
+</tr>
+<tr>
+<td><code>test-driven-development</code></td>
+<td>RED-GREEN-REFACTOR 循环</td>
+</tr>
+<tr>
+<td><code>systematic-debugging</code></td>
+<td>4 阶段根因分析</td>
+</tr>
+<tr>
+<td><code>verification-before-completion</code></td>
+<td>完成前验证</td>
+</tr>
+<tr>
+<td><code>requesting-code-review</code></td>
+<td>代码审查前检查清单</td>
+</tr>
+<tr>
+<td><code>receiving-code-review</code></td>
+<td>响应审查反馈</td>
+</tr>
+<tr>
+<td><code>using-git-worktrees</code></td>
+<td>并行开发分支</td>
+</tr>
+<tr>
+<td><code>finishing-a-development-branch</code></td>
+<td>合并/PR 决策工作流</td>
+</tr>
+<tr>
+<td><code>next-step-router</code></td>
+<td>关键节点推荐最优下一步</td>
+</tr>
+</tbody>
+</table>
+<h3 id="axiom-skills" class="tsd-anchor-link">Axiom Skills<a href="#axiom-skills" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ax-draft</code></td>
+<td>需求澄清 → Draft PRD → 用户确认</td>
+</tr>
+<tr>
+<td><code>ax-review</code></td>
+<td>5 专家并行评审 → 聚合 → Rough PRD</td>
+</tr>
+<tr>
+<td><code>ax-decompose</code></td>
+<td>Rough PRD → 系统架构 → 原子任务 DAG</td>
+</tr>
+<tr>
+<td><code>ax-implement</code></td>
+<td>按 Manifest 执行任务，CI 门禁，自动修复</td>
+</tr>
+<tr>
+<td><code>ax-analyze-error</code></td>
+<td>根因诊断 → 自动修复 → 知识队列</td>
+</tr>
+<tr>
+<td><code>ax-reflect</code></td>
+<td>会话反思 → 经验提取 → Action Items</td>
+</tr>
+<tr>
+<td><code>ax-evolve</code></td>
+<td>处理学习队列 → 更新知识库 → 模式检测</td>
+</tr>
+<tr>
+<td><code>ax-status</code></td>
+<td>完整系统状态仪表盘</td>
+</tr>
+<tr>
+<td><code>ax-rollback</code></td>
+<td>回滚到最近检查点（需用户确认）</td>
+</tr>
+<tr>
+<td><code>ax-suspend</code></td>
+<td>保存会话状态，安全退出</td>
+</tr>
+<tr>
+<td><code>ax-context</code></td>
+<td>直接操作 Axiom 记忆系统</td>
+</tr>
+<tr>
+<td><code>ax-evolution</code></td>
+<td>进化引擎统一入口（evolve/reflect/knowledge/patterns）</td>
+</tr>
+<tr>
+<td><code>ax-knowledge</code></td>
+<td>查询 Axiom 知识库</td>
+</tr>
+<tr>
+<td><code>ax-export</code></td>
+<td>导出 Axiom 工作流产物</td>
+</tr>
+</tbody>
+</table>
+<h3 id="增强-skills" class="tsd-anchor-link">增强 Skills<a href="#增强-skills" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepinit</code></td>
+<td>分层 <a href="http://AGENTS.md">AGENTS.md</a> 代码库文档化</td>
+</tr>
+<tr>
+<td><code>deepsearch</code></td>
+<td>多策略深度代码库搜索</td>
+</tr>
+<tr>
+<td><code>analyze</code></td>
+<td>深度分析与调查（debugger 别名）</td>
+</tr>
+<tr>
+<td><code>sciomc</code></td>
+<td>并行 scientist 编排</td>
+</tr>
+<tr>
+<td><code>external-context</code></td>
+<td>并行 document-specialist 网络搜索</td>
+</tr>
+<tr>
+<td><code>ccg</code></td>
+<td>Claude-Codex-Gemini 三模型并行编排</td>
+</tr>
+<tr>
+<td><code>frontend-ui-ux</code></td>
+<td>UI/UX 专业能力（静默激活）</td>
+</tr>
+<tr>
+<td><code>git-master</code></td>
+<td>Git 专家，原子提交和历史管理（静默激活）</td>
+</tr>
+<tr>
+<td><code>build-fix</code></td>
+<td>修复构建和 TypeScript 错误</td>
+</tr>
+<tr>
+<td><code>code-review</code></td>
+<td>全面代码审查</td>
+</tr>
+<tr>
+<td><code>security-review</code></td>
+<td>安全漏洞检测</td>
+</tr>
+<tr>
+<td><code>trace</code></td>
+<td>显示 agent 流程追踪时间线</td>
+</tr>
+<tr>
+<td><code>learn-about-omc</code></td>
+<td>了解 OMC 使用模式并获取建议</td>
+</tr>
+<tr>
+<td><code>dispatching-parallel-agents</code></td>
+<td>并行分发独立任务给多个 agents</td>
+</tr>
+</tbody>
+</table>
+<h3 id="工具类-skills" class="tsd-anchor-link">工具类 Skills<a href="#工具类-skills" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cancel</code></td>
+<td>统一取消所有执行模式</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>保存笔记到抗压缩 notepad</td>
+</tr>
+<tr>
+<td><code>learner</code></td>
+<td>从会话中提取可复用 skill</td>
+</tr>
+<tr>
+<td><code>omc-setup</code></td>
+<td>一次性安装向导</td>
+</tr>
+<tr>
+<td><code>mcp-setup</code></td>
+<td>配置 MCP 服务器</td>
+</tr>
+<tr>
+<td><code>hud</code></td>
+<td>配置 HUD 状态栏</td>
+</tr>
+<tr>
+<td><code>omc-doctor</code></td>
+<td>诊断并修复安装问题</td>
+</tr>
+<tr>
+<td><code>omc-help</code></td>
+<td>显示 OMC 使用指南</td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td>自动化发布工作流</td>
+</tr>
+<tr>
+<td><code>ralph-init</code></td>
+<td>初始化 PRD 以进行结构化任务跟踪</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>用 critic 审查工作计划</td>
+</tr>
+<tr>
+<td><code>writer-memory</code></td>
+<td>面向写作者的 agent 记忆系统</td>
+</tr>
+<tr>
+<td><code>project-session-manager</code></td>
+<td>管理隔离开发环境（git worktrees + tmux）</td>
+</tr>
+<tr>
+<td><code>psm</code></td>
+<td>project-session-manager 别名</td>
+</tr>
+<tr>
+<td><code>skill</code></td>
+<td>管理本地 skills（列出、添加、删除、搜索、编辑）</td>
+</tr>
+<tr>
+<td><code>wizard</code></td>
+<td>交互式配置向导</td>
+</tr>
+<tr>
+<td><code>writing-skills</code></td>
+<td>创建/编辑/验证 skills</td>
+</tr>
+<tr>
+<td><code>configure-discord</code></td>
+<td>配置 Discord webhook/bot 通知</td>
+</tr>
+<tr>
+<td><code>configure-telegram</code></td>
+<td>配置 Telegram bot 通知</td>
+</tr>
+<tr>
+<td><code>using-superpowers</code></td>
+<td>建立 skill 使用规则</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="执行模式" class="tsd-anchor-link">执行模式<a href="#执行模式" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="team-流水线（默认多-agent-编排器）" class="tsd-anchor-link">Team 流水线（默认多 Agent 编排器）<a href="#team-流水线（默认多-agent-编排器）" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code><span class="hl-5">team</span><span class="hl-2">-</span><span class="hl-5">plan</span><span class="hl-2"> → </span><span class="hl-5">team</span><span class="hl-2">-</span><span class="hl-5">prd</span><span class="hl-2"> → </span><span class="hl-5">team</span><span class="hl-2">-</span><span class="hl-5">exec</span><span class="hl-2"> → </span><span class="hl-5">team</span><span class="hl-2">-</span><span class="hl-5">verify</span><span class="hl-2"> → </span><span class="hl-5">team</span><span class="hl-2">-</span><span class="hl-5">fix</span><span class="hl-2">（</span><span class="hl-5">循环</span><span class="hl-2">）</span>
+</code><button>Copy</button></pre>
+
+<ul>
+<li><strong>team-plan</strong>：<code>explore</code> + <code>planner</code>，可选 <code>analyst</code>/<code>architect</code></li>
+<li><strong>team-prd</strong>：<code>analyst</code>，可选 <code>product-manager</code>/<code>critic</code></li>
+<li><strong>team-exec</strong>：<code>executor</code> + 任务适配专家</li>
+<li><strong>team-verify</strong>：<code>verifier</code> + 按需审查 agents</li>
+<li><strong>team-fix</strong>：根据缺陷类型路由到 <code>executor</code>/<code>build-fixer</code>/<code>debugger</code></li>
+</ul>
+<h3 id="mcp-路由" class="tsd-anchor-link">MCP 路由<a href="#mcp-路由" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>对只读分析任务优先使用 MCP 工具（更快更经济）：</p>
+<ul>
+<li><strong>Codex</strong>（<code>mcp__x__ask_codex</code>）：架构审查、规划验证、代码审查</li>
+<li><strong>Gemini</strong>（<code>mcp__g__ask_gemini</code>）：UI/UX 设计、大上下文任务（1M tokens）</li>
+</ul>
+<h3 id="axiom-代码智能" class="tsd-anchor-link">Axiom 代码智能<a href="#axiom-代码智能" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul>
+<li><strong>LSP</strong>：hover、goto definition、find references、diagnostics、rename</li>
+<li><strong>AST</strong>：<code>ast_grep_search</code>（结构化模式搜索）、<code>ast_grep_replace</code>（结构化转换）</li>
+<li><strong>Python REPL</strong>：持久数据分析环境</li>
+</ul>
+<hr>
+<h2 id="axiom-自我进化系统" class="tsd-anchor-link">Axiom 自我进化系统<a href="#axiom-自我进化系统" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>ultrapower 内置 Axiom 自我进化引擎，让 AI 工作流随使用不断优化。</p>
+<h3 id="核心机制" class="tsd-anchor-link">核心机制<a href="#核心机制" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>知识收割</td>
+<td>每次任务完成后自动提取经验教训，存入知识库</td>
+</tr>
+<tr>
+<td>模式检测</td>
+<td>识别重复代码模式，达到阈值（出现 ≥3 次）后提升为最佳实践</td>
+</tr>
+<tr>
+<td>工作流优化</td>
+<td>分析执行指标，发现瓶颈并生成优化建议</td>
+</tr>
+<tr>
+<td>跨会话记忆</td>
+<td>知识库和模式库跨会话持久化，越用越聪明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="快速开始" class="tsd-anchor-link">快速开始<a href="#快速开始" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0"># 1. 安装插件</span><br/><span class="hl-1">/plugin</span><span class="hl-2"> </span><span class="hl-3">marketplace</span><span class="hl-2"> </span><span class="hl-3">add</span><span class="hl-2"> </span><span class="hl-3">https://github.com/liangjie559567/ultrapower</span><br/><span class="hl-1">/plugin</span><span class="hl-2"> </span><span class="hl-3">install</span><span class="hl-2"> </span><span class="hl-3">omc@ultrapower</span><br/><br/><span class="hl-0"># 2. 初始化 Axiom 系统</span><br/><span class="hl-1">/ultrapower:ax-context</span><span class="hl-2"> </span><span class="hl-3">init</span><br/><br/><span class="hl-0"># 3. 查看系统状态</span><br/><span class="hl-1">/ax-status</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="进化工作流" class="tsd-anchor-link">进化工作流<a href="#进化工作流" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code><span class="hl-5">需求</span><span class="hl-2"> → /</span><span class="hl-5">ax</span><span class="hl-2">-</span><span class="hl-5">draft</span><span class="hl-2"> → /</span><span class="hl-5">ax</span><span class="hl-2">-</span><span class="hl-5">review</span><span class="hl-2"> → /</span><span class="hl-5">ax</span><span class="hl-2">-</span><span class="hl-5">decompose</span><span class="hl-2"> → /</span><span class="hl-5">ax</span><span class="hl-2">-</span><span class="hl-5">implement</span><br/><span class="hl-2">                                                      ↓</span><br/><span class="hl-2">                                                 </span><span class="hl-5">任务完成</span><br/><span class="hl-2">                                                      ↓</span><br/><span class="hl-2">                                             /</span><span class="hl-5">ax</span><span class="hl-2">-</span><span class="hl-5">reflect</span><span class="hl-2">（</span><span class="hl-5">反思</span><span class="hl-2">）</span><br/><span class="hl-2">                                                      ↓</span><br/><span class="hl-2">                                             /</span><span class="hl-5">ax</span><span class="hl-2">-</span><span class="hl-5">evolve</span><span class="hl-2">（</span><span class="hl-5">进化</span><span class="hl-2">）</span><br/><span class="hl-2">                                                      ↓</span><br/><span class="hl-2">                                        </span><span class="hl-5">知识库更新</span><span class="hl-2"> + </span><span class="hl-5">模式库更新</span>
+</code><button>Copy</button></pre>
+
+<p>详细文档请参阅 <a href="media/EVOLUTION.md">docs/EVOLUTION.md</a>。</p>
+<hr>
+<h2 id="mcp-服务器" class="tsd-anchor-link">MCP 服务器<a href="#mcp-服务器" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>ultrapower 提供完整的 MCP（Model Context Protocol）服务器，暴露 35 个自定义工具供 Claude Desktop 和 Cursor 使用。</p>
+<h3 id="快速开始-1" class="tsd-anchor-link">快速开始<a href="#快速开始-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0"># 启动 MCP 服务器</span><br/><span class="hl-1">node</span><span class="hl-2"> </span><span class="hl-3">bridge/mcp-server.cjs</span><br/><br/><span class="hl-0"># 或使用 npm</span><br/><span class="hl-1">npm</span><span class="hl-2"> </span><span class="hl-3">run</span><span class="hl-2"> </span><span class="hl-3">mcp:start</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="配置-claude-desktop" class="tsd-anchor-link">配置 Claude Desktop<a href="#配置-claude-desktop" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>编辑 <code>~/.claude/claude_desktop_config.json</code>：</p>
+<pre><code class="json"><span class="hl-2">{</span><br/><span class="hl-2">  </span><span class="hl-6">&quot;mcpServers&quot;</span><span class="hl-2">: {</span><br/><span class="hl-2">    </span><span class="hl-6">&quot;ultrapower&quot;</span><span class="hl-2">: {</span><br/><span class="hl-2">      </span><span class="hl-6">&quot;command&quot;</span><span class="hl-2">: </span><span class="hl-3">&quot;node&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">      </span><span class="hl-6">&quot;args&quot;</span><span class="hl-2">: [</span><span class="hl-3">&quot;/path/to/ultrapower/bridge/mcp-server.cjs&quot;</span><span class="hl-2">],</span><br/><span class="hl-2">      </span><span class="hl-6">&quot;env&quot;</span><span class="hl-2">: {</span><br/><span class="hl-2">        </span><span class="hl-6">&quot;OMC_LOG_LEVEL&quot;</span><span class="hl-2">: </span><span class="hl-3">&quot;info&quot;</span><br/><span class="hl-2">      }</span><br/><span class="hl-2">    }</span><br/><span class="hl-2">  }</span><br/><span class="hl-2">}</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="配置-cursor" class="tsd-anchor-link">配置 Cursor<a href="#配置-cursor" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>在项目根目录创建 <code>.cursor/mcp.json</code>：</p>
+<pre><code class="json"><span class="hl-2">{</span><br/><span class="hl-2">  </span><span class="hl-6">&quot;mcpServers&quot;</span><span class="hl-2">: {</span><br/><span class="hl-2">    </span><span class="hl-6">&quot;ultrapower&quot;</span><span class="hl-2">: {</span><br/><span class="hl-2">      </span><span class="hl-6">&quot;command&quot;</span><span class="hl-2">: </span><span class="hl-3">&quot;node&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">      </span><span class="hl-6">&quot;args&quot;</span><span class="hl-2">: [</span><span class="hl-3">&quot;/path/to/ultrapower/bridge/mcp-server.cjs&quot;</span><span class="hl-2">],</span><br/><span class="hl-2">      </span><span class="hl-6">&quot;env&quot;</span><span class="hl-2">: {</span><br/><span class="hl-2">        </span><span class="hl-6">&quot;OMC_LOG_LEVEL&quot;</span><span class="hl-2">: </span><span class="hl-3">&quot;info&quot;</span><br/><span class="hl-2">      }</span><br/><span class="hl-2">    }</span><br/><span class="hl-2">  }</span><br/><span class="hl-2">}</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="可用工具（35-个）" class="tsd-anchor-link">可用工具（35 个）<a href="#可用工具（35-个）" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul>
+<li><strong>LSP 工具（12 个）</strong>：代码导航、诊断、重构</li>
+<li><strong>AST 工具（2 个）</strong>：结构化模式匹配和替换</li>
+<li><strong>Python REPL（1 个）</strong>：持久数据分析环境</li>
+<li><strong>Notepad 工具（6 个）</strong>：会话记忆管理</li>
+<li><strong>State 工具（5 个）</strong>：模式状态管理</li>
+<li><strong>Project Memory 工具（4 个）</strong>：项目级持久记忆</li>
+<li><strong>Trace 工具（2 个）</strong>：Agent 流程追踪分析</li>
+<li><strong>Skills 工具（3 个）</strong>：Skill 加载和管理</li>
+</ul>
+<p>详见 <a href="media/mcp-server-usage.md">docs/guides/mcp-server-usage.md</a>。</p>
+<hr>
+<h2 id="哲学" class="tsd-anchor-link">哲学<a href="#哲学" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><strong>测试驱动开发</strong> — 始终先写测试</li>
+<li><strong>系统化而非临时</strong> — 流程优于猜测</li>
+<li><strong>复杂度降低</strong> — 简洁是首要目标</li>
+<li><strong>证据优于声明</strong> — 声明成功前先验证</li>
+</ul>
+<hr>
+<h2 id="赞助" class="tsd-anchor-link">赞助<a href="#赞助" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>如果 ultrapower 帮助你完成了有价值的工作，欢迎<a href="https://github.com/sponsors/liangjie559567">赞助开源工作</a>。</p>
+<h2 id="贡献" class="tsd-anchor-link">贡献<a href="#贡献" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Skills 直接存放在本仓库中。贡献方式：</p>
+<ol>
+<li>Fork 仓库</li>
+<li>为你的 skill 创建分支</li>
+<li>遵循 <code>writing-skills</code> skill 创建和测试新 skill</li>
+<li>提交 PR</li>
+</ol>
+<p>详见 <code>skills/writing-skills/SKILL.md</code>。</p>
+<h2 id="更新" class="tsd-anchor-link">更新<a href="#更新" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code class="bash"><span class="hl-1">/plugin</span><span class="hl-2"> </span><span class="hl-3">update</span><span class="hl-2"> </span><span class="hl-3">omc@ultrapower</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="许可证" class="tsd-anchor-link">许可证<a href="#许可证" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>MIT License — 详见 LICENSE 文件</p>
+<h2 id="支持" class="tsd-anchor-link">支持<a href="#支持" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><strong>Issues</strong>: <a href="https://github.com/liangjie559567/ultrapower/issues">https://github.com/liangjie559567/ultrapower/issues</a></li>
+<li><strong>Marketplace</strong>: <a href="https://github.com/liangjie559567/ultrapower">https://github.com/liangjie559567/ultrapower</a></li>
+<li><strong>安装部署教程</strong>: <a href="media/INSTALL.md">docs/INSTALL.md</a></li>
+<li><strong>完整参考文档</strong>: <a href="media/REFERENCE.md">docs/REFERENCE.md</a></li>
+<li><strong>进化系统文档</strong>: <a href="media/EVOLUTION.md">docs/EVOLUTION.md</a></li>
+<li><strong>主动进化系统</strong>: <a href="media/NEXUS.md">docs/NEXUS.md</a></li>
+<li><strong>迁移指南</strong>: <a href="media/MIGRATION.md">docs/MIGRATION.md</a></li>
+</ul>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#ultrapower"><span>ultrapower</span></a><ul><li><a href="#核心能力"><span>核心能力</span></a></li><li><a href="#安装"><span>安装</span></a></li><li><ul><li><a href="#方式一：claude-code-插件（推荐）"><span>方式一：<wbr/>Claude <wbr/>Code 插件（推荐）</span></a></li><li><a href="#方式二：npm-全局安装"><span>方式二：npm 全局安装</span></a></li><li><a href="#验证安装"><span>验证安装</span></a></li></ul></li><li><a href="#基础工作流"><span>基础工作流</span></a></li><li><a href="#agents（50-个）"><span>Agents（50 个）</span></a></li><li><ul><li><a href="#构建分析通道"><span>构建/分析通道</span></a></li><li><a href="#审查通道"><span>审查通道</span></a></li><li><a href="#领域专家"><span>领域专家</span></a></li><li><a href="#产品通道"><span>产品通道</span></a></li><li><a href="#协调"><span>协调</span></a></li><li><a href="#axiom-agents"><span>Axiom <wbr/>Agents</span></a></li></ul></li><li><a href="#skills（70-个）"><span>Skills（70 个）</span></a></li><li><ul><li><a href="#工作流-skills"><span>工作流 <wbr/>Skills</span></a></li><li><a href="#开发工作流-skills"><span>开发工作流 <wbr/>Skills</span></a></li><li><a href="#axiom-skills"><span>Axiom <wbr/>Skills</span></a></li><li><a href="#增强-skills"><span>增强 <wbr/>Skills</span></a></li><li><a href="#工具类-skills"><span>工具类 <wbr/>Skills</span></a></li></ul></li><li><a href="#执行模式"><span>执行模式</span></a></li><li><ul><li><a href="#team-流水线（默认多-agent-编排器）"><span>Team 流水线（默认多 <wbr/>Agent 编排器）</span></a></li><li><a href="#mcp-路由"><span>MCP 路由</span></a></li><li><a href="#axiom-代码智能"><span>Axiom 代码智能</span></a></li></ul></li><li><a href="#axiom-自我进化系统"><span>Axiom 自我进化系统</span></a></li><li><ul><li><a href="#核心机制"><span>核心机制</span></a></li><li><a href="#快速开始"><span>快速开始</span></a></li><li><a href="#进化工作流"><span>进化工作流</span></a></li></ul></li><li><a href="#mcp-服务器"><span>MCP 服务器</span></a></li><li><ul><li><a href="#快速开始-1"><span>快速开始</span></a></li><li><a href="#配置-claude-desktop"><span>配置 <wbr/>Claude <wbr/>Desktop</span></a></li><li><a href="#配置-cursor"><span>配置 <wbr/>Cursor</span></a></li><li><a href="#可用工具（35-个）"><span>可用工具（35 个）</span></a></li></ul></li><li><a href="#哲学"><span>哲学</span></a></li><li><a href="#赞助"><span>赞助</span></a></li><li><a href="#贡献"><span>贡献</span></a></li><li><a href="#更新"><span>更新</span></a></li><li><a href="#许可证"><span>许可证</span></a></li><li><a href="#支持"><span>支持</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">ultrapower API Documentation - v5.5.18</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

@@ -3,6 +3,7 @@
  */
 
 import { MCPClient } from './client.js';
+import { RETRY } from '../lib/constants.js';
 
 interface RetryConfig {
   maxRetries: number;
@@ -18,10 +19,10 @@ export class RetryMCPClient extends MCPClient {
   constructor(retryConfig?: Partial<RetryConfig>) {
     super();
     this.retryConfig = {
-      maxRetries: retryConfig?.maxRetries ?? 3,
-      initialDelay: retryConfig?.initialDelay ?? 1000,
-      maxDelay: retryConfig?.maxDelay ?? 30000,
-      backoffMultiplier: retryConfig?.backoffMultiplier ?? 2,
+      maxRetries: retryConfig?.maxRetries ?? RETRY.MAX_ATTEMPTS,
+      initialDelay: retryConfig?.initialDelay ?? RETRY.INITIAL_DELAY,
+      maxDelay: retryConfig?.maxDelay ?? RETRY.MAX_DELAY,
+      backoffMultiplier: retryConfig?.backoffMultiplier ?? RETRY.BACKOFF_MULTIPLIER,
     };
   }
 
