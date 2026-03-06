@@ -68,7 +68,9 @@ export function getWorktreeRoot(cwd?: string): string | null {
       setCache(key, root);
       return root;
     }
-  } catch {}
+  } catch {
+    // Ignore git command errors - not in a git repo
+  }
   return null;
 }
 
