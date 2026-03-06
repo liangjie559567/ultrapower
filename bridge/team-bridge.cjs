@@ -194,17 +194,21 @@ var require_main = __commonJS({
 // src/team/bridge-entry.ts
 var bridge_entry_exports = {};
 __export(bridge_entry_exports, {
+  loadConfigFromFile: () => loadConfigFromFile,
+  parseAndValidateConfigPath: () => parseAndValidateConfigPath,
+  validateAndNormalizeConfig: () => validateAndNormalizeConfig,
+  validateBridgeWorkingDirectory: () => validateBridgeWorkingDirectory,
   validateConfigPath: () => validateConfigPath
 });
 module.exports = __toCommonJS(bridge_entry_exports);
-var import_fs16 = require("fs");
-var import_path16 = require("path");
+var import_fs18 = require("fs");
+var import_path18 = require("path");
 var import_os2 = require("os");
 
 // src/team/mcp-team-bridge.ts
 var import_child_process5 = require("child_process");
-var import_fs15 = require("fs");
-var import_path15 = require("path");
+var import_fs17 = require("fs");
+var import_path17 = require("path");
 
 // src/team/fs-utils.ts
 var import_fs = require("fs");
@@ -1070,6 +1074,551 @@ function findPermissionViolations(changedPaths, permissions, cwd) {
   return violations;
 }
 
+// src/workers/sqlite-adapter.ts
+var import_fs15 = require("fs");
+var import_path15 = require("path");
+var SqliteWorkerAdapter = class {
+  db = null;
+  cwd;
+  constructor(cwd) {
+    this.cwd = cwd;
+  }
+  async init() {
+    try {
+      const betterSqlite3Module = await import("better-sqlite3");
+      const Database = betterSqlite3Module.default || betterSqlite3Module;
+      const stateDir = (0, import_path15.join)(this.cwd, ".omc", "state");
+      if (!(0, import_fs15.existsSync)(stateDir)) {
+        (0, import_fs15.mkdirSync)(stateDir, { recursive: true });
+      }
+      const dbPath = (0, import_path15.join)(stateDir, "workers.db");
+      this.db = new Database(dbPath);
+      this.db.pragma("journal_mode = WAL");
+      this.db.exec(`
+        CREATE TABLE IF NOT EXISTS workers (
+          worker_id TEXT PRIMARY KEY,
+          worker_type TEXT NOT NULL,
+          name TEXT NOT NULL,
+          status TEXT NOT NULL,
+          pid INTEGER,
+          spawned_at TEXT NOT NULL,
+          last_heartbeat_at TEXT,
+          completed_at TEXT,
+          provider TEXT,
+          model TEXT,
+          agent_role TEXT,
+          prompt_file TEXT,
+          response_file TEXT,
+          team_name TEXT,
+          tmux_session TEXT,
+          current_task_id TEXT,
+          consecutive_errors INTEGER DEFAULT 0,
+          error TEXT,
+          metadata TEXT
+        );
+        CREATE INDEX IF NOT EXISTS idx_worker_type ON workers(worker_type);
+        CREATE INDEX IF NOT EXISTS idx_status ON workers(status);
+        CREATE INDEX IF NOT EXISTS idx_team_name ON workers(team_name);
+      `);
+      return true;
+    } catch (error) {
+      console.error("[SqliteWorkerAdapter] Init failed:", error);
+      return false;
+    }
+  }
+  async upsert(worker) {
+    if (!this.db) return false;
+    try {
+      const stmt = this.db.prepare(`
+        INSERT INTO workers (
+          worker_id, worker_type, name, status, pid,
+          spawned_at, last_heartbeat_at, completed_at,
+          provider, model, agent_role, prompt_file, response_file,
+          team_name, tmux_session, current_task_id, consecutive_errors,
+          error, metadata
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(worker_id) DO UPDATE SET
+          status = excluded.status,
+          last_heartbeat_at = excluded.last_heartbeat_at,
+          completed_at = excluded.completed_at,
+          current_task_id = excluded.current_task_id,
+          consecutive_errors = excluded.consecutive_errors,
+          error = excluded.error,
+          metadata = excluded.metadata
+      `);
+      stmt.run(
+        worker.workerId,
+        worker.workerType,
+        worker.name,
+        worker.status,
+        worker.pid ?? null,
+        worker.spawnedAt,
+        worker.lastHeartbeatAt ?? null,
+        worker.completedAt ?? null,
+        worker.provider ?? null,
+        worker.model ?? null,
+        worker.agentRole ?? null,
+        worker.promptFile ?? null,
+        worker.responseFile ?? null,
+        worker.teamName ?? null,
+        worker.tmuxSession ?? null,
+        worker.currentTaskId ?? null,
+        worker.consecutiveErrors ?? 0,
+        worker.error ?? null,
+        worker.metadata ? JSON.stringify(worker.metadata) : null
+      );
+      return true;
+    } catch (error) {
+      console.error("[SqliteWorkerAdapter] Upsert failed:", error);
+      return false;
+    }
+  }
+  async get(workerId) {
+    if (!this.db) return null;
+    try {
+      const stmt = this.db.prepare("SELECT * FROM workers WHERE worker_id = ?");
+      const row = stmt.get(workerId);
+      return row ? this.rowToWorkerState(row) : null;
+    } catch (error) {
+      console.error("[SqliteWorkerAdapter] Get failed:", error);
+      return null;
+    }
+  }
+  async list(filter) {
+    if (!this.db) return [];
+    try {
+      let query = "SELECT * FROM workers WHERE 1=1";
+      const params = [];
+      if (filter?.workerType) {
+        query += " AND worker_type = ?";
+        params.push(filter.workerType);
+      }
+      if (filter?.status) {
+        const statuses = Array.isArray(filter.status) ? filter.status : [filter.status];
+        query += ` AND status IN (${statuses.map(() => "?").join(",")})`;
+        params.push(...statuses);
+      }
+      if (filter?.teamName) {
+        query += " AND team_name = ?";
+        params.push(filter.teamName);
+      }
+      if (filter?.provider) {
+        query += " AND provider = ?";
+        params.push(filter.provider);
+      }
+      if (filter?.spawnedAfter) {
+        query += " AND spawned_at >= ?";
+        params.push(filter.spawnedAfter.toISOString());
+      }
+      if (filter?.spawnedBefore) {
+        query += " AND spawned_at <= ?";
+        params.push(filter.spawnedBefore.toISOString());
+      }
+      query += " ORDER BY spawned_at DESC";
+      const stmt = this.db.prepare(query);
+      const rows = stmt.all(...params);
+      return rows.map((row) => this.rowToWorkerState(row));
+    } catch (error) {
+      console.error("[SqliteWorkerAdapter] List failed:", error);
+      return [];
+    }
+  }
+  async delete(workerId) {
+    if (!this.db) return false;
+    try {
+      const stmt = this.db.prepare("DELETE FROM workers WHERE worker_id = ?");
+      const result = stmt.run(workerId);
+      return result.changes > 0;
+    } catch (error) {
+      console.error("[SqliteWorkerAdapter] Delete failed:", error);
+      return false;
+    }
+  }
+  async healthCheck(workerId, maxHeartbeatAge = 3e4) {
+    const worker = await this.get(workerId);
+    if (!worker) return { isAlive: false };
+    const now = Date.now();
+    let heartbeatAge;
+    if (worker.lastHeartbeatAt) {
+      heartbeatAge = now - new Date(worker.lastHeartbeatAt).getTime();
+    }
+    const isAlive = worker.status === "running" || worker.status === "working" ? heartbeatAge !== void 0 && heartbeatAge < maxHeartbeatAge : worker.status !== "dead";
+    const uptimeMs = now - new Date(worker.spawnedAt).getTime();
+    return { isAlive, heartbeatAge, lastError: worker.error, uptimeMs };
+  }
+  async batchUpsert(workers) {
+    if (!this.db) return 0;
+    try {
+      const transaction = this.db.transaction((workers2) => {
+        let count = 0;
+        for (const worker of workers2) {
+          if (this.upsertSync(worker)) count++;
+        }
+        return count;
+      });
+      return transaction(workers);
+    } catch (error) {
+      console.error("[SqliteWorkerAdapter] Batch upsert failed:", error);
+      return 0;
+    }
+  }
+  async cleanup(maxAgeMs) {
+    if (!this.db) return 0;
+    try {
+      const cutoff = new Date(Date.now() - maxAgeMs).toISOString();
+      const stmt = this.db.prepare(`
+        DELETE FROM workers
+        WHERE status IN ('completed', 'failed', 'timeout', 'dead')
+        AND (completed_at < ? OR (completed_at IS NULL AND spawned_at < ?))
+      `);
+      const result = stmt.run(cutoff, cutoff);
+      return result.changes;
+    } catch (error) {
+      console.error("[SqliteWorkerAdapter] Cleanup failed:", error);
+      return 0;
+    }
+  }
+  async close() {
+    if (this.db) {
+      this.db.close();
+      this.db = null;
+    }
+  }
+  rowToWorkerState(row) {
+    return {
+      workerId: row.worker_id,
+      workerType: row.worker_type,
+      name: row.name,
+      status: row.status,
+      pid: row.pid,
+      spawnedAt: row.spawned_at,
+      lastHeartbeatAt: row.last_heartbeat_at,
+      completedAt: row.completed_at,
+      provider: row.provider,
+      model: row.model,
+      agentRole: row.agent_role,
+      promptFile: row.prompt_file,
+      responseFile: row.response_file,
+      teamName: row.team_name,
+      tmuxSession: row.tmux_session,
+      currentTaskId: row.current_task_id,
+      consecutiveErrors: row.consecutive_errors,
+      error: row.error,
+      metadata: row.metadata ? JSON.parse(row.metadata) : void 0
+    };
+  }
+  upsertSync(worker) {
+    if (!this.db) return false;
+    try {
+      const stmt = this.db.prepare(`
+        INSERT INTO workers (
+          worker_id, worker_type, name, status, pid,
+          spawned_at, last_heartbeat_at, completed_at,
+          provider, model, agent_role, prompt_file, response_file,
+          team_name, tmux_session, current_task_id, consecutive_errors,
+          error, metadata
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(worker_id) DO UPDATE SET
+          status = excluded.status,
+          last_heartbeat_at = excluded.last_heartbeat_at,
+          completed_at = excluded.completed_at,
+          current_task_id = excluded.current_task_id,
+          consecutive_errors = excluded.consecutive_errors,
+          error = excluded.error,
+          metadata = excluded.metadata
+      `);
+      stmt.run(
+        worker.workerId,
+        worker.workerType,
+        worker.name,
+        worker.status,
+        worker.pid ?? null,
+        worker.spawnedAt,
+        worker.lastHeartbeatAt ?? null,
+        worker.completedAt ?? null,
+        worker.provider ?? null,
+        worker.model ?? null,
+        worker.agentRole ?? null,
+        worker.promptFile ?? null,
+        worker.responseFile ?? null,
+        worker.teamName ?? null,
+        worker.tmuxSession ?? null,
+        worker.currentTaskId ?? null,
+        worker.consecutiveErrors ?? 0,
+        worker.error ?? null,
+        worker.metadata ? JSON.stringify(worker.metadata) : null
+      );
+      return true;
+    } catch {
+      return false;
+    }
+  }
+};
+
+// src/workers/json-adapter.ts
+var import_fs16 = require("fs");
+var import_path16 = require("path");
+var JsonWorkerAdapter = class {
+  cwd;
+  stateDir;
+  constructor(cwd) {
+    this.cwd = cwd;
+    this.stateDir = (0, import_path16.join)(cwd, ".omc", "state", "workers");
+  }
+  async init() {
+    try {
+      if (!(0, import_fs16.existsSync)(this.stateDir)) {
+        (0, import_fs16.mkdirSync)(this.stateDir, { recursive: true });
+      }
+      return true;
+    } catch (error) {
+      console.error("[JsonWorkerAdapter] Init failed:", error);
+      return false;
+    }
+  }
+  async upsert(worker) {
+    try {
+      const filePath = this.getWorkerFilePath(worker.workerId);
+      const tempPath = `${filePath}.tmp`;
+      (0, import_fs16.writeFileSync)(tempPath, JSON.stringify(worker, null, 2), "utf-8");
+      if ((0, import_fs16.existsSync)(filePath)) {
+        (0, import_fs16.unlinkSync)(filePath);
+      }
+      (0, import_fs16.writeFileSync)(filePath, (0, import_fs16.readFileSync)(tempPath, "utf-8"));
+      (0, import_fs16.unlinkSync)(tempPath);
+      return true;
+    } catch (error) {
+      console.error("[JsonWorkerAdapter] Upsert failed:", error);
+      return false;
+    }
+  }
+  async get(workerId) {
+    try {
+      const filePath = this.getWorkerFilePath(workerId);
+      if (!(0, import_fs16.existsSync)(filePath)) return null;
+      const content = (0, import_fs16.readFileSync)(filePath, "utf-8");
+      return JSON.parse(content);
+    } catch (error) {
+      console.error("[JsonWorkerAdapter] Get failed:", error);
+      return null;
+    }
+  }
+  async list(filter) {
+    try {
+      if (!(0, import_fs16.existsSync)(this.stateDir)) return [];
+      const files = (0, import_fs16.readdirSync)(this.stateDir).filter((f) => f.endsWith(".json"));
+      const workers = [];
+      for (const file of files) {
+        try {
+          const content = (0, import_fs16.readFileSync)((0, import_path16.join)(this.stateDir, file), "utf-8");
+          const worker = JSON.parse(content);
+          if (this.matchesFilter(worker, filter)) {
+            workers.push(worker);
+          }
+        } catch {
+        }
+      }
+      workers.sort(
+        (a, b) => new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime()
+      );
+      return workers;
+    } catch (error) {
+      console.error("[JsonWorkerAdapter] List failed:", error);
+      return [];
+    }
+  }
+  async delete(workerId) {
+    try {
+      const filePath = this.getWorkerFilePath(workerId);
+      if (!(0, import_fs16.existsSync)(filePath)) return false;
+      (0, import_fs16.unlinkSync)(filePath);
+      return true;
+    } catch (error) {
+      console.error("[JsonWorkerAdapter] Delete failed:", error);
+      return false;
+    }
+  }
+  async healthCheck(workerId, maxHeartbeatAge = 3e4) {
+    const worker = await this.get(workerId);
+    if (!worker) return { isAlive: false };
+    const now = Date.now();
+    let heartbeatAge;
+    if (worker.lastHeartbeatAt) {
+      heartbeatAge = now - new Date(worker.lastHeartbeatAt).getTime();
+    }
+    const isAlive = worker.status === "running" || worker.status === "working" ? heartbeatAge !== void 0 && heartbeatAge < maxHeartbeatAge : worker.status !== "dead";
+    const uptimeMs = now - new Date(worker.spawnedAt).getTime();
+    return { isAlive, heartbeatAge, lastError: worker.error, uptimeMs };
+  }
+  async batchUpsert(workers) {
+    let count = 0;
+    for (const worker of workers) {
+      if (await this.upsert(worker)) count++;
+    }
+    return count;
+  }
+  async cleanup(maxAgeMs) {
+    try {
+      const workers = await this.list();
+      let count = 0;
+      for (const worker of workers) {
+        const isTerminal = ["completed", "failed", "timeout", "dead"].includes(worker.status);
+        const timestamp = worker.completedAt || worker.spawnedAt;
+        const age = Date.now() - new Date(timestamp).getTime();
+        if (isTerminal && age > maxAgeMs) {
+          if (await this.delete(worker.workerId)) count++;
+        }
+      }
+      return count;
+    } catch (error) {
+      console.error("[JsonWorkerAdapter] Cleanup failed:", error);
+      return 0;
+    }
+  }
+  async close() {
+  }
+  getWorkerFilePath(workerId) {
+    const safeId = workerId.replace(/[^a-zA-Z0-9_-]/g, "_");
+    return (0, import_path16.join)(this.stateDir, `${safeId}.json`);
+  }
+  matchesFilter(worker, filter) {
+    if (!filter) return true;
+    if (filter.workerType && worker.workerType !== filter.workerType) return false;
+    if (filter.status) {
+      const statuses = Array.isArray(filter.status) ? filter.status : [filter.status];
+      if (!statuses.includes(worker.status)) return false;
+    }
+    if (filter.teamName && worker.teamName !== filter.teamName) return false;
+    if (filter.provider && worker.provider !== filter.provider) return false;
+    if (filter.spawnedAfter) {
+      const spawnedAt = new Date(worker.spawnedAt);
+      if (spawnedAt < filter.spawnedAfter) return false;
+    }
+    if (filter.spawnedBefore) {
+      const spawnedAt = new Date(worker.spawnedAt);
+      if (spawnedAt > filter.spawnedBefore) return false;
+    }
+    return true;
+  }
+};
+
+// src/workers/cached-adapter.ts
+var CachedWorkerAdapter = class {
+  inner;
+  cache = /* @__PURE__ */ new Map();
+  cacheTtlMs;
+  constructor(inner, cacheTtlMs = 5e3) {
+    this.inner = inner;
+    this.cacheTtlMs = cacheTtlMs;
+  }
+  async init() {
+    return this.inner.init();
+  }
+  async upsert(worker) {
+    const success = await this.inner.upsert(worker);
+    if (success) {
+      this.cache.set(worker.workerId, { worker, timestamp: Date.now() });
+    }
+    return success;
+  }
+  async get(workerId) {
+    const cached = this.cache.get(workerId);
+    if (cached && Date.now() - cached.timestamp < this.cacheTtlMs) {
+      return cached.worker;
+    }
+    const worker = await this.inner.get(workerId);
+    if (worker) {
+      this.cache.set(workerId, { worker, timestamp: Date.now() });
+    } else {
+      this.cache.delete(workerId);
+    }
+    return worker;
+  }
+  async list(filter) {
+    return this.inner.list(filter);
+  }
+  async delete(workerId) {
+    const success = await this.inner.delete(workerId);
+    if (success) {
+      this.cache.delete(workerId);
+    }
+    return success;
+  }
+  async healthCheck(workerId, maxHeartbeatAge) {
+    return this.inner.healthCheck(workerId, maxHeartbeatAge);
+  }
+  async batchUpsert(workers) {
+    const count = await this.inner.batchUpsert(workers);
+    const now = Date.now();
+    for (const worker of workers) {
+      this.cache.set(worker.workerId, { worker, timestamp: now });
+    }
+    return count;
+  }
+  async cleanup(maxAgeMs) {
+    const count = await this.inner.cleanup(maxAgeMs);
+    this.cache.clear();
+    return count;
+  }
+  async close() {
+    this.cache.clear();
+    return this.inner.close();
+  }
+};
+
+// src/workers/factory.ts
+async function createWorkerAdapter(type, cwd, options = {}) {
+  try {
+    let adapter;
+    if (type === "auto") {
+      try {
+        adapter = new SqliteWorkerAdapter(cwd);
+        const success2 = await adapter.init();
+        if (success2) {
+          console.log("[WorkerFactory] Using SQLite adapter");
+          return wrapWithCache(adapter, options);
+        }
+      } catch {
+      }
+      adapter = new JsonWorkerAdapter(cwd);
+      const success = await adapter.init();
+      if (success) {
+        console.log("[WorkerFactory] Using JSON adapter (SQLite unavailable)");
+        return wrapWithCache(adapter, options);
+      }
+    } else if (type === "sqlite") {
+      adapter = new SqliteWorkerAdapter(cwd);
+      const success = await adapter.init();
+      if (success) return wrapWithCache(adapter, options);
+    } else if (type === "json") {
+      adapter = new JsonWorkerAdapter(cwd);
+      const success = await adapter.init();
+      if (success) return wrapWithCache(adapter, options);
+    }
+    return null;
+  } catch (error) {
+    console.error("[WorkerFactory] Failed to create adapter:", error);
+    return null;
+  }
+}
+function wrapWithCache(adapter, options) {
+  if (options.enableCache === false) {
+    return adapter;
+  }
+  return new CachedWorkerAdapter(adapter, options.cacheTtlMs);
+}
+
+// src/lib/safe-json.ts
+function safeJsonParse(content, filePath) {
+  try {
+    const data = JSON.parse(content);
+    return { success: true, data };
+  } catch (error) {
+    const errorMsg = filePath ? `Failed to parse JSON from ${filePath}: ${error instanceof Error ? error.message : String(error)}` : `Failed to parse JSON: ${error instanceof Error ? error.message : String(error)}`;
+    return { success: false, error: errorMsg };
+  }
+}
+
 // src/team/mcp-team-bridge.ts
 function log(message) {
   const ts = (/* @__PURE__ */ new Date()).toISOString();
@@ -1222,26 +1771,26 @@ function buildTaskPrompt(task, messages, config) {
   return result;
 }
 function writePromptFile(config, taskId, prompt) {
-  const dir = (0, import_path15.join)(config.workingDirectory, ".omc", "prompts");
+  const dir = (0, import_path17.join)(config.workingDirectory, ".omc", "prompts");
   ensureDirWithMode(dir);
   const filename = `team-${config.teamName}-task-${taskId}-${Date.now()}.md`;
-  const filePath = (0, import_path15.join)(dir, filename);
+  const filePath = (0, import_path17.join)(dir, filename);
   writeFileWithMode(filePath, prompt);
   return filePath;
 }
 function getOutputPath(config, taskId) {
-  const dir = (0, import_path15.join)(config.workingDirectory, ".omc", "outputs");
+  const dir = (0, import_path17.join)(config.workingDirectory, ".omc", "outputs");
   ensureDirWithMode(dir);
   const suffix = Math.random().toString(36).slice(2, 8);
-  return (0, import_path15.join)(dir, `team-${config.teamName}-task-${taskId}-${Date.now()}-${suffix}.md`);
+  return (0, import_path17.join)(dir, `team-${config.teamName}-task-${taskId}-${Date.now()}-${suffix}.md`);
 }
 function readOutputSummary(outputFile) {
   try {
-    if (!(0, import_fs15.existsSync)(outputFile)) return "(no output file)";
+    if (!(0, import_fs17.existsSync)(outputFile)) return "(no output file)";
     const buf = Buffer.alloc(1024);
-    const fd = (0, import_fs15.openSync)(outputFile, "r");
+    const fd = (0, import_fs17.openSync)(outputFile, "r");
     try {
-      const bytesRead = (0, import_fs15.readSync)(fd, buf, 0, 1024, 0);
+      const bytesRead = (0, import_fs17.readSync)(fd, buf, 0, 1024, 0);
       if (bytesRead === 0) return "(empty output)";
       const content = buf.toString("utf-8", 0, bytesRead);
       if (content.length > 500) {
@@ -1249,7 +1798,7 @@ function readOutputSummary(outputFile) {
       }
       return content;
     } finally {
-      (0, import_fs15.closeSync)(fd);
+      (0, import_fs17.closeSync)(fd);
     }
   } catch {
     return "(error reading output)";
@@ -1265,30 +1814,29 @@ function parseCodexOutput(output) {
       messages.push("[output truncated]");
       break;
     }
-    try {
-      const event = JSON.parse(line);
-      if (event.type === "item.completed" && event.item?.type === "agent_message" && event.item.text) {
-        messages.push(event.item.text);
-        totalSize += event.item.text.length;
-      }
-      if (event.type === "message" && event.content) {
-        if (typeof event.content === "string") {
-          messages.push(event.content);
-          totalSize += event.content.length;
-        } else if (Array.isArray(event.content)) {
-          for (const part of event.content) {
-            if (part.type === "text" && part.text) {
-              messages.push(part.text);
-              totalSize += part.text.length;
-            }
+    const result = safeJsonParse(line);
+    if (!result.success) continue;
+    const event = result.data;
+    if (event.type === "item.completed" && event.item?.type === "agent_message" && event.item.text) {
+      messages.push(event.item.text);
+      totalSize += event.item.text.length;
+    }
+    if (event.type === "message" && event.content) {
+      if (typeof event.content === "string") {
+        messages.push(event.content);
+        totalSize += event.content.length;
+      } else if (Array.isArray(event.content)) {
+        for (const part of event.content) {
+          if (part.type === "text" && part.text) {
+            messages.push(part.text);
+            totalSize += part.text.length;
           }
         }
       }
-      if (event.type === "output_text" && event.text) {
-        messages.push(event.text);
-        totalSize += event.text.length;
-      }
-    } catch {
+    }
+    if (event.type === "output_text" && event.text) {
+      messages.push(event.text);
+      totalSize += event.text.length;
     }
   }
   return messages.join("\n") || output;
@@ -1402,6 +1950,16 @@ async function runBridge(config) {
   let activeChild = null;
   log(`[bridge] ${workerName}@${teamName} starting (${provider})`);
   audit(config, "bridge_start");
+  const cleanupDays = parseInt(process.env.WORKER_CLEANUP_DAYS || "7", 10);
+  const maxAgeMs = cleanupDays * 24 * 60 * 60 * 1e3;
+  createWorkerAdapter("auto", workingDirectory).then((adapter) => {
+    if (adapter) {
+      adapter.cleanup(maxAgeMs).catch((err) => {
+        log(`[bridge] Worker cleanup failed: ${err}`);
+      });
+    }
+  }).catch(() => {
+  });
   try {
     writeHeartbeat(workingDirectory, buildHeartbeat(config, "polling", null, 0));
   } catch (err) {
@@ -1628,7 +2186,7 @@ ${violationSummary}`);
 
 // src/team/bridge-entry.ts
 function validateConfigPath(configPath2, homeDir, claudeConfigDir) {
-  const norm = (p) => (0, import_path16.resolve)(p).replace(/\\/g, "/");
+  const norm = (p) => (0, import_path18.resolve)(p).replace(/\\/g, "/");
   const resolved = norm(configPath2);
   const normalizedHome = norm(homeDir);
   const normalizedConfigDir = norm(claudeConfigDir);
@@ -1638,8 +2196,8 @@ function validateConfigPath(configPath2, homeDir, claudeConfigDir) {
   const isTrustedSubpath = resolved === normalizedConfigDir || resolved.startsWith(normalizedConfigDir + "/") || resolved === normalizedOmcDir || resolved.startsWith(normalizedOmcDir + "/") || hasOmcComponent;
   if (!isUnderHome || !isTrustedSubpath) return false;
   try {
-    const parentDir = (0, import_path16.resolve)(resolved, "..");
-    const realParent = (0, import_fs16.realpathSync)(parentDir).replace(/\\/g, "/");
+    const parentDir = (0, import_path18.resolve)(resolved, "..");
+    const realParent = (0, import_fs18.realpathSync)(parentDir).replace(/\\/g, "/");
     if (!realParent.startsWith(normalizedHome + "/") && realParent !== normalizedHome) {
       return false;
     }
@@ -1650,15 +2208,15 @@ function validateConfigPath(configPath2, homeDir, claudeConfigDir) {
 function validateBridgeWorkingDirectory(workingDirectory) {
   let stat;
   try {
-    stat = (0, import_fs16.statSync)(workingDirectory);
+    stat = (0, import_fs18.statSync)(workingDirectory);
   } catch {
     throw new Error(`workingDirectory does not exist: ${workingDirectory}`);
   }
   if (!stat.isDirectory()) {
     throw new Error(`workingDirectory is not a directory: ${workingDirectory}`);
   }
-  const resolved = (0, import_fs16.realpathSync)(workingDirectory);
-  const home = (0, import_os2.homedir)();
+  const resolved = (0, import_fs18.realpathSync)(workingDirectory).replace(/\\/g, "/");
+  const home = (0, import_os2.homedir)().replace(/\\/g, "/");
   if (!resolved.startsWith(home + "/") && resolved !== home) {
     throw new Error(`workingDirectory is outside home directory: ${resolved}`);
   }
@@ -1667,71 +2225,39 @@ function validateBridgeWorkingDirectory(workingDirectory) {
     throw new Error(`workingDirectory is not inside a git worktree: ${workingDirectory}`);
   }
 }
-function main() {
-  const configIdx = process.argv.indexOf("--config");
-  if (configIdx === -1 || !process.argv[configIdx + 1]) {
-    console.error("Usage: node bridge-entry.js --config <path-to-config.json>");
-    process.exit(1);
-  }
-  const configPath2 = (0, import_path16.resolve)(process.argv[configIdx + 1]);
-  const home = (0, import_os2.homedir)();
-  const claudeConfigDir = getClaudeConfigDir();
-  if (!validateConfigPath(configPath2, home, claudeConfigDir)) {
-    console.error(`Config path must be under ~/ with ${claudeConfigDir} or ~/.omc/ subpath: ${configPath2}`);
-    process.exit(1);
-  }
-  let config;
-  try {
-    const raw = (0, import_fs16.readFileSync)(configPath2, "utf-8");
-    config = JSON.parse(raw);
-  } catch (err) {
-    console.error(`Failed to read config from ${configPath2}: ${err.message}`);
-    process.exit(1);
-  }
+function validateAndNormalizeConfig(config) {
   const required = ["teamName", "workerName", "provider", "workingDirectory"];
   for (const field of required) {
     if (!config[field]) {
-      console.error(`Missing required config field: ${field}`);
-      process.exit(1);
+      throw new Error(`Missing required config field: ${field}`);
     }
   }
   config.teamName = sanitizeName(config.teamName);
   config.workerName = sanitizeName(config.workerName);
   if (config.provider !== "codex" && config.provider !== "gemini") {
-    console.error(`Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`);
-    process.exit(1);
+    throw new Error(`Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`);
   }
-  try {
-    validateBridgeWorkingDirectory(config.workingDirectory);
-  } catch (err) {
-    console.error(`[bridge] Invalid workingDirectory: ${err.message}`);
-    process.exit(1);
-  }
+  validateBridgeWorkingDirectory(config.workingDirectory);
   if (config.permissionEnforcement) {
     const validModes = ["off", "audit", "enforce"];
     if (!validModes.includes(config.permissionEnforcement)) {
-      console.error(`Invalid permissionEnforcement: ${config.permissionEnforcement}. Must be 'off', 'audit', or 'enforce'.`);
-      process.exit(1);
+      throw new Error(`Invalid permissionEnforcement: ${config.permissionEnforcement}. Must be 'off', 'audit', or 'enforce'.`);
     }
     if (config.permissionEnforcement !== "off" && config.permissions) {
       const p = config.permissions;
       if (p.allowedPaths && !Array.isArray(p.allowedPaths)) {
-        console.error("permissions.allowedPaths must be an array of strings");
-        process.exit(1);
+        throw new Error("permissions.allowedPaths must be an array of strings");
       }
       if (p.deniedPaths && !Array.isArray(p.deniedPaths)) {
-        console.error("permissions.deniedPaths must be an array of strings");
-        process.exit(1);
+        throw new Error("permissions.deniedPaths must be an array of strings");
       }
       if (p.allowedCommands && !Array.isArray(p.allowedCommands)) {
-        console.error("permissions.allowedCommands must be an array of strings");
-        process.exit(1);
+        throw new Error("permissions.allowedCommands must be an array of strings");
       }
       const dangerousPatterns = ["**", "*", "!.git/**", "!.env*", "!**/.env*"];
       for (const pattern of p.allowedPaths || []) {
         if (dangerousPatterns.includes(pattern)) {
-          console.error(`Dangerous allowedPaths pattern rejected: "${pattern}"`);
-          process.exit(1);
+          throw new Error(`Dangerous allowedPaths pattern rejected: "${pattern}"`);
         }
       }
     }
@@ -1742,6 +2268,40 @@ function main() {
   config.outboxMaxLines = config.outboxMaxLines || 500;
   config.maxRetries = config.maxRetries || 5;
   config.permissionEnforcement = config.permissionEnforcement || "off";
+  return config;
+}
+function parseAndValidateConfigPath(argv) {
+  const configIdx = argv.indexOf("--config");
+  if (configIdx === -1 || !argv[configIdx + 1]) {
+    throw new Error("Usage: node bridge-entry.js --config <path-to-config.json>");
+  }
+  const configPath2 = (0, import_path18.resolve)(argv[configIdx + 1]);
+  const home = (0, import_os2.homedir)();
+  const claudeConfigDir = getClaudeConfigDir();
+  if (!validateConfigPath(configPath2, home, claudeConfigDir)) {
+    throw new Error(`Config path must be under ~/ with ${claudeConfigDir} or ~/.omc/ subpath: ${configPath2}`);
+  }
+  return configPath2;
+}
+function loadConfigFromFile(configPath2) {
+  let config;
+  try {
+    const raw = (0, import_fs18.readFileSync)(configPath2, "utf-8");
+    config = JSON.parse(raw);
+  } catch (err) {
+    throw new Error(`Failed to read config from ${configPath2}: ${err.message}`);
+  }
+  return validateAndNormalizeConfig(config);
+}
+function main() {
+  let config;
+  try {
+    const configPath2 = parseAndValidateConfigPath(process.argv);
+    config = loadConfigFromFile(configPath2);
+  } catch (err) {
+    console.error(`[bridge] ${err.message}`);
+    process.exit(1);
+  }
   for (const sig of ["SIGINT", "SIGTERM"]) {
     process.on(sig, () => {
       console.error(`[bridge] Received ${sig}, shutting down...`);
@@ -1763,5 +2323,9 @@ if (require.main === module) {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  loadConfigFromFile,
+  parseAndValidateConfigPath,
+  validateAndNormalizeConfig,
+  validateBridgeWorkingDirectory,
   validateConfigPath
 });

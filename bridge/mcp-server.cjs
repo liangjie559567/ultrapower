@@ -18347,8 +18347,46 @@ var LspClientManager = class {
   lastUsed = /* @__PURE__ */ new Map();
   inFlightCount = /* @__PURE__ */ new Map();
   idleTimer = null;
+  warmupPromises = /* @__PURE__ */ new Map();
+  symbolCache = /* @__PURE__ */ new Map();
   constructor() {
     this.startIdleCheck();
+    this.warmupCommonServers();
+  }
+  /**
+   * Warmup common language servers in background
+   */
+  warmupCommonServers() {
+    const cwd = process.cwd();
+    const commonServers = ["typescript", "python"];
+    for (const serverKey of commonServers) {
+      const config2 = getServerForFile(`.${serverKey === "typescript" ? "ts" : "py"}`);
+      if (config2 && commandExists(config2.command)) {
+        const key = `${cwd}:${config2.command}`;
+        const warmup = (async () => {
+          try {
+            const client = new LspClient(cwd, config2);
+            await client.connect();
+            this.clients.set(key, client);
+            this.lastUsed.set(key, Date.now());
+            const symbols = await client.workspaceSymbols("");
+            this.symbolCache.set(key, { symbols, timestamp: Date.now() });
+          } catch {
+          }
+        })();
+        this.warmupPromises.set(key, warmup);
+      }
+    }
+  }
+  /**
+   * Get cached workspace symbols if available
+   */
+  getCachedSymbols(key) {
+    const cached2 = this.symbolCache.get(key);
+    if (cached2 && Date.now() - cached2.timestamp < 3e5) {
+      return cached2.symbols;
+    }
+    return null;
   }
   /**
    * Get or create a client for a file
@@ -18360,6 +18398,11 @@ var LspClientManager = class {
     }
     const workspaceRoot = this.findWorkspaceRoot(filePath);
     const key = `${workspaceRoot}:${serverConfig.command}`;
+    const warmup = this.warmupPromises.get(key);
+    if (warmup) {
+      await warmup;
+      this.warmupPromises.delete(key);
+    }
     let client = this.clients.get(key);
     if (!client) {
       client = new LspClient(workspaceRoot, serverConfig);
@@ -18381,6 +18424,11 @@ var LspClientManager = class {
     }
     const workspaceRoot = this.findWorkspaceRoot(filePath);
     const key = `${workspaceRoot}:${serverConfig.command}`;
+    const warmup = this.warmupPromises.get(key);
+    if (warmup) {
+      await warmup;
+      this.warmupPromises.delete(key);
+    }
     let client = this.clients.get(key);
     if (!client) {
       client = new LspClient(workspaceRoot, serverConfig);
@@ -18480,6 +18528,8 @@ var LspClientManager = class {
     this.clients.clear();
     this.lastUsed.clear();
     this.inFlightCount.clear();
+    this.warmupPromises.clear();
+    this.symbolCache.clear();
   }
   /** Expose in-flight count for testing */
   getInFlightCount(key) {
@@ -19264,10 +19314,35 @@ var lspTools = [
 var import_fs5 = require("fs");
 var import_path6 = require("path");
 var import_module = require("module");
+var import_child_process4 = require("child_process");
 var import_meta = {};
 var sgModule = null;
 var sgLoadFailed = false;
 var sgLoadError = "";
+var installAttempted = false;
+async function tryInstallAstGrep() {
+  if (process.env.AST_AUTO_INSTALL === "false") {
+    return false;
+  }
+  try {
+    (0, import_child_process4.execSync)("npm --version", { stdio: "ignore", timeout: 5e3 });
+  } catch {
+    sgLoadError = "npm not available";
+    return false;
+  }
+  try {
+    console.log("Installing @ast-grep/napi...");
+    (0, import_child_process4.execSync)("npm install -g @ast-grep/napi --silent", {
+      stdio: "inherit",
+      timeout: 3e4
+    });
+    console.log("Installation complete");
+    return true;
+  } catch (error2) {
+    sgLoadError = `Installation failed: ${error2 instanceof Error ? error2.message : String(error2)}`;
+    return false;
+  }
+}
 async function getSgModule() {
   if (sgLoadFailed) {
     return null;
@@ -19280,6 +19355,26 @@ async function getSgModule() {
       try {
         sgModule = await import("@ast-grep/napi");
       } catch (error2) {
+        if (!installAttempted) {
+          installAttempted = true;
+          const installed = await tryInstallAstGrep();
+          if (installed) {
+            try {
+              const require2 = (0, import_module.createRequire)(import_meta.url || __filename || process.cwd() + "/");
+              sgModule = require2("@ast-grep/napi");
+              return sgModule;
+            } catch {
+              try {
+                sgModule = await import("@ast-grep/napi");
+                return sgModule;
+              } catch (retryError) {
+                sgLoadFailed = true;
+                sgLoadError = retryError instanceof Error ? retryError.message : String(retryError);
+                return null;
+              }
+            }
+          }
+        }
         sgLoadFailed = true;
         sgLoadError = error2 instanceof Error ? error2.message : String(error2);
         return null;
@@ -19452,12 +19547,23 @@ Note: Patterns must be valid AST nodes for the language.`,
     try {
       const sg = await getSgModule();
       if (!sg) {
+        const errorMsg = installAttempted ? `Auto-installation failed: ${sgLoadError}
+
+Please install manually:
+  npm install -g @ast-grep/napi
+
+Or disable auto-install:
+  export AST_AUTO_INSTALL=false` : `@ast-grep/napi is not available.
+
+Install manually:
+  npm install -g @ast-grep/napi
+
+Error: ${sgLoadError}`;
         return {
           content: [
             {
               type: "text",
-              text: `@ast-grep/napi is not available. Install it with: npm install -g @ast-grep/napi
-Error: ${sgLoadError}`
+              text: errorMsg
             }
           ]
         };
@@ -19572,12 +19678,23 @@ IMPORTANT: dryRun=true (default) only previews changes. Set dryRun=false to appl
     try {
       const sg = await getSgModule();
       if (!sg) {
+        const errorMsg = installAttempted ? `Auto-installation failed: ${sgLoadError}
+
+Please install manually:
+  npm install -g @ast-grep/napi
+
+Or disable auto-install:
+  export AST_AUTO_INSTALL=false` : `@ast-grep/napi is not available.
+
+Install manually:
+  npm install -g @ast-grep/napi
+
+Error: ${sgLoadError}`;
         return {
           content: [
             {
               type: "text",
-              text: `@ast-grep/napi is not available. Install it with: npm install -g @ast-grep/napi
-Error: ${sgLoadError}`
+              text: errorMsg
             }
           ]
         };
@@ -19807,7 +19924,7 @@ var fsSync2 = __toESM(require("fs"), 1);
 var path4 = __toESM(require("path"), 1);
 var os2 = __toESM(require("os"), 1);
 var crypto3 = __toESM(require("crypto"), 1);
-var import_child_process5 = require("child_process");
+var import_child_process6 = require("child_process");
 var import_util6 = require("util");
 
 // src/lib/atomic-write.ts
@@ -19921,10 +20038,10 @@ async function safeReadJson(filePath) {
 var path3 = __toESM(require("path"), 1);
 
 // src/platform/process-utils.ts
-var import_child_process4 = require("child_process");
+var import_child_process5 = require("child_process");
 var import_util5 = require("util");
 var fsPromises = __toESM(require("fs/promises"), 1);
-var execFileAsync = (0, import_util5.promisify)(import_child_process4.execFile);
+var execFileAsync = (0, import_util5.promisify)(import_child_process5.execFile);
 function isProcessAlive(pid) {
   if (!Number.isInteger(pid) || pid <= 0) return false;
   try {
@@ -20002,7 +20119,7 @@ async function getProcessStartTimeLinux(pid) {
 var PLATFORM = process.platform;
 
 // src/tools/python-repl/session-lock.ts
-var execFileAsync2 = (0, import_util6.promisify)(import_child_process5.execFile);
+var execFileAsync2 = (0, import_util6.promisify)(import_child_process6.execFile);
 var STALE_LOCK_AGE_MS = 6e4;
 var DEFAULT_ACQUIRE_TIMEOUT_MS = 3e4;
 var LOCK_RETRY_INTERVAL_MS = 100;
@@ -20429,15 +20546,15 @@ async function sendSocketRequest(socketPath, method, params, timeout = 6e4) {
 }
 
 // src/tools/python-repl/bridge-manager.ts
-var import_child_process6 = require("child_process");
+var import_child_process7 = require("child_process");
 var fs4 = __toESM(require("fs"), 1);
 var fsPromises2 = __toESM(require("fs/promises"), 1);
 var path5 = __toESM(require("path"), 1);
 var import_url2 = require("url");
-var import_child_process7 = require("child_process");
+var import_child_process8 = require("child_process");
 var import_util7 = require("util");
 var import_meta2 = {};
-var execFileAsync3 = (0, import_util7.promisify)(import_child_process7.execFile);
+var execFileAsync3 = (0, import_util7.promisify)(import_child_process8.execFile);
 var BRIDGE_SPAWN_TIMEOUT_MS = 3e4;
 var DEFAULT_GRACE_PERIOD_MS = 5e3;
 var SIGTERM_GRACE_MS = 2500;
@@ -20565,7 +20682,7 @@ async function spawnBridgeServer(sessionId, projectDir) {
   const effectiveProjectDir = projectDir || process.cwd();
   const pythonEnv = await ensurePythonEnvironment(effectiveProjectDir);
   const bridgeArgs = [bridgePath, socketPath];
-  const proc = (0, import_child_process6.spawn)(pythonEnv.pythonPath, bridgeArgs, {
+  const proc = (0, import_child_process7.spawn)(pythonEnv.pythonPath, bridgeArgs, {
     stdio: ["ignore", "ignore", "pipe"],
     cwd: effectiveProjectDir,
     env: { ...process.env, PYTHONUNBUFFERED: "1" },
@@ -21175,7 +21292,7 @@ Use this instead of Bash heredocs when you need:
 var import_fs8 = require("fs");
 
 // src/lib/worktree-paths.ts
-var import_child_process8 = require("child_process");
+var import_child_process9 = require("child_process");
 var import_fs6 = require("fs");
 var import_path7 = require("path");
 var OmcPaths = {
@@ -21200,7 +21317,7 @@ function getWorktreeRoot(cwd) {
     return worktreeCache.root || null;
   }
   try {
-    const root = (0, import_child_process8.execSync)("git rev-parse --show-toplevel", {
+    const root = (0, import_child_process9.execSync)("git rev-parse --show-toplevel", {
       cwd: effectiveCwd,
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"]
@@ -21672,6 +21789,17 @@ function assertValidMode(mode) {
   return mode;
 }
 
+// src/lib/safe-json.ts
+function safeJsonParse(content, filePath) {
+  try {
+    const data = JSON.parse(content);
+    return { success: true, data };
+  } catch (error2) {
+    const errorMsg = filePath ? `Failed to parse JSON from ${filePath}: ${error2 instanceof Error ? error2.message : String(error2)}` : `Failed to parse JSON: ${error2 instanceof Error ? error2.message : String(error2)}`;
+    return { success: false, error: errorMsg };
+  }
+}
+
 // src/tools/state-tools.ts
 var STATE_TOOL_MODES = [
   "autopilot",
@@ -21748,7 +21876,13 @@ Expected path: ${statePath2}`
           };
         }
         const content = (0, import_fs8.readFileSync)(statePath2, "utf-8");
-        const state = JSON.parse(content);
+        const result = safeJsonParse(content, statePath2);
+        if (!result.success) {
+          return {
+            content: [{ type: "text", text: result.error }],
+            isError: true
+          };
+        }
         return {
           content: [{
             type: "text",
@@ -21757,7 +21891,7 @@ Expected path: ${statePath2}`
 Path: ${statePath2}
 
 \`\`\`json
-${JSON.stringify(state, null, 2)}
+${JSON.stringify(result.data, null, 2)}
 \`\`\``
           }]
         };
@@ -21790,21 +21924,21 @@ Note: Reading from legacy/aggregate path (no session_id). This may include state
 
 `;
       if (legacyExists) {
-        try {
-          const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
-          const state = JSON.parse(content);
+        const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
+        const result = safeJsonParse(content, statePath);
+        if (result.success) {
           output += `### Legacy Path (shared)
 Path: ${statePath}
 
 \`\`\`json
-${JSON.stringify(state, null, 2)}
+${JSON.stringify(result.data, null, 2)}
 \`\`\`
 
 `;
-        } catch {
+        } else {
           output += `### Legacy Path (shared)
 Path: ${statePath}
-*Error reading state file*
+*${result.error}*
 
 `;
         }
@@ -21815,21 +21949,21 @@ Path: ${statePath}
 `;
         for (const sid of activeSessions) {
           const sessionStatePath = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sid) : resolveSessionStatePath(mode, sid, root);
-          try {
-            const content = (0, import_fs8.readFileSync)(sessionStatePath, "utf-8");
-            const state = JSON.parse(content);
+          const content = (0, import_fs8.readFileSync)(sessionStatePath, "utf-8");
+          const result = safeJsonParse(content, sessionStatePath);
+          if (result.success) {
             output += `**Session: ${sid}**
 Path: ${sessionStatePath}
 
 \`\`\`json
-${JSON.stringify(state, null, 2)}
+${JSON.stringify(result.data, null, 2)}
 \`\`\`
 
 `;
-          } catch {
+          } else {
             output += `**Session: ${sid}**
 Path: ${sessionStatePath}
-*Error reading state file*
+*${result.error}*
 
 `;
           }
@@ -22122,16 +22256,13 @@ var stateListActiveTool = {
       if (sessionId) {
         validateSessionId(sessionId);
         const activeModes = [...getActiveModes(root, sessionId)];
-        try {
-          const ralplanPath2 = resolveSessionStatePath("ralplan", sessionId, root);
-          if ((0, import_fs8.existsSync)(ralplanPath2)) {
-            const content = (0, import_fs8.readFileSync)(ralplanPath2, "utf-8");
-            const state = JSON.parse(content);
-            if (state.active) {
-              activeModes.push("ralplan");
-            }
+        const ralplanPath2 = resolveSessionStatePath("ralplan", sessionId, root);
+        if ((0, import_fs8.existsSync)(ralplanPath2)) {
+          const content = (0, import_fs8.readFileSync)(ralplanPath2, "utf-8");
+          const result = safeJsonParse(content, ralplanPath2);
+          if (result.success && result.data?.active) {
+            activeModes.push("ralplan");
           }
-        } catch {
         }
         if (activeModes.length === 0) {
           return {
@@ -22157,13 +22288,10 @@ ${modeList}`
       const legacyActiveModes = [...getActiveModes(root)];
       const ralplanPath = getStatePath("ralplan", root);
       if ((0, import_fs8.existsSync)(ralplanPath)) {
-        try {
-          const content = (0, import_fs8.readFileSync)(ralplanPath, "utf-8");
-          const state = JSON.parse(content);
-          if (state.active) {
-            legacyActiveModes.push("ralplan");
-          }
-        } catch {
+        const content = (0, import_fs8.readFileSync)(ralplanPath, "utf-8");
+        const result = safeJsonParse(content, ralplanPath);
+        if (result.success && result.data?.active) {
+          legacyActiveModes.push("ralplan");
         }
       }
       for (const mode of legacyActiveModes) {
@@ -22175,16 +22303,13 @@ ${modeList}`
       const sessionIds = listSessionIds(root);
       for (const sid of sessionIds) {
         const sessionActiveModes = [...getActiveModes(root, sid)];
-        try {
-          const ralplanSessionPath = resolveSessionStatePath("ralplan", sid, root);
-          if ((0, import_fs8.existsSync)(ralplanSessionPath)) {
-            const content = (0, import_fs8.readFileSync)(ralplanSessionPath, "utf-8");
-            const state = JSON.parse(content);
-            if (state.active) {
-              sessionActiveModes.push("ralplan");
-            }
+        const ralplanSessionPath = resolveSessionStatePath("ralplan", sid, root);
+        if ((0, import_fs8.existsSync)(ralplanSessionPath)) {
+          const content = (0, import_fs8.readFileSync)(ralplanSessionPath, "utf-8");
+          const result = safeJsonParse(content, ralplanSessionPath);
+          if (result.success && result.data?.active) {
+            sessionActiveModes.push("ralplan");
           }
-        } catch {
         }
         for (const mode of sessionActiveModes) {
           if (!modeSessionMap.has(mode)) {
@@ -22243,23 +22368,19 @@ var stateGetStatusTool = {
           validateSessionId(sessionId);
           const statePath = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sessionId) : resolveSessionStatePath(mode, sessionId, root);
           const active = MODE_CONFIGS[mode] ? isModeActive(mode, root, sessionId) : (0, import_fs8.existsSync)(statePath) && (() => {
-            try {
-              const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
-              const state = JSON.parse(content);
-              return state.active === true;
-            } catch {
-              return false;
-            }
+            const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
+            const result = safeJsonParse(content, statePath);
+            return result.success && result.data?.active === true;
           })();
           let statePreview = "No state file";
           if ((0, import_fs8.existsSync)(statePath)) {
-            try {
-              const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
-              const state = JSON.parse(content);
-              statePreview = JSON.stringify(state, null, 2).slice(0, 500);
+            const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
+            const result = safeJsonParse(content, statePath);
+            if (result.success) {
+              statePreview = JSON.stringify(result.data, null, 2).slice(0, 500);
               if (statePreview.length >= 500) statePreview += "\n...(truncated)";
-            } catch {
-              statePreview = "Error reading state file";
+            } else {
+              statePreview = result.error;
             }
           }
           lines2.push(`### Session: ${sessionId}`);
@@ -22280,13 +22401,9 @@ ${statePreview}
         }
         const legacyPath = getStatePath(mode, root);
         const legacyActive = MODE_CONFIGS[mode] ? isModeActive(mode, root) : (0, import_fs8.existsSync)(legacyPath) && (() => {
-          try {
-            const content = (0, import_fs8.readFileSync)(legacyPath, "utf-8");
-            const state = JSON.parse(content);
-            return state.active === true;
-          } catch {
-            return false;
-          }
+          const content = (0, import_fs8.readFileSync)(legacyPath, "utf-8");
+          const result = safeJsonParse(content, legacyPath);
+          return result.success && result.data?.active === true;
         })();
         lines2.push(`### Legacy Path`);
         lines2.push(`- **Active:** ${legacyActive ? "Yes" : "No"}`);
@@ -22294,17 +22411,13 @@ ${statePreview}
         lines2.push(`- **Exists:** ${(0, import_fs8.existsSync)(legacyPath) ? "Yes" : "No"}
 `);
         const activeSessions = MODE_CONFIGS[mode] ? getActiveSessionsForMode(mode, root) : listSessionIds(root).filter((sid) => {
-          try {
-            const sessionPath = resolveSessionStatePath(mode, sid, root);
-            if ((0, import_fs8.existsSync)(sessionPath)) {
-              const content = (0, import_fs8.readFileSync)(sessionPath, "utf-8");
-              const state = JSON.parse(content);
-              return state.active === true;
-            }
-            return false;
-          } catch {
-            return false;
+          const sessionPath = resolveSessionStatePath(mode, sid, root);
+          if ((0, import_fs8.existsSync)(sessionPath)) {
+            const content = (0, import_fs8.readFileSync)(sessionPath, "utf-8");
+            const result = safeJsonParse(content, sessionPath);
+            return result.success && result.data?.active === true;
           }
+          return false;
         });
         if (activeSessions.length > 0) {
           lines2.push(`### Active Sessions (${activeSessions.length})`);
@@ -22339,12 +22452,9 @@ No active sessions for this mode.`);
       const ralplanPath = sessionId ? resolveSessionStatePath("ralplan", sessionId, root) : getStatePath("ralplan", root);
       let ralplanActive = false;
       if ((0, import_fs8.existsSync)(ralplanPath)) {
-        try {
-          const content = (0, import_fs8.readFileSync)(ralplanPath, "utf-8");
-          const state = JSON.parse(content);
-          ralplanActive = state.active === true;
-        } catch {
-        }
+        const content = (0, import_fs8.readFileSync)(ralplanPath, "utf-8");
+        const result = safeJsonParse(content, ralplanPath);
+        ralplanActive = result.success && result.data?.active === true;
       }
       const ralplanIcon = ralplanActive ? "[ACTIVE]" : "[INACTIVE]";
       lines.push(`${ralplanIcon} **ralplan**: ${ralplanActive ? "Active" : "Inactive"}`);
@@ -24286,6 +24396,193 @@ ${formatSkillOutput(userSkills)}`;
 };
 var skillsTools = [loadLocalTool, loadGlobalTool, listSkillsTool];
 
+// src/tools/dependency-analyzer.ts
+var import_fs16 = require("fs");
+var import_path23 = require("path");
+var DependencyAnalyzerSchema = external_exports.object({
+  filePath: external_exports.string().describe("File path to analyze"),
+  depth: external_exports.number().optional().describe("Dependency depth (default: 1)")
+});
+var dependencyAnalyzerTool = {
+  name: "dependency_analyzer",
+  description: "Analyze file-level dependencies (imports/requires)",
+  schema: DependencyAnalyzerSchema.shape,
+  handler: async (args) => {
+    try {
+      const { filePath, depth = 1 } = args;
+      const content = (0, import_fs16.readFileSync)(filePath, "utf-8");
+      const deps = extractDependencies(content, filePath);
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({ file: filePath, dependencies: deps, depth }, null, 2)
+        }]
+      };
+    } catch (error2) {
+      return {
+        content: [{
+          type: "text",
+          text: `Error: ${error2 instanceof Error ? error2.message : String(error2)}`
+        }],
+        isError: true
+      };
+    }
+  }
+};
+function extractDependencies(content, filePath) {
+  const deps = [];
+  const dir = (0, import_path23.dirname)(filePath);
+  const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
+  const requireRegex = /require\(['"]([^'"]+)['"]\)/g;
+  let match;
+  while ((match = importRegex.exec(content)) !== null) {
+    deps.push(resolveImport(match[1], dir));
+  }
+  while ((match = requireRegex.exec(content)) !== null) {
+    deps.push(resolveImport(match[1], dir));
+  }
+  return [...new Set(deps)];
+}
+function resolveImport(importPath, baseDir) {
+  if (importPath.startsWith(".")) {
+    return (0, import_path23.join)(baseDir, importPath);
+  }
+  return importPath;
+}
+
+// src/tools/doc-sync.ts
+var import_fs17 = require("fs");
+var DocSyncSchema = external_exports.object({
+  sourceFile: external_exports.string().describe("Source code file with comments"),
+  targetDoc: external_exports.string().describe("Target documentation file"),
+  section: external_exports.string().optional().describe("Section to update (default: append)")
+});
+var docSyncTool = {
+  name: "doc_sync",
+  description: "Sync code comments to documentation files",
+  schema: DocSyncSchema.shape,
+  handler: async (args) => {
+    try {
+      const { sourceFile, targetDoc, section } = args;
+      const code = (0, import_fs17.readFileSync)(sourceFile, "utf-8");
+      const rules = extractSecurityRules(code);
+      if (rules.length === 0) {
+        return {
+          content: [{ type: "text", text: "No security rules found" }]
+        };
+      }
+      const docContent = (0, import_fs17.readFileSync)(targetDoc, "utf-8");
+      const updated = section ? updateSection(docContent, section, rules) : appendRules(docContent, rules);
+      (0, import_fs17.writeFileSync)(targetDoc, updated, "utf-8");
+      return {
+        content: [{
+          type: "text",
+          text: `Synced ${rules.length} rules to ${targetDoc}`
+        }]
+      };
+    } catch (error2) {
+      return {
+        content: [{
+          type: "text",
+          text: `Error: ${error2 instanceof Error ? error2.message : String(error2)}`
+        }],
+        isError: true
+      };
+    }
+  }
+};
+function extractSecurityRules(code) {
+  const rules = [];
+  const regex = /\/\*\*[\s\S]*?@security\s+([\s\S]*?)\*\//g;
+  let match;
+  while ((match = regex.exec(code)) !== null) {
+    rules.push(match[1].trim());
+  }
+  return rules;
+}
+function updateSection(doc, section, rules) {
+  const marker = `## ${section}`;
+  const idx = doc.indexOf(marker);
+  if (idx === -1) return appendRules(doc, rules);
+  const nextSection = doc.indexOf("\n## ", idx + marker.length);
+  const before = doc.slice(0, idx + marker.length);
+  const after = nextSection === -1 ? "" : doc.slice(nextSection);
+  return `${before}
+
+${rules.map((r) => `- ${r}`).join("\n")}
+${after}`;
+}
+function appendRules(doc, rules) {
+  return `${doc}
+
+## Auto-Generated Rules
+
+${rules.map((r) => `- ${r}`).join("\n")}
+`;
+}
+
+// src/tools/parallel-opportunity-detector.ts
+var ParallelOpportunitySchema = external_exports.object({
+  tasks: external_exports.array(external_exports.object({
+    id: external_exports.string(),
+    dependencies: external_exports.array(external_exports.string()).optional()
+  })).describe("Task list with dependencies")
+});
+var parallelOpportunityDetectorTool = {
+  name: "parallel_opportunity_detector",
+  description: "Analyze task dependency graph and recommend parallel strategies",
+  schema: ParallelOpportunitySchema.shape,
+  handler: async (args) => {
+    try {
+      const { tasks } = args;
+      const graph = buildDependencyGraph(tasks);
+      const phases = detectParallelPhases(graph);
+      const recommendation = generateRecommendation(phases);
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify(recommendation, null, 2)
+        }]
+      };
+    } catch (error2) {
+      return {
+        content: [{
+          type: "text",
+          text: `Error: ${error2 instanceof Error ? error2.message : String(error2)}`
+        }],
+        isError: true
+      };
+    }
+  }
+};
+function buildDependencyGraph(tasks) {
+  const graph = /* @__PURE__ */ new Map();
+  tasks.forEach((t) => graph.set(t.id, t.dependencies || []));
+  return graph;
+}
+function detectParallelPhases(graph) {
+  const phases = [];
+  const completed = /* @__PURE__ */ new Set();
+  while (completed.size < graph.size) {
+    const ready = Array.from(graph.entries()).filter(([id, deps]) => !completed.has(id) && deps.every((d) => completed.has(d))).map(([id]) => id);
+    if (ready.length === 0) break;
+    phases.push(ready);
+    ready.forEach((id) => completed.add(id));
+  }
+  return phases;
+}
+function generateRecommendation(phases) {
+  return {
+    totalPhases: phases.length,
+    phases: phases.map((p, i) => ({
+      phase: i + 1,
+      parallelTasks: p,
+      count: p.length
+    })),
+    strategy: phases.length > 1 ? "team" : "sequential"
+  };
+}
+
 // src/tools/tool-prefix-migration.ts
 var DEPRECATION_MAP = {
   // LSP Tools
@@ -24371,6 +24668,9 @@ var allCustomTools = [
   ...notepadTools.flatMap(registerToolWithBothNames),
   ...memoryTools.flatMap(registerToolWithBothNames),
   ...traceTools.flatMap(registerToolWithBothNames),
+  ...registerToolWithBothNames(dependencyAnalyzerTool),
+  ...registerToolWithBothNames(docSyncTool),
+  ...registerToolWithBothNames(parallelOpportunityDetectorTool),
   ...skillsTools
 ];
 
