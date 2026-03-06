@@ -76,19 +76,16 @@ export async function syncMarketplace(opts = {}) {
     if (p.source?.version !== version) { p.source.version = version; changed = true; }
   }
 
-  if (!changed) {
-    console.log('syncMarketplace: versions already in sync');
-    return { success: true };
+  if (changed) {
+    writeFileSync(marketplacePath, JSON.stringify(market, null, 2) + '\n');
   }
 
-  writeFileSync(marketplacePath, JSON.stringify(market, null, 2) + '\n');
-
-  // 直接提交到当前分支并推送到 main
+  // 总是推送到 main（即使本地已同步，main 可能还是旧版本）
   run(`git add .claude-plugin/marketplace.json`, dryRun);
-  run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
+  run(`git commit -m "chore: sync marketplace.json to v${version}" || true`, dryRun);
   run(`git push origin HEAD:main`, dryRun);
 
-  console.log(`syncMarketplace: updated to v${version} and pushed to main`);
+  console.log(`syncMarketplace: pushed v${version} to main`);
   return { success: true };
 }
 
