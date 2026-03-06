@@ -293,11 +293,29 @@ describe('bridge-entry config validation', () => {
 // ═══════════════════════════════════════════════════════════════
 
 describe('validateAndNormalizeConfig', () => {
+  const testDir = join(homedir(), '.omc', 'test-bridge-config');
+
+  beforeEach(() => {
+    mkdirSync(testDir, { recursive: true });
+    // Initialize git repo to satisfy worktree check
+    try {
+      require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
+    } catch (e) {
+      // Ignore if git init fails
+    }
+  });
+
+  afterEach(() => {
+    if (existsSync(testDir)) {
+      rmSync(testDir, { recursive: true, force: true });
+    }
+  });
+
   const validConfig: BridgeConfig = {
     teamName: 'test-team',
     workerName: 'worker1',
     provider: 'codex',
-    workingDirectory: process.cwd(),
+    workingDirectory: testDir,
   };
 
   it('throws if teamName is missing', () => {
