@@ -2,7 +2,7 @@
  * Memory optimization utilities
  */
 
-export function clearBuffer(buffer: string): string {
+export function clearBuffer(_buffer: string): string {
   return '';
 }
 
