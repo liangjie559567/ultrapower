@@ -14,6 +14,13 @@ import type { PluginConfig, ExternalModelsConfig } from '../shared/types.js';
 import { getConfigDir } from '../utils/paths.js';
 
 /**
+ * Validate model name format (alphanumeric, hyphens, dots, max 100 chars)
+ */
+function isValidModelName(name: string): boolean {
+  return /^[a-zA-Z0-9.\-]{1,100}$/.test(name);
+}
+
+/**
  * Default configuration
  */
 export const DEFAULT_CONFIG: PluginConfig = {
@@ -203,11 +210,13 @@ export function loadEnvConfig(): Partial<PluginConfig> {
 
   if (process.env.OMC_MAX_BACKGROUND_TASKS) {
     const maxTasks = parseInt(process.env.OMC_MAX_BACKGROUND_TASKS, 10);
-    if (!isNaN(maxTasks)) {
+    if (!isNaN(maxTasks) && maxTasks > 0 && maxTasks <= 100) {
       config.permissions = {
         ...config.permissions,
         maxBackgroundTasks: maxTasks
       };
+    } else {
+      console.warn(`[config] Invalid OMC_MAX_BACKGROUND_TASKS: ${process.env.OMC_MAX_BACKGROUND_TASKS}, using default`);
     }
   }
 
@@ -247,17 +256,37 @@ export function loadEnvConfig(): Partial<PluginConfig> {
   }
 
   if (process.env.OMC_EXTERNAL_MODELS_DEFAULT_CODEX_MODEL) {
-    externalModelsDefaults.codexModel = process.env.OMC_EXTERNAL_MODELS_DEFAULT_CODEX_MODEL;
+    const model = process.env.OMC_EXTERNAL_MODELS_DEFAULT_CODEX_MODEL;
+    if (isValidModelName(model)) {
+      externalModelsDefaults.codexModel = model;
+    } else {
+      console.warn(`[config] Invalid OMC_EXTERNAL_MODELS_DEFAULT_CODEX_MODEL: ${model}`);
+    }
   } else if (process.env.OMC_CODEX_DEFAULT_MODEL) {
     // Legacy fallback
-    externalModelsDefaults.codexModel = process.env.OMC_CODEX_DEFAULT_MODEL;
+    const model = process.env.OMC_CODEX_DEFAULT_MODEL;
+    if (isValidModelName(model)) {
+      externalModelsDefaults.codexModel = model;
+    } else {
+      console.warn(`[config] Invalid OMC_CODEX_DEFAULT_MODEL: ${model}`);
+    }
   }
 
   if (process.env.OMC_EXTERNAL_MODELS_DEFAULT_GEMINI_MODEL) {
-    externalModelsDefaults.geminiModel = process.env.OMC_EXTERNAL_MODELS_DEFAULT_GEMINI_MODEL;
+    const model = process.env.OMC_EXTERNAL_MODELS_DEFAULT_GEMINI_MODEL;
+    if (isValidModelName(model)) {
+      externalModelsDefaults.geminiModel = model;
+    } else {
+      console.warn(`[config] Invalid OMC_EXTERNAL_MODELS_DEFAULT_GEMINI_MODEL: ${model}`);
+    }
   } else if (process.env.OMC_GEMINI_DEFAULT_MODEL) {
     // Legacy fallback
-    externalModelsDefaults.geminiModel = process.env.OMC_GEMINI_DEFAULT_MODEL;
+    const model = process.env.OMC_GEMINI_DEFAULT_MODEL;
+    if (isValidModelName(model)) {
+      externalModelsDefaults.geminiModel = model;
+    } else {
+      console.warn(`[config] Invalid OMC_GEMINI_DEFAULT_MODEL: ${model}`);
+    }
   }
 
   const externalModelsFallback: ExternalModelsConfig['fallbackPolicy'] = {
