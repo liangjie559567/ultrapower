@@ -280,6 +280,57 @@ function fixNpmCache() {
 
 fixNpmCache();
 
+// Fix: npm-cache marketplace.json also needs repair
+function fixNpmCacheMarketplace() {
+  try {
+    const npmCacheDir = join(CLAUDE_DIR, 'plugins', 'cache', 'npm-cache', 'node_modules', '@liangjie559567', 'ultrapower');
+    if (!existsSync(npmCacheDir)) return;
+
+    const npmMarketplaceDir = join(npmCacheDir, '.claude-plugin');
+    const npmMarketplacePath = join(npmMarketplaceDir, 'marketplace.json');
+
+    let cacheVersion = '0.0.0';
+    try {
+      const cachePkg = JSON.parse(readFileSync(join(npmCacheDir, 'package.json'), 'utf-8'));
+      cacheVersion = cachePkg.version || cacheVersion;
+    } catch { /* use default */ }
+
+    function marketplaceNeedsRepair() {
+      try {
+        const content = JSON.parse(readFileSync(npmMarketplacePath, 'utf-8'));
+        if (content.name !== 'omc') return true;
+        if (!Array.isArray(content.plugins) || content.plugins.length === 0) return true;
+        return false;
+      } catch (e) {
+        if (e.code === 'ENOENT') return true;
+        return false;
+      }
+    }
+
+    if (!marketplaceNeedsRepair()) return;
+
+    const cleanMarketplaceJson = {
+      name: 'omc',
+      description: 'Disciplined multi-agent orchestration for Claude Code: workflow enforcement + parallel execution',
+      owner: { name: 'liangjie559567' },
+      plugins: [{
+        name: 'ultrapower',
+        description: 'Disciplined multi-agent orchestration: workflow enforcement + parallel execution',
+        version: cacheVersion,
+        source: { source: 'npm', package: '@liangjie559567/ultrapower', version: cacheVersion },
+        author: { name: 'liangjie559567' }
+      }]
+    };
+    mkdirSync(npmMarketplaceDir, { recursive: true });
+    writeFileSync(npmMarketplacePath, JSON.stringify(cleanMarketplaceJson, null, 2));
+    console.log(`[OMC] Repaired npm-cache marketplace.json (v${cacheVersion})`);
+  } catch (e) {
+    console.log('[OMC] Warning: Could not repair npm-cache marketplace.json:', e.message);
+  }
+}
+
+fixNpmCacheMarketplace();
+
 // Fix: Claude Code's npm-cache/package.json stores a semver range (e.g. "^5.2.3") after first install.
 // On subsequent "Update now" clicks, the installer sees the range is satisfied by the cached version
 // and skips re-downloading — so users stay on the old version forever.
@@ -389,6 +440,54 @@ function fixMissingPluginJson() {
 }
 
 fixMissingPluginJson();
+
+// Fix: npm install strips .claude-plugin/marketplace.json, recreate it in plugin cache
+function fixMissingMarketplaceJson() {
+  try {
+    const pluginRoot = dirname(__dirname);
+    const pkgPath = join(pluginRoot, 'package.json');
+    if (!existsSync(pkgPath)) return;
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+    const version = pkg.version || '0.0.0';
+
+    const marketplaceJson = {
+      name: 'omc',
+      description: 'Disciplined multi-agent orchestration for Claude Code: workflow enforcement + parallel execution',
+      owner: { name: 'liangjie559567' },
+      plugins: [{
+        name: 'ultrapower',
+        description: pkg.description || '',
+        version,
+        source: { source: 'npm', package: '@liangjie559567/ultrapower', version },
+        author: { name: 'liangjie559567' }
+      }]
+    };
+    const marketplaceJsonStr = JSON.stringify(marketplaceJson, null, 2);
+
+    // 1. Write to install dir
+    const localDir = join(pluginRoot, '.claude-plugin');
+    mkdirSync(localDir, { recursive: true });
+    writeFileSync(join(localDir, 'marketplace.json'), marketplaceJsonStr);
+    console.log('[OMC] Wrote .claude-plugin/marketplace.json in install dir');
+
+    // 2. Write to plugin cache
+    const pluginCacheBase = join(CLAUDE_DIR, 'plugins/cache/omc/ultrapower');
+    if (existsSync(pluginCacheBase)) {
+      const versions = readdirSync(pluginCacheBase);
+      for (const v of versions) {
+        const cacheDir = join(pluginCacheBase, v, '.claude-plugin');
+        mkdirSync(cacheDir, { recursive: true });
+        const versionedMkt = { ...marketplaceJson, plugins: [{ ...marketplaceJson.plugins[0], version: v, source: { ...marketplaceJson.plugins[0].source, version: v } }] };
+        writeFileSync(join(cacheDir, 'marketplace.json'), JSON.stringify(versionedMkt, null, 2));
+        console.log(`[OMC] Wrote .claude-plugin/marketplace.json in plugin cache v${v}`);
+      }
+    }
+  } catch (e) {
+    console.log('[OMC] Warning: Could not create .claude-plugin/marketplace.json:', e.message);
+  }
+}
+
+fixMissingMarketplaceJson();
 
 // 1. Create HUD directory
 if (!existsSync(HUD_DIR)) {
