@@ -16,19 +16,12 @@
  * - Line count enforcement (collapse to single line if needed)
  */
 
-// Matches CSI sequences that are NOT SGR (color/style) codes
-// SGR sequences end with 'm' and should be preserved for color output
-// Other CSI sequences (cursor movement, clear screen, etc.) should be stripped:
-// - H: cursor position, J: erase display, K: erase line
-// - A/B/C/D: cursor up/down/forward/back, etc.
-// - ?25l/?25h: cursor visibility (private sequences with ? prefix)
+// Cached compiled regexes
 const CSI_NON_SGR_REGEX = /\x1b\[\??[0-9;]*[A-LN-Za-ln-z]/g;
-
-// Matches OSC sequences (ESC]...BEL) - operating system commands
 const OSC_REGEX = /\x1b\][^\x07]*\x07/g;
-
-// Matches simple escape sequences (ESC + single char, but not [ or ])
 const SIMPLE_ESC_REGEX = /\x1b[^[\]]/g;
+const UNICODE_BLOCKS_REGEX = /[█░▓▒]/g;
+const LEADING_TRAILING_NEWLINES_REGEX = /^\n+|\n+$/g;
 
 /**
  * Strip terminal control ANSI sequences while preserving color/style (SGR) codes.
@@ -50,17 +43,20 @@ export function stripAnsi(text: string): string {
     .replace(SIMPLE_ESC_REGEX, ''); // Strip simple escape sequences
 }
 
+const UNICODE_MAP: Record<string, string> = {
+  '█': '#',
+  '░': '-',
+  '▓': '=',
+  '▒': '-'
+};
+
 /**
  * Replace variable-width Unicode block characters with fixed-width ASCII equivalents.
  * Targets characters commonly used in progress bars that have inconsistent
  * terminal width across different terminal emulators.
  */
 export function replaceUnicodeBlocks(text: string): string {
-  return text
-    .replace(/█/g, '#')
-    .replace(/░/g, '-')
-    .replace(/▓/g, '=')
-    .replace(/▒/g, '-');
+  return text.replace(UNICODE_BLOCKS_REGEX, (match) => UNICODE_MAP[match] || match);
 }
 
 /**
@@ -87,11 +83,12 @@ export function sanitizeOutput(output: string): string {
 
   // Step 3: Preserve multi-line output, just trim each line
   // Do NOT collapse to single line - HUD needs proper line breaks for tree display
-  const lines = sanitized.split('\n').map(line => line.trimEnd());
-  sanitized = lines.join('\n');
+  const lines = sanitized.split('\n');
+  const trimmedLines = [];
+  for (let i = 0; i < lines.length; i++) {
+    trimmedLines.push(lines[i].trimEnd());
+  }
 
   // Step 4: Remove leading/trailing empty lines
-  sanitized = sanitized.replace(/^\n+|\n+$/g, '');
-
-  return sanitized;
+  return trimmedLines.join('\n').replace(LEADING_TRAILING_NEWLINES_REGEX, '');
 }

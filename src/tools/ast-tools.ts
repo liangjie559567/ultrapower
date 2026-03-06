@@ -8,10 +8,11 @@
  */
 
 import { z } from "zod";
-import { readFileSync, readdirSync, statSync, writeFileSync } from "fs";
+import { readFileSync, readdirSync, statSync, writeFileSync, createReadStream } from "fs";
 import { join, extname, resolve } from "path";
 import { createRequire } from "module";
 import { execSync } from "child_process";
+import { createInterface } from "readline";
 
 // Dynamic import for @ast-grep/napi
 // Graceful degradation: if the module is not available (e.g., in bundled/plugin context),
@@ -201,6 +202,37 @@ const EXT_TO_LANG: Record<string, string> = {
 };
 
 /**
+ * Read file with streaming for large files (>10MB)
+ */
+async function readFileStream(
+  filePath: string,
+  onProgress?: (bytesRead: number, totalBytes: number) => void,
+): Promise<string> {
+  const stat = statSync(filePath);
+  const fileSize = stat.size;
+  const LARGE_FILE_THRESHOLD = 10 * 1024 * 1024; // 10MB
+
+  if (fileSize < LARGE_FILE_THRESHOLD) {
+    return readFileSync(filePath, "utf-8");
+  }
+
+  return new Promise((resolve, reject) => {
+    const chunks: string[] = [];
+    let bytesRead = 0;
+    const stream = createReadStream(filePath, { encoding: "utf-8" });
+
+    stream.on("data", (chunk: string) => {
+      chunks.push(chunk);
+      bytesRead += Buffer.byteLength(chunk, "utf-8");
+      onProgress?.(bytesRead, fileSize);
+    });
+
+    stream.on("end", () => resolve(chunks.join("")));
+    stream.on("error", reject);
+  });
+}
+
+/**
  * Get files matching the language in a directory
  */
 function getFilesForLanguage(
@@ -380,7 +412,7 @@ Note: Patterns must be valid AST nodes for the language.`,
         if (totalMatches >= maxResults) break;
 
         try {
-          const content = readFileSync(filePath, "utf-8");
+          const content = await readFileStream(filePath);
           const root = sg.parse(toLangEnum(sg, language), content).root();
           const matches = root.findAll(pattern);
 
@@ -520,7 +552,7 @@ IMPORTANT: dryRun=true (default) only previews changes. Set dryRun=false to appl
 
       for (const filePath of files) {
         try {
-          const content = readFileSync(filePath, "utf-8");
+          const content = await readFileStream(filePath);
           const root = sg.parse(toLangEnum(sg, language), content).root();
           const matches = root.findAll(pattern);
 

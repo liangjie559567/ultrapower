@@ -168,6 +168,65 @@ function isAlreadyCamelCase(obj: Record<string, unknown>): boolean {
 }
 
 /**
+ * Handle fast-path normalization for already-camelCase input
+ */
+function normalizeFastPath(rawObj: Record<string, unknown>, hookType?: string): HookInput {
+  const normalized = {
+    sessionId: rawObj.sessionId as string | undefined,
+    toolName: rawObj.toolName as string | undefined,
+    toolInput: rawObj.toolInput,
+    toolOutput: rawObj.toolOutput ?? rawObj.toolResponse,
+    directory: rawObj.directory as string | undefined,
+    prompt: rawObj.prompt as string | undefined,
+    message: rawObj.message as HookInput['message'],
+    parts: rawObj.parts as HookInput['parts'],
+    ...filterPassthrough(rawObj, hookType),
+  } as HookInput;
+
+  if (hookType && REQUIRED_KEYS[hookType]) {
+    validateRequiredKeys(normalized as Record<string, unknown>, hookType);
+  }
+
+  return normalized;
+}
+
+/**
+ * Validate input with Zod schema
+ */
+function validateWithZod(input: unknown, isSensitive: boolean, hookType?: string): RawHookInput {
+  const schema = isSensitive ? StrictHookInputSchema : HookInputSchema;
+  const parsed = schema.safeParse(input);
+
+  if (!parsed.success) {
+    const errorMsg = `[bridge-normalize] Zod validation failed: ${parsed.error.issues.map(i => i.message).join(', ')}`;
+    if (isSensitive) {
+      throw new Error(`${errorMsg} (hook: ${hookType})`);
+    }
+    console.error(errorMsg);
+  }
+
+  return (parsed.success ? parsed.data : input) as RawHookInput;
+}
+
+/**
+ * Map snake_case fields to camelCase
+ */
+function mapFieldsToCamelCase(input: RawHookInput, hookType?: string): HookInput {
+  return {
+    sessionId: input.session_id ?? input.sessionId,
+    toolName: input.tool_name ?? input.toolName,
+    toolInput: input.tool_input ?? input.toolInput,
+    toolOutput: input.tool_response ?? input.toolOutput ?? input.toolResponse,
+    directory: input.cwd ?? input.directory,
+    prompt: input.prompt,
+    message: input.message,
+    parts: input.parts,
+    ...filterPassthrough(input, hookType),
+    cwd: input.cwd ?? input.directory,
+  } as HookInput;
+}
+
+/**
  * Normalize hook input from Claude Code's snake_case format to the
  * camelCase HookInput interface used internally.
  *
@@ -184,68 +243,23 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
   }
 
   const rawObj = raw as Record<string, unknown>;
-
-  // Fast path: if input is already camelCase, skip Zod parse entirely.
-  // Sensitive hooks must always go through Zod for structural validation
-  // (type checking, format verification) regardless of key casing.
   const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
+
+  // Fast path for already-camelCase non-sensitive input
   if (isAlreadyCamelCase(rawObj) && !isSensitive) {
-    const normalized = {
-      sessionId: rawObj.sessionId as string | undefined,
-      toolName: rawObj.toolName as string | undefined,
-      toolInput: rawObj.toolInput,
-      toolOutput: rawObj.toolOutput ?? rawObj.toolResponse,
-      directory: rawObj.directory as string | undefined,
-      prompt: rawObj.prompt as string | undefined,
-      message: rawObj.message as HookInput['message'],
-      parts: rawObj.parts as HookInput['parts'],
-      ...filterPassthrough(rawObj, hookType),
-    } as HookInput;
-
-    // Validate required keys even on fast path
-    if (hookType && REQUIRED_KEYS[hookType]) {
-      validateRequiredKeys(normalized as Record<string, unknown>, hookType);
-    }
-
-    return normalized;
+    return normalizeFastPath(rawObj, hookType);
   }
 
-  // For sensitive hooks, pre-filter unknown fields before Zod validation
-  let inputToValidate = raw;
-  if (isSensitive) {
-    inputToValidate = preFilterSensitiveInput(raw as Record<string, unknown>, hookType!);
-  }
+  // Pre-filter sensitive hooks before validation
+  const inputToValidate = isSensitive
+    ? preFilterSensitiveInput(rawObj, hookType!)
+    : raw;
 
-  // Validate with Zod - use strict schema for sensitive hooks
-  const schema = isSensitive ? StrictHookInputSchema : HookInputSchema;
-  const parsed = schema.safeParse(inputToValidate);
-  if (!parsed.success) {
-    const errorMsg = `[bridge-normalize] Zod validation failed: ${parsed.error.issues.map(i => i.message).join(', ')}`;
-    // Sensitive hooks must fail fast on validation errors
-    if (isSensitive) {
-      throw new Error(`${errorMsg} (hook: ${hookType})`);
-    }
-    // Non-sensitive hooks log warning and continue
-    console.error(errorMsg);
-  }
+  // Validate with Zod
+  const input = validateWithZod(inputToValidate, isSensitive, hookType);
 
-  const input = (parsed.success ? parsed.data : inputToValidate) as RawHookInput;
-
-  const normalized = {
-    sessionId: input.session_id ?? input.sessionId,
-    toolName: input.tool_name ?? input.toolName,
-    toolInput: input.tool_input ?? input.toolInput,
-    // tool_response maps to toolOutput for backward compatibility
-    toolOutput: input.tool_response ?? input.toolOutput ?? input.toolResponse,
-    directory: input.cwd ?? input.directory,
-    prompt: input.prompt,
-    message: input.message,
-    parts: input.parts,
-    // Pass through extra fields with sensitivity filtering
-    ...filterPassthrough(input, hookType),
-    // Preserve cwd for hooks that expect it (session-end, pre-compact)
-    cwd: input.cwd ?? input.directory,
-  } as HookInput;
+  // Map fields to camelCase
+  const normalized = mapFieldsToCamelCase(input, hookType);
 
   // Validate required keys for sensitive hooks
   if (hookType && SENSITIVE_HOOKS.has(hookType)) {
@@ -299,6 +313,46 @@ function preFilterSensitiveInput(input: Record<string, unknown>, hookType: strin
   return filtered;
 }
 
+/** Keys that are already mapped in normalization */
+const MAPPED_KEYS = new Set([
+  'tool_name', 'toolName',
+  'tool_input', 'toolInput',
+  'tool_response', 'toolOutput', 'toolResponse',
+  'session_id', 'sessionId',
+  'cwd', 'directory',
+  'hook_event_name', 'hookEventName',
+  'prompt', 'message', 'parts',
+]);
+
+/**
+ * Check if a field should be included in passthrough
+ */
+function shouldIncludeField(key: string, value: unknown): boolean {
+  return !MAPPED_KEYS.has(key) && value !== undefined;
+}
+
+/**
+ * Handle sensitive hook field filtering
+ */
+function filterSensitiveField(key: string, value: unknown, hookType: string): [string, unknown] | null {
+  const whitelist = STRICT_WHITELIST[hookType] || [];
+  if (whitelist.includes(key)) {
+    return [key, value];
+  }
+  console.warn(`[bridge-normalize] Dropped unknown field "${key}" for sensitive hook "${hookType}"`);
+  return null;
+}
+
+/**
+ * Handle non-sensitive hook field filtering
+ */
+function filterNonSensitiveField(key: string, value: unknown, hookType?: string): [string, unknown] {
+  if (!KNOWN_FIELDS.has(key)) {
+    console.debug(`[bridge-normalize] Unknown field "${key}" passed through for hook "${hookType ?? 'unknown'}"`);
+  }
+  return [key, value];
+}
+
 /**
  * Filter passthrough fields based on hook sensitivity.
  *
@@ -306,37 +360,18 @@ function preFilterSensitiveInput(input: Record<string, unknown>, hookType: strin
  * - Other hooks: pass through unknown fields with a debug warning
  */
 function filterPassthrough(input: Record<string, unknown>, hookType?: string): Record<string, unknown> {
-  const MAPPED_KEYS = new Set([
-    'tool_name', 'toolName',
-    'tool_input', 'toolInput',
-    'tool_response', 'toolOutput', 'toolResponse',
-    'session_id', 'sessionId',
-    'cwd', 'directory',
-    'hook_event_name', 'hookEventName',
-    'prompt', 'message', 'parts',
-  ]);
-
   const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
   const extra: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(input)) {
-    if (MAPPED_KEYS.has(key) || value === undefined) continue;
+    if (!shouldIncludeField(key, value)) continue;
 
-    if (isSensitive) {
-      // Strict: only allow whitelisted fields for this specific hook type
-      const whitelist = STRICT_WHITELIST[hookType!] || [];
-      if (whitelist.includes(key)) {
-        extra[key] = value;
-      } else {
-        // Log dropped unknown fields for sensitive hooks
-        console.warn(`[bridge-normalize] Dropped unknown field "${key}" for sensitive hook "${hookType}"`);
-      }
-    } else {
-      // Conservative: pass through but warn on truly unknown fields
-      extra[key] = value;
-      if (!KNOWN_FIELDS.has(key)) {
-        console.debug(`[bridge-normalize] Unknown field "${key}" passed through for hook "${hookType ?? 'unknown'}"`);
-      }
+    const result = isSensitive
+      ? filterSensitiveField(key, value, hookType!)
+      : filterNonSensitiveField(key, value, hookType);
+
+    if (result) {
+      extra[result[0]] = result[1];
     }
   }
   return extra;

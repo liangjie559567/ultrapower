@@ -1,10 +1,16 @@
+import { getValidatedEnv } from '../../lib/env-validator.js';
+
 /**
  * Replace environment variables in string
  * Supports ${VAR_NAME} syntax
  */
 export function replaceEnvVars(value: string): string {
   return value.replace(/\$\{([^}]+)\}/g, (_, varName) => {
-    return process.env[varName] || '';
+    try {
+      return getValidatedEnv(varName) || '';
+    } catch {
+      return ''; // Silently skip invalid vars
+    }
   });
 }
 

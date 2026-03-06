@@ -14,7 +14,8 @@
  */
 
 import { pathToFileURL } from 'url';
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, watch } from "fs";
+import { readFile } from "fs/promises";
 import { join } from "path";
 import { resolveToWorktreeRoot } from "../lib/worktree-paths.js";
 import { auditLogger } from "../audit/logger.js";
@@ -73,6 +74,65 @@ const TEAM_TERMINAL_VALUES = new Set([
   "done",
 ]);
 
+// LRU Cache for file reads
+class LRUCache<K, V> {
+  private cache = new Map<K, V>();
+  private maxSize: number;
+
+  constructor(maxSize: number) {
+    this.maxSize = maxSize;
+  }
+
+  get(key: K): V | undefined {
+    const value = this.cache.get(key);
+    if (value !== undefined) {
+      this.cache.delete(key);
+      this.cache.set(key, value);
+    }
+    return value;
+  }
+
+  set(key: K, value: V): void {
+    this.cache.delete(key);
+    this.cache.set(key, value);
+    if (this.cache.size > this.maxSize) {
+      const firstKey = this.cache.keys().next().value as K;
+      if (firstKey !== undefined) {
+        this.cache.delete(firstKey);
+      }
+    }
+  }
+
+  delete(key: K): void {
+    this.cache.delete(key);
+  }
+}
+
+const fileCache = new LRUCache<string, string>(50);
+const watchers = new Map<string, ReturnType<typeof watch>>();
+
+function watchFile(path: string): void {
+  if (watchers.has(path)) return;
+  try {
+    const watcher = watch(path, () => {
+      fileCache.delete(path);
+    });
+    watchers.set(path, watcher);
+  } catch {
+    // Ignore watch errors
+  }
+}
+
+async function readFileCached(path: string): Promise<string> {
+  const cached = fileCache.get(path);
+  if (cached !== undefined) return cached;
+
+  const content = await readFile(path, "utf-8");
+  fileCache.set(path, content);
+  watchFile(path);
+  return content;
+}
+
 interface TeamStagedState {
   active?: boolean;
   stage?: string;
@@ -92,7 +152,43 @@ interface TeamStagedState {
   terminal?: boolean;
 }
 
-function readTeamStagedState(
+async function readTeamStagedState(
+  directory: string,
+  sessionId?: string,
+): Promise<TeamStagedState | null> {
+  const stateDir = join(directory, ".omc", "state");
+  const statePaths = sessionId
+    ? [
+        join(stateDir, "sessions", sessionId, "team-state.json"),
+        join(stateDir, "team-state.json"),
+      ]
+    : [join(stateDir, "team-state.json")];
+
+  for (const statePath of statePaths) {
+    if (!existsSync(statePath)) {
+      continue;
+    }
+
+    const content = await readFileCached(statePath);
+    const result = safeJsonParse<TeamStagedState>(content, statePath);
+
+    if (!result.success || typeof result.data !== "object" || result.data === null) {
+      continue;
+    }
+
+    const stateSessionId = result.data.session_id || result.data.sessionId;
+    if (sessionId && stateSessionId && stateSessionId !== sessionId) {
+      continue;
+    }
+
+    return result.data;
+  }
+
+  return null;
+}
+
+// Backward compatibility: sync version for non-async contexts
+function readTeamStagedStateSync(
   directory: string,
   sessionId?: string,
 ): TeamStagedState | null {
@@ -438,7 +534,7 @@ async function processPersistentMode(input: HookInput): Promise<HookOutput> {
   const result = await checkPersistentModes(sessionId, directory, stopContext);
   const output = createHookOutput(result);
 
-  const teamState = readTeamStagedState(directory, sessionId);
+  const teamState = await readTeamStagedState(directory, sessionId);
   if (!teamState || teamState.active !== true || isTeamStateTerminal(teamState)) {
     // No persistent mode and no active team — Claude is truly idle.
     // Send session-idle notification (non-blocking) unless this was a user abort or context limit.
@@ -583,7 +679,7 @@ Continue working in ultrawork mode until all tasks are complete.
 `);
   }
 
-  const teamState = readTeamStagedState(directory, sessionId);
+  const teamState = await readTeamStagedState(directory, sessionId);
   if (teamState?.active) {
     const teamName = teamState.team_name || teamState.teamName || "team";
     const stage = getTeamStage(teamState);
@@ -624,7 +720,7 @@ Resume from this stage and continue the staged Team workflow.
   const agentsMdPath = join(directory, 'AGENTS.md');
   if (existsSync(agentsMdPath)) {
     try {
-      let agentsContent = readFileSync(agentsMdPath, 'utf-8').trim();
+      let agentsContent = (await readFileCached(agentsMdPath)).trim();
       if (agentsContent) {
         // Truncate to ~2500 tokens (10000 chars) to avoid context bloat
         const MAX_AGENTS_CHARS = 10000;

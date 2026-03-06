@@ -4,6 +4,7 @@
  */
 
 import { getAgentTimeout } from './timeout-config.js';
+import { SIZE_LIMIT } from '../lib/constants.js';
 
 export interface TimeoutEvent {
   agentType: string;
@@ -16,7 +17,7 @@ export interface TimeoutEvent {
 export class TimeoutManager {
   private timers = new Map<string, NodeJS.Timeout>();
   private startTimes = new Map<string, number>();
-  private readonly MAX_CONCURRENT_TASKS = 1000;
+  private readonly MAX_CONCURRENT_TASKS = SIZE_LIMIT.MAX_CONCURRENT_TASKS;
 
   /**
    * 启动超时监控

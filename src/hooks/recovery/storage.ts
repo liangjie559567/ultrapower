@@ -10,8 +10,8 @@ import {
   readdirSync,
   readFileSync,
   unlinkSync,
-  writeFileSync,
 } from 'node:fs';
+import { atomicWriteFileSync } from '../../lib/atomic-write.js';
 import { join } from 'node:path';
 import {
   MESSAGE_STORAGE,
@@ -159,7 +159,7 @@ export function injectTextPart(
   };
 
   try {
-    writeFileSync(join(partDir, `${partId}.json`), JSON.stringify(part, null, 2));
+    atomicWriteFileSync(join(partDir, `${partId}.json`), JSON.stringify(part, null, 2));
     return true;
   } catch {
     return false;
@@ -344,7 +344,7 @@ export function prependThinkingPart(
   };
 
   try {
-    writeFileSync(join(partDir, `${partId}.json`), JSON.stringify(part, null, 2));
+    atomicWriteFileSync(join(partDir, `${partId}.json`), JSON.stringify(part, null, 2));
     return true;
   } catch {
     return false;
@@ -400,7 +400,7 @@ export function replaceEmptyTextParts(
         if (!textPart.text?.trim()) {
           textPart.text = replacementText;
           textPart.synthetic = true;
-          writeFileSync(filePath, JSON.stringify(textPart, null, 2));
+          atomicWriteFileSync(filePath, JSON.stringify(textPart, null, 2));
           anyReplaced = true;
         }
       }

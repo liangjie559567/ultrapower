@@ -3,6 +3,8 @@
  * Reduces redundant file I/O operations
  */
 
+import { CACHE } from './constants.js';
+
 interface CacheEntry {
   data: string;
   timestamp: number;
@@ -12,7 +14,7 @@ class FileCache {
   private cache = new Map<string, CacheEntry>();
   private ttl: number;
 
-  constructor(ttlMs: number = 5000) {
+  constructor(ttlMs: number = CACHE.FILE_TTL) {
     this.ttl = ttlMs;
   }
 
@@ -41,4 +43,4 @@ class FileCache {
   }
 }
 
-export const fileCache = new FileCache(5000);
+export const fileCache = new FileCache();

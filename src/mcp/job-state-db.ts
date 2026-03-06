@@ -20,7 +20,7 @@ import type BetterSqlite3 from "better-sqlite3";
 import type { JobStatus } from "../core/job-types.js";
 
 // Schema version - bump when adding migrations
-const DB_SCHEMA_VERSION = 1;
+const DB_SCHEMA_VERSION = 2;
 
 // Default max age for cleanup: 24 hours
 const DEFAULT_CLEANUP_MAX_AGE_MS = 24 * 60 * 60 * 1000;
@@ -199,17 +199,24 @@ export async function initJobDb(cwd: string): Promise<boolean> {
       CREATE INDEX IF NOT EXISTS idx_jobs_provider ON jobs(provider);
       CREATE INDEX IF NOT EXISTS idx_jobs_spawned_at ON jobs(spawned_at);
       CREATE INDEX IF NOT EXISTS idx_jobs_provider_status ON jobs(provider, status);
+      CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+      CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
     `);
 
-    // Check current schema version for future migrations
+    // Check current schema version and run migrations
     const versionStmt = db.prepare(
       "SELECT value FROM schema_info WHERE key = 'version'",
     );
     const versionRow = versionStmt.get() as { value: string } | undefined;
-    const __currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
+    const currentVersion = versionRow ? parseInt(versionRow.value, 10) : 0;
 
-    // Future migrations would go here:
-    // if (_currentVersion > 0 && _currentVersion < 2) { ... }
+    // Migration from v1 to v2: Add composite indexes
+    if (currentVersion > 0 && currentVersion < 2) {
+      db.exec(`
+        CREATE INDEX IF NOT EXISTS idx_jobs_status_spawned ON jobs(status, spawned_at);
+        CREATE INDEX IF NOT EXISTS idx_jobs_spawned_provider ON jobs(spawned_at, provider);
+      `);
+    }
 
     // Set schema version
     const setVersion = db.prepare(

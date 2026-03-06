@@ -12,6 +12,7 @@ import { join, dirname } from 'path';
 import * as jsonc from 'jsonc-parser';
 import type { PluginConfig, ExternalModelsConfig } from '../shared/types.js';
 import { getConfigDir } from '../utils/paths.js';
+import { SIZE_LIMIT } from '../lib/constants.js';
 
 /**
  * Validate model name format (alphanumeric, hyphens, dots, max 100 chars)
@@ -210,7 +211,7 @@ export function loadEnvConfig(): Partial<PluginConfig> {
 
   if (process.env.OMC_MAX_BACKGROUND_TASKS) {
     const maxTasks = parseInt(process.env.OMC_MAX_BACKGROUND_TASKS, 10);
-    if (!isNaN(maxTasks) && maxTasks > 0 && maxTasks <= 100) {
+    if (!isNaN(maxTasks) && maxTasks > 0 && maxTasks <= SIZE_LIMIT.MAX_TASKS_PER_CONFIG) {
       config.permissions = {
         ...config.permissions,
         maxBackgroundTasks: maxTasks

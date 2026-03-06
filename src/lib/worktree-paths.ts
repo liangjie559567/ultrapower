@@ -5,9 +5,9 @@
  * ensuring all operations stay within the worktree boundary.
  */
 
-import { execSync } from 'child_process';
 import { existsSync, mkdirSync, realpathSync, readdirSync } from 'fs';
 import { resolve, normalize, relative, sep, join, isAbsolute } from 'path';
+import { getWorktreeRoot as getWorktreeRootOptimized, clearGitCache } from './git-utils.js';
 
 /** Standard .omc subdirectories */
 export const OmcPaths = {
@@ -26,36 +26,12 @@ export const OmcPaths = {
   SKILLS: '.omc/skills',
 } as const;
 
-/** Cache for worktree root to avoid repeated git calls */
-let worktreeCache: { cwd: string; root: string } | null = null;
-
 /**
  * Get the git worktree root for the current or specified directory.
  * Returns null if not in a git repository.
  */
 export function getWorktreeRoot(cwd?: string): string | null {
-  const effectiveCwd = cwd || process.cwd();
-
-  // Return cached value if cwd matches
-  if (worktreeCache && worktreeCache.cwd === effectiveCwd) {
-    return worktreeCache.root || null;
-  }
-
-  try {
-    const root = execSync('git rev-parse --show-toplevel', {
-      cwd: effectiveCwd,
-      encoding: 'utf-8',
-      stdio: ['pipe', 'pipe', 'pipe'],
-    }).trim();
-
-    // Only cache actual git worktree roots
-    worktreeCache = { cwd: effectiveCwd, root };
-    return root;
-  } catch {
-    // Not in a git repository - do NOT cache fallback
-    // so that if directory becomes a git repo later, we re-detect
-    return null;
-  }
+  return getWorktreeRootOptimized(cwd);
 }
 
 /**
@@ -245,7 +221,8 @@ export function ensureAllOmcDirs(worktreeRoot?: string): void {
  * Clear the worktree cache (useful for testing).
  */
 export function clearWorktreeCache(): void {
-  worktreeCache = null;
+  // Delegate to git-utils cache clearing
+  clearGitCache();
 }
 
 // ============================================================================

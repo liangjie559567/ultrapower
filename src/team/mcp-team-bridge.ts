@@ -62,7 +62,7 @@ function captureFileSnapshot(cwd: string): Set<string> {
   const files = new Set<string>();
   try {
     // Get all tracked files that are modified, added, or staged
-    const statusOutput = execSync('git status --porcelain', { cwd, encoding: 'utf-8', timeout: 10000 });
+    const statusOutput = execSync('git --no-pager status --porcelain', { cwd, encoding: 'utf-8', timeout: 10000 });
     for (const line of statusOutput.split('\n')) {
       if (!line.trim()) continue;
       // Format: "XY filename" or "XY filename -> newname"
@@ -73,7 +73,7 @@ function captureFileSnapshot(cwd: string): Set<string> {
     }
 
     // Get untracked files
-    const untrackedOutput = execSync('git ls-files --others --exclude-standard', { cwd, encoding: 'utf-8', timeout: 10000 });
+    const untrackedOutput = execSync('git --no-pager ls-files --others --exclude-standard', { cwd, encoding: 'utf-8', timeout: 10000 });
     for (const line of untrackedOutput.split('\n')) {
       if (line.trim()) files.add(line.trim());
     }

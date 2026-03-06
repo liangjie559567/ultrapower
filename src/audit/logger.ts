@@ -2,6 +2,7 @@ import { createHmac } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { safeJsonParse } from '../lib/safe-json.js';
+import { SIZE_LIMIT } from '../lib/constants.js';
 
 interface AuditEntry {
   timestamp: string;
@@ -16,7 +17,7 @@ interface AuditEntry {
 class AuditLogger {
   private logPath: string;
   private secretKey: Buffer;
-  private maxSize = 10 * 1024 * 1024;
+  private maxSize = SIZE_LIMIT.AUDIT_LOG_MAX;
 
   constructor(logDir: string) {
     this.logPath = path.join(logDir, 'audit.log');
