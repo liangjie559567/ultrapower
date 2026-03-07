@@ -192,7 +192,7 @@ export function deactivateUltrawork(directory?: string, sessionId?: string): boo
         const result = safeJsonParse(content, legacyFile);
 
         if (result.success) {
-          const legacyState = result.data as any;
+          const legacyState = result.data as { session_id?: string };
           // Only remove if it belongs to this session or is unowned (no session_id)
           if (!legacyState.session_id || legacyState.session_id === sessionId) {
             unlinkSync(legacyFile);

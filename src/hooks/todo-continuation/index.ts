@@ -229,8 +229,8 @@ function parseTodoFile(filePath: string): Todo[] {
     }
 
     // Handle object format with todos array
-    if (data && typeof data === 'object' && 'todos' in data && Array.isArray((data as any).todos)) {
-      return (data as any).todos.filter((item: unknown) => {
+    if (data && typeof data === 'object' && 'todos' in data && Array.isArray((data as { todos: unknown }).todos)) {
+      return (data as { todos: unknown[] }).todos.filter((item: unknown) => {
         const todo = item as Record<string, unknown>;
         return (
           todo &&

@@ -180,7 +180,7 @@ export function isActiveModeRunning(directory: string): boolean {
         const result = safeJsonParse(content, statePath);
 
         if (result.success && result.data) {
-          const state = result.data as any;
+          const state = result.data as { active?: boolean; status?: string };
           // Check if mode is active
           if (state.active === true || state.status === 'running' || state.status === 'active') {
             return true;

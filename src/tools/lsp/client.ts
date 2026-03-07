@@ -611,7 +611,7 @@ class LspClientManager {
     const commonServers = ['typescript', 'python'];
 
     for (const serverKey of commonServers) {
-      const config = (getServerForFile as any)(`.${serverKey === 'typescript' ? 'ts' : 'py'}`);
+      const config = getServerForFile(`.${serverKey === 'typescript' ? 'ts' : 'py'}`);
       if (config && commandExists(config.command)) {
         const key = `${cwd}:${config.command}`;
         const warmup = (async () => {

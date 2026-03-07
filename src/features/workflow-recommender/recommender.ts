@@ -7,10 +7,23 @@ export interface WorkflowRecommendation {
   workflow: string;
   confidence: number;
   agents: string[];
+  conditions?: {
+    taskCount?: { min?: number; max?: number };
+    taskType?: string;
+    priority?: string;
+    keywords?: string[];
+  };
 }
 
 interface RecommenderConfig {
   recommendations: WorkflowRecommendation[];
+}
+
+interface RecommendationContext {
+  taskCount?: number;
+  taskType?: string;
+  keywords?: string[];
+  priority?: string;
 }
 
 export function getWorkflowRecommendation(context: {
@@ -31,10 +44,11 @@ export function getWorkflowRecommendation(context: {
   return null;
 }
 
-function matchesConditions(context: any, rec: any): boolean {
+function matchesConditions(context: RecommendationContext, rec: WorkflowRecommendation): boolean {
   const cond = rec.conditions;
+  if (!cond) return true;
 
-  if (cond.taskCount) {
+  if (cond.taskCount && context.taskCount !== undefined) {
     if (cond.taskCount.min && context.taskCount < cond.taskCount.min) return false;
     if (cond.taskCount.max && context.taskCount > cond.taskCount.max) return false;
   }
@@ -44,7 +58,7 @@ function matchesConditions(context: any, rec: any): boolean {
 
   if (cond.keywords && context.keywords) {
     const hasMatch = cond.keywords.some((kw: string) =>
-      context.keywords.some((ck: string) => ck.includes(kw))
+      context.keywords!.some((ck: string) => ck.includes(kw))
     );
     if (!hasMatch) return false;
   }
