@@ -47,55 +47,55 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('valid transitions', () => {
-    it('should transition from expansion to planning', () => {
-      initAutopilot(testDir, 'build a CLI tool');
-      const state = transitionPhase(testDir, 'planning');
+    it('should transition from expansion to planning', async () => {
+      await initAutopilot(testDir, 'build a CLI tool');
+      const state = await transitionPhase(testDir, 'planning');
 
       expect(state).not.toBeNull();
       expect(state!.phase).toBe('planning');
       expect(state!.active).toBe(true);
     });
 
-    it('should transition from planning to execution', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'planning');
-      const state = transitionPhase(testDir, 'execution');
+    it('should transition from planning to execution', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'planning');
+      const state = await transitionPhase(testDir, 'execution');
 
       expect(state).not.toBeNull();
       expect(state!.phase).toBe('execution');
       expect(state!.active).toBe(true);
     });
 
-    it('should transition from execution to qa', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'planning');
-      transitionPhase(testDir, 'execution');
-      const state = transitionPhase(testDir, 'qa');
+    it('should transition from execution to qa', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'planning');
+      await transitionPhase(testDir, 'execution');
+      const state = await transitionPhase(testDir, 'qa');
 
       expect(state).not.toBeNull();
       expect(state!.phase).toBe('qa');
       expect(state!.active).toBe(true);
     });
 
-    it('should transition from qa to validation', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'planning');
-      transitionPhase(testDir, 'execution');
-      transitionPhase(testDir, 'qa');
-      const state = transitionPhase(testDir, 'validation');
+    it('should transition from qa to validation', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'planning');
+      await transitionPhase(testDir, 'execution');
+      await transitionPhase(testDir, 'qa');
+      const state = await transitionPhase(testDir, 'validation');
 
       expect(state).not.toBeNull();
       expect(state!.phase).toBe('validation');
       expect(state!.active).toBe(true);
     });
 
-    it('should transition from validation to complete', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'planning');
-      transitionPhase(testDir, 'execution');
-      transitionPhase(testDir, 'qa');
-      transitionPhase(testDir, 'validation');
-      const state = transitionPhase(testDir, 'complete');
+    it('should transition from validation to complete', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'planning');
+      await transitionPhase(testDir, 'execution');
+      await transitionPhase(testDir, 'qa');
+      await transitionPhase(testDir, 'validation');
+      const state = await transitionPhase(testDir, 'complete');
 
       expect(state).not.toBeNull();
       expect(state!.phase).toBe('complete');
@@ -103,13 +103,13 @@ describe('Autopilot State Machine Transitions', () => {
       expect(state!.completed_at).not.toBeNull();
     });
 
-    it('should walk through the full lifecycle: expansion -> planning -> execution -> qa -> validation -> complete', () => {
-      initAutopilot(testDir, 'full lifecycle test');
+    it('should walk through the full lifecycle: expansion -> planning -> execution -> qa -> validation -> complete', async () => {
+      await initAutopilot(testDir, 'full lifecycle test');
 
       const phases: AutopilotPhase[] = ['planning', 'execution', 'qa', 'validation', 'complete'];
 
       for (const phase of phases) {
-        const state = transitionPhase(testDir, phase);
+        const state = await transitionPhase(testDir, phase);
         expect(state).not.toBeNull();
         expect(state!.phase).toBe(phase);
       }
@@ -126,35 +126,35 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('terminal states', () => {
-    it('should mark as inactive on complete', () => {
-      initAutopilot(testDir, 'test');
-      const state = transitionPhase(testDir, 'complete');
+    it('should mark as inactive on complete', async () => {
+      await initAutopilot(testDir, 'test');
+      const state = await transitionPhase(testDir, 'complete');
 
       expect(state!.active).toBe(false);
       expect(state!.completed_at).toBeTruthy();
     });
 
-    it('should mark as inactive on failed', () => {
-      initAutopilot(testDir, 'test');
-      const state = transitionPhase(testDir, 'failed');
+    it('should mark as inactive on failed', async () => {
+      await initAutopilot(testDir, 'test');
+      const state = await transitionPhase(testDir, 'failed');
 
       expect(state!.active).toBe(false);
       expect(state!.completed_at).toBeTruthy();
     });
 
-    it('transitionToComplete helper should work', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'validation');
-      const result: TransitionResult = transitionToComplete(testDir);
+    it('transitionToComplete helper should work', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'validation');
+      const result: TransitionResult = await transitionToComplete(testDir);
 
       expect(result.success).toBe(true);
       expect(result.state?.phase).toBe('complete');
       expect(result.state?.active).toBe(false);
     });
 
-    it('transitionToFailed helper should work', () => {
-      initAutopilot(testDir, 'test');
-      const result: TransitionResult = transitionToFailed(testDir, 'Something went wrong');
+    it('transitionToFailed helper should work', async () => {
+      await initAutopilot(testDir, 'test');
+      const result: TransitionResult = await transitionToFailed(testDir, 'Something went wrong');
 
       expect(result.success).toBe(true);
       expect(result.state?.phase).toBe('failed');
@@ -167,26 +167,26 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('transitions without active state', () => {
-    it('should return null when transitioning with no state', () => {
-      const state = transitionPhase(testDir, 'planning');
+    it('should return null when transitioning with no state', async () => {
+      const state = await transitionPhase(testDir, 'planning');
       expect(state).toBeNull();
     });
 
-    it('should return null after state is cleared', () => {
-      initAutopilot(testDir, 'test');
+    it('should return null after state is cleared', async () => {
+      await initAutopilot(testDir, 'test');
       clearAutopilotState(testDir);
-      const state = transitionPhase(testDir, 'planning');
+      const state = await transitionPhase(testDir, 'planning');
       expect(state).toBeNull();
     });
 
-    it('transitionToComplete should fail when no state', () => {
-      const result = transitionToComplete(testDir);
+    it('transitionToComplete should fail when no state', async () => {
+      const result = await transitionToComplete(testDir);
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
     });
 
-    it('transitionToFailed should fail when no state', () => {
-      const result = transitionToFailed(testDir, 'error');
+    it('transitionToFailed should fail when no state', async () => {
+      const result = await transitionToFailed(testDir, 'error');
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
     });
@@ -197,10 +197,10 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('idempotent transitions', () => {
-    it('should handle transitioning to the same phase twice', () => {
-      initAutopilot(testDir, 'test');
-      const first = transitionPhase(testDir, 'planning');
-      const second = transitionPhase(testDir, 'planning');
+    it('should handle transitioning to the same phase twice', async () => {
+      await initAutopilot(testDir, 'test');
+      const first = await transitionPhase(testDir, 'planning');
+      const second = await transitionPhase(testDir, 'planning');
 
       expect(first).not.toBeNull();
       expect(second).not.toBeNull();
@@ -210,25 +210,25 @@ describe('Autopilot State Machine Transitions', () => {
       expect(second!.active).toBe(true);
     });
 
-    it('should not crash on double-complete', () => {
-      initAutopilot(testDir, 'test');
-      const first = transitionPhase(testDir, 'complete');
+    it('should not crash on double-complete', async () => {
+      await initAutopilot(testDir, 'test');
+      const first = await transitionPhase(testDir, 'complete');
       expect(first).not.toBeNull();
       expect(first!.active).toBe(false);
 
       // Second transition on inactive state should return null
-      const second = transitionPhase(testDir, 'complete');
+      const second = await transitionPhase(testDir, 'complete');
       expect(second).toBeNull();
     });
 
-    it('should not crash on double-failed', () => {
-      initAutopilot(testDir, 'test');
-      const first = transitionPhase(testDir, 'failed');
+    it('should not crash on double-failed', async () => {
+      await initAutopilot(testDir, 'test');
+      const first = await transitionPhase(testDir, 'failed');
       expect(first).not.toBeNull();
       expect(first!.active).toBe(false);
 
       // Second transition on inactive state should return null
-      const second = transitionPhase(testDir, 'failed');
+      const second = await transitionPhase(testDir, 'failed');
       expect(second).toBeNull();
     });
   });
@@ -238,25 +238,25 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('recovery from failure', () => {
-    it('should not allow transition from failed state (state becomes inactive)', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'failed');
+    it('should not allow transition from failed state (state becomes inactive)', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'failed');
 
       // State is now inactive; transitionPhase checks for active state
-      const recovery = transitionPhase(testDir, 'execution');
+      const recovery = await transitionPhase(testDir, 'execution');
       expect(recovery).toBeNull();
     });
 
-    it('recovery requires re-initialization after failure', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'failed');
+    it('recovery requires re-initialization after failure', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'failed');
 
       // Verify state is inactive
       expect(isAutopilotActive(testDir)).toBe(false);
 
       // Clear and reinitialize
       clearAutopilotState(testDir);
-      const newState = initAutopilot(testDir, 'retry after failure');
+      const newState = await initAutopilot(testDir, 'retry after failure');
 
       expect(newState).not.toBeNull();
       expect(newState!.active).toBe(true);
@@ -269,9 +269,9 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('phase duration tracking', () => {
-    it('should record phase start timestamps', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'planning');
+    it('should record phase start timestamps', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'planning');
 
       const state = readAutopilotState(testDir);
       expect(state!.phase_durations).toBeDefined();
@@ -279,16 +279,16 @@ describe('Autopilot State Machine Transitions', () => {
       expect(typeof state!.phase_durations['planning_start_ms']).toBe('number');
     });
 
-    it('should record duration for completed phases', () => {
-      initAutopilot(testDir, 'test');
+    it('should record duration for completed phases', async () => {
+      await initAutopilot(testDir, 'test');
 
       // Set a start time for expansion phase
       const state = readAutopilotState(testDir)!;
       state.phase_durations['expansion_start_ms'] = Date.now() - 1000; // 1 second ago
-      writeAutopilotState(testDir, state);
+      await writeAutopilotState(testDir, state);
 
       // Transition away from expansion
-      transitionPhase(testDir, 'planning');
+      await transitionPhase(testDir, 'planning');
 
       const updatedState = readAutopilotState(testDir);
       // The expansion duration should be recorded
@@ -302,43 +302,43 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('phase data updates during transitions', () => {
-    it('should preserve expansion data across transitions', () => {
-      initAutopilot(testDir, 'test');
-      updateExpansion(testDir, { analyst_complete: true, requirements_summary: 'Build a REST API' });
-      transitionPhase(testDir, 'planning');
+    it('should preserve expansion data across transitions', async () => {
+      await initAutopilot(testDir, 'test');
+      await updateExpansion(testDir, { analyst_complete: true, requirements_summary: 'Build a REST API' });
+      await transitionPhase(testDir, 'planning');
 
       const state = readAutopilotState(testDir);
       expect(state!.expansion.analyst_complete).toBe(true);
       expect(state!.expansion.requirements_summary).toBe('Build a REST API');
     });
 
-    it('should preserve planning data across transitions', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'planning');
-      updatePlanning(testDir, { approved: true, plan_path: '/tmp/plan.md' });
-      transitionPhase(testDir, 'execution');
+    it('should preserve planning data across transitions', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'planning');
+      await updatePlanning(testDir, { approved: true, plan_path: '/tmp/plan.md' });
+      await transitionPhase(testDir, 'execution');
 
       const state = readAutopilotState(testDir);
       expect(state!.planning.approved).toBe(true);
       expect(state!.planning.plan_path).toBe('/tmp/plan.md');
     });
 
-    it('should preserve execution data across transitions', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'execution');
-      updateExecution(testDir, { tasks_completed: 5, tasks_total: 10 });
-      transitionPhase(testDir, 'qa');
+    it('should preserve execution data across transitions', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'execution');
+      await updateExecution(testDir, { tasks_completed: 5, tasks_total: 10 });
+      await transitionPhase(testDir, 'qa');
 
       const state = readAutopilotState(testDir);
       expect(state!.execution.tasks_completed).toBe(5);
       expect(state!.execution.tasks_total).toBe(10);
     });
 
-    it('should preserve QA data across transitions', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'qa');
-      updateQA(testDir, { build_status: 'passing', lint_status: 'passing', test_status: 'passing' });
-      transitionPhase(testDir, 'validation');
+    it('should preserve QA data across transitions', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'qa');
+      await updateQA(testDir, { build_status: 'passing', lint_status: 'passing', test_status: 'passing' });
+      await transitionPhase(testDir, 'validation');
 
       const state = readAutopilotState(testDir);
       expect(state!.qa.build_status).toBe('passing');
@@ -346,11 +346,11 @@ describe('Autopilot State Machine Transitions', () => {
       expect(state!.qa.test_status).toBe('passing');
     });
 
-    it('should preserve validation data through complete', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'validation');
-      updateValidation(testDir, { all_approved: true, validation_rounds: 1 });
-      transitionPhase(testDir, 'complete');
+    it('should preserve validation data through complete', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'validation');
+      await updateValidation(testDir, { all_approved: true, validation_rounds: 1 });
+      await transitionPhase(testDir, 'complete');
 
       const state = readAutopilotState(testDir);
       expect(state!.validation.all_approved).toBe(true);
@@ -363,14 +363,14 @@ describe('Autopilot State Machine Transitions', () => {
   // --------------------------------------------------------------------------
 
   describe('session-scoped transitions', () => {
-    it('should isolate state by session ID', () => {
+    it('should isolate state by session ID', async () => {
       const session1 = 'session-aaa';
       const session2 = 'session-bbb';
 
-      initAutopilot(testDir, 'session 1 task', session1);
-      initAutopilot(testDir, 'session 2 task', session2);
+      await initAutopilot(testDir, 'session 1 task', session1);
+      await initAutopilot(testDir, 'session 2 task', session2);
 
-      transitionPhase(testDir, 'planning', session1);
+      await transitionPhase(testDir, 'planning', session1);
 
       const state1 = readAutopilotState(testDir, session1);
       const state2 = readAutopilotState(testDir, session2);
@@ -379,9 +379,9 @@ describe('Autopilot State Machine Transitions', () => {
       expect(state2!.phase).toBe('expansion');
     });
 
-    it('should not allow cross-session state reads', () => {
+    it('should not allow cross-session state reads', async () => {
       const session1 = 'session-ccc';
-      initAutopilot(testDir, 'task', session1);
+      await initAutopilot(testDir, 'task', session1);
 
       // Reading with a different session ID should return null
       const state = readAutopilotState(testDir, 'session-different');

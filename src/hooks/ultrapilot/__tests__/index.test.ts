@@ -92,24 +92,29 @@ describe('ultrapilot coordinator', () => {
       }
     });
 
-    it('should prevent file ownership conflicts', () => {
-      const state = initUltrapilot(testDir, 'test task', ['task1', 'task2']);
+    it('should prevent file ownership conflicts', async () => {
+      const state = await initUltrapilot(testDir, 'test task', ['task1', 'task2']);
       expect(state).toBeTruthy();
 
-      const success1 = assignFileToWorker(testDir, 'worker-1', 'file.ts');
+      const success1 = await assignFileToWorker(testDir, 'worker-1', 'file.ts');
       expect(success1).toBe(true);
 
-      const success2 = assignFileToWorker(testDir, 'worker-2', 'file.ts');
+      const success2 = await assignFileToWorker(testDir, 'worker-2', 'file.ts');
       expect(success2).toBe(false);
     });
 
     it('should track shared files correctly', async () => {
-      const state = initUltrapilot(testDir, 'test task', ['task1']);
+      const state = await initUltrapilot(testDir, 'test task', ['task1']);
       expect(state).toBeTruthy();
 
-      await handleSharedFiles(testDir, ['package.json']);
-      expect(isSharedFile(testDir, 'package.json')).toBe(true);
-      expect(assignFileToWorker(testDir, 'worker-1', 'package.json')).toBe(false);
+      const result = await handleSharedFiles(testDir, ['package.json']);
+      console.log('handleSharedFiles result:', result);
+
+      const isShared = isSharedFile(testDir, 'package.json');
+      console.log('isSharedFile result:', isShared);
+
+      expect(isShared).toBe(true);
+      expect(await assignFileToWorker(testDir, 'worker-1', 'package.json')).toBe(false);
     });
   });
 
@@ -144,7 +149,7 @@ describe('ultrapilot coordinator', () => {
         { id: 'w1', index: 0, task: 't1', ownedFiles: [], status: 'complete', filesCreated: [], filesModified: ['shared.ts'], startedAt: '' },
         { id: 'w2', index: 1, task: 't2', ownedFiles: [], status: 'complete', filesCreated: [], filesModified: ['shared.ts'], startedAt: '' }
       ];
-      writeUltrapilotState(testDir, state);
+      await writeUltrapilotState(testDir, state);
 
       const result = await integrateResults(testDir);
       expect(result.conflicts).toContain('shared.ts');

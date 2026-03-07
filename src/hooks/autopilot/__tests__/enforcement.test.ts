@@ -18,9 +18,21 @@ describe('Autopilot Enforcement', () => {
     mkdirSync(TEST_DIR, { recursive: true });
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    // Wait for file locks to be released on Windows
+    await new Promise(resolve => setTimeout(resolve, 100));
     if (existsSync(TEST_DIR)) {
-      rmSync(TEST_DIR, { recursive: true, force: true });
+      try {
+        rmSync(TEST_DIR, { recursive: true, force: true });
+      } catch (err) {
+        // Retry once after another delay
+        await new Promise(resolve => setTimeout(resolve, 200));
+        try {
+          rmSync(TEST_DIR, { recursive: true, force: true });
+        } catch {
+          // Ignore cleanup errors in tests
+        }
+      }
     }
   });
 
@@ -57,16 +69,16 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should return null when session mismatch', async () => {
-      initAutopilot(TEST_DIR, 'test idea', 'different-session');
+      await initAutopilot(TEST_DIR, 'test idea', 'different-session');
       const result = await checkAutopilot(TEST_SESSION, TEST_DIR);
       expect(result).toBe(null);
     });
 
     it('should stop at max iterations', async () => {
-      const state = initAutopilot(TEST_DIR, 'test', TEST_SESSION, { maxIterations: 1 });
+      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION, { maxIterations: 1 });
       if (state) {
         state.iteration = 1;
-        writeAutopilotState(TEST_DIR, state, TEST_SESSION);
+        await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
       }
 
       const result = await checkAutopilot(TEST_SESSION, TEST_DIR);
@@ -75,11 +87,11 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should return complete when phase is complete', async () => {
-      const state = initAutopilot(TEST_DIR, 'test', TEST_SESSION);
+      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
       if (state) {
         state.phase = 'complete';
         // Keep active=true so checkAutopilot processes it
-        writeAutopilotState(TEST_DIR, state, TEST_SESSION);
+        await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
       }
 
       const result = await checkAutopilot(TEST_SESSION, TEST_DIR);
@@ -89,11 +101,11 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should return failed when phase is failed', async () => {
-      const state = initAutopilot(TEST_DIR, 'test', TEST_SESSION);
+      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
       if (state) {
         state.phase = 'failed';
         // Keep active=true so checkAutopilot processes it
-        writeAutopilotState(TEST_DIR, state, TEST_SESSION);
+        await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
       }
 
       const result = await checkAutopilot(TEST_SESSION, TEST_DIR);
@@ -102,7 +114,7 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should generate continuation prompt', async () => {
-      initAutopilot(TEST_DIR, 'test idea', TEST_SESSION);
+      await initAutopilot(TEST_DIR, 'test idea', TEST_SESSION);
       const result = await checkAutopilot(TEST_SESSION, TEST_DIR);
 
       expect(result?.shouldBlock).toBe(true);
@@ -111,7 +123,7 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should include phase in continuation prompt', async () => {
-      initAutopilot(TEST_DIR, 'test idea', TEST_SESSION);
+      await initAutopilot(TEST_DIR, 'test idea', TEST_SESSION);
       const result = await checkAutopilot(TEST_SESSION, TEST_DIR);
 
       expect(result?.phase).toBe('expansion');
@@ -119,10 +131,10 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should track iteration count', async () => {
-      const state = initAutopilot(TEST_DIR, 'test', TEST_SESSION);
+      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
       if (state) {
         state.iteration = 3;
-        writeAutopilotState(TEST_DIR, state, TEST_SESSION);
+        await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
       }
 
       const result = await checkAutopilot(TEST_SESSION, TEST_DIR);
