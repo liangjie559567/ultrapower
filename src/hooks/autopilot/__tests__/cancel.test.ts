@@ -53,16 +53,16 @@ describe('AutopilotCancel', () => {
   });
 
   describe('cancelAutopilot', () => {
-    it('should return failure when no state exists', () => {
-      const result = cancelAutopilot(testDir);
+    it('should return failure when no state exists', async () => {
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(false);
       expect(result.message).toBe('No active autopilot session found');
       expect(result.preservedState).toBeUndefined();
     });
 
-    it('should return failure when state exists but is not active', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('should return failure when state exists but is not active', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (state) {
         state.active = false;
         const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
@@ -70,17 +70,17 @@ describe('AutopilotCancel', () => {
         fs.writeFileSync(stateFile, JSON.stringify(state, null, 2));
       }
 
-      const result = cancelAutopilot(testDir);
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(false);
       expect(result.message).toBe('Autopilot is not currently active');
       expect(result.preservedState).toBeUndefined();
     });
 
-    it('should successfully cancel active autopilot and preserve state', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should successfully cancel active autopilot and preserve state', async () => {
+      await initAutopilot(testDir, 'test idea');
 
-      const result = cancelAutopilot(testDir);
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain('Autopilot cancelled at phase: expansion');
@@ -90,19 +90,19 @@ describe('AutopilotCancel', () => {
       expect(result.preservedState?.originalIdea).toBe('test idea');
     });
 
-    it('should preserve state at different phases', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'planning');
+    it('should preserve state at different phases', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'planning');
 
-      const result = cancelAutopilot(testDir);
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain('Autopilot cancelled at phase: planning');
       expect(result.preservedState?.phase).toBe('planning');
     });
 
-    it('should clean up ralph state when active', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clean up ralph state when active', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock active ralph state
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce({
@@ -110,15 +110,15 @@ describe('AutopilotCancel', () => {
         linked_ultrawork: false
       } as any);
 
-      const result = cancelAutopilot(testDir);
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain('Cleaned up: ralph');
       expect(ralphLoop.clearRalphState).toHaveBeenCalledWith(testDir);
     });
 
-    it('should clean up ralph and ultrawork when linked', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clean up ralph and ultrawork when linked', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock active ralph state with linked ultrawork
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce({
@@ -126,7 +126,7 @@ describe('AutopilotCancel', () => {
         linked_ultrawork: true
       } as any);
 
-      const result = cancelAutopilot(testDir);
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain('Cleaned up: ultrawork, ralph');
@@ -134,23 +134,23 @@ describe('AutopilotCancel', () => {
       expect(ralphLoop.clearRalphState).toHaveBeenCalledWith(testDir);
     });
 
-    it('should clean up ultraqa state when active', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clean up ultraqa state when active', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock active ultraqa state
       vi.mocked(ultraqaLoop.readUltraQAState).mockReturnValueOnce({
         active: true
       } as any);
 
-      const result = cancelAutopilot(testDir);
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain('Cleaned up: ultraqa');
       expect(ultraqaLoop.clearUltraQAState).toHaveBeenCalledWith(testDir);
     });
 
-    it('should clean up all states when all are active', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clean up all states when all are active', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock all states active
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce({
@@ -161,7 +161,7 @@ describe('AutopilotCancel', () => {
         active: true
       } as any);
 
-      const result = cancelAutopilot(testDir);
+      const result = await cancelAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toContain('Cleaned up: ultrawork, ralph, ultraqa');
@@ -170,10 +170,10 @@ describe('AutopilotCancel', () => {
       expect(ultraqaLoop.clearUltraQAState).toHaveBeenCalledWith(testDir);
     });
 
-    it('should mark autopilot as inactive but keep state on disk', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should mark autopilot as inactive but keep state on disk', async () => {
+      await initAutopilot(testDir, 'test idea');
 
-      cancelAutopilot(testDir);
+      await cancelAutopilot(testDir);
 
       const state = readAutopilotState(testDir);
       expect(state).not.toBeNull();
@@ -181,14 +181,14 @@ describe('AutopilotCancel', () => {
       expect(state?.originalIdea).toBe('test idea');
     });
 
-    it('should not clear other session ralph/ultraqa state when sessionId provided', () => {
+    it('should not clear other session ralph/ultraqa state when sessionId provided', async () => {
       const sessionId = 'session-a';
-      initAutopilot(testDir, 'test idea', sessionId);
+      await initAutopilot(testDir, 'test idea', sessionId);
 
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce(null as any);
       vi.mocked(ultraqaLoop.readUltraQAState).mockReturnValueOnce(null as any);
 
-      cancelAutopilot(testDir, sessionId);
+      await cancelAutopilot(testDir, sessionId);
 
       expect(ralphLoop.readRalphState).toHaveBeenCalledWith(testDir, sessionId);
       expect(ultraqaLoop.readUltraQAState).toHaveBeenCalledWith(testDir, sessionId);
@@ -199,15 +199,15 @@ describe('AutopilotCancel', () => {
   });
 
   describe('clearAutopilot', () => {
-    it('should return success when no state exists', () => {
+    it('should return success when no state exists', async () => {
       const result = clearAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toBe('No autopilot state to clear');
     });
 
-    it('should clear all autopilot state completely', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clear all autopilot state completely', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       const result = clearAutopilot(testDir);
 
@@ -218,8 +218,8 @@ describe('AutopilotCancel', () => {
       expect(state).toBeNull();
     });
 
-    it('should clear ralph state when present', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clear ralph state when present', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock ralph state exists
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce({
@@ -232,8 +232,8 @@ describe('AutopilotCancel', () => {
       expect(ralphLoop.clearRalphState).toHaveBeenCalledWith(testDir);
     });
 
-    it('should clear ralph and linked ultrawork state when present', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clear ralph and linked ultrawork state when present', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock ralph state with linked ultrawork
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce({
@@ -247,8 +247,8 @@ describe('AutopilotCancel', () => {
       expect(ralphLoop.clearRalphState).toHaveBeenCalledWith(testDir);
     });
 
-    it('should clear ultraqa state when present', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clear ultraqa state when present', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock ultraqa state exists
       vi.mocked(ultraqaLoop.readUltraQAState).mockReturnValueOnce({
@@ -260,8 +260,8 @@ describe('AutopilotCancel', () => {
       expect(ultraqaLoop.clearUltraQAState).toHaveBeenCalledWith(testDir);
     });
 
-    it('should clear all states when all are present', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should clear all states when all are present', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       // Mock all states exist
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce({
@@ -282,9 +282,9 @@ describe('AutopilotCancel', () => {
       expect(state).toBeNull();
     });
 
-    it('should not clear other session ralph/ultraqa state when sessionId provided', () => {
+    it('should not clear other session ralph/ultraqa state when sessionId provided', async () => {
       const sessionId = 'session-a';
-      initAutopilot(testDir, 'test idea', sessionId);
+      await initAutopilot(testDir, 'test idea', sessionId);
 
       vi.mocked(ralphLoop.readRalphState).mockReturnValueOnce(null as any);
       vi.mocked(ultraqaLoop.readUltraQAState).mockReturnValueOnce(null as any);
@@ -300,7 +300,7 @@ describe('AutopilotCancel', () => {
   });
 
   describe('canResumeAutopilot', () => {
-    it('should return false when no state exists', () => {
+    it('should return false when no state exists', async () => {
       const result = canResumeAutopilot(testDir);
 
       expect(result.canResume).toBe(false);
@@ -308,9 +308,9 @@ describe('AutopilotCancel', () => {
       expect(result.resumePhase).toBeUndefined();
     });
 
-    it('should return true for recently cancelled incomplete state', () => {
-      initAutopilot(testDir, 'test idea');
-      cancelAutopilot(testDir);
+    it('should return true for recently cancelled incomplete state', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await cancelAutopilot(testDir);
 
       const result = canResumeAutopilot(testDir);
 
@@ -319,10 +319,10 @@ describe('AutopilotCancel', () => {
       expect(result.resumePhase).toBe('expansion');
     });
 
-    it('should return true for recently cancelled planning state', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'planning');
-      cancelAutopilot(testDir);
+    it('should return true for recently cancelled planning state', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'planning');
+      await cancelAutopilot(testDir);
 
       const result = canResumeAutopilot(testDir);
 
@@ -330,9 +330,9 @@ describe('AutopilotCancel', () => {
       expect(result.resumePhase).toBe('planning');
     });
 
-    it('should return false for complete phase', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'complete');
+    it('should return false for complete phase', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'complete');
 
       const result = canResumeAutopilot(testDir);
 
@@ -341,9 +341,9 @@ describe('AutopilotCancel', () => {
       expect(result.state?.phase).toBe('complete');
     });
 
-    it('should return false for failed phase', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'failed');
+    it('should return false for failed phase', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'failed');
 
       const result = canResumeAutopilot(testDir);
 
@@ -352,8 +352,8 @@ describe('AutopilotCancel', () => {
       expect(result.state?.phase).toBe('failed');
     });
 
-    it('should return false for state that is still active (issue #609)', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should return false for state that is still active (issue #609)', async () => {
+      await initAutopilot(testDir, 'test idea');
       // State is active: true — do NOT cancel, simulate another session seeing this
 
       const result = canResumeAutopilot(testDir);
@@ -363,9 +363,9 @@ describe('AutopilotCancel', () => {
       expect(result.state?.active).toBe(true);
     });
 
-    it('should return false for stale cancelled state older than 1 hour (issue #609)', () => {
-      initAutopilot(testDir, 'test idea');
-      cancelAutopilot(testDir);
+    it('should return false for stale cancelled state older than 1 hour (issue #609)', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await cancelAutopilot(testDir);
 
       // Age the state file to be older than the stale threshold
       const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
@@ -377,9 +377,9 @@ describe('AutopilotCancel', () => {
       expect(result.canResume).toBe(false);
     });
 
-    it('should auto-cleanup stale state file (issue #609)', () => {
-      initAutopilot(testDir, 'test idea');
-      cancelAutopilot(testDir);
+    it('should auto-cleanup stale state file (issue #609)', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await cancelAutopilot(testDir);
 
       // Age the state file
       const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
@@ -393,10 +393,10 @@ describe('AutopilotCancel', () => {
       expect(state).toBeNull();
     });
 
-    it('should allow resume for recently cancelled state within 1 hour', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'execution');
-      cancelAutopilot(testDir);
+    it('should allow resume for recently cancelled state within 1 hour', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'execution');
+      await cancelAutopilot(testDir);
 
       // File is fresh — well within the 1 hour window
       const result = canResumeAutopilot(testDir);
@@ -407,39 +407,39 @@ describe('AutopilotCancel', () => {
   });
 
   describe('resumeAutopilot', () => {
-    it('should return failure when no state exists', () => {
-      const result = resumeAutopilot(testDir);
+    it('should return failure when no state exists', async () => {
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(false);
       expect(result.message).toBe('No autopilot session available to resume');
       expect(result.state).toBeUndefined();
     });
 
-    it('should return failure when state is complete', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'complete');
+    it('should return failure when state is complete', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'complete');
 
-      const result = resumeAutopilot(testDir);
-
-      expect(result.success).toBe(false);
-      expect(result.message).toBe('No autopilot session available to resume');
-    });
-
-    it('should return failure when state is failed', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'failed');
-
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(false);
       expect(result.message).toBe('No autopilot session available to resume');
     });
 
-    it('should successfully resume from expansion phase', () => {
-      initAutopilot(testDir, 'test idea');
-      cancelAutopilot(testDir); // Cancel to make it inactive
+    it('should return failure when state is failed', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'failed');
 
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
+
+      expect(result.success).toBe(false);
+      expect(result.message).toBe('No autopilot session available to resume');
+    });
+
+    it('should successfully resume from expansion phase', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await cancelAutopilot(testDir); // Cancel to make it inactive
+
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toBe('Resuming autopilot at phase: expansion');
@@ -448,12 +448,12 @@ describe('AutopilotCancel', () => {
       expect(result.state?.iteration).toBe(2);
     });
 
-    it('should successfully resume from planning phase', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'planning');
-      cancelAutopilot(testDir);
+    it('should successfully resume from planning phase', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'planning');
+      await cancelAutopilot(testDir);
 
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.message).toBe('Resuming autopilot at phase: planning');
@@ -461,44 +461,44 @@ describe('AutopilotCancel', () => {
       expect(result.state?.active).toBe(true);
     });
 
-    it('should increment iteration on resume', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should increment iteration on resume', async () => {
+      await initAutopilot(testDir, 'test idea');
 
       let state = readAutopilotState(testDir);
       const initialIteration = state?.iteration ?? 0;
 
-      cancelAutopilot(testDir);
-      resumeAutopilot(testDir);
+      await cancelAutopilot(testDir);
+      await resumeAutopilot(testDir);
 
       state = readAutopilotState(testDir);
       expect(state?.iteration).toBe(initialIteration + 1);
     });
 
-    it('should re-activate state on resume', () => {
-      initAutopilot(testDir, 'test idea');
-      cancelAutopilot(testDir);
+    it('should re-activate state on resume', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await cancelAutopilot(testDir);
 
       let state = readAutopilotState(testDir);
       expect(state?.active).toBe(false);
 
-      resumeAutopilot(testDir);
+      await resumeAutopilot(testDir);
 
       state = readAutopilotState(testDir);
       expect(state?.active).toBe(true);
     });
 
-    it('should preserve all state data on resume', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'execution');
-      updateExecution(testDir, {
+    it('should preserve all state data on resume', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'execution');
+      await updateExecution(testDir, {
         files_created: ['file1.ts', 'file2.ts'],
         files_modified: ['file3.ts'],
         tasks_completed: 5,
         tasks_total: 10
       });
 
-      cancelAutopilot(testDir);
-      const result = resumeAutopilot(testDir);
+      await cancelAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.state?.execution.files_created).toEqual(['file1.ts', 'file2.ts']);
@@ -507,42 +507,42 @@ describe('AutopilotCancel', () => {
       expect(result.state?.execution.tasks_total).toBe(10);
     });
 
-    it('should refuse to resume stale state from a previous session (issue #609)', () => {
-      initAutopilot(testDir, 'old idea from session A');
-      transitionPhase(testDir, 'planning');
-      cancelAutopilot(testDir);
+    it('should refuse to resume stale state from a previous session (issue #609)', async () => {
+      await initAutopilot(testDir, 'old idea from session A');
+      await transitionPhase(testDir, 'planning');
+      await cancelAutopilot(testDir);
 
       // Simulate passage of time — file is now older than 1 hour
       const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
       const pastTime = new Date(Date.now() - STALE_STATE_MAX_AGE_MS - 60_000);
       utimesSync(stateFile, pastTime, pastTime);
 
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(false);
       expect(result.message).toBe('No autopilot session available to resume');
     });
 
-    it('should refuse to resume actively-running state (issue #609)', () => {
-      initAutopilot(testDir, 'test idea');
+    it('should refuse to resume actively-running state (issue #609)', async () => {
+      await initAutopilot(testDir, 'test idea');
       // Do NOT cancel — state is still active: true
 
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(false);
       expect(result.message).toBe('No autopilot session available to resume');
     });
 
-    it('should resume interrupted state (active=true but older than 5 min)', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'execution');
+    it('should resume interrupted state (active=true but older than 5 min)', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'execution');
       // Simulate crash: state is still active=true but file is old
 
       const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
       const pastTime = new Date(Date.now() - 6 * 60 * 1000); // 6 minutes ago
       utimesSync(stateFile, pastTime, pastTime);
 
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.state?.was_interrupted).toBe(true);
@@ -550,15 +550,15 @@ describe('AutopilotCancel', () => {
       expect(result.state?.active).toBe(true);
     });
 
-    it('should set was_interrupted and resumed_at on interrupted resume', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'qa');
+    it('should set was_interrupted and resumed_at on interrupted resume', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'qa');
 
       const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
       const pastTime = new Date(Date.now() - 10 * 60 * 1000); // 10 minutes ago
       utimesSync(stateFile, pastTime, pastTime);
 
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
 
       expect(result.success).toBe(true);
       expect(result.state?.was_interrupted).toBe(true);
@@ -568,7 +568,7 @@ describe('AutopilotCancel', () => {
   });
 
   describe('formatCancelMessage', () => {
-    it('should format failure message', () => {
+    it('should format failure message', async () => {
       const result: CancelResult = {
         success: false,
         message: 'No active autopilot session found'
@@ -579,7 +579,7 @@ describe('AutopilotCancel', () => {
       expect(formatted).toBe('[AUTOPILOT] No active autopilot session found');
     });
 
-    it('should format success message without preserved state', () => {
+    it('should format success message without preserved state', async () => {
       const result: CancelResult = {
         success: true,
         message: 'Autopilot state cleared completely'
@@ -592,10 +592,10 @@ describe('AutopilotCancel', () => {
       expect(formatted).not.toContain('Progress Summary');
     });
 
-    it('should format success message with preserved state and progress summary', () => {
-      const _state = initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'execution');
-      updateExecution(testDir, {
+    it('should format success message with preserved state and progress summary', async () => {
+      const _state = await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'execution');
+      await updateExecution(testDir, {
         files_created: ['file1.ts', 'file2.ts', 'file3.ts'],
         files_modified: ['file4.ts', 'file5.ts']
       });
@@ -623,8 +623,8 @@ describe('AutopilotCancel', () => {
       expect(formatted).toContain('Run /autopilot to resume from where you left off.');
     });
 
-    it('should handle zero progress in summary', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('should handle zero progress in summary', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -642,8 +642,8 @@ describe('AutopilotCancel', () => {
       expect(formatted).toContain('- Agents used: 0');
     });
 
-    it('should handle cleanup message in preserved state format', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('should handle cleanup message in preserved state format', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -664,8 +664,8 @@ describe('AutopilotCancel', () => {
   });
 
   describe('formatFailureSummary', () => {
-    it('should show completed steps with checkmarks', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('should show completed steps with checkmarks', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       state.phase = 'execution';
       state.completed_steps = ['expansion', 'planning'];
@@ -680,8 +680,8 @@ describe('AutopilotCancel', () => {
       expect(output).toContain('/autopilot');
     });
 
-    it('should handle no completed steps', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('should handle no completed steps', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       state.phase = 'expansion';
       state.completed_steps = [];
@@ -692,8 +692,8 @@ describe('AutopilotCancel', () => {
       expect(output).not.toContain('✓');
     });
 
-    it('should not show phases beyond failure point', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('should not show phases beyond failure point', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       state.phase = 'planning';
       state.completed_steps = ['expansion'];
@@ -707,48 +707,48 @@ describe('AutopilotCancel', () => {
   });
 
   describe('appendCompletedStep', () => {
-    it('should append a step to completed_steps', () => {
-      initAutopilot(testDir, 'test idea');
-      appendCompletedStep(testDir, 'expansion');
+    it('should append a step to completed_steps', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await appendCompletedStep(testDir, 'expansion');
 
       const state = readAutopilotState(testDir);
       expect(state?.completed_steps).toContain('expansion');
     });
 
-    it('should accumulate multiple steps', () => {
-      initAutopilot(testDir, 'test idea');
-      appendCompletedStep(testDir, 'expansion');
-      appendCompletedStep(testDir, 'planning');
+    it('should accumulate multiple steps', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await appendCompletedStep(testDir, 'expansion');
+      await appendCompletedStep(testDir, 'planning');
 
       const state = readAutopilotState(testDir);
       expect(state?.completed_steps).toEqual(['expansion', 'planning']);
     });
 
-    it('should return false when no state exists', () => {
-      const result = appendCompletedStep(testDir, 'expansion');
+    it('should return false when no state exists', async () => {
+      const result = await appendCompletedStep(testDir, 'expansion');
       expect(result).toBe(false);
     });
   });
 
   describe('recordFailureReason', () => {
-    it('should record failure reason in state', () => {
-      initAutopilot(testDir, 'test idea');
-      recordFailureReason(testDir, 'Build failed: tsc error');
+    it('should record failure reason in state', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await recordFailureReason(testDir, 'Build failed: tsc error');
 
       const state = readAutopilotState(testDir);
       expect(state?.failure_reason).toBe('Build failed: tsc error');
     });
 
-    it('should return false when no state exists', () => {
-      const result = recordFailureReason(testDir, 'some error');
+    it('should return false when no state exists', async () => {
+      const result = await recordFailureReason(testDir, 'some error');
       expect(result).toBe(false);
     });
   });
 
   describe('review fixes', () => {
-    it('canResumeAutopilot: stale cleanup should not return state', () => {
-      initAutopilot(testDir, 'test idea');
-      cancelAutopilot(testDir);
+    it('canResumeAutopilot: stale cleanup should not return state', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await cancelAutopilot(testDir);
 
       const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
       const pastTime = new Date(Date.now() - STALE_STATE_MAX_AGE_MS - 60_000);
@@ -760,32 +760,32 @@ describe('AutopilotCancel', () => {
       expect(result.state).toBeUndefined();
     });
 
-    it('appendCompletedStep: deduplicates repeated steps', () => {
-      initAutopilot(testDir, 'test idea');
-      appendCompletedStep(testDir, 'expansion');
-      appendCompletedStep(testDir, 'expansion'); // duplicate
+    it('appendCompletedStep: deduplicates repeated steps', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await appendCompletedStep(testDir, 'expansion');
+      await appendCompletedStep(testDir, 'expansion'); // duplicate
 
       const state = readAutopilotState(testDir);
       expect(state?.completed_steps?.filter(s => s === 'expansion').length).toBe(1);
     });
 
-    it('resumeAutopilot: refuses when max_iterations reached', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('resumeAutopilot: refuses when max_iterations reached', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
-      cancelAutopilot(testDir);
+      await cancelAutopilot(testDir);
 
       // Set iteration to max
       const s = readAutopilotState(testDir)!;
       s.iteration = s.max_iterations;
-      writeAutopilotState(testDir, s);
+      await writeAutopilotState(testDir, s);
 
-      const result = resumeAutopilot(testDir);
+      const result = await resumeAutopilot(testDir);
       expect(result.success).toBe(false);
       expect(result.message).toContain('Max iterations');
     });
 
-    it('formatFailureSummary: shows failure phase even when intermediate phases skipped', () => {
-      const state = initAutopilot(testDir, 'test idea');
+    it('formatFailureSummary: shows failure phase even when intermediate phases skipped', async () => {
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       // expansion done, planning skipped (e.g. skipQa scenario analog), failed at qa
       state.phase = 'qa';
