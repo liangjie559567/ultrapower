@@ -41,7 +41,7 @@ export class MCPClient {
   async disconnect(): Promise<void> {
     if (this.transport) {
       await this.client.close();
-      // @ts-ignore - removeAllListeners exists on EventEmitter
+      // @ts-expect-error - removeAllListeners exists on EventEmitter
       this.client.removeAllListeners?.();
       this.transport = null;
       this.toolsCache = null;

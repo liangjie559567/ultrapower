@@ -265,14 +265,13 @@ export function parseDecompositionResult(response: string): DecompositionResult 
     jsonStr = jsonMatch[0];
   }
 
-  let parsed: unknown;
   const parseResult = safeJsonParse(jsonStr);
   if (!parseResult.success) {
     throw new Error(
       `Could not parse decomposition result: invalid JSON - ${parseResult.error}`
     );
   }
-  parsed = parseResult.data;
+  const parsed: unknown = parseResult.data;
 
   // Validate structure
   if (!parsed || typeof parsed !== 'object') {

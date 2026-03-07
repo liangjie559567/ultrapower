@@ -1373,9 +1373,8 @@ export async function main(): Promise<void> {
 
   const inputStr = Buffer.concat(chunks).toString("utf-8");
 
-  let input: HookInput;
   const result = safeJsonParse<HookInput>(inputStr);
-  input = result.success ? result.data! : {};
+  const input: HookInput = result.success ? result.data! : {};
 
   // Process hook
   const output = await processHook(hookType, input);
