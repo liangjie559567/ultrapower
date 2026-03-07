@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -87,13 +87,18 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -104,12 +109,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">56x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Intent Classifier - 意图分类器
@@ -117,23 +127,28 @@
 &nbsp;
 import type { Intent } from './types.js';
 &nbsp;
-const patterns = <span class="cstat-no" title="statement not covered" >{</span>
-  'feature-single': /\b(add|implement|create|build)\s+(a|an|one|single)\b/i,
-  'feature-multiple': /\b(add|implement|create)\s+(multiple|several|many)\b/i,
-  'bug-fix': /\b(fix|bug|error|issue|broken)\b/i,
-  'refactor': /\b(refactor|cleanup|improve|optimize)\b/i,
-  'review': /\b(review|audit|check|inspect)\b/i,
-  'explore': /\b(explore|understand|analyze|investigate)\b/i,
-  'plan': /\b(plan|design|architect|strategy)\b/i,
-};
+const patterns: Array&lt;{ intent: Intent; pattern: RegExp; priority: number }&gt; = [
+  { intent: 'bug-fix', pattern: /(fix|bug|error|issue|broken|修复|错误|问题|故障)/i, priority: 10 },
+  { intent: 'refactor', pattern: /(refactor|cleanup|restructure|重构|优化|改进|整个.*架构)/i, priority: 9 },
+  { intent: 'review', pattern: /(review|audit|check|inspect|审查|检查|评审)/i, priority: 8 },
+  { intent: 'plan', pattern: /(plan|design|architect|strategy|规划|设计|架构)/i, priority: 7 },
+  { intent: 'explore', pattern: /(explore|understand|analyze|investigate|探索|分析|调查)/i, priority: 6 },
+  { intent: 'feature-multiple', pattern: /(add|implement|create)\s+(multiple|several|many)|添加.*多个|实现.*多个/i, priority: 5 },
+  { intent: 'feature-single', pattern: /(add|implement|create|build|添加|实现|创建|构建|登录|功能)/i, priority: 1 },
+];
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >classifyIntent(u</span>serInput: string): Intent {
-<span class="cstat-no" title="statement not covered" >  for (const [intent, pattern] of Object.entries(patterns)) {</span>
-<span class="cstat-no" title="statement not covered" >    if (pattern.test(userInput)) {</span>
-<span class="cstat-no" title="statement not covered" >      return intent as Intent;</span>
+export function classifyIntent(userInput: string): Intent {
+  let bestMatch: { intent: Intent; priority: number } | null = null;
+&nbsp;
+  for (const { intent, pattern, priority } of patterns) {
+    if (pattern.test(userInput)) {
+      if (!bestMatch || priority &gt; bestMatch.priority) {
+        bestMatch = { intent, priority };
+      }
     }
   }
-<span class="cstat-no" title="statement not covered" >  return 'feature-single';</span>
+&nbsp;
+  return bestMatch ? bestMatch.intent : 'feature-single';
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -142,7 +157,7 @@ export function <span class="fstat-no" title="function not covered" >classifyInt
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

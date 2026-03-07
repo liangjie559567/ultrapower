@@ -26,7 +26,10 @@ class AuditLogger {
   }
 
   private deriveSecretKey(): Buffer {
-    const seed = process.env.OMC_AUDIT_SECRET || 'default-seed';
+    const seed = process.env.OMC_AUDIT_SECRET;
+    if (!seed) {
+      throw new Error('OMC_AUDIT_SECRET environment variable is required');
+    }
     return Buffer.from(createHmac('sha256', 'omc-audit').update(seed).digest('hex'));
   }
 
@@ -101,4 +104,19 @@ class AuditLogger {
   }
 }
 
-export const auditLogger = new AuditLogger('.omc/logs');
+let _auditLogger: AuditLogger | null = null;
+
+export const auditLogger = {
+  get instance(): AuditLogger {
+    if (!_auditLogger) {
+      _auditLogger = new AuditLogger('.omc/logs');
+    }
+    return _auditLogger;
+  },
+  async log(entry: Omit<AuditEntry, 'timestamp' | 'signature'>) {
+    return this.instance.log(entry);
+  },
+  async verify() {
+    return this.instance.verify();
+  }
+};

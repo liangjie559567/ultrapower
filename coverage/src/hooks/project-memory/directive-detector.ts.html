@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">10.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>6/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">5.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>2/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">9.09% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>1/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">11.53% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>6/52</span>
             </div>
         
             
@@ -257,7 +257,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -379,27 +379,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -441,7 +441,7 @@ import { UserDirective } from './types.js';
 /**
  * Patterns that indicate user directives
  */
-const DIRECTIVE_PATTERNS = <span class="cstat-no" title="statement not covered" >[</span>
+const DIRECTIVE_PATTERNS = [
   // Explicit directives
   /only (?:look at|focus on|work on|use) (.+)/i,
   /always (?:use|check|include|remember) (.+)/i,
@@ -558,20 +558,20 @@ function <span class="fstat-no" title="function not covered" >normalizeCommand(c
 /**
  * Add directive if not duplicate
  */
-export function <span class="fstat-no" title="function not covered" >addDirective(</span>
+export function addDirective(
   directives: UserDirective[],
   newDirective: UserDirective
 ): UserDirective[] {
   // Check for duplicates
-  const isDuplicate = <span class="cstat-no" title="statement not covered" >directives.some(<span class="fstat-no" title="function not covered" >d =&gt;</span></span>
+  const isDuplicate = directives.some(<span class="fstat-no" title="function not covered" >d =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    d.directive.toLowerCase() === newDirective.directive.toLowerCase()</span>
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!isDuplicate) {</span>
-<span class="cstat-no" title="statement not covered" >    directives.push(newDirective);</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (!isDuplicate) {
+    directives.push(newDirective);
 &nbsp;
     // Keep only most recent 20 directives
-<span class="cstat-no" title="statement not covered" >    if (directives.length &gt; 20) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (directives.length &gt; 20) {
 <span class="cstat-no" title="statement not covered" >      directives.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
         // Sort by priority first, then by timestamp
 <span class="cstat-no" title="statement not covered" >        if (a.priority !== b.priority) {</span>
@@ -583,7 +583,7 @@ export function <span class="fstat-no" title="function not covered" >addDirectiv
     }
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return directives;</span>
+  return directives;
 }
 &nbsp;
 /**
@@ -622,7 +622,7 @@ export function <span class="fstat-no" title="function not covered" >formatDirec
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

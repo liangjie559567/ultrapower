@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">93.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>14/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>21/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">93.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>14/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -118,33 +118,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -155,39 +155,39 @@
 &nbsp;
 import type { Q1Answer, Q2Answer, Q3Answer, ExecutionMode } from './types.js';
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >getRecommendation(</span>
+export function getRecommendation(
   q1: Q1Answer,
   q2?: Q2Answer,
   q3?: Q3Answer
 ): ExecutionMode {
   // Q1 = single (单个功能)
-<span class="cstat-no" title="statement not covered" >  if (q1 === 'single') {</span>
-<span class="cstat-no" title="statement not covered" >    if (q2 === 'simple') {</span>
-<span class="cstat-no" title="statement not covered" >      return q3 === 'continuous' ? 'ralph' : 'executor';</span>
+  if (q1 === 'single') {
+    if (q2 === 'simple') {
+      return q3 === 'continuous' ? 'ralph' : 'executor';
     }
-<span class="cstat-no" title="statement not covered" >    if (q2 === 'complex') {</span>
-<span class="cstat-no" title="statement not covered" >      return 'autopilot';</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (q2 === 'complex') {
+      return 'autopilot';
     }
   }
 &nbsp;
   // Q1 = multiple (多个功能)
-<span class="cstat-no" title="statement not covered" >  if (q1 === 'multiple') {</span>
-<span class="cstat-no" title="statement not covered" >    return q2 === 'independent' ? 'ultrawork' : 'team';</span>
+  if (q1 === 'multiple') {
+    return q2 === 'independent' ? 'ultrawork' : 'team';
   }
 &nbsp;
   // Q1 = fix (修复问题)
-<span class="cstat-no" title="statement not covered" >  if (q1 === 'fix') {</span>
-<span class="cstat-no" title="statement not covered" >    if (q2 === 'single-file') {</span>
-<span class="cstat-no" title="statement not covered" >      return 'executor';</span>
+  if (q1 === 'fix') {
+    if (q2 === 'single-file') {
+      return 'executor';
     }
-<span class="cstat-no" title="statement not covered" >    if (q2 === 'multi-file') {</span>
-<span class="cstat-no" title="statement not covered" >      return q3 === 'verify-loop' ? 'ralph' : 'ultrawork';</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (q2 === 'multi-file') {
+      return q3 === 'verify-loop' ? 'ralph' : 'ultrawork';
     }
   }
 &nbsp;
   // Q1 = uncertain (不确定)
-<span class="cstat-no" title="statement not covered" >  if (q1 === 'uncertain') {</span>
-<span class="cstat-no" title="statement not covered" >    return q2 === 'need-plan' ? 'plan' : 'restart';</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (q1 === 'uncertain') {
+    return q2 === 'need-plan' ? 'plan' : 'restart';
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return 'executor'; // 默认回退</span>
@@ -199,7 +199,7 @@ export function <span class="fstat-no" title="function not covered" >getRecommen
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

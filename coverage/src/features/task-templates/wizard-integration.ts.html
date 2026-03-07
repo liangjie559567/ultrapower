@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -103,43 +103,43 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TemplateLoader } from '../task-templates';
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TemplateLoader } from '../task-templates/index.js';
 &nbsp;
 export interface WizardContext {
   templateLoader: TemplateLoader;
 }
 &nbsp;
 export class TemplateIntegration {
-<span class="fstat-no" title="function not covered" >  constructor(private <span class="cstat-no" title="statement not covered" >c</span>ontext: WizardContext) {</span>}
+  constructor(private context: WizardContext) {}
 &nbsp;
-<span class="fstat-no" title="function not covered" >  getTemplateForMode(m</span>ode: string): string | null {
-    const templates: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{</span>
+  getTemplateForMode(mode: string): string | null {
+    const templates: Record&lt;string, string&gt; = {
       'feature-dev': 'feature-development',
       'bug-fix': 'bug-fix',
       'code-review': 'code-review',
@@ -147,18 +147,18 @@ export class TemplateIntegration {
       'security': 'security-audit'
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return templates[mode] || null;</span>
+    return templates[mode] || <span class="branch-1 cbranch-no" title="branch not covered" >null;</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  applyTemplate(t</span>emplateName: string, taskDescription: string): string {
-    const template = <span class="cstat-no" title="statement not covered" >this.context.templateLoader.load(templateName);</span>
-<span class="cstat-no" title="statement not covered" >    return `# ${taskDescription}\n\n${template.content}`;</span>
+  applyTemplate(templateName: string, taskDescription: string): string {
+    const template = this.context.templateLoader.load(templateName);
+    return `# ${taskDescription}\n\n${template.content}`;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  listAvailableTemplates(): Array&lt;{ name: string; description: string }&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return this.context.templateLoader.listTemplates().map(<span class="fstat-no" title="function not covered" >name =&gt; {</span></span>
-      const template = <span class="cstat-no" title="statement not covered" >this.context.templateLoader.load(name);</span>
-<span class="cstat-no" title="statement not covered" >      return { name, description: template.description };</span>
+  listAvailableTemplates(): Array&lt;{ name: string; description: string }&gt; {
+    return this.context.templateLoader.listTemplates().map((name: string) =&gt; {
+      const template = this.context.templateLoader.load(name);
+      return { name, description: template.description };
     });
   }
 }
@@ -169,7 +169,7 @@ export class TemplateIntegration {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

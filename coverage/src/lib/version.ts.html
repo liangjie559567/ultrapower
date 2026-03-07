@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -113,27 +113,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Shared version helper
@@ -148,28 +148,28 @@ import { fileURLToPath } from 'url';
  * Get the package version from package.json at runtime.
  * Works from any file within the package (src/ or dist/).
  */
-export function <span class="fstat-no" title="function not covered" >getRuntimePackageVersion(): string {</span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const <span class="cstat-no" title="statement not covered" >__filename = fileURLToPath(import.meta.url);</span>
-    const <span class="cstat-no" title="statement not covered" >__dirname = dirname(__filename);</span>
+export function getRuntimePackageVersion(): string {
+  try {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
     // Try multiple levels up to find package.json
     // From dist/lib/version.js -&gt; ../../package.json
     // From src/lib/version.ts -&gt; ../../package.json
-<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0; i</span> &lt; 5; i++) {</span>
-      const <span class="cstat-no" title="statement not covered" >candidate = join(__dirname, ...Array(i + 1).fill('..'), 'package.json');</span>
-<span class="cstat-no" title="statement not covered" >      try {</span>
-        const pkg = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(candidate, 'utf-8'));</span>
-<span class="cstat-no" title="statement not covered" >        if (pkg.name &amp;&amp; pkg.version) {</span>
-<span class="cstat-no" title="statement not covered" >          return pkg.version;</span>
+    for (let i = 0; i &lt; 5; i++) {
+      const candidate = join(__dirname, ...Array(i + 1).fill('..'), 'package.json');
+      try {
+        const pkg = JSON.parse(readFileSync(candidate, 'utf-8'));
+        if (pkg.name &amp;&amp; pkg.version) {
+          return pkg.version;
         }
       } catch {
-<span class="cstat-no" title="statement not covered" >        continue;</span>
+        continue;
       }
     }
   } catch {
     // Fallback
   }
-<span class="cstat-no" title="statement not covered" >  return 'unknown';</span>
+  return 'unknown';
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -178,7 +178,7 @@ export function <span class="fstat-no" title="function not covered" >getRuntimeP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

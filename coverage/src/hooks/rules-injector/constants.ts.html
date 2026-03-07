@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -126,45 +126,45 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Rules Injector Constants
  *
@@ -177,11 +177,11 @@ import { join } from 'path';
 import { homedir } from 'os';
 &nbsp;
 /** Storage directory for rules injector state */
-export const <span class="cstat-no" title="statement not covered" >OMC_STORAGE_DIR = join(homedir(), '.omc');</span>
-export const <span class="cstat-no" title="statement not covered" >RULES_INJECTOR_STORAGE = join(OMC_STORAGE_DIR, 'rules-injector');</span>
+export const OMC_STORAGE_DIR = join(homedir(), '.omc');
+export const RULES_INJECTOR_STORAGE = join(OMC_STORAGE_DIR, 'rules-injector');
 &nbsp;
 /** Project marker files that indicate a project root */
-export const PROJECT_MARKERS = <span class="cstat-no" title="statement not covered" >[</span>
+export const PROJECT_MARKERS = [
   '.git',
   'pyproject.toml',
   'package.json',
@@ -191,31 +191,31 @@ export const PROJECT_MARKERS = <span class="cstat-no" title="statement not cover
 ];
 &nbsp;
 /** Subdirectories to search for rules within projects */
-export const PROJECT_RULE_SUBDIRS: [string, string][] = <span class="cstat-no" title="statement not covered" >[</span>
+export const PROJECT_RULE_SUBDIRS: [string, string][] = [
   ['.github', 'instructions'],
   ['.cursor', 'rules'],
   ['.claude', 'rules'],
 ];
 &nbsp;
 /** Single-file rules that always apply */
-export const PROJECT_RULE_FILES: string[] = <span class="cstat-no" title="statement not covered" >[</span>
+export const PROJECT_RULE_FILES: string[] = [
   '.github/copilot-instructions.md',
 ];
 &nbsp;
 /** Pattern for GitHub instructions files */
-export const GITHUB_INSTRUCTIONS_PATTERN = <span class="cstat-no" title="statement not covered" >/\.instructions\.md$/;</span>
+export const GITHUB_INSTRUCTIONS_PATTERN = /\.instructions\.md$/;
 &nbsp;
 /** User-level rule directory */
-export const USER_RULE_DIR = <span class="cstat-no" title="statement not covered" >'.claude/rules';</span>
+export const USER_RULE_DIR = '.claude/rules';
 &nbsp;
 /** Valid rule file extensions */
-export const RULE_EXTENSIONS = <span class="cstat-no" title="statement not covered" >['.md', '.mdc'];</span>
+export const RULE_EXTENSIONS = ['.md', '.mdc'];
 &nbsp;
 /** Tools that trigger rule injection */
-export const TRACKED_TOOLS = <span class="cstat-no" title="statement not covered" >['read', 'write', 'edit', 'multiedit'];</span>
+export const TRACKED_TOOLS = ['read', 'write', 'edit', 'multiedit'];
 &nbsp;
 /** Maximum number of directory levels to traverse upward when searching for rules or project root */
-export const MAX_TRAVERSAL_DEPTH = <span class="cstat-no" title="statement not covered" >30;</span>
+export const MAX_TRAVERSAL_DEPTH = 30;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -223,7 +223,7 @@ export const MAX_TRAVERSAL_DEPTH = <span class="cstat-no" title="statement not c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

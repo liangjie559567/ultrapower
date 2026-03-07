@@ -76,7 +76,14 @@ export type HookType =
   | "pre-compact"
   | "setup-init"
   | "setup-maintenance"
-  | "permission-request";
+  | "permission-request"
+  | "delegation-enforcer"
+  | "omc-orchestrator-pre-tool"
+  | "omc-orchestrator-post-tool"
+  | "user-prompt-submit"
+  | "file-save"
+  | "setup"
+  | "agent-execution-complete";
 
 /**
  * Hook severity levels for error handling
@@ -106,4 +113,11 @@ export const HOOK_SEVERITY: Record<HookType, HookSeverity> = {
   'ralph': HookSeverity.LOW,
   'persistent-mode': HookSeverity.LOW,
   'autopilot': HookSeverity.LOW,
+  'delegation-enforcer': HookSeverity.LOW,
+  'omc-orchestrator-pre-tool': HookSeverity.LOW,
+  'omc-orchestrator-post-tool': HookSeverity.LOW,
+  'user-prompt-submit': HookSeverity.LOW,
+  'file-save': HookSeverity.LOW,
+  'setup': HookSeverity.HIGH,
+  'agent-execution-complete': HookSeverity.LOW,
 };

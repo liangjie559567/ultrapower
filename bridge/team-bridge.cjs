@@ -1145,15 +1145,16 @@ var SqliteWorkerAdapter = class {
   async init() {
     try {
       const betterSqlite3Module = await import("better-sqlite3");
-      const Database = betterSqlite3Module.default || betterSqlite3Module;
+      const DatabaseConstructor = betterSqlite3Module.default || betterSqlite3Module;
       const stateDir = (0, import_path15.join)(this.cwd, ".omc", "state");
       if (!(0, import_fs15.existsSync)(stateDir)) {
         (0, import_fs15.mkdirSync)(stateDir, { recursive: true });
       }
       const dbPath = (0, import_path15.join)(stateDir, "workers.db");
-      this.db = new Database(dbPath);
-      this.db.pragma("journal_mode = WAL");
-      this.db.exec(`
+      this.db = new DatabaseConstructor(dbPath);
+      if (this.db) {
+        this.db.pragma("journal_mode = WAL");
+        this.db.exec(`
         CREATE TABLE IF NOT EXISTS workers (
           worker_id TEXT PRIMARY KEY,
           worker_type TEXT NOT NULL,
@@ -1179,6 +1180,7 @@ var SqliteWorkerAdapter = class {
         CREATE INDEX IF NOT EXISTS idx_status ON workers(status);
         CREATE INDEX IF NOT EXISTS idx_team_name ON workers(team_name);
       `);
+      }
       return true;
     } catch (error) {
       console.error("[SqliteWorkerAdapter] Init failed:", error);

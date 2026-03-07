@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>12/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>12/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -133,34 +133,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
@@ -182,35 +182,35 @@ import { join } from 'path';
 import { AGENT_USAGE_REMINDER_STORAGE } from './constants.js';
 import type { AgentUsageState } from './types.js';
 &nbsp;
-function <span class="fstat-no" title="function not covered" >getStoragePath(s</span>essionID: string): string {
-<span class="cstat-no" title="statement not covered" >  return join(AGENT_USAGE_REMINDER_STORAGE, `${sessionID}.json`);</span>
+function getStoragePath(sessionID: string): string {
+  return join(AGENT_USAGE_REMINDER_STORAGE, `${sessionID}.json`);
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >loadAgentUsageState(s</span>essionID: string): AgentUsageState | null {
-  const filePath = <span class="cstat-no" title="statement not covered" >getStoragePath(sessionID);</span>
-<span class="cstat-no" title="statement not covered" >  if (!existsSync(filePath)) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+export function loadAgentUsageState(sessionID: string): AgentUsageState | null {
+  const filePath = getStoragePath(sessionID);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!existsSync(filePath)) <span class="cstat-no" title="statement not covered" >return null;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-<span class="cstat-no" title="statement not covered" >    return JSON.parse(content) as AgentUsageState;</span>
+  try {
+    const content = readFileSync(filePath, 'utf-8');
+    return JSON.parse(content) as AgentUsageState;
   } catch {
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >saveAgentUsageState(s</span>tate: AgentUsageState): void {
-<span class="cstat-no" title="statement not covered" >  if (!existsSync(AGENT_USAGE_REMINDER_STORAGE)) {</span>
+export function saveAgentUsageState(state: AgentUsageState): void {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!existsSync(AGENT_USAGE_REMINDER_STORAGE)) {
 <span class="cstat-no" title="statement not covered" >    mkdirSync(AGENT_USAGE_REMINDER_STORAGE, { recursive: true });</span>
   }
 &nbsp;
-  const filePath = <span class="cstat-no" title="statement not covered" >getStoragePath(state.sessionID);</span>
-<span class="cstat-no" title="statement not covered" >  writeFileSync(filePath, JSON.stringify(state, null, 2));</span>
+  const filePath = getStoragePath(state.sessionID);
+  writeFileSync(filePath, JSON.stringify(state, null, 2));
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >clearAgentUsageState(s</span>essionID: string): void {
-  const filePath = <span class="cstat-no" title="statement not covered" >getStoragePath(sessionID);</span>
-<span class="cstat-no" title="statement not covered" >  if (existsSync(filePath)) {</span>
-<span class="cstat-no" title="statement not covered" >    unlinkSync(filePath);</span>
+export function clearAgentUsageState(sessionID: string): void {
+  const filePath = getStoragePath(sessionID);
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (existsSync(filePath)) {
+    unlinkSync(filePath);
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -220,7 +220,7 @@ export function <span class="fstat-no" title="function not covered" >clearAgentU
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -218,12 +218,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -269,7 +269,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,7 +321,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -340,7 +340,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -353,7 +353,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -369,12 +369,12 @@
  * Project Memory Constants
  */
 &nbsp;
-export const MEMORY_FILE = <span class="cstat-no" title="statement not covered" >'project-memory.json';</span>
-export const MEMORY_DIR = <span class="cstat-no" title="statement not covered" >'.omc';</span>
-export const CACHE_EXPIRY_MS = <span class="cstat-no" title="statement not covered" >24 * 60 * 60 * 1000; // 24 hours</span>
-export const SCHEMA_VERSION = <span class="cstat-no" title="statement not covered" >'1.0.0';</span>
+export const MEMORY_FILE = 'project-memory.json';
+export const MEMORY_DIR = '.omc';
+export const CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
+export const SCHEMA_VERSION = '1.0.0';
 &nbsp;
-export const CONFIG_PATTERNS = <span class="cstat-no" title="statement not covered" >[</span>
+export const CONFIG_PATTERNS = [
   // JavaScript/TypeScript
   { file: 'package.json', indicates: { language: 'JavaScript/TypeScript', packageManager: 'npm' } },
   { file: 'tsconfig.json', indicates: { language: 'TypeScript' } },
@@ -420,7 +420,7 @@ export const CONFIG_PATTERNS = <span class="cstat-no" title="statement not cover
   { file: '*.fsproj', indicates: { language: 'F#', packageManager: 'nuget' } },
 ];
 &nbsp;
-export const FRAMEWORK_PATTERNS: Record&lt;string, { category: 'frontend' | 'backend' | 'fullstack' | 'testing' | 'build' }&gt; = <span class="cstat-no" title="statement not covered" >{</span>
+export const FRAMEWORK_PATTERNS: Record&lt;string, { category: 'frontend' | 'backend' | 'fullstack' | 'testing' | 'build' }&gt; = {
   // Frontend
   'react': { category: 'frontend' },
   'react-dom': { category: 'frontend' },
@@ -472,7 +472,7 @@ export const FRAMEWORK_PATTERNS: Record&lt;string, { category: 'frontend' | 'bac
   'turbopack': { category: 'build' },
 };
 &nbsp;
-export const MAIN_DIRECTORIES = <span class="cstat-no" title="statement not covered" >[</span>
+export const MAIN_DIRECTORIES = [
   'src',
   'lib',
   'app',
@@ -491,7 +491,7 @@ export const MAIN_DIRECTORIES = <span class="cstat-no" title="statement not cove
   'static',
 ];
 &nbsp;
-export const BUILD_COMMAND_PATTERNS = <span class="cstat-no" title="statement not covered" >[</span>
+export const BUILD_COMMAND_PATTERNS = [
   /npm\s+run\s+build/,
   /pnpm\s+build/,
   /yarn\s+build/,
@@ -504,7 +504,7 @@ export const BUILD_COMMAND_PATTERNS = <span class="cstat-no" title="statement no
   /gradle\s+build/,
 ];
 &nbsp;
-export const TEST_COMMAND_PATTERNS = <span class="cstat-no" title="statement not covered" >[</span>
+export const TEST_COMMAND_PATTERNS = [
   /npm\s+test/,
   /pnpm\s+test/,
   /yarn\s+test/,
@@ -523,7 +523,7 @@ export const TEST_COMMAND_PATTERNS = <span class="cstat-no" title="statement not
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@ export interface CancelResult {
  * Cancel autopilot and clean up all related state
  * Progress is preserved for potential resume
  */
-export function cancelAutopilot(directory: string, sessionId?: string): CancelResult {
+export async function cancelAutopilot(directory: string, sessionId?: string): Promise<CancelResult> {
   const state = readAutopilotState(directory, sessionId);
 
   if (!state) {
@@ -81,7 +81,7 @@ export function cancelAutopilot(directory: string, sessionId?: string): CancelRe
 
   // Mark autopilot as inactive but preserve state for resume
   state.active = false;
-  writeAutopilotState(directory, state, sessionId);
+  await writeAutopilotState(directory, state, sessionId);
 
   const cleanupMsg = cleanedUp.length > 0
     ? ` Cleaned up: ${cleanedUp.join(', ')}.`
@@ -209,11 +209,11 @@ export function canResumeAutopilot(directory: string, sessionId?: string): {
 /**
  * Resume a paused autopilot session
  */
-export function resumeAutopilot(directory: string, sessionId?: string): {
+export async function resumeAutopilot(directory: string, sessionId?: string): Promise<{
   success: boolean;
   message: string;
   state?: AutopilotState;
-} {
+}> {
   const { canResume, state, wasInterrupted } = canResumeAutopilot(directory, sessionId);
 
   if (!canResume || !state) {
@@ -241,7 +241,7 @@ export function resumeAutopilot(directory: string, sessionId?: string): {
     state.resumed_at = new Date().toISOString();
   }
 
-  if (!writeAutopilotState(directory, state, sessionId)) {
+  if (!(await writeAutopilotState(directory, state, sessionId))) {
     return {
       success: false,
       message: 'Failed to update autopilot state'

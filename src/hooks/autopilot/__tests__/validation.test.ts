@@ -11,7 +11,7 @@ import {
   getValidationSpawnPrompt,
   formatValidationResults
 } from '../validation.js';
-import { initAutopilot, transitionPhase } from '../state.js';
+import { initAutopilot, transitionPhase, readAutopilotState } from '../state.js';
 
 describe('AutopilotValidation', () => {
   let testDir: string;
@@ -25,22 +25,22 @@ describe('AutopilotValidation', () => {
   });
 
   describe('recordValidationVerdict', () => {
-    it('should return false when state does not exist', () => {
-      const result = recordValidationVerdict(testDir, 'functional', 'APPROVED');
+    it('should return false when state does not exist', async () => {
+      const result = await recordValidationVerdict(testDir, 'functional', 'APPROVED');
       expect(result).toBe(false);
     });
 
-    it('should return false when phase is not validation', () => {
-      initAutopilot(testDir, 'test idea');
-      const result = recordValidationVerdict(testDir, 'functional', 'APPROVED');
+    it('should return false when phase is not validation', async () => {
+      await initAutopilot(testDir, 'test idea');
+      const result = await recordValidationVerdict(testDir, 'functional', 'APPROVED');
       expect(result).toBe(false);
     });
 
-    it('should record verdict and increment architects_spawned for new verdict', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should record verdict and increment architects_spawned for new verdict', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      const result = recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      const result = await recordValidationVerdict(testDir, 'functional', 'APPROVED');
       expect(result).toBe(true);
 
       const status = getValidationStatus(testDir);
@@ -56,12 +56,12 @@ describe('AutopilotValidation', () => {
       expect(status2).not.toBeNull();
     });
 
-    it('should replace existing verdict of same type without incrementing architects_spawned', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should replace existing verdict of same type without incrementing architects_spawned', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
 
       const status = getValidationStatus(testDir);
       expect(status?.verdicts).toHaveLength(1);
@@ -72,80 +72,80 @@ describe('AutopilotValidation', () => {
       });
     });
 
-    it('should record verdict with issues', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should record verdict with issues', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
       const issues = ['Missing feature X', 'Incomplete feature Y'];
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', issues);
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', issues);
 
       const status = getValidationStatus(testDir);
       expect(status?.verdicts[0].issues).toEqual(issues);
     });
 
-    it('should set all_approved to true when all 3 verdicts are APPROVED', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should set all_approved to true when all 3 verdicts are APPROVED', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const status = getValidationStatus(testDir);
       expect(status?.allApproved).toBe(true);
     });
 
-    it('should set all_approved to false when any verdict is REJECTED', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should set all_approved to false when any verdict is REJECTED', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security issue']);
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
-
-      const status = getValidationStatus(testDir);
-      expect(status?.allApproved).toBe(false);
-    });
-
-    it('should set all_approved to false when any verdict is NEEDS_FIX', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'NEEDS_FIX', ['Minor fixes']);
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security issue']);
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const status = getValidationStatus(testDir);
       expect(status?.allApproved).toBe(false);
     });
 
-    it('should not set all_approved until all 3 verdicts are recorded', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should set all_approved to false when any verdict is NEEDS_FIX', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'NEEDS_FIX', ['Minor fixes']);
+
+      const status = getValidationStatus(testDir);
+      expect(status?.allApproved).toBe(false);
+    });
+
+    it('should not set all_approved until all 3 verdicts are recorded', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
+
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
       let status = getValidationStatus(testDir);
       expect(status?.allApproved).toBe(false);
 
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
       status = getValidationStatus(testDir);
       expect(status?.allApproved).toBe(false);
 
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
       status = getValidationStatus(testDir);
       expect(status?.allApproved).toBe(true);
     });
   });
 
   describe('getValidationStatus', () => {
-    it('should return null when state does not exist', () => {
+    it('should return null when state does not exist', async () => {
       const status = getValidationStatus(testDir);
       expect(status).toBeNull();
     });
 
-    it('should return proper status object with no verdicts', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should return proper status object with no verdicts', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
       const status = getValidationStatus(testDir);
       expect(status).not.toBeNull();
@@ -156,12 +156,12 @@ describe('AutopilotValidation', () => {
       expect(status?.issues).toEqual([]);
     });
 
-    it('should return status with verdicts', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should return status with verdicts', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security issue 1']);
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security issue 1']);
 
       const status = getValidationStatus(testDir);
       expect(status?.success).toBe(false); // Only 2 out of 3 verdicts
@@ -170,36 +170,36 @@ describe('AutopilotValidation', () => {
       expect(status?.issues).toEqual(['Security issue 1']);
     });
 
-    it('should aggregate all issues from all verdicts', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should aggregate all issues from all verdicts', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1', 'Issue 2']);
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'REJECTED', ['Issue 3']);
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1', 'Issue 2']);
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'REJECTED', ['Issue 3']);
 
       const status = getValidationStatus(testDir);
       expect(status?.issues).toEqual(['Issue 1', 'Issue 2', 'Issue 3']);
     });
 
-    it('should return success true when 3 verdicts recorded', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should return success true when 3 verdicts recorded', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const status = getValidationStatus(testDir);
       expect(status?.success).toBe(true);
       expect(status?.allApproved).toBe(true);
     });
 
-    it('should return current validation round', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-      startValidationRound(testDir);
-      startValidationRound(testDir);
+    it('should return current validation round', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
+      await startValidationRound(testDir);
+      await startValidationRound(testDir);
 
       const status = getValidationStatus(testDir);
       expect(status?.round).toBe(2);
@@ -207,159 +207,159 @@ describe('AutopilotValidation', () => {
   });
 
   describe('startValidationRound', () => {
-    it('should return false when state does not exist', () => {
-      const result = startValidationRound(testDir);
+    it('should return false when state does not exist', async () => {
+      const result = await startValidationRound(testDir);
       expect(result).toBe(false);
     });
 
-    it('should return false when phase is not validation', () => {
-      initAutopilot(testDir, 'test idea');
-      const result = startValidationRound(testDir);
+    it('should return false when phase is not validation', async () => {
+      await initAutopilot(testDir, 'test idea');
+      const result = await startValidationRound(testDir);
       expect(result).toBe(false);
     });
 
-    it('should increment validation_rounds', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should increment validation_rounds', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
       let status = getValidationStatus(testDir);
       expect(status?.round).toBe(0);
 
-      startValidationRound(testDir);
+      await startValidationRound(testDir);
       status = getValidationStatus(testDir);
       expect(status?.round).toBe(1);
 
-      startValidationRound(testDir);
+      await startValidationRound(testDir);
       status = getValidationStatus(testDir);
       expect(status?.round).toBe(2);
     });
 
-    it('should clear verdicts array', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should clear verdicts array', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
 
       let status = getValidationStatus(testDir);
       expect(status?.verdicts).toHaveLength(2);
 
-      startValidationRound(testDir);
+      await startValidationRound(testDir);
       status = getValidationStatus(testDir);
       expect(status?.verdicts).toEqual([]);
     });
 
-    it('should reset all_approved to false', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should reset all_approved to false', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       let status = getValidationStatus(testDir);
       expect(status?.allApproved).toBe(true);
 
-      startValidationRound(testDir);
+      await startValidationRound(testDir);
       status = getValidationStatus(testDir);
       expect(status?.allApproved).toBe(false);
     });
 
-    it('should reset architects_spawned to 0', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should reset architects_spawned to 0', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
 
-      startValidationRound(testDir);
+      await startValidationRound(testDir);
 
       // After new round, can record new verdicts
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['New issue']);
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['New issue']);
       const status = getValidationStatus(testDir);
       expect(status?.verdicts).toHaveLength(1);
     });
   });
 
   describe('shouldRetryValidation', () => {
-    it('should return false when state does not exist', () => {
+    it('should return false when state does not exist', async () => {
       const result = shouldRetryValidation(testDir);
       expect(result).toBe(false);
     });
 
-    it('should return false when no rejections exist', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should return false when no rejections exist', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const result = shouldRetryValidation(testDir);
       expect(result).toBe(false);
     });
 
-    it('should return true when rejection exists and rounds remain', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-      startValidationRound(testDir);
+    it('should return true when rejection exists and rounds remain', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
+      await startValidationRound(testDir);
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const result = shouldRetryValidation(testDir, 3);
       expect(result).toBe(true);
     });
 
-    it('should return false when max rounds reached', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should return false when max rounds reached', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
       // Max out rounds
-      startValidationRound(testDir);
-      startValidationRound(testDir);
-      startValidationRound(testDir);
+      await startValidationRound(testDir);
+      await startValidationRound(testDir);
+      await startValidationRound(testDir);
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
 
       const result = shouldRetryValidation(testDir, 3);
       expect(result).toBe(false);
     });
 
-    it('should use default maxRounds of 3', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should use default maxRounds of 3', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      startValidationRound(testDir);
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
+      await startValidationRound(testDir);
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue']);
 
       const result = shouldRetryValidation(testDir); // No maxRounds param
       expect(result).toBe(true);
     });
 
-    it('should return true for NEEDS_FIX verdict when rounds remain', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-      startValidationRound(testDir);
+    it('should return true for NEEDS_FIX verdict when rounds remain', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
+      await startValidationRound(testDir);
 
-      recordValidationVerdict(testDir, 'functional', 'NEEDS_FIX', ['Minor fix']);
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'NEEDS_FIX', ['Minor fix']);
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       // NEEDS_FIX is not a rejection, should return false
       const result = shouldRetryValidation(testDir, 3);
       expect(result).toBe(false);
     });
 
-    it('should handle multiple rejections', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-      startValidationRound(testDir);
+    it('should handle multiple rejections', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
+      await startValidationRound(testDir);
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
-      recordValidationVerdict(testDir, 'security', 'REJECTED', ['Issue 2']);
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
+      await recordValidationVerdict(testDir, 'security', 'REJECTED', ['Issue 2']);
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const result = shouldRetryValidation(testDir, 3);
       expect(result).toBe(true);
@@ -367,38 +367,38 @@ describe('AutopilotValidation', () => {
   });
 
   describe('getIssuesToFix', () => {
-    it('should return empty array when state does not exist', () => {
+    it('should return empty array when state does not exist', async () => {
       const issues = getIssuesToFix(testDir);
       expect(issues).toEqual([]);
     });
 
-    it('should return empty array when no verdicts exist', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-
-      const issues = getIssuesToFix(testDir);
-      expect(issues).toEqual([]);
-    });
-
-    it('should return empty array when all verdicts are APPROVED', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+    it('should return empty array when no verdicts exist', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
       const issues = getIssuesToFix(testDir);
       expect(issues).toEqual([]);
     });
 
-    it('should return formatted issues from REJECTED verdicts', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should return empty array when all verdicts are APPROVED', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Missing feature A', 'Incomplete feature B']);
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
+
+      const issues = getIssuesToFix(testDir);
+      expect(issues).toEqual([]);
+    });
+
+    it('should return formatted issues from REJECTED verdicts', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
+
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Missing feature A', 'Incomplete feature B']);
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const issues = getIssuesToFix(testDir);
       expect(issues).toEqual([
@@ -406,13 +406,13 @@ describe('AutopilotValidation', () => {
       ]);
     });
 
-    it('should format issues from multiple rejected verdicts', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should format issues from multiple rejected verdicts', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
-      recordValidationVerdict(testDir, 'security', 'REJECTED', ['Issue 2', 'Issue 3']);
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
+      await recordValidationVerdict(testDir, 'security', 'REJECTED', ['Issue 2', 'Issue 3']);
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
       const issues = getIssuesToFix(testDir);
       expect(issues).toEqual([
@@ -421,23 +421,23 @@ describe('AutopilotValidation', () => {
       ]);
     });
 
-    it('should ignore REJECTED verdicts with no issues', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should ignore REJECTED verdicts with no issues', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
 
       const issues = getIssuesToFix(testDir);
       expect(issues).toEqual([]);
     });
 
-    it('should not include NEEDS_FIX verdicts', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should not include NEEDS_FIX verdicts', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'NEEDS_FIX', ['Minor fix']);
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'NEEDS_FIX', ['Minor fix']);
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
 
       const issues = getIssuesToFix(testDir);
       expect(issues).toEqual([]);
@@ -445,7 +445,7 @@ describe('AutopilotValidation', () => {
   });
 
   describe('getValidationSpawnPrompt', () => {
-    it('should return prompt with spec path', () => {
+    it('should return prompt with spec path', async () => {
       const specPath = '/path/to/spec.md';
       const prompt = getValidationSpawnPrompt(specPath);
 
@@ -456,7 +456,7 @@ describe('AutopilotValidation', () => {
       expect(prompt).toContain('ultrapower:code-reviewer');
     });
 
-    it('should include all three validation types', () => {
+    it('should include all three validation types', async () => {
       const prompt = getValidationSpawnPrompt('/spec.md');
 
       expect(prompt).toContain('FUNCTIONAL COMPLETENESS REVIEW');
@@ -464,14 +464,14 @@ describe('AutopilotValidation', () => {
       expect(prompt).toContain('CODE QUALITY REVIEW');
     });
 
-    it('should specify model as opus', () => {
+    it('should specify model as opus', async () => {
       const prompt = getValidationSpawnPrompt('/spec.md');
 
       const opusMatches = prompt.match(/model="opus"/g);
       expect(opusMatches).toHaveLength(3);
     });
 
-    it('should include verdict format instructions', () => {
+    it('should include verdict format instructions', async () => {
       const prompt = getValidationSpawnPrompt('/spec.md');
 
       expect(prompt).toContain('APPROVED or REJECTED');
@@ -479,10 +479,11 @@ describe('AutopilotValidation', () => {
   });
 
   describe('formatValidationResults', () => {
-    it('should format state with no verdicts', () => {
-      const state = initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should format state with no verdicts', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
+      const state = readAutopilotState(testDir);
       const formatted = formatValidationResults(state!);
 
       expect(formatted).toContain('## Validation Results');
@@ -490,13 +491,13 @@ describe('AutopilotValidation', () => {
       expect(formatted).toContain('NEEDS FIXES');
     });
 
-    it('should format approved verdicts with checkmark icon', () => {
-      initAutopilot(testDir, 'test idea');
-      const _state = transitionPhase(testDir, 'validation');
+    it('should format approved verdicts with checkmark icon', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      const updatedState = transitionPhase(testDir, 'validation');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
 
+      const updatedState = readAutopilotState(testDir);
       const formatted = formatValidationResults(updatedState!);
 
       expect(formatted).toContain('✓');
@@ -504,12 +505,12 @@ describe('AutopilotValidation', () => {
       expect(formatted).toContain('APPROVED');
     });
 
-    it('should format rejected verdicts with X icon', () => {
-      initAutopilot(testDir, 'test idea');
-      const _state = transitionPhase(testDir, 'validation');
+    it('should format rejected verdicts with X icon', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
-      const updatedState = transitionPhase(testDir, 'validation');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1']);
+      const updatedState = readAutopilotState(testDir);
 
       const formatted = formatValidationResults(updatedState!);
 
@@ -518,12 +519,12 @@ describe('AutopilotValidation', () => {
       expect(formatted).toContain('REJECTED');
     });
 
-    it('should include issues with bullet points', () => {
-      initAutopilot(testDir, 'test idea');
-      const _state = transitionPhase(testDir, 'validation');
+    it('should include issues with bullet points', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1', 'Issue 2']);
-      const updatedState = transitionPhase(testDir, 'validation');
+      await recordValidationVerdict(testDir, 'functional', 'REJECTED', ['Issue 1', 'Issue 2']);
+      const updatedState = readAutopilotState(testDir);
 
       const formatted = formatValidationResults(updatedState!);
 
@@ -531,57 +532,57 @@ describe('AutopilotValidation', () => {
       expect(formatted).toContain('- Issue 2');
     });
 
-    it('should show ALL APPROVED when all verdicts approved', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should show ALL APPROVED when all verdicts approved', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'APPROVED');
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'APPROVED');
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
-      const state = transitionPhase(testDir, 'validation');
+      const state = readAutopilotState(testDir);
       const formatted = formatValidationResults(state!);
 
       expect(formatted).toContain('ALL APPROVED');
       expect(formatted).toContain('Ready to complete');
     });
 
-    it('should show NEEDS FIXES when any verdict not approved', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should show NEEDS FIXES when any verdict not approved', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security flaw']);
-      recordValidationVerdict(testDir, 'quality', 'APPROVED');
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security flaw']);
+      await recordValidationVerdict(testDir, 'quality', 'APPROVED');
 
-      const state = transitionPhase(testDir, 'validation');
+      const state = readAutopilotState(testDir);
       const formatted = formatValidationResults(state!);
 
       expect(formatted).toContain('NEEDS FIXES');
       expect(formatted).toContain('Address issues above');
     });
 
-    it('should display current round number', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
-      startValidationRound(testDir);
-      startValidationRound(testDir);
+    it('should display current round number', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
+      await startValidationRound(testDir);
+      await startValidationRound(testDir);
 
-      const state = transitionPhase(testDir, 'validation');
+      const state = readAutopilotState(testDir);
       const formatted = formatValidationResults(state!);
 
       expect(formatted).toContain('Round: 2');
     });
 
-    it('should format all verdict types correctly', () => {
-      initAutopilot(testDir, 'test idea');
-      transitionPhase(testDir, 'validation');
+    it('should format all verdict types correctly', async () => {
+      await initAutopilot(testDir, 'test idea');
+      await transitionPhase(testDir, 'validation');
 
-      recordValidationVerdict(testDir, 'functional', 'APPROVED');
-      recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security issue']);
-      recordValidationVerdict(testDir, 'quality', 'NEEDS_FIX', ['Minor fix']);
+      await recordValidationVerdict(testDir, 'functional', 'APPROVED');
+      await recordValidationVerdict(testDir, 'security', 'REJECTED', ['Security issue']);
+      await recordValidationVerdict(testDir, 'quality', 'NEEDS_FIX', ['Minor fix']);
 
-      const state = transitionPhase(testDir, 'validation');
+      const state = readAutopilotState(testDir);
       const formatted = formatValidationResults(state!);
 
       expect(formatted).toContain('FUNCTIONAL');

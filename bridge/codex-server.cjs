@@ -14863,8 +14863,13 @@ async function initJobDb(cwd) {
       const oldestKey = dbMap.keys().next().value;
       if (oldestKey) {
         const oldDb = dbMap.get(oldestKey);
-        oldDb?.close();
-        dbMap.delete(oldestKey);
+        try {
+          oldDb?.close();
+        } catch (err) {
+          console.error(`[job-state-db] Failed to close connection: ${err}`);
+        } finally {
+          dbMap.delete(oldestKey);
+        }
       }
     }
     ensureStateDir(cwd);
@@ -16350,7 +16355,7 @@ var TIME_THRESHOLD = {
 
 // src/config/loader.ts
 function isValidModelName(name) {
-  return /^[a-zA-Z0-9.\-]{1,100}$/.test(name);
+  return /^[a-zA-Z0-9.-]{1,100}$/.test(name);
 }
 var DEFAULT_CONFIG = {
   agents: {
@@ -16757,9 +16762,7 @@ function executeCodex(prompt, model, cwd, reasoningEffort) {
     const child = (0, import_child_process3.spawn)("codex", args, {
       stdio: ["pipe", "pipe", "pipe"],
       ...cwd ? { cwd } : {},
-      // shell: true needed on Windows for .cmd/.bat executables.
-      // Safe: args are array-based and model names are regex-validated.
-      ...process.platform === "win32" ? { shell: true } : {}
+      shell: false
     });
     const timeoutHandle = setTimeout(() => {
       if (!settled) {
@@ -16883,9 +16886,7 @@ function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingDirector
         detached: process.platform !== "win32",
         stdio: ["pipe", "pipe", "pipe"],
         ...workingDirectory ? { cwd: workingDirectory } : {},
-        // shell: true needed on Windows for .cmd/.bat executables.
-        // Safe: args are array-based and model names are regex-validated.
-        ...process.platform === "win32" ? { shell: true } : {}
+        shell: false
       });
       if (!child.pid) {
         return { error: "Failed to get process ID" };
@@ -17460,15 +17461,16 @@ var SqliteWorkerAdapter = class {
   async init() {
     try {
       const betterSqlite3Module = await import("better-sqlite3");
-      const Database2 = betterSqlite3Module.default || betterSqlite3Module;
+      const DatabaseConstructor = betterSqlite3Module.default || betterSqlite3Module;
       const stateDir = (0, import_path11.join)(this.cwd, ".omc", "state");
       if (!(0, import_fs11.existsSync)(stateDir)) {
         (0, import_fs11.mkdirSync)(stateDir, { recursive: true });
       }
       const dbPath = (0, import_path11.join)(stateDir, "workers.db");
-      this.db = new Database2(dbPath);
-      this.db.pragma("journal_mode = WAL");
-      this.db.exec(`
+      this.db = new DatabaseConstructor(dbPath);
+      if (this.db) {
+        this.db.pragma("journal_mode = WAL");
+        this.db.exec(`
         CREATE TABLE IF NOT EXISTS workers (
           worker_id TEXT PRIMARY KEY,
           worker_type TEXT NOT NULL,
@@ -17494,6 +17496,7 @@ var SqliteWorkerAdapter = class {
         CREATE INDEX IF NOT EXISTS idx_status ON workers(status);
         CREATE INDEX IF NOT EXISTS idx_team_name ON workers(team_name);
       `);
+      }
       return true;
     } catch (error2) {
       console.error("[SqliteWorkerAdapter] Init failed:", error2);

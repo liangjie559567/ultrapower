@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -259,14 +259,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -276,7 +276,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -302,10 +302,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -334,7 +334,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -385,7 +385,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,7 +397,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -415,7 +415,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -447,14 +447,14 @@
  * Adapted from oh-my-opencode's omc-orchestrator hook.
  */
 &nbsp;
-export const HOOK_NAME = <span class="cstat-no" title="statement not covered" >'omc-orchestrator';</span>
+export const HOOK_NAME = 'omc-orchestrator';
 &nbsp;
 /** @deprecated Use ALLOWED_PATH_PATTERNS instead. Legacy single prefix. */
-export const ALLOWED_PATH_PREFIX = <span class="cstat-no" title="statement not covered" >'.omc/';</span>
+export const ALLOWED_PATH_PREFIX = '.omc/';
 &nbsp;
 /** Path patterns that orchestrator IS allowed to modify directly.
  *  Paths are normalized to forward slashes before matching (via toForwardSlash). */
-export const ALLOWED_PATH_PATTERNS = <span class="cstat-no" title="statement not covered" >[</span>
+export const ALLOWED_PATH_PATTERNS = [
   /^\.omc\//,                    // .omc/**
   /^\.claude\//,                 // .claude/** (local)
   /^~?\/\.claude\//,             // ~/.claude/** (global)
@@ -464,7 +464,7 @@ export const ALLOWED_PATH_PATTERNS = <span class="cstat-no" title="statement not
 ];
 &nbsp;
 /** Source file extensions that should trigger delegation warnings */
-export const WARNED_EXTENSIONS = <span class="cstat-no" title="statement not covered" >[</span>
+export const WARNED_EXTENSIONS = [
   // JavaScript/TypeScript
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
   // Python
@@ -490,10 +490,10 @@ export const WARNED_EXTENSIONS = <span class="cstat-no" title="statement not cov
 ];
 &nbsp;
 /** Tools that perform file modifications */
-export const WRITE_EDIT_TOOLS = <span class="cstat-no" title="statement not covered" >['Write', 'Edit', 'write', 'edit'];</span>
+export const WRITE_EDIT_TOOLS = ['Write', 'Edit', 'write', 'edit'];
 &nbsp;
 /** Reminder when orchestrator performs direct file work */
-export const DIRECT_WORK_REMINDER = <span class="cstat-no" title="statement not covered" >`</span>
+export const DIRECT_WORK_REMINDER = `
 &nbsp;
 ---
 &nbsp;
@@ -522,7 +522,7 @@ You should NOT:
 `;
 &nbsp;
 /** Strong warning when orchestrator tries to modify source files */
-export const ORCHESTRATOR_DELEGATION_REQUIRED = <span class="cstat-no" title="statement not covered" >`</span>
+export const ORCHESTRATOR_DELEGATION_REQUIRED = `
 &nbsp;
 ---
 &nbsp;
@@ -573,7 +573,7 @@ DELEGATE. DON'T IMPLEMENT.
 `;
 &nbsp;
 /** Continuation prompt for boulder state */
-export const BOULDER_CONTINUATION_PROMPT = <span class="cstat-no" title="statement not covered" >`[SYSTEM REMINDER - BOULDER CONTINUATION]</span>
+export const BOULDER_CONTINUATION_PROMPT = `[SYSTEM REMINDER - BOULDER CONTINUATION]
 &nbsp;
 You have an active work plan with incomplete tasks. Continue working.
 &nbsp;
@@ -585,7 +585,7 @@ RULES:
 - If blocked, document the blocker and move to the next task`;
 &nbsp;
 /** Verification reminder for subagent work */
-export const VERIFICATION_REMINDER = <span class="cstat-no" title="statement not covered" >`**MANDATORY VERIFICATION - SUBAGENTS LIE**</span>
+export const VERIFICATION_REMINDER = `**MANDATORY VERIFICATION - SUBAGENTS LIE**
 &nbsp;
 Subagents FREQUENTLY claim completion when:
 - Tests are actually FAILING
@@ -603,7 +603,7 @@ DO NOT TRUST THE AGENT'S SELF-REPORT.
 VERIFY EACH CLAIM WITH YOUR OWN TOOL CALLS.`;
 &nbsp;
 /** Directive for subagents to refuse multi-task requests */
-export const SINGLE_TASK_DIRECTIVE = <span class="cstat-no" title="statement not covered" >`</span>
+export const SINGLE_TASK_DIRECTIVE = `
 &nbsp;
 [SYSTEM DIRECTIVE - SINGLE TASK ONLY]
 &nbsp;
@@ -634,7 +634,7 @@ If you were NOT given **exactly ONE atomic task**, you MUST:
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

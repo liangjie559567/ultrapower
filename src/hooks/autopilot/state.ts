@@ -106,11 +106,11 @@ export function readAutopilotState(directory: string, sessionId?: string): Autop
 /**
  * Write autopilot state to disk
  */
-export function writeAutopilotState(directory: string, state: AutopilotState, sessionId?: string): boolean {
+export async function writeAutopilotState(directory: string, state: AutopilotState, sessionId?: string): Promise<boolean> {
   ensureStateDir(directory, sessionId);
   const stateFile = getStateFilePath(directory, sessionId);
 
-  return withFileLock(stateFile, () => {
+  return await withFileLock(stateFile, () => {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         atomicWriteJsonSync(stateFile, state);
@@ -167,12 +167,12 @@ export function isAutopilotActive(directory: string, sessionId?: string): boolea
 /**
  * Initialize a new autopilot session
  */
-export function initAutopilot(
+export async function initAutopilot(
   directory: string,
   idea: string,
   sessionId?: string,
   config?: Partial<AutopilotConfig>
-): AutopilotState | null {
+): Promise<AutopilotState | null> {
   // Mutual exclusion check via mode-registry
   const canStart = canStartMode('autopilot', directory);
   if (!canStart.allowed) {
@@ -237,7 +237,7 @@ export function initAutopilot(
   };
 
   ensureAutopilotDir(directory);
-  writeAutopilotState(directory, state, sessionId);
+  await writeAutopilotState(directory, state, sessionId);
 
   return state;
 }
@@ -245,11 +245,11 @@ export function initAutopilot(
 /**
  * Transition to a new phase
  */
-export function transitionPhase(
+export async function transitionPhase(
   directory: string,
   newPhase: AutopilotPhase,
   sessionId?: string
-): AutopilotState | null {
+): Promise<AutopilotState | null> {
   const state = readAutopilotState(directory, sessionId);
 
   if (!state || !state.active) {
@@ -275,94 +275,94 @@ export function transitionPhase(
     state.active = false;
   }
 
-  writeAutopilotState(directory, state, sessionId);
+  await writeAutopilotState(directory, state, sessionId);
   return state;
 }
 
 /**
  * Increment the agent spawn counter
  */
-export function incrementAgentCount(directory: string, count: number = 1, sessionId?: string): boolean {
+export async function incrementAgentCount(directory: string, count: number = 1, sessionId?: string): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
   state.total_agents_spawned += count;
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
  * Update expansion phase data
  */
-export function updateExpansion(
+export async function updateExpansion(
   directory: string,
   updates: Partial<AutopilotState['expansion']>,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
   state.expansion = { ...state.expansion, ...updates };
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
  * Update planning phase data
  */
-export function updatePlanning(
+export async function updatePlanning(
   directory: string,
   updates: Partial<AutopilotState['planning']>,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
   state.planning = { ...state.planning, ...updates };
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
  * Update execution phase data
  */
-export function updateExecution(
+export async function updateExecution(
   directory: string,
   updates: Partial<AutopilotState['execution']>,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
   state.execution = { ...state.execution, ...updates };
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
  * Update QA phase data
  */
-export function updateQA(
+export async function updateQA(
   directory: string,
   updates: Partial<AutopilotState['qa']>,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
   state.qa = { ...state.qa, ...updates };
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
  * Update validation phase data
  */
-export function updateValidation(
+export async function updateValidation(
   directory: string,
   updates: Partial<AutopilotState['validation']>,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
   state.validation = { ...state.validation, ...updates };
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
@@ -398,10 +398,10 @@ export interface TransitionResult {
  * 3. Starting UltraQA mode
  * 4. Preserving context for potential rollback
  */
-export function transitionRalphToUltraQA(
+export async function transitionRalphToUltraQA(
   directory: string,
   sessionId: string
-): TransitionResult {
+): Promise<TransitionResult> {
   const autopilotState = readAutopilotState(directory, sessionId);
 
   if (!autopilotState || autopilotState.phase !== 'execution') {
@@ -414,7 +414,7 @@ export function transitionRalphToUltraQA(
   const ralphState = readRalphState(directory, sessionId);
 
   // Step 1: Preserve Ralph progress in autopilot state
-  const executionUpdated = updateExecution(directory, {
+  const executionUpdated = await updateExecution(directory, {
     ralph_iterations: ralphState?.iteration ?? autopilotState.execution.ralph_iterations,
     ralph_completed_at: new Date().toISOString(),
     ultrawork_active: false
@@ -441,7 +441,7 @@ export function transitionRalphToUltraQA(
   }
 
   // Step 3: Transition to QA phase
-  const newState = transitionPhase(directory, 'qa', sessionId);
+  const newState = await transitionPhase(directory, 'qa', sessionId);
   if (!newState) {
     return {
       success: false,
@@ -454,8 +454,8 @@ export function transitionRalphToUltraQA(
 
   if (!qaResult.success) {
     // Rollback on failure - restore execution phase
-    transitionPhase(directory, 'execution', sessionId);
-    updateExecution(directory, { ralph_completed_at: undefined }, sessionId);
+    await transitionPhase(directory, 'execution', sessionId);
+    await updateExecution(directory, { ralph_completed_at: undefined }, sessionId);
 
     return {
       success: false,
@@ -472,10 +472,10 @@ export function transitionRalphToUltraQA(
 /**
  * Transition from UltraQA (Phase 3: QA) to Validation (Phase 4)
  */
-export function transitionUltraQAToValidation(
+export async function transitionUltraQAToValidation(
   directory: string,
   sessionId?: string
-): TransitionResult {
+): Promise<TransitionResult> {
   const autopilotState = readAutopilotState(directory, sessionId);
 
   if (!autopilotState || autopilotState.phase !== 'qa') {
@@ -488,7 +488,7 @@ export function transitionUltraQAToValidation(
   const qaState = readUltraQAState(directory, sessionId);
 
   // Preserve QA progress
-  const qaUpdated = updateQA(directory, {
+  const qaUpdated = await updateQA(directory, {
     ultraqa_cycles: qaState?.cycle ?? autopilotState.qa.ultraqa_cycles,
     qa_completed_at: new Date().toISOString()
   }, sessionId);
@@ -504,7 +504,7 @@ export function transitionUltraQAToValidation(
   clearUltraQAState(directory, sessionId);
 
   // Transition to validation
-  const newState = transitionPhase(directory, 'validation', sessionId);
+  const newState = await transitionPhase(directory, 'validation', sessionId);
   if (!newState) {
     return {
       success: false,
@@ -521,8 +521,8 @@ export function transitionUltraQAToValidation(
 /**
  * Transition from Validation (Phase 4) to Complete
  */
-export function transitionToComplete(directory: string, sessionId?: string): TransitionResult {
-  const state = transitionPhase(directory, 'complete', sessionId);
+export async function transitionToComplete(directory: string, sessionId?: string): Promise<TransitionResult> {
+  const state = await transitionPhase(directory, 'complete', sessionId);
 
   if (!state) {
     return {
@@ -537,12 +537,12 @@ export function transitionToComplete(directory: string, sessionId?: string): Tra
 /**
  * Transition to failed state
  */
-export function transitionToFailed(
+export async function transitionToFailed(
   directory: string,
   error: string,
   sessionId?: string
-): TransitionResult {
-  const state = transitionPhase(directory, 'failed', sessionId);
+): Promise<TransitionResult> {
+  const state = await transitionPhase(directory, 'failed', sessionId);
 
   if (!state) {
     return {
@@ -552,7 +552,7 @@ export function transitionToFailed(
   }
 
   if (error) {
-    recordFailureReason(directory, error, sessionId);
+    await recordFailureReason(directory, error, sessionId);
   }
 
   return { success: true, state };
@@ -647,11 +647,11 @@ Signal when all tasks complete: EXECUTION_COMPLETE
  * Append a completed step to the state's completed_steps list.
  * Called after each phase successfully finishes.
  */
-export function appendCompletedStep(
+export async function appendCompletedStep(
   directory: string,
   step: string,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
@@ -661,20 +661,20 @@ export function appendCompletedStep(
   if (!state.completed_steps.includes(step)) {
     state.completed_steps.push(step);
   }
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
  * Record a failure reason in the state.
  */
-export function recordFailureReason(
+export async function recordFailureReason(
   directory: string,
   reason: string,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
   state.failure_reason = reason;
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }

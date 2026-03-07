@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>12/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -144,44 +144,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,45 +204,45 @@ export interface PostToolContext {
 export class PostToolGuard {
   private readonly activeContextFile: string;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(b</span>aseDir?: string) {
-    const base = <span class="cstat-no" title="statement not covered" >baseDir ?? process.cwd();</span>
-<span class="cstat-no" title="statement not covered" >    this.activeContextFile = path.join(base, '.omc', 'axiom', 'active_context.md');</span>
+  constructor(baseDir?: string) {
+    const base = baseDir ?? <span class="branch-1 cbranch-no" title="branch not covered" >process.cwd();</span>
+    this.activeContextFile = path.join(base, '.omc', 'axiom', 'active_context.md');
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >onToolUse(c</span>tx: PostToolContext): Promise&lt;void&gt; {
-    const { toolName, toolInput } = <span class="cstat-no" title="statement not covered" >ctx;</span>
+  async onToolUse(ctx: PostToolContext): Promise&lt;void&gt; {
+    const { toolName, toolInput } = ctx;
 &nbsp;
     // 记录文件写入操作
-<span class="cstat-no" title="statement not covered" >    if (toolName === 'Write' || toolName === 'Edit') {</span>
-      const filePath = <span class="cstat-no" title="statement not covered" >String(toolInput['file_path'] ?? '');</span>
-<span class="cstat-no" title="statement not covered" >      await this.appendActivity(`Tool: ${toolName} → ${filePath}`);</span>
+    if (toolName === 'Write' || toolName === 'Edit') {
+      const filePath = String(toolInput['file_path'] ?? '');
+      await this.appendActivity(`Tool: ${toolName} → ${filePath}`);
     }
 &nbsp;
     // 记录 Bash 命令
-<span class="cstat-no" title="statement not covered" >    if (toolName === 'Bash') {</span>
-      const cmd = <span class="cstat-no" title="statement not covered" >String(toolInput['command'] ?? '').slice(0, 80);</span>
-<span class="cstat-no" title="statement not covered" >      await this.appendActivity(`Tool: Bash → ${cmd}`);</span>
+    if (toolName === 'Bash') {
+      const cmd = String(toolInput['command'] ?? '').slice(0, 80);
+      await this.appendActivity(`Tool: Bash → ${cmd}`);
     }
   }
 &nbsp;
-  private async <span class="fstat-no" title="function not covered" >appendActivity(l</span>ine: string): Promise&lt;void&gt; {
+  private async appendActivity(line: string): Promise&lt;void&gt; {
     let content: string;
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      content = await fs.readFile(this.activeContextFile, 'utf-8');</span>
+    try {
+      content = await fs.readFile(this.activeContextFile, 'utf-8');
     } catch {
-<span class="cstat-no" title="statement not covered" >      return; // 文件不存在时跳过</span>
+      return; // 文件不存在时跳过
     }
 &nbsp;
-    const <span class="cstat-no" title="statement not covered" >timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');</span>
-    const entry = <span class="cstat-no" title="statement not covered" >`\n- [${timestamp}] ${line}`;</span>
+    const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const entry = `\n- [${timestamp}] ${line}`;
 &nbsp;
     // 在 ## Recent Activity 节追加
-<span class="cstat-no" title="statement not covered" >    if (content.includes('## Recent Activity')) {</span>
-      const updated = <span class="cstat-no" title="statement not covered" >content.replace(</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (content.includes('## Recent Activity')) {
+      const updated = content.replace(
         /(## Recent Activity\n)/,
         `$1${entry}\n`
       );
-<span class="cstat-no" title="statement not covered" >      await fs.writeFile(this.activeContextFile, updated, 'utf-8');</span>
+      await fs.writeFile(this.activeContextFile, updated, 'utf-8');
     }
   }
 }
@@ -253,7 +253,7 @@ export class PostToolGuard {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

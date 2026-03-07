@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">68.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>11/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>10/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -154,32 +154,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,7 +175,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,21 +221,21 @@ import type { InjectedPathsData } from './types.js';
 /**
  * Get storage file path for a session.
  */
-function <span class="fstat-no" title="function not covered" >getStoragePath(s</span>essionID: string): string {
-<span class="cstat-no" title="statement not covered" >  return join(README_INJECTOR_STORAGE, `${sessionID}.json`);</span>
+function getStoragePath(sessionID: string): string {
+  return join(README_INJECTOR_STORAGE, `${sessionID}.json`);
 }
 &nbsp;
 /**
  * Load set of injected directory paths for a session.
  */
-export function <span class="fstat-no" title="function not covered" >loadInjectedPaths(s</span>essionID: string): Set&lt;string&gt; {
-  const filePath = <span class="cstat-no" title="statement not covered" >getStoragePath(sessionID);</span>
-<span class="cstat-no" title="statement not covered" >  if (!existsSync(filePath)) <span class="cstat-no" title="statement not covered" >return new Set();</span></span>
+export function loadInjectedPaths(sessionID: string): Set&lt;string&gt; {
+  const filePath = getStoragePath(sessionID);
+  if (!existsSync(filePath)) return new Set();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-    const data: InjectedPathsData = <span class="cstat-no" title="statement not covered" >JSON.parse(content);</span>
-<span class="cstat-no" title="statement not covered" >    return new Set(data.injectedPaths);</span>
+  try {
+    const content = readFileSync(filePath, 'utf-8');
+    const data: InjectedPathsData = JSON.parse(content);
+    return new Set(data.injectedPaths);
   } catch {
 <span class="cstat-no" title="statement not covered" >    return new Set();</span>
   }
@@ -244,18 +244,18 @@ export function <span class="fstat-no" title="function not covered" >loadInjecte
 /**
  * Save set of injected directory paths for a session.
  */
-export function <span class="fstat-no" title="function not covered" >saveInjectedPaths(s</span>essionID: string, paths: Set&lt;string&gt;): void {
-<span class="cstat-no" title="statement not covered" >  if (!existsSync(README_INJECTOR_STORAGE)) {</span>
+export function saveInjectedPaths(sessionID: string, paths: Set&lt;string&gt;): void {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!existsSync(README_INJECTOR_STORAGE)) {
 <span class="cstat-no" title="statement not covered" >    mkdirSync(README_INJECTOR_STORAGE, { recursive: true });</span>
   }
 &nbsp;
-  const data: InjectedPathsData = <span class="cstat-no" title="statement not covered" >{</span>
+  const data: InjectedPathsData = {
     sessionID,
     injectedPaths: Array.from(paths),
     updatedAt: Date.now(),
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  writeFileSync(getStoragePath(sessionID), JSON.stringify(data, null, 2));</span>
+  writeFileSync(getStoragePath(sessionID), JSON.stringify(data, null, 2));
 }
 &nbsp;
 /**
@@ -274,7 +274,7 @@ export function <span class="fstat-no" title="function not covered" >clearInject
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

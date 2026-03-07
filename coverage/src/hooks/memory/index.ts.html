@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>14/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">21.42% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>3/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>6/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">34.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>14/41</span>
             </div>
         
             
@@ -188,38 +188,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -296,39 +296,39 @@ import type { ContextManager, ContextStatus, MemorySection } from './types.js';
 export class FileContextManager implements ContextManager {
   private readonly baseDir: string;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(b</span>aseDir?: string) {
-<span class="cstat-no" title="statement not covered" >    this.baseDir = baseDir ?? process.cwd();</span>
+  constructor(baseDir?: string) {
+    this.baseDir = baseDir ?? <span class="branch-1 cbranch-no" title="branch not covered" >process.cwd();</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >resolvePath(s</span>ection: MemorySection): string {
-    const rel = <span class="cstat-no" title="statement not covered" >SECTION_FILES[section];</span>
-<span class="cstat-no" title="statement not covered" >    if (!rel) <span class="cstat-no" title="statement not covered" >throw new Error(`Unknown section: ${section}`);</span></span>
-<span class="cstat-no" title="statement not covered" >    return path.join(this.baseDir, rel);</span>
+  private resolvePath(section: MemorySection): string {
+    const rel = SECTION_FILES[section];
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!rel) <span class="cstat-no" title="statement not covered" >throw new Error(`Unknown section: ${section}`);</span>
+    return path.join(this.baseDir, rel);
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >read(s</span>ection: MemorySection): Promise&lt;string&gt; {
-    const filePath = <span class="cstat-no" title="statement not covered" >this.resolvePath(section);</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return await fs.readFile(filePath, 'utf-8');</span>
+  async read(section: MemorySection): Promise&lt;string&gt; {
+    const filePath = this.resolvePath(section);
+    try {
+      return await fs.readFile(filePath, 'utf-8');
     } catch {
 <span class="cstat-no" title="statement not covered" >      return '';</span>
     }
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >write(s</span>ection: MemorySection, content: string): Promise&lt;void&gt; {
-    const filePath = <span class="cstat-no" title="statement not covered" >this.resolvePath(section);</span>
-<span class="cstat-no" title="statement not covered" >    await fs.mkdir(path.dirname(filePath), { recursive: true });</span>
-<span class="cstat-no" title="statement not covered" >    await fs.writeFile(filePath, content, 'utf-8');</span>
+  async write(section: MemorySection, content: string): Promise&lt;void&gt; {
+    const filePath = this.resolvePath(section);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, content, 'utf-8');
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >merge(s</span>ection: MemorySection, content: string): Promise&lt;void&gt; {
-    const existing = <span class="cstat-no" title="statement not covered" >await this.read(section);</span>
-    const separator = <span class="cstat-no" title="statement not covered" >existing.endsWith('\n') ? '' : '\n';</span>
-<span class="cstat-no" title="statement not covered" >    await this.write(section, existing + separator + content);</span>
+  async merge(section: MemorySection, content: string): Promise&lt;void&gt; {
+    const existing = await this.read(section);
+    const separator = existing.endsWith('\n') ? <span class="branch-0 cbranch-no" title="branch not covered" >'' : '</span>\n';
+    await this.write(section, existing + separator + content);
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >clear(s</span>ection: MemorySection): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >    await this.write(section, '');</span>
+  async clear(section: MemorySection): Promise&lt;void&gt; {
+    await this.write(section, '');
   }
 &nbsp;
   async <span class="fstat-no" title="function not covered" >checkpoint(l</span>abel: string): Promise&lt;void&gt; {
@@ -397,7 +397,7 @@ export type { ContextManager, ContextStatus, MemorySection } from './types.js';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

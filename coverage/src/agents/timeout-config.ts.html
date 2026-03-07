@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -151,7 +151,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,24 +192,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Agent 超时配置
@@ -225,7 +225,7 @@ export interface TimeoutConfig {
 /**
  * 默认超时配置（单位：毫秒）
  */
-export const DEFAULT_TIMEOUT_CONFIG: TimeoutConfig = <span class="cstat-no" title="statement not covered" >{</span>
+export const DEFAULT_TIMEOUT_CONFIG: TimeoutConfig = {
   default: 300000, // 5 分钟
 &nbsp;
   byAgentType: {
@@ -260,30 +260,30 @@ export const DEFAULT_TIMEOUT_CONFIG: TimeoutConfig = <span class="cstat-no" titl
  * 获取 Agent 的超时时间
  * 优先级：环境变量 &gt; Agent 类型 &gt; 模型 &gt; 默认值
  */
-export function <span class="fstat-no" title="function not covered" >getAgentTimeout(</span>
+export function getAgentTimeout(
   agentType: string,
   model?: string,
-  config: TimeoutConfig = <span class="branch-0 cbranch-no" title="branch not covered" >DEFAULT_TIMEOUT_CONFIG</span>
+  config: TimeoutConfig = DEFAULT_TIMEOUT_CONFIG
 ): number {
   // 环境变量覆盖
-  const envTimeout = <span class="cstat-no" title="statement not covered" >process.env.OMC_AGENT_TIMEOUT;</span>
-<span class="cstat-no" title="statement not covered" >  if (envTimeout) {</span>
-    const parsed = <span class="cstat-no" title="statement not covered" >parseInt(envTimeout, 10);</span>
-<span class="cstat-no" title="statement not covered" >    if (!isNaN(parsed) &amp;&amp; parsed &gt; 0) <span class="cstat-no" title="statement not covered" >return parsed;</span></span>
+  const envTimeout = process.env.OMC_AGENT_TIMEOUT;
+  if (envTimeout) {
+    const parsed = parseInt(envTimeout, 10);
+    if (!isNaN(parsed) &amp;&amp; parsed &gt; 0) return parsed;
   }
 &nbsp;
   // Agent 类型特定超时
-<span class="cstat-no" title="statement not covered" >  if (config.byAgentType[agentType]) {</span>
-<span class="cstat-no" title="statement not covered" >    return config.byAgentType[agentType];</span>
+  if (config.byAgentType[agentType]) {
+    return config.byAgentType[agentType];
   }
 &nbsp;
   // 模型特定超时
-<span class="cstat-no" title="statement not covered" >  if (model &amp;&amp; config.byModel[model]) {</span>
-<span class="cstat-no" title="statement not covered" >    return config.byModel[model];</span>
+  if (model &amp;&amp; config.byModel[model]) {
+    return config.byModel[model];
   }
 &nbsp;
   // 默认超时
-<span class="cstat-no" title="statement not covered" >  return config.default;</span>
+  return config.default;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -292,7 +292,7 @@ export function <span class="fstat-no" title="function not covered" >getAgentTim
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

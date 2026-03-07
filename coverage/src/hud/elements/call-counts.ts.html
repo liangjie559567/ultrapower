@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -121,10 +121,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,19 +141,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * OMC HUD - Call Counts Element
@@ -167,10 +167,10 @@
 &nbsp;
 // Windows terminals (cmd.exe, PowerShell, Windows Terminal) may not render
 // multi-byte emoji correctly, causing HUD layout corruption.
-const isWin = <span class="cstat-no" title="statement not covered" >process.platform === 'win32';</span>
-const TOOL_ICON = <span class="cstat-no" title="statement not covered" >isWin ? 'T:' : '\u{1F527}';</span>
-const AGENT_ICON = <span class="cstat-no" title="statement not covered" >isWin ? 'A:' : '\u{1F916}';</span>
-const SKILL_ICON = <span class="cstat-no" title="statement not covered" >isWin ? 'S:' : '\u26A1';</span>
+const isWin = process.platform === 'win32';
+const TOOL_ICON = isWin ? 'T:' : <span class="branch-1 cbranch-no" title="branch not covered" >'\u{1F527}';</span>
+const AGENT_ICON = isWin ? 'A:' : <span class="branch-1 cbranch-no" title="branch not covered" >'\u{1F916}';</span>
+const SKILL_ICON = isWin ? 'S:' : <span class="branch-1 cbranch-no" title="branch not covered" >'\u26A1';</span>
 &nbsp;
 /**
  * Render call counts badge.
@@ -182,24 +182,24 @@ const SKILL_ICON = <span class="cstat-no" title="statement not covered" >isWin ?
  * @param agentInvocations - Total Task/proxy_Task calls seen in transcript
  * @param skillUsages - Total Skill/proxy_Skill calls seen in transcript
  */
-export function <span class="fstat-no" title="function not covered" >renderCallCounts(</span>
+export function renderCallCounts(
   toolCalls: number,
   agentInvocations: number,
   skillUsages: number,
 ): string | null {
-  const parts: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
+  const parts: string[] = [];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (toolCalls &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    parts.push(`${TOOL_ICON}${toolCalls}`);</span>
+  if (toolCalls &gt; 0) {
+    parts.push(`${TOOL_ICON}${toolCalls}`);
   }
-<span class="cstat-no" title="statement not covered" >  if (agentInvocations &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    parts.push(`${AGENT_ICON}${agentInvocations}`);</span>
+  if (agentInvocations &gt; 0) {
+    parts.push(`${AGENT_ICON}${agentInvocations}`);
   }
-<span class="cstat-no" title="statement not covered" >  if (skillUsages &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    parts.push(`${SKILL_ICON}${skillUsages}`);</span>
+  if (skillUsages &gt; 0) {
+    parts.push(`${SKILL_ICON}${skillUsages}`);
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return parts.length &gt; 0 ? parts.join(' ') : null;</span>
+  return parts.length &gt; 0 ? parts.join(' ') : null;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -208,7 +208,7 @@ export function <span class="fstat-no" title="function not covered" >renderCallC
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

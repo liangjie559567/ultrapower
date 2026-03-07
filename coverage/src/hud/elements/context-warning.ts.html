@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -111,9 +111,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -129,17 +129,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * OMC HUD - Context Limit Warning Element
@@ -150,9 +150,9 @@
 &nbsp;
 import { RESET } from '../colors.js';
 &nbsp;
-const YELLOW = <span class="cstat-no" title="statement not covered" >'\x1b[33m';</span>
-const RED = <span class="cstat-no" title="statement not covered" >'\x1b[31m';</span>
-const BOLD = <span class="cstat-no" title="statement not covered" >'\x1b[1m';</span>
+const YELLOW = '\x1b[33m';
+const RED = '\x1b[31m';
+const BOLD = '\x1b[1m';
 &nbsp;
 /**
  * Render a context usage status indicator.
@@ -162,23 +162,23 @@ const BOLD = <span class="cstat-no" title="statement not covered" >'\x1b[1m';</s
  * @param contextPercent - Current context usage (0-100)
  * @param threshold - Configured threshold to trigger indicator (default 80)
  */
-export function <span class="fstat-no" title="function not covered" >renderContextLimitWarning(</span>
+export function renderContextLimitWarning(
   contextPercent: number,
   threshold: number,
   _autoCompact?: boolean,
   _suppressedByCompact?: boolean
 ): string | null {
-  const safePercent = <span class="cstat-no" title="statement not covered" >Math.min(100, Math.max(0, Math.round(contextPercent)));</span>
+  const safePercent = Math.min(100, Math.max(0, Math.round(contextPercent)));
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (safePercent &lt; threshold) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
+  if (safePercent &lt; threshold) {
+    return null;
   }
 &nbsp;
-  const isCritical = <span class="cstat-no" title="statement not covered" >safePercent &gt;= 90;</span>
-  const color = <span class="cstat-no" title="statement not covered" >isCritical ? RED : YELLOW;</span>
-  const icon = <span class="cstat-no" title="statement not covered" >isCritical ? '!!' : '!';</span>
+  const isCritical = safePercent &gt;= 90;
+  const color = isCritical ? RED : YELLOW;
+  const icon = isCritical ? '!!' : '!';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return `${color}${BOLD}[${icon}] ctx ${safePercent}%${RESET}`;</span>
+  return `${color}${BOLD}[${icon}] ctx ${safePercent}%${RESET}`;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -187,7 +187,7 @@ export function <span class="fstat-no" title="function not covered" >renderConte
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

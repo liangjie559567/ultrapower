@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">1.87% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/267</span>
+                <span class='fraction'>5/267</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">1.96% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/254</span>
+                <span class='fraction'>5/254</span>
             </div>
         
             
@@ -1477,7 +1477,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1547,7 +1547,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1571,7 +1571,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1593,7 +1593,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1617,7 +1617,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2389,7 +2389,7 @@ function <span class="fstat-no" title="function not covered" >selectStrategy(a</
 // Decomposition Strategies
 // ============================================================================
 &nbsp;
-const fullstackStrategy: DecompositionStrategy = <span class="cstat-no" title="statement not covered" >{</span>
+const fullstackStrategy: DecompositionStrategy = {
   name: 'Fullstack App',
   applicableTypes: ['fullstack-app'],
   decompose: <span class="fstat-no" title="function not covered" >(a</span>nalysis, _context) =&gt; {
@@ -2459,7 +2459,7 @@ const fullstackStrategy: DecompositionStrategy = <span class="cstat-no" title="s
   }
 };
 &nbsp;
-const refactoringStrategy: DecompositionStrategy = <span class="cstat-no" title="statement not covered" >{</span>
+const refactoringStrategy: DecompositionStrategy = {
   name: 'Refactoring',
   applicableTypes: ['refactoring'],
   decompose: <span class="fstat-no" title="function not covered" >(a</span>nalysis, _context) =&gt; {
@@ -2483,7 +2483,7 @@ const refactoringStrategy: DecompositionStrategy = <span class="cstat-no" title=
   }
 };
 &nbsp;
-const bugFixStrategy: DecompositionStrategy = <span class="cstat-no" title="statement not covered" >{</span>
+const bugFixStrategy: DecompositionStrategy = {
   name: 'Bug Fix',
   applicableTypes: ['bug-fix'],
   decompose: <span class="fstat-no" title="function not covered" >(a</span>nalysis, _context) =&gt; {
@@ -2505,7 +2505,7 @@ const bugFixStrategy: DecompositionStrategy = <span class="cstat-no" title="stat
   }
 };
 &nbsp;
-const featureStrategy: DecompositionStrategy = <span class="cstat-no" title="statement not covered" >{</span>
+const featureStrategy: DecompositionStrategy = {
   name: 'Feature',
   applicableTypes: ['feature'],
   decompose: <span class="fstat-no" title="function not covered" >(a</span>nalysis, _context) =&gt; {
@@ -2529,7 +2529,7 @@ const featureStrategy: DecompositionStrategy = <span class="cstat-no" title="sta
   }
 };
 &nbsp;
-const defaultStrategy: DecompositionStrategy = <span class="cstat-no" title="statement not covered" >{</span>
+const defaultStrategy: DecompositionStrategy = {
   name: 'Default',
   applicableTypes: [],
   decompose: <span class="fstat-no" title="function not covered" >(a</span>nalysis, _context) =&gt; {
@@ -2806,7 +2806,7 @@ function <span class="fstat-no" title="function not covered" >explainStrategy(a<
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

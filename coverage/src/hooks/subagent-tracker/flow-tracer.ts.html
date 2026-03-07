@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -193,7 +193,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -213,7 +213,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,7 +232,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -248,7 +248,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -264,7 +264,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -280,7 +280,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -299,13 +299,13 @@ import { appendReplayEvent } from './session-replay.js';
 /**
  * Record a hook fire event
  */
-export function <span class="fstat-no" title="function not covered" >recordHookFire(</span>
+export function recordHookFire(
   directory: string,
   sessionId: string,
   hookName: string,
   hookEvent: string
 ): void {
-<span class="cstat-no" title="statement not covered" >  appendReplayEvent(directory, sessionId, {</span>
+  appendReplayEvent(directory, sessionId, {
     agent: 'system',
     event: 'hook_fire',
     hook: hookName,
@@ -316,7 +316,7 @@ export function <span class="fstat-no" title="function not covered" >recordHookF
 /**
  * Record a hook result event with timing and context info
  */
-export function <span class="fstat-no" title="function not covered" >recordHookResult(</span>
+export function recordHookResult(
   directory: string,
   sessionId: string,
   hookName: string,
@@ -325,7 +325,7 @@ export function <span class="fstat-no" title="function not covered" >recordHookR
   contextInjected: boolean,
   contextLength?: number
 ): void {
-<span class="cstat-no" title="statement not covered" >  appendReplayEvent(directory, sessionId, {</span>
+  appendReplayEvent(directory, sessionId, {
     agent: 'system',
     event: 'hook_result',
     hook: hookName,
@@ -339,12 +339,12 @@ export function <span class="fstat-no" title="function not covered" >recordHookR
 /**
  * Record a keyword detection event
  */
-export function <span class="fstat-no" title="function not covered" >recordKeywordDetected(</span>
+export function recordKeywordDetected(
   directory: string,
   sessionId: string,
   keyword: string
 ): void {
-<span class="cstat-no" title="statement not covered" >  appendReplayEvent(directory, sessionId, {</span>
+  appendReplayEvent(directory, sessionId, {
     agent: 'system',
     event: 'keyword_detected',
     keyword,
@@ -354,13 +354,13 @@ export function <span class="fstat-no" title="function not covered" >recordKeywo
 /**
  * Record a skill activation event
  */
-export function <span class="fstat-no" title="function not covered" >recordSkillActivated(</span>
+export function recordSkillActivated(
   directory: string,
   sessionId: string,
   skillName: string,
   source: string
 ): void {
-<span class="cstat-no" title="statement not covered" >  appendReplayEvent(directory, sessionId, {</span>
+  appendReplayEvent(directory, sessionId, {
     agent: 'system',
     event: 'skill_activated',
     skill_name: skillName,
@@ -371,12 +371,12 @@ export function <span class="fstat-no" title="function not covered" >recordSkill
 /**
  * Record a skill invocation event (via Skill tool call)
  */
-export function <span class="fstat-no" title="function not covered" >recordSkillInvoked(</span>
+export function recordSkillInvoked(
   directory: string,
   sessionId: string,
   skillName: string
 ): void {
-<span class="cstat-no" title="statement not covered" >  appendReplayEvent(directory, sessionId, {</span>
+  appendReplayEvent(directory, sessionId, {
     agent: 'system',
     event: 'skill_invoked',
     skill_name: skillName,
@@ -386,13 +386,13 @@ export function <span class="fstat-no" title="function not covered" >recordSkill
 /**
  * Record a mode change event
  */
-export function <span class="fstat-no" title="function not covered" >recordModeChange(</span>
+export function recordModeChange(
   directory: string,
   sessionId: string,
   fromMode: string,
   toMode: string
 ): void {
-<span class="cstat-no" title="statement not covered" >  appendReplayEvent(directory, sessionId, {</span>
+  appendReplayEvent(directory, sessionId, {
     agent: 'system',
     event: 'mode_change',
     mode_from: fromMode,
@@ -406,7 +406,7 @@ export function <span class="fstat-no" title="function not covered" >recordModeC
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

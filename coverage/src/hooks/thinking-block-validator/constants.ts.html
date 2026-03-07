@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -130,21 +130,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,7 +144,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,17 +164,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Thinking Block Validator Constants
  *
@@ -186,12 +186,12 @@
 /**
  * Hook name identifier
  */
-export const HOOK_NAME = <span class="cstat-no" title="statement not covered" >"thinking-block-validator";</span>
+export const HOOK_NAME = "thinking-block-validator";
 &nbsp;
 /**
  * Part types that are considered "content" (non-thinking)
  */
-export const CONTENT_PART_TYPES = <span class="cstat-no" title="statement not covered" >[</span>
+export const CONTENT_PART_TYPES = [
   "tool",
   "tool_use",
   "text"
@@ -200,7 +200,7 @@ export const CONTENT_PART_TYPES = <span class="cstat-no" title="statement not co
 /**
  * Part types that are considered "thinking"
  */
-export const THINKING_PART_TYPES = <span class="cstat-no" title="statement not covered" >[</span>
+export const THINKING_PART_TYPES = [
   "thinking",
   "reasoning"
 ] as const;
@@ -209,7 +209,7 @@ export const THINKING_PART_TYPES = <span class="cstat-no" title="statement not c
  * Model patterns that support extended thinking
  * Aligns with think-mode/switcher.ts patterns
  */
-export const THINKING_MODEL_PATTERNS = <span class="cstat-no" title="statement not covered" >[</span>
+export const THINKING_MODEL_PATTERNS = [
   "thinking",
   "-high",
   "claude-sonnet-4",
@@ -220,17 +220,17 @@ export const THINKING_MODEL_PATTERNS = <span class="cstat-no" title="statement n
 /**
  * Default thinking content for synthetic blocks
  */
-export const DEFAULT_THINKING_CONTENT = <span class="cstat-no" title="statement not covered" >"[Continuing from previous reasoning]";</span>
+export const DEFAULT_THINKING_CONTENT = "[Continuing from previous reasoning]";
 &nbsp;
 /**
  * Prefix for synthetic thinking part IDs
  */
-export const SYNTHETIC_THINKING_ID_PREFIX = <span class="cstat-no" title="statement not covered" >"prt_0000000000_synthetic_thinking";</span>
+export const SYNTHETIC_THINKING_ID_PREFIX = "prt_0000000000_synthetic_thinking";
 &nbsp;
 /**
  * Error message that this hook prevents
  */
-export const PREVENTED_ERROR = <span class="cstat-no" title="statement not covered" >"Expected thinking/redacted_thinking but found tool_use";</span>
+export const PREVENTED_ERROR = "Expected thinking/redacted_thinking but found tool_use";
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -238,7 +238,7 @@ export const PREVENTED_ERROR = <span class="cstat-no" title="statement not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

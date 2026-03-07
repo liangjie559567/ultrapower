@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -195,31 +195,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,18 +231,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,35 +285,35 @@ export interface TokenSnapshot {
 /**
  * Extract token usage from StatuslineStdin and calculate delta from previous snapshot.
  */
-export function <span class="fstat-no" title="function not covered" >extractTokens(</span>
+export function extractTokens(
   stdin: StatuslineStdin,
   previousSnapshot: TokenSnapshot | null,
   modelName: string,
   agentName?: string
 ): ExtractedTokens {
-  const currentUsage = <span class="cstat-no" title="statement not covered" >stdin.context_window?.current_usage;</span>
+  const currentUsage = stdin.context_window?.current_usage;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!currentUsage) {</span>
-<span class="cstat-no" title="statement not covered" >    return createEmptyExtraction(modelName, agentName);</span>
+  if (!currentUsage) {
+    return createEmptyExtraction(modelName, agentName);
   }
 &nbsp;
   // Calculate deltas
-  const inputDelta = <span class="cstat-no" title="statement not covered" >previousSnapshot</span>
+  const inputDelta = previousSnapshot
     ? currentUsage.input_tokens - previousSnapshot.inputTokens
     : currentUsage.input_tokens;
 &nbsp;
-  const cacheDelta = <span class="cstat-no" title="statement not covered" >previousSnapshot</span>
+  const cacheDelta = previousSnapshot
     ? currentUsage.cache_creation_input_tokens - previousSnapshot.cacheCreationTokens
     : currentUsage.cache_creation_input_tokens;
 &nbsp;
-  const cacheReadDelta = <span class="cstat-no" title="statement not covered" >previousSnapshot</span>
+  const cacheReadDelta = previousSnapshot
     ? currentUsage.cache_read_input_tokens - previousSnapshot.cacheReadTokens
     : currentUsage.cache_read_input_tokens;
 &nbsp;
   // Estimate output tokens (from output-estimator.ts)
-  const <span class="cstat-no" title="statement not covered" >outputTokens = estimateOutputTokens(inputDelta, modelName);</span>
+  const outputTokens = estimateOutputTokens(inputDelta, modelName);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
+  return {
     inputTokens: Math.max(0, inputDelta),
     outputTokens,
     cacheCreationTokens: Math.max(0, cacheDelta),
@@ -328,10 +328,10 @@ export function <span class="fstat-no" title="function not covered" >extractToke
 /**
  * Create current snapshot for next delta calculation.
  */
-export function <span class="fstat-no" title="function not covered" >createSnapshot(s</span>tdin: StatuslineStdin): TokenSnapshot {
-  const usage = <span class="cstat-no" title="statement not covered" >stdin.context_window?.current_usage;</span>
+export function createSnapshot(stdin: StatuslineStdin): TokenSnapshot {
+  const usage = stdin.context_window?.current_usage;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
+  return {
     inputTokens: usage?.input_tokens ?? 0,
     cacheCreationTokens: usage?.cache_creation_input_tokens ?? 0,
     cacheReadTokens: usage?.cache_read_input_tokens ?? 0,
@@ -339,8 +339,8 @@ export function <span class="fstat-no" title="function not covered" >createSnaps
   };
 }
 &nbsp;
-function <span class="fstat-no" title="function not covered" >createEmptyExtraction(m</span>odelName: string, agentName?: string): ExtractedTokens {
-<span class="cstat-no" title="statement not covered" >  return {</span>
+function createEmptyExtraction(modelName: string, agentName?: string): ExtractedTokens {
+  return {
     inputTokens: 0,
     outputTokens: 0,
     cacheCreationTokens: 0,
@@ -358,7 +358,7 @@ function <span class="fstat-no" title="function not covered" >createEmptyExtract
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

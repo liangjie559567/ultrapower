@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>7/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -95,55 +95,55 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { randomUUID } from 'crypto';
 import { getDb } from './db.js';
 import { WriteQueue } from './write-queue.js';
 &nbsp;
 export class ToolTracker {
-  private _queue = <span class="cstat-no" title="statement not covered" >new WriteQueue();</span>
+  private _queue = new WriteQueue();
 &nbsp;
-<span class="fstat-no" title="function not covered" >  startCall(o</span>pts: { session_id: string; tool_name: string; parent_run_id?: string }): string {
-    const <span class="cstat-no" title="statement not covered" >id = randomUUID();</span>
-<span class="cstat-no" title="statement not covered" >    this._queue.enqueue({</span>
+  startCall(opts: { session_id: string; tool_name: string; parent_run_id?: string }): string {
+    const id = randomUUID();
+    this._queue.enqueue({
       table: 'tool_calls',
       row: { id, session_id: opts.session_id, parent_run_id: opts.parent_run_id ?? null, tool_name: opts.tool_name, start_time: Date.now(), success: 1 },
     });
-<span class="cstat-no" title="statement not covered" >    this._queue.flush();</span>
-<span class="cstat-no" title="statement not covered" >    return id;</span>
+    this._queue.flush();
+    return id;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  endCall(i</span>d: string, success: boolean, error_msg?: string): void {
-    const <span class="cstat-no" title="statement not covered" >db = getDb();</span>
-    const row = <span class="cstat-no" title="statement not covered" >db.prepare('SELECT start_time FROM tool_calls WHERE id = ?').get(id) as { start_time: number } | undefined;</span>
-    const duration_ms = <span class="cstat-no" title="statement not covered" >row ? Date.now() - row.start_time : null;</span>
-<span class="cstat-no" title="statement not covered" >    db.prepare('UPDATE tool_calls SET duration_ms = ?, success = ?, error_msg = ? WHERE id = ?')</span>
+  endCall(id: string, success: boolean, error_msg?: string): void {
+    const db = getDb();
+    const row = db.prepare('SELECT start_time FROM tool_calls WHERE id = ?').get(id) as { start_time: number } | undefined;
+    const duration_ms = row ? Date.now() - row.start_time : <span class="branch-1 cbranch-no" title="branch not covered" >null;</span>
+    db.prepare('UPDATE tool_calls SET duration_ms = ?, success = ?, error_msg = ? WHERE id = ?')
       .run(duration_ms, success ? 1 : 0, error_msg ?? null, id);
   }
 }
 &nbsp;
-export const toolTracker = <span class="cstat-no" title="statement not covered" >new ToolTracker();</span>
+export const toolTracker = new ToolTracker();
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -151,7 +151,7 @@ export const toolTracker = <span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

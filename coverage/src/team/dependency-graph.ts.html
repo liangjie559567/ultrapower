@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -107,38 +107,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
@@ -146,38 +146,38 @@
  */
 &nbsp;
 export class DependencyGraph {
-  private adjacencyList = <span class="cstat-no" title="statement not covered" >new Map&lt;string, Set&lt;string&gt;&gt;();</span>
+  private adjacencyList = new Map&lt;string, Set&lt;string&gt;&gt;();
 &nbsp;
   /**
    * 添加节点
    */
-<span class="fstat-no" title="function not covered" >  addNode(n</span>odeId: string): void {
-<span class="cstat-no" title="statement not covered" >    if (!this.adjacencyList.has(nodeId)) {</span>
-<span class="cstat-no" title="statement not covered" >      this.adjacencyList.set(nodeId, new Set());</span>
+  addNode(nodeId: string): void {
+    if (!this.adjacencyList.has(nodeId)) {
+      this.adjacencyList.set(nodeId, new Set());
     }
   }
 &nbsp;
   /**
    * 添加依赖边：from 依赖 to
    */
-<span class="fstat-no" title="function not covered" >  addEdge(f</span>rom: string, to: string): void {
-<span class="cstat-no" title="statement not covered" >    this.addNode(from);</span>
-<span class="cstat-no" title="statement not covered" >    this.addNode(to);</span>
-<span class="cstat-no" title="statement not covered" >    this.adjacencyList.get(from)!.add(to);</span>
+  addEdge(from: string, to: string): void {
+    this.addNode(from);
+    this.addNode(to);
+    this.adjacencyList.get(from)!.add(to);
   }
 &nbsp;
   /**
    * 获取节点的所有依赖
    */
-<span class="fstat-no" title="function not covered" >  getDependencies(n</span>odeId: string): string[] {
-<span class="cstat-no" title="statement not covered" >    return Array.from(this.adjacencyList.get(nodeId) || []);</span>
+  getDependencies(nodeId: string): string[] {
+    return Array.from(this.adjacencyList.get(nodeId) || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>;
   }
 &nbsp;
   /**
    * 获取所有节点
    */
-<span class="fstat-no" title="function not covered" >  getNodes(): string[] {</span>
-<span class="cstat-no" title="statement not covered" >    return Array.from(this.adjacencyList.keys());</span>
+  getNodes(): string[] {
+    return Array.from(this.adjacencyList.keys());
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -187,7 +187,7 @@ export class DependencyGraph {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

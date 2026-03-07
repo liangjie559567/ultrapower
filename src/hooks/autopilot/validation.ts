@@ -33,13 +33,13 @@ export interface ValidationCoordinatorResult {
 /**
  * Record a validation verdict from an architect
  */
-export function recordValidationVerdict(
+export async function recordValidationVerdict(
   directory: string,
   type: ValidationVerdictType,
   verdict: ValidationVerdict,
   issues?: string[],
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state || state.phase !== 'validation') {
     return false;
@@ -70,7 +70,7 @@ export function recordValidationVerdict(
     );
   }
 
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**
@@ -101,7 +101,7 @@ export function getValidationStatus(directory: string, sessionId?: string): Vali
 /**
  * Start a new validation round
  */
-export function startValidationRound(directory: string, sessionId?: string): boolean {
+export async function startValidationRound(directory: string, sessionId?: string): Promise<boolean> {
   const state = readAutopilotState(directory, sessionId);
   if (!state || state.phase !== 'validation') {
     return false;
@@ -112,7 +112,7 @@ export function startValidationRound(directory: string, sessionId?: string): boo
   state.validation.all_approved = false;
   state.validation.architects_spawned = 0;
 
-  return writeAutopilotState(directory, state, sessionId);
+  return await writeAutopilotState(directory, state, sessionId);
 }
 
 /**

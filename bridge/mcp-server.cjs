@@ -3236,8 +3236,8 @@ var require_utils = __commonJS({
       }
       return ind;
     }
-    function removeDotSegments(path12) {
-      let input = path12;
+    function removeDotSegments(path13) {
+      let input = path13;
       const output = [];
       let nextSlash = -1;
       let len = 0;
@@ -3436,8 +3436,8 @@ var require_schemes = __commonJS({
         wsComponent.secure = void 0;
       }
       if (wsComponent.resourceName) {
-        const [path12, query] = wsComponent.resourceName.split("?");
-        wsComponent.path = path12 && path12 !== "/" ? path12 : void 0;
+        const [path13, query] = wsComponent.resourceName.split("?");
+        wsComponent.path = path13 && path13 !== "/" ? path13 : void 0;
         wsComponent.query = query;
         wsComponent.resourceName = void 0;
       }
@@ -6799,12 +6799,12 @@ var require_dist = __commonJS({
         throw new Error(`Unknown format "${name}"`);
       return f;
     };
-    function addFormats(ajv, list, fs10, exportName) {
+    function addFormats(ajv, list, fs11, exportName) {
       var _a;
       var _b;
       (_a = (_b = ajv.opts.code).formats) !== null && _a !== void 0 ? _a : _b.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`;
       for (const f of list)
-        ajv.addFormat(f, fs10[f]);
+        ajv.addFormat(f, fs11[f]);
     }
     module2.exports = exports2 = formatsPlugin;
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -7290,8 +7290,8 @@ function getErrorMap() {
 
 // node_modules/zod/v3/helpers/parseUtil.js
 var makeIssue = (params) => {
-  const { data, path: path12, errorMaps, issueData } = params;
-  const fullPath = [...path12, ...issueData.path || []];
+  const { data, path: path13, errorMaps, issueData } = params;
+  const fullPath = [...path13, ...issueData.path || []];
   const fullIssue = {
     ...issueData,
     path: fullPath
@@ -7407,11 +7407,11 @@ var errorUtil;
 
 // node_modules/zod/v3/types.js
 var ParseInputLazyPath = class {
-  constructor(parent, value, path12, key) {
+  constructor(parent, value, path13, key) {
     this._cachedPath = [];
     this.parent = parent;
     this.data = value;
-    this._path = path12;
+    this._path = path13;
     this._key = key;
   }
   get path() {
@@ -11048,15 +11048,15 @@ function assignProp(target, prop, value) {
     configurable: true
   });
 }
-function getElementAtPath(obj, path12) {
-  if (!path12)
+function getElementAtPath(obj, path13) {
+  if (!path13)
     return obj;
-  return path12.reduce((acc, key) => acc?.[key], obj);
+  return path13.reduce((acc, key) => acc?.[key], obj);
 }
 function promiseAllObject(promisesObj) {
   const keys = Object.keys(promisesObj);
-  const promises2 = keys.map((key) => promisesObj[key]);
-  return Promise.all(promises2).then((results) => {
+  const promises3 = keys.map((key) => promisesObj[key]);
+  return Promise.all(promises3).then((results) => {
     const resolvedObj = {};
     for (let i = 0; i < keys.length; i++) {
       resolvedObj[keys[i]] = results[i];
@@ -11371,11 +11371,11 @@ function aborted(x, startIndex = 0) {
   }
   return false;
 }
-function prefixIssues(path12, issues) {
+function prefixIssues(path13, issues) {
   return issues.map((iss) => {
     var _a;
     (_a = iss).path ?? (_a.path = []);
-    iss.path.unshift(path12);
+    iss.path.unshift(path13);
     return iss;
   });
 }
@@ -18598,12 +18598,12 @@ function formatRange(range) {
 function formatLocation(location) {
   const uri = location.uri || location.targetUri;
   if (!uri) return "Unknown location";
-  const path12 = uriToPath(uri);
+  const path13 = uriToPath(uri);
   const loc = location;
   const locationRange = loc.range || loc.targetRange || loc.targetSelectionRange;
-  if (!locationRange) return path12;
+  if (!locationRange) return path13;
   const range = formatRange(locationRange);
-  return `${path12}:${range}`;
+  return `${path13}:${range}`;
 }
 function formatHover(hover) {
   if (!hover) return "No hover information available";
@@ -18689,8 +18689,8 @@ function formatWorkspaceEdit(edit) {
   const lines = [];
   if (edit.changes) {
     for (const [uri, changes] of Object.entries(edit.changes)) {
-      const path12 = uriToPath(uri);
-      lines.push(`File: ${path12}`);
+      const path13 = uriToPath(uri);
+      lines.push(`File: ${path13}`);
       for (const change of changes) {
         const range = formatRange(change.range);
         const preview = change.newText.length > 50 ? change.newText.slice(0, 50) + "..." : change.newText;
@@ -18700,8 +18700,8 @@ function formatWorkspaceEdit(edit) {
   }
   if (edit.documentChanges) {
     for (const docChange of edit.documentChanges) {
-      const path12 = uriToPath(docChange.textDocument.uri);
-      lines.push(`File: ${path12}`);
+      const path13 = uriToPath(docChange.textDocument.uri);
+      lines.push(`File: ${path13}`);
       for (const change of docChange.edits) {
         const range = formatRange(change.range);
         const preview = change.newText.length > 50 ? change.newText.slice(0, 50) + "..." : change.newText;
@@ -19561,7 +19561,7 @@ Note: Patterns must be valid AST nodes for the language.`,
     const {
       pattern,
       language,
-      path: path12 = ".",
+      path: path13 = ".",
       context = 2,
       maxResults = 20
     } = args;
@@ -19589,13 +19589,13 @@ Error: ${sgLoadError}`;
           ]
         };
       }
-      const files = getFilesForLanguage(path12, language);
+      const files = getFilesForLanguage(path13, language);
       if (files.length === 0) {
         return {
           content: [
             {
               type: "text",
-              text: `No ${language} files found in ${path12}`
+              text: `No ${language} files found in ${path13}`
             }
           ]
         };
@@ -19635,7 +19635,7 @@ Error: ${sgLoadError}`;
               type: "text",
               text: `No matches found for pattern: ${pattern}
 
-Searched ${files.length} ${language} file(s) in ${path12}
+Searched ${files.length} ${language} file(s) in ${path13}
 
 Tip: Ensure the pattern is a valid AST node. For example:
 - Use "function $NAME" not just "$NAME"
@@ -19695,7 +19695,7 @@ IMPORTANT: dryRun=true (default) only previews changes. Set dryRun=false to appl
     dryRun: external_exports.boolean().optional().describe("Preview only, don't apply changes (default: true)")
   },
   handler: async (args) => {
-    const { pattern, replacement, language, path: path12 = ".", dryRun = true } = args;
+    const { pattern, replacement, language, path: path13 = ".", dryRun = true } = args;
     try {
       const sg = await getSgModule();
       if (!sg) {
@@ -19720,13 +19720,13 @@ Error: ${sgLoadError}`;
           ]
         };
       }
-      const files = getFilesForLanguage(path12, language);
+      const files = getFilesForLanguage(path13, language);
       if (files.length === 0) {
         return {
           content: [
             {
               type: "text",
-              text: `No ${language} files found in ${path12}`
+              text: `No ${language} files found in ${path13}`
             }
           ]
         };
@@ -19794,7 +19794,7 @@ Error: ${sgLoadError}`;
               type: "text",
               text: `No matches found for pattern: ${pattern}
 
-Searched ${files.length} ${language} file(s) in ${path12}`
+Searched ${files.length} ${language} file(s) in ${path13}`
             }
           ]
         };
@@ -20716,7 +20716,7 @@ async function spawnBridgeServer(sessionId, projectDir) {
   const MAX_STDERR_CHARS = 64 * 1024;
   let stderrBuffer = "";
   let stderrTruncated = false;
-  proc.stderr?.on("data", (chunk) => {
+  const stderrHandler = (chunk) => {
     if (stderrTruncated) return;
     const text = chunk.toString();
     if (stderrBuffer.length + text.length > MAX_STDERR_CHARS) {
@@ -20725,7 +20725,8 @@ async function spawnBridgeServer(sessionId, projectDir) {
     } else {
       stderrBuffer += text;
     }
-  });
+  };
+  proc.stderr?.on("data", stderrHandler);
   const startTime = Date.now();
   while (!isSocket(socketPath)) {
     if (Date.now() - startTime > BRIDGE_SPAWN_TIMEOUT_MS) {
@@ -21429,6 +21430,9 @@ function validateSessionId(sessionId) {
   if (sessionId.includes("..") || sessionId.includes("/") || sessionId.includes("\\")) {
     throw new Error(`Invalid session ID: path traversal not allowed (${sessionId})`);
   }
+  if (/^[a-zA-Z]:/.test(sessionId)) {
+    throw new Error(`Invalid session ID: absolute paths not allowed (${sessionId})`);
+  }
   if (!SESSION_ID_REGEX.test(sessionId)) {
     throw new Error(`Invalid session ID: must be alphanumeric with hyphens/underscores, max 256 chars (${sessionId})`);
   }
@@ -21507,6 +21511,43 @@ function validateWorkingDirectory(workingDirectory) {
     throw new Error(`workingDirectory '${workingDirectory}' is outside the trusted worktree root '${trustedRoot}'.`);
   }
   return trustedRoot;
+}
+
+// src/lib/file-lock.ts
+var fs5 = __toESM(require("fs"), 1);
+var path6 = __toESM(require("path"), 1);
+async function acquireLock(lockPath, staleMs = 3e4) {
+  const lockFile = path6.join(lockPath, "lock.json");
+  const tryAcquire = () => {
+    try {
+      fs5.mkdirSync(lockPath);
+    } catch (err) {
+      const nodeErr = err;
+      if (nodeErr.code !== "EEXIST") {
+        throw err;
+      }
+      let meta2 = null;
+      try {
+        const raw = fs5.readFileSync(lockFile, "utf8");
+        meta2 = JSON.parse(raw);
+      } catch {
+      }
+      const isStale = meta2 === null || Date.now() - meta2.timestamp > staleMs;
+      if (isStale) {
+        fs5.rmSync(lockPath, { recursive: true, force: true });
+        tryAcquire();
+        return;
+      }
+      throw new Error(`[file-lock] \u9501\u5DF2\u88AB\u5360\u7528: ${lockPath}`);
+    }
+    const meta = { pid: process.pid, timestamp: Date.now() };
+    fs5.writeFileSync(lockFile, JSON.stringify(meta), "utf8");
+  };
+  tryAcquire();
+  const unlock = async () => {
+    fs5.rmSync(lockPath, { recursive: true, force: true });
+  };
+  return unlock;
 }
 
 // src/hooks/mode-registry/index.ts
@@ -21719,8 +21760,8 @@ function getActiveSessionsForMode(mode, cwd) {
 
 // src/audit/logger.ts
 var import_crypto2 = require("crypto");
-var fs5 = __toESM(require("fs"), 1);
-var path6 = __toESM(require("path"), 1);
+var fs6 = __toESM(require("fs"), 1);
+var path7 = __toESM(require("path"), 1);
 
 // src/lib/safe-json.ts
 function safeJsonParse(content, filePath) {
@@ -21765,12 +21806,15 @@ var AuditLogger = class {
   secretKey;
   maxSize = SIZE_LIMIT.AUDIT_LOG_MAX;
   constructor(logDir) {
-    this.logPath = path6.join(logDir, "audit.log");
+    this.logPath = path7.join(logDir, "audit.log");
     this.secretKey = this.deriveSecretKey();
     this.ensureLogDir(logDir);
   }
   deriveSecretKey() {
-    const seed = process.env.OMC_AUDIT_SECRET || "default-seed";
+    const seed = process.env.OMC_AUDIT_SECRET;
+    if (!seed) {
+      throw new Error("OMC_AUDIT_SECRET environment variable is required");
+    }
     return Buffer.from((0, import_crypto2.createHmac)("sha256", "omc-audit").update(seed).digest("hex"));
   }
   sign(entry) {
@@ -21787,14 +21831,14 @@ var AuditLogger = class {
     await this.rotateIfNeeded();
   }
   async appendLog(line) {
-    await fs5.promises.appendFile(this.logPath, line, "utf8");
+    await fs6.promises.appendFile(this.logPath, line, "utf8");
   }
   async rotateIfNeeded() {
     try {
-      const stats = await fs5.promises.stat(this.logPath);
+      const stats = await fs6.promises.stat(this.logPath);
       if (stats.size >= this.maxSize) {
         const rotatedPath = `${this.logPath}.${Date.now()}`;
-        await fs5.promises.rename(this.logPath, rotatedPath);
+        await fs6.promises.rename(this.logPath, rotatedPath);
       }
     } catch (err) {
       if (err.code !== "ENOENT") throw err;
@@ -21802,7 +21846,7 @@ var AuditLogger = class {
   }
   async verify() {
     try {
-      const content = await fs5.promises.readFile(this.logPath, "utf8");
+      const content = await fs6.promises.readFile(this.logPath, "utf8");
       const lines = content.split("\n").filter(Boolean);
       let valid = 0, invalid = 0;
       for (const line of lines) {
@@ -21829,16 +21873,30 @@ var AuditLogger = class {
     }
   }
   ensureLogDir(dir) {
-    if (!fs5.existsSync(dir)) {
-      fs5.mkdirSync(dir, { recursive: true });
+    if (!fs6.existsSync(dir)) {
+      fs6.mkdirSync(dir, { recursive: true });
     }
   }
 };
-var auditLogger = new AuditLogger(".omc/logs");
+var _auditLogger = null;
+var auditLogger = {
+  get instance() {
+    if (!_auditLogger) {
+      _auditLogger = new AuditLogger(".omc/logs");
+    }
+    return _auditLogger;
+  },
+  async log(entry) {
+    return this.instance.log(entry);
+  },
+  async verify() {
+    return this.instance.verify();
+  }
+};
 
 // src/lib/path-validator.ts
-var path7 = __toESM(require("path"), 1);
-var fs6 = __toESM(require("fs"), 1);
+var path8 = __toESM(require("path"), 1);
+var fs7 = __toESM(require("fs"), 1);
 
 // src/lib/validateMode.ts
 var VALID_MODES = [
@@ -21900,7 +21958,7 @@ function pruneMap(map, maxSize) {
 // src/tools/state-tools.ts
 var stateCache = /* @__PURE__ */ new Map();
 var CACHE_MAX_SIZE = 50;
-var CACHE_TTL_MS = 5e3;
+var CACHE_TTL_MS = 1e3;
 var cacheHits = 0;
 var cacheMisses = 0;
 function getCacheKey(mode, root, sessionId) {
@@ -22209,9 +22267,15 @@ var stateWriteTool = {
           updatedBy: "state_write_tool"
         }
       };
-      atomicWriteJsonSync(statePath, stateWithMeta);
-      const cacheKey = getCacheKey(mode, root, sessionId);
-      invalidateCache(cacheKey);
+      const lockPath = `${statePath}.lock`;
+      const unlock = await acquireLock(lockPath, 3e4);
+      try {
+        atomicWriteJsonSync(statePath, stateWithMeta);
+        const cacheKey = getCacheKey(mode, root, sessionId);
+        invalidateCache(cacheKey);
+      } finally {
+        await unlock();
+      }
       const sessionInfo = sessionId ? ` (session: ${sessionId})` : " (legacy path)";
       const warningMessage = sessionId ? "" : "\n\nWARNING: No session_id provided. State written to legacy shared path which may leak across parallel sessions. Pass session_id for session-scoped isolation.";
       return {

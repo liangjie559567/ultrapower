@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -187,10 +187,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -250,26 +250,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">152x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">44x</span>
+<span class="cline-any cline-yes">1029x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -278,9 +278,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -288,8 +288,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Think Mode Detector
@@ -301,10 +301,10 @@
  */
 &nbsp;
 /** English patterns for think keywords */
-const ENGLISH_PATTERNS = <span class="cstat-no" title="statement not covered" >[/\bultrathink\b/i, /\bthink\b/i];</span>
+const ENGLISH_PATTERNS = [/\bultrathink\b/i, /\bthink\b/i];
 &nbsp;
 /** Multilingual think keywords for global support */
-const MULTILINGUAL_KEYWORDS = <span class="cstat-no" title="statement not covered" >[</span>
+const MULTILINGUAL_KEYWORDS = [
   // Korean
   '생각', '고민', '검토', '제대로',
   // Chinese (Simplified &amp; Traditional)
@@ -364,46 +364,46 @@ const MULTILINGUAL_KEYWORDS = <span class="cstat-no" title="statement not covere
 ];
 &nbsp;
 /** Combined patterns including multilingual support */
-const MULTILINGUAL_PATTERNS = <span class="cstat-no" title="statement not covered" >MULTILINGUAL_KEYWORDS.map(<span class="fstat-no" title="function not covered" >(k</span>w) =&gt; <span class="cstat-no" title="statement not covered" >new RegExp(kw, 'i'))</span>;</span>
-const THINK_PATTERNS = <span class="cstat-no" title="statement not covered" >[...ENGLISH_PATTERNS, ...MULTILINGUAL_PATTERNS];</span>
+const MULTILINGUAL_PATTERNS = MULTILINGUAL_KEYWORDS.map((kw) =&gt; new RegExp(kw, 'i'));
+const THINK_PATTERNS = [...ENGLISH_PATTERNS, ...MULTILINGUAL_PATTERNS];
 &nbsp;
 /** Regex patterns for code blocks */
-const CODE_BLOCK_PATTERN = <span class="cstat-no" title="statement not covered" >/```[\s\S]*?```/g;</span>
-const INLINE_CODE_PATTERN = <span class="cstat-no" title="statement not covered" >/`[^`]+`/g;</span>
+const CODE_BLOCK_PATTERN = /```[\s\S]*?```/g;
+const INLINE_CODE_PATTERN = /`[^`]+`/g;
 &nbsp;
 /**
  * Remove code blocks from text to avoid false positive keyword detection.
  */
-export function <span class="fstat-no" title="function not covered" >removeCodeBlocks(t</span>ext: string): string {
-<span class="cstat-no" title="statement not covered" >  return text.replace(CODE_BLOCK_PATTERN, '').replace(INLINE_CODE_PATTERN, '');</span>
+export function removeCodeBlocks(text: string): string {
+  return text.replace(CODE_BLOCK_PATTERN, '').replace(INLINE_CODE_PATTERN, '');
 }
 &nbsp;
 /**
  * Detect if text contains a think keyword (excluding code blocks).
  */
-export function <span class="fstat-no" title="function not covered" >detectThinkKeyword(t</span>ext: string): boolean {
-  const textWithoutCode = <span class="cstat-no" title="statement not covered" >removeCodeBlocks(text);</span>
-<span class="cstat-no" title="statement not covered" >  return THINK_PATTERNS.some(<span class="fstat-no" title="function not covered" >(p</span>attern) =&gt; <span class="cstat-no" title="statement not covered" >pattern.test(textWithoutCode))</span>;</span>
+export function detectThinkKeyword(text: string): boolean {
+  const textWithoutCode = removeCodeBlocks(text);
+  return THINK_PATTERNS.some((pattern) =&gt; pattern.test(textWithoutCode));
 }
 &nbsp;
 /**
  * Extract text content from message parts.
  */
-export function <span class="fstat-no" title="function not covered" >extractPromptText(</span>
+export function extractPromptText(
   parts: Array&lt;{ type: string; text?: string }&gt;
 ): string {
-<span class="cstat-no" title="statement not covered" >  return parts</span>
-    .filter(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.type === 'text')</span>
-    .map(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.text || '')</span>
+  return parts
+    .filter((p) =&gt; p.type === 'text')
+    .map((p) =&gt; p.text || '')
     .join('');
 }
 &nbsp;
 /**
  * Check if the text contains the ultrathink keyword specifically.
  */
-export function <span class="fstat-no" title="function not covered" >detectUltrathinkKeyword(t</span>ext: string): boolean {
-  const textWithoutCode = <span class="cstat-no" title="statement not covered" >removeCodeBlocks(text);</span>
-<span class="cstat-no" title="statement not covered" >  return /\bultrathink\b/i.test(textWithoutCode);</span>
+export function detectUltrathinkKeyword(text: string): boolean {
+  const textWithoutCode = removeCodeBlocks(text);
+  return /\bultrathink\b/i.test(textWithoutCode);
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -412,7 +412,7 @@ export function <span class="fstat-no" title="function not covered" >detectUltra
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -267,7 +267,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,7 +281,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -330,7 +330,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -373,7 +373,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -410,7 +410,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -460,7 +460,7 @@
 /**
  * BDD (Behavior-Driven Development) keywords that are acceptable in comments
  */
-export const BDD_KEYWORDS = <span class="cstat-no" title="statement not covered" >new Set([</span>
+export const BDD_KEYWORDS = new Set([
   'given',
   'when',
   'then',
@@ -474,7 +474,7 @@ export const BDD_KEYWORDS = <span class="cstat-no" title="statement not covered"
 /**
  * Prefixes for type checker and linter directives (acceptable comments)
  */
-export const TYPE_CHECKER_PREFIXES = <span class="cstat-no" title="statement not covered" >[</span>
+export const TYPE_CHECKER_PREFIXES = [
   // Python
   'type:',
   'noqa',
@@ -523,7 +523,7 @@ export const TYPE_CHECKER_PREFIXES = <span class="cstat-no" title="statement not
 /**
  * Header message for comment detection
  */
-export const HOOK_MESSAGE_HEADER = <span class="cstat-no" title="statement not covered" >`COMMENT/DOCSTRING DETECTED - IMMEDIATE ACTION REQUIRED</span>
+export const HOOK_MESSAGE_HEADER = `COMMENT/DOCSTRING DETECTED - IMMEDIATE ACTION REQUIRED
 &nbsp;
 Your recent changes contain comments or docstrings, which triggered this hook.
 You need to take immediate action. You must follow the conditions below.
@@ -566,7 +566,7 @@ Detected comments/docstrings:
 /**
  * Pattern for detecting line comments by language
  */
-export const LINE_COMMENT_PATTERNS: Record&lt;string, RegExp&gt; = <span class="cstat-no" title="statement not covered" >{</span>
+export const LINE_COMMENT_PATTERNS: Record&lt;string, RegExp&gt; = {
   // C-style: //, /* */
   js: /\/\/.*$|\/\*[\s\S]*?\*\//gm,
   ts: /\/\/.*$|\/\*[\s\S]*?\*\//gm,
@@ -603,7 +603,7 @@ export const LINE_COMMENT_PATTERNS: Record&lt;string, RegExp&gt; = <span class="
 /**
  * File extensions to language mapping
  */
-export const EXTENSION_TO_LANGUAGE: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{</span>
+export const EXTENSION_TO_LANGUAGE: Record&lt;string, string&gt; = {
   '.js': 'js',
   '.mjs': 'js',
   '.cjs': 'js',
@@ -649,7 +649,7 @@ export const EXTENSION_TO_LANGUAGE: Record&lt;string, string&gt; = <span class="
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

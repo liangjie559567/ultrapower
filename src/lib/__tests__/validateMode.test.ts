@@ -19,6 +19,9 @@ describe('validateMode', () => {
     expect(validateMode('../../etc')).toBe(false);
     expect(validateMode('..\\windows')).toBe(false);
     expect(validateMode('./local')).toBe(false);
+    expect(validateMode('autopilot/../../../etc/passwd')).toBe(false);
+    expect(validateMode('team/../../secrets')).toBe(false);
+    expect(validateMode('ralph\\..\\..\\config')).toBe(false);
   });
 
   it('rejects absolute paths', () => {

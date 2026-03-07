@@ -1,25 +1,350 @@
-# BUG 分析研究报告
+# ultrapower Bug 分析研究报告
 
-**Session ID:** research-bug-analysis-20260306
+**Session ID:** bug-analysis-20260306
 **日期:** 2026-03-06
 **状态:** COMPLETE
 
 ## 执行摘要
 
-通过 5 个并行分析阶段，识别出项目中的 **13 个关键问题**，分为 3 个优先级：
+通过 6 个并行分析阶段对 ultrapower v5.5.30 进行全面 bug 分析，识别出 **39 个问题**：
 
-- **P0 (Critical):** 4 个 - 路径处理、并发竞态、安全防护缺口
-- **P1 (High):** 5 个 - 输入验证、错误处理、类型安全
-- **P2 (Medium):** 4 个 - 平台兼容性、缓存一致性、文档缺失
+- **P0 (Critical):** 3 个 - 状态缓存竞态、SQLite 连接泄漏、bridge.ts 静默失败
+- **P1 (High):** 7 个 - SessionLock TOCTOU、MCP 子进程泄漏、Windows shell 注入、Python REPL 监听器泄漏、WAL 非原子性、MCP bridge 监听器累积
+- **P2 (Medium):** 29 个 - 类型安全 (652 any)、错误处理、资源管理改进
 
-**根本原因模式：**
-1. 防御性编程不一致（缺少统一验证框架）
-2. 平台抽象层缺失（Windows 路径硬编码）
-3. 并发控制未实施（锁机制存在但未使用）
+**影响模块：**
+- 状态管理 (state-tools.ts, bridge.ts): 最高风险 - 缓存竞态 + 静默失败
+- MCP 层 (codex/gemini servers, MCPClient.ts, mcp-bridge.ts): 资源泄漏 + 类型不确定性 + 监听器累积
+- Hook 系统 (bridge.ts): 静默失败 + 并发问题
+- 数据库层 (job-state-db.ts): SQLite 连接泄漏
+- Python REPL (bridge-manager.ts): stderr 监听器泄漏
+- 文件系统 (atomic-write.ts): WAL 写入非原子性
 
 ---
 
 ## 研究方法
+
+### 阶段分解
+
+| 阶段 | 焦点 | 层级 | 状态 |
+|------|------|------|------|
+| Stage 1 | 错误日志和状态文件分析 | LOW | ✅ Complete |
+| Stage 2 | 测试失败模式分析 | MEDIUM | ✅ Complete |
+| Stage 3 | 并发问题和竞态条件 | HIGH | ✅ Complete |
+| Stage 4 | 资源泄漏检测 | HIGH | ✅ Complete |
+| Stage 5 | 安全漏洞扫描 | HIGH | ✅ Complete |
+| Verification | 交叉验证 | MEDIUM | ✅ Complete |
+
+### 执行策略
+
+- 6 个独立阶段并行执行（5 个分析阶段 + 1 个验证阶段）
+- 使用智能模型路由（haiku/sonnet/opus）
+- 交叉验证确保发现一致性
+
+---
+
+## 关键发现
+
+### P0 - Critical 问题
+
+#### [C1] 状态缓存竞态条件
+
+**问题：** `state_write` 在写入前失效缓存，导致并发写入时出现陈旧数据窗口
+
+**证据：**
+```typescript
+// src/tools/state-tools.ts:421-422
+invalidateCache(cacheKey);  // 先失效
+atomicWriteJsonSync(statePath, stateWithMeta);  // 后写入
+```
+
+**竞态场景：**
+1. Agent A 在 T0 调用 state_write，失效缓存
+2. Agent B 在 T1 调用 state_read，缓存未命中，从磁盘读取旧数据
+3. Agent A 在 T2 完成写入新数据
+4. Agent B 在 T3 使用 T1 读取的旧数据进行修改
+5. **结果：Agent B 的修改基于陈旧数据，覆盖 Agent A 的更新**
+
+**影响：** 多 agent 并发场景下状态不一致，可能导致任务状态丢失
+
+**修复建议：**
+```typescript
+// 先写入，后失效缓存
+atomicWriteJsonSync(statePath, stateWithMeta);
+invalidateCache(cacheKey);
+```
+
+**置信度：** HIGH
+
+---
+
+#### [C2] SQLite 连接泄漏
+
+**问题：** `pruneOldConnections()` 在关闭失败时不清理 Map 条目
+
+**证据：**
+```typescript
+// src/mcp/swarm/job-state-db.ts:152-159
+function pruneOldConnections() {
+  if (dbInstances.size <= MAX_CONNECTIONS) return;
+  const oldest = Array.from(dbInstances.keys())[0];
+  dbInstances.get(oldest)?.close();  // 可能抛出异常
+  dbInstances.delete(oldest);        // 异常时不执行
+}
+```
+
+**影响：**
+- 连接池泄漏，最终耗尽文件描述符
+- 长时间运行的 swarm 任务会触发 EMFILE 错误
+
+**修复建议：**
+```typescript
+function pruneOldConnections() {
+  if (dbInstances.size <= MAX_CONNECTIONS) return;
+  const oldest = Array.from(dbInstances.keys())[0];
+  try {
+    dbInstances.get(oldest)?.close();
+  } catch (err) {
+    console.error(`Failed to close SQLite connection: ${err}`);
+  } finally {
+    dbInstances.delete(oldest);  // 无论成功失败都清理
+  }
+}
+```
+
+**置信度：** HIGH
+
+---
+
+#### [C3] Bridge.ts 静默失败模式
+
+**问题：** 45 处类型断言 + 7 处 `.catch(() => {})` 导致错误被吞噬
+
+**证据：**
+```typescript
+// src/hooks/bridge.ts:560-566
+import("../notifications/index.js").then(({ notify }) =>
+  notify("session-idle", {
+    sessionId,
+    projectPath: directory,
+    profileName: process.env.OMC_NOTIFY_PROFILE,
+  }).catch(() => {})  // 静默失败
+).catch(() => {});
+
+// Lines 625-626, 647-653 等多处相同模式
+```
+
+**影响：**
+- 通知失败时用户无感知
+- 调试困难，无法追踪失败原因
+- 违反"快速失败"原则
+
+**修复建议：**
+```typescript
+.catch((err) => {
+  if (process.env.OMC_DEBUG) {
+    console.error(`[bridge] notification failed: ${err.message}`);
+  }
+})
+```
+
+**置信度：** HIGH
+
+---
+
+### P1 - High 问题
+
+#### [C4] SessionLock TOCTOU 漏洞
+
+**问题：** 检查和创建锁文件之间存在时间窗口
+
+**证据：**
+```typescript
+// src/lib/session-lock.ts:42-56
+if (existsSync(lockPath)) {
+  const content = readFileSync(lockPath, 'utf-8');
+  // ... 解析和检查
+}
+// 时间窗口：另一个进程可能在此处创建锁
+writeFileSync(lockPath, JSON.stringify(lockData));
+```
+
+**修复建议：** 使用 `fs.open()` 的 `wx` 标志实现原子性创建
+
+**置信度：** HIGH
+
+---
+
+#### [C5] MCP 客户端子进程泄漏
+
+**问题：** 重试循环中子进程未正确清理
+
+**证据：**
+```typescript
+// src/mcp/client/MCPClient.ts:34-72
+for (let attempt = 0; attempt < maxRetries; attempt++) {
+  try {
+    this.process = spawn(command, args);
+    break;
+  } catch (error) {
+    // 失败时未 kill this.process
+    if (attempt === maxRetries - 1) throw error;
+  }
+}
+```
+
+**修复建议：** 在 catch 块中添加 `this.process?.kill()`
+
+**置信度：** HIGH
+
+---
+
+#### [C6] Windows Shell 命令注入
+
+**问题：** `shell: true` 允许命令注入
+
+**证据：**
+```typescript
+// src/mcp/gemini-core.ts, src/mcp/codex-core.ts
+spawn(command, args, { shell: true })
+```
+
+**修复建议：** 使用 `shell: false` 或严格验证参数
+
+**置信度：** MEDIUM
+
+---
+
+#### [C7] Python REPL stderr 监听器泄漏
+
+**问题：** 每次执行都添加新监听器，从不移除
+
+**证据：**
+```typescript
+// src/tools/python-repl/bridge-manager.ts:340-349
+pythonProcess.stderr.on('data', (data) => {
+  stderrBuffer += data.toString();
+});
+```
+
+**修复建议：** 使用 `once()` 或执行完成后 `removeAllListeners()`
+
+**置信度：** HIGH
+
+---
+
+#### [R1] WAL 写入非原子性
+
+**问题：** WAL 模式下两步操作不保证原子性
+
+**证据：**
+```typescript
+// src/lib/atomic-write.ts:89-103
+writeFileSync(walPath, content);
+renameSync(walPath, targetPath);
+```
+
+**修复建议：** 使用 `fsync()` 确保 WAL 持久化后再重命名
+
+**置信度：** MEDIUM
+
+---
+
+#### [R2] MCP Bridge 事件监听器累积
+
+**问题：** 每次重连都添加新监听器
+
+**证据：**
+```typescript
+// src/mcp/mcp-bridge.ts:196-223
+this.client.on('notification', handler);
+this.client.on('error', errorHandler);
+```
+
+**修复建议：** 重连前调用 `removeAllListeners()`
+
+**置信度：** MEDIUM
+
+---
+
+### P2 - Medium 问题
+
+#### [T1] 类型安全薄弱
+
+**问题：** 652 处 `any` 类型使用，密度 0.74/文件
+
+**修复建议：** 逐步替换为泛型或联合类型
+
+**置信度：** MEDIUM
+
+---
+
+#### [E1] 错误处理不一致
+
+**问题：** 7 处静默失败 + 45 处类型断言
+
+**修复建议：** 统一错误处理策略，添加日志
+
+**置信度：** HIGH
+
+---
+
+## 交叉验证结果
+
+✅ **验证通过** - 所有发现相互一致，无矛盾
+
+### 关联模式
+
+**模式 1：资源泄漏链**
+- C2 + C5 + C7 + R2
+- 共同特征：清理逻辑在异常路径中缺失
+
+**模式 2：并发问题**
+- C1 + C4 + R1
+- 共同特征：检查-使用时间窗口
+
+**模式 3：静默失败**
+- C3 + E1
+- 共同特征：`.catch(() => {})` 模式
+
+---
+
+## 修复优先级路线图
+
+### 第 1 阶段（P0 - 立即）
+
+1. 修复状态缓存竞态 (C1) - 30 分钟
+2. 修复 SQLite 连接泄漏 (C2) - 1 小时
+3. 添加 Bridge.ts 错误日志 (C3) - 2 小时
+
+### 第 2 阶段（P1 - 1 周内）
+
+4. 修复 SessionLock TOCTOU (C4) - 3 小时
+5. 修复 MCP 子进程泄漏 (C5) - 2 小时
+6. 修复 Python REPL 监听器泄漏 (C7) - 1 小时
+7. 修复 MCP Bridge 监听器累积 (R2) - 2 小时
+
+### 第 3 阶段（P2 - 1 个月内）
+
+8. 减少 any 类型使用 (T1) - 持续重构
+9. 统一错误处理 (E1) - 1 周
+
+---
+
+## 限制说明
+
+1. 错误日志是单次快照，无法验证间歇性问题
+2. 未检查所有路径参数的遍历风险
+3. 测试代码中的 any 使用未深入分析
+
+---
+
+**报告生成时间：** 2026-03-06T18:23:53.758Z
+**分析耗时：** ~6 分钟
+**参与 Scientist Agent：** 6 个
+
+[PROMISE:RESEARCH_COMPLETE]
+
 
 ### 阶段分解
 

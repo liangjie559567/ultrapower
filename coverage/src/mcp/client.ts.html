@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>4/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>1/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>4/16</span>
             </div>
         
             
@@ -111,7 +111,9 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -120,6 +122,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,17 +141,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,7 +154,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -174,11 +178,11 @@ interface MCPTool {
 &nbsp;
 export class MCPClient {
   private client: Client;
-  private transport: StdioClientTransport | null = <span class="cstat-no" title="statement not covered" >null;</span>
-  private toolsCache: MCPTool[] | null = <span class="cstat-no" title="statement not covered" >null;</span>
+  private transport: StdioClientTransport | null = null;
+  private toolsCache: MCPTool[] | null = null;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor() {</span>
-<span class="cstat-no" title="statement not covered" >    this.client = new Client(</span>
+  constructor() {
+    this.client = new Client(
       { name: 'ultrapower-mcp-client', version: '1.0.0' },
       { capabilities: {} }
     );
@@ -199,9 +203,11 @@ export class MCPClient {
 <span class="cstat-no" title="statement not covered" >    return this.toolsCache;</span>
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >disconnect(): Promise&lt;void&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (this.transport) {</span>
+  async disconnect(): Promise&lt;void&gt; {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (this.transport) {
 <span class="cstat-no" title="statement not covered" >      await this.client.close();</span>
+      // @ts-expect-error - removeAllListeners exists on EventEmitter
+<span class="cstat-no" title="statement not covered" >      this.client.removeAllListeners?.();</span>
 <span class="cstat-no" title="statement not covered" >      this.transport = null;</span>
 <span class="cstat-no" title="statement not covered" >      this.toolsCache = null;</span>
     }
@@ -214,7 +220,7 @@ export class MCPClient {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-05T11:38:16.550Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

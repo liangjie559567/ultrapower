@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -135,11 +135,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,31 +178,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">78x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">78x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Database from 'better-sqlite3';
 import * as path from 'path';
 import * as os from 'os';
 import { mkdirSync } from 'fs';
 &nbsp;
-let _db: InstanceType&lt;typeof Database&gt; | null = <span class="cstat-no" title="statement not covered" >null;</span>
+let _db: InstanceType&lt;typeof Database&gt; | null = null;
 &nbsp;
-const SCHEMA = <span class="cstat-no" title="statement not covered" >`</span>
+const SCHEMA = `
 PRAGMA journal_mode = WAL;
 PRAGMA synchronous = NORMAL;
 CREATE TABLE IF NOT EXISTS agent_runs (
@@ -246,23 +246,23 @@ CREATE INDEX IF NOT EXISTS idx_tool_calls_duration ON tool_calls(duration_ms);
 CREATE INDEX IF NOT EXISTS idx_cost_records_session ON cost_records(session_id);
 `;
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >getDb(d</span>bPath?: string): InstanceType&lt;typeof Database&gt; {
-<span class="cstat-no" title="statement not covered" >  if (!_db) {</span>
-    const p = <span class="cstat-no" title="statement not covered" >dbPath ?? path.join(os.homedir(), '.claude', '.omc', 'observability.db');</span>
-<span class="cstat-no" title="statement not covered" >    mkdirSync(path.dirname(p), { recursive: true });</span>
-<span class="cstat-no" title="statement not covered" >    _db = new Database(p);</span>
-<span class="cstat-no" title="statement not covered" >    _db.exec(SCHEMA);</span>
+export function getDb(dbPath?: string): InstanceType&lt;typeof Database&gt; {
+  if (!_db) {
+    const p = dbPath ?? <span class="branch-1 cbranch-no" title="branch not covered" >path.join(os.homedir(), '.claude', '.omc', 'observability.db');</span>
+    mkdirSync(path.dirname(p), { recursive: true });
+    _db = new Database(p);
+    _db.exec(SCHEMA);
   }
-<span class="cstat-no" title="statement not covered" >  return _db;</span>
+  return _db;
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >closeDb(): void {</span>
-<span class="cstat-no" title="statement not covered" >  _db?.close();</span>
-<span class="cstat-no" title="statement not covered" >  _db = null;</span>
+export function closeDb(): void {
+  _db?.close();
+  _db = null;
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >resetDb(): void {</span>
-<span class="cstat-no" title="statement not covered" >  closeDb();</span>
+export function resetDb(): void {
+  closeDb();
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -271,7 +271,7 @@ export function <span class="fstat-no" title="function not covered" >resetDb(): 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

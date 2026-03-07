@@ -186,13 +186,13 @@ export async function checkAutopilot(
     if (nextPhase) {
       // Handle special transitions
       if (state.phase === 'execution' && nextPhase === 'qa') {
-        const result = transitionRalphToUltraQA(workingDir, sessionId);
+        const result = await transitionRalphToUltraQA(workingDir, sessionId);
         if (!result.success) {
           // Transition failed, continue in current phase
           return generateContinuationPrompt(state, workingDir);
         }
       } else if (state.phase === 'qa' && nextPhase === 'validation') {
-        const result = transitionUltraQAToValidation(workingDir, sessionId);
+        const result = await transitionUltraQAToValidation(workingDir, sessionId);
         if (!result.success) {
           return generateContinuationPrompt(state, workingDir, sessionId);
         }

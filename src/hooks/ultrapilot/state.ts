@@ -94,11 +94,11 @@ export function readUltrapilotState(directory: string, sessionId?: string): Ultr
 /**
  * Write ultrapilot state to disk
  */
-export function writeUltrapilotState(directory: string, state: UltrapilotState, sessionId?: string): boolean {
+export async function writeUltrapilotState(directory: string, state: UltrapilotState, sessionId?: string): Promise<boolean> {
   ensureStateDir(directory, sessionId);
   const stateFile = getStateFilePath(directory, sessionId);
 
-  return withFileLock(stateFile, () => {
+  return await withFileLock(stateFile, () => {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         atomicWriteJsonSync(stateFile, state);
@@ -142,13 +142,13 @@ export function isUltrapilotActive(directory: string, sessionId?: string): boole
 /**
  * Initialize a new ultrapilot session
  */
-export function initUltrapilot(
+export async function initUltrapilot(
   directory: string,
   task: string,
   subtasks: string[],
   sessionId?: string,
   config?: Partial<UltrapilotConfig>
-): UltrapilotState | null {
+): Promise<UltrapilotState | null> {
   // Mutual exclusion check via mode-registry
   const canStart = canStartMode('ultrapilot', directory);
   if (!canStart.allowed) {
@@ -180,19 +180,19 @@ export function initUltrapilot(
     project_path: directory
   };
 
-  writeUltrapilotState(directory, state, sessionId);
+  await writeUltrapilotState(directory, state, sessionId);
   return state;
 }
 
 /**
  * Update worker state
  */
-export function updateWorkerState(
+export async function updateWorkerState(
   directory: string,
   workerId: string,
   updates: Partial<WorkerState>,
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readUltrapilotState(directory, sessionId);
   if (!state) return false;
 
@@ -200,13 +200,13 @@ export function updateWorkerState(
   if (workerIndex === -1) return false;
 
   state.workers[workerIndex] = { ...state.workers[workerIndex], ...updates };
-  return writeUltrapilotState(directory, state, sessionId);
+  return await writeUltrapilotState(directory, state, sessionId);
 }
 
 /**
  * Add a new worker
  */
-export function addWorker(directory: string, worker: WorkerState, sessionId?: string): boolean {
+export async function addWorker(directory: string, worker: WorkerState, sessionId?: string): Promise<boolean> {
   const state = readUltrapilotState(directory, sessionId);
   if (!state) return false;
 
@@ -216,19 +216,19 @@ export function addWorker(directory: string, worker: WorkerState, sessionId?: st
   // Update ownership
   state.ownership.workers[worker.id] = worker.ownedFiles;
 
-  return writeUltrapilotState(directory, state, sessionId);
+  return await writeUltrapilotState(directory, state, sessionId);
 }
 
 /**
  * Mark worker as complete
  */
-export function completeWorker(
+export async function completeWorker(
   directory: string,
   workerId: string,
   filesCreated: string[],
   filesModified: string[],
   sessionId?: string
-): boolean {
+): Promise<boolean> {
   const state = readUltrapilotState(directory, sessionId);
   if (!state) return false;
 
@@ -241,13 +241,13 @@ export function completeWorker(
   state.workers[workerIndex].filesModified = filesModified;
   state.successfulWorkers += 1;
 
-  return writeUltrapilotState(directory, state, sessionId);
+  return await writeUltrapilotState(directory, state, sessionId);
 }
 
 /**
  * Mark worker as failed
  */
-export function failWorker(directory: string, workerId: string, error: string, sessionId?: string): boolean {
+export async function failWorker(directory: string, workerId: string, error: string, sessionId?: string): Promise<boolean> {
   const state = readUltrapilotState(directory, sessionId);
   if (!state) return false;
 
@@ -259,20 +259,20 @@ export function failWorker(directory: string, workerId: string, error: string, s
   state.workers[workerIndex].error = error;
   state.failedWorkers += 1;
 
-  return writeUltrapilotState(directory, state, sessionId);
+  return await writeUltrapilotState(directory, state, sessionId);
 }
 
 /**
  * Complete ultrapilot session
  */
-export function completeUltrapilot(directory: string, sessionId?: string): boolean {
+export async function completeUltrapilot(directory: string, sessionId?: string): Promise<boolean> {
   const state = readUltrapilotState(directory, sessionId);
   if (!state) return false;
 
   state.active = false;
   state.completedAt = new Date().toISOString();
 
-  return writeUltrapilotState(directory, state, sessionId);
+  return await writeUltrapilotState(directory, state, sessionId);
 }
 
 /**
@@ -331,7 +331,7 @@ export function writeFileOwnership(directory: string, ownership: FileOwnership, 
 /**
  * Record a file conflict
  */
-export function recordConflict(directory: string, filePath: string, sessionId?: string): boolean {
+export async function recordConflict(directory: string, filePath: string, sessionId?: string): Promise<boolean> {
   const state = readUltrapilotState(directory, sessionId);
   if (!state) return false;
 
@@ -339,7 +339,7 @@ export function recordConflict(directory: string, filePath: string, sessionId?: 
     state.ownership.conflicts.push(filePath);
   }
 
-  return writeUltrapilotState(directory, state, sessionId);
+  return await writeUltrapilotState(directory, state, sessionId);
 }
 
 /**

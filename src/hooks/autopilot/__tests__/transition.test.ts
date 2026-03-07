@@ -23,19 +23,19 @@ describe('Phase Transitions', () => {
   });
 
   describe('transitionRalphToUltraQA', () => {
-    it('should fail if not in execution phase', () => {
-      initAutopilot(testDir, 'test', 'session-1');
+    it('should fail if not in execution phase', async () => {
+      await initAutopilot(testDir, 'test', 'session-1');
       // Still in expansion phase
-      const result = transitionRalphToUltraQA(testDir, 'session-1');
+      const result = await transitionRalphToUltraQA(testDir, 'session-1');
       expect(result.success).toBe(false);
       expect(result.error).toContain('Not in execution phase');
     });
 
-    it('should transition from execution to qa', () => {
-      initAutopilot(testDir, 'test', 'session-1');
-      transitionPhase(testDir, 'execution', 'session-1');
+    it('should transition from execution to qa', async () => {
+      await initAutopilot(testDir, 'test', 'session-1');
+      await transitionPhase(testDir, 'execution', 'session-1');
 
-      const result = transitionRalphToUltraQA(testDir, 'session-1');
+      const result = await transitionRalphToUltraQA(testDir, 'session-1');
       expect(result.success).toBe(true);
 
       const state = readAutopilotState(testDir, 'session-1');
@@ -44,17 +44,17 @@ describe('Phase Transitions', () => {
   });
 
   describe('transitionUltraQAToValidation', () => {
-    it('should fail if not in qa phase', () => {
-      initAutopilot(testDir, 'test');
-      const result = transitionUltraQAToValidation(testDir);
+    it('should fail if not in qa phase', async () => {
+      await initAutopilot(testDir, 'test');
+      const result = await transitionUltraQAToValidation(testDir);
       expect(result.success).toBe(false);
     });
 
-    it('should transition from qa to validation', () => {
-      initAutopilot(testDir, 'test');
-      transitionPhase(testDir, 'qa');
+    it('should transition from qa to validation', async () => {
+      await initAutopilot(testDir, 'test');
+      await transitionPhase(testDir, 'qa');
 
-      const result = transitionUltraQAToValidation(testDir);
+      const result = await transitionUltraQAToValidation(testDir);
       expect(result.success).toBe(true);
 
       const state = readAutopilotState(testDir);

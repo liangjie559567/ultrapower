@@ -29,28 +29,28 @@ describe('AutopilotSummary', () => {
   });
 
   describe('generateSummary', () => {
-    it('should return null when no state exists', () => {
+    it('should return null when no state exists', async () => {
       const summary = generateSummary(testDir);
       expect(summary).toBeNull();
     });
 
-    it('should return summary with all fields populated', () => {
+    it('should return summary with all fields populated', async () => {
       // Initialize autopilot
-      initAutopilot(testDir, 'Build a test feature');
+      await initAutopilot(testDir, 'Build a test feature');
 
       // Update execution with files
-      updateExecution(testDir, {
+      await updateExecution(testDir, {
         files_created: ['src/feature.ts', 'src/feature.test.ts'],
         files_modified: ['src/index.ts']
       });
 
       // Update QA status
-      updateQA(testDir, {
+      await updateQA(testDir, {
         test_status: 'passing'
       });
 
       // Transition to complete
-      transitionPhase(testDir, 'complete');
+      await transitionPhase(testDir, 'complete');
 
       const summary = generateSummary(testDir);
 
@@ -64,14 +64,14 @@ describe('AutopilotSummary', () => {
       expect(summary?.phasesCompleted).toContain('complete');
     });
 
-    it('should track all completed phases', () => {
-      initAutopilot(testDir, 'Test phases');
+    it('should track all completed phases', async () => {
+      await initAutopilot(testDir, 'Test phases');
 
       // Manually update state to simulate completed phases
-      updateExecution(testDir, {
+      await updateExecution(testDir, {
         ralph_completed_at: new Date().toISOString()
       });
-      updateQA(testDir, {
+      await updateQA(testDir, {
         qa_completed_at: new Date().toISOString()
       });
 
@@ -81,25 +81,25 @@ describe('AutopilotSummary', () => {
       expect(summary?.phasesCompleted).toContain('qa');
     });
 
-    it('should correctly report test status as Failing', () => {
-      initAutopilot(testDir, 'Test failing');
-      updateQA(testDir, { test_status: 'failing' });
+    it('should correctly report test status as Failing', async () => {
+      await initAutopilot(testDir, 'Test failing');
+      await updateQA(testDir, { test_status: 'failing' });
 
       const summary = generateSummary(testDir);
       expect(summary?.testsStatus).toBe('Failing');
     });
 
-    it('should correctly report test status as Skipped', () => {
-      initAutopilot(testDir, 'Test skipped');
-      updateQA(testDir, { test_status: 'skipped' });
+    it('should correctly report test status as Skipped', async () => {
+      await initAutopilot(testDir, 'Test skipped');
+      await updateQA(testDir, { test_status: 'skipped' });
 
       const summary = generateSummary(testDir);
       expect(summary?.testsStatus).toBe('Skipped');
     });
 
-    it('should correctly report test status as Not run', () => {
-      initAutopilot(testDir, 'Test not run');
-      updateQA(testDir, { test_status: 'pending' });
+    it('should correctly report test status as Not run', async () => {
+      await initAutopilot(testDir, 'Test not run');
+      await updateQA(testDir, { test_status: 'pending' });
 
       const summary = generateSummary(testDir);
       expect(summary?.testsStatus).toBe('Not run');
@@ -107,7 +107,7 @@ describe('AutopilotSummary', () => {
   });
 
   describe('formatSummary', () => {
-    it('should return formatted box string', () => {
+    it('should return formatted box string', async () => {
       const summary = {
         originalIdea: 'Build a feature',
         filesCreated: ['a.ts', 'b.ts'],
@@ -132,7 +132,7 @@ describe('AutopilotSummary', () => {
       expect(formatted).toMatch(/╰─+╯/m);
     });
 
-    it('should truncate long ideas', () => {
+    it('should truncate long ideas', async () => {
       const summary = {
         originalIdea: 'This is a very long idea that exceeds the maximum display length and should be truncated',
         filesCreated: [],
@@ -151,7 +151,7 @@ describe('AutopilotSummary', () => {
       expect(formatted).not.toContain('truncated');
     });
 
-    it('should format duration in hours and minutes', () => {
+    it('should format duration in hours and minutes', async () => {
       const summary = {
         originalIdea: 'Test',
         filesCreated: [],
@@ -167,7 +167,7 @@ describe('AutopilotSummary', () => {
       expect(formatted).toContain('Duration: 1h 1m');
     });
 
-    it('should format duration in seconds only', () => {
+    it('should format duration in seconds only', async () => {
       const summary = {
         originalIdea: 'Test',
         filesCreated: [],
@@ -185,8 +185,8 @@ describe('AutopilotSummary', () => {
   });
 
   describe('formatCompactSummary', () => {
-    it('should return correct format for expansion phase', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should return correct format for expansion phase', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -195,12 +195,12 @@ describe('AutopilotSummary', () => {
       expect(compact).toBe('[AUTOPILOT] Phase 1/5: EXPANSION | 0 files');
     });
 
-    it('should return correct format for planning phase', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should return correct format for planning phase', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      transitionPhase(testDir, 'planning');
+      await transitionPhase(testDir, 'planning');
       const updatedState = readAutopilotState(testDir);
       if (!updatedState) {
         throw new Error('Failed to read autopilot state');
@@ -211,13 +211,13 @@ describe('AutopilotSummary', () => {
       expect(compact).toBe('[AUTOPILOT] Phase 2/5: PLANNING | 0 files');
     });
 
-    it('should return correct format for execution phase', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should return correct format for execution phase', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
       state.phase = 'execution';
-      updateExecution(testDir, {
+      await updateExecution(testDir, {
         files_created: ['a.ts', 'b.ts'],
         files_modified: ['c.ts']
       });
@@ -229,8 +229,8 @@ describe('AutopilotSummary', () => {
       expect(compact).toBe('[AUTOPILOT] Phase 3/5: EXECUTION | 3 files');
     });
 
-    it('should return correct format for qa phase', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should return correct format for qa phase', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -241,8 +241,8 @@ describe('AutopilotSummary', () => {
       expect(compact).toBe('[AUTOPILOT] Phase 4/5: QA | 0 files');
     });
 
-    it('should return correct format for validation phase', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should return correct format for validation phase', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -253,16 +253,16 @@ describe('AutopilotSummary', () => {
       expect(compact).toBe('[AUTOPILOT] Phase 5/5: VALIDATION | 0 files');
     });
 
-    it('should show checkmark for complete phase', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should show checkmark for complete phase', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      updateExecution(testDir, {
+      await updateExecution(testDir, {
         files_created: ['a.ts'],
         files_modified: ['b.ts']
       });
-      transitionPhase(testDir, 'complete');
+      await transitionPhase(testDir, 'complete');
 
       state.phase = 'complete';
       state.total_agents_spawned = 10;
@@ -274,8 +274,8 @@ describe('AutopilotSummary', () => {
       expect(compact).toBe('[AUTOPILOT ✓] Complete | 2 files | 10 agents');
     });
 
-    it('should show X for failed phase', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should show X for failed phase', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -288,8 +288,8 @@ describe('AutopilotSummary', () => {
   });
 
   describe('formatFailureSummary', () => {
-    it('should include phase and no error', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should include phase and no error', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -304,8 +304,8 @@ describe('AutopilotSummary', () => {
       expect(formatted).toMatch(/╰─+╯/m);
     });
 
-    it('should include error message', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should include error message', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -319,8 +319,8 @@ describe('AutopilotSummary', () => {
       expect(formatted).toContain('Build failed with exit code 1');
     });
 
-    it('should handle long error messages by wrapping', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should handle long error messages by wrapping', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -337,8 +337,8 @@ describe('AutopilotSummary', () => {
       expect(formatted).toContain('he box width and should be wrapped across multip');
     });
 
-    it('should limit error to 3 lines', () => {
-      const state = initAutopilot(testDir, 'Test');
+    it('should limit error to 3 lines', async () => {
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -356,12 +356,12 @@ describe('AutopilotSummary', () => {
   });
 
   describe('formatFileList', () => {
-    it('should return empty string for no files', () => {
+    it('should return empty string for no files', async () => {
       const result = formatFileList([], 'Created Files');
       expect(result).toBe('');
     });
 
-    it('should format list with title and count', () => {
+    it('should format list with title and count', async () => {
       const files = ['src/a.ts', 'src/b.ts', 'src/c.ts'];
       const result = formatFileList(files, 'Created Files');
 
@@ -371,7 +371,7 @@ describe('AutopilotSummary', () => {
       expect(result).toContain('- src/c.ts');
     });
 
-    it('should limit files shown to maxFiles parameter', () => {
+    it('should limit files shown to maxFiles parameter', async () => {
       const files = Array.from({ length: 15 }, (_, i) => `file${i}.ts`);
       const result = formatFileList(files, 'Files', 5);
 
@@ -381,14 +381,14 @@ describe('AutopilotSummary', () => {
       expect(result).not.toContain('- file5.ts');
     });
 
-    it('should show "and X more" when files exceed maxFiles', () => {
+    it('should show "and X more" when files exceed maxFiles', async () => {
       const files = Array.from({ length: 15 }, (_, i) => `file${i}.ts`);
       const result = formatFileList(files, 'Files', 10);
 
       expect(result).toContain('- ... and 5 more');
     });
 
-    it('should default maxFiles to 10', () => {
+    it('should default maxFiles to 10', async () => {
       const files = Array.from({ length: 20 }, (_, i) => `file${i}.ts`);
       const result = formatFileList(files, 'Files');
 
@@ -397,7 +397,7 @@ describe('AutopilotSummary', () => {
       expect(result).toContain('- ... and 10 more');
     });
 
-    it('should not show "and X more" when files equal maxFiles', () => {
+    it('should not show "and X more" when files equal maxFiles', async () => {
       const files = Array.from({ length: 10 }, (_, i) => `file${i}.ts`);
       const result = formatFileList(files, 'Files', 10);
 
@@ -406,7 +406,7 @@ describe('AutopilotSummary', () => {
       expect(result).toContain('- file9.ts');
     });
 
-    it('should not show "and X more" when files less than maxFiles', () => {
+    it('should not show "and X more" when files less than maxFiles', async () => {
       const files = ['a.ts', 'b.ts'];
       const result = formatFileList(files, 'Files', 10);
 

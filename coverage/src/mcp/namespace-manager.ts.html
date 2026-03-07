@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -111,23 +111,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Namespace Manager for MCP Tools
@@ -143,24 +143,24 @@ export interface NamespacedTool {
 /**
  * Add namespace prefix to tool name
  */
-export function <span class="fstat-no" title="function not covered" >addNamespace(s</span>erverName: string, toolName: string): string {
-<span class="cstat-no" title="statement not covered" >  return `mcp__${serverName}__${toolName}`;</span>
+export function addNamespace(serverName: string, toolName: string): string {
+  return `mcp__${serverName}__${toolName}`;
 }
 &nbsp;
 /**
  * Parse namespaced tool name
  */
-export function <span class="fstat-no" title="function not covered" >parseNamespace(n</span>amespacedName: string): { serverName: string; toolName: string } | null {
-  const match = <span class="cstat-no" title="statement not covered" >namespacedName.match(/^mcp__([^_]+)__(.+)$/);</span>
-<span class="cstat-no" title="statement not covered" >  if (!match) <span class="cstat-no" title="statement not covered" >return null;</span></span>
-<span class="cstat-no" title="statement not covered" >  return { serverName: match[1], toolName: match[2] };</span>
+export function parseNamespace(namespacedName: string): { serverName: string; toolName: string } | null {
+  const match = namespacedName.match(/^mcp__([^_]+)__(.+)$/);
+  if (!match) return null;
+  return { serverName: match[1], toolName: match[2] };
 }
 &nbsp;
 /**
  * Check if tool name is namespaced
  */
-export function <span class="fstat-no" title="function not covered" >isNamespaced(n</span>ame: string): boolean {
-<span class="cstat-no" title="statement not covered" >  return /^mcp__[^_]+__.+$/.test(name);</span>
+export function isNamespaced(name: string): boolean {
+  return /^mcp__[^_]+__.+$/.test(name);
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -169,7 +169,7 @@ export function <span class="fstat-no" title="function not covered" >isNamespace
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-05T11:38:16.550Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

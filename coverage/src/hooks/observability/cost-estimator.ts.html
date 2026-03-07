@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -131,35 +131,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -168,17 +158,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { randomUUID } from 'crypto';
 import { WriteQueue } from './write-queue.js';
 &nbsp;
@@ -189,25 +189,25 @@ export interface TokenUsage {
   cache_read_tokens?: number;
 }
 &nbsp;
-const PRICING: Record&lt;string, [number, number, number, number]&gt; = <span class="cstat-no" title="statement not covered" >{</span>
+const PRICING: Record&lt;string, [number, number, number, number]&gt; = {
   haiku:  [0.80,  4.00,  1.00, 0.08],
   sonnet: [3.00,  15.00, 3.75, 0.30],
   opus:   [15.00, 75.00, 18.75, 1.50],
 };
 &nbsp;
-function <span class="fstat-no" title="function not covered" >getModelKey(m</span>odel: string): string {
-  const m = <span class="cstat-no" title="statement not covered" >model.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >  if (m.includes('haiku')) <span class="cstat-no" title="statement not covered" >return 'haiku';</span></span>
-<span class="cstat-no" title="statement not covered" >  if (m.includes('opus')) <span class="cstat-no" title="statement not covered" >return 'opus';</span></span>
-<span class="cstat-no" title="statement not covered" >  return 'sonnet';</span>
+function getModelKey(model: string): string {
+  const m = model.toLowerCase();
+  if (m.includes('haiku')) return 'haiku';
+  if (m.includes('opus')) return 'opus';
+  return 'sonnet';
 }
 &nbsp;
 export class CostEstimator {
-  private _queue = <span class="cstat-no" title="statement not covered" >new WriteQueue();</span>
+  private _queue = new WriteQueue();
 &nbsp;
-<span class="fstat-no" title="function not covered" >  estimateCost(m</span>odel: string, usage: TokenUsage): number {
-    const [ip, op, cw, cr] = <span class="cstat-no" title="statement not covered" >PRICING[getModelKey(model)]!;</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
+  estimateCost(model: string, usage: TokenUsage): number {
+    const [ip, op, cw, cr] = PRICING[getModelKey(model)]!;
+    return (
       (usage.input_tokens * ip +
        usage.output_tokens * op +
        (usage.cache_write_tokens ?? 0) * cw +
@@ -215,9 +215,9 @@ export class CostEstimator {
     );
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  record(o</span>pts: { session_id: string; agent_run_id?: string; model: string; usage: TokenUsage }): void {
-    const { session_id, agent_run_id, model, usage } = <span class="cstat-no" title="statement not covered" >opts;</span>
-<span class="cstat-no" title="statement not covered" >    this._queue.enqueue({</span>
+  record(opts: { session_id: string; agent_run_id?: string; model: string; usage: TokenUsage }): void {
+    const { session_id, agent_run_id, model, usage } = opts;
+    this._queue.enqueue({
       table: 'cost_records',
       row: {
         id: randomUUID(),
@@ -232,11 +232,11 @@ export class CostEstimator {
         recorded_at: Date.now(),
       },
     });
-<span class="cstat-no" title="statement not covered" >    this._queue.flush();</span>
+    this._queue.flush();
   }
 }
 &nbsp;
-export const costEstimator = <span class="cstat-no" title="statement not covered" >new CostEstimator();</span>
+export const costEstimator = new CostEstimator();
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -244,7 +244,7 @@ export const costEstimator = <span class="cstat-no" title="statement not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

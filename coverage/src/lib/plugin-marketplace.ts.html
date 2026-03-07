@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>9/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -112,11 +112,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -125,23 +123,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Plugin marketplace: conditional activation (requires ≥5 third-party plugins).
@@ -151,10 +151,10 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 &nbsp;
-function <span class="fstat-no" title="function not covered" >getRegistryPath(): string {</span>
-<span class="cstat-no" title="statement not covered" >  return process.env['OMC_REGISTRY_PATH'] ?? join(homedir(), '.claude', 'plugins', 'installed_plugins.json');</span>
+function getRegistryPath(): string {
+  return process.env['OMC_REGISTRY_PATH'<span class="branch-1 cbranch-no" title="branch not covered" >] ?? join(homedir(), '.claude', 'plugins', 'installed_plugins.json');</span>
 }
-const MARKETPLACE_THRESHOLD = <span class="cstat-no" title="statement not covered" >5;</span>
+const MARKETPLACE_THRESHOLD = 5;
 &nbsp;
 interface InstalledPluginsJson {
   version: 2;
@@ -164,24 +164,24 @@ interface InstalledPluginsJson {
 /**
  * Count third-party plugins (excludes 'ultrapower@*').
  */
-export function <span class="fstat-no" title="function not covered" >countThirdPartyPlugins(): number {</span>
-  const registryPath = <span class="cstat-no" title="statement not covered" >getRegistryPath();</span>
-<span class="cstat-no" title="statement not covered" >  if (!existsSync(registryPath)) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const raw = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(registryPath, 'utf-8')) as unknown;</span>
-<span class="cstat-no" title="statement not covered" >    if (!raw || typeof raw !== 'object' || !('plugins' in raw) || typeof (raw as Record&lt;string, unknown&gt;).plugins !== 'object') <span class="cstat-no" title="statement not covered" >return 0;</span></span>
-    const registry = <span class="cstat-no" title="statement not covered" >raw as InstalledPluginsJson;</span>
-<span class="cstat-no" title="statement not covered" >    return Object.keys(registry.plugins).filter(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >!</span>k.startsWith('ultrapower@'))</span>.length;</span>
+export function countThirdPartyPlugins(): number {
+  const registryPath = getRegistryPath();
+  if (!existsSync(registryPath)) return 0;
+  try {
+    const raw = JSON.parse(readFileSync(registryPath, 'utf-8')) as unknown;
+    if (!raw || typeof raw !== 'object' || !('plugins' in raw) || typeof (raw as Record&lt;string, unknown&gt;).plugins !== 'object') return 0;
+    const registry = raw as InstalledPluginsJson;
+    return Object.keys(registry.plugins).filter(k =&gt; !k.startsWith('ultrapower@')).length;
   } catch {
-<span class="cstat-no" title="statement not covered" >    return 0;</span>
+    return 0;
   }
 }
 &nbsp;
 /**
  * Returns true only when marketplace should be exposed to users.
  */
-export function <span class="fstat-no" title="function not covered" >isMarketplaceEnabled(): boolean {</span>
-<span class="cstat-no" title="statement not covered" >  return countThirdPartyPlugins() &gt;= MARKETPLACE_THRESHOLD;</span>
+export function isMarketplaceEnabled(): boolean {
+  return countThirdPartyPlugins() &gt;= MARKETPLACE_THRESHOLD;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -190,7 +190,7 @@ export function <span class="fstat-no" title="function not covered" >isMarketpla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

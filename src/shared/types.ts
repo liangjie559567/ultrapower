@@ -35,6 +35,11 @@ export interface PluginConfig {
     planner?: { model?: string; enabled?: boolean };
   };
 
+  // Execution mode
+  defaultExecutionMode?: string;
+  enableAutoSearch?: boolean;
+  enableAutoAnalyze?: boolean;
+
   // Feature toggles
   features?: {
     parallelExecution?: boolean;

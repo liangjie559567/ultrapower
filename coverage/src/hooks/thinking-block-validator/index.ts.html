@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">12.82% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/78</span>
+                <span class='fraction'>10/78</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">17.64% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>12/68</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>4/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">11.94% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>8/67</span>
             </div>
         
             
@@ -325,7 +325,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -333,24 +333,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -549,33 +549,33 @@ import {
 export * from "./types.js";
 export * from "./constants.js";
 &nbsp;
-function <span class="fstat-no" title="function not covered" >isContentPartType(t</span>ype: string): boolean {
-<span class="cstat-no" title="statement not covered" >  return (CONTENT_PART_TYPES as readonly string[]).includes(type);</span>
+function isContentPartType(type: string): boolean {
+  return (CONTENT_PART_TYPES as readonly string[]).includes(type);
 }
 &nbsp;
 function <span class="fstat-no" title="function not covered" >isThinkingPartType(t</span>ype: string): boolean {
 <span class="cstat-no" title="statement not covered" >  return (THINKING_PART_TYPES as readonly string[]).includes(type);</span>
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >isExtendedThinkingModel(m</span>odelID: string): boolean {
-<span class="cstat-no" title="statement not covered" >  if (!modelID) <span class="cstat-no" title="statement not covered" >return false;</span></span>
-  const lower = <span class="cstat-no" title="statement not covered" >modelID.toLowerCase();</span>
+export function isExtendedThinkingModel(modelID: string): boolean {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!modelID) <span class="cstat-no" title="statement not covered" >return false;</span>
+  const lower = modelID.toLowerCase();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (lower.includes("thinking") || lower.endsWith("-high")) {</span>
-<span class="cstat-no" title="statement not covered" >    return true;</span>
+  if (lower.includes("thinking") || lower.endsWith("-high")) {
+    return true;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     lower.includes("claude-sonnet-4") ||
     lower.includes("claude-opus-4") ||
     lower.includes("claude-3")
   );
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >hasContentParts(p</span>arts: MessagePart[]): boolean {
-<span class="cstat-no" title="statement not covered" >  if (!parts || parts.length === 0) <span class="cstat-no" title="statement not covered" >return false;</span></span>
+export function hasContentParts(parts: MessagePart[]): boolean {
+  if (!parts || parts.length === 0) return false;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return parts.some(<span class="fstat-no" title="function not covered" >(p</span>art: MessagePart) =&gt; <span class="cstat-no" title="statement not covered" >isContentPartType(part.type))</span>;</span>
+  return parts.some((part: MessagePart) =&gt; isContentPartType(part.type));
 }
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >startsWithThinkingBlock(p</span>arts: MessagePart[]): boolean {
@@ -745,7 +745,7 @@ export function <span class="fstat-no" title="function not covered" >getValidati
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

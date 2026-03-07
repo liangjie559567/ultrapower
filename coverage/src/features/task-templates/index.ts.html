@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -118,22 +118,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,10 +133,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { readFileSync } from 'fs';
@@ -159,23 +159,23 @@ export interface TaskTemplate {
 export class TemplateLoader {
   private templatesDir: string;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(<span class="branch-0 cbranch-no" title="branch not covered" >t</span>emplatesDir: string = join(process.cwd(), 'templates', 'tasks')) {</span>
-<span class="cstat-no" title="statement not covered" >    this.templatesDir = templatesDir;</span>
+  constructor(templatesDir: string = join(process.cwd(), 'templates', 'tasks')) {
+    this.templatesDir = templatesDir;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  load(t</span>emplateName: string): TaskTemplate {
-    const <span class="cstat-no" title="statement not covered" >filePath = join(this.templatesDir, `${templateName}.md`);</span>
-    const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
+  load(templateName: string): TaskTemplate {
+    const filePath = join(this.templatesDir, `${templateName}.md`);
+    const content = readFileSync(filePath, 'utf-8');
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return {</span>
+    return {
       name: templateName,
       description: this.extractDescription(content),
       content
     };
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  listTemplates(): string[] {</span>
-<span class="cstat-no" title="statement not covered" >    return [</span>
+  listTemplates(): string[] {
+    return [
       'feature-development',
       'bug-fix',
       'code-review',
@@ -184,9 +184,9 @@ export class TemplateLoader {
     ];
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >extractDescription(c</span>ontent: string): string {
-    const lines = <span class="cstat-no" title="statement not covered" >content.split('\n');</span>
-<span class="cstat-no" title="statement not covered" >    return lines[0]?.replace(/^#\s+/, '') || '';</span>
+  private extractDescription(content: string): string {
+    const lines = content.split('\n');
+    return lines[0]?.replace(/^#\s+/, '') || <span class="branch-1 cbranch-no" title="branch not covered" >'';</span>
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -196,7 +196,7 @@ export class TemplateLoader {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

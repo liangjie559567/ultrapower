@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>8/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -131,29 +131,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * OMC HUD - CWD Element
@@ -173,33 +173,33 @@ import type { CwdFormat } from '../types.js';
  * @param format - Display format (relative, absolute, folder)
  * @returns Formatted path string or null if empty
  */
-export function <span class="fstat-no" title="function not covered" >renderCwd(</span>
+export function renderCwd(
   cwd: string | undefined,
-  format: CwdFormat = <span class="branch-0 cbranch-no" title="branch not covered" >'relative'</span>
+  format: CwdFormat = 'relative'
 ): string | null {
-<span class="cstat-no" title="statement not covered" >  if (!cwd) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+  if (!cwd) return null;
 &nbsp;
   let displayPath: string;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  switch (format) {</span>
+  switch (format) {
     case 'relative': {
-      const <span class="cstat-no" title="statement not covered" >home = homedir();</span>
-<span class="cstat-no" title="statement not covered" >      displayPath = cwd.startsWith(home)</span>
+      const home = homedir();
+      displayPath = cwd.startsWith(home)
         ? '~' + cwd.slice(home.length)
         : cwd;
-<span class="cstat-no" title="statement not covered" >      break;</span>
+      break;
     }
     case 'absolute':
-<span class="cstat-no" title="statement not covered" >      displayPath = cwd;</span>
-<span class="cstat-no" title="statement not covered" >      break;</span>
+      displayPath = cwd;
+      break;
     case 'folder':
-<span class="cstat-no" title="statement not covered" >      displayPath = basename(cwd);</span>
-<span class="cstat-no" title="statement not covered" >      break;</span>
-    default:
+      displayPath = basename(cwd);
+      break;
+<span class="branch-3 cbranch-no" title="branch not covered" >    default:</span>
 <span class="cstat-no" title="statement not covered" >      displayPath = cwd;</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return `${dim(displayPath)}`;</span>
+  return `${dim(displayPath)}`;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -208,7 +208,7 @@ export function <span class="fstat-no" title="function not covered" >renderCwd(<
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

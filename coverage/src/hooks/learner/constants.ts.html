@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -117,40 +117,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Learned Skills Constants
  */
@@ -161,40 +161,40 @@ import { getClaudeConfigDir } from '../../utils/paths.js';
 import { OmcPaths } from '../../lib/worktree-paths.js';
 &nbsp;
 /** User-level skills directory (read by skill-injector.mjs hook) */
-export const <span class="cstat-no" title="statement not covered" >USER_SKILLS_DIR = join(getClaudeConfigDir(), 'skills', 'omc-learned');</span>
+export const USER_SKILLS_DIR = join(getClaudeConfigDir(), 'skills', 'omc-learned');
 &nbsp;
 /** Global skills directory (new preferred location: ~/.omc/skills) */
-export const <span class="cstat-no" title="statement not covered" >GLOBAL_SKILLS_DIR = join(homedir(), '.omc', 'skills');</span>
+export const GLOBAL_SKILLS_DIR = join(homedir(), '.omc', 'skills');
 &nbsp;
 /** Project-level skills subdirectory */
-export const PROJECT_SKILLS_SUBDIR = <span class="cstat-no" title="statement not covered" >OmcPaths.SKILLS;</span>
+export const PROJECT_SKILLS_SUBDIR = OmcPaths.SKILLS;
 &nbsp;
 /** Maximum recursion depth for skill file discovery */
-export const MAX_RECURSION_DEPTH = <span class="cstat-no" title="statement not covered" >10;</span>
+export const MAX_RECURSION_DEPTH = 10;
 &nbsp;
 /** Valid skill file extension */
-export const SKILL_EXTENSION = <span class="cstat-no" title="statement not covered" >'.md';</span>
+export const SKILL_EXTENSION = '.md';
 &nbsp;
 /** Feature flag key for enabling/disabling */
-export const FEATURE_FLAG_KEY = <span class="cstat-no" title="statement not covered" >'learner.enabled';</span>
+export const FEATURE_FLAG_KEY = 'learner.enabled';
 &nbsp;
 /** Default feature flag value */
-export const FEATURE_FLAG_DEFAULT = <span class="cstat-no" title="statement not covered" >true;</span>
+export const FEATURE_FLAG_DEFAULT = true;
 &nbsp;
 /** Maximum skill content length (characters) */
-export const MAX_SKILL_CONTENT_LENGTH = <span class="cstat-no" title="statement not covered" >4000;</span>
+export const MAX_SKILL_CONTENT_LENGTH = 4000;
 &nbsp;
 /** Minimum quality score for auto-injection */
-export const MIN_QUALITY_SCORE = <span class="cstat-no" title="statement not covered" >50;</span>
+export const MIN_QUALITY_SCORE = 50;
 &nbsp;
 /** Required metadata fields */
-export const REQUIRED_METADATA_FIELDS = <span class="cstat-no" title="statement not covered" >['id', 'name', 'description', 'triggers', 'source'];</span>
+export const REQUIRED_METADATA_FIELDS = ['id', 'name', 'description', 'triggers', 'source'];
 &nbsp;
 /** Maximum skills to inject per session */
-export const MAX_SKILLS_PER_SESSION = <span class="cstat-no" title="statement not covered" >10;</span>
+export const MAX_SKILLS_PER_SESSION = 10;
 &nbsp;
 /** Debug mode enabled */
-export const DEBUG_ENABLED = <span class="cstat-no" title="statement not covered" >process.env.OMC_DEBUG === '1';</span>
+export const DEBUG_ENABLED = process.env.OMC_DEBUG === '1';
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -202,7 +202,7 @@ export const DEBUG_ENABLED = <span class="cstat-no" title="statement not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

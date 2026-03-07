@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">22.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>8/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">22.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>8/36</span>
             </div>
         
             
@@ -189,7 +189,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,20 +208,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1153x</span>
+<span class="cline-any cline-yes">1153x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1149x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1148x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -304,7 +304,7 @@
 &nbsp;
 import { execSync, execFileSync } from 'child_process';
 &nbsp;
-const TMUX_SESSION_PREFIX = <span class="cstat-no" title="statement not covered" >'omc-team';</span>
+const TMUX_SESSION_PREFIX = 'omc-team';
 &nbsp;
 /** Validate tmux is available. Throws with install instructions if not. */
 export function <span class="fstat-no" title="function not covered" >validateTmux(): void {</span>
@@ -322,21 +322,21 @@ export function <span class="fstat-no" title="function not covered" >validateTmu
 }
 &nbsp;
 /** Sanitize name to prevent tmux command injection (alphanum + hyphen only) */
-export function <span class="fstat-no" title="function not covered" >sanitizeName(n</span>ame: string): string {
-  const sanitized = <span class="cstat-no" title="statement not covered" >name.replace(/[^a-zA-Z0-9-]/g, '');</span>
-<span class="cstat-no" title="statement not covered" >  if (sanitized.length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error(`Invalid name: "${name}" contains no valid characters (alphanumeric or hyphen)`);</span>
+export function sanitizeName(name: string): string {
+  const sanitized = name.replace(/[^a-zA-Z0-9-]/g, '');
+  if (sanitized.length === 0) {
+    throw new Error(`Invalid name: "${name}" contains no valid characters (alphanumeric or hyphen)`);
   }
-<span class="cstat-no" title="statement not covered" >  if (sanitized.length &lt; 2) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error(`Invalid name: "${name}" too short after sanitization (minimum 2 characters)`);</span>
+  if (sanitized.length &lt; 2) {
+    throw new Error(`Invalid name: "${name}" too short after sanitization (minimum 2 characters)`);
   }
   // Truncate to safe length for tmux session names
-<span class="cstat-no" title="statement not covered" >  return sanitized.slice(0, 50);</span>
+  return sanitized.slice(0, 50);
 }
 &nbsp;
 /** Build session name: "omc-team-{teamName}-{workerName}" */
-export function <span class="fstat-no" title="function not covered" >sessionName(t</span>eamName: string, workerName: string): string {
-<span class="cstat-no" title="statement not covered" >  return `${TMUX_SESSION_PREFIX}-${sanitizeName(teamName)}-${sanitizeName(workerName)}`;</span>
+export function sessionName(teamName: string, workerName: string): string {
+  return `${TMUX_SESSION_PREFIX}-${sanitizeName(teamName)}-${sanitizeName(workerName)}`;
 }
 &nbsp;
 /** Create a detached tmux session. Kills stale session with same name first. */
@@ -415,7 +415,7 @@ export function <span class="fstat-no" title="function not covered" >spawnBridge
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-04T14:44:46.855Z
+                at 2026-03-07T00:52:33.933Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
