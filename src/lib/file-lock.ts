@@ -74,3 +74,43 @@ export async function acquireLock(
 
   return unlock;
 }
+
+/**
+ * 在文件锁保护下执行同步操作
+ */
+export function withFileLock<T>(filePath: string, fn: () => T): T {
+  const lockPath = `${filePath}.lock`;
+  const lockFile = path.join(lockPath, 'lock.json');
+
+  try {
+    fs.mkdirSync(lockPath);
+  } catch (err) {
+    const nodeErr = err as NodeJS.ErrnoException;
+    if (nodeErr.code === 'EEXIST') {
+      let meta: LockMeta | null = null;
+      try {
+        const raw = fs.readFileSync(lockFile, 'utf8');
+        meta = JSON.parse(raw) as LockMeta;
+      } catch {
+        // Ignore parse errors, treat as stale lock
+      }
+
+      const isStale = meta === null || Date.now() - meta.timestamp > 30000;
+      if (isStale) {
+        fs.rmSync(lockPath, { recursive: true, force: true });
+        return withFileLock(filePath, fn);
+      }
+      throw new Error(`[file-lock] 锁已被占用: ${lockPath}`);
+    }
+    throw err;
+  }
+
+  const meta: LockMeta = { pid: process.pid, timestamp: Date.now() };
+  fs.writeFileSync(lockFile, JSON.stringify(meta), 'utf8');
+
+  try {
+    return fn();
+  } finally {
+    fs.rmSync(lockPath, { recursive: true, force: true });
+  }
+}

@@ -7,7 +7,7 @@
  * - State machine operations
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync, statSync } from 'fs';
+import { existsSync, readFileSync, mkdirSync, unlinkSync, statSync } from 'fs';
 import { join } from 'path';
 import type { AutopilotState, AutopilotPhase, AutopilotConfig } from './types.js';
 import { DEFAULT_CONFIG } from './types.js';
@@ -23,6 +23,8 @@ import {
 } from '../ultraqa/index.js';
 import { canStartMode } from '../mode-registry/index.js';
 import { resolveSessionStatePath, ensureSessionStateDir } from '../../lib/worktree-paths.js';
+import { atomicWriteJsonSync } from '../../lib/atomic-write.js';
+import { withFileLock } from '../../lib/file-lock.js';
 
 const STATE_FILE = 'autopilot-state.json';
 const SPEC_DIR = 'autopilot';
@@ -105,14 +107,20 @@ export function readAutopilotState(directory: string, sessionId?: string): Autop
  * Write autopilot state to disk
  */
 export function writeAutopilotState(directory: string, state: AutopilotState, sessionId?: string): boolean {
-  try {
-    ensureStateDir(directory, sessionId);
-    const stateFile = getStateFilePath(directory, sessionId);
-    writeFileSync(stateFile, JSON.stringify(state, null, 2));
-    return true;
-  } catch {
+  ensureStateDir(directory, sessionId);
+  const stateFile = getStateFilePath(directory, sessionId);
+
+  return withFileLock(stateFile, () => {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        atomicWriteJsonSync(stateFile, state);
+        return true;
+      } catch (_err) {
+        if (attempt === 3) return false;
+      }
+    }
     return false;
-  }
+  });
 }
 
 /**

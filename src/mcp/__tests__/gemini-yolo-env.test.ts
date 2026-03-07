@@ -6,7 +6,7 @@
  * Use vi.resetModules() + dynamic import() to reload the module with different
  * environment variable states for each test case.
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 // Mock child_process before any dynamic imports
 vi.mock('child_process', () => ({

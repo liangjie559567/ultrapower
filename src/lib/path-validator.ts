@@ -76,7 +76,7 @@ export function validatePath(userPath: string, baseDir: string): string {
   let resolved: string;
   try {
     resolved = fs.realpathSync(joined);
-  } catch (err) {
+  } catch (_err) {
     // Path doesn't exist yet - validate parent directory
     const parent = path.dirname(joined);
     if (fs.existsSync(parent)) {

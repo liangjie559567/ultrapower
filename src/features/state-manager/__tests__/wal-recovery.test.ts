@@ -119,7 +119,7 @@ describe('WAL Recovery', () => {
   it('verifies data integrity after recovery', () => {
     const wal = new WriteAheadLog(testDir);
     const testData = { value: 'integrity-test', nested: { key: 'value' } };
-    const id = wal.writeEntry('test-mode', testData);
+    wal.writeEntry('test-mode', testData);
 
     // Create new instance and verify data
     const wal2 = new WriteAheadLog(testDir);

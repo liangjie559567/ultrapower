@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { loadConfig } from '../config-loader';
 import { writeFileSync, mkdirSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';

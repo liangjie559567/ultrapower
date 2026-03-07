@@ -9,15 +9,15 @@ const levels: Record<LogLevel, number> = {
 
 const currentLevel = (process.env.MCP_LOG_LEVEL?.toLowerCase() as LogLevel) || 'info';
 
-function log(level: LogLevel, ...args: any[]) {
+function log(level: LogLevel, ...args: unknown[]) {
   if (levels[level] >= levels[currentLevel]) {
     console.error(`[${level.toUpperCase()}]`, ...args);
   }
 }
 
 export const logger = {
-  debug: (...args: any[]) => log('debug', ...args),
-  info: (...args: any[]) => log('info', ...args),
-  warn: (...args: any[]) => log('warn', ...args),
-  error: (...args: any[]) => log('error', ...args),
+  debug: (...args: unknown[]) => log('debug', ...args),
+  info: (...args: unknown[]) => log('info', ...args),
+  warn: (...args: unknown[]) => log('warn', ...args),
+  error: (...args: unknown[]) => log('error', ...args),
 };

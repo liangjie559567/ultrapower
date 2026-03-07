@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach as _afterEach } from 'vitest';
 import * as path from 'path';
 
 // Set environment variable BEFORE importing bridge-manager
@@ -90,7 +90,7 @@ import {
   killBridgeWithEscalation,
   cleanupBridgeSessions,
   cleanupStaleBridges,
-  isSocket
+  isSocket as _isSocket
 } from '../bridge-manager.js';
 import type { BridgeMeta } from '../types.js';
 import { isProcessAlive, getProcessStartTime } from '../../../platform/process-utils.js';
@@ -419,7 +419,7 @@ describe('bridge-manager', () => {
 
       vi.mocked(isProcessAlive).mockReturnValueOnce(true).mockReturnValueOnce(false);
 
-      const mockKill = vi.spyOn(process, 'kill').mockReturnValue(true);
+      const _mockKill = vi.spyOn(process, 'kill').mockReturnValue(true);
       vi.mocked(fs.unlinkSync).mockReturnValue(undefined);
 
       const result = await cleanupBridgeSessions(sessionIds);

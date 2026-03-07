@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
-import { checkPersistentModes, createHookOutput, resetTodoContinuationAttempts } from '../index.js';
+import { checkPersistentModes, createHookOutput } from '../index.js';
 import * as worktreePaths from '../../../lib/worktree-paths.js';
 
 const TEST_DIR = join(process.cwd(), '.test-persistent-mode');

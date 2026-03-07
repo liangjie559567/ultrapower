@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
-import { tmpdir } from 'os';
 import type { StoredPart } from '../types.js';
 
 // Mock constants to use test directory

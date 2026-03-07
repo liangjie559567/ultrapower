@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
-import { readState, writeState, clearState, StateLocation } from '../index.js';
-import { encryptState, decryptState } from '../encryption.js';
+import { readState, writeState, StateLocation } from '../index.js';
 
 describe('Encryption Integration', () => {
   const testDir = path.join(process.cwd(), '.test-encryption-integration');

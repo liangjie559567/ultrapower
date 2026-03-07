@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { normalizeHookInput, SENSITIVE_HOOKS } from '../bridge-normalize.js';
+import { normalizeHookInput } from '../bridge-normalize.js';
 
 describe('bridge-normalize', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;

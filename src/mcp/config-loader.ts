@@ -5,7 +5,7 @@
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
-import { validateConfig, MCPConfig, MCPServerConfig } from './config-schema.js';
+import { validateConfig, MCPConfig } from './config-schema.js';
 
 export function loadConfig(projectDir?: string): MCPConfig {
   const configs: MCPConfig[] = [];

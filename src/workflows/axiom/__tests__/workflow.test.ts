@@ -145,7 +145,7 @@ describe('Scope Gate', () => {
       '- src/lib/session.ts',
     ].join('\n'));
 
-    const modifiedFile = 'src/features/auth/login.ts';
+    const _modifiedFile = 'src/features/auth/login.ts';
     const manifest = readFileSync(manifestPath, 'utf-8');
     const inScope = manifest.includes('src/features/auth/');
 

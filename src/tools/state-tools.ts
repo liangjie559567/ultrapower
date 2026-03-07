@@ -83,7 +83,7 @@ export function getCacheStats() {
 }
 
 // ExecutionMode from mode-registry (8 modes - NO ralplan)
-const EXECUTION_MODES = [
+const _EXECUTION_MODES = [
   'autopilot', 'ultrapilot', 'swarm', 'pipeline', 'team',
   'ralph', 'ultrawork', 'ultraqa'
 ] as const;

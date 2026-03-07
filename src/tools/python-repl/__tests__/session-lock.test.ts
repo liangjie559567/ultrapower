@@ -47,7 +47,7 @@ vi.mock('../../../platform/index.js', () => ({
 import {
   SessionLock,
   LockTimeoutError,
-  LockError,
+  LockError as _LockError,
   withLock,
   getLockStatus,
   isProcessAlive,

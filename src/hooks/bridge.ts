@@ -20,7 +20,7 @@ import { join } from "path";
 import { resolveToWorktreeRoot } from "../lib/worktree-paths.js";
 import { auditLogger } from "../audit/logger.js";
 import { safeJsonParse } from "../lib/safe-json.js";
-import { assertValidDirectory } from "../lib/validateMode.js";
+import { assertValidDirectory as _assertValidDirectory } from "../lib/validateMode.js";
 
 // Hot-path imports: needed on every/most hook invocations (keyword-detector, pre/post-tool-use)
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
@@ -119,12 +119,29 @@ function watchFile(path: string): void {
     const watcher = watch(path, () => {
       fileCache.delete(path);
     });
-    watcher.on('error', () => {
+    watcher.on('error', (err: Error) => {
       watchers.delete(path);
+      import("../audit/logger.js").then(({ auditLogger }) => {
+        auditLogger.log({
+          actor: "bridge",
+          action: "file-watch-error",
+          resource: path,
+          result: "failure",
+          metadata: { error: err.message }
+        }).catch(() => {});
+      });
     });
     watchers.set(path, watcher);
-  } catch {
-    // Ignore watch errors
+  } catch (err: unknown) {
+    import("../audit/logger.js").then(({ auditLogger }) => {
+      auditLogger.log({
+        actor: "bridge",
+        action: "file-watch-setup-error",
+        resource: path,
+        result: "failure",
+        metadata: { error: err instanceof Error ? err.message : String(err) }
+      }).catch(() => {});
+    });
   }
 }
 
@@ -133,6 +150,9 @@ async function readFileCached(path: string): Promise<string> {
   if (cached !== undefined) return cached;
 
   const content = await readFile(path, "utf-8");
+  const recheck = fileCache.get(path);
+  if (recheck !== undefined) return recheck;
+
   fileCache.set(path, content);
   watchFile(path);
   return content;
@@ -170,30 +190,30 @@ async function readTeamStagedState(
     : [join(stateDir, "team-state.json")];
 
   for (const statePath of statePaths) {
-    if (!existsSync(statePath)) {
+    try {
+      const content = await readFile(statePath, "utf-8");
+      const result = safeJsonParse<TeamStagedState>(content, statePath);
+
+      if (!result.success || typeof result.data !== "object" || result.data === null) {
+        continue;
+      }
+
+      const stateSessionId = result.data.session_id || result.data.sessionId;
+      if (sessionId && stateSessionId && stateSessionId !== sessionId) {
+        continue;
+      }
+
+      return result.data;
+    } catch {
       continue;
     }
-
-    const content = await readFileCached(statePath);
-    const result = safeJsonParse<TeamStagedState>(content, statePath);
-
-    if (!result.success || typeof result.data !== "object" || result.data === null) {
-      continue;
-    }
-
-    const stateSessionId = result.data.session_id || result.data.sessionId;
-    if (sessionId && stateSessionId && stateSessionId !== sessionId) {
-      continue;
-    }
-
-    return result.data;
   }
 
   return null;
 }
 
 // Backward compatibility: sync version for non-async contexts
-function readTeamStagedStateSync(
+function _readTeamStagedStateSync(
   directory: string,
   sessionId?: string,
 ): TeamStagedState | null {
@@ -564,11 +584,29 @@ async function processPersistentMode(input: HookInput): Promise<HookOutput> {
             projectPath: directory,
             profileName: process.env.OMC_NOTIFY_PROFILE,
           }).catch((err) => {
+            import("../audit/logger.js").then(({ auditLogger }) => {
+              auditLogger.log({
+                actor: "bridge",
+                action: "session-idle-notification",
+                resource: sessionId,
+                result: "failure",
+                metadata: { error: err.message }
+              }).catch(() => {});
+            });
             if (process.env.OMC_DEBUG) {
               console.error(`[bridge] session-idle notification failed: ${err.message}`);
             }
           })
         ).catch((err) => {
+          import("../audit/logger.js").then(({ auditLogger }) => {
+            auditLogger.log({
+              actor: "bridge",
+              action: "notification-import",
+              resource: "notifications/index.js",
+              result: "failure",
+              metadata: { error: err.message }
+            }).catch(() => {});
+          });
           if (process.env.OMC_DEBUG) {
             console.error(`[bridge] notification import failed: ${err.message}`);
           }

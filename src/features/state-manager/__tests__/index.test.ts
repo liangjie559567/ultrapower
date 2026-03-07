@@ -1,6 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
+import { describe, it, expect } from 'vitest';
 import {
   isStateStale,
   createStateManager,

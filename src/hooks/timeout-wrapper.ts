@@ -7,7 +7,7 @@ export interface TimeoutOptions {
   timeoutMs: number;
   label: string;
   onTimeout?: (elapsed: number) => void;
-  fallback?: () => any;
+  fallback?: () => unknown;
 }
 
 /**
@@ -43,7 +43,7 @@ export async function withTimeout<T>(
       if (onTimeout) {
         onTimeout(elapsed);
       }
-      return fallback?.();
+      return fallback?.() as T | undefined;
     }
 
     throw error;
@@ -65,7 +65,7 @@ export function withTimeoutSync<T>(
   } catch (error) {
     const elapsed = Date.now() - startTime;
     console.warn(`[hook-bridge] ${label} error after ${elapsed}ms:`, error);
-    return fallback?.();
+    return fallback?.() as T | undefined;
   }
 }
 

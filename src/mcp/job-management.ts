@@ -27,7 +27,7 @@ import { isSpawnedPid as isGeminiSpawnedPid } from './gemini-core.js';
 import { isJobDbInitialized, getJob, getActiveJobs as getActiveJobsFromDb, getJobsByStatus, updateJobStatus } from './job-state-db.js';
 import { createWorkerAdapter } from '../workers/factory.js';
 import type { WorkerStateAdapter } from '../workers/adapter.js';
-import type { WorkerState } from '../workers/types.js';
+import type { WorkerState, WorkerStatus } from '../workers/types.js';
 
 /** Signals allowed for kill_job. SIGKILL excluded - too dangerous for process groups. */
 const ALLOWED_SIGNALS: ReadonlySet<string> = new Set(['SIGTERM', 'SIGINT']);
@@ -64,12 +64,12 @@ async function getAdapter(cwd?: string): Promise<WorkerStateAdapter | null> {
 /**
  * Convert JobStatus to WorkerState
  */
-function jobStatusToWorkerState(job: JobStatus): WorkerState {
+function _jobStatusToWorkerState(job: JobStatus): WorkerState {
   return {
     workerId: `${job.provider}:${job.jobId}`,
     workerType: 'mcp',
     name: job.jobId,
-    status: job.status as any,
+    status: job.status as WorkerStatus,
     pid: job.pid,
     spawnedAt: job.spawnedAt,
     lastHeartbeatAt: job.completedAt,
@@ -680,7 +680,7 @@ export async function handleListJobs(
   // Try WorkerStateAdapter first
   const adapter = await getAdapter();
   if (adapter) {
-    let statusArray: any[] = [];
+    let statusArray: Array<'spawned' | 'running' | 'completed' | 'failed' | 'timeout'> = [];
     if (statusFilter === 'active') {
       statusArray = ['spawned', 'running'];
     } else if (statusFilter === 'completed') {

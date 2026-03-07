@@ -7,7 +7,7 @@ import { join } from 'path';
 import type { WorkerState, WorkerFilter, HealthStatus, WorkerStatus } from './types.js';
 import type { WorkerStateAdapter } from './adapter.js';
 
-type Database = any;
+type Database = import('better-sqlite3').Database;
 
 export class SqliteWorkerAdapter implements WorkerStateAdapter {
   private db: Database | null = null;
@@ -20,17 +20,17 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
   async init(): Promise<boolean> {
     try {
       const betterSqlite3Module = await import('better-sqlite3');
-      const Database = (betterSqlite3Module as any).default || betterSqlite3Module;
+      const DatabaseConstructor = betterSqlite3Module.default || betterSqlite3Module;
       const stateDir = join(this.cwd, '.omc', 'state');
       if (!existsSync(stateDir)) {
         mkdirSync(stateDir, { recursive: true });
       }
 
       const dbPath = join(stateDir, 'workers.db');
-      this.db = new Database(dbPath);
-      this.db.pragma('journal_mode = WAL');
-
-      this.db.exec(`
+      this.db = new (DatabaseConstructor as any)(dbPath) as Database;
+      if (this.db) {
+        this.db.pragma('journal_mode = WAL');
+        this.db.exec(`
         CREATE TABLE IF NOT EXISTS workers (
           worker_id TEXT PRIMARY KEY,
           worker_type TEXT NOT NULL,
@@ -56,6 +56,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
         CREATE INDEX IF NOT EXISTS idx_status ON workers(status);
         CREATE INDEX IF NOT EXISTS idx_team_name ON workers(team_name);
       `);
+      }
 
       return true;
     } catch (error) {

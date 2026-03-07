@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { checkPreTool, isRestrictedTool } from '../pre-tool.js';
 import { PostToolGuard } from '../post-tool.js';
 import { SessionWatchdog } from '../session-watchdog.js';
-import { StatusDashboard } from '../status-dashboard.js';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import * as os from 'os';

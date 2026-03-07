@@ -73,9 +73,10 @@ describe('MCPClient', () => {
 
       await client.connect('uvx', ['test-server']);
 
-      expect(mockSpawn).toHaveBeenCalledWith('uvx', ['test-server'], {
+      expect(MockTransport).toHaveBeenCalledWith({
+        command: 'uvx',
+        args: ['test-server'],
         env: undefined,
-        stdio: ['pipe', 'pipe', 'pipe'],
       });
       expect(mockClient.connect).toHaveBeenCalledWith(mockTransport);
       expect(client.isAvailable()).toBe(true);
@@ -87,9 +88,10 @@ describe('MCPClient', () => {
 
       await client.connect('uvx', ['test-server'], customEnv);
 
-      expect(mockSpawn).toHaveBeenCalledWith('uvx', ['test-server'], {
-        env: expect.objectContaining(customEnv),
-        stdio: ['pipe', 'pipe', 'pipe'],
+      expect(MockTransport).toHaveBeenCalledWith({
+        command: 'uvx',
+        args: ['test-server'],
+        env: customEnv,
       });
     });
 
@@ -253,7 +255,6 @@ describe('MCPClient', () => {
       await client.disconnect();
 
       expect(mockClient.close).toHaveBeenCalled();
-      expect(mockProcess.kill).toHaveBeenCalled();
     });
 
     it('should be idempotent', async () => {
@@ -265,7 +266,6 @@ describe('MCPClient', () => {
       await client.disconnect();
 
       expect(mockClient.close).toHaveBeenCalledTimes(1);
-      expect(mockProcess.kill).toHaveBeenCalledTimes(1);
     });
 
     it('should handle disconnect when not connected', async () => {
@@ -320,7 +320,7 @@ describe('MCPClient', () => {
       await client1.connect('uvx', ['server1']);
       await client2.connect('uvx', ['server2']);
 
-      expect(mockSpawn).toHaveBeenCalledTimes(2);
+      expect(MockTransport).toHaveBeenCalledTimes(2);
     });
   });
 

@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
-import { homedir, tmpdir } from 'os';
+import { tmpdir } from 'os';
 import { randomBytes } from 'crypto';
 
 // Mock getClaudeConfigDir before importing the module under test
@@ -16,6 +16,7 @@ import { randomBytes } from 'crypto';
 let testClaudeDir = '';
 vi.mock('../utils/paths.js', () => ({
   getClaudeConfigDir: () => testClaudeDir,
+  toForwardSlash: (path: string) => path.replace(/\\/g, '/'),
 }));
 
 // Import after mock setup

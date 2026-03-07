@@ -1,6 +1,5 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { spawn, ChildProcess } from 'child_process';
 
 interface MCPTool {
   name: string;
@@ -11,7 +10,6 @@ interface MCPTool {
 export class MCPClient {
   private client: Client;
   private transport: StdioClientTransport | null = null;
-  private process: ChildProcess | null = null;
   private toolsCache: MCPTool[] | null = null;
   private connected = false;
   private available = true;
@@ -38,7 +36,6 @@ export class MCPClient {
         return;
       } catch (error) {
         console.error(`Connection attempt ${attempt + 1}/${maxRetries} failed:`, error);
-        this.process?.kill();
 
         if (attempt < maxRetries - 1) {
           await new Promise(resolve => setTimeout(resolve, delays[attempt]));
@@ -52,13 +49,6 @@ export class MCPClient {
 
   private async attemptConnect(command: string, args: string[], env?: Record<string, string>): Promise<void> {
     try {
-      const mergedEnv = env ? { ...process.env, ...env } : undefined;
-
-      this.process = spawn(command, args, {
-        env: mergedEnv,
-        stdio: ['pipe', 'pipe', 'pipe'],
-      });
-
       this.transport = new StdioClientTransport({
         command,
         args,
@@ -100,12 +90,22 @@ export class MCPClient {
     try {
       if (this.transport) {
         await this.client.close();
+
+        const proc = (this.transport as unknown as { _process?: { killed: boolean; kill: (signal: string) => void; once: (event: string, listener: () => void) => void } })._process;
+        if (proc && !proc.killed) {
+          proc.kill('SIGTERM');
+
+          await Promise.race([
+            new Promise<void>(resolve => proc.once('exit', () => resolve())),
+            new Promise(resolve => setTimeout(() => {
+              if (!proc.killed) proc.kill('SIGKILL');
+              resolve(undefined);
+            }, 5000))
+          ]);
+        }
+
         this.transport = null;
         this.toolsCache = null;
-      }
-      if (this.process) {
-        this.process.kill();
-        this.process = null;
       }
     } finally {
       this.connected = false;

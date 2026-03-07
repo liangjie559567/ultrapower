@@ -1,5 +1,5 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'fs';
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync as _mkdirSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { EventEmitter } from 'node:events';
@@ -70,7 +70,7 @@ import {
   buildTaskPrompt,
   diffSnapshots,
   readOutputSummary,
-  sanitizePromptContent,
+  sanitizePromptContent as _sanitizePromptContent,
   spawnCliProcess,
   runBridge,
 } from '../mcp-team-bridge.js';

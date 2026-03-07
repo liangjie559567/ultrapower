@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi as _vi, beforeEach, afterEach } from 'vitest';
 import { readFileSync, existsSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir, homedir } from 'os';
@@ -300,7 +300,7 @@ describe('validateAndNormalizeConfig', () => {
     // Initialize git repo to satisfy worktree check
     try {
       require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
-    } catch (e) {
+    } catch (_e) {
       // Ignore if git init fails
     }
   });
@@ -531,7 +531,7 @@ describe('loadConfigFromFile', () => {
     mkdirSync(testDir, { recursive: true });
     try {
       require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
-    } catch (e) {
+    } catch (_e) {
       // Ignore if git init fails
     }
   });
@@ -621,7 +621,7 @@ describe('validateAndNormalizeConfig — permission edge cases', () => {
     mkdirSync(testDir, { recursive: true });
     try {
       require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
-    } catch (e) {
+    } catch (_e) {
       // Ignore if git init fails
     }
   });
@@ -711,7 +711,7 @@ describe('full config loading flow', () => {
     mkdirSync(testDir, { recursive: true });
     try {
       require('child_process').execSync('git init', { cwd: testDir, stdio: 'ignore' });
-    } catch (e) {
+    } catch (_e) {
       // Ignore if git init fails
     }
   });

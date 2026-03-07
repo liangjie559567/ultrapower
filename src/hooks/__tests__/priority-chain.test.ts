@@ -8,9 +8,9 @@
  * Ralph (P1) > Autopilot (P1.5) > Ultrawork (P2) > stop-continuation (P3)
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { processHook, type HookInput, type HookType } from '../bridge.js';
-import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+import { existsSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
@@ -253,7 +253,7 @@ describe('Hook Priority Chain', () => {
   describe('Hook Execution Order Validation', () => {
     it('should execute hooks in priority order during Stop phase', async () => {
       const sessionId = 'test-execution-order';
-      const executionLog: string[] = [];
+      const _executionLog: string[] = [];
 
       // Activate all stop-phase modes
       const ralphStatePath = join(omcStateDir, 'ralph-state.json');

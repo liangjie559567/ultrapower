@@ -42,7 +42,7 @@ describe('worker-restart', () => {
     await new Promise(resolve => setTimeout(resolve, 200));
     try {
       rmSync(testDir, { recursive: true, force: true });
-    } catch (e) {
+    } catch (_e) {
       // Ignore cleanup errors on Windows
     }
   });

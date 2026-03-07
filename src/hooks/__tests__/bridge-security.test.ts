@@ -793,7 +793,7 @@ describe('T003: Hook Input Whitelist Enforcement', () => {
 
       try {
         normalizeHookInput(raw, hookType);
-      } catch (e) {
+      } catch (_e) {
         // Some hooks may throw due to missing required keys, that's expected
       }
 

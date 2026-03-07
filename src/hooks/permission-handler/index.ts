@@ -115,7 +115,7 @@ export function isHeredocWithSafeBase(command: string): boolean {
 /**
  * Classify Bash command sensitivity
  */
-function classifyBashCommand(command: string): SensitivityLevel {
+function _classifyBashCommand(command: string): SensitivityLevel {
   const CRITICAL_PATTERNS = [
     /rm\s+-rf\s+\//,
     /sudo\s+rm/,
@@ -142,7 +142,7 @@ function classifyBashCommand(command: string): SensitivityLevel {
 /**
  * Classify file path sensitivity
  */
-function classifyFilePath(filePath: string): SensitivityLevel {
+function _classifyFilePath(filePath: string): SensitivityLevel {
   if (filePath.startsWith('/etc/') || filePath.startsWith('/usr/bin/')) return 'high';
   if (filePath.includes('.env') || filePath.includes('config')) return 'medium';
   return 'low';

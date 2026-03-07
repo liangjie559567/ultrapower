@@ -5,13 +5,15 @@
  * file ownership, and progress.
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, mkdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import type { UltrapilotState, UltrapilotConfig, WorkerState, FileOwnership } from './types.js';
 import { DEFAULT_CONFIG } from './types.js';
 import { canStartMode } from '../mode-registry/index.js';
 import { resolveSessionStatePath, ensureSessionStateDir } from '../../lib/worktree-paths.js';
 import { safeJsonParse } from '../../lib/safe-json.js';
+import { atomicWriteJsonSync } from '../../lib/atomic-write.js';
+import { withFileLock } from '../../lib/file-lock.js';
 
 const STATE_FILE = 'ultrapilot-state.json';
 const OWNERSHIP_FILE = 'ultrapilot-ownership.json';
@@ -93,14 +95,20 @@ export function readUltrapilotState(directory: string, sessionId?: string): Ultr
  * Write ultrapilot state to disk
  */
 export function writeUltrapilotState(directory: string, state: UltrapilotState, sessionId?: string): boolean {
-  try {
-    ensureStateDir(directory, sessionId);
-    const stateFile = getStateFilePath(directory, sessionId);
-    writeFileSync(stateFile, JSON.stringify(state, null, 2));
-    return true;
-  } catch {
+  ensureStateDir(directory, sessionId);
+  const stateFile = getStateFilePath(directory, sessionId);
+
+  return withFileLock(stateFile, () => {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        atomicWriteJsonSync(stateFile, state);
+        return true;
+      } catch (_err) {
+        if (attempt === 3) return false;
+      }
+    }
     return false;
-  }
+  });
 }
 
 /**
@@ -306,14 +314,18 @@ export function readFileOwnership(directory: string, sessionId?: string): FileOw
  * Write file ownership mapping
  */
 export function writeFileOwnership(directory: string, ownership: FileOwnership, sessionId?: string): boolean {
-  try {
-    ensureStateDir(directory, sessionId);
-    const ownershipFile = getOwnershipFilePath(directory, sessionId);
-    writeFileSync(ownershipFile, JSON.stringify(ownership, null, 2));
-    return true;
-  } catch {
-    return false;
+  ensureStateDir(directory, sessionId);
+  const ownershipFile = getOwnershipFilePath(directory, sessionId);
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      atomicWriteJsonSync(ownershipFile, ownership);
+      return true;
+    } catch (_err) {
+      if (attempt === 3) return false;
+    }
   }
+  return false;
 }
 
 /**

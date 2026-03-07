@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { mkdirSync, rmSync, writeFileSync } from "fs";
+import { mkdirSync, rmSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
 

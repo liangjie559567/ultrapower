@@ -33,12 +33,12 @@ const mockExistsSync = vi.mocked(existsSync);
 const mockReadFileSync = vi.mocked(readFileSync);
 const mockAtomicWriteJsonSync = vi.mocked(atomicWriteJsonSync);
 
-const REGISTRY_PATH_SUFFIX = join('.claude', 'plugins', 'installed_plugins.json');
+const _REGISTRY_PATH_SUFFIX = join('.claude', 'plugins', 'installed_plugins.json');
 
 import { join } from 'path';
 import { homedir } from 'os';
 
-const REGISTRY_PATH = join(homedir(), '.claude', 'plugins', 'installed_plugins.json');
+const _REGISTRY_PATH = join(homedir(), '.claude', 'plugins', 'installed_plugins.json');
 
 function makeRegistry(version: string, installPath = '/mock/install/path') {
   return {

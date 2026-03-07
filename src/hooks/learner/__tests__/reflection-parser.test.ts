@@ -12,7 +12,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { parseReflectionLog, type ReflectionBlock } from '../reflection-parser.js';
+import { parseReflectionLog } from '../reflection-parser.js';
 
 // ── 辅助：构造一个标准反思块字符串 ──────────────────────────────────────────
 function makeBlock(

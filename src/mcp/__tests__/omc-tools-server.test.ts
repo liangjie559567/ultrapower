@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { parseDisabledGroups, getOmcToolNames, DISABLE_TOOLS_GROUP_MAP } from '../omc-tools-server.js';
 import { TOOL_CATEGORIES } from '../../constants/index.js';
 

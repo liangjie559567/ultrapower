@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { decomposeTask, DEFAULT_CONFIG, assignFileToWorker, isFileOwnedByWorker, isSharedFile, handleSharedFiles, startUltrapilot, integrateResults } from '../index.js';
+import { decomposeTask, DEFAULT_CONFIG, assignFileToWorker, isSharedFile, handleSharedFiles, startUltrapilot, integrateResults } from '../index.js';
 import { writeUltrapilotState, initUltrapilot } from '../state.js';
 import * as fs from 'fs';
 import * as path from 'path';

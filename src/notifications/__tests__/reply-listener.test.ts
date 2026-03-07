@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { existsSync, mkdirSync, writeFileSync, unlinkSync, rmSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync, rmSync } from "fs";
 import { join } from "path";
-import { tmpdir, homedir } from "os";
+import { tmpdir } from "os";
 
 vi.mock('../../features/rate-limit-wait/tmux-detector.js', () => ({
   capturePaneContent: vi.fn(() => 'Claude Code'),

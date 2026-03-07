@@ -5,7 +5,7 @@ export interface Metric {
   timestamp: number;
   type: 'build' | 'worker_health' | 'worker_status' | 'lsp_init' | 'memory';
   value: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class MetricsCollector {
@@ -22,7 +22,7 @@ export class MetricsCollector {
     }
   }
 
-  record(type: Metric['type'], value: number, metadata?: Record<string, any>): void {
+  record(type: Metric['type'], value: number, metadata?: Record<string, unknown>): void {
     const metric: Metric = {
       timestamp: Date.now(),
       type,

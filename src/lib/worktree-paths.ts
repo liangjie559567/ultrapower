@@ -385,6 +385,10 @@ export function ensureSessionStateDir(sessionId: string, worktreeRoot?: string):
  */
 export function resolveToWorktreeRoot(directory?: string): string {
   if (directory) {
+    // Validate directory parameter to prevent path traversal
+    if (directory.includes('..')) {
+      throw new Error(`Path traversal detected in directory: ${directory}`);
+    }
     const resolved = resolve(directory);
     const root = getWorktreeRoot(resolved);
     if (root) return root;

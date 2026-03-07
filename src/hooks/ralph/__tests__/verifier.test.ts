@@ -4,7 +4,6 @@ import { join } from 'path';
 import {
   readVerificationState,
   writeVerificationState,
-  clearVerificationState,
   startVerification,
   recordArchitectFeedback,
   detectArchitectApproval,

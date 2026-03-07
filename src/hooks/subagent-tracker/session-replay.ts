@@ -184,7 +184,7 @@ export function recordAgentStart(
   try {
     assertValidSessionId(sessionId);
     assertValidAgentId(agentId);
-  } catch (err) {
+  } catch (_err) {
     // Validation failed - skip recording to prevent path traversal
     return;
   }
@@ -212,7 +212,7 @@ export function recordAgentStop(
   try {
     assertValidSessionId(sessionId);
     assertValidAgentId(agentId);
-  } catch (err) {
+  } catch (_err) {
     // Validation failed - skip recording to prevent path traversal
     return;
   }

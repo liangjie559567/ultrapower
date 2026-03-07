@@ -2,7 +2,7 @@
  * Tests for job-management.ts with WorkerStateAdapter
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { handleCheckJobStatus, handleListJobs } from '../job-management.js';
 
 describe('job-management with WorkerStateAdapter', () => {

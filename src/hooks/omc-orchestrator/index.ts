@@ -9,7 +9,6 @@
  */
 
 import * as path from 'path';
-import { execSync } from 'child_process';
 import { getClaudeConfigDir } from '../../utils/paths.js';
 import { existsSync, readFileSync } from 'fs';
 import {
@@ -167,6 +166,7 @@ export function isWriteEditTool(toolName: string): boolean {
  */
 export function getGitDiffStats(directory: string): GitFileStat[] {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { getStatusAndDiff } = require('../../lib/git-utils.js');
     const { status: statusOutput, diffStats: output } = getStatusAndDiff(directory);
 

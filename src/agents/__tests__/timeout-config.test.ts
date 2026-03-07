@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { getAgentTimeout, DEFAULT_TIMEOUT_CONFIG } from '../timeout-config.js';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { getAgentTimeout } from '../timeout-config.js';
 
 describe('timeout-config', () => {
   beforeEach(() => {

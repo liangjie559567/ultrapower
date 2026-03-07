@@ -10,7 +10,7 @@ interface AuditEntry {
   action: string;
   resource: string;
   result: 'success' | 'failure';
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   signature?: string;
 }
 
@@ -57,8 +57,8 @@ class AuditLogger {
         const rotatedPath = `${this.logPath}.${Date.now()}`;
         await fs.promises.rename(this.logPath, rotatedPath);
       }
-    } catch (err: any) {
-      if (err.code !== 'ENOENT') throw err;
+    } catch (err: unknown) {
+      if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
     }
   }
 
@@ -88,8 +88,8 @@ class AuditLogger {
       }
 
       return { valid, invalid };
-    } catch (err: any) {
-      if (err.code === 'ENOENT') return { valid: 0, invalid: 0 };
+    } catch (err: unknown) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') return { valid: 0, invalid: 0 };
       throw err;
     }
   }

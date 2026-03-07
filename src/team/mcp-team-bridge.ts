@@ -302,7 +302,7 @@ function parseCodexOutput(output: string): string {
     const result = safeJsonParse(line);
     if (!result.success) continue;
 
-    const event = result.data as any;
+    const event = result.data as { type?: string; item?: { type?: string; text?: string }; content?: string | Array<{ type?: string; text?: string }>; text?: string };
     if (event.type === 'item.completed' && event.item?.type === 'agent_message' && event.item.text) {
       messages.push(event.item.text);
       totalSize += event.item.text.length;

@@ -18,7 +18,7 @@ import { SIZE_LIMIT } from '../lib/constants.js';
  * Validate model name format (alphanumeric, hyphens, dots, max 100 chars)
  */
 function isValidModelName(name: string): boolean {
-  return /^[a-zA-Z0-9.\-]{1,100}$/.test(name);
+  return /^[a-zA-Z0-9.-]{1,100}$/.test(name);
 }
 
 /**
