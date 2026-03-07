@@ -6,6 +6,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { atomicWriteJson } from './atomic-write.js';
 
 interface LockMeta {
   pid: number;
@@ -76,41 +77,85 @@ export async function acquireLock(
 }
 
 /**
- * 在文件锁保护下执行同步操作
+ * 在文件锁保护下执行异步操作
  */
-export function withFileLock<T>(filePath: string, fn: () => T): T {
+export async function withFileLock<T>(
+  filePath: string,
+  fn: () => T | Promise<T>,
+  maxRetries: number = 20,
+  retryDelay: number = 100
+): Promise<T> {
   const lockPath = `${filePath}.lock`;
   const lockFile = path.join(lockPath, 'lock.json');
 
-  try {
-    fs.mkdirSync(lockPath);
-  } catch (err) {
-    const nodeErr = err as NodeJS.ErrnoException;
-    if (nodeErr.code === 'EEXIST') {
-      let meta: LockMeta | null = null;
-      try {
-        const raw = fs.readFileSync(lockFile, 'utf8');
-        meta = JSON.parse(raw) as LockMeta;
-      } catch {
-        // Ignore parse errors, treat as stale lock
-      }
+  // Ensure parent directories exist (use sync to avoid Windows async mkdir issues)
+  const fileDir = path.dirname(filePath);
+  if (!fs.existsSync(fileDir)) {
+    fs.mkdirSync(fileDir, { recursive: true });
+  }
 
-      const isStale = meta === null || Date.now() - meta.timestamp > 30000;
-      if (isStale) {
-        fs.rmSync(lockPath, { recursive: true, force: true });
-        return withFileLock(filePath, fn);
+  let lastError: Error | null = null;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      await fs.promises.mkdir(lockPath);
+      break; // Lock acquired
+    } catch (err) {
+      const nodeErr = err as NodeJS.ErrnoException;
+      if (nodeErr.code === 'EEXIST') {
+        let meta: LockMeta | null = null;
+        try {
+          const raw = await fs.promises.readFile(lockFile, 'utf8');
+          meta = JSON.parse(raw) as LockMeta;
+        } catch {
+          // Ignore parse errors, treat as stale lock
+        }
+
+        const isStale = meta === null || Date.now() - meta.timestamp > 30000;
+        if (isStale) {
+          await fs.promises.rm(lockPath, { recursive: true, force: true });
+          continue; // Retry immediately
+        }
+
+        // Lock is held by another process, retry with delay
+        if (attempt < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
+          continue;
+        }
+        lastError = new Error(`[file-lock] 锁已被占用: ${lockPath}`);
+      } else {
+        throw err;
       }
-      throw new Error(`[file-lock] 锁已被占用: ${lockPath}`);
     }
-    throw err;
+  }
+
+  if (lastError) {
+    throw lastError;
   }
 
   const meta: LockMeta = { pid: process.pid, timestamp: Date.now() };
-  fs.writeFileSync(lockFile, JSON.stringify(meta), 'utf8');
+  try {
+    await fs.promises.writeFile(lockFile, JSON.stringify(meta), 'utf8');
+  } catch (writeErr) {
+    const nodeErr = writeErr as NodeJS.ErrnoException;
+    if (nodeErr.code === 'ENOENT') {
+      // Lock directory was deleted between mkdir and writeFile
+      await fs.promises.rm(lockPath, { recursive: true, force: true });
+      return withFileLock(filePath, fn);
+    }
+    throw writeErr;
+  }
 
   try {
-    return fn();
+    return await fn();
   } finally {
-    fs.rmSync(lockPath, { recursive: true, force: true });
+    try {
+      await fs.promises.rm(lockPath, { recursive: true, force: true });
+    } catch (err) {
+      const nodeErr = err as NodeJS.ErrnoException;
+      if (nodeErr.code !== 'ENOENT') {
+        // Ignore ENOENT (already deleted), rethrow others
+        throw err;
+      }
+    }
   }
 }

@@ -1,3 +1,18 @@
+# ultrapower v5.5.31
+
+**发布日期**: 2026-03-07
+
+## Bug Fixes
+
+- **测试异步调用修复** - 修复测试文件中的异步调用问题
+  - 修复 `ultrapilot/index.test.ts` 中 1 处缺失 await
+  - 修复 `autopilot/transitions.test.ts` 中 17 处重复 `await await`
+  - 修复 `autopilot/enforcement.test.ts` 中 Windows 文件锁问题（异步清理+重试）
+  - 修复 `autopilot/cancel.test.ts` 中 4 处重复 `await await`
+  - 所有 6278 个测试通过
+
+---
+
 # ultrapower v5.5.30
 
 **发布日期**: 2026-03-06

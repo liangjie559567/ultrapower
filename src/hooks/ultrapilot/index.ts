@@ -71,7 +71,7 @@ export async function startUltrapilot(
   const subtasks = await decomposeTask(task, mergedConfig);
 
   // Initialize state
-  const state = initUltrapilot(cwd, task, subtasks, sessionId, mergedConfig);
+  const state = await initUltrapilot(cwd, task, subtasks, sessionId, mergedConfig);
   if (!state) {
     throw new Error('Failed to initialize ultrapilot: another mode is active');
   }
@@ -396,7 +396,7 @@ export async function handleSharedFiles(
     }
   }
 
-  return writeUltrapilotState(cwd, state);
+  return await writeUltrapilotState(cwd, state);
 }
 
 /**
@@ -429,11 +429,11 @@ export function isSharedFile(cwd: string, filePath: string): boolean {
 /**
  * Assign file ownership to a worker
  */
-export function assignFileToWorker(
+export async function assignFileToWorker(
   cwd: string,
   workerId: string,
   filePath: string
-): boolean {
+): Promise<boolean> {
   const state = readUltrapilotState(cwd);
   if (!state) return false;
 
@@ -444,7 +444,7 @@ export function assignFileToWorker(
 
   for (const [id, files] of Object.entries(state.ownership.workers)) {
     if (id !== workerId && files.includes(filePath)) {
-      recordConflict(cwd, filePath);
+      await recordConflict(cwd, filePath);
       return false; // Already owned by another worker
     }
   }
@@ -458,7 +458,7 @@ export function assignFileToWorker(
     state.ownership.workers[workerId].push(filePath);
   }
 
-  return writeUltrapilotState(cwd, state);
+  return await writeUltrapilotState(cwd, state);
 }
 
 // Re-export types and state management functions
