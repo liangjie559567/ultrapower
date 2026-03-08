@@ -1,3 +1,29 @@
+# ultrapower v5.5.39
+
+**发布日期**: 2026-03-08
+
+## Bug Fixes
+
+- **HUD 不显示问题修复** - 恢复缺失的 statusline 配置
+  - 根因：`.claude-plugin/plugin.json` 缺少 `statusline` 字段
+  - 影响：用户安装插件后 HUD 无法显示
+  - 修复：添加 `statusline.command` 和 `statusline.args` 配置
+  - Commit: 58b28a9a
+
+- **插件配置同步** - 修复多个配置文件不一致问题
+  - `.cursor-plugin/plugin.json` 包含错误的 superpowers 配置，已同步为 ultrapower
+  - `marketplace.json` 版本不一致（source.version: 5.5.35 → 5.5.38）
+  - 确保所有插件清单包含 statusline 配置
+  - Commit: 149031aa
+
+- **版本同步脚本增强** - 防止未来配置丢失
+  - `bump-version.mjs` 新增 `.cursor-plugin/plugin.json` 同步
+  - 现在同步 5 个文件：package.json, .claude-plugin/plugin.json, .cursor-plugin/plugin.json, marketplace.json (两个)
+  - 版本验证包含 cursorPlugin 字段检查
+  - Commit: 15b98e46
+
+---
+
 # ultrapower v5.5.34
 
 **发布日期**: 2026-03-08
