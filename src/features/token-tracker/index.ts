@@ -40,7 +40,9 @@ async function updateSessionIndex(sessionId: string): Promise<void> {
     try {
       const stats = await readFile(TOKEN_LOG_FILE, 'utf-8');
       offset = stats.length;
-    } catch {}
+    } catch {
+      // File doesn't exist yet, start from 0
+    }
     index.sessions[sessionId] = { offset, count: 0, lastUpdate: Date.now() };
   }
   index.sessions[sessionId].count++;
@@ -79,7 +81,9 @@ export async function getSessionStats(sessionId: string): Promise<Stats> {
       stats.models[record.model].input += record.inputTokens;
       stats.models[record.model].output += record.outputTokens;
     }
-  } catch {}
+  } catch {
+    // Failed to read log file, return empty stats
+  }
 
   return stats;
 }
