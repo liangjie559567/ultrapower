@@ -1,3 +1,33 @@
+# ultrapower v5.5.34
+
+**发布日期**: 2026-03-08
+
+## Documentation
+
+- **文档同步到 v5.5.33** - 全面更新文档以匹配实际实现
+  - 同步版本号：8 个文档文件从 v5.5.5 更新到 v5.5.33
+  - 修正计数：agents (50→49), hooks (47→43)
+  - 修复路径引用：移除 CLAUDE.md 中的 `./` 前缀
+
+- **文档自动化工具** - 创建 3 个脚本防止未来文档漂移
+  - `scripts/sync-version.mjs`: 从 package.json 同步版本到文档
+  - `scripts/validate-counts.mjs`: 验证 agents/skills/hooks/tools 计数
+  - `scripts/check-links.mjs`: 检查 markdown 文件中的断链
+  - 新增 6 个 npm 脚本：`sync:version`, `validate:counts`, `check:links`（含 `--dry-run` 和 `--fix` 模式）
+
+- **新用户指南** - 改善新用户入门体验
+  - `docs/QUICKSTART.md`: 5 分钟快速入门指南
+  - `docs/AXIOM.md`: 统一的 Axiom 框架文档（14 agents, 14 skills, 完整工作流示例）
+  - 更新 `docs/INSTALL.md`: 添加不支持安装方法的警告
+
+- **Agent 架构文档重写** - 澄清模型路由机制
+  - 重写 `docs/shared/agent-tiers.md` 和 `docs/partials/agent-tiers.md`
+  - 移除误导性的 `-low/-medium/-high` 后缀变体说明
+  - 更新为反映实际的 `model` 参数架构（haiku/sonnet/opus）
+  - 简化 agent 工具矩阵
+
+---
+
 # ultrapower v5.5.33
 
 **发布日期**: 2026-03-08
