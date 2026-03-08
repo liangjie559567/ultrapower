@@ -175,15 +175,16 @@ describe('Windows HUD Platform Fixes (#739)', () => {
   });
 
   // =========================================================================
-  // P1: Git shell option on Windows
+  // P1: Git command execution (spawnSync with parameterized args)
   // =========================================================================
   describe('P1: Git execSync shell option', () => {
-    it('git-utils.ts should use conditional shell option', () => {
+    it('git-utils.ts should use spawnSync with parameterized arguments', () => {
       const content = readFileSync(
         join(packageRoot, 'src', 'lib', 'git-utils.ts'),
         'utf-8',
       );
-      expect(content).toContain("shell: process.platform === 'win32' ? 'cmd.exe' : undefined");
+      expect(content).toContain("spawnSync('git', args,");
+      expect(content).toContain("import { spawnSync } from 'child_process'");
     });
 
     it('shell option logic should produce cmd.exe on win32', () => {

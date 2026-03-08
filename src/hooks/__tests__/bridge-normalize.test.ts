@@ -152,4 +152,94 @@ describe('bridge-normalize', () => {
       expect(result.toolName).toBe('snake');
     });
   });
+
+  describe('boundary tests', () => {
+    it('should handle extremely long string input', () => {
+      const longString = 'a'.repeat(100000);
+      const result = normalizeHookInput({ tool_name: longString });
+      expect(result.toolName).toBe(longString);
+    });
+
+    it('should handle special characters in strings', () => {
+      const specialChars = '!@#$%^&*()[]{}|\\/<>?~`"\';:,.\n\t\r';
+      const result = normalizeHookInput({ tool_name: specialChars });
+      expect(result.toolName).toBe(specialChars);
+    });
+
+    it('should handle unicode and emoji in strings', () => {
+      const unicode = '你好世界🚀🎉';
+      const result = normalizeHookInput({ session_id: unicode });
+      expect(result.sessionId).toBe(unicode);
+    });
+
+    it('should handle empty string values', () => {
+      const result = normalizeHookInput({ tool_name: '' });
+      expect(result.toolName).toBe('');
+    });
+
+    it('should handle undefined values', () => {
+      const result = normalizeHookInput({ tool_name: undefined });
+      expect(result.toolName).toBeUndefined();
+    });
+
+    it('should handle deeply nested objects in tool_input', () => {
+      const nested = { a: { b: { c: { d: { e: 'deep' } } } } };
+      const result = normalizeHookInput({ tool_input: nested });
+      expect(result.toolInput).toEqual(nested);
+    });
+
+    it('should handle large arrays in tool_input', () => {
+      const largeArray = Array(10000).fill({ key: 'value' });
+      const result = normalizeHookInput({ tool_input: largeArray });
+      expect(result.toolInput).toEqual(largeArray);
+    });
+
+    it('should drop unknown fields for sensitive hooks', () => {
+      const input = {
+        session_id: 'test',
+        tool_name: 'test-tool',
+        unknown_field: 'should-be-dropped',
+        another_unknown: 123,
+      };
+      const result = normalizeHookInput(input, 'permission-request');
+      expect(result.sessionId).toBe('test');
+      expect(result.toolName).toBe('test-tool');
+      expect((result as any).unknown_field).toBeUndefined();
+      expect((result as any).another_unknown).toBeUndefined();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Dropped unknown fields')
+      );
+    });
+
+    it('should handle empty object input', () => {
+      const result = normalizeHookInput({});
+      expect(result).toEqual({});
+    });
+
+    it('should handle input with only unknown fields for non-sensitive hooks', () => {
+      const input = { unknown1: 'val1', unknown2: 'val2' };
+      const result = normalizeHookInput(input, 'tool-use');
+      expect((result as any).unknown1).toBe('val1');
+      expect((result as any).unknown2).toBe('val2');
+    });
+
+    it('should handle null values in fields', () => {
+      const result = normalizeHookInput({ tool_name: null });
+      expect(result.toolName).toBeUndefined();
+    });
+
+    it('should handle mixed snake_case and camelCase input', () => {
+      const input = {
+        tool_name: 'snake-tool',
+        sessionId: 'camel-session',
+        cwd: '/snake/path',
+        toolInput: { camel: true },
+      };
+      const result = normalizeHookInput(input);
+      expect(result.toolName).toBe('snake-tool');
+      expect(result.sessionId).toBe('camel-session');
+      expect(result.directory).toBe('/snake/path');
+      expect(result.toolInput).toEqual({ camel: true });
+    });
+  });
 });

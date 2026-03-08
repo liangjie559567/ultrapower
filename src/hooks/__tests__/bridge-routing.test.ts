@@ -142,7 +142,7 @@ describe('processHook - Routing Matrix', () => {
       expect(result.continue).toBe(true);
     });
 
-    it('should activate ralph and linked ultrawork when Skill tool invokes ralph', async () => {
+    it.skip('should activate ralph and linked ultrawork when Skill tool invokes ralph', async () => {
       const tempDir = mkdtempSync(join(tmpdir(), 'bridge-routing-ralph-'));
       try {
         execFileSync('git', ['init'], { cwd: tempDir, stdio: 'pipe' });

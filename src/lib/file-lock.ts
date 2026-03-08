@@ -88,10 +88,15 @@ export async function withFileLock<T>(
   const lockPath = `${filePath}.lock`;
   const lockFile = path.join(lockPath, 'lock.json');
 
-  // Ensure parent directories exist (use sync to avoid Windows async mkdir issues)
+  // Ensure parent directories exist for both file and lock
   const fileDir = path.dirname(filePath);
+  const lockParentDir = path.dirname(lockPath);
+
   if (!fs.existsSync(fileDir)) {
     fs.mkdirSync(fileDir, { recursive: true });
+  }
+  if (!fs.existsSync(lockParentDir)) {
+    fs.mkdirSync(lockParentDir, { recursive: true });
   }
 
   let lastError: Error | null = null;
@@ -116,9 +121,10 @@ export async function withFileLock<T>(
           continue; // Retry immediately
         }
 
-        // Lock is held by another process, retry with delay
+        // Lock is held by another process, retry with exponential backoff + jitter
         if (attempt < maxRetries) {
-          await new Promise(resolve => setTimeout(resolve, retryDelay));
+          const delay = Math.min(100 * Math.pow(2, attempt), 1000) + Math.random() * 50;
+          await new Promise(resolve => setTimeout(resolve, delay));
           continue;
         }
         lastError = new Error(`[file-lock] 锁已被占用: ${lockPath}`);
@@ -148,14 +154,11 @@ export async function withFileLock<T>(
   try {
     return await fn();
   } finally {
-    try {
-      await fs.promises.rm(lockPath, { recursive: true, force: true });
-    } catch (err) {
+    await fs.promises.rm(lockPath, { recursive: true, force: true }).catch((err) => {
       const nodeErr = err as NodeJS.ErrnoException;
       if (nodeErr.code !== 'ENOENT') {
-        // Ignore ENOENT (already deleted), rethrow others
         throw err;
       }
-    }
+    });
   }
 }

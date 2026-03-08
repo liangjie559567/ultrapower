@@ -64,6 +64,11 @@ function getPackageDir(): string {
 }
 
 /**
+ * Process-level prompt cache to avoid repeated file reads
+ */
+const promptCache = new Map<string, string>();
+
+/**
  * Strip YAML frontmatter from markdown content.
  */
 function stripFrontmatter(content: string): string {
@@ -90,11 +95,21 @@ export function loadAgentPrompt(agentName: string, provider?: ExternalModelProvi
 
   // Try provider-specific prompt first
   if (provider) {
+    const cacheKey = `${provider}:${agentName}`;
+
+    // Check cache first
+    if (promptCache.has(cacheKey)) {
+      return promptCache.get(cacheKey)!;
+    }
+
     // Build-time path (CJS bundle)
     try {
       if (provider === 'codex' && typeof __AGENT_PROMPTS_CODEX__ !== 'undefined' && __AGENT_PROMPTS_CODEX__ !== null) {
         const prompt = __AGENT_PROMPTS_CODEX__[agentName];
-        if (prompt) return prompt;
+        if (prompt) {
+          promptCache.set(cacheKey, prompt);
+          return prompt;
+        }
       }
     } catch {
       // __AGENT_PROMPTS_CODEX__ not defined — fall through to runtime file read
@@ -111,7 +126,9 @@ export function loadAgentPrompt(agentName: string, provider?: ExternalModelProvi
       const rel = relative(resolvedProviderDir, resolvedPath);
       if (!rel.startsWith('..') && !isAbsolute(rel)) {
         const content = readFileSync(providerPath, 'utf-8');
-        return stripFrontmatter(content);
+        const prompt = stripFrontmatter(content);
+        promptCache.set(cacheKey, prompt);
+        return prompt;
       }
     } catch {
       // provider-specific not found, fall through to default
@@ -119,10 +136,20 @@ export function loadAgentPrompt(agentName: string, provider?: ExternalModelProvi
   }
 
   // Prefer build-time embedded prompts (always available in CJS bundles)
+  const cacheKey = agentName;
+
+  // Check cache first
+  if (promptCache.has(cacheKey)) {
+    return promptCache.get(cacheKey)!;
+  }
+
   try {
     if (typeof __AGENT_PROMPTS__ !== 'undefined' && __AGENT_PROMPTS__ !== null) {
       const prompt = __AGENT_PROMPTS__[agentName];
-      if (prompt) return prompt;
+      if (prompt) {
+        promptCache.set(cacheKey, prompt);
+        return prompt;
+      }
     }
   } catch {
     // __AGENT_PROMPTS__ not defined — fall through to runtime file read
@@ -142,7 +169,9 @@ export function loadAgentPrompt(agentName: string, provider?: ExternalModelProvi
     }
 
     const content = readFileSync(agentPath, 'utf-8');
-    return stripFrontmatter(content);
+    const prompt = stripFrontmatter(content);
+    promptCache.set(cacheKey, prompt);
+    return prompt;
   } catch (error) {
     // Don't leak internal paths in error messages
     const message = error instanceof Error && error.message.includes('Invalid agent name')

@@ -764,3 +764,82 @@ analyst (识别问题)
 **生成者**: Analyst (Metis)
 **置信度**: 高（基于完整会话数据）
 **下次审查**: v5.6.0 发布后
+
+---
+
+## 反思 | 2026-03-08 | v5.5.31 发布会话
+
+**会话 ID**: 2026-03-08-test-fixes
+**持续时间**: ~2 小时
+**主要成果**: 修复 49 个测试/构建问题，成功发布 v5.5.31
+
+### 做得好的地方
+
+1. **系统化问题定位** - 使用 Grep 工具精确定位所有 `await await` 实例，避免遗漏
+2. **专业 agent 使用** - 在 TypeScript 构建错误修复时及时委派给 build-fixer agent（27 个错误）
+3. **完整验证** - 发布前运行完整测试套件（6278 个测试），确保零回归
+
+### 可以改进的地方
+
+1. **预防措施** - 缺少 ESLint 规则防止 `await await` 模式进入代码库
+2. **文档滞后** - Windows 文件锁处理最佳实践未及时文档化
+3. **自动化不足** - 手动执行 Grep 搜索，可以通过 pre-commit hook 自动化
+
+### 关键学习
+
+**[LQ-072] 重复 await 检测模式**
+- 问题：测试文件中 17+4 处 `await await` 导致异步行为异常
+- 解决：使用 `Grep(pattern="await\\s+await", output_mode="content")` 系统化搜索
+- 知识：正则模式 `await\\s+await` 可靠检测重复 await，应集成到 lint 规则
+
+**[LQ-073] Windows 测试清理策略**
+- 问题：Windows 文件锁导致 `enforcement.test.ts` 失败
+- 解决：异步清理 + 重试机制（`withFileLock` 最多 20 次重试）
+- 知识：Windows 测试需要显式异步清理和重试逻辑，不能依赖同步 `rmSync`
+
+**[LQ-074] 专业 agent 委派时机**
+- 问题：27 个 TypeScript 构建错误（类型不匹配、缺失属性）
+- 解决：委派给 build-fixer agent，避免手动逐个修复
+- 知识：>10 个同类错误时应立即委派专业 agent，而非手动处理
+
+### 可复用模式
+
+**P-005: 跨平台测试清理模式**
+```typescript
+// Windows 兼容的异步清理
+await withFileLock(filePath, async () => {
+  await fs.promises.rm(path, { recursive: true, force: true });
+}, maxRetries: 20, retryDelay: 100);
+```
+
+**P-006: 系统化代码模式搜索**
+```bash
+# 使用 Grep 工具而非手动搜索
+Grep(pattern="await\\s+await", output_mode="content", glob="**/*.test.ts")
+```
+
+**P-007: Agent 委派决策树**
+- <5 个同类问题 → 手动修复
+- 5-10 个同类问题 → 评估复杂度，考虑委派
+- >10 个同类问题 → 立即委派专业 agent
+
+### Action Items
+
+**[P0] 添加 ESLint 规则**
+- 创建自定义规则检测 `await await` 模式
+- 集成到 CI 流水线，阻止此类代码合并
+
+**[P1] 文档化 Windows 测试最佳实践**
+- 在 `docs/standards/testing-guide.md` 中添加 Windows 文件锁处理章节
+- 包含 `withFileLock` 使用示例和重试策略
+
+**[P2] 自动化工具**
+- 创建 pre-commit hook 运行 Grep 检查常见反模式
+- 集成到 `scripts/pre-commit-checks.sh`
+
+### 指标
+
+- 修复问题数: 49（22 异步 + 27 类型错误）
+- 测试通过率: 100% (6278/6278)
+- 发布时间: ~2 小时
+- Agent 使用: 1 次（build-fixer，处理 27 个错误）

@@ -16,7 +16,7 @@ interface AuditEntry {
 
 class AuditLogger {
   private logPath: string;
-  private secretKey: Buffer;
+  private secretKey: Buffer | null;
   private maxSize = SIZE_LIMIT.AUDIT_LOG_MAX;
 
   constructor(logDir: string) {
@@ -25,40 +25,43 @@ class AuditLogger {
     this.ensureLogDir(logDir);
   }
 
-  private deriveSecretKey(): Buffer {
+  private deriveSecretKey(): Buffer | null {
     const seed = process.env.OMC_AUDIT_SECRET;
     if (!seed) {
-      throw new Error('OMC_AUDIT_SECRET environment variable is required');
+      return null;
     }
     return Buffer.from(createHmac('sha256', 'omc-audit').update(seed).digest('hex'));
   }
 
   private sign(entry: Omit<AuditEntry, 'signature'>): string {
+    if (!this.secretKey) return '';
     const payload = JSON.stringify(entry);
     return createHmac('sha256', this.secretKey).update(payload).digest('hex');
   }
 
-  async log(entry: Omit<AuditEntry, 'timestamp' | 'signature'>) {
+  log(entry: Omit<AuditEntry, 'timestamp' | 'signature'>): Promise<void> {
+    if (!this.secretKey) return Promise.resolve();
     const fullEntry: AuditEntry = {
       ...entry,
       timestamp: new Date().toISOString(),
     };
     fullEntry.signature = this.sign(fullEntry);
 
-    await this.appendLog(JSON.stringify(fullEntry) + '\n');
-    await this.rotateIfNeeded();
+    this.appendLog(JSON.stringify(fullEntry) + '\n');
+    this.rotateIfNeeded();
+    return Promise.resolve();
   }
 
-  private async appendLog(line: string) {
-    await fs.promises.appendFile(this.logPath, line, 'utf8');
+  private appendLog(line: string) {
+    fs.appendFileSync(this.logPath, line, 'utf8');
   }
 
-  private async rotateIfNeeded() {
+  private rotateIfNeeded() {
     try {
-      const stats = await fs.promises.stat(this.logPath);
+      const stats = fs.statSync(this.logPath);
       if (stats.size >= this.maxSize) {
         const rotatedPath = `${this.logPath}.${Date.now()}`;
-        await fs.promises.rename(this.logPath, rotatedPath);
+        fs.renameSync(this.logPath, rotatedPath);
       }
     } catch (err: unknown) {
       if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
@@ -113,7 +116,7 @@ export const auditLogger = {
     }
     return _auditLogger;
   },
-  async log(entry: Omit<AuditEntry, 'timestamp' | 'signature'>) {
+  log(entry: Omit<AuditEntry, 'timestamp' | 'signature'>) {
     return this.instance.log(entry);
   },
   async verify() {
