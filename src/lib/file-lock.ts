@@ -103,6 +103,9 @@ export async function withFileLock<T>(
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       await fs.promises.mkdir(lockPath);
+      // Write lock metadata immediately after mkdir to minimize race window
+      const meta: LockMeta = { pid: process.pid, timestamp: Date.now() };
+      await fs.promises.writeFile(lockFile, JSON.stringify(meta), 'utf8');
       break; // Lock acquired
     } catch (err) {
       const nodeErr = err as NodeJS.ErrnoException;
@@ -128,6 +131,10 @@ export async function withFileLock<T>(
           continue;
         }
         lastError = new Error(`[file-lock] 锁已被占用: ${lockPath}`);
+      } else if (nodeErr.code === 'ENOENT') {
+        // Lock directory was deleted between mkdir and writeFile
+        await fs.promises.rm(lockPath, { recursive: true, force: true }).catch(() => {});
+        continue; // Retry immediately
       } else {
         throw err;
       }
@@ -136,19 +143,6 @@ export async function withFileLock<T>(
 
   if (lastError) {
     throw lastError;
-  }
-
-  const meta: LockMeta = { pid: process.pid, timestamp: Date.now() };
-  try {
-    await fs.promises.writeFile(lockFile, JSON.stringify(meta), 'utf8');
-  } catch (writeErr) {
-    const nodeErr = writeErr as NodeJS.ErrnoException;
-    if (nodeErr.code === 'ENOENT') {
-      // Lock directory was deleted between mkdir and writeFile
-      await fs.promises.rm(lockPath, { recursive: true, force: true });
-      return withFileLock(filePath, fn);
-    }
-    throw writeErr;
   }
 
   try {
