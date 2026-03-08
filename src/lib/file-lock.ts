@@ -90,23 +90,18 @@ export async function withFileLock<T>(
 
   // Ensure parent directories exist for both file and lock
   const fileDir = path.dirname(filePath);
-  const lockDir = path.dirname(lockPath);
+  const lockPathParent = path.dirname(lockPath);
 
   if (!fs.existsSync(fileDir)) {
     fs.mkdirSync(fileDir, { recursive: true });
   }
-  if (!fs.existsSync(lockDir)) {
-    fs.mkdirSync(lockDir, { recursive: true });
+  if (!fs.existsSync(lockPathParent)) {
+    fs.mkdirSync(lockPathParent, { recursive: true });
   }
 
   let lastError: Error | null = null;
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      // Ensure lockPath parent exists before creating lock directory
-      const lockPathParent = path.dirname(lockPath);
-      if (!fs.existsSync(lockPathParent)) {
-        fs.mkdirSync(lockPathParent, { recursive: true });
-      }
       await fs.promises.mkdir(lockPath);
       break; // Lock acquired
     } catch (err) {
