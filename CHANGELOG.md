@@ -1,3 +1,28 @@
+# ultrapower v5.6.1
+
+**发布日期**: 2026-03-08
+
+## Features
+
+- **Skill Frontmatter 验证** - 自动验证 skill 定义完整性
+  - 新增 validate-skill-frontmatter.mjs 脚本
+  - 集成到 prepublishOnly hook
+  - 添加 npm run validate:skills 命令
+
+## Bug Fixes
+
+- **CI 测试稳定性** - 修复性能测试在快速 CI 环境中的不稳定问题
+  - 将 toBeLessThan 改为 toBeLessThanOrEqual
+  - 避免缓存命中时时间相等导致的失败
+
+## Documentation
+
+- **发布流程文档** - 完善 release skill 文档
+  - 添加 skill frontmatter 验证步骤
+  - 文档化 npm provenance 环境限制
+
+---
+
 # ultrapower v5.6.0
 
 **发布日期**: 2026-03-08
