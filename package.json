@@ -68,7 +68,8 @@
     "validate:counts": "node scripts/validate-counts.mjs",
     "validate:counts:fix": "node scripts/validate-counts.mjs --fix",
     "check:links": "node scripts/check-links.mjs",
-    "check:links:fix": "node scripts/check-links.mjs --fix"
+    "check:links:fix": "node scripts/check-links.mjs --fix",
+    "validate:plugins": "node scripts/validate-plugin-configs.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.1.0",
