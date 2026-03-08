@@ -25,3 +25,17 @@
 **内容**: `npm publish --provenance` 仅在 GitHub Actions 中可用，本地发布需 `--no-provenance`
 **验证**: 成功发布 v5.6.0
 **应用场景**: 手动发布流程
+
+### KB-004: CCG 功能模块化设计模式
+**置信度**: 90%
+**来源**: CCG workflow routing 实现
+**内容**: 新功能应拆分为独立模块（detector/router/sanitizer/workflow），通过统一入口点组合，避免单体文件膨胀
+**验证**: ccg-skill.ts 仅 31 行，职责清晰
+**应用场景**: 添加新功能模块时
+
+### KB-005: Ultrapilot 可选功能扩展模式
+**置信度**: 95%
+**来源**: Architect 任务分解集成
+**内容**: 向后兼容的功能扩展应通过可选配置标志（useAIDecomposition）+ 默认值（false）实现，保持既有行为不变
+**验证**: 所有 6411 测试通过，无破坏性变更
+**应用场景**: 扩展现有系统功能时
