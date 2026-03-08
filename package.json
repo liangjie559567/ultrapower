@@ -57,7 +57,7 @@
     "sync-metadata:verify": "tsx scripts/sync-metadata.ts --verify",
     "sync-metadata:dry-run": "tsx scripts/sync-metadata.ts --dry-run",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run build && npm run compose-docs && npm run sync:marketplace",
+    "prepublishOnly": "npm run build && npm run compose-docs && npm run validate:skills && npm run sync:marketplace",
     "postinstall": "node scripts/plugin-setup.mjs",
     "release:local": "node scripts/release-local.mjs",
     "release:dry-run": "node scripts/release-local.mjs --dry-run",
@@ -73,7 +73,8 @@
     "validate:counts:fix": "node scripts/validate-counts.mjs --fix",
     "check:links": "node scripts/check-links.mjs",
     "check:links:fix": "node scripts/check-links.mjs --fix",
-    "validate:plugins": "node scripts/validate-plugin-configs.mjs"
+    "validate:plugins": "node scripts/validate-plugin-configs.mjs",
+    "validate:skills": "node scripts/validate-skill-frontmatter.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.1.0",

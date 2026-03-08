@@ -35,11 +35,12 @@ description: ultrapower 的自动化发布工作流
 > ⚠️ `CLAUDE.md` 是开发规范文档，版本引用不同步会导致开发者参考错误的规范版本。
 > ⚠️ `docs/REFERENCE.md` 存在两处数量声明（TOC 第 12 行 + 正文第 280 行），新增 skill/agent/hook 时必须同步更新两处，否则会出现文档内部不一致（k-047）。
 
-### 2. 运行测试
+### 2. 运行测试和验证
 ```bash
 npm run test:run
+npm run validate:skills
 ```
-继续前所有 231+ 个测试必须通过。
+所有测试必须通过，所有 skill 必须有有效的 frontmatter。
 
 ### 3. 提交版本升级
 ```bash
@@ -78,9 +79,10 @@ claude plugin marketplace update omc
 
 ### 6. 发布到 npm（CI 已自动完成，手动备用）
 ```bash
-npm publish --access public
+npm publish --access public --no-provenance
 ```
 > ⚠️ npm 不允许覆盖已发布版本，版本号必须先升级再发布。
+> ⚠️ `--provenance` 仅在 GitHub Actions 中可用，本地发布必须使用 `--no-provenance`。
 
 ### 7. 创建 GitHub Release（CI 已自动完成，手动备用）
 ```bash
