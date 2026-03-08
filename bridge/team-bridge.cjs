@@ -3,7 +3,8 @@
 try {
   var _cp = require('child_process');
   var _Module = require('module');
-  var _globalRoot = _cp.execSync('npm root -g', { encoding: 'utf8', timeout: 5000 }).trim();
+  var _result = _cp.spawnSync('npm', ['root', '-g'], { encoding: 'utf8', timeout: 5000 });
+  var _globalRoot = _result.status === 0 ? _result.stdout.trim() : '';
   if (_globalRoot) {
     var _sep = process.platform === 'win32' ? ';' : ':';
     process.env.NODE_PATH = _globalRoot + (process.env.NODE_PATH ? _sep + process.env.NODE_PATH : '');
@@ -758,13 +759,13 @@ function setCache(key, value) {
 }
 function execGit(command, cwd) {
   try {
-    return (0, import_child_process3.execSync)(`git --no-pager ${command}`, {
+    const args = ["--no-pager", ...command.split(/\s+/)];
+    const result = (0, import_child_process3.spawnSync)("git", args, {
       cwd,
       encoding: "utf-8",
-      timeout: GIT_TIMEOUT,
-      stdio: ["pipe", "pipe", "pipe"],
-      shell: process.platform === "win32" ? "cmd.exe" : void 0
-    }).trim();
+      timeout: GIT_TIMEOUT
+    });
+    return result.status === 0 ? result.stdout.trim() : "";
   } catch {
     return "";
   }
