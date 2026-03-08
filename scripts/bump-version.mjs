@@ -9,6 +9,7 @@ import { resolve } from 'node:path';
 const FILES = {
   pkg: resolve('package.json'),
   plugin: resolve('.claude-plugin/plugin.json'),
+  cursorPlugin: resolve('.cursor-plugin/plugin.json'),
   marketplace: resolve('.claude-plugin/marketplace.json'),
   rootMarketplace: resolve('marketplace.json'),
 };
@@ -16,10 +17,12 @@ const FILES = {
 export function readVersions() {
   const pkg = JSON.parse(readFileSync(FILES.pkg, 'utf-8'));
   const plugin = JSON.parse(readFileSync(FILES.plugin, 'utf-8'));
+  const cursorPlugin = JSON.parse(readFileSync(FILES.cursorPlugin, 'utf-8'));
   const market = JSON.parse(readFileSync(FILES.marketplace, 'utf-8'));
   return {
     pkg: pkg.version,
     plugin: plugin.version,
+    cursorPlugin: cursorPlugin.version,
     marketplace: market.plugins?.[0]?.version,
     marketplaceSource: market.plugins?.[0]?.source?.version,
   };
@@ -55,6 +58,11 @@ export function bumpVersion(newVersion) {
   const plugin = JSON.parse(readFileSync(FILES.plugin, 'utf-8'));
   plugin.version = newVersion;
   writeFileSync(FILES.plugin, JSON.stringify(plugin, null, 2) + '\n');
+
+  // cursor-plugin.json
+  const cursorPlugin = JSON.parse(readFileSync(FILES.cursorPlugin, 'utf-8'));
+  cursorPlugin.version = newVersion;
+  writeFileSync(FILES.cursorPlugin, JSON.stringify(cursorPlugin, null, 2) + '\n');
 
   // marketplace.json
   const market = JSON.parse(readFileSync(FILES.marketplace, 'utf-8'));
