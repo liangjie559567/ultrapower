@@ -14,7 +14,7 @@ function run(cmd, dryRun = false) {
     console.log(`[dry-run] ${cmd}`);
     return '';
   }
-  return execSync(cmd, { stdio: 'pipe', encoding: 'utf-8' });
+  return execSync(cmd, { stdio: 'inherit' });
 }
 
 export async function preflight(opts = {}) {
