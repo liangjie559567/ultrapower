@@ -28,7 +28,10 @@ Task(subagent_type="ultrapower:axiom-tech-lead", model="sonnet", prompt="评审 
 Task(subagent_type="ultrapower:axiom-critic", model="sonnet", prompt="评审 PRD 初稿（安全/质量）：[draft内容]，输出到 docs/reviews/[name]/review_critic.md")
 ```
 
-等待所有 5 份评审报告生成于 `docs/reviews/[name]/`
+**等待策略**：
+- 使用 TaskOutput 工具等待每个 Task 完成（block=true, timeout=300000）
+- 如果任何 Task 超时或失败，报告错误并停止工作流
+- **禁止主 agent 自己编写评审报告**：必须等待专家 agents 完成
 
 ### Step 2: 汇总与仲裁
 
