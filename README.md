@@ -11,6 +11,8 @@ ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowe
 
 ## 快速开始（10 分钟上手）
 
+**新用户？** 查看 [📖 5 分钟快速入门指南](docs/QUICKSTART.md)
+
 ### 前置条件
 
 - Node.js >= 18
