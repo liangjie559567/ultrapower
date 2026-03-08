@@ -2,9 +2,9 @@
 description: 知识图谱索引 - 管理所有知识条目的元信息
 schema_version: 2
 version: 1.0
-last_updated: 2026-03-05
-entries: 74
-cycle: 18
+last_updated: 2026-03-08
+entries: 80
+cycle: 19
 ---
 
 # Knowledge Base (知识图谱索引)
@@ -91,15 +91,19 @@ cycle: 18
 | k-074 | Version Number Sync Checklist (8 Files) | workflow | 0.95 | 2026-03-05 | active |
 | k-075 | CHANGELOG Prepend Pattern (Bash Command) | pattern | 0.95 | 2026-03-05 | active |
 | k-076 | Git Lock File Pre-Check Pattern | workflow | 0.9 | 2026-03-05 | active |
+| k-077 | Documentation Sync Automation Pattern | workflow | 0.95 | 2026-03-08 | active |
+| k-078 | Count Validation Pattern (agents/skills/hooks/tools) | workflow | 0.95 | 2026-03-08 | active |
+| k-079 | Priority-Driven Execution Strategy | workflow | 0.9 | 2026-03-08 | active |
+| k-080 | Agent Model Routing Clarification (model parameter) | architecture | 0.95 | 2026-03-08 | active |
 
 ## 2. 分类统计 (Category Stats)
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| architecture | 20 | 架构相关知识 |
+| architecture | 21 | 架构相关知识 |
 | debugging | 6 | 调试技巧 |
 | pattern | 9 | 代码模式 |
-| workflow | 22 | 工作流相关 |
+| workflow | 25 | 工作流相关 |
 | tooling | 9 | 工具使用 |
 | security | 3 | 安全相关知识 |
 | platform | 1 | 平台兼容性 |
@@ -384,3 +388,136 @@ git 操作被中断（Ctrl+C、进程崩溃）导致锁文件残留。
 **相关知识**: k-072, k-021
 
 ---
+
+
+### k-077: Documentation Sync Automation Pattern
+
+**分类**: workflow
+**置信度**: 0.95
+**创建时间**: 2026-03-08
+**标签**: documentation, automation, version-sync, validation
+
+**描述**:
+v5.5.34 创建了3个自动化脚本防止文档漂移：sync-version.mjs（版本同步）、validate-counts.mjs（计数验证）、check-links.mjs（断链检查）。
+
+**适用场景**:
+- 版本发布前文档同步
+- CI/CD 文档验证
+- 防止文档与代码实现不一致
+
+**核心脚本**:
+1. **sync-version.mjs**: 从 package.json 读取版本号，同步到 8 个文档文件
+2. **validate-counts.mjs**: 验证文档中声明的 agents/skills/hooks/tools 数量与实际实现一致
+3. **check-links.mjs**: 检查 markdown 文件中的内部链接是否有效
+
+**npm 脚本**:
+```json
+"sync:version": "node scripts/sync-version.mjs",
+"sync:version:dry": "node scripts/sync-version.mjs --dry-run",
+"validate:counts": "node scripts/validate-counts.mjs",
+"validate:counts:fix": "node scripts/validate-counts.mjs --fix",
+"check:links": "node scripts/check-links.mjs",
+"check:links:fix": "node scripts/check-links.mjs --fix"
+```
+
+**相关知识**: k-074, k-036, k-047
+
+---
+
+### k-078: Count Validation Pattern (agents/skills/hooks/tools)
+
+**分类**: workflow
+**置信度**: 0.95
+**创建时间**: 2026-03-08
+**标签**: validation, documentation, count-verification
+
+**描述**:
+文档中声明的数量（如"49 agents"）必须与实际实现一致。validate-counts.mjs 自动扫描源代码和文档，对比数量差异。
+
+**验证目标**:
+- Agents: 扫描 agents/ 目录 .md 文件（排除 AGENTS.md）
+- Skills: 扫描 skills/ 目录子目录数量
+- Hooks: 扫描 hooks/hooks.json 中的事件类型
+- Tools: 扫描 src/tools/ 导出的工具定义
+
+**修复模式**:
+```bash
+npm run validate:counts        # 仅检查，报告差异
+npm run validate:counts:fix    # 自动修复文档中的数量
+```
+
+**常见差异**:
+- 文档更新滞后（agents 50→49）
+- 计数方式不一致（hooks 47→43，移除废弃事件）
+- 新增功能未更新文档
+
+**相关知识**: k-077, k-047
+
+---
+
+### k-079: Priority-Driven Execution Strategy
+
+**分类**: workflow
+**置信度**: 0.9
+**创建时间**: 2026-03-08
+**标签**: workflow, priority, execution-order
+
+**描述**:
+v5.5.34 会话采用优先级驱动执行：P0（版本同步）→ P1（自动化工具）→ P2（用户指南）→ P3（架构文档）。确保关键任务优先完成。
+
+**优先级定义**:
+- **P0**: 阻塞发布的关键任务（版本同步、构建修复）
+- **P1**: 防止未来问题的基础设施（自动化脚本、测试）
+- **P2**: 改善用户体验（快速入门、安装指南）
+- **P3**: 长期价值（架构文档、最佳实践）
+
+**执行原则**:
+1. 先完成 P0，确保可发布
+2. P1 投资回报率高，优先于 P2/P3
+3. P2/P3 可并行执行
+4. 时间不足时，P3 可延后到下个版本
+
+**实际案例**:
+v5.5.34 会话中，优先完成版本同步（P0）和自动化脚本（P1），确保发布成功。用户指南（P2）和架构文档（P3）在 P0/P1 完成后并行执行。
+
+**相关知识**: k-072, k-077
+
+---
+
+### k-080: Agent Model Routing Clarification (model parameter)
+
+**分类**: architecture
+**置信度**: 0.95
+**创建时间**: 2026-03-08
+**标签**: agent, model-routing, architecture, documentation
+
+**描述**:
+Agent 架构文档存在误导：文档声明 `-low/-medium/-high` 后缀变体，但实际实现使用统一 agent 名称 + `model` 参数路由（haiku/sonnet/opus）。
+
+**实际架构**:
+```typescript
+// ❌ 文档错误声明（不存在的变体）
+Task(subagent_type="ultrapower:executor-low", ...)
+Task(subagent_type="ultrapower:executor-medium", ...)
+Task(subagent_type="ultrapower:executor-high", ...)
+
+// ✅ 实际实现（统一 agent + model 参数）
+Task(subagent_type="ultrapower:executor", model="haiku", ...)
+Task(subagent_type="ultrapower:executor", model="sonnet", ...)
+Task(subagent_type="ultrapower:executor", model="opus", ...)
+```
+
+**修复内容**:
+- 重写 docs/shared/agent-tiers.md 和 docs/partials/agent-tiers.md
+- 移除所有 `-low/-medium/-high` 后缀变体说明
+- 更新为反映实际的 `model` 参数架构
+- 简化 agent 工具矩阵
+
+**影响范围**:
+- 用户可能尝试调用不存在的 agent 变体
+- 文档与代码实现不一致导致困惑
+
+**相关知识**: k-001, k-005, k-077
+
+---
+

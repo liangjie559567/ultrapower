@@ -1,0 +1,914 @@
+Build & Test	Run node scripts/release-steps.mjs validate	﻿2026-03-08T01:47:30.1568663Z ##[group]Run node scripts/release-steps.mjs validate
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:47:30.1569020Z [36;1mnode scripts/release-steps.mjs validate[0m
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:47:30.1598366Z shell: /usr/bin/bash -e {0}
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:47:30.1598603Z ##[endgroup]
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4313609Z Step validate failed: Command failed: npm run test:run
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4315198Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4316639Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4317670Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4318213Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4318466Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4318915Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4319383Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4319940Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4320900Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4321537Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4321826Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4322146Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4322750Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4323637Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4324315Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4324819Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4325153Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4325318Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4325570Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4326066Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4326490Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4327003Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4327330Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4327635Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4327870Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4328219Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4328739Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4329254Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4329822Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4330151Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4330314Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4330569Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4330832Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4331147Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4331644Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4332217Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4332405Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4332619Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4332967Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4333488Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4334024Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4334516Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4334840Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4334991Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4335262Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4335526Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4336441Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4337336Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4337904Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4338210Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4338523Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4339109Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4340421Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4340950Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4341456Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4341788Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4341946Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4342214Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4342477Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4342792Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4343281Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4343619Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4343797Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4344002Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4344375Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4344991Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4345511Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4346270Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4346619Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4346787Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4347040Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4347305Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4347622Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4348123Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4348443Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4348623Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4348823Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4349169Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4350432Z [90mstderr[2m | src/__tests__/hooks.test.ts[2m > [22m[2mMutual Exclusion - UltraQA and Ralph[2m > [22m[2mRalph mutual exclusion[2m > [22m[2mshould fail to start Ralph when UltraQA is active
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4351479Z [22m[39mCannot start Ralph Loop while UltraQA is active. Cancel UltraQA first with /ultrapower:cancel.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4351839Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4352627Z [90mstderr[2m | src/hooks/__tests__/bridge-security.test.ts[2m > [22m[2mMCP Prompt Injection Boundaries[2m > [22m[2mshould return undefined for non-existent but valid-format agent roles
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4353449Z [22m[39m[loadAgentPrompt] Agent prompt file not found
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4353986Z [prompt-injection] Agent role "nonexistent-agent-xyz" prompt not found, skipping injection
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4354321Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4354963Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2minitJobDb[2m > [22m[2mshould initialize the database successfully
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4356338Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4356726Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4357303Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2minitJobDb[2m > [22m[2mshould create the jobs.db file
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4358183Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4358556Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4359090Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2minitJobDb[2m > [22m[2mshould be idempotent
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4359942Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4360308Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4360877Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcloseJobDb[2m > [22m[2mshould close the database
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4361846Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4362209Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4362809Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2misJobDbInitialized[2m > [22m[2mshould return true after init
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4363724Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4364093Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4364713Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2misJobDbInitialized[2m > [22m[2mshould return false after close
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4365627Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4366133Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4366778Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobDb[2m > [22m[2mshould return database instance when initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4367588Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4367867Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4368508Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobDb[2m > [22m[2mshould return database instance when initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4369414Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4369792Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4370321Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould insert a new job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4371067Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4371354Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4371888Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould insert a new job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4372757Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4373117Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4373685Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould update an existing job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4374432Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4374947Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4375446Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4375706Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4376378Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould update an existing job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4377333Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4377700Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4378337Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould return false when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4379240Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4379609Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4380227Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with all optional fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4381026Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4381543Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4381800Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4382427Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with all optional fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4383389Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4383751Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4384394Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with undefined optional fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4385186Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4385695Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4386133Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4386784Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupsertJob[2m > [22m[2mshould handle jobs with undefined optional fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4387709Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4388065Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4388671Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return a job by provider and jobId
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4389447Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4389946Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4390219Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4390803Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return a job by provider and jobId
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4391698Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4392065Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4392651Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return null for non-existent job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4393416Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4393701Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4394291Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return null for non-existent job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4395169Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4395535Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4396619Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould handle both providers independently
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4397423Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4397945Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4398528Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4399007Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4399262Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4399866Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould handle both providers independently
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4400769Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4401147Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4401724Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould correctly map boolean fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4402490Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4403007Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4403260Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4403845Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould correctly map boolean fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4404780Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4405155Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4406008Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJob[2m > [22m[2mshould return null when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4407029Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4407403Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4408045Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by status for all providers
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4408890Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4409410Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4409897Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4410397Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4410650Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4411293Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by status for all providers
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4412229Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4412600Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4413216Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by provider and status
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4414006Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4414521Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4415004Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4415259Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4415991Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould filter by provider and status
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4416979Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4417353Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4417989Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould return empty array when no matches
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4418783Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4419286Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4419537Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4420337Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould return empty array when no matches
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4421251Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4421615Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4422312Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobsByStatus[2m > [22m[2mshould return empty array when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4423261Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4423633Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4424253Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return spawned and running jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4425042Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4425557Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4426115Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4426656Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4427137Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4427387Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4428022Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return spawned and running jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4428927Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4429292Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4429868Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould filter by provider
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4430621Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4431125Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4431615Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4431866Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4432439Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould filter by provider
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4433319Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4433678Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4434321Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return empty array when no active jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4435117Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4435623Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4435949Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4436586Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return empty array when no active jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4437519Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4437883Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4438563Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould return empty array when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4439510Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4439873Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4440504Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould include timeout status as not active
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4441368Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4441878Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4442364Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4442617Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4443256Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetActiveJobs[2m > [22m[2mshould include timeout status as not active
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4444169Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4444532Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4445149Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould return jobs within time window
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4446023Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4446538Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4447012Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4447333Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4447951Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould return jobs within time window
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4448859Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4449225Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4449790Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould filter by provider
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4450535Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4451044Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4451527Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4451785Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4452350Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould filter by provider
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4453258Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4453619Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4454250Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould use default time window of 1 hour
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4455042Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4455552Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4456225Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4456486Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4457134Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould use default time window of 1 hour
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4458049Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4458407Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4459081Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetRecentJobs[2m > [22m[2mshould return empty array when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4460034Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4460395Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4460996Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update specific fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4461772Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4462367Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4462854Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4463110Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4463722Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update specific fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4464614Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4464980Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4465644Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould return true even if no fields to update
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4466616Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4467131Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4467401Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4468049Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould return true even if no fields to update
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4469057Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4469417Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4469992Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update pid field
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4470743Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4471243Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4471728Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4471989Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4472552Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update pid field
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4473435Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4473801Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4474384Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update error field
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4475156Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4475662Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4476214Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4476469Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4477049Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update error field
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4477938Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4478300Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4478898Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update fallback fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4479679Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4480184Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4480672Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4480929Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4481517Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update fallback fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4482407Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4482765Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4483382Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update killedByUser field
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4484266Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4484778Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4485262Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4485520Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4486179Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update killedByUser field
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4487091Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4487453Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4488120Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update slug, model, and agentRole fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4488928Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4489508Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4489987Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4490235Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4490908Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould update slug, model, and agentRole fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4491844Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4492211Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4492870Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mupdateJobStatus[2m > [22m[2mshould return false when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4493793Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4494158Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4494683Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould delete a job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4495403Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4496059Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4496562Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4496817Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4497348Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould delete a job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4498189Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4498559Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4499166Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould succeed even if job does not exist
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4499947Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4500228Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4500835Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould succeed even if job does not exist
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4501728Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4502089Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4502726Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould only delete the specified provider job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4503513Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4504014Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4504580Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4505068Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4505553Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4505884Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4506548Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould only delete the specified provider job
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4507466Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4507836Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4508462Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mdeleteJob[2m > [22m[2mshould return false when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4509375Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4509741Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4510393Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import valid status JSON files
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4511270Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4511775Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4512252Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4512511Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4513161Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import valid status JSON files
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4514091Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4514463Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4515076Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip malformed files
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4516032Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4516309Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4516938Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip malformed files
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4517842Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4518211Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4518891Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould return zero counts for empty directory
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4519725Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4520006Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4520692Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould return zero counts for empty directory
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4521652Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4522009Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4522692Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import multiple files in a transaction
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4523775Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4524393Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4525085Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4525576Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4526165Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4526548Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4527270Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould import multiple files in a transaction
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4528226Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4528591Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4529250Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip files missing required fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4530068Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4530355Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4531016Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould skip files missing required fields
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4531953Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4532376Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4533076Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould handle non-existent directory gracefully
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4533913Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4534184Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4534866Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould handle non-existent directory gracefully
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4535933Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4536365Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4537083Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mmigrateFromJsonFiles[2m > [22m[2mshould return zero counts when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4538058Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4538426Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4539018Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove old terminal jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4539789Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4540296Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4540776Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4541262Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4541832Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4542316Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4542790Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4543275Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4543755Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4544006Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4544628Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove old terminal jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4545519Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4545983Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4546644Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould not remove active jobs regardless of age
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4547455Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4548056Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4548538Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4549044Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4549537Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4549785Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4550443Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould not remove active jobs regardless of age
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4551387Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4551753Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4552353Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove timeout status jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4553132Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4553641Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4554195Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4554444Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4555050Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould remove timeout status jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4556048Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4556415Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4557037Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould use default max age of 24 hours
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4557826Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4558346Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4558831Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4559313Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4559796Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4560052Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4560672Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould use default max age of 24 hours
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4561584Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4561947Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4562587Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould return 0 when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4563497Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4563867Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4564480Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould return 0 when no jobs to clean
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4565266Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4565842Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4566093Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4566719Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mcleanupOldJobs[2m > [22m[2mshould return 0 when no jobs to clean
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4567623Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4567987Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4568562Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return correct counts
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4569389Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4569909Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4570406Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4570892Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4571378Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4571852Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4572110Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4572682Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return correct counts
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4573566Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4573928Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4574532Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return all zeros for empty db
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4575376Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4575649Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4576457Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return all zeros for empty db
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4577364Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4577735Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4578344Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould count both providers together
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4579119Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4579632Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4580124Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4580377Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4580971Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould count both providers together
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4581862Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4582231Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4582862Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobStats[2m > [22m[2mshould return null when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4583779Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4584149Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4584842Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould return empty string when no jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4585692Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4586312Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4586796Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4587283Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4587545Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4588239Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould return empty string when no jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4589211Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4589613Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4590353Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include active jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4591163Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4591658Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4592149Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4592630Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4593117Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4593368Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4594006Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include active jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4594918Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4595292Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4596108Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include recent completed jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4597035Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4597542Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4598026Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4598504Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4598984Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4599239Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4600215Z [90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mcalls enforcement before HUD tracking
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4601482Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-project'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4601887Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4602569Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include recent completed jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4603532Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4603897Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4604878Z [90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mblocks propagated from enforcement
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4606165Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-project'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4606566Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4607192Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include job stats
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4607995Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4608513Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4609006Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4609493Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4609965Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4610451Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4610705Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4611651Z [90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mwarnings propagated from enforcement
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4612975Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-project'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4613371Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4614010Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould include job stats
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4614941Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4615305Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4616410Z [90mstderr[2m | src/__tests__/delegation-enforcement-levels.test.ts[2m > [22m[2mdelegation-enforcement-levels[2m > [22m[2mprocessPreToolUse integration via processHook[2m > [22m[2mTask tool tracking still works when enforcement passes
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4617664Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-project'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4618068Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4618761Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show elapsed time for active jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4619682Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4620192Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4620679Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4621160Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4621634Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4621889Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4622588Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show elapsed time for active jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4623581Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4623952Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4624614Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show fallback information
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4625431Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4626010Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4626481Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4626963Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4627445Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4627695Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4628364Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show fallback information
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4629315Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4629674Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4630306Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show error messages
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4631109Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4631619Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4632098Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4632582Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4633052Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4633455Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4634102Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show error messages
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4635038Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4635407Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4636141Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould truncate long error messages
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4636970Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4637473Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4637946Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4638423Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4638907Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4639154Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4639830Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould truncate long error messages
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4640850Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4641211Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4641868Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould limit recent jobs to 10
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4642673Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4643180Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4643664Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4644152Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4644642Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4645122Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4645602Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4646178Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4646657Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4647132Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4647609Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4648087Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4648569Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4649049Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4649520Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4650004Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4650484Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4650962Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4651441Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4651691Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4652347Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould limit recent jobs to 10
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4653288Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4653654Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4654354Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould only show recent jobs from last hour
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4655280Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4655853Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4656344Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4656813Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4657292Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4657771Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4658018Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4658728Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould only show recent jobs from last hour
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4659713Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4660139Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4660827Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show both codex and gemini jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4661658Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4662163Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4662644Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4663124Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4663591Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4664063Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4664325Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4665010Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould show both codex and gemini jobs
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4666032Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4666394Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4667155Z [90mstderr[2m | src/__tests__/job-state-db.test.ts[2m > [22m[2mjob-state-db[2m > [22m[2mgetJobSummaryForPreCompact[2m > [22m[2mshould return empty string when db is not initialized
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4668158Z [22m[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4668520Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4668792Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4669295Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4669803Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4670141Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4670316Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4670577Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4670856Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4671187Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4671695Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4672026Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4672214Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4672424Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4672773Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4673291Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4673795Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4674291Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4674739Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4674910Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4675168Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4675439Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4675825Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4676345Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4744661Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4744905Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4745126Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4745500Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4746835Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "ralph" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4747972Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4748452Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4748787Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4749601Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4750103Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4750437Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4750602Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4750867Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4751138Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4751456Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4751987Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4752325Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4752511Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4752708Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4753060Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4753593Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4754097Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4754591Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4754916Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4755080Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4755343Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4755604Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4756016Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4756521Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4756854Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4757028Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4757229Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4757575Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4758749Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "persistent-mode" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4759919Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4760318Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4760593Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4761098Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4761598Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4761932Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4762102Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4762359Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4762619Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4762936Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4763432Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4763858Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4764080Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4764324Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4764673Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4765210Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4765712Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4766504Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4766836Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4767000Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4767249Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4767510Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4767827Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4768328Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4768653Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4768837Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4769034Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4769379Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4770622Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "session-start" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4771754Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4772154Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4772415Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4772920Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4773414Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4773733Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4773901Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4774157Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4774420Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4774732Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4775233Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4775562Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4775850Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4776154Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4776503Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4777040Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4777545Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4778040Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4778359Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4778517Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4778771Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4779030Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4779339Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4779852Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4780180Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4780365Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4780560Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4780905Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4781429Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4781924Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4782423Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4782735Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4782897Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4783150Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4783498Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4783807Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4784313Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4784637Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4784815Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4785008Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4785352Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4785984Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4786486Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4786975Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4787298Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4787457Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4787711Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4787961Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4788275Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4788775Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4789166Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4789346Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4789537Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4789881Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4790407Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4790907Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4791391Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4791711Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4791873Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4792125Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4792378Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4792693Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4793192Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4793523Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4793704Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4793908Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4794254Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4795396Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "session-end" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4796598Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4796989Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4797824Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "session-end" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4798936Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4799334Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4799591Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4800105Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4800617Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4800945Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4801127Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4801385Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4801645Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4801962Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4802457Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4802782Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4802963Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4803159Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4803565Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4804092Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4804599Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4805092Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4805408Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4805572Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4805902Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4806159Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4806468Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4806967Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4807289Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4807467Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4807668Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4808010Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4808538Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4809094Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4809596Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4809913Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4810072Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4810332Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4810589Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4810899Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4811396Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4811727Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4811908Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4812097Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4812443Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4812973Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4813473Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4813964Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4814279Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4814435Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4814691Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4814948Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4815260Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4815912Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4816330Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4816529Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4816730Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4817082Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4817617Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4818139Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4818631Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4818945Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4819102Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4819359Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4819615Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4819921Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4820409Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4820731Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4820908Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4821093Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4821433Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4821960Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4822457Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4823037Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4823370Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4823530Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4823785Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4824036Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4824351Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4824844Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4825172Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4825356Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4825543Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4825990Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4827139Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "pre-tool-use" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4828262Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4828714Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4829571Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "post-tool-use" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4830686Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4831084Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4831920Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "autopilot" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4833017Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4833417Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4833678Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4834193Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4834699Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4835015Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4835178Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4835438Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4835702Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4836081Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4836578Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4836908Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4837091Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4837282Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4837634Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4838765Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould route "pre-compact" and return a valid HookOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4839712Z [22m[39m[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4840238Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4840724Z [job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4840986Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4841243Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4841749Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4842254Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4842574Z hint: call:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4842725Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4842981Z hint: 	git config --global init.defaultBranch <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4843306Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4843620Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4844110Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4844434Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4844616Z hint: 	git branch -m <name>
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4844816Z hint:
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4845158Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4846325Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle keyword-detector with a keyword prompt
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4847438Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4847833Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4848627Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle pre-tool-use with Bash tool input
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4849703Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4850155Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4850953Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle post-tool-use with tool output
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4852026Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4852416Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4853241Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2mHookType routing[2m > [22m[2mshould handle session-start and return continue:true
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4854329Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4854721Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4855602Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2minput normalization[2m > [22m[2mshould normalize snake_case tool_name to camelCase toolName
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4857033Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4857428Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4858221Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2minput normalization[2m > [22m[2mshould normalize tool_response to toolOutput
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4859294Z [22m[39m[worktree] non-git directory provided, falling back to process root { directory: [32m'/tmp/test-routing'[39m }
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4859675Z 
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4860429Z [90mstderr[2m | src/hooks/__tests__/bridge-routing.test.ts[2m > [22m[2mprocessHook - Routing Matrix[2m > [22m[2minput normalization[2m > [22m[2mshould handle already-came
+Build & Test	Run node scripts/release-steps.mjs validate	2026-03-08T01:48:49.4871653Z ##[error]Process completed with exit code 1.

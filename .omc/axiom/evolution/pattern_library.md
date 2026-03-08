@@ -1,7 +1,7 @@
 ---
 description: 代码模式库 - 存储可复用的代码模式和模板
 version: 1.0
-last_updated: 2026-03-02
+last_updated: 2026-03-08
 ---
 
 # Pattern Library (代码模式库)
@@ -25,19 +25,22 @@ last_updated: 2026-03-02
 | P-011 | Windows Bash Hook Path: Shell Syntax Mismatch Anti-Pattern | platform | 1 | 0.95 | pending |
 | P-012 | Block-First-with-Fallback Format Parser | architecture | 1 | 0.9 | pending |
 | P-013 | GitHub Actions CI Permission and Secret Configuration Anti-Pattern | ci-cd | 2 | 0.95 | active |
+| P-014 | Documentation Automation Script Pattern | workflow-def | 1 | 0.95 | pending |
+| P-015 | Priority-Driven Task Execution Pattern | workflow-def | 1 | 0.9 | pending |
+| P-016 | Agent Model Parameter Routing (not suffix variants) | architecture | 1 | 0.95 | pending |
 
 ## 2. 模式分类 (Categories)
 
 | Category | Description | Count |
 |----------|-------------|-------|
-| workflow-def | 工作流定义模式 | 4 |
+| workflow-def | 工作流定义模式 | 6 |
 | data-layer | 数据层模式 | 0 |
 | ui-layer | UI 层模式 | 0 |
 | business-logic | 业务逻辑模式 | 0 |
 | tooling | 工具使用反模式 | 2 |
 | security | 安全防护模式 | 1 |
 | debugging | 调试反模式 | 1 |
-| architecture | 架构设计模式 | 1 |
+| architecture | 架构设计模式 | 2 |
 | platform | 平台兼容性反模式 | 1 |
 | ci-cd | CI/CD 配置反模式 | 1 |
 
@@ -309,3 +312,143 @@ min_occurrences: 3
 | ID | Name | Occurrences | Notes |
 |----|------|-------------|-------|
 | - | - | - | 暂无 |
+
+
+### P-014: Documentation Automation Script Pattern
+
+**Category**: workflow-def
+**Occurrences**: 1 (scripts/sync-version.mjs, validate-counts.mjs, check-links.mjs)
+**Confidence**: 0.95
+**First Seen**: 2026-03-08
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> 创建自动化脚本防止文档漂移，包含 dry-run 模式和 fix 模式。脚本从源代码读取真实数据，与文档声明对比，自动修复差异。
+
+**Template**:
+```javascript
+// scripts/sync-version.mjs
+import { readFileSync, writeFileSync } from 'fs';
+
+const pkg = JSON.parse(readFileSync('package.json', 'utf-8'));
+const version = pkg.version;
+
+const files = [
+  'README.md',
+  'docs/CLAUDE.md',
+  '.claude-plugin/plugin.json',
+  // ...
+];
+
+const dryRun = process.argv.includes('--dry-run');
+
+for (const file of files) {
+  let content = readFileSync(file, 'utf-8');
+  const updated = content.replace(/version: \d+\.\d+\.\d+/g, `version: ${version}`);
+  
+  if (dryRun) {
+    console.log(`[DRY-RUN] Would update ${file}`);
+  } else {
+    writeFileSync(file, updated);
+    console.log(`Updated ${file}`);
+  }
+}
+```
+
+**npm 脚本配置**:
+```json
+{
+  "sync:version": "node scripts/sync-version.mjs",
+  "sync:version:dry": "node scripts/sync-version.mjs --dry-run",
+  "validate:counts": "node scripts/validate-counts.mjs",
+  "validate:counts:fix": "node scripts/validate-counts.mjs --fix"
+}
+```
+
+**Related**: k-077, k-078
+
+---
+
+### P-015: Priority-Driven Task Execution Pattern
+
+**Category**: workflow-def
+**Occurrences**: 1 (v5.5.34 session)
+**Confidence**: 0.9
+**First Seen**: 2026-03-08
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> 将任务按优先级分层（P0/P1/P2/P3），优先完成阻塞性任务，确保关键路径不被延误。P0 完成前不开始 P1，P1 完成前不开始 P2/P3。
+
+**Template**:
+```
+P0 (Critical - 阻塞发布):
+  - 版本同步
+  - 构建修复
+  - 关键 bug 修复
+
+P1 (High - 防止未来问题):
+  - 自动化脚本
+  - 测试覆盖
+  - CI/CD 改进
+
+P2 (Medium - 用户体验):
+  - 文档改进
+  - 快速入门指南
+  - 错误信息优化
+
+P3 (Low - 长期价值):
+  - 架构文档
+  - 最佳实践
+  - 性能优化
+```
+
+**执行顺序**:
+1. 完成所有 P0 任务
+2. 完成所有 P1 任务
+3. P2/P3 可并行执行
+4. 时间不足时，P3 延后
+
+**Related**: k-079, k-072
+
+---
+
+
+### P-016: Agent Model Parameter Routing (not suffix variants)
+
+**Category**: architecture
+**Occurrences**: 1 (docs/shared/agent-tiers.md, docs/partials/agent-tiers.md)
+**Confidence**: 0.95
+**First Seen**: 2026-03-08
+**Status**: pending (需要 3 次出现才能提升为 active)
+
+**Description**:
+> Agent 架构使用统一 agent 名称 + `model` 参数路由到不同模型层级，而非 `-low/-medium/-high` 后缀变体。文档声明后缀变体会误导用户调用不存在的 agent。
+
+**Template**:
+```typescript
+// ❌ 错误：使用不存在的后缀变体
+Task(subagent_type="ultrapower:executor-low", prompt="...")
+Task(subagent_type="ultrapower:executor-medium", prompt="...")
+Task(subagent_type="ultrapower:executor-high", prompt="...")
+
+// ✅ 正确：统一 agent + model 参数
+Task(subagent_type="ultrapower:executor", model="haiku", prompt="...")
+Task(subagent_type="ultrapower:executor", model="sonnet", prompt="...")
+Task(subagent_type="ultrapower:executor", model="opus", prompt="...")
+```
+
+**模型选择指南**:
+- **haiku**: 快速查找、轻量扫描、简单修复
+- **sonnet**: 标准实现、调试、审查
+- **opus**: 架构设计、深度分析、复杂重构
+
+**文档修复**:
+- 移除所有 `-low/-medium/-high` 后缀变体说明
+- 更新为 `model` 参数架构
+- 简化 agent 工具矩阵
+
+**Related**: k-080, k-001, k-005
+
+---
+

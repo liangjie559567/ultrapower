@@ -43,7 +43,7 @@ describe('omc-tools-server', () => {
     it('should filter out AST tools when includeAst is false', () => {
       const tools = getOmcToolNames({ includeAst: false });
       expect(tools.some(t => t.includes('ast_'))).toBe(false);
-      expect(tools).toHaveLength(33); // 12 LSP + 1 python + 3 skills + 5 state + 6 notepad + 4 memory + 2 trace
+      expect(tools).toHaveLength(33); // 12 LSP + 2 AST + 3 skills + 5 state + 6 notepad + 4 memory + 2 trace
     });
 
     it('should filter out python_repl when includePython is false', () => {

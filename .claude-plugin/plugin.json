@@ -22,6 +22,8 @@
   ],
   "statusline": {
     "command": "node",
-    "args": ["dist/hud/index.js"]
+    "args": [
+      "dist/hud/index.js"
+    ]
   }
 }
