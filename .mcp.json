@@ -2,15 +2,24 @@
   "mcpServers": {
     "t": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/mcp-server.cjs"]
+      "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/mcp-server.cjs"],
+      "env": {
+        "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower"
+      }
     },
     "x": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/codex-server.cjs"]
+      "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/codex-server.cjs"],
+      "env": {
+        "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower"
+      }
     },
     "g": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/gemini-server.cjs"]
+      "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/gemini-server.cjs"],
+      "env": {
+        "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower"
+      }
     }
   }
 }
