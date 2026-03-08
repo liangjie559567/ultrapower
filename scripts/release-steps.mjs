@@ -29,7 +29,7 @@ export async function preflight(opts = {}) {
 export async function validateBuild(opts = {}) {
   const { skipTests = false, dryRun = false } = opts;
   try {
-    run('tsc --noEmit', dryRun);
+    run('npx tsc --noEmit', dryRun);
     run('npm run build', dryRun);
     if (!skipTests) run('npm run test:run', dryRun);
     return { success: true, output: 'Build validation passed' };

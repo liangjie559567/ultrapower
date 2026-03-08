@@ -1,7 +1,7 @@
 {
   "name": "ultrapower",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
-  "version": "5.5.40",
+  "version": "5.5.41",
   "author": {
     "name": "liangjie559567"
   },
@@ -19,11 +19,5 @@
     "claudecode",
     "anthropic",
     "llm"
-  ],
-  "statusline": {
-    "command": "node",
-    "args": [
-      "dist/hud/index.js"
-    ]
-  }
+  ]
 }
