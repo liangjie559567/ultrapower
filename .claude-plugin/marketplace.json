@@ -8,7 +8,7 @@
     {
       "name": "ultrapower",
       "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
-      "version": "5.5.44",
+      "version": "5.5.45",
       "source": {
         "source": "npm",
         "package": "@liangjie559567/ultrapower",
