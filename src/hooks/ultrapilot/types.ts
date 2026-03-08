@@ -24,6 +24,10 @@ export interface UltrapilotConfig {
   sharedFiles?: string[];
   /** Whether to enable verbose logging */
   verbose?: boolean;
+  /** Use Architect agent for intelligent task decomposition */
+  useAIDecomposition?: boolean;
+  /** Codebase context for AI decomposition */
+  codebaseContext?: string;
 }
 
 /**
@@ -138,5 +142,7 @@ export const DEFAULT_CONFIG: Required<UltrapilotConfig> = {
     'requirements.txt',
     'setup.py'
   ],
-  verbose: false
+  verbose: false,
+  useAIDecomposition: false,
+  codebaseContext: ''
 };
