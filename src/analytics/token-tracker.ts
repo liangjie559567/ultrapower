@@ -382,6 +382,8 @@ export class TokenTracker {
 
   private async getAllStatsLegacy(): Promise<AggregateTokenStats> {
     const { calculateCost } = await import("./cost-estimator.js");
+    const { createReadStream } = await import("fs");
+    const { createInterface } = await import("readline");
 
     const stats: AggregateTokenStats = {
       totalInputTokens: 0,
@@ -398,71 +400,66 @@ export class TokenTracker {
     };
 
     try {
-      const content = await fs.readFile(TOKEN_LOG_FILE, "utf-8");
-      const lines = content
-        .trim()
-        .split("\n")
-        .filter((line) => line.trim());
-
-      if (lines.length === 0) {
+      if (!fsSync.existsSync(TOKEN_LOG_FILE)) {
         return stats;
       }
 
       const sessions = new Set<string>();
+      const stream = createReadStream(TOKEN_LOG_FILE, { encoding: "utf-8" });
+      const rl = createInterface({ input: stream, crlfDelay: Infinity });
 
-      for (const line of lines) {
-        const record: TokenUsage = JSON.parse(line);
-        stats.entryCount++;
+      for await (const line of rl) {
+        if (!line.trim()) continue;
 
-        // Track unique sessions
-        sessions.add(record.sessionId);
+        try {
+          const record: TokenUsage = JSON.parse(line);
+          stats.entryCount++;
 
-        // Track timestamps
-        if (!stats.firstEntry || record.timestamp < stats.firstEntry) {
-          stats.firstEntry = record.timestamp;
+          sessions.add(record.sessionId);
+
+          if (!stats.firstEntry || record.timestamp < stats.firstEntry) {
+            stats.firstEntry = record.timestamp;
+          }
+          if (!stats.lastEntry || record.timestamp > stats.lastEntry) {
+            stats.lastEntry = record.timestamp;
+          }
+
+          stats.totalInputTokens += record.inputTokens;
+          stats.totalOutputTokens += record.outputTokens;
+          stats.totalCacheCreation += record.cacheCreationTokens;
+          stats.totalCacheRead += record.cacheReadTokens;
+
+          const cost = calculateCost({
+            modelName: record.modelName,
+            inputTokens: record.inputTokens,
+            outputTokens: record.outputTokens,
+            cacheCreationTokens: record.cacheCreationTokens,
+            cacheReadTokens: record.cacheReadTokens,
+          });
+          stats.totalCost += cost.totalCost;
+
+          const agentKey = record.agentName || "(main session)";
+          if (!stats.byAgent[agentKey]) {
+            stats.byAgent[agentKey] = { tokens: 0, cost: 0 };
+          }
+          stats.byAgent[agentKey].tokens +=
+            record.inputTokens + record.outputTokens;
+          stats.byAgent[agentKey].cost += cost.totalCost;
+
+          if (!stats.byModel[record.modelName]) {
+            stats.byModel[record.modelName] = { tokens: 0, cost: 0 };
+          }
+          stats.byModel[record.modelName].tokens +=
+            record.inputTokens + record.outputTokens;
+          stats.byModel[record.modelName].cost += cost.totalCost;
+        } catch {
+          continue;
         }
-        if (!stats.lastEntry || record.timestamp > stats.lastEntry) {
-          stats.lastEntry = record.timestamp;
-        }
-
-        // Aggregate totals
-        stats.totalInputTokens += record.inputTokens;
-        stats.totalOutputTokens += record.outputTokens;
-        stats.totalCacheCreation += record.cacheCreationTokens;
-        stats.totalCacheRead += record.cacheReadTokens;
-
-        // Calculate cost for this record
-        const cost = calculateCost({
-          modelName: record.modelName,
-          inputTokens: record.inputTokens,
-          outputTokens: record.outputTokens,
-          cacheCreationTokens: record.cacheCreationTokens,
-          cacheReadTokens: record.cacheReadTokens,
-        });
-        stats.totalCost += cost.totalCost;
-
-        // Aggregate by agent (use "(main session)" for entries without agentName)
-        const agentKey = record.agentName || "(main session)";
-        if (!stats.byAgent[agentKey]) {
-          stats.byAgent[agentKey] = { tokens: 0, cost: 0 };
-        }
-        stats.byAgent[agentKey].tokens +=
-          record.inputTokens + record.outputTokens;
-        stats.byAgent[agentKey].cost += cost.totalCost;
-
-        // Aggregate by model
-        if (!stats.byModel[record.modelName]) {
-          stats.byModel[record.modelName] = { tokens: 0, cost: 0 };
-        }
-        stats.byModel[record.modelName].tokens +=
-          record.inputTokens + record.outputTokens;
-        stats.byModel[record.modelName].cost += cost.totalCost;
       }
 
       stats.sessionCount = sessions.size;
       return stats;
     } catch (_error) {
-      // If file doesn't exist or is empty, return empty stats
       return stats;
     }
   }
