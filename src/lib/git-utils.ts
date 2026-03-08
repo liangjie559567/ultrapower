@@ -7,7 +7,7 @@
  * - Caching for frequently accessed data
  */
 
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 
 const GIT_TIMEOUT = 5000;
 const CACHE_TTL = 1000; // 1 second cache
@@ -42,13 +42,13 @@ export function clearGitCache(): void {
  */
 function execGit(command: string, cwd?: string): string {
   try {
-    return execSync(`git --no-pager ${command}`, {
+    const args = ['--no-pager', ...command.split(/\s+/)];
+    const result = spawnSync('git', args, {
       cwd,
       encoding: 'utf-8',
       timeout: GIT_TIMEOUT,
-      stdio: ['pipe', 'pipe', 'pipe'],
-      shell: process.platform === 'win32' ? 'cmd.exe' : undefined,
-    }).trim();
+    });
+    return result.status === 0 ? result.stdout.trim() : '';
   } catch {
     return '';
   }

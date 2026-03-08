@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { codexMcpServer, codexToolNames } from '../mcp/codex-server.js';
 import { geminiMcpServer, geminiToolNames } from '../mcp/gemini-server.js';
 import { detectCodexCli, detectGeminiCli, resetDetectionCache } from '../mcp/cli-detection.js';
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 
 // Mock child_process
 vi.mock('child_process', () => ({
-  execSync: vi.fn(),
+  spawnSync: vi.fn(),
   spawn: vi.fn()
 }));
 
@@ -59,9 +59,9 @@ describe('Multi-Model MCP Servers', () => {
 
     describe('detectCodexCli', () => {
       it('should detect Codex CLI when available', () => {
-        vi.mocked(execSync)
-          .mockReturnValueOnce('/usr/local/bin/codex\n')  // which codex
-          .mockReturnValueOnce('1.0.0\n');                 // codex --version
+        vi.mocked(spawnSync)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/local/bin/codex\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '1.0.0\n', stderr: '', error: undefined } as any);
 
         const result = detectCodexCli();
 
@@ -72,9 +72,7 @@ describe('Multi-Model MCP Servers', () => {
       });
 
       it('should handle missing Codex CLI', () => {
-        vi.mocked(execSync).mockImplementation(() => {
-          throw new Error('command not found');
-        });
+        vi.mocked(spawnSync).mockReturnValueOnce({ status: 1, stdout: '', stderr: 'command not found', error: undefined } as any);
 
         const result = detectCodexCli();
 
@@ -84,37 +82,37 @@ describe('Multi-Model MCP Servers', () => {
       });
 
       it('should cache detection results', () => {
-        vi.mocked(execSync)
-          .mockReturnValueOnce('/usr/bin/codex\n')
-          .mockReturnValueOnce('2.0.0\n');
+        vi.mocked(spawnSync)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/codex\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '2.0.0\n', stderr: '', error: undefined } as any);
 
         const result1 = detectCodexCli();
         const result2 = detectCodexCli();
 
-        // execSync should only be called twice (once for which, once for version)
-        expect(execSync).toHaveBeenCalledTimes(2);
+        // spawnSync should only be called twice (once for which, once for version)
+        expect(spawnSync).toHaveBeenCalledTimes(2);
         expect(result1).toBe(result2); // Same reference due to caching
       });
 
       it('should bypass cache when useCache is false', () => {
-        vi.mocked(execSync)
-          .mockReturnValueOnce('/usr/bin/codex\n')
-          .mockReturnValueOnce('2.0.0\n')
-          .mockReturnValueOnce('/usr/bin/codex\n')
-          .mockReturnValueOnce('2.0.0\n');
+        vi.mocked(spawnSync)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/codex\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '2.0.0\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/codex\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '2.0.0\n', stderr: '', error: undefined } as any);
 
         detectCodexCli(true);
         detectCodexCli(false);
 
-        expect(execSync).toHaveBeenCalledTimes(4);
+        expect(spawnSync).toHaveBeenCalledTimes(4);
       });
     });
 
     describe('detectGeminiCli', () => {
       it('should detect Gemini CLI when available', () => {
-        vi.mocked(execSync)
-          .mockReturnValueOnce('/usr/local/bin/gemini\n')  // which gemini
-          .mockReturnValueOnce('1.5.0\n');                  // gemini --version
+        vi.mocked(spawnSync)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/local/bin/gemini\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '1.5.0\n', stderr: '', error: undefined } as any);
 
         const result = detectGeminiCli();
 
@@ -125,9 +123,7 @@ describe('Multi-Model MCP Servers', () => {
       });
 
       it('should handle missing Gemini CLI', () => {
-        vi.mocked(execSync).mockImplementation(() => {
-          throw new Error('command not found');
-        });
+        vi.mocked(spawnSync).mockReturnValueOnce({ status: 1, stdout: '', stderr: 'command not found', error: undefined } as any);
 
         const result = detectGeminiCli();
 
@@ -137,42 +133,42 @@ describe('Multi-Model MCP Servers', () => {
       });
 
       it('should cache detection results', () => {
-        vi.mocked(execSync)
-          .mockReturnValueOnce('/usr/bin/gemini\n')
-          .mockReturnValueOnce('1.0.0\n');
+        vi.mocked(spawnSync)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/gemini\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '1.0.0\n', stderr: '', error: undefined } as any);
 
         const result1 = detectGeminiCli();
         const result2 = detectGeminiCli();
 
-        expect(execSync).toHaveBeenCalledTimes(2);
+        expect(spawnSync).toHaveBeenCalledTimes(2);
         expect(result1).toBe(result2);
       });
     });
 
     describe('resetDetectionCache', () => {
       it('should clear both caches', () => {
-        vi.mocked(execSync)
-          .mockReturnValueOnce('/usr/bin/codex\n')
-          .mockReturnValueOnce('1.0.0\n')
-          .mockReturnValueOnce('/usr/bin/gemini\n')
-          .mockReturnValueOnce('1.0.0\n');
+        vi.mocked(spawnSync)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/codex\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '1.0.0\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/gemini\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '1.0.0\n', stderr: '', error: undefined } as any);
 
         detectCodexCli();
         detectGeminiCli();
 
         resetDetectionCache();
 
-        // After reset, should call execSync again
-        vi.mocked(execSync)
-          .mockReturnValueOnce('/usr/bin/codex\n')
-          .mockReturnValueOnce('1.0.0\n')
-          .mockReturnValueOnce('/usr/bin/gemini\n')
-          .mockReturnValueOnce('1.0.0\n');
+        // After reset, should call spawnSync again
+        vi.mocked(spawnSync)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/codex\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '1.0.0\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '/usr/bin/gemini\n', stderr: '', error: undefined } as any)
+          .mockReturnValueOnce({ status: 0, stdout: '1.0.0\n', stderr: '', error: undefined } as any);
 
         detectCodexCli();
         detectGeminiCli();
 
-        expect(execSync).toHaveBeenCalledTimes(8);
+        expect(spawnSync).toHaveBeenCalledTimes(8);
       });
     });
   });

@@ -21311,7 +21311,7 @@ Use this instead of Bash heredocs when you need:
 };
 
 // src/tools/state-tools.ts
-var import_fs8 = require("fs");
+var import_fs9 = require("fs");
 
 // src/lib/worktree-paths.ts
 var import_fs6 = require("fs");
@@ -21336,13 +21336,13 @@ function setCache(key, value) {
 }
 function execGit(command, cwd) {
   try {
-    return (0, import_child_process9.execSync)(`git --no-pager ${command}`, {
+    const args = ["--no-pager", ...command.split(/\s+/)];
+    const result = (0, import_child_process9.spawnSync)("git", args, {
       cwd,
       encoding: "utf-8",
-      timeout: GIT_TIMEOUT,
-      stdio: ["pipe", "pipe", "pipe"],
-      shell: process.platform === "win32" ? "cmd.exe" : void 0
-    }).trim();
+      timeout: GIT_TIMEOUT
+    });
+    return result.status === 0 ? result.stdout.trim() : "";
   } catch {
     return "";
   }
@@ -21813,32 +21813,35 @@ var AuditLogger = class {
   deriveSecretKey() {
     const seed = process.env.OMC_AUDIT_SECRET;
     if (!seed) {
-      throw new Error("OMC_AUDIT_SECRET environment variable is required");
+      return null;
     }
     return Buffer.from((0, import_crypto2.createHmac)("sha256", "omc-audit").update(seed).digest("hex"));
   }
   sign(entry) {
+    if (!this.secretKey) return "";
     const payload = JSON.stringify(entry);
     return (0, import_crypto2.createHmac)("sha256", this.secretKey).update(payload).digest("hex");
   }
-  async log(entry) {
+  log(entry) {
+    if (!this.secretKey) return Promise.resolve();
     const fullEntry = {
       ...entry,
       timestamp: (/* @__PURE__ */ new Date()).toISOString()
     };
     fullEntry.signature = this.sign(fullEntry);
-    await this.appendLog(JSON.stringify(fullEntry) + "\n");
-    await this.rotateIfNeeded();
+    this.appendLog(JSON.stringify(fullEntry) + "\n");
+    this.rotateIfNeeded();
+    return Promise.resolve();
   }
-  async appendLog(line) {
-    await fs6.promises.appendFile(this.logPath, line, "utf8");
+  appendLog(line) {
+    fs6.appendFileSync(this.logPath, line, "utf8");
   }
-  async rotateIfNeeded() {
+  rotateIfNeeded() {
     try {
-      const stats = await fs6.promises.stat(this.logPath);
+      const stats = fs6.statSync(this.logPath);
       if (stats.size >= this.maxSize) {
         const rotatedPath = `${this.logPath}.${Date.now()}`;
-        await fs6.promises.rename(this.logPath, rotatedPath);
+        fs6.renameSync(this.logPath, rotatedPath);
       }
     } catch (err) {
       if (err.code !== "ENOENT") throw err;
@@ -21886,7 +21889,7 @@ var auditLogger = {
     }
     return _auditLogger;
   },
-  async log(entry) {
+  log(entry) {
     return this.instance.log(entry);
   },
   async verify() {
@@ -21907,12 +21910,16 @@ var VALID_MODES = [
   "ralph",
   "ultrawork",
   "ultraqa",
-  "swarm"
+  "swarm",
+  "ralplan"
 ];
 function validateMode(mode) {
   return typeof mode === "string" && VALID_MODES.includes(mode);
 }
 function assertValidMode(mode) {
+  if (typeof mode === "string" && mode.length > 100) {
+    throw new Error("Mode name too long");
+  }
   if (!validateMode(mode)) {
     const raw = typeof mode === "string" ? mode : String(mode);
     const display = raw.length > 50 ? `${raw.slice(0, 50)}...(truncated)` : raw;
@@ -21944,47 +21951,27 @@ function assertValidMode(mode) {
   return mode;
 }
 
-// src/lib/memory-utils.ts
-function pruneMap(map, maxSize) {
-  if (map.size <= maxSize) return;
-  const toDelete = map.size - maxSize;
-  let count = 0;
-  for (const key of map.keys()) {
-    if (count++ >= toDelete) break;
-    map.delete(key);
+// src/lib/state-cache.ts
+var import_fs8 = require("fs");
+var stateCache = /* @__PURE__ */ new Map();
+function readStateWithCache(path13, data, ttl = 5e3) {
+  try {
+    const mtime = (0, import_fs8.statSync)(path13).mtimeMs;
+    const cached2 = stateCache.get(path13);
+    if (cached2 && cached2.mtime === mtime && Date.now() - cached2.cachedAt < ttl) {
+      return { ...cached2.data };
+    }
+    stateCache.set(path13, { data, mtime, cachedAt: Date.now() });
+    return data;
+  } catch {
+    return data;
   }
+}
+function invalidateStateCache(path13) {
+  stateCache.delete(path13);
 }
 
 // src/tools/state-tools.ts
-var stateCache = /* @__PURE__ */ new Map();
-var CACHE_MAX_SIZE = 50;
-var CACHE_TTL_MS = 1e3;
-var cacheHits = 0;
-var cacheMisses = 0;
-function getCacheKey(mode, root, sessionId) {
-  return `${mode}:${root}:${sessionId || "legacy"}`;
-}
-function getCached2(key) {
-  const entry = stateCache.get(key);
-  if (!entry) {
-    cacheMisses++;
-    return null;
-  }
-  if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
-    stateCache.delete(key);
-    cacheMisses++;
-    return null;
-  }
-  cacheHits++;
-  return entry.data;
-}
-function setCache2(key, data) {
-  stateCache.set(key, { data, timestamp: Date.now() });
-  pruneMap(stateCache, CACHE_MAX_SIZE);
-}
-function invalidateCache(key) {
-  stateCache.delete(key);
-}
 var STATE_TOOL_MODES = [
   "autopilot",
   "ultrapilot",
@@ -22027,7 +22014,7 @@ var stateReadTool = {
       const sessionId = session_id;
       if (mode === "swarm") {
         const statePath2 = getStatePath(mode, root);
-        if (!(0, import_fs8.existsSync)(statePath2)) {
+        if (!(0, import_fs9.existsSync)(statePath2)) {
           return {
             content: [{
               type: "text",
@@ -22050,7 +22037,7 @@ Note: Swarm uses SQLite database. Use swarm-specific tools to query state.`
       if (sessionId) {
         validateSessionId(sessionId);
         const statePath2 = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sessionId) : resolveSessionStatePath(mode, sessionId, root);
-        if (!(0, import_fs8.existsSync)(statePath2)) {
+        if (!(0, import_fs9.existsSync)(statePath2)) {
           return {
             content: [{
               type: "text",
@@ -22059,20 +22046,15 @@ Expected path: ${statePath2}`
             }]
           };
         }
-        const cacheKey = getCacheKey(mode, root, sessionId);
-        let data = getCached2(cacheKey);
-        if (!data) {
-          const content = (0, import_fs8.readFileSync)(statePath2, "utf-8");
-          const result = safeJsonParse(content, statePath2);
-          if (!result.success) {
-            return {
-              content: [{ type: "text", text: result.error }],
-              isError: true
-            };
-          }
-          data = result.data;
-          setCache2(cacheKey, data);
+        const content = (0, import_fs9.readFileSync)(statePath2, "utf-8");
+        const result = safeJsonParse(content, statePath2);
+        if (!result.success) {
+          return {
+            content: [{ type: "text", text: result.error }],
+            isError: true
+          };
         }
+        const data = readStateWithCache(statePath2, result.data);
         return {
           content: [{
             type: "text",
@@ -22087,12 +22069,12 @@ ${JSON.stringify(data, null, 2)}
         };
       }
       const statePath = getStatePath(mode, root);
-      const legacyExists = (0, import_fs8.existsSync)(statePath);
+      const legacyExists = (0, import_fs9.existsSync)(statePath);
       const sessionIds = listSessionIds(root);
       const activeSessions = [];
       for (const sid of sessionIds) {
         const sessionStatePath = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sid) : resolveSessionStatePath(mode, sid, root);
-        if ((0, import_fs8.existsSync)(sessionStatePath)) {
+        if ((0, import_fs9.existsSync)(sessionStatePath)) {
           activeSessions.push(sid);
         }
       }
@@ -22114,7 +22096,7 @@ Note: Reading from legacy/aggregate path (no session_id). This may include state
 
 `;
       if (legacyExists) {
-        const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
+        const content = (0, import_fs9.readFileSync)(statePath, "utf-8");
         const result = safeJsonParse(content, statePath);
         if (result.success) {
           output += `### Legacy Path (shared)
@@ -22139,7 +22121,7 @@ Path: ${statePath}
 `;
         for (const sid of activeSessions) {
           const sessionStatePath = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sid) : resolveSessionStatePath(mode, sid, root);
-          const content = (0, import_fs8.readFileSync)(sessionStatePath, "utf-8");
+          const content = (0, import_fs9.readFileSync)(sessionStatePath, "utf-8");
           const result = safeJsonParse(content, sessionStatePath);
           if (result.success) {
             output += `**Session: ${sid}**
@@ -22271,8 +22253,7 @@ var stateWriteTool = {
       const unlock = await acquireLock(lockPath, 3e4);
       try {
         atomicWriteJsonSync(statePath, stateWithMeta);
-        const cacheKey = getCacheKey(mode, root, sessionId);
-        invalidateCache(cacheKey);
+        invalidateStateCache(statePath);
       } finally {
         await unlock();
       }
@@ -22325,8 +22306,8 @@ var stateClearTool = {
       const sessionId = session_id;
       if (sessionId) {
         validateSessionId(sessionId);
-        const cacheKey = getCacheKey(mode, root, sessionId);
-        invalidateCache(cacheKey);
+        const statePath = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sessionId) : resolveSessionStatePath(mode, sessionId, root);
+        invalidateStateCache(statePath);
         if (MODE_CONFIGS[mode]) {
           const success = clearModeState(mode, root, sessionId);
           if (success) {
@@ -22345,9 +22326,8 @@ var stateClearTool = {
             };
           }
         }
-        const statePath = resolveSessionStatePath(mode, sessionId, root);
-        if ((0, import_fs8.existsSync)(statePath)) {
-          (0, import_fs8.unlinkSync)(statePath);
+        if ((0, import_fs9.existsSync)(statePath)) {
+          (0, import_fs9.unlinkSync)(statePath);
           return {
             content: [{
               type: "text",
@@ -22368,7 +22348,7 @@ Removed: ${statePath}`
       const errors = [];
       if (MODE_CONFIGS[mode]) {
         const legacyStatePath = getStateFilePath(root, mode);
-        if ((0, import_fs8.existsSync)(legacyStatePath)) {
+        if ((0, import_fs9.existsSync)(legacyStatePath)) {
           if (clearModeState(mode, root)) {
             clearedCount++;
           } else {
@@ -22377,9 +22357,9 @@ Removed: ${statePath}`
         }
       } else {
         const statePath = getStatePath(mode, root);
-        if ((0, import_fs8.existsSync)(statePath)) {
+        if ((0, import_fs9.existsSync)(statePath)) {
           try {
-            (0, import_fs8.unlinkSync)(statePath);
+            (0, import_fs9.unlinkSync)(statePath);
             clearedCount++;
           } catch {
             errors.push("legacy path");
@@ -22390,7 +22370,7 @@ Removed: ${statePath}`
       for (const sid of sessionIds) {
         if (MODE_CONFIGS[mode]) {
           const sessionStatePath = getStateFilePath(root, mode, sid);
-          if ((0, import_fs8.existsSync)(sessionStatePath)) {
+          if ((0, import_fs9.existsSync)(sessionStatePath)) {
             if (clearModeState(mode, root, sid)) {
               clearedCount++;
             } else {
@@ -22399,9 +22379,9 @@ Removed: ${statePath}`
           }
         } else {
           const statePath = resolveSessionStatePath(mode, sid, root);
-          if ((0, import_fs8.existsSync)(statePath)) {
+          if ((0, import_fs9.existsSync)(statePath)) {
             try {
-              (0, import_fs8.unlinkSync)(statePath);
+              (0, import_fs9.unlinkSync)(statePath);
               clearedCount++;
             } catch {
               errors.push(`session: ${sid}`);
@@ -22457,8 +22437,8 @@ var stateListActiveTool = {
         validateSessionId(sessionId);
         const activeModes = [...getActiveModes(root, sessionId)];
         const ralplanPath2 = resolveSessionStatePath("ralplan", sessionId, root);
-        if ((0, import_fs8.existsSync)(ralplanPath2)) {
-          const content = (0, import_fs8.readFileSync)(ralplanPath2, "utf-8");
+        if ((0, import_fs9.existsSync)(ralplanPath2)) {
+          const content = (0, import_fs9.readFileSync)(ralplanPath2, "utf-8");
           const result = safeJsonParse(content, ralplanPath2);
           if (result.success && result.data?.active) {
             activeModes.push("ralplan");
@@ -22487,8 +22467,8 @@ ${modeList}`
       const modeSessionMap = /* @__PURE__ */ new Map();
       const legacyActiveModes = [...getActiveModes(root)];
       const ralplanPath = getStatePath("ralplan", root);
-      if ((0, import_fs8.existsSync)(ralplanPath)) {
-        const content = (0, import_fs8.readFileSync)(ralplanPath, "utf-8");
+      if ((0, import_fs9.existsSync)(ralplanPath)) {
+        const content = (0, import_fs9.readFileSync)(ralplanPath, "utf-8");
         const result = safeJsonParse(content, ralplanPath);
         if (result.success && result.data?.active) {
           legacyActiveModes.push("ralplan");
@@ -22504,8 +22484,8 @@ ${modeList}`
       for (const sid of sessionIds) {
         const sessionActiveModes = [...getActiveModes(root, sid)];
         const ralplanSessionPath = resolveSessionStatePath("ralplan", sid, root);
-        if ((0, import_fs8.existsSync)(ralplanSessionPath)) {
-          const content = (0, import_fs8.readFileSync)(ralplanSessionPath, "utf-8");
+        if ((0, import_fs9.existsSync)(ralplanSessionPath)) {
+          const content = (0, import_fs9.readFileSync)(ralplanSessionPath, "utf-8");
           const result = safeJsonParse(content, ralplanSessionPath);
           if (result.success && result.data?.active) {
             sessionActiveModes.push("ralplan");
@@ -22567,14 +22547,14 @@ var stateGetStatusTool = {
         if (sessionId) {
           validateSessionId(sessionId);
           const statePath = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sessionId) : resolveSessionStatePath(mode, sessionId, root);
-          const active = MODE_CONFIGS[mode] ? isModeActive(mode, root, sessionId) : (0, import_fs8.existsSync)(statePath) && (() => {
-            const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
+          const active = MODE_CONFIGS[mode] ? isModeActive(mode, root, sessionId) : (0, import_fs9.existsSync)(statePath) && (() => {
+            const content = (0, import_fs9.readFileSync)(statePath, "utf-8");
             const result = safeJsonParse(content, statePath);
             return result.success && result.data?.active === true;
           })();
           let statePreview = "No state file";
-          if ((0, import_fs8.existsSync)(statePath)) {
-            const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
+          if ((0, import_fs9.existsSync)(statePath)) {
+            const content = (0, import_fs9.readFileSync)(statePath, "utf-8");
             const result = safeJsonParse(content, statePath);
             if (result.success) {
               statePreview = JSON.stringify(result.data, null, 2).slice(0, 500);
@@ -22586,7 +22566,7 @@ var stateGetStatusTool = {
           lines2.push(`### Session: ${sessionId}`);
           lines2.push(`- **Active:** ${active ? "Yes" : "No"}`);
           lines2.push(`- **State Path:** ${statePath}`);
-          lines2.push(`- **Exists:** ${(0, import_fs8.existsSync)(statePath) ? "Yes" : "No"}`);
+          lines2.push(`- **Exists:** ${(0, import_fs9.existsSync)(statePath) ? "Yes" : "No"}`);
           lines2.push(`
 ### State Preview
 \`\`\`json
@@ -22600,20 +22580,20 @@ ${statePreview}
           };
         }
         const legacyPath = getStatePath(mode, root);
-        const legacyActive = MODE_CONFIGS[mode] ? isModeActive(mode, root) : (0, import_fs8.existsSync)(legacyPath) && (() => {
-          const content = (0, import_fs8.readFileSync)(legacyPath, "utf-8");
+        const legacyActive = MODE_CONFIGS[mode] ? isModeActive(mode, root) : (0, import_fs9.existsSync)(legacyPath) && (() => {
+          const content = (0, import_fs9.readFileSync)(legacyPath, "utf-8");
           const result = safeJsonParse(content, legacyPath);
           return result.success && result.data?.active === true;
         })();
         lines2.push(`### Legacy Path`);
         lines2.push(`- **Active:** ${legacyActive ? "Yes" : "No"}`);
         lines2.push(`- **State Path:** ${legacyPath}`);
-        lines2.push(`- **Exists:** ${(0, import_fs8.existsSync)(legacyPath) ? "Yes" : "No"}
+        lines2.push(`- **Exists:** ${(0, import_fs9.existsSync)(legacyPath) ? "Yes" : "No"}
 `);
         const activeSessions = MODE_CONFIGS[mode] ? getActiveSessionsForMode(mode, root) : listSessionIds(root).filter((sid) => {
           const sessionPath = resolveSessionStatePath(mode, sid, root);
-          if ((0, import_fs8.existsSync)(sessionPath)) {
-            const content = (0, import_fs8.readFileSync)(sessionPath, "utf-8");
+          if ((0, import_fs9.existsSync)(sessionPath)) {
+            const content = (0, import_fs9.readFileSync)(sessionPath, "utf-8");
             const result = safeJsonParse(content, sessionPath);
             return result.success && result.data?.active === true;
           }
@@ -22651,8 +22631,8 @@ No active sessions for this mode.`);
       }
       const ralplanPath = sessionId ? resolveSessionStatePath("ralplan", sessionId, root) : getStatePath("ralplan", root);
       let ralplanActive = false;
-      if ((0, import_fs8.existsSync)(ralplanPath)) {
-        const content = (0, import_fs8.readFileSync)(ralplanPath, "utf-8");
+      if ((0, import_fs9.existsSync)(ralplanPath)) {
+        const content = (0, import_fs9.readFileSync)(ralplanPath, "utf-8");
         const result = safeJsonParse(content, ralplanPath);
         ralplanActive = result.success && result.data?.active === true;
       }
@@ -22685,7 +22665,7 @@ var stateTools = [
 ];
 
 // src/hooks/notepad/index.ts
-var import_fs9 = require("fs");
+var import_fs10 = require("fs");
 var import_path9 = require("path");
 var NOTEPAD_FILENAME = "notepad.md";
 var DEFAULT_CONFIG = {
@@ -22702,15 +22682,15 @@ function getNotepadPath(directory) {
 }
 function initNotepad(directory) {
   const omcDir = (0, import_path9.join)(directory, ".omc");
-  if (!(0, import_fs9.existsSync)(omcDir)) {
+  if (!(0, import_fs10.existsSync)(omcDir)) {
     try {
-      (0, import_fs9.mkdirSync)(omcDir, { recursive: true });
+      (0, import_fs10.mkdirSync)(omcDir, { recursive: true });
     } catch {
       return false;
     }
   }
   const notepadPath = getNotepadPath(directory);
-  if ((0, import_fs9.existsSync)(notepadPath)) {
+  if ((0, import_fs10.existsSync)(notepadPath)) {
     return true;
   }
   const content = `# Notepad
@@ -22735,11 +22715,11 @@ ${MANUAL_HEADER}
 }
 function readNotepad(directory) {
   const notepadPath = getNotepadPath(directory);
-  if (!(0, import_fs9.existsSync)(notepadPath)) {
+  if (!(0, import_fs10.existsSync)(notepadPath)) {
     return null;
   }
   try {
-    return (0, import_fs9.readFileSync)(notepadPath, "utf-8");
+    return (0, import_fs10.readFileSync)(notepadPath, "utf-8");
   } catch {
     return null;
   }
@@ -22786,13 +22766,13 @@ function getManualSection(directory) {
   return extractSection(content, MANUAL_HEADER);
 }
 function setPriorityContext(directory, content, config2 = DEFAULT_CONFIG) {
-  if (!(0, import_fs9.existsSync)(getNotepadPath(directory))) {
+  if (!(0, import_fs10.existsSync)(getNotepadPath(directory))) {
     if (!initNotepad(directory)) {
       return { success: false };
     }
   }
   const notepadPath = getNotepadPath(directory);
-  let notepadContent = (0, import_fs9.readFileSync)(notepadPath, "utf-8");
+  let notepadContent = (0, import_fs10.readFileSync)(notepadPath, "utf-8");
   const warning = content.length > config2.priorityMaxChars ? `Priority Context exceeds ${config2.priorityMaxChars} chars (${content.length} chars). Consider condensing.` : void 0;
   notepadContent = replaceSection(notepadContent, PRIORITY_HEADER, content);
   try {
@@ -22803,13 +22783,13 @@ function setPriorityContext(directory, content, config2 = DEFAULT_CONFIG) {
   }
 }
 function addWorkingMemoryEntry(directory, content) {
-  if (!(0, import_fs9.existsSync)(getNotepadPath(directory))) {
+  if (!(0, import_fs10.existsSync)(getNotepadPath(directory))) {
     if (!initNotepad(directory)) {
       return false;
     }
   }
   const notepadPath = getNotepadPath(directory);
-  let notepadContent = (0, import_fs9.readFileSync)(notepadPath, "utf-8");
+  let notepadContent = (0, import_fs10.readFileSync)(notepadPath, "utf-8");
   const currentMemory = extractSection(notepadContent, WORKING_MEMORY_HEADER) || "";
   const now = /* @__PURE__ */ new Date();
   const timestamp = now.toISOString().slice(0, 16).replace("T", " ");
@@ -22830,13 +22810,13 @@ ${content}
   }
 }
 function addManualEntry(directory, content) {
-  if (!(0, import_fs9.existsSync)(getNotepadPath(directory))) {
+  if (!(0, import_fs10.existsSync)(getNotepadPath(directory))) {
     if (!initNotepad(directory)) {
       return false;
     }
   }
   const notepadPath = getNotepadPath(directory);
-  let notepadContent = (0, import_fs9.readFileSync)(notepadPath, "utf-8");
+  let notepadContent = (0, import_fs10.readFileSync)(notepadPath, "utf-8");
   const currentManual = extractSection(notepadContent, MANUAL_HEADER) || "";
   const now = /* @__PURE__ */ new Date();
   const timestamp = now.toISOString().slice(0, 16).replace("T", " ");
@@ -22854,10 +22834,10 @@ ${content}
 }
 function pruneOldEntries(directory, daysOld = DEFAULT_CONFIG.workingMemoryDays) {
   const notepadPath = getNotepadPath(directory);
-  if (!(0, import_fs9.existsSync)(notepadPath)) {
+  if (!(0, import_fs10.existsSync)(notepadPath)) {
     return { pruned: 0, remaining: 0 };
   }
-  let notepadContent = (0, import_fs9.readFileSync)(notepadPath, "utf-8");
+  let notepadContent = (0, import_fs10.readFileSync)(notepadPath, "utf-8");
   const workingMemory = extractSection(notepadContent, WORKING_MEMORY_HEADER);
   if (!workingMemory) {
     return { pruned: 0, remaining: 0 };
@@ -22895,7 +22875,7 @@ ${entry.content}`).join("\n\n");
 }
 function getNotepadStats(directory) {
   const notepadPath = getNotepadPath(directory);
-  if (!(0, import_fs9.existsSync)(notepadPath)) {
+  if (!(0, import_fs10.existsSync)(notepadPath)) {
     return {
       exists: false,
       totalSize: 0,
@@ -22904,7 +22884,7 @@ function getNotepadStats(directory) {
       oldestEntry: null
     };
   }
-  const content = (0, import_fs9.readFileSync)(notepadPath, "utf-8");
+  const content = (0, import_fs10.readFileSync)(notepadPath, "utf-8");
   const priorityContext = extractSection(content, PRIORITY_HEADER) || "";
   const workingMemory = extractSection(content, WORKING_MEMORY_HEADER) || "";
   const entryMatches = workingMemory.match(
@@ -23326,7 +23306,7 @@ var ContextCollector = class {
 var contextCollector = new ContextCollector();
 
 // src/hooks/rules-injector/finder.ts
-var import_fs10 = require("fs");
+var import_fs11 = require("fs");
 var import_path11 = require("path");
 
 // src/hooks/rules-injector/constants.ts
@@ -23638,27 +23618,27 @@ var memoryTools = [
 ];
 
 // src/tools/trace-tools.ts
-var import_fs12 = require("fs");
+var import_fs13 = require("fs");
 var import_path17 = require("path");
 
 // src/hooks/subagent-tracker/session-replay.ts
-var import_fs11 = require("fs");
+var import_fs12 = require("fs");
 var import_path16 = require("path");
 var REPLAY_PREFIX = "agent-replay-";
 var MAX_REPLAY_SIZE_BYTES = 5 * 1024 * 1024;
 function getReplayFilePath(directory, sessionId) {
   const stateDir = (0, import_path16.join)(directory, ".omc", "state");
-  if (!(0, import_fs11.existsSync)(stateDir)) {
-    (0, import_fs11.mkdirSync)(stateDir, { recursive: true });
+  if (!(0, import_fs12.existsSync)(stateDir)) {
+    (0, import_fs12.mkdirSync)(stateDir, { recursive: true });
   }
   const safeId = sessionId.replace(/[^a-zA-Z0-9_-]/g, "_");
   return (0, import_path16.join)(stateDir, `${REPLAY_PREFIX}${safeId}.jsonl`);
 }
 function readReplayEvents(directory, sessionId) {
   const filePath = getReplayFilePath(directory, sessionId);
-  if (!(0, import_fs11.existsSync)(filePath)) return [];
+  if (!(0, import_fs12.existsSync)(filePath)) return [];
   try {
-    const content = (0, import_fs11.readFileSync)(filePath, "utf-8");
+    const content = (0, import_fs12.readFileSync)(filePath, "utf-8");
     return content.split("\n").filter((line) => line.trim()).map((line) => {
       try {
         return JSON.parse(line);
@@ -23833,10 +23813,10 @@ var REPLAY_PREFIX2 = "agent-replay-";
 function findLatestSessionId(directory) {
   const stateDir = (0, import_path17.join)(directory, ".omc", "state");
   try {
-    const files = (0, import_fs12.readdirSync)(stateDir).filter((f) => f.startsWith(REPLAY_PREFIX2) && f.endsWith(".jsonl")).map((f) => ({
+    const files = (0, import_fs13.readdirSync)(stateDir).filter((f) => f.startsWith(REPLAY_PREFIX2) && f.endsWith(".jsonl")).map((f) => ({
       name: f,
       sessionId: f.slice(REPLAY_PREFIX2.length, -".jsonl".length),
-      mtime: (0, import_fs12.statSync)((0, import_path17.join)(stateDir, f)).mtimeMs
+      mtime: (0, import_fs13.statSync)((0, import_path17.join)(stateDir, f)).mtimeMs
     })).sort((a, b) => b.mtime - a.mtime);
     return files.length > 0 ? files[0].sessionId : null;
   } catch {
@@ -24182,12 +24162,12 @@ var import_path22 = require("path");
 var import_os4 = require("os");
 
 // src/hooks/learner/loader.ts
-var import_fs15 = require("fs");
+var import_fs16 = require("fs");
 var import_crypto3 = require("crypto");
 var import_path21 = require("path");
 
 // src/hooks/learner/finder.ts
-var import_fs14 = require("fs");
+var import_fs15 = require("fs");
 var import_path20 = require("path");
 
 // src/hooks/learner/constants.ts
@@ -24196,7 +24176,7 @@ var import_os3 = require("os");
 
 // src/utils/paths.ts
 var import_path18 = require("path");
-var import_fs13 = require("fs");
+var import_fs14 = require("fs");
 var import_os2 = require("os");
 
 // src/utils/config-dir.ts
@@ -24221,10 +24201,10 @@ var DEBUG_ENABLED = process.env.OMC_DEBUG === "1";
 
 // src/hooks/learner/finder.ts
 function findSkillFilesRecursive(dir, results, depth = 0) {
-  if (!(0, import_fs14.existsSync)(dir)) return;
+  if (!(0, import_fs15.existsSync)(dir)) return;
   if (depth > MAX_RECURSION_DEPTH) return;
   try {
-    const entries = (0, import_fs14.readdirSync)(dir, { withFileTypes: true });
+    const entries = (0, import_fs15.readdirSync)(dir, { withFileTypes: true });
     for (const entry of entries) {
       const fullPath = (0, import_path20.join)(dir, entry.name);
       if (entry.isDirectory()) {
@@ -24241,7 +24221,7 @@ function findSkillFilesRecursive(dir, results, depth = 0) {
 }
 function safeRealpathSync(filePath) {
   try {
-    return (0, import_fs14.realpathSync)(filePath);
+    return (0, import_fs15.realpathSync)(filePath);
   } catch {
     return filePath;
   }
@@ -24449,7 +24429,7 @@ function loadAllSkills(projectRoot) {
   const seenIds = /* @__PURE__ */ new Map();
   for (const candidate of candidates) {
     try {
-      const rawContent = (0, import_fs15.readFileSync)(candidate.path, "utf-8");
+      const rawContent = (0, import_fs16.readFileSync)(candidate.path, "utf-8");
       const { metadata, content, valid, errors } = parseSkillFile(rawContent);
       if (!valid) {
         if (DEBUG_ENABLED) {
@@ -24597,7 +24577,7 @@ ${formatSkillOutput(userSkills)}`;
 var skillsTools = [loadLocalTool, loadGlobalTool, listSkillsTool];
 
 // src/tools/dependency-analyzer.ts
-var import_fs16 = require("fs");
+var import_fs17 = require("fs");
 var import_path23 = require("path");
 var DependencyAnalyzerSchema = external_exports.object({
   filePath: external_exports.string().describe("File path to analyze"),
@@ -24610,7 +24590,7 @@ var dependencyAnalyzerTool = {
   handler: async (args) => {
     try {
       const { filePath, depth = 1 } = args;
-      const content = (0, import_fs16.readFileSync)(filePath, "utf-8");
+      const content = (0, import_fs17.readFileSync)(filePath, "utf-8");
       const deps = extractDependencies(content, filePath);
       return {
         content: [{
@@ -24651,7 +24631,7 @@ function resolveImport(importPath, baseDir) {
 }
 
 // src/tools/doc-sync.ts
-var import_fs17 = require("fs");
+var import_fs18 = require("fs");
 var DocSyncSchema = external_exports.object({
   sourceFile: external_exports.string().describe("Source code file with comments"),
   targetDoc: external_exports.string().describe("Target documentation file"),
@@ -24664,16 +24644,16 @@ var docSyncTool = {
   handler: async (args) => {
     try {
       const { sourceFile, targetDoc, section } = args;
-      const code = (0, import_fs17.readFileSync)(sourceFile, "utf-8");
+      const code = (0, import_fs18.readFileSync)(sourceFile, "utf-8");
       const rules = extractSecurityRules(code);
       if (rules.length === 0) {
         return {
           content: [{ type: "text", text: "No security rules found" }]
         };
       }
-      const docContent = (0, import_fs17.readFileSync)(targetDoc, "utf-8");
+      const docContent = (0, import_fs18.readFileSync)(targetDoc, "utf-8");
       const updated = section ? updateSection(docContent, section, rules) : appendRules(docContent, rules);
-      (0, import_fs17.writeFileSync)(targetDoc, updated, "utf-8");
+      (0, import_fs18.writeFileSync)(targetDoc, updated, "utf-8");
       return {
         content: [{
           type: "text",

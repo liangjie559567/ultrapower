@@ -14351,11 +14351,14 @@ function detectGeminiCli(useCache = true) {
   if (useCache && geminiCache) return geminiCache;
   const installHint = "Install Gemini CLI: npm install -g @google/gemini-cli (see https://github.com/google-gemini/gemini-cli)";
   try {
-    const command = process.platform === "win32" ? "where gemini" : "which gemini";
-    const path = (0, import_child_process.execSync)(command, { encoding: "utf-8", timeout: 5e3 }).trim();
+    const cmd = process.platform === "win32" ? "where" : "which";
+    const pathResult = (0, import_child_process.spawnSync)(cmd, ["gemini"], { encoding: "utf-8", timeout: 5e3 });
+    if (pathResult.status !== 0) throw new Error("gemini not found");
+    const path = pathResult.stdout.trim();
     let version2;
     try {
-      version2 = (0, import_child_process.execSync)("gemini --version", { encoding: "utf-8", timeout: 5e3 }).trim();
+      const versionResult = (0, import_child_process.spawnSync)("gemini", ["--version"], { encoding: "utf-8", timeout: 5e3 });
+      if (versionResult.status === 0) version2 = versionResult.stdout.trim();
     } catch {
     }
     const result = { available: true, path, version: version2, installHint };
@@ -14399,13 +14402,13 @@ function setCache(key, value) {
 }
 function execGit(command, cwd) {
   try {
-    return (0, import_child_process2.execSync)(`git --no-pager ${command}`, {
+    const args = ["--no-pager", ...command.split(/\s+/)];
+    const result = (0, import_child_process2.spawnSync)("git", args, {
       cwd,
       encoding: "utf-8",
-      timeout: GIT_TIMEOUT,
-      stdio: ["pipe", "pipe", "pipe"],
-      shell: process.platform === "win32" ? "cmd.exe" : void 0
-    }).trim();
+      timeout: GIT_TIMEOUT
+    });
+    return result.status === 0 ? result.stdout.trim() : "";
   } catch {
     return "";
   }
@@ -14458,6 +14461,7 @@ function getPackageDir() {
   }
   return process.cwd();
 }
+var promptCache = /* @__PURE__ */ new Map();
 function stripFrontmatter(content) {
   const match = content.match(/^---[\s\S]*?---\s*([\s\S]*)$/);
   return match ? match[1].trim() : content.trim();
@@ -14467,10 +14471,17 @@ function loadAgentPrompt(agentName, provider) {
     throw new Error(`Invalid agent name: contains disallowed characters`);
   }
   if (provider) {
+    const cacheKey2 = `${provider}:${agentName}`;
+    if (promptCache.has(cacheKey2)) {
+      return promptCache.get(cacheKey2);
+    }
     try {
       if (provider === "codex" && typeof __AGENT_PROMPTS_CODEX__ !== "undefined" && __AGENT_PROMPTS_CODEX__ !== null) {
         const prompt = __AGENT_PROMPTS_CODEX__[agentName];
-        if (prompt) return prompt;
+        if (prompt) {
+          promptCache.set(cacheKey2, prompt);
+          return prompt;
+        }
       }
     } catch {
     }
@@ -14482,15 +14493,24 @@ function loadAgentPrompt(agentName, provider) {
       const rel = (0, import_path3.relative)(resolvedProviderDir, resolvedPath);
       if (!rel.startsWith("..") && !(0, import_path3.isAbsolute)(rel)) {
         const content = (0, import_fs3.readFileSync)(providerPath, "utf-8");
-        return stripFrontmatter(content);
+        const prompt = stripFrontmatter(content);
+        promptCache.set(cacheKey2, prompt);
+        return prompt;
       }
     } catch {
     }
   }
+  const cacheKey = agentName;
+  if (promptCache.has(cacheKey)) {
+    return promptCache.get(cacheKey);
+  }
   try {
     if (typeof define_AGENT_PROMPTS_default !== "undefined" && define_AGENT_PROMPTS_default !== null) {
       const prompt = define_AGENT_PROMPTS_default[agentName];
-      if (prompt) return prompt;
+      if (prompt) {
+        promptCache.set(cacheKey, prompt);
+        return prompt;
+      }
     }
   } catch {
   }
@@ -14504,7 +14524,9 @@ function loadAgentPrompt(agentName, provider) {
       throw new Error(`Invalid agent name: path traversal detected`);
     }
     const content = (0, import_fs3.readFileSync)(agentPath, "utf-8");
-    return stripFrontmatter(content);
+    const prompt = stripFrontmatter(content);
+    promptCache.set(cacheKey, prompt);
+    return prompt;
   } catch (error2) {
     const message = error2 instanceof Error && error2.message.includes("Invalid agent name") ? error2.message : "Agent prompt file not found";
     console.warn(`[loadAgentPrompt] ${message}`);

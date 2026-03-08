@@ -5,7 +5,7 @@
  * Results are cached per-session to avoid repeated filesystem checks.
  */
 
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 
 export interface CliDetectionResult {
   available: boolean;
@@ -28,11 +28,14 @@ export function detectCodexCli(useCache = true): CliDetectionResult {
   const installHint = 'Install Codex CLI: npm install -g @openai/codex';
 
   try {
-    const command = process.platform === 'win32' ? 'where codex' : 'which codex';
-    const path = execSync(command, { encoding: 'utf-8', timeout: 5000 }).trim();
+    const cmd = process.platform === 'win32' ? 'where' : 'which';
+    const pathResult = spawnSync(cmd, ['codex'], { encoding: 'utf-8', timeout: 5000 });
+    if (pathResult.status !== 0) throw new Error('codex not found');
+    const path = pathResult.stdout.trim();
     let version: string | undefined;
     try {
-      version = execSync('codex --version', { encoding: 'utf-8', timeout: 5000 }).trim();
+      const versionResult = spawnSync('codex', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+      if (versionResult.status === 0) version = versionResult.stdout.trim();
     } catch {
       // Version check is optional
     }
@@ -60,11 +63,14 @@ export function detectGeminiCli(useCache = true): CliDetectionResult {
   const installHint = 'Install Gemini CLI: npm install -g @google/gemini-cli (see https://github.com/google-gemini/gemini-cli)';
 
   try {
-    const command = process.platform === 'win32' ? 'where gemini' : 'which gemini';
-    const path = execSync(command, { encoding: 'utf-8', timeout: 5000 }).trim();
+    const cmd = process.platform === 'win32' ? 'where' : 'which';
+    const pathResult = spawnSync(cmd, ['gemini'], { encoding: 'utf-8', timeout: 5000 });
+    if (pathResult.status !== 0) throw new Error('gemini not found');
+    const path = pathResult.stdout.trim();
     let version: string | undefined;
     try {
-      version = execSync('gemini --version', { encoding: 'utf-8', timeout: 5000 }).trim();
+      const versionResult = spawnSync('gemini', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+      if (versionResult.status === 0) version = versionResult.stdout.trim();
     } catch {
       // Version check is optional
     }
