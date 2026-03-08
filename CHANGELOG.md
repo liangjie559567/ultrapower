@@ -1,5 +1,11 @@
 # ultrapower v5.5.39
 
+## 5.5.40
+
+### Patch Changes
+
+- Test changesets workflow integration
+
 **发布日期**: 2026-03-08
 
 ## Bug Fixes
@@ -138,6 +144,7 @@
   - 所有 MCP 工具名称现在都在 64 字符以内（最长 47 字符）
 
 ---
+
 # ultrapower v5.5.23
 
 **发布日期**: 2026-03-06
@@ -219,6 +226,7 @@
 v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 **推荐操作**：
+
 - 升级到 v5.5.18 以获得安全和性能改进
 - 监控 Worker 健康检查指标（现在可在 <10ms 内获得）
 - 查看 hook 执行日志以了解 permission-request 阻塞行为
@@ -279,11 +287,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 ### 新增
 
 - **feat(mcp): MCP 全面采用计划完成（42 个原子任务）**
-    - 工具前缀迁移系统（`src/tools/tool-prefix-migration.ts`）：双注册 + 废弃警告
-    - npm 包发布（`@liangjie559567/ultrapower-mcp-server@5.5.15`）
-    - 自动迁移脚本（`scripts/migrate-tool-names.js`）
-    - 完整 MCP 生态文档（`docs/mcp/`）：README、overview、server-guide、client-guide、configuration、performance
-    - 迁移指南（`docs/guides/tool-name-migration.md`）
+  - 工具前缀迁移系统（`src/tools/tool-prefix-migration.ts`）：双注册 + 废弃警告
+  - npm 包发布（`@liangjie559567/ultrapower-mcp-server@5.5.15`）
+  - 自动迁移脚本（`scripts/migrate-tool-names.js`）
+  - 完整 MCP 生态文档（`docs/mcp/`）：README、overview、server-guide、client-guide、configuration、performance
+  - 迁移指南（`docs/guides/tool-name-migration.md`）
 
 ### 文档
 
@@ -377,6 +385,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 # ultrapower v5.5.6
 
 ### 文档
+
 - Comprehensive documentation update: REFERENCE.md (49 agents/71 skills/35 tools/35 hooks), ARCHITECTURE.md (611 lines), FEATURES.md (1238 lines)
 - docs/standards/ 10 files bumped to v5.5.6
 - Merge docs/shared/ into docs/partials/ (remove 6 duplicate files)
@@ -404,14 +413,18 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 ---
 
 ## [5.5.4] - 2026-03-02
+
 ### Code Quality
+
 - Expand `generatePromptId` entropy from 4 to 8 bytes
 - Add 4MB prompt size limit to `executeGemini`
 - Unify catch blocks to return `isError: true` consistently
 - Dynamic `ALLOWED_BOUNDARIES` calculation in skills-tools
 
 ## [5.5.3] - 2026-03-02
+
 ### Documentation & Namespace
+
 - Replace all `superpowers:` prefix residuals with `ultrapower:`
 - Add deprecation notice for legacy namespace with migration hints
 - Sync AGENTS.md version and agent count with package.json
@@ -419,19 +432,25 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 - Add GitHub Actions windows-latest CI matrix
 
 ## [5.5.2] - 2026-03-02
+
 ### Feature
+
 - Add delegation-enforcer: auto-inject model for Task/Agent calls
   (explore→haiku, executor→sonnet when model unspecified)
 
 ## [5.5.1] - 2026-03-02
+
 ### Fix (Windows & Features)
+
 - Fix `which`/`where` platform branch in auto-update
 - Fix path handling: use `path.relative()` + `path.resolve()` normalization
 - Fix `wait_for_job` max wait timeout (60s cap)
 - Fix `handleKillJob` order: kill process before writing status
 
 ## [5.5.0] - 2026-03-02
+
 ### Security
+
 - Add `assertValidMode()` path traversal guard at state_read/state_write entry
 - Replace `execSync` with `execFileSync` in LSP servers (shell injection fix)
 - Disable fast path for SENSITIVE_HOOKS in bridge-normalize
@@ -792,7 +811,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 - **Axiom 深度融合**：将 Axiom 智能体编排框架完整集成到 ultrapower，提供需求→开发→进化全流程工作流
   - **14 个 Axiom agents**：axiom-requirement-analyst、axiom-product-designer、axiom-review-aggregator、axiom-prd-crafter、axiom-system-architect、axiom-evolution-engine、axiom-context-manager、axiom-worker，以及 6 个专家评审角色（axiom-ux-director、axiom-product-director、axiom-domain-expert、axiom-tech-lead、axiom-critic、axiom-sub-prd-writer）
   - **14 个 Axiom skills**：ax-draft、ax-review、ax-decompose、ax-implement、ax-analyze-error、ax-reflect、ax-evolve、ax-status、ax-rollback、ax-suspend、ax-context、ax-evolution、ax-knowledge、ax-export
-  - **14 个斜杠命令**：对应所有 ax-* skills 的 `/ultrapower:ax-*` 命令
+  - **14 个斜杠命令**：对应所有 ax-_ skills 的 `/ultrapower:ax-_` 命令
   - **14 个 Codex prompts**：为所有 Axiom agents 提供 OpenAI Codex 适配提示词
 - **Axiom 记忆系统**：`.omc/axiom/` 目录，含 active_context、project_decisions、user_preferences、state_machine、reflection_log 及 evolution/ 子目录（knowledge_base、pattern_library、learning_queue、workflow_metrics）
 - **Axiom 进化引擎**：知识收割、模式检测、置信度系统、学习队列（P0-P3 优先级）
@@ -979,6 +998,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 ## 变更
 
 ### 变更
+
 - **Team skill**：移除了 team 成员的硬编码 `model: "sonnet"` 默认值。队友现在继承用户的会话模型，而非强制使用 Sonnet。由于每个队友都是能够生成自己子智能体的完整 Claude Code 会话，会话模型充当编排层。
 - **Team 配置**：从 `.omc-config.json` team 配置选项中移除了 `defaultModel`。
 
@@ -1016,6 +1036,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 之前的分层智能体系统（`-low`、`-medium`、`-high` 后缀）已被弃用并移除。此举旨在简化用户体验，并与现代模型能力保持一致。
 
 **迁移指南：**
+
 - **需要操作：** 用户必须更新其脚本、配置和自定义命令。
 - **如何更新：** 不再通过层级选择智能体（如 `planner-high`），而是使用单一统一智能体（如 `planner`），并通过 Claude Code 设置或模型参数指定所需的模型大小/能力。
 - **示例：** `Task(subagent_type="ultrapower:architect-high", ...)` 应改为 `Task(subagent_type="ultrapower:architect", model="opus", ...)`。
