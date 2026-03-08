@@ -150,7 +150,8 @@ export async function withFileLock<T>(
   } finally {
     await fs.promises.rm(lockPath, { recursive: true, force: true }).catch((err) => {
       const nodeErr = err as NodeJS.ErrnoException;
-      if (nodeErr.code !== 'ENOENT') {
+      // Ignore ENOENT (already deleted) and ENOTEMPTY (Windows race condition)
+      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
         throw err;
       }
     });
