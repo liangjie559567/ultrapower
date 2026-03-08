@@ -11,6 +11,9 @@
 export async function readStdin() {
     // Skip if running in TTY mode (interactive terminal)
     if (process.stdin.isTTY) {
+        if (process.env.OMC_DEBUG) {
+            console.error('[HUD stdin] Skipped: TTY mode');
+        }
         return null;
     }
     const chunks = [];
@@ -21,11 +24,17 @@ export async function readStdin() {
         }
         const raw = chunks.join('');
         if (!raw.trim()) {
+            if (process.env.OMC_DEBUG) {
+                console.error('[HUD stdin] Empty input');
+            }
             return null;
         }
         return JSON.parse(raw);
     }
-    catch {
+    catch (err) {
+        if (process.env.OMC_DEBUG) {
+            console.error('[HUD stdin] Parse error:', err);
+        }
         return null;
     }
 }

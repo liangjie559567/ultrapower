@@ -14,6 +14,9 @@ import type { StatuslineStdin } from './types.js';
 export async function readStdin(): Promise<StatuslineStdin | null> {
   // Skip if running in TTY mode (interactive terminal)
   if (process.stdin.isTTY) {
+    if (process.env.OMC_DEBUG) {
+      console.error('[HUD stdin] Skipped: TTY mode');
+    }
     return null;
   }
 
@@ -28,11 +31,17 @@ export async function readStdin(): Promise<StatuslineStdin | null> {
 
     const raw = chunks.join('');
     if (!raw.trim()) {
+      if (process.env.OMC_DEBUG) {
+        console.error('[HUD stdin] Empty input');
+      }
       return null;
     }
 
     return JSON.parse(raw) as StatuslineStdin;
-  } catch {
+  } catch (err) {
+    if (process.env.OMC_DEBUG) {
+      console.error('[HUD stdin] Parse error:', err);
+    }
     return null;
   }
 }
