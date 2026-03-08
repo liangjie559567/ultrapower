@@ -1,15 +1,24 @@
 # ultrapower 安装部署详细教程
 
-ultrapower v5.2.2 完整安装指南，覆盖从零开始到完全配置的所有步骤。
+ultrapower v5.5.33 完整安装指南，覆盖从零开始到完全配置的所有步骤。
+
+---
+
+> **⚠️ 重要提示：仅支持 Claude Code 插件安装方式**
+>
+> 从 v5.5.x 开始，ultrapower 仅支持通过 Claude Code 插件系统安装（方式一）。
+> 方式二（本地开发）和方式三（npm 全局安装）已不再官方支持，仅供开发者参考。
+>
+> 推荐所有用户使用**方式一：插件市场安装**。
 
 ---
 
 ## 目录
 
 - [前提条件](#前提条件)
-- [方式一：插件市场安装（推荐）](#方式一插件市场安装推荐)
-- [方式二：本地开发安装](#方式二本地开发安装)
-- [方式三：npm 全局安装](#方式三npm-全局安装)
+- [方式一：插件市场安装（推荐，唯一官方支持）](#方式一插件市场安装推荐)
+- [方式二：本地开发安装（不支持）](#方式二本地开发安装)
+- [方式三：npm 全局安装（不支持）](#方式三npm-全局安装)
 - [安装后配置](#安装后配置)
 - [Axiom 系统初始化](#axiom-系统初始化)
 - [MCP 服务器配置](#mcp-服务器配置)
@@ -53,9 +62,9 @@ git --version
 
 ---
 
-## 方式一：插件市场安装（推荐）
+## 方式一：插件市场安装（推荐，唯一官方支持）
 
-这是最简单的安装方式，适合大多数用户。
+这是唯一官方支持的安装方式，适合所有用户。
 
 ### 步骤 1：添加插件市场
 
@@ -79,7 +88,7 @@ git --version
 
 **预期输出：**
 ```
-✓ Installing ultrapower v5.2.2...
+✓ Installing ultrapower v5.5.33...
 ✓ Hooks registered: 39
 ✓ Agents loaded: 49
 ✓ Skills available: 71
@@ -105,7 +114,12 @@ Plugin installed successfully.
 
 ---
 
-## 方式二：本地开发安装
+## 方式二：本地开发安装（不支持）
+
+> **⚠️ 警告：此方式不再官方支持**
+>
+> 本地开发安装仅供 ultrapower 核心开发者使用。普通用户请使用方式一。
+> 使用此方式可能遇到兼容性问题，不提供技术支持。
 
 适合开发者或需要自定义修改的用户。
 
@@ -130,7 +144,7 @@ npm run build
 
 **预期输出：**
 ```
-> ultrapower@5.2.2 build
+> ultrapower@5.5.33 build
 > tsc && node scripts/build-skill-bridge.mjs
 ✓ TypeScript compiled
 ✓ Skill bridge built
@@ -175,7 +189,12 @@ claude plugin update omc@ultrapower
 
 ---
 
-## 方式三：npm 全局安装
+## 方式三：npm 全局安装（不支持）
+
+> **⚠️ 警告：此方式不再官方支持**
+>
+> npm 全局安装已废弃，不保证与最新版本兼容。
+> 强烈建议使用方式一（插件市场安装）。
 
 适合需要在多个项目间共享的场景。
 
@@ -430,7 +449,7 @@ ultrapower 支持多种 AI 工具，安装后自动生成适配器文件：
 
 ```bash
 # 在 Claude Code 中
-/plugin install omc@ultrapower@5.2.2
+/plugin install omc@ultrapower@5.5.33
 ```
 
 ### 检查当前版本
@@ -487,7 +506,7 @@ rmdir C:\empty_temp
 Remove-Item -Recurse -Force "C:\Users\<name>\.claude\plugins\marketplaces\omc"
 ```
 
-删除后重新安装插件，v5.2.2 已修复此问题，不会再次出现。
+删除后重新安装插件，v5.5.33 已修复此问题，不会再次出现。
 
 ### 问题：hooks 未触发
 
@@ -506,7 +525,7 @@ cat ~/.claude/settings.json | grep hooks
 
 **症状**：`lsp_hover`、`lsp_goto_definition` 等工具报错
 
-**解决**：确保 Node.js 在 PATH 中，LSP 服务器需要 `.cmd` 扩展名支持（v5.2.2 已修复）。
+**解决**：确保 Node.js 在 PATH 中，LSP 服务器需要 `.cmd` 扩展名支持（v5.5.33 已修复）。
 
 ```bash
 # 验证 Node.js 可访问

@@ -1,6 +1,6 @@
-<!-- ultrapower v5.5.5 | updated: 2026-03-02 -->
+<!-- ultrapower v5.5.33 | updated: 2026-03-02 -->
 
-# ultrapower Reference — v5.5.5
+# ultrapower Reference — v5.5.33
 
 Complete reference manual for ultrapower. For quick start see [README.md](../README.md).
 
