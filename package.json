@@ -66,6 +66,9 @@
     "sync:version": "node scripts/sync-version.mjs",
     "sync:version:dry": "node scripts/sync-version.mjs --dry-run",
     "sync:marketplace": "node scripts/sync-marketplace.mjs",
+    "changeset": "changeset",
+    "version": "changeset version && npm run sync:version && npm run sync:marketplace",
+    "release": "npm run build && npm test && changeset publish",
     "validate:counts": "node scripts/validate-counts.mjs",
     "validate:counts:fix": "node scripts/validate-counts.mjs --fix",
     "check:links": "node scripts/check-links.mjs",
@@ -89,6 +92,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@eslint/js": "^9.39.2",
     "@types/node": "^22.19.7",
     "@types/ws": "^8.18.1",
