@@ -6,10 +6,7 @@
  * this module ensures the mode persists until all work is done.
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
-import { join } from 'path';
-import { resolveSessionStatePath, ensureSessionStateDir } from '../../lib/worktree-paths.js';
-import { safeJsonParse } from '../../lib/safe-json.js';
+import { createStateAdapter } from '../../lib/state-adapter.js';
 
 export interface UltraworkState {
   /** Whether ultrawork mode is currently active */
@@ -30,123 +27,31 @@ export interface UltraworkState {
   linked_to_ralph?: boolean;
 }
 
-const __DEFAULT_STATE: UltraworkState = {
-  active: false,
-  started_at: '',
-  original_prompt: '',
-  reinforcement_count: 0,
-  last_checked_at: ''
-};
-
-/**
- * Get the state file path for Ultrawork
- */
-function getStateFilePath(directory?: string, sessionId?: string): string {
-  const baseDir = directory || process.cwd();
-  if (sessionId) {
-    return resolveSessionStatePath('ultrawork', sessionId, baseDir);
-  }
-  const omcDir = join(baseDir, '.omc');
-  return join(omcDir, 'state', 'ultrawork-state.json');
-}
-
-
-/**
- * Ensure the .omc/state directory exists
- */
-function ensureStateDir(directory?: string, sessionId?: string): void {
-  if (sessionId) {
-    ensureSessionStateDir(sessionId, directory || process.cwd());
-    return;
-  }
-  const baseDir = directory || process.cwd();
-  const omcDir = join(baseDir, '.omc', 'state');
-  if (!existsSync(omcDir)) {
-    mkdirSync(omcDir, { recursive: true });
-  }
-}
-
-
 /**
  * Read Ultrawork state from disk (local only)
- *
- * When sessionId is provided, ONLY reads session-scoped file — no legacy fallback.
- * This prevents cross-session state leakage.
  */
 export function readUltraworkState(directory?: string, sessionId?: string): UltraworkState | null {
-  // When sessionId is provided, ONLY check session-scoped path — no legacy fallback.
-  if (sessionId) {
-    const sessionFile = getStateFilePath(directory, sessionId);
-    if (!existsSync(sessionFile)) {
-      return null;
-    }
-    try {
-      const content = readFileSync(sessionFile, 'utf-8');
-      const result = safeJsonParse<UltraworkState>(content, sessionFile);
-
-      if (!result.success) {
-        console.error('[ultrawork] Failed to parse session state file:', result.error);
-        return null;
-      }
-
-      const state = result.data!;
-      // Validate session identity: state must belong to this session
-      if (state.session_id && state.session_id !== sessionId) {
-        return null;
-      }
-
-      return state;
-    } catch (error) {
-      console.error('[ultrawork] Failed to read session state file:', error);
-      return null;
-    }
-  }
-
-  // No sessionId: read legacy path (backward compat)
-  const localStateFile = getStateFilePath(directory);
-  if (existsSync(localStateFile)) {
-    try {
-      const content = readFileSync(localStateFile, 'utf-8');
-      const result = safeJsonParse<UltraworkState>(content, localStateFile);
-
-      if (!result.success) {
-        console.error('[ultrawork] Failed to parse state file:', result.error);
-        return null;
-      }
-
-      return result.data!;
-    } catch (error) {
-      console.error('[ultrawork] Failed to read state file:', error);
-      return null;
-    }
-  }
-
-  return null;
+  const adapter = createStateAdapter<UltraworkState>('ultrawork', directory || process.cwd());
+  return adapter.read(sessionId);
 }
 
 /**
  * Write Ultrawork state to disk (local only)
  */
-export function writeUltraworkState(state: UltraworkState, directory?: string, sessionId?: string): boolean {
-  try {
-    ensureStateDir(directory, sessionId);
-    const localStateFile = getStateFilePath(directory, sessionId);
-    writeFileSync(localStateFile, JSON.stringify(state, null, 2), { mode: 0o600 });
-    return true;
-  } catch {
-    return false;
-  }
+export async function writeUltraworkState(state: UltraworkState, directory?: string, sessionId?: string): Promise<boolean> {
+  const adapter = createStateAdapter<UltraworkState>('ultrawork', directory || process.cwd());
+  return await adapter.write(state, sessionId);
 }
 
 /**
  * Activate ultrawork mode
  */
-export function activateUltrawork(
+export async function activateUltrawork(
   prompt: string,
   sessionId?: string,
   directory?: string,
   linkedToRalph?: boolean
-): boolean {
+): Promise<boolean> {
   const state: UltraworkState = {
     active: true,
     started_at: new Date().toISOString(),
@@ -158,50 +63,24 @@ export function activateUltrawork(
     linked_to_ralph: linkedToRalph
   };
 
-  return writeUltraworkState(state, directory, sessionId);
+  return await writeUltraworkState(state, directory, sessionId);
 }
 
 /**
  * Deactivate ultrawork mode
  *
- * When sessionId is provided:
- * 1. Deletes the session-scoped state file
- * 2. Cleans up ghost legacy files that belong to this session (or have no session_id)
- *    to prevent stale legacy files from leaking into other sessions.
+ * Clears session-scoped state and legacy files if they belong to this session.
  */
 export function deactivateUltrawork(directory?: string, sessionId?: string): boolean {
-  let success = true;
-
-  // Delete session-scoped state file
-  const stateFile = getStateFilePath(directory, sessionId);
-  if (existsSync(stateFile)) {
-    try {
-      unlinkSync(stateFile);
-    } catch {
-      success = false;
-    }
-  }
+  const adapter = createStateAdapter<UltraworkState>('ultrawork', directory || process.cwd());
+  const success = adapter.clear(sessionId);
 
   // Ghost legacy cleanup: if sessionId provided, also remove legacy file
   // if it belongs to this session or has no session_id (orphaned)
   if (sessionId) {
-    const legacyFile = getStateFilePath(directory); // no sessionId = legacy path
-    if (existsSync(legacyFile)) {
-      try {
-        const content = readFileSync(legacyFile, 'utf-8');
-        const result = safeJsonParse(content, legacyFile);
-
-        if (result.success) {
-          const legacyState = result.data as { session_id?: string };
-          // Only remove if it belongs to this session or is unowned (no session_id)
-          if (!legacyState.session_id || legacyState.session_id === sessionId) {
-            unlinkSync(legacyFile);
-          }
-        }
-        // Do NOT delete another session's legacy data
-      } catch {
-        // If we can't read/parse, leave it alone
-      }
+    const legacyState = adapter.read(); // Read legacy state without sessionId
+    if (legacyState && (!legacyState.session_id || legacyState.session_id === sessionId)) {
+      adapter.clear(); // Clear legacy file
     }
   }
 
@@ -211,7 +90,7 @@ export function deactivateUltrawork(directory?: string, sessionId?: string): boo
 /**
  * Increment reinforcement count (called when mode is reinforced on stop)
  */
-export function incrementReinforcement(directory?: string, sessionId?: string): UltraworkState | null {
+export async function incrementReinforcement(directory?: string, sessionId?: string): Promise<UltraworkState | null> {
   const state = readUltraworkState(directory, sessionId);
 
   if (!state || !state.active) {
@@ -221,7 +100,7 @@ export function incrementReinforcement(directory?: string, sessionId?: string): 
   state.reinforcement_count += 1;
   state.last_checked_at = new Date().toISOString();
 
-  if (writeUltraworkState(state, directory, sessionId)) {
+  if (await writeUltraworkState(state, directory, sessionId)) {
     return state;
   }
 

@@ -31,8 +31,8 @@ describe('ultrawork state management', () => {
   });
 
   describe('normal flow', () => {
-    it('should activate ultrawork and persist state', () => {
-      const result = activateUltrawork('test task', SESSION_ID, TEST_DIR);
+    it('should activate ultrawork and persist state', async () => {
+      const result = await activateUltrawork('test task', SESSION_ID, TEST_DIR);
       expect(result).toBe(true);
 
       const state = readUltraworkState(TEST_DIR, SESSION_ID);
@@ -43,8 +43,8 @@ describe('ultrawork state management', () => {
       expect(state?.reinforcement_count).toBe(0);
     });
 
-    it('should deactivate ultrawork and remove state', () => {
-      activateUltrawork('test task', SESSION_ID, TEST_DIR);
+    it('should deactivate ultrawork and remove state', async () => {
+      await activateUltrawork('test task', SESSION_ID, TEST_DIR);
       const result = deactivateUltrawork(TEST_DIR, SESSION_ID);
       expect(result).toBe(true);
 
@@ -52,9 +52,9 @@ describe('ultrawork state management', () => {
       expect(state).toBeNull();
     });
 
-    it('should increment reinforcement count', () => {
-      activateUltrawork('test task', SESSION_ID, TEST_DIR);
-      const updated = incrementReinforcement(TEST_DIR, SESSION_ID);
+    it('should increment reinforcement count', async () => {
+      await activateUltrawork('test task', SESSION_ID, TEST_DIR);
+      const updated = await incrementReinforcement(TEST_DIR, SESSION_ID);
 
       expect(updated).not.toBeNull();
       expect(updated?.reinforcement_count).toBe(1);
@@ -77,19 +77,19 @@ describe('ultrawork state management', () => {
       expect(state).toBeNull();
     });
 
-    it('should return null when incrementing inactive state', () => {
-      const result = incrementReinforcement(TEST_DIR, SESSION_ID);
+    it('should return null when incrementing inactive state', async () => {
+      const result = await incrementReinforcement(TEST_DIR, SESSION_ID);
       expect(result).toBeNull();
     });
   });
 
   describe('session isolation', () => {
-    it('should prevent cross-session state leakage', () => {
+    it('should prevent cross-session state leakage', async () => {
       const session1 = 'session-1';
       const session2 = 'session-2';
 
-      activateUltrawork('task 1', session1, TEST_DIR);
-      activateUltrawork('task 2', session2, TEST_DIR);
+      await activateUltrawork('task 1', session1, TEST_DIR);
+      await activateUltrawork('task 2', session2, TEST_DIR);
 
       const state1 = readUltraworkState(TEST_DIR, session1);
       const state2 = readUltraworkState(TEST_DIR, session2);
@@ -100,7 +100,7 @@ describe('ultrawork state management', () => {
       expect(state2?.session_id).toBe(session2);
     });
 
-    it('should reject state with mismatched session_id', () => {
+    it('should reject state with mismatched session_id', async () => {
       const state: UltraworkState = {
         active: true,
         started_at: new Date().toISOString(),
@@ -110,13 +110,13 @@ describe('ultrawork state management', () => {
         last_checked_at: new Date().toISOString()
       };
 
-      writeUltraworkState(state, TEST_DIR, SESSION_ID);
+      await writeUltraworkState(state, TEST_DIR, SESSION_ID);
       const read = readUltraworkState(TEST_DIR, SESSION_ID);
       expect(read).toBeNull();
     });
 
-    it('should enforce strict session isolation in shouldReinforceUltrawork', () => {
-      activateUltrawork('test', SESSION_ID, TEST_DIR);
+    it('should enforce strict session isolation in shouldReinforceUltrawork', async () => {
+      await activateUltrawork('test', SESSION_ID, TEST_DIR);
 
       expect(shouldReinforceUltrawork(SESSION_ID, TEST_DIR)).toBe(true);
       expect(shouldReinforceUltrawork('other-session', TEST_DIR)).toBe(false);
@@ -145,7 +145,7 @@ describe('ultrawork state management', () => {
       expect(state?.original_prompt).toBe('legacy task');
     });
 
-    it('should clean up ghost legacy files on deactivate', () => {
+    it('should clean up ghost legacy files on deactivate', async () => {
       const legacyDir = join(TEST_DIR, '.omc', 'state');
       mkdirSync(legacyDir, { recursive: true });
       const legacyFile = join(legacyDir, 'ultrawork-state.json');
@@ -160,7 +160,7 @@ describe('ultrawork state management', () => {
       };
       writeFileSync(legacyFile, JSON.stringify(legacyState));
 
-      activateUltrawork('test', SESSION_ID, TEST_DIR);
+      await activateUltrawork('test', SESSION_ID, TEST_DIR);
       deactivateUltrawork(TEST_DIR, SESSION_ID);
 
       expect(existsSync(legacyFile)).toBe(false);
@@ -183,10 +183,10 @@ describe('ultrawork state management', () => {
       expect(message).toContain('PARALLEL');
     });
 
-    it('should create hook instance with bound methods', () => {
+    it('should create hook instance with bound methods', async () => {
       const hook = createUltraworkStateHook(TEST_DIR);
 
-      hook.activate('test', SESSION_ID);
+      await hook.activate('test', SESSION_ID);
       expect(hook.getState(SESSION_ID)?.active).toBe(true);
 
       hook.deactivate(SESSION_ID);
@@ -195,8 +195,8 @@ describe('ultrawork state management', () => {
   });
 
   describe('ralph linkage', () => {
-    it('should track ralph linkage in state', () => {
-      activateUltrawork('test', SESSION_ID, TEST_DIR, true);
+    it('should track ralph linkage in state', async () => {
+      await activateUltrawork('test', SESSION_ID, TEST_DIR, true);
       const state = readUltraworkState(TEST_DIR, SESSION_ID);
       expect(state?.linked_to_ralph).toBe(true);
     });

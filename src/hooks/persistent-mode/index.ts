@@ -13,39 +13,49 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
-import {
-  readUltraworkState,
-  writeUltraworkState,
-  incrementReinforcement,
-  deactivateUltrawork,
-  getUltraworkPersistenceMessage,
-  type UltraworkState
-} from '../ultrawork/index.js';
 import { resolveToWorktreeRoot } from '../../lib/worktree-paths.js';
-import {
-  readRalphState,
-  writeRalphState,
-  incrementRalphIteration,
-  clearRalphState,
-  getPrdCompletionStatus,
-  getRalphContext,
-  readVerificationState,
-  recordArchitectFeedback,
-  getArchitectVerificationPrompt,
-  getArchitectRejectionContinuationPrompt,
-  detectArchitectApproval,
-  detectArchitectRejection,
-  clearVerificationState
-} from '../ralph/index.js';
-import { checkIncompleteTodos, getNextPendingTodo, StopContext, isUserAbort, isContextLimitStop } from '../todo-continuation/index.js';
+import { StopContext, isUserAbort, isContextLimitStop } from '../todo-continuation/index.js';
 import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
-import {
-  isAutopilotActive
-} from '../autopilot/index.js';
-import { checkAutopilot } from '../autopilot/enforcement.js';
-import { readTeamPipelineState } from '../team-pipeline/state.js';
-import type { TeamPipelinePhase } from '../team-pipeline/types.js';
 import { readLastToolError, clearToolErrorState, getToolErrorRetryGuidance, type ToolErrorState } from './tool-error.js';
+import { hookEventBus } from './event-bus.js';
+
+// Lazy imports via event bus
+let ultraworkModule: any;
+let ralphModule: any;
+let todoModule: any;
+let autopilotModule: any;
+let autopilotEnforcementModule: any;
+let teamPipelineModule: any;
+
+async function loadUltrawork() {
+  if (!ultraworkModule) ultraworkModule = await import('../ultrawork/index.js');
+  return ultraworkModule;
+}
+
+async function loadRalph() {
+  if (!ralphModule) ralphModule = await import('../ralph/index.js');
+  return ralphModule;
+}
+
+async function loadTodo() {
+  if (!todoModule) todoModule = await import('../todo-continuation/index.js');
+  return todoModule;
+}
+
+async function loadAutopilot() {
+  if (!autopilotModule) autopilotModule = await import('../autopilot/index.js');
+  return autopilotModule;
+}
+
+async function loadAutopilotEnforcement() {
+  if (!autopilotEnforcementModule) autopilotEnforcementModule = await import('../autopilot/enforcement.js');
+  return autopilotEnforcementModule;
+}
+
+async function loadTeamPipeline() {
+  if (!teamPipelineModule) teamPipelineModule = await import('../team-pipeline/state.js');
+  return teamPipelineModule;
+}
 
 export interface PersistentModeResult {
   /** Whether to block the stop event */
@@ -94,7 +104,8 @@ export function resetTodoContinuationAttempts(sessionId: string): void {
 /**
  * Check for architect approval in session transcript
  */
-function checkArchitectApprovalInTranscript(sessionId: string): boolean {
+async function checkArchitectApprovalInTranscript(sessionId: string): Promise<boolean> {
+  const ralph = await loadRalph();
   const claudeDir = getClaudeConfigDir();
   const possiblePaths = [
     join(claudeDir, 'sessions', sessionId, 'transcript.md'),
@@ -106,7 +117,7 @@ function checkArchitectApprovalInTranscript(sessionId: string): boolean {
     if (existsSync(transcriptPath)) {
       try {
         const content = readFileSync(transcriptPath, 'utf-8');
-        if (detectArchitectApproval(content)) {
+        if (ralph.detectArchitectApproval(content)) {
           return true;
         }
       } catch {
@@ -120,7 +131,8 @@ function checkArchitectApprovalInTranscript(sessionId: string): boolean {
 /**
  * Check for architect rejection in session transcript
  */
-function checkArchitectRejectionInTranscript(sessionId: string): { rejected: boolean; feedback: string } {
+async function checkArchitectRejectionInTranscript(sessionId: string): Promise<{ rejected: boolean; feedback: string }> {
+  const ralph = await loadRalph();
   const claudeDir = getClaudeConfigDir();
   const possiblePaths = [
     join(claudeDir, 'sessions', sessionId, 'transcript.md'),
@@ -132,7 +144,7 @@ function checkArchitectRejectionInTranscript(sessionId: string): { rejected: boo
     if (existsSync(transcriptPath)) {
       try {
         const content = readFileSync(transcriptPath, 'utf-8');
-        const result = detectArchitectRejection(content);
+        const result = ralph.detectArchitectRejection(content);
         if (result.rejected) {
           return result;
         }
@@ -152,8 +164,9 @@ async function checkRalphLoop(
   sessionId?: string,
   directory?: string
 ): Promise<PersistentModeResult | null> {
+  const ralph = await loadRalph();
   const workingDir = resolveToWorktreeRoot(directory);
-  const state = readRalphState(workingDir, sessionId);
+  const state = ralph.readRalphState(workingDir, sessionId);
 
   if (!state || !state.active) {
     return null;
@@ -167,10 +180,11 @@ async function checkRalphLoop(
   // Self-heal linked ultrawork: if ralph is active and marked linked but ultrawork
   // state is missing, recreate it so stop reinforcement cannot silently disappear.
   if (state.linked_ultrawork) {
-    const ultraworkState = readUltraworkState(workingDir, sessionId);
+    const ultrawork = await loadUltrawork();
+    const ultraworkState = ultrawork.readUltraworkState(workingDir, sessionId);
     if (!ultraworkState?.active) {
       const now = new Date().toISOString();
-      const restoredState: UltraworkState = {
+      const restoredState = {
         active: true,
         started_at: state.started_at || now,
         original_prompt: state.prompt || 'Ralph loop task',
@@ -180,21 +194,23 @@ async function checkRalphLoop(
         last_checked_at: now,
         linked_to_ralph: true
       };
-      writeUltraworkState(restoredState, workingDir, sessionId);
+      ultrawork.writeUltraworkState(restoredState, workingDir, sessionId);
     }
   }
 
   // Check team pipeline state coordination
   // When team mode is active alongside ralph, respect team phase transitions
-  const teamState = readTeamPipelineState(workingDir, sessionId);
+  const team = await loadTeamPipeline();
+  const teamState = team.readTeamPipelineState(workingDir, sessionId);
   if (teamState && teamState.active !== undefined) {
-    const teamPhase: TeamPipelinePhase = teamState.phase;
+    const teamPhase = teamState.phase;
 
     // If team pipeline reached a terminal state, ralph should also complete
     if (teamPhase === 'complete') {
-      clearRalphState(workingDir, sessionId);
-      clearVerificationState(workingDir, sessionId);
-      deactivateUltrawork(workingDir, sessionId);
+      const ultrawork = await loadUltrawork();
+      ralph.clearRalphState(workingDir, sessionId);
+      ralph.clearVerificationState(workingDir, sessionId);
+      ultrawork.deactivateUltrawork(workingDir, sessionId);
       return {
         shouldBlock: false,
         message: `[RALPH LOOP COMPLETE - TEAM] Team pipeline completed successfully. Ralph loop ending after ${state.iteration} iteration(s).`,
@@ -202,9 +218,10 @@ async function checkRalphLoop(
       };
     }
     if (teamPhase === 'failed') {
-      clearRalphState(workingDir, sessionId);
-      clearVerificationState(workingDir, sessionId);
-      deactivateUltrawork(workingDir, sessionId);
+      const ultrawork = await loadUltrawork();
+      ralph.clearRalphState(workingDir, sessionId);
+      ralph.clearVerificationState(workingDir, sessionId);
+      ultrawork.deactivateUltrawork(workingDir, sessionId);
       return {
         shouldBlock: false,
         message: `[RALPH LOOP STOPPED - TEAM FAILED] Team pipeline failed. Ralph loop ending after ${state.iteration} iteration(s).`,
@@ -212,9 +229,10 @@ async function checkRalphLoop(
       };
     }
     if (teamPhase === 'cancelled') {
-      clearRalphState(workingDir, sessionId);
-      clearVerificationState(workingDir, sessionId);
-      deactivateUltrawork(workingDir, sessionId);
+      const ultrawork = await loadUltrawork();
+      ralph.clearRalphState(workingDir, sessionId);
+      ralph.clearVerificationState(workingDir, sessionId);
+      ultrawork.deactivateUltrawork(workingDir, sessionId);
       return {
         shouldBlock: false,
         message: `[RALPH LOOP CANCELLED - TEAM] Team pipeline was cancelled. Ralph loop ending after ${state.iteration} iteration(s).`,
@@ -224,12 +242,13 @@ async function checkRalphLoop(
   }
 
   // Check for PRD-based completion (all stories have passes: true)
-  const prdStatus = getPrdCompletionStatus(workingDir);
+  const prdStatus = ralph.getPrdCompletionStatus(workingDir);
   if (prdStatus.hasPrd && prdStatus.allComplete) {
+    const ultrawork = await loadUltrawork();
     // All PRD stories complete - allow completion
-    clearRalphState(workingDir, sessionId);
-    clearVerificationState(workingDir, sessionId);
-    deactivateUltrawork(workingDir, sessionId);
+    ralph.clearRalphState(workingDir, sessionId);
+    ralph.clearVerificationState(workingDir, sessionId);
+    ultrawork.deactivateUltrawork(workingDir, sessionId);
     return {
       shouldBlock: false,
       message: `[RALPH LOOP COMPLETE - PRD] All ${prdStatus.status?.total || 0} stories are complete! Great work!`,
@@ -238,18 +257,19 @@ async function checkRalphLoop(
   }
 
   // Check for existing verification state (architect verification in progress)
-  const verificationState = readVerificationState(workingDir, sessionId);
+  const verificationState = ralph.readVerificationState(workingDir, sessionId);
 
   if (verificationState?.pending) {
     // Verification is in progress - check for architect's response
     if (sessionId) {
       // Check for architect approval
-      if (checkArchitectApprovalInTranscript(sessionId)) {
+      if (await checkArchitectApprovalInTranscript(sessionId)) {
+        const ultrawork = await loadUltrawork();
         // Architect approved - truly complete
         // Also deactivate ultrawork if it was active alongside ralph
-        clearVerificationState(workingDir, sessionId);
-        clearRalphState(workingDir, sessionId);
-        deactivateUltrawork(workingDir, sessionId);
+        ralph.clearVerificationState(workingDir, sessionId);
+        ralph.clearRalphState(workingDir, sessionId);
+        ultrawork.deactivateUltrawork(workingDir, sessionId);
         return {
           shouldBlock: false,
           message: `[RALPH LOOP VERIFIED COMPLETE] Architect verified task completion after ${state.iteration} iteration(s). Excellent work!`,
@@ -258,14 +278,14 @@ async function checkRalphLoop(
       }
 
       // Check for architect rejection
-      const rejection = checkArchitectRejectionInTranscript(sessionId);
+      const rejection = await checkArchitectRejectionInTranscript(sessionId);
       if (rejection.rejected) {
         // Architect rejected - continue with feedback
-        recordArchitectFeedback(workingDir, false, rejection.feedback, sessionId);
-        const updatedVerification = readVerificationState(workingDir, sessionId);
+        ralph.recordArchitectFeedback(workingDir, false, rejection.feedback, sessionId);
+        const updatedVerification = ralph.readVerificationState(workingDir, sessionId);
 
         if (updatedVerification) {
-          const continuationPrompt = getArchitectRejectionContinuationPrompt(updatedVerification);
+          const continuationPrompt = ralph.getArchitectRejectionContinuationPrompt(updatedVerification);
           return {
             shouldBlock: true,
             message: continuationPrompt,
@@ -280,7 +300,7 @@ async function checkRalphLoop(
     }
 
     // Verification still pending - remind to spawn architect
-    const verificationPrompt = getArchitectVerificationPrompt(verificationState);
+    const verificationPrompt = ralph.getArchitectVerificationPrompt(verificationState);
     return {
       shouldBlock: true,
       message: verificationPrompt,
@@ -298,7 +318,7 @@ async function checkRalphLoop(
     // Extend the limit and continue enforcement so user-visible cancellation
     // remains the only explicit termination path.
     state.max_iterations += 10;
-    writeRalphState(workingDir, state, sessionId);
+    ralph.writeRalphState(workingDir, state, sessionId);
   }
 
   // Read tool error before generating message
@@ -306,13 +326,13 @@ async function checkRalphLoop(
   const errorGuidance = getToolErrorRetryGuidance(toolError);
 
   // Increment and continue
-  const newState = incrementRalphIteration(workingDir, sessionId);
+  const newState = ralph.incrementRalphIteration(workingDir, sessionId);
   if (!newState) {
     return null;
   }
 
   // Get PRD context for injection
-  const ralphContext = getRalphContext(workingDir);
+  const ralphContext = ralph.getRalphContext(workingDir);
   const prdInstruction = prdStatus.hasPrd
     ? `2. Check prd.json - are ALL stories marked passes: true?`
     : `2. Check your todo list - are ALL items marked complete?`;
@@ -358,7 +378,8 @@ async function checkUltrawork(
   directory?: string,
   _hasIncompleteTodos?: boolean
 ): Promise<PersistentModeResult | null> {
-  const state = readUltraworkState(directory, sessionId);
+  const ultrawork = await loadUltrawork();
+  const state = ultrawork.readUltraworkState(directory, sessionId);
 
   if (!state || !state.active) {
     return null;
@@ -371,12 +392,12 @@ async function checkUltrawork(
 
   // Reinforce ultrawork mode - ALWAYS continue while active.
   // This prevents false stops from bash errors, transient failures, etc.
-  const newState = incrementReinforcement(directory, sessionId);
+  const newState = await ultrawork.incrementReinforcement(directory, sessionId);
   if (!newState) {
     return null;
   }
 
-  const message = getUltraworkPersistenceMessage(newState);
+  const message = ultrawork.getUltraworkPersistenceMessage(newState);
 
   return {
     shouldBlock: true,
@@ -396,7 +417,8 @@ async function _checkTodoContinuation(
   sessionId?: string,
   directory?: string
 ): Promise<PersistentModeResult | null> {
-  const result = await checkIncompleteTodos(sessionId, directory);
+  const todo = await loadTodo();
+  const result = await todo.checkIncompleteTodos(sessionId, directory);
 
   if (result.count === 0) {
     // Reset counter when todos are cleared
@@ -426,7 +448,7 @@ async function _checkTodoContinuation(
     };
   }
 
-  const nextTodo = getNextPendingTodo(result);
+  const nextTodo = todo.getNextPendingTodo(result);
   const nextTaskInfo = nextTodo
     ? `\n\nNext ${result.source === 'task' ? 'Task' : 'todo'}: "${nextTodo.content}" (${nextTodo.status})`
     : '';
@@ -491,7 +513,8 @@ export async function checkPersistentModes(
 
   // First, check for incomplete todos (we need this info for ultrawork)
   // Note: stopContext already checked above, but pass it for consistency
-  const todoResult = await checkIncompleteTodos(sessionId, workingDir, stopContext);
+  const todo = await loadTodo();
+  const todoResult = await todo.checkIncompleteTodos(sessionId, workingDir, stopContext);
   const hasIncompleteTodos = todoResult.count > 0;
 
   // Priority 1: Ralph (explicit loop mode)
@@ -501,8 +524,10 @@ export async function checkPersistentModes(
   }
 
   // Priority 1.5: Autopilot (full orchestration mode - higher than ultrawork, lower than ralph)
-  if (isAutopilotActive(workingDir, sessionId)) {
-    const autopilotResult = await checkAutopilot(sessionId, workingDir);
+  const autopilot = await loadAutopilot();
+  if (autopilot.isAutopilotActive(workingDir, sessionId)) {
+    const enforcement = await loadAutopilotEnforcement();
+    const autopilotResult = await enforcement.checkAutopilot(sessionId, workingDir);
     if (autopilotResult?.shouldBlock) {
       return {
         shouldBlock: true,

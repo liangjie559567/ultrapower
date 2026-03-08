@@ -22,11 +22,11 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
   });
 
   describe('activateUltrawork stores session_id correctly', () => {
-    it('should store session_id when provided', () => {
+    it('should store session_id when provided', async () => {
       const sessionId = 'session-abc-123';
       const prompt = 'Fix all errors';
 
-      const result = activateUltrawork(prompt, sessionId, tempDir);
+      const result = await activateUltrawork(prompt, sessionId, tempDir);
       expect(result).toBe(true);
 
       const state = readUltraworkState(tempDir, sessionId);
@@ -36,10 +36,10 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(state?.original_prompt).toBe(prompt);
     });
 
-    it('should set session_id to undefined when not provided', () => {
+    it('should set session_id to undefined when not provided', async () => {
       const prompt = 'Fix all errors';
 
-      const result = activateUltrawork(prompt, undefined, tempDir);
+      const result = await activateUltrawork(prompt, undefined, tempDir);
       expect(result).toBe(true);
 
       const state = readUltraworkState(tempDir);
@@ -47,18 +47,18 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(state?.session_id).toBeUndefined();
     });
 
-    it('should initialize reinforcement_count to 0', () => {
+    it('should initialize reinforcement_count to 0', async () => {
       const sessionId = 'session-xyz';
-      activateUltrawork('Test task', sessionId, tempDir);
+      await activateUltrawork('Test task', sessionId, tempDir);
 
       const state = readUltraworkState(tempDir, sessionId);
       expect(state?.reinforcement_count).toBe(0);
     });
 
-    it('should set started_at and last_checked_at timestamps', () => {
+    it('should set started_at and last_checked_at timestamps', async () => {
       const beforeTime = Date.now();
       const sessionId = 'session-1';
-      activateUltrawork('Test task', sessionId, tempDir);
+      await activateUltrawork('Test task', sessionId, tempDir);
       const afterTime = Date.now();
 
       const state = readUltraworkState(tempDir, sessionId);
@@ -77,68 +77,68 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
   });
 
   describe('shouldReinforceUltrawork strict session matching', () => {
-    it('should return true when session IDs match', () => {
+    it('should return true when session IDs match', async () => {
       const sessionId = 'session-match-test';
-      activateUltrawork('Test task', sessionId, tempDir);
+      await activateUltrawork('Test task', sessionId, tempDir);
 
       const result = shouldReinforceUltrawork(sessionId, tempDir);
       expect(result).toBe(true);
     });
 
-    it('should return false when session IDs do not match', () => {
+    it('should return false when session IDs do not match', async () => {
       const sessionId1 = 'session-original';
       const sessionId2 = 'session-different';
 
-      activateUltrawork('Test task', sessionId1, tempDir);
+      await activateUltrawork('Test task', sessionId1, tempDir);
 
       const result = shouldReinforceUltrawork(sessionId2, tempDir);
       expect(result).toBe(false);
     });
 
-    it('should return false when state has session_id but caller does not provide one', () => {
-      activateUltrawork('Test task', 'session-with-id', tempDir);
+    it('should return false when state has session_id but caller does not provide one', async () => {
+      await activateUltrawork('Test task', 'session-with-id', tempDir);
 
       const result = shouldReinforceUltrawork(undefined, tempDir);
       expect(result).toBe(false);
     });
 
-    it('should return false when caller provides session_id but state does not have one', () => {
-      activateUltrawork('Test task', undefined, tempDir);
+    it('should return false when caller provides session_id but state does not have one', async () => {
+      await activateUltrawork('Test task', undefined, tempDir);
 
       const result = shouldReinforceUltrawork('session-requesting', tempDir);
       expect(result).toBe(false);
     });
 
-    it('should return false when both state and caller have undefined session_id (Bug #5 fix)', () => {
-      activateUltrawork('Test task', undefined, tempDir);
+    it('should return false when both state and caller have undefined session_id (Bug #5 fix)', async () => {
+      await activateUltrawork('Test task', undefined, tempDir);
 
       // Both undefined should NOT match - prevents cross-session contamination
       const result = shouldReinforceUltrawork(undefined, tempDir);
       expect(result).toBe(false);
     });
 
-    it('should return false when ultrawork is not active', () => {
+    it('should return false when ultrawork is not active', async () => {
       const sessionId = 'session-inactive';
-      activateUltrawork('Test task', sessionId, tempDir);
+      await activateUltrawork('Test task', sessionId, tempDir);
       deactivateUltrawork(tempDir, sessionId);
 
       const result = shouldReinforceUltrawork(sessionId, tempDir);
       expect(result).toBe(false);
     });
 
-    it('should return false when no state file exists', () => {
+    it('should return false when no state file exists', async () => {
       const result = shouldReinforceUltrawork('any-session', tempDir);
       expect(result).toBe(false);
     });
   });
 
   describe('Cross-session isolation', () => {
-    it('should prevent Session B from reinforcing Session A\'s ultrawork', () => {
+    it('should prevent Session B from reinforcing Session A\'s ultrawork', async () => {
       const sessionA = 'session-alice';
       const sessionB = 'session-bob';
 
       // Session A activates ultrawork
-      activateUltrawork('Session A task', sessionA, tempDir);
+      await activateUltrawork('Session A task', sessionA, tempDir);
 
       const state = readUltraworkState(tempDir, sessionA);
       expect(state?.active).toBe(true);
@@ -153,16 +153,16 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(shouldReinforceA).toBe(true);
     });
 
-    it('should allow Session A to reinforce its own ultrawork multiple times', () => {
+    it('should allow Session A to reinforce its own ultrawork multiple times', async () => {
       const sessionA = 'session-alpha';
-      activateUltrawork('Task for Alpha', sessionA, tempDir);
+      await activateUltrawork('Task for Alpha', sessionA, tempDir);
 
       // First reinforcement check
       let shouldReinforce = shouldReinforceUltrawork(sessionA, tempDir);
       expect(shouldReinforce).toBe(true);
 
       // Increment reinforcement
-      let updatedState = incrementReinforcement(tempDir, sessionA);
+      let updatedState = await incrementReinforcement(tempDir, sessionA);
       expect(updatedState?.reinforcement_count).toBe(1);
 
       // Second reinforcement check
@@ -170,15 +170,15 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(shouldReinforce).toBe(true);
 
       // Increment again
-      updatedState = incrementReinforcement(tempDir, sessionA);
+      updatedState = await incrementReinforcement(tempDir, sessionA);
       expect(updatedState?.reinforcement_count).toBe(2);
     });
 
-    it('should prevent reinforcement after session ID change', () => {
+    it('should prevent reinforcement after session ID change', async () => {
       const originalSession = 'session-original';
       const newSession = 'session-new';
 
-      activateUltrawork('Original task', originalSession, tempDir);
+      await activateUltrawork('Original task', originalSession, tempDir);
 
       // Original session can reinforce
       expect(shouldReinforceUltrawork(originalSession, tempDir)).toBe(true);
@@ -187,18 +187,18 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(shouldReinforceUltrawork(newSession, tempDir)).toBe(false);
 
       // Even after incrementing with original session
-      incrementReinforcement(tempDir, originalSession);
+      await incrementReinforcement(tempDir, originalSession);
 
       // New session still cannot reinforce
       expect(shouldReinforceUltrawork(newSession, tempDir)).toBe(false);
     });
 
-    it('should allow new session to activate after deactivation', () => {
+    it('should allow new session to activate after deactivation', async () => {
       const sessionA = 'session-first';
       const sessionB = 'session-second';
 
       // Session A activates
-      activateUltrawork('First task', sessionA, tempDir);
+      await activateUltrawork('First task', sessionA, tempDir);
       expect(shouldReinforceUltrawork(sessionA, tempDir)).toBe(true);
       expect(shouldReinforceUltrawork(sessionB, tempDir)).toBe(false);
 
@@ -207,16 +207,16 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(shouldReinforceUltrawork(sessionA, tempDir)).toBe(false);
 
       // Session B can now activate its own ultrawork
-      activateUltrawork('Second task', sessionB, tempDir);
+      await activateUltrawork('Second task', sessionB, tempDir);
       expect(shouldReinforceUltrawork(sessionB, tempDir)).toBe(true);
       expect(shouldReinforceUltrawork(sessionA, tempDir)).toBe(false);
     });
   });
 
   describe('Edge cases', () => {
-    it('should reject empty string and undefined session IDs for isolation safety', () => {
+    it('should reject empty string and undefined session IDs for isolation safety', async () => {
       const emptySession = '';
-      activateUltrawork('Task with empty session', emptySession, tempDir);
+      await activateUltrawork('Task with empty session', emptySession, tempDir);
 
       // Empty string and undefined should both be rejected to prevent
       // cross-session contamination (Bug #5 fix)
@@ -224,14 +224,14 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(shouldReinforceUltrawork(undefined, tempDir)).toBe(false);
     });
 
-    it('should preserve session_id through reinforcement cycles', () => {
+    it('should preserve session_id through reinforcement cycles', async () => {
       const sessionId = 'session-persistent';
-      activateUltrawork('Persistent task', sessionId, tempDir);
+      await activateUltrawork('Persistent task', sessionId, tempDir);
 
       // Multiple reinforcement cycles
       for (let i = 0; i < 5; i++) {
         expect(shouldReinforceUltrawork(sessionId, tempDir)).toBe(true);
-        incrementReinforcement(tempDir, sessionId);
+        await incrementReinforcement(tempDir, sessionId);
       }
 
       // Session ID should still be preserved
@@ -240,11 +240,11 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(state?.reinforcement_count).toBe(5);
     });
 
-    it('should handle rapid session switches correctly', () => {
+    it('should handle rapid session switches correctly', async () => {
       const sessions = ['session-1', 'session-2', 'session-3'];
 
       for (const session of sessions) {
-        activateUltrawork(`Task for ${session}`, session, tempDir);
+        await activateUltrawork(`Task for ${session}`, session, tempDir);
 
         // Only the current session should be able to reinforce
         expect(shouldReinforceUltrawork(session, tempDir)).toBe(true);
@@ -262,9 +262,9 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
   });
 
   describe('Integration with linked_to_ralph flag', () => {
-    it('should preserve session_id when linked to ralph', () => {
+    it('should preserve session_id when linked to ralph', async () => {
       const sessionId = 'session-ralph-linked';
-      activateUltrawork('Ralph-linked task', sessionId, tempDir, true);
+      await await activateUltrawork('Ralph-linked task', sessionId, tempDir, true);
 
       const state = readUltraworkState(tempDir, sessionId);
       expect(state?.session_id).toBe(sessionId);
@@ -275,7 +275,7 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(shouldReinforceUltrawork('different-session', tempDir)).toBe(false);
     });
 
-    it('should maintain session isolation regardless of ralph link status', () => {
+    it('should maintain session isolation regardless of ralph link status', async () => {
       const sessionId = 'session-with-ralph';
       activateUltrawork('Task', sessionId, tempDir, true);
 
@@ -285,9 +285,9 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
   });
 
   describe('State file integrity', () => {
-    it('should maintain consistent state across multiple reads', () => {
+    it('should maintain consistent state across multiple reads', async () => {
       const sessionId = 'session-consistency';
-      activateUltrawork('Consistency test', sessionId, tempDir);
+      await activateUltrawork('Consistency test', sessionId, tempDir);
 
       const state1 = readUltraworkState(tempDir, sessionId);
       const state2 = readUltraworkState(tempDir, sessionId);
@@ -371,9 +371,9 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       return JSON.parse(readFileSync(path, 'utf-8'));
     }
 
-    it('should clean up legacy file with matching session_id on deactivate', () => {
+    it('should clean up legacy file with matching session_id on deactivate', async () => {
       // Create both session-scoped and legacy files for session-A
-      activateUltrawork('Task A', 'session-A', tempDir);
+      await activateUltrawork('Task A', 'session-A', tempDir);
       createLegacyState({
         active: true,
         session_id: 'session-A',
@@ -388,8 +388,8 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(legacyFileExists()).toBe(false);
     });
 
-    it('should clean up legacy file with no session_id (orphaned)', () => {
-      activateUltrawork('Task A', 'session-A', tempDir);
+    it('should clean up legacy file with no session_id (orphaned)', async () => {
+      await activateUltrawork('Task A', 'session-A', tempDir);
       createLegacyState({
         active: true,
         original_prompt: 'Orphaned legacy'
@@ -402,7 +402,7 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(legacyFileExists()).toBe(false);
     });
 
-    it('should NOT clean up legacy file belonging to another session', () => {
+    it('should NOT clean up legacy file belonging to another session', async () => {
       activateUltrawork('Task A', 'session-A', tempDir);
       createLegacyState({
         active: true,
@@ -417,7 +417,7 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       expect(readLegacyState()?.session_id).toBe('session-B');
     });
 
-    it('should work correctly when no legacy file exists', () => {
+    it('should work correctly when no legacy file exists', async () => {
       activateUltrawork('Task A', 'session-A', tempDir);
 
       // No legacy file created

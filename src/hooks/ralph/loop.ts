@@ -10,13 +10,7 @@
  * Ported from oh-my-opencode's ralph hook.
  */
 
-import {
-  existsSync,
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  unlinkSync,
-} from "fs";
+import { existsSync, unlinkSync, readFileSync, mkdirSync } from "fs";
 import { join } from "path";
 import {
   readPrd,
@@ -40,6 +34,7 @@ import {
 import { resolveSessionStatePath, ensureSessionStateDir } from "../../lib/worktree-paths.js";
 import { readTeamPipelineState } from "../team-pipeline/state.js";
 import type { TeamPipelinePhase } from "../team-pipeline/types.js";
+import { createStateAdapter } from "../../lib/state-adapter.js";
 
 // Forward declaration to avoid circular import - check ultraqa state file directly
 export function isUltraQAActive(directory: string, sessionId?: string): boolean {
@@ -144,38 +139,8 @@ function ensureStateDir(directory: string, sessionId?: string): void {
  * Read Ralph Loop state from disk
  */
 export function readRalphState(directory: string, sessionId?: string): RalphLoopState | null {
-  // When sessionId is provided, ONLY check session-scoped path — no legacy fallback
-  if (sessionId) {
-    const sessionFile = getStateFilePath(directory, sessionId);
-    if (!existsSync(sessionFile)) {
-      return null;
-    }
-    try {
-      const content = readFileSync(sessionFile, "utf-8");
-      const state: RalphLoopState = JSON.parse(content);
-      // Validate session identity
-      if (state.session_id && state.session_id !== sessionId) {
-        return null;
-      }
-      return state;
-    } catch {
-      return null; // NO legacy fallback
-    }
-  }
-
-  // No sessionId: legacy path (backward compat)
-  const stateFile = getStateFilePath(directory);
-  if (!existsSync(stateFile)) {
-    return null;
-  }
-
-  try {
-    const content = readFileSync(stateFile, "utf-8");
-    return JSON.parse(content);
-  } catch (error) {
-    console.error("[ralph] Failed to read state file:", error);
-    return null;
-  }
+  const adapter = createStateAdapter<RalphLoopState>('ralph', directory);
+  return adapter.read(sessionId);
 }
 
 /**
@@ -186,32 +151,16 @@ export function writeRalphState(
   state: RalphLoopState,
   sessionId?: string
 ): boolean {
-  try {
-    ensureStateDir(directory, sessionId);
-    const stateFile = getStateFilePath(directory, sessionId);
-    writeFileSync(stateFile, JSON.stringify(state, null, 2), { mode: 0o600 });
-    return true;
-  } catch {
-    return false;
-  }
+  const adapter = createStateAdapter<RalphLoopState>('ralph', directory);
+  return adapter.writeSync(state, sessionId);
 }
 
 /**
  * Clear Ralph Loop state
  */
 export function clearRalphState(directory: string, sessionId?: string): boolean {
-  const stateFile = getStateFilePath(directory, sessionId);
-
-  if (!existsSync(stateFile)) {
-    return true;
-  }
-
-  try {
-    unlinkSync(stateFile);
-    return true;
-  } catch {
-    return false;
-  }
+  const adapter = createStateAdapter<RalphLoopState>('ralph', directory);
+  return adapter.clear(sessionId);
 }
 
 /**
