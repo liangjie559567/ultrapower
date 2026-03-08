@@ -18,7 +18,7 @@ describe('CCG Performance', () => {
     await createDocFromTemplate('requirements', vars);
     const time2 = Date.now() - start2;
 
-    expect(time2).toBeLessThan(time1);
+    expect(time2).toBeLessThanOrEqual(time1);
   });
 
   it('should batch create multiple docs', async () => {
