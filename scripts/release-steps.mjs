@@ -39,10 +39,11 @@ export async function validateBuild(opts = {}) {
 }
 
 export async function publishNpm(opts = {}) {
-  const { dryRun = false, tag = 'latest' } = opts;
+  const { dryRun = false, tag = 'latest', provenance = true } = opts;
   const version = getVersion();
   try {
-    run(`npm publish --access public --tag ${tag}`, dryRun);
+    const provenanceFlag = provenance && process.env.GITHUB_ACTIONS ? '--provenance' : '';
+    run(`npm publish --access public --tag ${tag} ${provenanceFlag}`.trim(), dryRun);
     return { success: true, version };
   } catch (err) {
     return { success: false, version, output: err.message };
@@ -78,6 +79,17 @@ export async function syncMarketplace(opts = {}) {
     if (p.source?.version !== version) { p.source.version = version; changed = true; }
   }
 
+  if (!changed) {
+    console.log('syncMarketplace: versions already in sync');
+    return { success: true };
+  }
+
+  if (dryRun) {
+    console.log('[dry-run] Would update marketplace.json and plugin.json');
+    console.log('[dry-run] Would commit and push to dev');
+    return { success: true };
+  }
+
   // Sync plugin.json
   const pluginPath = resolve('.claude-plugin/plugin.json');
   const plugin = JSON.parse(readFileSync(pluginPath, 'utf-8'));
@@ -93,9 +105,9 @@ export async function syncMarketplace(opts = {}) {
 
   writeFileSync(marketplacePath, JSON.stringify(market, null, 2) + '\n');
   writeFileSync(pluginPath, JSON.stringify(plugin, null, 2) + '\n');
-  run(`git add .claude-plugin/marketplace.json .claude-plugin/plugin.json`, dryRun);
 
   try {
+    run(`git add .claude-plugin/marketplace.json .claude-plugin/plugin.json`, dryRun);
     run(`git commit -m "chore: sync marketplace.json to v${version}"`, dryRun);
     run(`git push origin HEAD:dev`, dryRun);
     console.log(`syncMarketplace: updated to v${version} and pushed to dev`);
@@ -143,7 +155,12 @@ if (cliStep && ['preflight', 'validate', 'publish', 'release', 'sync'].includes(
   const dryRun = process.argv.includes('--dry-run');
   const version = process.env.GITHUB_REF_NAME?.replace(/^v/, '') || undefined;
   const stepMap = { preflight, validate: validateBuild, publish: publishNpm, release: createGithubRelease, sync: syncMarketplace };
-  stepMap[cliStep]({ dryRun, version }).then(r => {
-    if (!r.success) { console.error(`Step ${cliStep} failed: ${r.output ?? ''}`); process.exit(1); }
-  });
+  stepMap[cliStep]({ dryRun, version })
+    .then(r => {
+      if (!r.success) { console.error(`Step ${cliStep} failed: ${r.output ?? ''}`); process.exit(1); }
+    })
+    .catch(err => {
+      console.error(`Step ${cliStep} threw exception: ${err.message}`);
+      process.exit(1);
+    });
 }
