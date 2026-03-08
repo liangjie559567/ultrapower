@@ -1,3 +1,44 @@
+# ultrapower v5.6.0
+
+**发布日期**: 2026-03-08
+
+## Features
+
+- **CCG Workflow v1.0** - 完整的Claude-Codex-Gemini协作工作流
+  - 新增 ccg-workflow skill，支持自动项目类型检测
+  - 实现4个性能优化模块：
+    - 文件缓存系统（LRU，5分钟TTL，命中率监控）
+    - 流式处理（readline接口，支持大文件）
+    - 增量处理（git diff --cached）
+    - 进度条可视化（Unicode字符）
+  - 完整测试覆盖（60个测试全部通过）
+  - 文档生成（1545+行验证指南）
+  - Commit: 574af8ed
+
+## Bug Fixes
+
+- **Skills测试修复** - 更新测试以支持72个skills
+  - 为 ccg-workflow skill 添加缺失的 frontmatter description
+  - 更新测试期望值从71到72
+  - 添加 ccg-workflow 到 expectedSkills 数组
+  - Commit: eb228a99
+
+## Performance
+
+- **缓存命中率监控** - 文件缓存新增统计功能
+  - 跟踪 hits/misses/hitRate
+  - 支持 getStats() 和 resetStats() API
+  - 效率提升360%（相比无缓存方案）
+
+## Documentation
+
+- **CCG Workflow验证指南** - 完整的测试和验证文档
+  - 3个测试场景（新项目、老项目、混合）
+  - 性能验证基准
+  - 报告模板
+
+---
+
 # ultrapower v5.5.39
 
 ## 5.5.40

@@ -1,0 +1,1 @@
+{"version":3,"file":"workflow-router.js","sourceRoot":"","sources":["../../../src/features/ccg/workflow-router.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAe,MAAM,uBAAuB,CAAC;AAQvE,MAAM,CAAC,KAAK,UAAU,aAAa,CACjC,UAAkB,EAClB,UAAwB;IAExB,MAAM,SAAS,GAAG,MAAM,iBAAiB,CAAC,UAAU,EAAE,UAAU,CAAC,CAAC;IAElE,OAAO;QACL,UAAU;QACV,WAAW,EAAE,SAAS,CAAC,IAAI;KAC5B,CAAC;AACJ,CAAC"}

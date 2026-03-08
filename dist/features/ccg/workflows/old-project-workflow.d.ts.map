@@ -1,0 +1,1 @@
+{"version":3,"file":"old-project-workflow.d.ts","sourceRoot":"","sources":["../../../../src/features/ccg/workflows/old-project-workflow.ts"],"names":[],"mappings":"AAKA,MAAM,WAAW,wBAAwB;IACvC,UAAU,EAAE,MAAM,CAAC;CACpB;AAED,qBAAa,kBAAkB;IAC7B,OAAO,CAAC,MAAM,CAA2B;IACzC,OAAO,CAAC,gBAAgB,CAAuB;gBAEnC,MAAM,EAAE,wBAAwB;IAKtC,OAAO,IAAI,OAAO,CAAC,IAAI,CAAC;CAO/B"}
