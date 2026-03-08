@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"node scripts/release-local.mjs\",\"timeout\":300000,\"description\":\"Execute release pipeline with npx fix\"}",
-  "error": "Exit code 1\nRunning release pipeline (dryRun=false, startFrom=validate)\nStep 2/5: validateBuild...\n\n> @liangjie559567/ultrapower@5.5.40 build\n> tsc && node scripts/parallel-build.mjs && npm run compose-docs\n\nBuilt dist/hooks/skill-bridge.cjs\nEmbedding 50 agent roles + prompts into bridge/gemini-server.cjs\nEmbedding 50 agent roles + prompts into bridge/codex-server.cjs\nEmbedding 51 Codex agent prompts\nBuilt bridge/team-bridge.cjs\nBuilt bridge/mcp-server.cjs\nBuilt bridge/gemini-server.cjs\nBuilt br...",
-  "timestamp": "2026-03-08T08:36:52.961Z",
+  "tool_input_preview": "{\"command\":\"tail -100 C:\\\\Users\\\\ljyih\\\\.claude\\\\projects\\\\C--Users-ljyih-Desktop-ultrapower\\\\2f5b2f33-f754-4e2d-85a6-2163af1e2ecd\\\\tool-results\\\\bw0nl44j6.txt\",\"description\":\"Check release pipeline f...",
+  "error": "Exit code 1\ntail: cannot open 'C:Usersljyih.claudeprojectsC--Users-ljyih-Desktop-ultrapower2f5b2f33-f754-4e2d-85a6-2163af1e2ecdtool-resultsbw0nl44j6.txt' for reading: No such file or directory",
+  "timestamp": "2026-03-08T08:39:12.360Z",
   "retry_count": 1
 }
