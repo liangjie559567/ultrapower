@@ -62,8 +62,13 @@ describe('assertValidMode', () => {
     expect(() => assertValidMode('C:\\Windows')).toThrow('Path traversal attempt detected');
   });
 
+  it('rejects inputs exceeding 100 characters', () => {
+    const longInput = 'a'.repeat(101);
+    expect(() => assertValidMode(longInput)).toThrow('Mode name too long');
+  });
+
   it('truncates long inputs', () => {
-    const longInput = 'a'.repeat(100);
+    const longInput = 'a'.repeat(60); // 60 chars, within 100 limit but will be truncated in error message
     expect(() => assertValidMode(longInput)).toThrow('...(truncated)');
   });
 

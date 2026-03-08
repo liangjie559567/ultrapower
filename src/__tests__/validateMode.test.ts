@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { validateMode, assertValidMode, VALID_MODES } from '../lib/validateMode.js';
 
 describe('validateMode', () => {
-  it('should return true for all 8 valid modes', () => {
-    const expected = ['autopilot', 'ultrapilot', 'team', 'pipeline', 'ralph', 'ultrawork', 'ultraqa', 'swarm'];
-    expect(VALID_MODES).toHaveLength(8);
+  it('should return true for all 9 valid modes', () => {
+    const expected = ['autopilot', 'ultrapilot', 'team', 'pipeline', 'ralph', 'ultrawork', 'ultraqa', 'swarm', 'ralplan'];
+    expect(VALID_MODES).toHaveLength(9);
     for (const mode of expected) {
       expect(validateMode(mode)).toBe(true);
     }
@@ -90,7 +90,7 @@ describe('assertValidMode', () => {
       errorMessage = (e as Error).message;
     }
     expect(errorMessage.length).toBeLessThan(500);
-    expect(errorMessage).toContain('truncated');
+    expect(errorMessage).toBe('Mode name too long');
   });
 
   it('error message should not expose raw non-string input verbatim', () => {

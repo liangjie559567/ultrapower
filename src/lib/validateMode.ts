@@ -17,9 +17,10 @@ import { auditLogger } from '../audit/logger.js';
 export { validatePath, SecurityError } from './path-validator.js';
 
 /**
- * All valid execution mode names (8 total).
+ * All valid execution mode names (9 total).
  * Derived from src/hooks/mode-registry/index.ts.
  * Note (D-03): PRD originally listed 7 modes; 'swarm' was added, making 8.
+ * Note (SEC-H02): 'ralplan' added for path traversal protection.
  */
 export const VALID_MODES = [
   'autopilot',
@@ -30,6 +31,7 @@ export const VALID_MODES = [
   'ultrawork',
   'ultraqa',
   'swarm',
+  'ralplan',
 ] as const;
 
 /** Union type of all valid mode strings. */
@@ -67,6 +69,9 @@ export function validateMode(mode: unknown): mode is ValidMode {
  * // const stateFilePath = `.omc/state/${mode}-state.json`;
  */
 export function assertValidMode(mode: unknown): ValidMode {
+  if (typeof mode === 'string' && mode.length > 100) {
+    throw new Error('Mode name too long');
+  }
   if (!validateMode(mode)) {
     const raw = typeof mode === 'string' ? mode : String(mode);
     const display = raw.length > 50 ? `${raw.slice(0, 50)}...(truncated)` : raw;
