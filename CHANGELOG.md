@@ -1,3 +1,24 @@
+# ultrapower v5.5.33
+
+**发布日期**: 2026-03-08
+
+## Bug Fixes
+
+- **文件锁竞态条件修复** - 消除 `withFileLock` 中的竞态窗口
+  - 将 `lock.json` 写入移到 `mkdir` 成功后立即执行
+  - 修复并发测试失败：`[1,3,2,4]` → `[1,2,3,4]` 或 `[3,4,1,2]`
+  - 添加 ENOENT 错误处理，防止 writeFile 时锁目录被删除
+
+- **Windows 兼容性修复** - 修复 Windows 平台锁清理错误
+  - 在 finally 块中同时忽略 ENOENT 和 ENOTEMPTY 错误
+  - 修复 3 进程并发测试在 Windows CI 上的失败
+
+- **性能测试稳定性** - 放宽 CI 环境性能阈值
+  - `batchUpsert` 阈值从 100ms 增加到 150ms
+  - 适应 CI 环境的性能波动（Windows CI 实测 102.75ms）
+
+---
+
 # ultrapower v5.5.31
 
 **发布日期**: 2026-03-07
