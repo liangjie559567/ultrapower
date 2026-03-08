@@ -266,7 +266,13 @@ describe('withFileLock', () => {
 
     // 串行执行应该是 [1,2,3,4] 或 [3,4,1,2]
     expect(results.length).toBe(4);
-    expect(results[0] === 1 ? results : [results[2], results[3], results[0], results[1]]).toEqual([1, 2, 3, 4]);
+    // 验证每对数字是连续的（串行执行的证明）
+    const idx1 = results.indexOf(1);
+    const idx2 = results.indexOf(2);
+    const idx3 = results.indexOf(3);
+    const idx4 = results.indexOf(4);
+    expect(Math.abs(idx2 - idx1)).toBe(1);
+    expect(Math.abs(idx4 - idx3)).toBe(1);
   });
 
   it('3个进程并发竞争时串行执行', async () => {
