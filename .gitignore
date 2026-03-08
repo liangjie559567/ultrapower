@@ -2,7 +2,7 @@
 .private-journal/
 .claude/
 node_modules/
-dist/
+# dist/ - MUST be committed for plugin distribution
 .omc/state/
 .omc/logs/
 .omc/prompts/

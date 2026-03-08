@@ -1,0 +1,1 @@
+{"version":3,"file":"recommendation-engine.d.ts","sourceRoot":"","sources":["../../../src/features/workflow-recommender/recommendation-engine.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,OAAO,KAAK,EAAE,MAAM,EAAE,aAAa,EAAE,cAAc,EAAE,MAAM,YAAY,CAAC;AAExE,wBAAgB,iBAAiB,CAC/B,MAAM,EAAE,MAAM,EACd,OAAO,EAAE,aAAa,GACrB,cAAc,CA+GhB"}

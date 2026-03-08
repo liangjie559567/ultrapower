@@ -1,0 +1,493 @@
+/**
+ * Persistent Mode Hook
+ *
+ * Unified handler for persistent work modes: ultrawork, ralph, and todo-continuation.
+ * This hook intercepts Stop events and enforces work continuation based on:
+ * 1. Active ultrawork mode with pending todos
+ * 2. Active ralph loop (until cancelled via /ultrapower:cancel)
+ * 3. Any pending todos (general enforcement)
+ *
+ * Priority order: Ralph > Ultrawork > Todo Continuation
+ */
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
+import { getClaudeConfigDir } from '../../utils/paths.js';
+import { resolveToWorktreeRoot } from '../../lib/worktree-paths.js';
+import { isUserAbort, isContextLimitStop } from '../todo-continuation/index.js';
+import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
+import { readLastToolError, getToolErrorRetryGuidance } from './tool-error.js';
+// Lazy imports via event bus
+let ultraworkModule;
+let ralphModule;
+let todoModule;
+let autopilotModule;
+let autopilotEnforcementModule;
+let teamPipelineModule;
+async function loadUltrawork() {
+    if (!ultraworkModule)
+        ultraworkModule = await import('../ultrawork/index.js');
+    return ultraworkModule;
+}
+async function loadRalph() {
+    if (!ralphModule)
+        ralphModule = await import('../ralph/index.js');
+    return ralphModule;
+}
+async function loadTodo() {
+    if (!todoModule)
+        todoModule = await import('../todo-continuation/index.js');
+    return todoModule;
+}
+async function loadAutopilot() {
+    if (!autopilotModule)
+        autopilotModule = await import('../autopilot/index.js');
+    return autopilotModule;
+}
+async function loadAutopilotEnforcement() {
+    if (!autopilotEnforcementModule)
+        autopilotEnforcementModule = await import('../autopilot/enforcement.js');
+    return autopilotEnforcementModule;
+}
+async function loadTeamPipeline() {
+    if (!teamPipelineModule)
+        teamPipelineModule = await import('../team-pipeline/state.js');
+    return teamPipelineModule;
+}
+/** Maximum todo-continuation attempts before giving up (prevents infinite loops) */
+const MAX_TODO_CONTINUATION_ATTEMPTS = 5;
+/** Track todo-continuation attempts per session to prevent infinite loops */
+const todoContinuationAttempts = new Map();
+/**
+ * Get or increment todo-continuation attempt counter
+ */
+function trackTodoContinuationAttempt(sessionId) {
+    const current = todoContinuationAttempts.get(sessionId) || 0;
+    const next = current + 1;
+    todoContinuationAttempts.set(sessionId, next);
+    return next;
+}
+/**
+ * Reset todo-continuation attempt counter (call when todos actually change)
+ */
+export function resetTodoContinuationAttempts(sessionId) {
+    todoContinuationAttempts.delete(sessionId);
+}
+/**
+ * Check for architect approval in session transcript
+ */
+async function checkArchitectApprovalInTranscript(sessionId) {
+    const ralph = await loadRalph();
+    const claudeDir = getClaudeConfigDir();
+    const possiblePaths = [
+        join(claudeDir, 'sessions', sessionId, 'transcript.md'),
+        join(claudeDir, 'sessions', sessionId, 'messages.json'),
+        join(claudeDir, 'transcripts', `${sessionId}.md`)
+    ];
+    for (const transcriptPath of possiblePaths) {
+        if (existsSync(transcriptPath)) {
+            try {
+                const content = readFileSync(transcriptPath, 'utf-8');
+                if (ralph.detectArchitectApproval(content)) {
+                    return true;
+                }
+            }
+            catch {
+                continue;
+            }
+        }
+    }
+    return false;
+}
+/**
+ * Check for architect rejection in session transcript
+ */
+async function checkArchitectRejectionInTranscript(sessionId) {
+    const ralph = await loadRalph();
+    const claudeDir = getClaudeConfigDir();
+    const possiblePaths = [
+        join(claudeDir, 'sessions', sessionId, 'transcript.md'),
+        join(claudeDir, 'sessions', sessionId, 'messages.json'),
+        join(claudeDir, 'transcripts', `${sessionId}.md`)
+    ];
+    for (const transcriptPath of possiblePaths) {
+        if (existsSync(transcriptPath)) {
+            try {
+                const content = readFileSync(transcriptPath, 'utf-8');
+                const result = ralph.detectArchitectRejection(content);
+                if (result.rejected) {
+                    return result;
+                }
+            }
+            catch {
+                continue;
+            }
+        }
+    }
+    return { rejected: false, feedback: '' };
+}
+/**
+ * Check Ralph Loop state and determine if it should continue
+ * Now includes Architect verification for completion claims
+ */
+async function checkRalphLoop(sessionId, directory) {
+    const ralph = await loadRalph();
+    const workingDir = resolveToWorktreeRoot(directory);
+    const state = ralph.readRalphState(workingDir, sessionId);
+    if (!state || !state.active) {
+        return null;
+    }
+    // Strict session isolation: only process state for matching session
+    if (state.session_id !== sessionId) {
+        return null;
+    }
+    // Self-heal linked ultrawork: if ralph is active and marked linked but ultrawork
+    // state is missing, recreate it so stop reinforcement cannot silently disappear.
+    if (state.linked_ultrawork) {
+        const ultrawork = await loadUltrawork();
+        const ultraworkState = ultrawork.readUltraworkState(workingDir, sessionId);
+        if (!ultraworkState?.active) {
+            const now = new Date().toISOString();
+            const restoredState = {
+                active: true,
+                started_at: state.started_at || now,
+                original_prompt: state.prompt || 'Ralph loop task',
+                session_id: sessionId,
+                project_path: workingDir,
+                reinforcement_count: 0,
+                last_checked_at: now,
+                linked_to_ralph: true
+            };
+            ultrawork.writeUltraworkState(restoredState, workingDir, sessionId);
+        }
+    }
+    // Check team pipeline state coordination
+    // When team mode is active alongside ralph, respect team phase transitions
+    const team = await loadTeamPipeline();
+    const teamState = team.readTeamPipelineState(workingDir, sessionId);
+    if (teamState && teamState.active !== undefined) {
+        const teamPhase = teamState.phase;
+        // If team pipeline reached a terminal state, ralph should also complete
+        if (teamPhase === 'complete') {
+            const ultrawork = await loadUltrawork();
+            ralph.clearRalphState(workingDir, sessionId);
+            ralph.clearVerificationState(workingDir, sessionId);
+            ultrawork.deactivateUltrawork(workingDir, sessionId);
+            return {
+                shouldBlock: false,
+                message: `[RALPH LOOP COMPLETE - TEAM] Team pipeline completed successfully. Ralph loop ending after ${state.iteration} iteration(s).`,
+                mode: 'none'
+            };
+        }
+        if (teamPhase === 'failed') {
+            const ultrawork = await loadUltrawork();
+            ralph.clearRalphState(workingDir, sessionId);
+            ralph.clearVerificationState(workingDir, sessionId);
+            ultrawork.deactivateUltrawork(workingDir, sessionId);
+            return {
+                shouldBlock: false,
+                message: `[RALPH LOOP STOPPED - TEAM FAILED] Team pipeline failed. Ralph loop ending after ${state.iteration} iteration(s).`,
+                mode: 'none'
+            };
+        }
+        if (teamPhase === 'cancelled') {
+            const ultrawork = await loadUltrawork();
+            ralph.clearRalphState(workingDir, sessionId);
+            ralph.clearVerificationState(workingDir, sessionId);
+            ultrawork.deactivateUltrawork(workingDir, sessionId);
+            return {
+                shouldBlock: false,
+                message: `[RALPH LOOP CANCELLED - TEAM] Team pipeline was cancelled. Ralph loop ending after ${state.iteration} iteration(s).`,
+                mode: 'none'
+            };
+        }
+    }
+    // Check for PRD-based completion (all stories have passes: true)
+    const prdStatus = ralph.getPrdCompletionStatus(workingDir);
+    if (prdStatus.hasPrd && prdStatus.allComplete) {
+        const ultrawork = await loadUltrawork();
+        // All PRD stories complete - allow completion
+        ralph.clearRalphState(workingDir, sessionId);
+        ralph.clearVerificationState(workingDir, sessionId);
+        ultrawork.deactivateUltrawork(workingDir, sessionId);
+        return {
+            shouldBlock: false,
+            message: `[RALPH LOOP COMPLETE - PRD] All ${prdStatus.status?.total || 0} stories are complete! Great work!`,
+            mode: 'none'
+        };
+    }
+    // Check for existing verification state (architect verification in progress)
+    const verificationState = ralph.readVerificationState(workingDir, sessionId);
+    if (verificationState?.pending) {
+        // Verification is in progress - check for architect's response
+        if (sessionId) {
+            // Check for architect approval
+            if (await checkArchitectApprovalInTranscript(sessionId)) {
+                const ultrawork = await loadUltrawork();
+                // Architect approved - truly complete
+                // Also deactivate ultrawork if it was active alongside ralph
+                ralph.clearVerificationState(workingDir, sessionId);
+                ralph.clearRalphState(workingDir, sessionId);
+                ultrawork.deactivateUltrawork(workingDir, sessionId);
+                return {
+                    shouldBlock: false,
+                    message: `[RALPH LOOP VERIFIED COMPLETE] Architect verified task completion after ${state.iteration} iteration(s). Excellent work!`,
+                    mode: 'none'
+                };
+            }
+            // Check for architect rejection
+            const rejection = await checkArchitectRejectionInTranscript(sessionId);
+            if (rejection.rejected) {
+                // Architect rejected - continue with feedback
+                ralph.recordArchitectFeedback(workingDir, false, rejection.feedback, sessionId);
+                const updatedVerification = ralph.readVerificationState(workingDir, sessionId);
+                if (updatedVerification) {
+                    const continuationPrompt = ralph.getArchitectRejectionContinuationPrompt(updatedVerification);
+                    return {
+                        shouldBlock: true,
+                        message: continuationPrompt,
+                        mode: 'ralph',
+                        metadata: {
+                            iteration: state.iteration,
+                            maxIterations: state.max_iterations
+                        }
+                    };
+                }
+            }
+        }
+        // Verification still pending - remind to spawn architect
+        const verificationPrompt = ralph.getArchitectVerificationPrompt(verificationState);
+        return {
+            shouldBlock: true,
+            message: verificationPrompt,
+            mode: 'ralph',
+            metadata: {
+                iteration: state.iteration,
+                maxIterations: state.max_iterations
+            }
+        };
+    }
+    // Check max iterations
+    if (state.iteration >= state.max_iterations) {
+        // Do not silently stop Ralph with unfinished work.
+        // Extend the limit and continue enforcement so user-visible cancellation
+        // remains the only explicit termination path.
+        state.max_iterations += 10;
+        ralph.writeRalphState(workingDir, state, sessionId);
+    }
+    // Read tool error before generating message
+    const toolError = readLastToolError(workingDir);
+    const errorGuidance = getToolErrorRetryGuidance(toolError);
+    // Increment and continue
+    const newState = ralph.incrementRalphIteration(workingDir, sessionId);
+    if (!newState) {
+        return null;
+    }
+    // Get PRD context for injection
+    const ralphContext = ralph.getRalphContext(workingDir);
+    const prdInstruction = prdStatus.hasPrd
+        ? `2. Check prd.json - are ALL stories marked passes: true?`
+        : `2. Check your todo list - are ALL items marked complete?`;
+    const continuationPrompt = `<ralph-continuation>
+${errorGuidance ? errorGuidance + '\n' : ''}
+[RALPH - ITERATION ${newState.iteration}/${newState.max_iterations}]
+
+The task is NOT complete yet. Continue working.
+${ralphContext}
+CRITICAL INSTRUCTIONS:
+1. Review your progress and the original task
+${prdInstruction}
+3. Continue from where you left off
+4. When FULLY complete (after Architect verification), run \`/ultrapower:cancel\` to cleanly exit and clean up state files. If cancel fails, retry with \`/ultrapower:cancel --force\`.
+5. Do NOT stop until the task is truly done
+
+${newState.prompt ? `Original task: ${newState.prompt}` : ''}
+
+</ralph-continuation>
+
+---
+
+`;
+    return {
+        shouldBlock: true,
+        message: continuationPrompt,
+        mode: 'ralph',
+        metadata: {
+            iteration: newState.iteration,
+            maxIterations: newState.max_iterations,
+            toolError: toolError || undefined
+        }
+    };
+}
+/**
+ * Check Ultrawork state and determine if it should reinforce
+ */
+async function checkUltrawork(sessionId, directory, _hasIncompleteTodos) {
+    const ultrawork = await loadUltrawork();
+    const state = ultrawork.readUltraworkState(directory, sessionId);
+    if (!state || !state.active) {
+        return null;
+    }
+    // Strict session isolation: only process state for matching session
+    if (state.session_id !== sessionId) {
+        return null;
+    }
+    // Reinforce ultrawork mode - ALWAYS continue while active.
+    // This prevents false stops from bash errors, transient failures, etc.
+    const newState = await ultrawork.incrementReinforcement(directory, sessionId);
+    if (!newState) {
+        return null;
+    }
+    const message = ultrawork.getUltraworkPersistenceMessage(newState);
+    return {
+        shouldBlock: true,
+        message,
+        mode: 'ultrawork',
+        metadata: {
+            reinforcementCount: newState.reinforcement_count
+        }
+    };
+}
+/**
+ * Check for incomplete todos (baseline enforcement)
+ * Includes max-attempts counter to prevent infinite loops when agent is stuck
+ */
+async function _checkTodoContinuation(sessionId, directory) {
+    const todo = await loadTodo();
+    const result = await todo.checkIncompleteTodos(sessionId, directory);
+    if (result.count === 0) {
+        // Reset counter when todos are cleared
+        if (sessionId) {
+            resetTodoContinuationAttempts(sessionId);
+        }
+        return null;
+    }
+    // Track continuation attempts to prevent infinite loops
+    const attemptCount = sessionId ? trackTodoContinuationAttempt(sessionId) : 1;
+    // Use dynamic label based on source (Tasks vs todos)
+    const _sourceLabel = result.source === 'task' ? 'Tasks' : 'todos';
+    const sourceLabelLower = result.source === 'task' ? 'tasks' : 'todos';
+    if (attemptCount > MAX_TODO_CONTINUATION_ATTEMPTS) {
+        // Too many attempts - agent appears stuck, allow stop but warn
+        return {
+            shouldBlock: false,
+            message: `[TODO CONTINUATION LIMIT] Attempted ${MAX_TODO_CONTINUATION_ATTEMPTS} continuations without progress. ${result.count} ${sourceLabelLower} remain incomplete. Consider reviewing the stuck ${sourceLabelLower} or asking the user for guidance.`,
+            mode: 'none',
+            metadata: {
+                todoCount: result.count,
+                todoContinuationAttempts: attemptCount
+            }
+        };
+    }
+    const nextTodo = todo.getNextPendingTodo(result);
+    const nextTaskInfo = nextTodo
+        ? `\n\nNext ${result.source === 'task' ? 'Task' : 'todo'}: "${nextTodo.content}" (${nextTodo.status})`
+        : '';
+    const attemptInfo = attemptCount > 1
+        ? `\n[Continuation attempt ${attemptCount}/${MAX_TODO_CONTINUATION_ATTEMPTS}]`
+        : '';
+    const message = `<todo-continuation>
+
+${TODO_CONTINUATION_PROMPT}
+
+[Status: ${result.count} of ${result.total} ${sourceLabelLower} remaining]${nextTaskInfo}${attemptInfo}
+
+</todo-continuation>
+
+---
+
+`;
+    return {
+        shouldBlock: true,
+        message,
+        mode: 'todo-continuation',
+        metadata: {
+            todoCount: result.count,
+            todoContinuationAttempts: attemptCount
+        }
+    };
+}
+/**
+ * Main persistent mode checker
+ * Checks all persistent modes in priority order and returns appropriate action
+ */
+export async function checkPersistentModes(sessionId, directory, stopContext // NEW: from todo-continuation types
+) {
+    const workingDir = resolveToWorktreeRoot(directory);
+    // CRITICAL: Never block context-limit stops.
+    // Blocking these causes a deadlock where Claude Code cannot compact.
+    // See: https://github.com/liangjie559567/ultrapower/issues/213
+    if (isContextLimitStop(stopContext)) {
+        return {
+            shouldBlock: false,
+            message: '',
+            mode: 'none'
+        };
+    }
+    // Check for user abort - skip all continuation enforcement
+    if (isUserAbort(stopContext)) {
+        return {
+            shouldBlock: false,
+            message: '',
+            mode: 'none'
+        };
+    }
+    // First, check for incomplete todos (we need this info for ultrawork)
+    // Note: stopContext already checked above, but pass it for consistency
+    const todo = await loadTodo();
+    const todoResult = await todo.checkIncompleteTodos(sessionId, workingDir, stopContext);
+    const hasIncompleteTodos = todoResult.count > 0;
+    // Priority 1: Ralph (explicit loop mode)
+    const ralphResult = await checkRalphLoop(sessionId, workingDir);
+    if (ralphResult) {
+        return ralphResult;
+    }
+    // Priority 1.5: Autopilot (full orchestration mode - higher than ultrawork, lower than ralph)
+    const autopilot = await loadAutopilot();
+    if (autopilot.isAutopilotActive(workingDir, sessionId)) {
+        const enforcement = await loadAutopilotEnforcement();
+        const autopilotResult = await enforcement.checkAutopilot(sessionId, workingDir);
+        if (autopilotResult?.shouldBlock) {
+            return {
+                shouldBlock: true,
+                message: autopilotResult.message,
+                mode: 'autopilot',
+                metadata: {
+                    iteration: autopilotResult.metadata?.iteration,
+                    maxIterations: autopilotResult.metadata?.maxIterations,
+                    phase: autopilotResult.phase,
+                    tasksCompleted: autopilotResult.metadata?.tasksCompleted,
+                    tasksTotal: autopilotResult.metadata?.tasksTotal,
+                    toolError: autopilotResult.metadata?.toolError
+                }
+            };
+        }
+    }
+    // Priority 2: Ultrawork Mode (performance mode with persistence)
+    const ultraworkResult = await checkUltrawork(sessionId, workingDir, hasIncompleteTodos);
+    if (ultraworkResult?.shouldBlock) {
+        return ultraworkResult;
+    }
+    // NOTE: Priority 3 (Todo Continuation) removed to prevent false positives.
+    // Only explicit modes (ralph, autopilot, ultrawork, etc.) trigger continuation enforcement.
+    // No blocking needed
+    return {
+        shouldBlock: false,
+        message: '',
+        mode: 'none'
+    };
+}
+/**
+ * Create hook output for Claude Code
+ * NOTE: Always returns continue: true with soft enforcement via message injection.
+ * Never returns continue: false to avoid blocking user intent.
+ */
+export function createHookOutput(result) {
+    // Always allow stop, but inject message for soft enforcement
+    return {
+        continue: true,
+        message: result.message || undefined
+    };
+}
+// Re-export tool-error functions for testing
+export { readLastToolError, clearToolErrorState, getToolErrorRetryGuidance } from './tool-error.js';
+//# sourceMappingURL=index.js.map

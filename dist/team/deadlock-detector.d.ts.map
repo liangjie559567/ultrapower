@@ -1,0 +1,1 @@
+{"version":3,"file":"deadlock-detector.d.ts","sourceRoot":"","sources":["../../src/team/deadlock-detector.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,OAAO,EAAE,eAAe,EAAE,MAAM,uBAAuB,CAAC;AAQxD,MAAM,WAAW,cAAc;IAC7B,WAAW,EAAE,OAAO,CAAC;IACrB,KAAK,CAAC,EAAE,MAAM,EAAE,CAAC;CAClB;AAED,qBAAa,gBAAgB;IAC3B;;OAEG;IACH,MAAM,CAAC,KAAK,EAAE,eAAe,GAAG,cAAc;IAqB9C,OAAO,CAAC,GAAG;CA4BZ"}

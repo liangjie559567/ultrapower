@@ -1,0 +1,146 @@
+/**
+ * orchestrator.ts — 进化引擎编排器
+ *
+ * 从 Axiom orchestrator.py 移植。编排完整的进化流程。
+ */
+import { KnowledgeHarvester } from './harvester.js';
+import { PatternDetector } from './pattern-detector.js';
+import { ConfidenceEngine } from './confidence.js';
+import { WorkflowMetrics } from './metrics.js';
+import { LearningQueue } from './learning-queue.js';
+import { ReflectionEngine } from './reflection.js';
+import { KnowledgeIndexManager } from './index-manager.js';
+import { SeedKnowledge } from './seed-knowledge.js';
+import { QueueArchiver } from './queue-archiver.js';
+export class EvolutionOrchestrator {
+    harvester;
+    patternDetector;
+    confidenceEngine;
+    metrics;
+    learningQueue;
+    reflection;
+    indexManager;
+    seedKnowledge;
+    queueArchiver;
+    constructor(baseDir, config) {
+        const base = baseDir ?? process.cwd();
+        this.harvester = new KnowledgeHarvester(base);
+        this.patternDetector = new PatternDetector(base, config);
+        this.confidenceEngine = new ConfidenceEngine(base, config);
+        this.metrics = new WorkflowMetrics(base);
+        this.learningQueue = new LearningQueue(base, config);
+        this.reflection = new ReflectionEngine(base);
+        this.indexManager = new KnowledgeIndexManager(base);
+        this.seedKnowledge = new SeedKnowledge(base);
+        this.queueArchiver = new QueueArchiver(base);
+    }
+    /** 初始化：加载种子知识（首次运行时） */
+    async initialize() {
+        await this.seedKnowledge.seed();
+        await this.indexManager.rebuildIndex();
+    }
+    /** /evolve 入口：处理 diff，更新模式库，衰减置信度（对齐 Python orchestrator.evolve） */
+    async evolve(options = {}) {
+        const { diffText = '' } = options;
+        // 1. 处理学习队列（P0 优先，IDLE 时补充处理 P1）
+        const nextBatch = await this.learningQueue.getNextBatch(3);
+        for (const item of nextBatch) {
+            await this.learningQueue.updateStatus(item.id, 'processing');
+            await this.learningQueue.updateStatus(item.id, 'done');
+        }
+        // IDLE 补充：处理 P1 条目
+        const p1Batch = (await this.learningQueue.getNextBatch(5))
+            .filter(i => i.priority === 'P1');
+        for (const item of p1Batch) {
+            await this.learningQueue.updateStatus(item.id, 'processing');
+            await this.learningQueue.updateStatus(item.id, 'done');
+        }
+        // 2. 重建索引
+        await this.indexManager.rebuildIndex();
+        // 3. 衰减未使用的知识（30 天）
+        const decayed = await this.confidenceEngine.decayUnused(30);
+        // 4. 获取已废弃条目
+        const deprecated = await this.confidenceEngine.getDeprecated();
+        // 5. 检测模式（Python 内部使用 git diff，此处接受外部传入）
+        const patternResult = await this.patternDetector.detectAndUpdate(diffText);
+        // 6. 从 diff 收割知识
+        let harvested = 0;
+        if (diffText) {
+            const files = [...diffText.matchAll(/\+\+\+ b\/(.+)/g)].map(m => m[1] ?? '');
+            for (const f of files.slice(0, 3)) {
+                await this.harvester.harvest('code_change', `Pattern from ${f}`, diffText.slice(0, 500));
+                harvested++;
+            }
+        }
+        // 7. 获取工作流洞察（对齐 Python metrics.get_all_insights）
+        // 仅作触发，结果不纳入 EvolveResult
+        // 8. 获取反思摘要和待处理行动项
+        const reflectionSummary = await this.reflection.getReflectionSummary(5);
+        const pendingActionItems = await this.reflection.getPendingActionItems();
+        // 9. 清理 7 天前的已完成队列条目
+        await this.learningQueue.cleanup(7);
+        // 10. 自动检查并触发队列归档
+        const archiveResult = await this.queueArchiver.archive();
+        // 11. 获取队列统计
+        const queueStats = await this.learningQueue.getStats();
+        return {
+            newPatterns: patternResult.newPatterns,
+            promoted: patternResult.promoted,
+            harvested,
+            decayed: decayed.length,
+            deprecated: deprecated.length,
+            queueStats,
+            reflectionSummary,
+            pendingActionItems,
+            archiveResult,
+        };
+    }
+    /** 手动触发队列归档（对应 --archive-queue 参数） */
+    async archiveQueue() {
+        return this.queueArchiver.archive();
+    }
+    /** /reflect 入口：生成反思报告 */
+    async reflect(options) {
+        return this.reflection.reflect(options.sessionName, {
+            durationMin: options.durationMin,
+            tasksCompleted: options.tasksCompleted,
+            tasksTotal: options.tasksTotal,
+            wentWell: options.wentWell,
+            couldImprove: options.couldImprove,
+            learnings: options.learnings,
+            actionItems: options.actionItems,
+        });
+    }
+    /** 获取最近反思 */
+    async getRecentReflections(limit = 5) {
+        return this.reflection.getRecentReflections(limit);
+    }
+    /** 获取工作流洞察 */
+    async getInsights(workflow) {
+        return this.metrics.getInsights(workflow);
+    }
+    /** 任务完成时触发（对齐 Python on_task_completed） */
+    async onTaskCompleted(taskId, description) {
+        await this.learningQueue.addItem('task_completion', taskId, 'P2', description);
+    }
+    /** 错误修复成功时触发（对齐 Python on_error_fixed） */
+    async onErrorFixed(errorType, rootCause, solution) {
+        await this.learningQueue.addItem('error_fix', errorType, 'P1', `Root cause: ${rootCause} | Solution: ${solution}`);
+    }
+    /** 工作流完成时触发（对齐 Python on_workflow_completed） */
+    async onWorkflowCompleted(workflow, durationMin, success, notes = '') {
+        await this.metrics.endTracking(workflow, { success, notes, durationOverride: durationMin });
+        await this.learningQueue.addItem('workflow_completion', workflow, 'P2', `duration=${durationMin}min success=${success} ${notes}`.trim());
+    }
+    /** 搜索知识库（对齐 Python search_knowledge） */
+    async searchKnowledge(query) {
+        return this.harvester.search(query);
+    }
+    /** 搜索模式库（对齐 Python search_patterns） */
+    async searchPatterns(query) {
+        const patterns = await this.patternDetector.loadPatterns();
+        const q = query.toLowerCase();
+        return patterns.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+    }
+}
+//# sourceMappingURL=orchestrator.js.map

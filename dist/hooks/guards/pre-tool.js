@@ -1,0 +1,55 @@
+/**
+ * pre-tool.ts — PreToolUse 守卫
+ *
+ * 注册 PreToolUse 事件，执行权限检查和范围验证。
+ */
+import path from 'path';
+import os from 'os';
+/** 受限工具列表（需要额外确认） */
+const RESTRICTED_TOOLS = new Set([
+    'Bash',
+    'Write',
+    'Edit',
+]);
+/** 高风险命令模式 */
+const DANGEROUS_PATTERNS = [
+    /rm\s+-rf/,
+    /git\s+push\s+--force/,
+    /git\s+reset\s+--hard/,
+    /DROP\s+TABLE/i,
+    /DELETE\s+FROM/i,
+];
+export function checkPreTool(ctx) {
+    const { toolName, toolInput } = ctx;
+    // Bash 命令安全检查
+    if (toolName === 'Bash') {
+        const cmd = String(toolInput['command'] ?? '');
+        for (const pattern of DANGEROUS_PATTERNS) {
+            if (pattern.test(cmd)) {
+                return {
+                    allowed: false,
+                    reason: `Dangerous command pattern detected: ${pattern.source}`,
+                };
+            }
+        }
+    }
+    // Write 路径范围检查
+    // 使用 path.resolve() 规范化路径，防止路径遍历攻击（T-2b）
+    if (toolName === 'Write') {
+        const rawPath = String(toolInput['file_path'] ?? '');
+        const filePath = path.resolve(rawPath);
+        const homeClaudeDir = path.join(os.homedir(), '.claude');
+        if (filePath.startsWith(homeClaudeDir) ||
+            filePath.includes('node_modules')) {
+            return {
+                allowed: false,
+                reason: `Write to restricted path: ${filePath}`,
+            };
+        }
+    }
+    return { allowed: true };
+}
+export function isRestrictedTool(toolName) {
+    return RESTRICTED_TOOLS.has(toolName);
+}
+//# sourceMappingURL=pre-tool.js.map
