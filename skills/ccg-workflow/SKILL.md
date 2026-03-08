@@ -1,3 +1,8 @@
+---
+name: ccg-workflow
+description: 启动 Claude-Codex 协作工作流，自动检测项目类型并执行相应流程
+---
+
 # CCG Workflow - Claude-Codex Collaboration Workflow
 
 ## Trigger
