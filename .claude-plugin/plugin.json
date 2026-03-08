@@ -19,11 +19,5 @@
     "claudecode",
     "anthropic",
     "llm"
-  ],
-  "statusline": {
-    "command": "node",
-    "args": [
-      "dist/hud/index.js"
-    ]
-  }
+  ]
 }
