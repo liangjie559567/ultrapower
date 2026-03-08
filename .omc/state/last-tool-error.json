@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"cat .claude-plugin/plugin.json | jq '.statusline'\",\"description\":\"验证 statusline 配置存在且格式正确\"}",
-  "error": "Exit code 127\n/usr/bin/bash: line 1: jq: command not found",
-  "timestamp": "2026-03-08T04:58:18.346Z",
-  "retry_count": 1
+  "tool_input_preview": "{\"command\":\"git push origin main && git push origin v5.5.34\",\"description\":\"推送到 GitHub\"}",
+  "error": "Exit code 1\nTo https://github.com/liangjie559567/ultrapower.git\n   e4eac43..ff9aa6d  main -> main\nTo https://github.com/liangjie559567/ultrapower.git\n ! [rejected]        v5.5.34 -> v5.5.34 (already exists)\nerror: failed to push some refs to 'https://github.com/liangjie559567/ultrapower.git'\nhint: Updates were rejected because the tag already exists in the remote.",
+  "timestamp": "2026-03-08T05:04:20.923Z",
+  "retry_count": 2
 }
