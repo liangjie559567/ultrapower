@@ -1,6 +1,6 @@
 {
   "name": "@liangjie559567/ultrapower",
-  "version": "5.5.32",
+  "version": "5.5.33",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
   "type": "module",
   "main": "dist/index.js",
