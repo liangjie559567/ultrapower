@@ -741,12 +741,23 @@ export function install(options = {}) {
                     // Claude Code executes statusLine commands via Git Bash on Windows,
                     // which requires forward slashes. Backslashes in JSON cause parse failures.
                     const hudCommandPath = hudScriptPath.replace(/\\/g, '/');
+                    const existingStatusLine = existingSettings.statusLine;
+                    const existingCommand = existingStatusLine?.command;
+                    // Auto-fix corrupted OMC statusLine (backslashes in path)
+                    const needsFix = existingCommand && isOmcStatusLine(existingSettings.statusLine) && existingCommand.includes('\\');
                     if (!existingSettings.statusLine) {
                         existingSettings.statusLine = {
                             type: 'command',
                             command: 'node ' + hudCommandPath
                         };
                         log('  Configured statusLine');
+                    }
+                    else if (needsFix) {
+                        existingSettings.statusLine = {
+                            type: 'command',
+                            command: 'node ' + hudCommandPath
+                        };
+                        log('  Fixed corrupted statusLine path (backslashes → forward slashes)');
                     }
                     else if (options.force && isOmcStatusLine(existingSettings.statusLine)) {
                         existingSettings.statusLine = {
