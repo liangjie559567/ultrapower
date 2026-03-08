@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"npm view @liangjie559567/ultrapower@5.5.42 --json | python -c \\\"import sys, json; data=json.load(sys.stdin); print('Has provenance:', 'npm' in data.get('_hasShrinkwrap', {}) or 'attestatio...",
-  "error": "Exit code 1\nTraceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\n    import sys, json; data=json.load(sys.stdin); print('Has provenance:', 'npm' in data.get('_hasShrinkwrap', {}) or 'attestations' in str(data))\r\n                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nTypeError: argument of type 'bool' is not a container or iterable",
-  "timestamp": "2026-03-08T09:57:26.582Z",
+  "tool_input_preview": "{\"command\":\"npm view @liangjie559567/ultrapower@5.5.43 --json > /tmp/pkg543.json && python -c \\\"import json; d=json.load(open('/tmp/pkg543.json')); print('Provenance:', 'Yes' if any('attest' in str(k)...",
+  "error": "Exit code 1\nTraceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\n    import json; d=json.load(open('/tmp/pkg543.json')); print('Provenance:', 'Yes' if any('attest' in str(k).lower() for k in d.keys()) else 'No'); print('Keys:', [k for k in d.keys() if 'npm' in k.lower() or 'attest' in k.lower() or 'sign' in k.lower()])\r\n                             ~~~~^^^^^^^^^^^^^^^^^^^^\r\nFileNotFoundError: [Errno 2] No such file or directory: '/tmp/pkg543.json'",
+  "timestamp": "2026-03-08T10:02:44.230Z",
   "retry_count": 1
 }
