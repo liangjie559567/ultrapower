@@ -172,68 +172,75 @@ export async function recordSessionMetrics(directory: string, input: SessionEndI
 /**
  * Clean up transient state files
  */
-export function cleanupTransientState(directory: string): number {
+export async function cleanupTransientState(directory: string): Promise<number> {
   let filesRemoved = 0;
   const omcDir = path.join(directory, '.omc');
 
-  if (!fs.existsSync(omcDir)) {
+  try {
+    await fs.promises.access(omcDir);
+  } catch {
     return filesRemoved;
   }
 
   // Remove transient agent tracking
   const trackingPath = path.join(omcDir, 'state', 'subagent-tracking.json');
-  if (fs.existsSync(trackingPath)) {
-    try {
-      fs.unlinkSync(trackingPath);
-      filesRemoved++;
-    } catch (_error) {
-      // Ignore removal errors
-    }
+  try {
+    await fs.promises.access(trackingPath);
+    await fs.promises.unlink(trackingPath);
+    filesRemoved++;
+  } catch {
+    // Ignore removal errors
   }
 
   // Clean stale checkpoints (older than 24 hours)
   const checkpointsDir = path.join(omcDir, 'checkpoints');
-  if (fs.existsSync(checkpointsDir)) {
+  try {
+    await fs.promises.access(checkpointsDir);
     const now = Date.now();
     const oneDayAgo = now - 24 * 60 * 60 * 1000;
 
-    try {
-      const files = fs.readdirSync(checkpointsDir);
-      for (const file of files) {
-        const filePath = path.join(checkpointsDir, file);
-        const stats = fs.statSync(filePath);
-
+    const files = await fs.promises.readdir(checkpointsDir);
+    for (const file of files) {
+      const filePath = path.join(checkpointsDir, file);
+      try {
+        const stats = await fs.promises.stat(filePath);
         if (stats.mtimeMs < oneDayAgo) {
-          fs.unlinkSync(filePath);
+          await fs.promises.unlink(filePath);
           filesRemoved++;
         }
+      } catch {
+        // Ignore per-file errors
       }
-    } catch (_error) {
-      // Ignore cleanup errors
     }
+  } catch {
+    // Ignore cleanup errors
   }
 
   // Remove .tmp files in .omc/
-  const removeTmpFiles = (dir: string) => {
+  const removeTmpFiles = async (dir: string): Promise<void> => {
     try {
-      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      const entries = await fs.promises.readdir(dir, { withFileTypes: true });
 
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
 
         if (entry.isDirectory()) {
-          removeTmpFiles(fullPath);
+          await removeTmpFiles(fullPath);
         } else if (entry.name.endsWith('.tmp')) {
-          fs.unlinkSync(fullPath);
-          filesRemoved++;
+          try {
+            await fs.promises.unlink(fullPath);
+            filesRemoved++;
+          } catch {
+            // Ignore per-file errors
+          }
         }
       }
-    } catch (_error) {
+    } catch {
       // Ignore errors
     }
   };
 
-  removeTmpFiles(omcDir);
+  await removeTmpFiles(omcDir);
 
   return filesRemoved;
 }
@@ -327,52 +334,49 @@ export async function extractPythonReplSessionIdsFromTranscript(transcriptPath: 
  * @param sessionId - Optional session ID to match. Only cleans states belonging to this session.
  * @returns Object with counts of files removed and modes cleaned
  */
-export function cleanupModeStates(directory: string, sessionId?: string): { filesRemoved: number; modesCleaned: string[] } {
+export async function cleanupModeStates(directory: string, sessionId?: string): Promise<{ filesRemoved: number; modesCleaned: string[] }> {
   let filesRemoved = 0;
   const modesCleaned: string[] = [];
   const stateDir = path.join(directory, '.omc', 'state');
 
-  if (!fs.existsSync(stateDir)) {
+  try {
+    await fs.promises.access(stateDir);
+  } catch {
     return { filesRemoved, modesCleaned };
   }
 
   for (const { file, mode } of MODE_STATE_FILES) {
     const localPath = path.join(stateDir, file);
 
-    // Check if local state exists and is active
-    if (fs.existsSync(localPath)) {
-      try {
-        // For JSON files, check if active before removing
-        if (file.endsWith('.json')) {
-          const content = fs.readFileSync(localPath, 'utf-8');
-          const state = JSON.parse(content);
+    try {
+      await fs.promises.access(localPath);
 
-          // Only clean if marked as active AND belongs to this session
-          // (prevents removing other concurrent sessions' states)
-          if (state.active === true) {
-            // If sessionId is provided, only clean matching states
-            // If state has no session_id, it's legacy - clean it
-            // If state.session_id matches our sessionId, clean it
-            const stateSessionId = state.session_id as string | undefined;
-            if (!sessionId || !stateSessionId || stateSessionId === sessionId) {
-              fs.unlinkSync(localPath);
-              filesRemoved++;
-              if (!modesCleaned.includes(mode)) {
-                modesCleaned.push(mode);
-              }
+      // For JSON files, check if active before removing
+      if (file.endsWith('.json')) {
+        const content = await fs.promises.readFile(localPath, 'utf-8');
+        const state = JSON.parse(content);
+
+        // Only clean if marked as active AND belongs to this session
+        if (state.active === true) {
+          const stateSessionId = state.session_id as string | undefined;
+          if (!sessionId || !stateSessionId || stateSessionId === sessionId) {
+            await fs.promises.unlink(localPath);
+            filesRemoved++;
+            if (!modesCleaned.includes(mode)) {
+              modesCleaned.push(mode);
             }
           }
-        } else {
-          // For marker files, always remove
-          fs.unlinkSync(localPath);
-          filesRemoved++;
-          if (!modesCleaned.includes(mode)) {
-            modesCleaned.push(mode);
-          }
         }
-      } catch {
-        // Ignore errors, continue with other files
+      } else {
+        // For marker files, always remove
+        await fs.promises.unlink(localPath);
+        filesRemoved++;
+        if (!modesCleaned.includes(mode)) {
+          modesCleaned.push(mode);
+        }
       }
+    } catch {
+      // Ignore errors, continue with other files
     }
   }
 
@@ -382,20 +386,20 @@ export function cleanupModeStates(directory: string, sessionId?: string): { file
 /**
  * Export session summary to .omc/sessions/
  */
-export function exportSessionSummary(directory: string, metrics: SessionMetrics): void {
+export async function exportSessionSummary(directory: string, metrics: SessionMetrics): Promise<void> {
   const sessionsDir = path.join(directory, '.omc', 'sessions');
 
-  // Create sessions directory if it doesn't exist
-  if (!fs.existsSync(sessionsDir)) {
-    fs.mkdirSync(sessionsDir, { recursive: true });
+  try {
+    await fs.promises.access(sessionsDir);
+  } catch {
+    await fs.promises.mkdir(sessionsDir, { recursive: true });
   }
 
-  // Write session summary
   const sessionFile = path.join(sessionsDir, `${metrics.session_id}.json`);
 
   try {
-    fs.writeFileSync(sessionFile, JSON.stringify(metrics, null, 2), 'utf-8');
-  } catch (_error) {
+    await fs.promises.writeFile(sessionFile, JSON.stringify(metrics, null, 2), 'utf-8');
+  } catch {
     // Ignore write errors
   }
 }
@@ -406,15 +410,15 @@ export function exportSessionSummary(directory: string, metrics: SessionMetrics)
 export async function processSessionEnd(input: SessionEndInput): Promise<HookOutput> {
   // Record and export session metrics to disk
   const metrics = await recordSessionMetrics(input.cwd, input);
-  exportSessionSummary(input.cwd, metrics);
+  await exportSessionSummary(input.cwd, metrics);
 
   // Clean up transient state files
-  cleanupTransientState(input.cwd);
+  await cleanupTransientState(input.cwd);
 
   // Clean up mode state files to prevent stale state issues
   // This ensures the stop hook won't malfunction in subsequent sessions
   // Pass session_id to only clean up this session's states
-  cleanupModeStates(input.cwd, input.session_id);
+  await cleanupModeStates(input.cwd, input.session_id);
 
   // Clean up Python REPL bridge sessions used in this transcript (#641).
   // Best-effort only: session end should not fail because cleanup fails.

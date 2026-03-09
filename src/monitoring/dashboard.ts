@@ -42,8 +42,8 @@ export class Dashboard {
     return `${(bytes / 1024 / 1024).toFixed(1)}MB`;
   }
 
-  private checkRegression(type: Metric['type'], current: number): string {
-    const baseline = this.collector.getBaseline(type);
+  private async checkRegression(type: Metric['type'], current: number): Promise<string> {
+    const baseline = await this.collector.getBaseline(type);
     if (!baseline) return '';
 
     const thresholds: Record<Metric['type'], number> = {
@@ -63,54 +63,54 @@ export class Dashboard {
     return '';
   }
 
-  display(hours: number = 24): void {
+  async display(hours: number = 24): Promise<void> {
     const since = Date.now() - hours * 3600 * 1000;
     const types: Metric['type'][] = ['build', 'worker_health', 'worker_status', 'lsp_init', 'memory'];
 
     console.log('\n📊 Performance Dashboard\n');
     console.log(`Period: Last ${hours}h\n`);
 
-    types.forEach(type => {
-      const metrics = this.collector.getMetrics(type, since);
+    for (const type of types) {
+      const metrics = await this.collector.getMetrics(type, since);
       if (metrics.length === 0) {
         console.log(`${type}: No data`);
-        return;
+        continue;
       }
 
       const values = metrics.map((m: Metric) => m.value);
       const stats = this.calculateStats(values);
       const formatter = type === 'memory' ? this.formatMemory : this.formatDuration;
-      const regression = this.checkRegression(type, stats.avg);
+      const regression = await this.checkRegression(type, stats.avg);
 
       console.log(`${type}:`);
       console.log(`  avg: ${formatter(stats.avg)}${regression}`);
       console.log(`  p95: ${formatter(stats.p95)}`);
       console.log(`  min: ${formatter(stats.min)} | max: ${formatter(stats.max)}`);
       console.log(`  samples: ${stats.count}\n`);
-    });
+    }
   }
 
-  setBaselines(): void {
+  async setBaselines(): Promise<void> {
     const types: Metric['type'][] = ['build', 'worker_health', 'worker_status', 'lsp_init', 'memory'];
 
-    types.forEach(type => {
-      const metrics = this.collector.getMetrics(type);
+    for (const type of types) {
+      const metrics = await this.collector.getMetrics(type);
       if (metrics.length > 0) {
         const values = metrics.map((m: Metric) => m.value);
         const stats = this.calculateStats(values);
-        this.collector.setBaseline(type, stats.avg);
+        await this.collector.setBaseline(type, stats.avg);
       }
-    });
+    }
 
     console.log('✅ Baselines updated');
   }
 
-  export(format: 'json' | 'csv', outputPath: string, type?: Metric['type']): void {
+  async export(format: 'json' | 'csv', outputPath: string, type?: Metric['type']): Promise<void> {
     if (format === 'json') {
-      this.collector.exportToJSON(outputPath);
+      await this.collector.exportToJSON(outputPath);
       console.log(`✅ Exported to ${outputPath}`);
     } else if (type) {
-      this.collector.exportToCSV(type, outputPath);
+      await this.collector.exportToCSV(type, outputPath);
       console.log(`✅ Exported ${type} to ${outputPath}`);
     }
   }
