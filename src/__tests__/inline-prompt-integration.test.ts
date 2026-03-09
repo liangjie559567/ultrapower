@@ -15,6 +15,7 @@ vi.mock('../mcp/cli-detection.js', () => ({
   detectCodexCli: vi.fn(() => ({ available: true, path: '/usr/bin/codex', version: '1.0.0', installHint: '' })),
   detectGeminiCli: vi.fn(() => ({ available: true, path: '/usr/bin/gemini', version: '1.0.0', installHint: '' })),
   getCliCommand: vi.fn((name: string) => process.platform === 'win32' ? `${name}.cmd` : name),
+  getSpawnEnv: vi.fn(() => process.env),
   resetDetectionCache: vi.fn(),
 }));
 

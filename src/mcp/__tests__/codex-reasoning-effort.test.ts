@@ -23,6 +23,7 @@ vi.mock('../shared-exec.js', () => ({
 vi.mock('../cli-detection.js', () => ({
   detectCodexCli: vi.fn(() => ({ available: true })),
   getCliCommand: vi.fn((name: string) => process.platform === 'win32' ? `${name}.cmd` : name),
+  getSpawnEnv: vi.fn(() => process.env),
 }));
 
 vi.mock('../../lib/worktree-paths.js', () => ({
