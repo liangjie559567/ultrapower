@@ -24,34 +24,39 @@ export interface AuditEntry {
  * Log an audit entry for delegation enforcement
  */
 export function logAuditEntry(entry: Omit<AuditEntry, 'timestamp'>): void {
-  try {
-    const fullEntry: AuditEntry = {
-      ...entry,
-      timestamp: new Date().toISOString(),
-    };
+  const fullEntry: AuditEntry = {
+    ...entry,
+    timestamp: new Date().toISOString(),
+  };
 
-    const logDir = path.join(process.cwd(), LOG_DIR);
-    const logPath = path.join(logDir, LOG_FILE);
+  const logDir = path.join(process.cwd(), LOG_DIR);
+  const logPath = path.join(logDir, LOG_FILE);
 
-    // Create directory if it doesn't exist
-    fs.mkdirSync(logDir, { recursive: true });
-
-    // Append entry as JSONL
-    fs.appendFileSync(logPath, JSON.stringify(fullEntry) + '\n');
-  } catch {
-    // Silently fail - audit logging should not break main functionality
-  }
+  // Fire-and-forget async logging
+  (async () => {
+    try {
+      await fs.promises.mkdir(logDir, { recursive: true });
+      await fs.promises.appendFile(logPath, JSON.stringify(fullEntry) + '\n');
+    } catch (_err) {
+      console.error('[delegation-audit] Failed to write log:', _err);
+    }
+  })();
 }
 
 /**
  * Read audit log entries (for analysis)
  */
-export function readAuditLog(directory?: string): AuditEntry[] {
+export async function readAuditLog(directory?: string): Promise<AuditEntry[]> {
   try {
     const logPath = path.join(directory || process.cwd(), LOG_DIR, LOG_FILE);
-    if (!fs.existsSync(logPath)) return [];
 
-    const content = fs.readFileSync(logPath, 'utf-8');
+    try {
+      await fs.promises.access(logPath);
+    } catch {
+      return [];
+    }
+
+    const content = await fs.promises.readFile(logPath, 'utf-8');
     return content
       .split('\n')
       .filter(line => line.trim())
@@ -64,13 +69,13 @@ export function readAuditLog(directory?: string): AuditEntry[] {
 /**
  * Get audit summary statistics
  */
-export function getAuditSummary(directory?: string): {
+export async function getAuditSummary(directory?: string): Promise<{
   total: number;
   allowed: number;
   warned: number;
   byExtension: Record<string, number>;
-} {
-  const entries = readAuditLog(directory);
+}> {
+  const entries = await readAuditLog(directory);
   const byExtension: Record<string, number> = {};
 
   for (const entry of entries) {

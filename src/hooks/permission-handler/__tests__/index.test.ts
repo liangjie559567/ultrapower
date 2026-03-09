@@ -278,55 +278,55 @@ describe('permission-handler', () => {
       }
     });
 
-    it('should return false when no state directory exists', () => {
-      expect(isActiveModeRunning(testDir)).toBe(false);
+    it('should return false when no state directory exists', async () => {
+      expect(await isActiveModeRunning(testDir)).toBe(false);
     });
 
-    it('should return false when state directory is empty', () => {
+    it('should return false when state directory is empty', async () => {
       fs.mkdirSync(stateDir, { recursive: true });
-      expect(isActiveModeRunning(testDir)).toBe(false);
+      expect(await isActiveModeRunning(testDir)).toBe(false);
     });
 
-    it('should return true when autopilot is active', () => {
+    it('should return true when autopilot is active', async () => {
       fs.mkdirSync(stateDir, { recursive: true });
       fs.writeFileSync(
         path.join(stateDir, 'autopilot-state.json'),
         JSON.stringify({ active: true })
       );
-      expect(isActiveModeRunning(testDir)).toBe(true);
+      expect(await isActiveModeRunning(testDir)).toBe(true);
     });
 
-    it('should return true when ralph is running', () => {
+    it('should return true when ralph is running', async () => {
       fs.mkdirSync(stateDir, { recursive: true });
       fs.writeFileSync(
         path.join(stateDir, 'ralph-state.json'),
         JSON.stringify({ status: 'running' })
       );
-      expect(isActiveModeRunning(testDir)).toBe(true);
+      expect(await isActiveModeRunning(testDir)).toBe(true);
     });
 
-    it('should return false when mode is inactive', () => {
+    it('should return false when mode is inactive', async () => {
       fs.mkdirSync(stateDir, { recursive: true });
       fs.writeFileSync(
         path.join(stateDir, 'autopilot-state.json'),
         JSON.stringify({ active: false })
       );
-      expect(isActiveModeRunning(testDir)).toBe(false);
+      expect(await isActiveModeRunning(testDir)).toBe(false);
     });
 
-    it('should handle malformed JSON gracefully', () => {
+    it('should handle malformed JSON gracefully', async () => {
       fs.mkdirSync(stateDir, { recursive: true });
       fs.writeFileSync(
         path.join(stateDir, 'autopilot-state.json'),
         'invalid json {'
       );
-      expect(isActiveModeRunning(testDir)).toBe(false);
+      expect(await isActiveModeRunning(testDir)).toBe(false);
     });
 
-    it('should return true when swarm marker exists', () => {
+    it('should return true when swarm marker exists', async () => {
       fs.mkdirSync(stateDir, { recursive: true });
       fs.writeFileSync(path.join(stateDir, 'swarm-active.marker'), '');
-      expect(isActiveModeRunning(testDir)).toBe(true);
+      expect(await isActiveModeRunning(testDir)).toBe(true);
     });
   });
 
