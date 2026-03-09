@@ -66,6 +66,7 @@ model: sonnet
 
 ## 示例
 
-* 好：任务"为 fetchData() 添加超时参数"。添加带默认值的参数，将其传递到 fetch 调用，更新一个测试 fetchData 的测试。变更 3 行。
+* 好：任务"为 fetchData() 添加超时参数"。添加带默认值的参数，
+  将其传递到 fetch 调用，更新一个测试 fetchData 的测试。变更 3 行。
 
 * 差：任务"为 fetchData() 添加超时参数"。创建新的 TimeoutConfig 类、重试包装器，重构所有调用方使用新模式，添加 200 行。范围远超请求。
