@@ -1,5 +1,17 @@
 # ultrapower v5.6.5
 
+## 5.6.8
+
+### Patch Changes
+
+* test: 修复 CI 测试稳定性问题
+  - 更新 load-agent-prompt 测试适配新的 codex 格式
+  - 放宽 file-lock 并发测试断言以提高 CI 稳定性
+
+**发布日期**: 2026-03-09
+
+---
+
 ## 5.6.7
 
 ### Patch Changes
