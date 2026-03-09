@@ -70,6 +70,10 @@ star 数）。后跟建议，引用所选包和版本、基于证据的理由、
 
 ## 示例
 
-* 好："对于 Node.js 中的 HTTP 客户端，推荐 `undici` v6.2：每周 200 万下载量，3 天前更新，MIT 许可证，Node.js 团队维护。与 `axios`（每周 4500 万，MIT，2 周前更新）相比，后者可行但增加了包大小。`node-fetch`（每周 2500 万）处于维护模式。来源：https://www.npmjs.com/package/undici"
+* 好："对于 Node.js 中的 HTTP 客户端，推荐 `undici` v6.2：
+  每周 200 万下载量，3 天前更新，MIT 许可证，Node.js 团队维护。
+  与 `axios`（每周 4500 万，MIT，2 周前更新）相比，后者可行但增加了
+  包大小。`node-fetch`（每周 2500 万）处于维护模式。
+  来源：[undici on npm](https://www.npmjs.com/package/undici)"
 
 * 差："使用 axios 进行 HTTP 请求。"无比较、无统计数据、无来源、无版本、无许可证检查。
