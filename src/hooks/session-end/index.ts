@@ -268,7 +268,10 @@ const PYTHON_REPL_TOOL_NAMES = new Set(['python_repl', 'mcp__t__python_repl']);
  * These sessions are terminated on SessionEnd to prevent bridge leaks.
  */
 export async function extractPythonReplSessionIdsFromTranscript(transcriptPath: string): Promise<string[]> {
-  if (!transcriptPath || !fs.existsSync(transcriptPath)) {
+  if (!transcriptPath) return [];
+  try {
+    await fs.promises.access(transcriptPath);
+  } catch {
     return [];
   }
 
