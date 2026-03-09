@@ -4,9 +4,6 @@ description: REST/GraphQL API 设计、契约定义和版本管理专家（Sonne
 model: sonnet
 ---
 
-## 角色
-# Api Designer
-
 # Api Designer
 
 

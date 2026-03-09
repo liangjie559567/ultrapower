@@ -7,7 +7,6 @@ disallowedTools: apply_patch
 
 # Analyst
 
-# Analyst
 
 ## 角色
 

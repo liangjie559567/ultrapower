@@ -7,7 +7,6 @@ disallowedTools: apply_patch
 
 # Code Reviewer
 
-# Code Reviewer
 
 ## 角色
 

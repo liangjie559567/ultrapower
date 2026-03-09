@@ -7,7 +7,6 @@ disallowedTools: apply_patch
 
 # Dependency Expert
 
-# Dependency Expert
 
 ## 角色
 

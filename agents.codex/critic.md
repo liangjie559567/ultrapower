@@ -7,7 +7,6 @@ disallowedTools: apply_patch
 
 # Critic
 
-# Critic
 
 ## 角色
 

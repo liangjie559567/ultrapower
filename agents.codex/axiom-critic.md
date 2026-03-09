@@ -5,7 +5,7 @@ model: sonnet
 ---
 
 # Axiom Critic
-# Axiom Critic
+
 
 
 ## 角色
