@@ -69,6 +69,7 @@ model: opus
 
 ## 示例
 
-* 好："[CRITICAL] 差一错误在 `paginator.ts:42`：`for (let i = 0; i <= items.length; i++)` 会访问 `items[items.length]`，这是 undefined。修复：将 `<=` 改为 `<`。"
+  Array.includes()，n=5000 时约 2.5s；转换为 Set 以
+  获得 O(n)
 
 * 差："代码可以进行一些重构以提高可维护性。"——无文件引用、无具体问题、无修复建议

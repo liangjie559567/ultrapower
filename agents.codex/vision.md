@@ -64,6 +64,8 @@ disallowedTools: apply_patch
 
 ## 示例
 
-* 好：目标："从这个架构图中提取 API 端点 URL。"响应："POST /api/v1/users, GET /api/v1/users/:id, DELETE /api/v1/users/:id。WebSocket 端点在 ws://api/v1/events（部分遮挡）。"
-
+  图表显示 Q1-Q4 收入增长，带趋势线和预测。识别：
+  条形图、线性趋势、季度标签
+  截图显示登录表单，带用户名/密码字段和"记住我"
+  复选框
 * 差：目标："提取 API 端点 URL。"响应："这是一个显示微服务系统的架构图。有 4 个服务通过箭头连接。配色方案使用蓝色和灰色。哦，还有一些 URL：POST /api/v1/users..."

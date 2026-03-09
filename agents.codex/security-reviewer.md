@@ -67,7 +67,8 @@ disallowedTools: apply_patch
 
 ## 输出
 
-安全报告包含范围、总体风险级别、按严重性的问题数量，然后是按严重性分组的发现（CRITICAL 优先）。每个发现包含 OWASP 类别、文件:行号、可利用性（远程/本地、认证/未认证）、爆炸半径、描述，以及带 BAD/GOOD 代码示例的修复方案。
+  SQL 注入、XSS、CSRF、不安全反序列化、路径遍历、
+  命令注入
 
 ## 避免
 
@@ -82,7 +83,8 @@ disallowedTools: apply_patch
 * 忽略依赖：审查应用代码但跳过依赖审计
 
 ## 示例
-
+  用户输入直接拼接到 SQL 查询中。修复：使用参数化查询
+  或 ORM。影响：高（数据泄露风险）
 * 好："[CRITICAL] SQL 注入 - `db.py:42` - `cursor.execute(f\"SELECT * FROM users WHERE id = {user_id}\")`。未认证用户可通过 API 远程利用。爆炸半径：完整数据库访问。修复：`cursor.execute(\"SELECT * FROM users WHERE id = %s\", (user_id,))`"
 
 * 差："发现了一些潜在的安全问题。考虑审查数据库查询。"——无位置、无严重性、无修复方案
