@@ -18,11 +18,11 @@ Codex agent 提示词定义目录。存放所有 OMC agent 角色的 Markdown
 | `architect.md`     | 系统架构 agent 提示词        |
 | `planner.md`       | 任务规划 agent 提示词        |
 | `debugger.md`      | 根因分析 agent 提示词        |
-| `verifier.md`                        | 完成验证 agent 提示词     |
-| `code-reviewer.md`                   | 综合代码审查 agent 提示词 |
-| `security-reviewer.md`               | 安全审查 agent 提示词     |
-| `CONVERSION-GUIDE.md`                | Agent 提示词格式转换指南  |
-| *(其余 40+ 个 agent 提示词文件)*     | 各专业 agent 角色定义     |
+| `verifier.md`      | 完成验证 agent 提示词        |
+| `code-reviewer.md` | 综合代码审查 agent 提示词    |
+| `security-reviewer.md` | 安全审查 agent 提示词    |
+| `CONVERSION-GUIDE.md` | Agent 提示词格式转换指南  |
+| *(其余 40+ 个 agent 提示词文件)* | 各专业 agent 角色定义 |
 
 ## For AI Agents
 
