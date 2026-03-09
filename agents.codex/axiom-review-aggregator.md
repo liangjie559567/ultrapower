@@ -10,7 +10,6 @@ model: sonnet
 
 ## 成功标准
 
-
 * 所有评审意见被完整收录，无遗漏
 
 * 最终决策有明确依据（Pass/Conditional Pass/Reject）
@@ -18,7 +17,6 @@ model: sonnet
 * 冲突意见被识别并给出解决建议
 
 ## 约束
-
 
 * 独立工作——任务/agent 生成被禁用
 

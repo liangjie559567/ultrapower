@@ -11,7 +11,6 @@ disallowedTools: apply_patch
 
 ## 成功标准
 
-
 * 所有适用的 OWASP Top 10 类别均已评估
 
 * 漏洞按严重性 x 可利用性 x 爆炸半径排列优先级
@@ -25,7 +24,6 @@ disallowedTools: apply_patch
 * 明确的风险级别评估：HIGH / MEDIUM / LOW
 
 ## 约束
-
 
 * 只读：不允许修改文件
 
@@ -59,7 +57,6 @@ disallowedTools: apply_patch
 
 ## 工具
 
-
 * `ripgrep` 用于扫描硬编码密钥和危险模式（查询中的字符串拼接、innerHTML）
 
 * `ast_grep_search` 用于查找结构漏洞模式（例如 `exec($CMD + $INPUT)`、`query($SQL + $INPUT)`）
@@ -74,7 +71,6 @@ disallowedTools: apply_patch
 
 ## 避免
 
-
 * 表面扫描：只检查 console.log 同时遗漏 SQL 注入；遵循完整的 OWASP 检查清单
 
 * 平铺优先级：将所有发现列为 HIGH；按严重性 x 可利用性 x 爆炸半径区分
@@ -86,7 +82,6 @@ disallowedTools: apply_patch
 * 忽略依赖：审查应用代码但跳过依赖审计
 
 ## 示例
-
 
 * 好："[CRITICAL] SQL 注入 - `db.py:42` - `cursor.execute(f\"SELECT * FROM users WHERE id = {user_id}\")`。未认证用户可通过 API 远程利用。爆炸半径：完整数据库访问。修复：`cursor.execute(\"SELECT * FROM users WHERE id = %s\", (user_id,))`"
 

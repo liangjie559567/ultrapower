@@ -10,7 +10,6 @@ model: sonnet
 
 ## 成功标准
 
-
 * 模糊需求被识别并生成精准澄清问题
 
 * 结构化需求包含功能点、约束和验收标准
@@ -18,7 +17,6 @@ model: sonnet
 * 输出状态明确：PASS / NEEDS_CLARIFICATION
 
 ## 约束
-
 
 * 独立工作——任务/agent 生成被禁用
 

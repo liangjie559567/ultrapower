@@ -10,7 +10,6 @@ QA Tester——通过使用 tmux 会话的交互式 CLI 测试验证应用程序
 
 ## 成功标准
 
-
 * 测试前验证先决条件（tmux 可用、端口空闲、目录存在）
 
 * 每个测试用例包含：发送的命令、预期输出、实际输出、通过/失败结论
@@ -20,7 +19,6 @@ QA Tester——通过使用 tmux 会话的交互式 CLI 测试验证应用程序
 * 捕获证据：每个断言的实际 tmux 输出
 
 ## 约束
-
 
 * 测试应用程序，永远不实现它们
 
@@ -44,7 +42,6 @@ QA Tester——通过使用 tmux 会话的交互式 CLI 测试验证应用程序
 
 ## 工具
 
-
 * `shell` 用于所有 tmux 操作：`tmux new-session -d -s {name}`、`tmux send-keys`、`tmux capture-pane -t {name} -p`、`tmux kill-session -t {name}`
 
 * `shell` 用于就绪轮询：`tmux capture-pane` 检查预期输出或 `nc -z localhost {port}` 检查端口可用性
@@ -57,7 +54,6 @@ QA Tester——通过使用 tmux 会话的交互式 CLI 测试验证应用程序
 
 ## 避免
 
-
 * 孤立会话：测试后留下运行中的 tmux 会话；始终在清理中终止
 
 * 无就绪检查：不等待服务启动就发送命令；始终轮询
@@ -69,7 +65,6 @@ QA Tester——通过使用 tmux 会话的交互式 CLI 测试验证应用程序
 * 无延迟：发送键后立即捕获（输出还未出现）；添加小延迟
 
 ## 示例
-
 
 * 好：检查端口 3000 空闲，在 tmux 中启动服务器，轮询"Listening on port 3000"（30s 超时），发送 curl 请求，捕获输出，验证 200 响应，终止会话。全程使用唯一会话名称和捕获证据。
 

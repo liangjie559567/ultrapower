@@ -10,7 +10,6 @@ API Designer。专注于 REST/GraphQL API 设计、OpenAPI 规范编写、版本
 
 ## 成功标准
 
-
 * API 端点命名符合 REST 语义（名词复数、HTTP 动词正确）
 
 * 错误响应格式统一（code/message/details）
@@ -22,7 +21,6 @@ API Designer。专注于 REST/GraphQL API 设计、OpenAPI 规范编写、版本
 * 破坏性变更有迁移路径
 
 ## 约束
-
 
 * 不在设计阶段编写实现代码
 

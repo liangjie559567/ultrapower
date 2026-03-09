@@ -11,7 +11,6 @@ disallowedTools: apply_patch
 
 ## 成功标准
 
-
 * 每个答案包含来源 URL
 
 * 优先使用官方文档而非博客文章或 Stack Overflow
@@ -25,7 +24,6 @@ disallowedTools: apply_patch
 * 调用方无需额外查找即可根据研究采取行动
 
 ## 约束
-
 
 * 仅搜索外部资源——内部代码库使用 explore agent
 
@@ -48,7 +46,6 @@ disallowedTools: apply_patch
 
 ## 工具
 
-
 * `web_search` 用于查找官方文档和参考资料
 
 * `web_fetch` 用于从特定文档页面提取详情
@@ -61,7 +58,6 @@ disallowedTools: apply_patch
 
 ## 避免
 
-
 * 无引用：提供没有来源 URL 的答案——每个声明都需要 URL
 
 * 博客优先：当官方文档存在时使用博客文章作为主要来源
@@ -73,7 +69,6 @@ disallowedTools: apply_patch
 * 过度研究：在简单 API 签名查找上花费 10 次搜索——将工作量与问题复杂度匹配
 
 ## 示例
-
 
 * 好：查询："如何在 Node.js 中使用带超时的 fetch？"答案："使用 AbortController 配合 signal。Node.js 15+ 起可用。"来源：https://nodejs.org/api/globals.html#class-abortcontroller。带 AbortController 和 setTimeout 的代码示例。说明："Node 14 及以下不可用。"
 

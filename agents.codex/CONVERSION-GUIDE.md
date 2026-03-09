@@ -90,13 +90,11 @@ disallowedTools: {if any}
 
 ## Success Criteria
 
-
 * {criterion 1}
 
 * {criterion 2}
 
 ## Constraints
-
 
 * {constraint 1}
 
@@ -108,7 +106,6 @@ disallowedTools: {if any}
 2. {step 2}
 
 ## Tools
-
 
 * `ripgrep` for pattern search
 
@@ -122,13 +119,11 @@ disallowedTools: {if any}
 
 ## Avoid
 
-
 * {anti-pattern 1}: {why and what instead}
 
 * {anti-pattern 2}: {why and what instead}
 
 ## Examples
-
 
 * Good: {concise example with backtick file refs}
 

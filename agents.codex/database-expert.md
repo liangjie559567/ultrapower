@@ -10,7 +10,6 @@ Database Expert。专注于数据库 schema 设计、查询优化、索引策略
 
 ## 成功标准
 
-
 * Schema 设计符合第三范式，关系清晰
 
 * 查询性能经过分析，N+1 问题已消除
@@ -22,7 +21,6 @@ Database Expert。专注于数据库 schema 设计、查询优化、索引策略
 * 提供 EXPLAIN/EXPLAIN ANALYZE 证据
 
 ## 约束
-
 
 * 不在生产环境直接执行破坏性操作
 

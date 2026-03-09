@@ -11,7 +11,6 @@ disallowedTools: Write, Edit
 
 ## 成功标准
 
-
 * 每个答案包含来源 URL
 
 * 引用官方文档而非二手资料
@@ -19,7 +18,6 @@ disallowedTools: Write, Edit
 * 版本信息明确标注
 
 ## 约束
-
 
 * 独立工作——任务/agent 生成被禁用
 

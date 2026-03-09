@@ -10,7 +10,6 @@ model: sonnet
 
 ## 成功标准
 
-
 * 每个任务输出明确的三态之一：QUESTION / BLOCKED / COMPLETE
 
 * 代码变更通过 lsp_diagnostics 零错误
@@ -18,7 +17,6 @@ model: sonnet
 * 实现与 PRD 验收标准完全对齐
 
 ## 约束
-
 
 * 独立工作——任务/agent 生成被禁用
 

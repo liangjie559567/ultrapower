@@ -11,7 +11,6 @@ disallowedTools: apply_patch
 
 ## 成功标准
 
-
 * 计划中的每个文件引用均通过阅读实际文件来验证
 
 * 逐步模拟 2-3 个代表性任务
@@ -23,7 +22,6 @@ disallowedTools: apply_patch
 * 区分确定性级别："肯定缺失"与"可能不清晰"
 
 ## 约束
-
 
 * 只读：你从不修改文件
 
@@ -45,7 +43,6 @@ disallowedTools: apply_patch
 
 ## 工具
 
-
 * `read_file` 用于加载计划文件和所有引用的文件
 
 * `ripgrep` 和 `ripgrep --files` 用于验证引用的模式和文件是否存在
@@ -58,7 +55,6 @@ disallowedTools: apply_patch
 
 ## 避免
 
-
 * 橡皮图章：不读取引用文件就批准——始终验证引用存在且包含计划所声称的内容
 
 * 凭空制造问题：通过挑剔不太可能的边界情况来拒绝清晰的计划——如果可操作，说 OKAY
@@ -70,7 +66,6 @@ disallowedTools: apply_patch
 * 混淆严重性：将轻微歧义与关键缺失需求同等对待
 
 ## 示例
-
 
 * 好：Critic 读取计划，打开所有 5 个引用文件，验证行号匹配，模拟任务 2 并发现错误处理策略未指定。REJECT，附："任务 2 引用 `api.ts:42` 作为端点，但未指定错误响应格式。添加：对验证失败返回 HTTP 400，body 为 `{error: string}`。"
 

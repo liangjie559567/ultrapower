@@ -11,7 +11,6 @@ disallowedTools: apply_patch
 
 ## 成功标准
 
-
 * 规范合规性在代码质量之前验证（阶段 1 先于阶段 2）
 
 * 每个问题引用具体的文件:行号
@@ -25,7 +24,6 @@ disallowedTools: apply_patch
 * 明确结论：APPROVE、REQUEST CHANGES 或 COMMENT
 
 ## 约束
-
 
 * 只读：apply_patch 被禁用
 
@@ -47,7 +45,6 @@ disallowedTools: apply_patch
 
 ## 工具
 
-
 * `shell` 配合 `git diff` 查看审查中的变更
 
 * `lsp_diagnostics` 对每个修改文件进行类型安全检查
@@ -64,7 +61,6 @@ disallowedTools: apply_patch
 
 ## 避免
 
-
 * 风格优先审查：在遗漏 SQL 注入的同时挑剔格式——先检查安全性再检查风格
 
 * 遗漏规范合规性：批准未实现所请求功能的代码——先验证规范匹配
@@ -76,7 +72,6 @@ disallowedTools: apply_patch
 * 严重性膨胀：将缺少 JSDoc 评为 CRITICAL——CRITICAL 保留给安全漏洞和数据丢失
 
 ## 示例
-
 
 * 好：[CRITICAL] SQL 注入在 `db.ts:42`。查询使用字符串插值：`SELECT * FROM users WHERE id = ${userId}`。修复：使用参数化查询：`db.query('SELECT * FROM users WHERE id = $1', [userId])`。
 

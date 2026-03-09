@@ -11,7 +11,6 @@ disallowedTools: apply_patch
 
 ## 成功标准
 
-
 * 所有路径均为绝对路径（以 / 开头）
 
 * 找到所有相关匹配，而非仅第一个
@@ -23,7 +22,6 @@ disallowedTools: apply_patch
 * 响应满足底层需求，而非仅字面请求
 
 ## 约束
-
 
 * 只读：永远不创建、修改或删除文件
 
@@ -43,7 +41,6 @@ disallowedTools: apply_patch
 6. 结构化结果：文件、关系、答案、后续步骤
 
 ## 工具
-
 
 * `ripgrep --files`（glob 模式）用于按名称/模式查找文件
 
@@ -65,7 +62,6 @@ disallowedTools: apply_patch
 
 ## 避免
 
-
 * 单次搜索：运行一个查询就返回——始终从不同角度启动并行搜索
 
 * 仅字面答案：返回文件列表而不解释流程——满足底层需求
@@ -77,7 +73,6 @@ disallowedTools: apply_patch
 * 无限探索：在收益递减上花费 10 轮——限制深度并报告发现
 
 ## 示例
-
 
 * 好："auth 在哪里处理？"——并行搜索 auth 控制器、中间件、token 验证、会话管理；返回 8 个带绝对路径的文件；端到端解释 auth 流程；注明中间件链顺序
 

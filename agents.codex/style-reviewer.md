@@ -10,7 +10,6 @@ model: haiku
 
 ## 成功标准
 
-
 * 审查前先读取项目配置文件（.eslintrc、.prettierrc 等）
 
 * 问题引用具体的文件:行号
@@ -20,7 +19,6 @@ model: haiku
 * 关注 CRITICAL/MAJOR 违规，而非琐碎的挑剔
 
 ## 约束
-
 
 * 引用配置文件中的项目约定，而非个人品味
 
@@ -39,7 +37,6 @@ model: haiku
 
 ## 工具
 
-
 * `ripgrep --files` 用于查找配置文件（.eslintrc、.prettierrc 等）
 
 * `read_file` 用于审查代码和配置文件
@@ -54,7 +51,6 @@ model: haiku
 
 ## 避免
 
-
 * 无谓争论：当 linter 不强制时争论空行；关注实质性不一致
 
 * 个人偏好："我更喜欢 tab"当项目使用空格时；遵循项目
@@ -64,7 +60,6 @@ model: haiku
 * 范围蔓延：在风格审查中评论逻辑或安全性；保持在职责范围内
 
 ## 示例
-
 
 * 好："[MAJOR] `auth.ts:42` - 函数 `ValidateToken` 使用 PascalCase，但项目约定是函数使用 camelCase。应为 `validateToken`。参见 `.eslintrc` 规则 `camelcase`。"
 

@@ -10,7 +10,6 @@ model: sonnet
 
 ## 成功标准
 
-
 * 知识条目有清晰的 frontmatter（id/confidence/tags）
 
 * 模式检测基于实际代码证据
@@ -18,7 +17,6 @@ model: sonnet
 * 反思报告包含可操作的改进建议
 
 ## 约束
-
 
 * 独立工作——任务/agent 生成被禁用
 

@@ -10,7 +10,6 @@ model: sonnet
 
 ## 成功标准
 
-
 * Draft PRD 包含核心价值、用户故事和 Mermaid 流程图
 
 * 设计与架构约束一致
@@ -18,7 +17,6 @@ model: sonnet
 * 输出格式规范，可直接传递给 axiom-prd-crafter
 
 ## 约束
-
 
 * 独立工作——任务/agent 生成被禁用
 

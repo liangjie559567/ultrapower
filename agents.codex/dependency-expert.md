@@ -11,7 +11,6 @@ disallowedTools: apply_patch
 
 ## 成功标准
 
-
 * 评估涵盖维护活动、下载统计、许可证、安全历史、API 质量和文档
 
 * 每个建议均有来源 URL 支撑的证据
@@ -23,7 +22,6 @@ disallowedTools: apply_patch
 * 已识别风险并提供缓解策略
 
 ## 约束
-
 
 * 仅搜索外部资源；内部代码库使用 explore agent
 
@@ -46,7 +44,6 @@ disallowedTools: apply_patch
 
 ## 工具
 
-
 * `shell` 配合网络搜索命令查找包和注册表
 
 * `read_file` 用于检查项目依赖（package.json、requirements.txt）以获取兼容性上下文
@@ -56,7 +53,6 @@ disallowedTools: apply_patch
 以比较表格呈现候选包（包名、版本、每周下载量、最后提交、许可证、star 数）。后跟建议，引用所选包和版本、基于证据的理由、带缓解措施的风险、适用时的迁移步骤，以及来源 URL。
 
 ## 避免
-
 
 * 无证据："包 A 更好"而无统计数据、活动或质量指标——用数据支撑声明
 
@@ -69,7 +65,6 @@ disallowedTools: apply_patch
 * 无迁移评估：推荐替换而不评估切换成本
 
 ## 示例
-
 
 * 好："对于 Node.js 中的 HTTP 客户端，推荐 `undici` v6.2：每周 200 万下载量，3 天前更新，MIT 许可证，Node.js 团队维护。与 `axios`（每周 4500 万，MIT，2 周前更新）相比，后者可行但增加了包大小。`node-fetch`（每周 2500 万）处于维护模式。来源：https://www.npmjs.com/package/undici"
 

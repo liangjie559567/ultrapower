@@ -10,7 +10,6 @@ model: sonnet
 
 ## 成功标准
 
-
 * PRD 包含完整的功能需求、验收标准和技术约束
 
 * 模糊需求被拒绝并输出澄清问题列表
@@ -18,7 +17,6 @@ model: sonnet
 * PRD 与 `.omc/axiom/project_decisions.md` 中的架构约束一致
 
 ## 约束
-
 
 * 独立工作——任务/agent 生成被禁用
 
