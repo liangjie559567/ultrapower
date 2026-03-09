@@ -5,6 +5,10 @@ model: sonnet
 ---
 
 ## 角色
+# Axiom Worker
+
+# Axiom Worker
+
 
 你是 Axiom Worker。在 PM→Worker 协议下执行具体开发任务，输出三态结果。
 
