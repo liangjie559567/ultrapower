@@ -7,6 +7,14 @@
 
 import { spawnSync } from 'child_process';
 
+/**
+ * Get platform-specific CLI command name
+ * On Windows, npm global binaries need .cmd extension
+ */
+export function getCliCommand(baseName: string): string {
+  return process.platform === 'win32' ? `${baseName}.cmd` : baseName;
+}
+
 export interface CliDetectionResult {
   available: boolean;
   path?: string;
@@ -28,13 +36,14 @@ export function detectCodexCli(useCache = true): CliDetectionResult {
   const installHint = 'Install Codex CLI: npm install -g @openai/codex';
 
   try {
+    const codexCmd = getCliCommand('codex');
     const cmd = process.platform === 'win32' ? 'where' : 'which';
     const pathResult = spawnSync(cmd, ['codex'], { encoding: 'utf-8', timeout: 5000 });
     if (pathResult.status !== 0) throw new Error('codex not found');
     const path = pathResult.stdout.trim();
     let version: string | undefined;
     try {
-      const versionResult = spawnSync('codex', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+      const versionResult = spawnSync(codexCmd, ['--version'], { encoding: 'utf-8', timeout: 5000 });
       if (versionResult.status === 0) version = versionResult.stdout.trim();
     } catch {
       // Version check is optional
@@ -63,13 +72,14 @@ export function detectGeminiCli(useCache = true): CliDetectionResult {
   const installHint = 'Install Gemini CLI: npm install -g @google/gemini-cli (see https://github.com/google-gemini/gemini-cli)';
 
   try {
+    const geminiCmd = getCliCommand('gemini');
     const cmd = process.platform === 'win32' ? 'where' : 'which';
     const pathResult = spawnSync(cmd, ['gemini'], { encoding: 'utf-8', timeout: 5000 });
     if (pathResult.status !== 0) throw new Error('gemini not found');
     const path = pathResult.stdout.trim();
     let version: string | undefined;
     try {
-      const versionResult = spawnSync('gemini', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+      const versionResult = spawnSync(geminiCmd, ['--version'], { encoding: 'utf-8', timeout: 5000 });
       if (versionResult.status === 0) version = versionResult.stdout.trim();
     } catch {
       // Version check is optional

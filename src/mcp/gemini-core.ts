@@ -16,7 +16,7 @@ import { spawn } from 'child_process';
 import { mkdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'fs';
 import { resolve, relative, sep, isAbsolute, join } from 'path';
 import { createStdoutCollector, safeWriteOutputFile } from './shared-exec.js';
-import { detectGeminiCli } from './cli-detection.js';
+import { detectGeminiCli, getCliCommand } from './cli-detection.js';
 import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { isExternalPromptAllowed } from './mcp-config.js';
 import { resolveSystemPrompt, buildPromptWithSystemContext, wrapUntrustedFileContent, wrapUntrustedCliResponse, isValidAgentRoleName, VALID_AGENT_ROLES, singleErrorBlock, inlineSuccessBlocks } from './prompt-injection.js';
@@ -111,7 +111,7 @@ export function executeGemini(prompt: string, model?: string, cwd?: string): Pro
     if (model) {
       args.push('--model', model);
     }
-    const child = spawn('gemini', args, {
+    const child = spawn(getCliCommand('gemini'), args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...(cwd ? { cwd } : {}),
       shell: false
@@ -213,7 +213,7 @@ export function executeGeminiBackground(
     const trySpawnWithModel = (tryModel: string, remainingModels: string[]): { pid: number } | { error: string } => {
       validateModelName(tryModel);
       const args = ['-p=.', ...(GEMINI_YOLO ? ['--yolo'] : []), '--model', tryModel];
-      const child = spawn('gemini', args, {
+      const child = spawn(getCliCommand('gemini'), args, {
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],
         ...(workingDirectory ? { cwd: workingDirectory } : {}),

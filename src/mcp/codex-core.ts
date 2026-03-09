@@ -12,7 +12,7 @@ import { spawn } from 'child_process';
 import { mkdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'fs';
 import { resolve, relative, sep, isAbsolute, join } from 'path';
 import { createStdoutCollector, safeWriteOutputFile } from './shared-exec.js';
-import { detectCodexCli } from './cli-detection.js';
+import { detectCodexCli, getCliCommand } from './cli-detection.js';
 import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { isExternalPromptAllowed } from './mcp-config.js';
 import { resolveSystemPrompt, buildPromptWithSystemContext, wrapUntrustedFileContent, wrapUntrustedCliResponse, isValidAgentRoleName, VALID_AGENT_ROLES, singleErrorBlock, inlineSuccessBlocks } from './prompt-injection.js';
@@ -225,7 +225,7 @@ export function executeCodex(prompt: string, model: string, cwd?: string, reason
     if (reasoningEffort && VALID_REASONING_EFFORTS.includes(reasoningEffort)) {
       args.push('-c', `model_reasoning_effort="${reasoningEffort}"`);
     }
-    const child = spawn('codex', args, {
+    const child = spawn(getCliCommand('codex'), args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...(cwd ? { cwd } : {}),
       shell: false
@@ -402,7 +402,7 @@ export function executeCodexBackground(
       if (reasoningEffort && VALID_REASONING_EFFORTS.includes(reasoningEffort)) {
         args.push('-c', `model_reasoning_effort="${reasoningEffort}"`);
       }
-      const child = spawn('codex', args, {
+      const child = spawn(getCliCommand('codex'), args, {
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],
         ...(workingDirectory ? { cwd: workingDirectory } : {}),
