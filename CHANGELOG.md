@@ -1,5 +1,18 @@
 # ultrapower v5.6.5
 
+## 5.6.7
+
+### Patch Changes
+
+* fix: 修复文档部署失败问题
+  - 添加 `.markdownlint.json` 配置文件禁用冲突规则
+  - 更新 GitHub Actions 工作流引用配置文件
+  - 文档成功部署到 GitHub Pages
+
+**发布日期**: 2026-03-09
+
+---
+
 ## 5.6.6
 
 ### Patch Changes
