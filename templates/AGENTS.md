@@ -4,6 +4,7 @@
 # templates/
 
 ## Purpose
+
 项目模板目录。存放用于初始化新项目或环境的配置模板，包括 Axiom 工作流模板、Hook 脚本模板和规则模板，供 `omc install` 时复制到目标项目。
 
 ## Subdirectories

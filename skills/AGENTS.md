@@ -96,12 +96,12 @@ cat skills/my-skill/SKILL.md
 
 ### 执行模式 Skills
 
-| Skill | 用途 | 模型 | 并行度 |
-|-------|------|------|--------|
-| autopilot | 从想法到代码的全自主执行 | sonnet | 1 |
-| ralph | 带验证的自引用循环 | sonnet | 1 |
-| ultrawork | 最大并行度的 agent 编排 | sonnet | N |
-| team | N 个协调 agents 的分阶段流水线 | sonnet | N |
-| ultrapilot | Team 的兼容性外观 | sonnet | N |
-| pipeline | 顺序 agent 链式执行 | sonnet | 1 |
-| swarm | Team 的兼容性外观 | sonnet | N |
+| Skill      | 用途                         | 模型   | 并行度 |
+| ---------- | ---------------------------- | ------ | ------ |
+| autopilot  | 从想法到代码的全自主执行     | sonnet | 1      |
+| ralph      | 带验证的自引用循环           | sonnet | 1      |
+| ultrawork  | 最大并行度的 agent 编排      | sonnet | N      |
+| team       | N 个协调 agents 的分阶段流水线 | sonnet | N      |
+| ultrapilot | Team 的兼容性外观            | sonnet | N      |
+| pipeline   | 顺序 agent 链式执行          | sonnet | 1      |
+| swarm      | Team 的兼容性外观            | sonnet | N      |
