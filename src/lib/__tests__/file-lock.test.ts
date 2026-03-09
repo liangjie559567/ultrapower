@@ -26,8 +26,13 @@ describe('acquireLock', () => {
     lockPath = path.join(tmpDir, '.lock');
   });
 
-  afterEach(() => {
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+  afterEach(async () => {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+    } catch (err) {
+      // Ignore cleanup errors on Windows
+    }
   });
 
   // ─── 1. 正常加锁：lock 目录和 lock.json 被创建 ────────────────────────────
@@ -211,8 +216,13 @@ describe('withFileLock', () => {
     testFile = path.join(tmpDir, 'test.json');
   });
 
-  afterEach(() => {
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+  afterEach(async () => {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+    } catch (err) {
+      // Ignore cleanup errors on Windows
+    }
   });
 
   // ─── 1. 基本功能：执行函数并返回结果 ────────────────────────────────────

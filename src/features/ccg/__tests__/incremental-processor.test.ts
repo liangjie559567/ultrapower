@@ -13,6 +13,7 @@ describe('Incremental Processor', () => {
     execSync('git init');
     execSync('git config user.email "test@test.com"');
     execSync('git config user.name "Test"');
+    execSync('git config commit.gpgsign false');
     writeFileSync('file1.txt', 'initial');
     execSync('git add file1.txt');
     execSync('git commit -m "initial"');
