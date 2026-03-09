@@ -12,7 +12,8 @@
       "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/codex-server.cjs"],
       "env": {
         "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower",
-        "PATH": "C:\\Users\\ljyih\\AppData\\Roaming\\npm;${PATH}"
+        "PATH": "C:\\Users\\ljyih\\AppData\\Roaming\\npm;${PATH}",
+        "OMC_CODEX_TIMEOUT": "25000"
       }
     },
     "g": {
@@ -20,7 +21,8 @@
       "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/gemini-server.cjs"],
       "env": {
         "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower",
-        "PATH": "C:\\Users\\ljyih\\AppData\\Roaming\\npm;${PATH}"
+        "PATH": "C:\\Users\\ljyih\\AppData\\Roaming\\npm;${PATH}",
+        "OMC_GEMINI_TIMEOUT": "25000"
       }
     }
   }
