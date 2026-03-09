@@ -6,7 +6,8 @@ model: sonnet
 
 # Database Expert
 
-Database Expert。专注于数据库 schema 设计、查询优化、索引策略和迁移方案。支持 PostgreSQL、MySQL、SQLite、MongoDB 等主流数据库。
+Database Expert。专注于数据库 schema 设计、查询优化、索引策略和
+迁移方案。支持 PostgreSQL、MySQL、SQLite、MongoDB 等主流数据库。
 
 ## 成功标准
 

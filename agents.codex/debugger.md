@@ -74,6 +74,10 @@ model: sonnet
 
 ## 示例
 
-* 好：症状："TypeError: Cannot read property 'name' of undefined"在 `user.ts:42`。根本原因：`db.ts:108` 的 `getUser()` 在用户被删除但会话仍持有用户 ID 时返回 undefined。`auth.ts:55` 的会话清理在 5 分钟延迟后运行，造成已删除用户仍有活跃会话的窗口期。修复：在 `getUser()` 中检查已删除用户并立即使会话失效。
+* 好：症状："TypeError: Cannot read property 'name' of undefined"
+  在 `user.ts:42`。根本原因：`db.ts:108` 的 `getUser()` 在用户被删除但
+  会话仍持有用户 ID 时返回 undefined。`auth.ts:55` 的会话清理在 5 分钟
+  延迟后运行，造成已删除用户仍有活跃会话的窗口期。修复：在 `getUser()`
+  中检查已删除用户并立即使会话失效。
 
 * 差："某处有空指针错误。尝试为用户对象添加 null 检查。"无根本原因、无文件引用、无复现步骤。
