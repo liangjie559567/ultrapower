@@ -1,105 +1,45 @@
-# 快速开始
+# 🚀 3 分钟快速开始
 
-> **预计时间**: 20 分钟
-> **前置条件**: 已完成[安装](./installation.md)
+## 第一步：安装与初始化
 
----
-
-## 第一个示例：使用 Autopilot
-
-### 步骤 1: 创建测试项目
+在 Claude Code 会话中执行：
 
 ```bash
-mkdir ultrapower-demo && cd ultrapower-demo
-npm init -y
-omc install
+# 1. 挂载应用市场并安装
+/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin install omc@ultrapower
+
+# 2. 运行配置向导（初始化基础权限与设置）
+/ultrapower:omc-setup
 ```
 
-✅ **检查点 1**: 项目包含 `CLAUDE.md` 文件
+## 第二步：体验自主执行（Autopilot）
 
----
-
-### 步骤 2: 启动 Claude Code
+无需手动选择模型或 Agent，直接输入想法，引擎会自动进行需求分析、拆解任务并执行：
 
 ```bash
-claude chat
+/ultrapower:autopilot "创建一个带密码强度验证的登录组件，要求响应式设计"
 ```
 
-✅ **检查点 2**: Claude Code CLI 已启动
+## 第三步：体验并行多 Agent（Team 模式）
 
----
-
-### 步骤 3: 运行第一个 Autopilot 任务
-
-在 Claude Code 中输入：
-
-```
-/ultrapower:autopilot "创建一个简单的 HTTP 服务器，监听 3000 端口"
-```
-
-**预期输出**:
-
-* Agent 自动分析需求
-
-* 生成代码文件
-
-* 运行测试验证
-
-✅ **检查点 3**: 生成了 `server.js` 或类似文件
-
----
-
-### 步骤 4: 验证结果
+对于复杂重构，启动团队协同模式，多线程同时修改：
 
 ```bash
-node server.js
-
-# 访问 <http://localhost:3000>
-
+/ultrapower:team "重构所有的 API 请求，替换为统一的 Axios 实例，并添加错误重试拦截器"
 ```
 
-✅ **检查点 4**: 服务器正常运行
-
 ---
 
-## 🎉 恭喜！
+## 💡 接下来？
 
-你已经成功运行了第一个 ultrapower 示例！
+* **查看实时大盘和 Agent 消耗**：输入 `omc stats`
+* **了解端到端的纪律开发流程**：[阅读 Workflows 深度指南](../core-concepts/WORKFLOWS.md)
+* **探索 49 个专业 Agents**：[查看 Agent 参考手册](../reference/AGENTS.md)
+* **掌握 71 个 Skills**：[浏览 Skills 清单](../reference/SKILLS.md)
 
----
+## 🔧 遇到问题？
 
-## 下一步学习
-
-### 理解核心概念
-
-* [什么是 Agents？](./concepts.md#agents)
-
-* [什么是 Skills？](./concepts.md#skills)
-
-### 尝试更多功能
-
-* [Team 协作](../guides/workflow-team-pipeline.md) - 多 agent 并行工作
-
-* [Ralph 循环](../guides/workflow-ralph-loop.md) - 持续执行直到完成
-
----
-
-## 常见问题
-
-### Q: Autopilot 没有响应？
-
-**检查**:
-1. 确认 `CLAUDE.md` 存在
-2. 运行 `omc doctor` 检查状态
-3. 查看 [故障排查](../guides/troubleshooting.md)
-
-### Q: 生成的代码有错误？
-
-**正常现象**！Autopilot 会自动：
-1. 检测错误
-2. 调用 debugger agent
-3. 自动修复并重试
-
----
-
-**遇到问题？** [查看完整故障排查指南](../guides/troubleshooting.md)
+* **诊断工具**：运行 `/ultrapower:omc-doctor` 自动检测并修复常见问题
+* **故障排查**：查看 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
+* **提交 Issue**：https://github.com/liangjie559567/ultrapower/issues
