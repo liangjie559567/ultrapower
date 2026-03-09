@@ -97,11 +97,11 @@ describe('Installer Constants', () => {
         if (filename === 'AGENTS.md') continue;
 
         // Check for frontmatter delimiters
-        expect(content).toMatch(/^---\n/);
-        expect(content).toMatch(/\n---\n/);
+        expect(content).toMatch(/^---\r?\n/);
+        expect(content).toMatch(/\r?\n---\r?\n/);
 
         // Extract frontmatter
-        const frontmatterMatch = (content as string).match(/^---\n([\s\S]*?)\n---/);
+        const frontmatterMatch = (content as string).match(/^---\r?\n([\s\S]*?)\r?\n---/);
         expect(frontmatterMatch).toBeTruthy();
 
         const frontmatter = frontmatterMatch![1];
@@ -552,14 +552,14 @@ describe('Installer Constants', () => {
         // Skip non-agent files
         if (filename === 'AGENTS.md') continue;
 
-        const frontmatterMatch = (content as string).match(/^---\n([\s\S]*?)\n---/);
+        const frontmatterMatch = (content as string).match(/^---\r?\n([\s\S]*?)\r?\n---/);
         expect(frontmatterMatch).toBeTruthy();
 
         const frontmatter = frontmatterMatch![1];
 
         // Each line should be key: value format (allow camelCase keys like disallowedTools)
         // Also allow YAML multi-line values (lines starting with spaces are continuation lines)
-        const lines = frontmatter.split('\n').filter((line: string) => line.trim());
+        const lines = frontmatter.split(/\r?\n/).filter((line: string) => line.trim());
         for (const line of lines) {
           expect(line).toMatch(/^([a-zA-Z]+:\s+.+|[a-zA-Z]+:\s*$|\s+.+)/);
         }
