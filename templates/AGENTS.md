@@ -8,21 +8,23 @@
 
 ## Subdirectories
 
-| Directory | Purpose |
-|-----------|---------|
-| `axiom/` | Axiom 工作流配置模板（见 `axiom/AGENTS.md`） |
-| `hooks/` | Hook 脚本模板（见 `hooks/AGENTS.md`） |
-| `rules/` | 规则文件模板（见 `rules/AGENTS.md`） |
+| Directory | Purpose                                      |
+| --------- | -------------------------------------------- |
+| `axiom/`  | Axiom 工作流配置模板（见 `axiom/AGENTS.md`） |
+| `hooks/`  | Hook 脚本模板（见 `hooks/AGENTS.md`）        |
+| `rules/`  | 规则文件模板（见 `rules/AGENTS.md`）         |
 
 ## For AI Agents
 
 ### 修改此目录时
-- 模板变更会影响所有新安装的项目
-- 参见 `src/installer/` 了解模板复制逻辑
+
+* 模板变更会影响所有新安装的项目
+* 参见 `src/installer/` 了解模板复制逻辑
 
 ## Dependencies
 
 ### Internal
-- `src/installer/` — 安装管理模块
+
+* `src/installer/` — 安装管理模块
 
 <!-- MANUAL: -->
