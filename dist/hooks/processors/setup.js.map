@@ -1,1 +1,1 @@
-{"version":3,"file":"setup.js","sourceRoot":"","sources":["../../../src/hooks/processors/setup.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,KAAK,UAAU,YAAY,CAAC,KAAgB;IACjD,OAAO,EAAE,QAAQ,EAAE,IAAI,EAAE,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"setup.js","sourceRoot":"","sources":["../../../src/hooks/processors/setup.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,KAAK,UAAU,YAAY,CAAC,MAAiB;IAClD,OAAO,EAAE,QAAQ,EAAE,IAAI,EAAE,CAAC;AAC5B,CAAC"}

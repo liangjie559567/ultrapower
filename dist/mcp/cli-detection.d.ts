@@ -9,6 +9,10 @@
  * On Windows, npm global binaries need .cmd extension
  */
 export declare function getCliCommand(baseName: string): string;
+/**
+ * Get spawn environment with npm global path included
+ */
+export declare function getSpawnEnv(): NodeJS.ProcessEnv;
 export interface CliDetectionResult {
     available: boolean;
     path?: string;

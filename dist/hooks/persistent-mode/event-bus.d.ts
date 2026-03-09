@@ -1,11 +1,11 @@
 /**
  * Simple event bus for hook decoupling
  */
-type EventHandler = (data: any) => void | Promise<void>;
+type EventHandler = (data: unknown) => void | Promise<void>;
 declare class EventBus {
     private handlers;
     on(event: string, handler: EventHandler): void;
-    emit(event: string, data?: any): Promise<void>;
+    emit(event: string, data?: unknown): Promise<void>;
 }
 export declare const hookEventBus: EventBus;
 export {};

@@ -1,1 +1,1 @@
-{"version":3,"file":"permissionRequest.js","sourceRoot":"","sources":["../../../src/hooks/processors/permissionRequest.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,KAAK,UAAU,wBAAwB,CAAC,KAAgB;IAC7D,OAAO,EAAE,QAAQ,EAAE,IAAI,EAAE,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"permissionRequest.js","sourceRoot":"","sources":["../../../src/hooks/processors/permissionRequest.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,KAAK,UAAU,wBAAwB,CAAC,MAAiB;IAC9D,OAAO,EAAE,QAAQ,EAAE,IAAI,EAAE,CAAC;AAC5B,CAAC"}

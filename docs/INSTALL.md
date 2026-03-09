@@ -1,6 +1,6 @@
 # ultrapower 安装部署详细教程
 
-ultrapower v5.6.6 完整安装指南，覆盖从零开始到完全配置的所有步骤。
+ultrapower v5.6.8 完整安装指南，覆盖从零开始到完全配置的所有步骤。
 
 ---
 
@@ -102,7 +102,7 @@ git --version
 
 **预期输出：**
 ```
-✓ Installing ultrapower v5.6.6...
+✓ Installing ultrapower v5.6.8...
 ✓ Hooks registered: 39
 ✓ Agents loaded: 49
 ✓ Skills available: 71

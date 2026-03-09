@@ -110,9 +110,12 @@ function _classifyFilePath(filePath) {
 /**
  * Check if an active mode (autopilot/ultrawork/ralph/swarm) is running
  */
-export function isActiveModeRunning(directory) {
+export async function isActiveModeRunning(directory) {
     const stateDir = path.join(directory, '.omc', 'state');
-    if (!fs.existsSync(stateDir)) {
+    try {
+        await fs.promises.access(stateDir);
+    }
+    catch {
         return false;
     }
     const activeStateFiles = [
@@ -124,14 +127,15 @@ export function isActiveModeRunning(directory) {
     ];
     for (const stateFile of activeStateFiles) {
         const statePath = path.join(stateDir, stateFile);
-        if (fs.existsSync(statePath)) {
+        try {
+            await fs.promises.access(statePath);
             // Marker files: existence alone indicates active mode
             if (stateFile.endsWith('.marker')) {
                 return true;
             }
             // JSON state files: check active/status fields
             try {
-                const content = fs.readFileSync(statePath, 'utf-8');
+                const content = await fs.promises.readFile(statePath, 'utf-8');
                 const result = safeJsonParse(content, statePath);
                 if (result.success && result.data) {
                     const state = result.data;
@@ -145,6 +149,10 @@ export function isActiveModeRunning(directory) {
                 // Ignore parse errors, continue checking
                 continue;
             }
+        }
+        catch {
+            // File doesn't exist, continue checking
+            continue;
         }
     }
     return false;

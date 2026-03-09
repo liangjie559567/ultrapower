@@ -1,1 +1,1 @@
-{"version":3,"file":"userPromptSubmit.js","sourceRoot":"","sources":["../../../src/hooks/processors/userPromptSubmit.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,KAAK,UAAU,uBAAuB,CAAC,KAAgB;IAC5D,OAAO,EAAE,QAAQ,EAAE,IAAI,EAAE,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"userPromptSubmit.js","sourceRoot":"","sources":["../../../src/hooks/processors/userPromptSubmit.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,KAAK,UAAU,uBAAuB,CAAC,MAAiB;IAC7D,OAAO,EAAE,QAAQ,EAAE,IAAI,EAAE,CAAC;AAC5B,CAAC"}

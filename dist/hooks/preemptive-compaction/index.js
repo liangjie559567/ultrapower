@@ -35,7 +35,9 @@ function debugLog(...args) {
         const msg = `[${new Date().toISOString()}] [preemptive-compaction] ${args
             .map((a) => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a))
             .join(' ')}\n`;
-        fs.appendFileSync(DEBUG_FILE, msg);
+        fs.promises.appendFile(DEBUG_FILE, msg).catch(() => {
+            // Ignore debug log write failures
+        });
     }
 }
 /**

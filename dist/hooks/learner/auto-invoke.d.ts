@@ -22,11 +22,11 @@ export interface AutoInvokeState {
 /**
  * Load auto-invocation config from ~/.claude/.omc-config.json
  */
-export declare function loadInvocationConfig(): InvocationConfig;
+export declare function loadInvocationConfig(): Promise<InvocationConfig>;
 /**
  * Initialize auto-invoke state for a session
  */
-export declare function initAutoInvoke(sessionId: string): AutoInvokeState;
+export declare function initAutoInvoke(sessionId: string): Promise<AutoInvokeState>;
 /**
  * Decide whether to auto-invoke a skill based on confidence and constraints
  */
@@ -64,11 +64,11 @@ export declare function saveInvocationHistory(state: AutoInvokeState): void;
 /**
  * Load invocation history from disk
  */
-export declare function loadInvocationHistory(sessionId: string): AutoInvokeState | null;
+export declare function loadInvocationHistory(sessionId: string): Promise<AutoInvokeState | null>;
 /**
  * Get aggregated invocation analytics across all sessions
  */
-export declare function getAggregatedStats(): {
+export declare function getAggregatedStats(): Promise<{
     totalSessions: number;
     totalInvocations: number;
     successRate: number;
@@ -78,5 +78,5 @@ export declare function getAggregatedStats(): {
         count: number;
         successRate: number;
     }>;
-};
+}>;
 //# sourceMappingURL=auto-invoke.d.ts.map

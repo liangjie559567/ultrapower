@@ -12,13 +12,16 @@ const DEFAULT_CONFIG = {
 /**
  * Load auto-invocation config from ~/.claude/.omc-config.json
  */
-export function loadInvocationConfig() {
+export async function loadInvocationConfig() {
     const configPath = path.join(getClaudeConfigDir(), '.omc-config.json');
     try {
-        if (!fs.existsSync(configPath)) {
+        try {
+            await fs.promises.access(configPath);
+        }
+        catch {
             return { ...DEFAULT_CONFIG };
         }
-        const configFile = fs.readFileSync(configPath, 'utf-8');
+        const configFile = await fs.promises.readFile(configPath, 'utf-8');
         const config = JSON.parse(configFile);
         // Merge with defaults
         return {
@@ -36,10 +39,10 @@ export function loadInvocationConfig() {
 /**
  * Initialize auto-invoke state for a session
  */
-export function initAutoInvoke(sessionId) {
+export async function initAutoInvoke(sessionId) {
     return {
         sessionId,
-        config: loadInvocationConfig(),
+        config: await loadInvocationConfig(),
         invocations: [],
         lastInvokeTime: 0,
     };
@@ -152,13 +155,16 @@ export function saveInvocationHistory(state) {
 /**
  * Load invocation history from disk
  */
-export function loadInvocationHistory(sessionId) {
+export async function loadInvocationHistory(sessionId) {
     const historyFile = path.join(os.homedir(), '.omc', 'analytics', 'invocations', `${sessionId}.json`);
     try {
-        if (!fs.existsSync(historyFile)) {
+        try {
+            await fs.promises.access(historyFile);
+        }
+        catch {
             return null;
         }
-        const data = JSON.parse(fs.readFileSync(historyFile, 'utf-8'));
+        const data = JSON.parse(await fs.promises.readFile(historyFile, 'utf-8'));
         return {
             sessionId: data.sessionId,
             config: data.config,
@@ -176,10 +182,13 @@ export function loadInvocationHistory(sessionId) {
 /**
  * Get aggregated invocation analytics across all sessions
  */
-export function getAggregatedStats() {
+export async function getAggregatedStats() {
     const historyDir = path.join(os.homedir(), '.omc', 'analytics', 'invocations');
     try {
-        if (!fs.existsSync(historyDir)) {
+        try {
+            await fs.promises.access(historyDir);
+        }
+        catch {
             return {
                 totalSessions: 0,
                 totalInvocations: 0,
@@ -187,11 +196,11 @@ export function getAggregatedStats() {
                 topSkills: [],
             };
         }
-        const files = fs.readdirSync(historyDir).filter(f => f.endsWith('.json'));
+        const files = (await fs.promises.readdir(historyDir)).filter(f => f.endsWith('.json'));
         const allInvocations = [];
         const skillStats = new Map();
         for (const file of files) {
-            const data = JSON.parse(fs.readFileSync(path.join(historyDir, file), 'utf-8'));
+            const data = JSON.parse(await fs.promises.readFile(path.join(historyDir, file), 'utf-8'));
             allInvocations.push(...data.invocations);
             for (const inv of data.invocations) {
                 const existing = skillStats.get(inv.skillId) || { name: inv.skillName, total: 0, successful: 0 };

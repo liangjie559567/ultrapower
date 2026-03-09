@@ -15,15 +15,15 @@ export type { SessionEndInput, SessionMetrics, HookOutput };
  * duration reflects the full session span (e.g. autopilot started before
  * ultrawork).
  */
-export declare function getSessionStartTime(directory: string, sessionId?: string): string | undefined;
+export declare function getSessionStartTime(directory: string, sessionId?: string): Promise<string | undefined>;
 /**
  * Record session metrics
  */
-export declare function recordSessionMetrics(directory: string, input: SessionEndInput): SessionMetrics;
+export declare function recordSessionMetrics(directory: string, input: SessionEndInput): Promise<SessionMetrics>;
 /**
  * Clean up transient state files
  */
-export declare function cleanupTransientState(directory: string): number;
+export declare function cleanupTransientState(directory: string): Promise<number>;
 /**
  * Extract python_repl research session IDs from transcript JSONL.
  * These sessions are terminated on SessionEnd to prevent bridge leaks.
@@ -40,14 +40,14 @@ export declare function extractPythonReplSessionIdsFromTranscript(transcriptPath
  * @param sessionId - Optional session ID to match. Only cleans states belonging to this session.
  * @returns Object with counts of files removed and modes cleaned
  */
-export declare function cleanupModeStates(directory: string, sessionId?: string): {
+export declare function cleanupModeStates(directory: string, sessionId?: string): Promise<{
     filesRemoved: number;
     modesCleaned: string[];
-};
+}>;
 /**
  * Export session summary to .omc/sessions/
  */
-export declare function exportSessionSummary(directory: string, metrics: SessionMetrics): void;
+export declare function exportSessionSummary(directory: string, metrics: SessionMetrics): Promise<void>;
 /**
  * Process session end
  */

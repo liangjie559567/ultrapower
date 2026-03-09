@@ -12,6 +12,19 @@ import { spawnSync } from 'child_process';
 export function getCliCommand(baseName) {
     return process.platform === 'win32' ? `${baseName}.cmd` : baseName;
 }
+/**
+ * Get spawn environment with npm global path included
+ */
+export function getSpawnEnv() {
+    const env = { ...process.env };
+    if (process.platform === 'win32' && process.env.APPDATA) {
+        const npmPath = `${process.env.APPDATA}\\npm`;
+        if (!env.PATH?.includes(npmPath)) {
+            env.PATH = `${npmPath};${env.PATH || ''}`;
+        }
+    }
+    return env;
+}
 // Session-level cache for detection results
 let codexCache = null;
 let geminiCache = null;
@@ -25,7 +38,7 @@ export function detectCodexCli(useCache = true) {
     try {
         const codexCmd = getCliCommand('codex');
         const cmd = process.platform === 'win32' ? 'where' : 'which';
-        const pathResult = spawnSync(cmd, ['codex'], { encoding: 'utf-8', timeout: 5000 });
+        const pathResult = spawnSync(cmd, [codexCmd], { encoding: 'utf-8', timeout: 5000 });
         if (pathResult.status !== 0)
             throw new Error('codex not found');
         const path = pathResult.stdout.trim();
@@ -62,7 +75,7 @@ export function detectGeminiCli(useCache = true) {
     try {
         const geminiCmd = getCliCommand('gemini');
         const cmd = process.platform === 'win32' ? 'where' : 'which';
-        const pathResult = spawnSync(cmd, ['gemini'], { encoding: 'utf-8', timeout: 5000 });
+        const pathResult = spawnSync(cmd, [geminiCmd], { encoding: 'utf-8', timeout: 5000 });
         if (pathResult.status !== 0)
             throw new Error('gemini not found');
         const path = pathResult.stdout.trim();

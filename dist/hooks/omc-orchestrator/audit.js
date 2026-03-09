@@ -11,31 +11,36 @@ const LOG_FILE = 'delegation-audit.jsonl';
  * Log an audit entry for delegation enforcement
  */
 export function logAuditEntry(entry) {
-    try {
-        const fullEntry = {
-            ...entry,
-            timestamp: new Date().toISOString(),
-        };
-        const logDir = path.join(process.cwd(), LOG_DIR);
-        const logPath = path.join(logDir, LOG_FILE);
-        // Create directory if it doesn't exist
-        fs.mkdirSync(logDir, { recursive: true });
-        // Append entry as JSONL
-        fs.appendFileSync(logPath, JSON.stringify(fullEntry) + '\n');
-    }
-    catch {
-        // Silently fail - audit logging should not break main functionality
-    }
+    const fullEntry = {
+        ...entry,
+        timestamp: new Date().toISOString(),
+    };
+    const logDir = path.join(process.cwd(), LOG_DIR);
+    const logPath = path.join(logDir, LOG_FILE);
+    // Fire-and-forget async logging
+    (async () => {
+        try {
+            await fs.promises.mkdir(logDir, { recursive: true });
+            await fs.promises.appendFile(logPath, JSON.stringify(fullEntry) + '\n');
+        }
+        catch (_err) {
+            console.error('[delegation-audit] Failed to write log:', _err);
+        }
+    })();
 }
 /**
  * Read audit log entries (for analysis)
  */
-export function readAuditLog(directory) {
+export async function readAuditLog(directory) {
     try {
         const logPath = path.join(directory || process.cwd(), LOG_DIR, LOG_FILE);
-        if (!fs.existsSync(logPath))
+        try {
+            await fs.promises.access(logPath);
+        }
+        catch {
             return [];
-        const content = fs.readFileSync(logPath, 'utf-8');
+        }
+        const content = await fs.promises.readFile(logPath, 'utf-8');
         return content
             .split('\n')
             .filter(line => line.trim())
@@ -48,8 +53,8 @@ export function readAuditLog(directory) {
 /**
  * Get audit summary statistics
  */
-export function getAuditSummary(directory) {
-    const entries = readAuditLog(directory);
+export async function getAuditSummary(directory) {
+    const entries = await readAuditLog(directory);
     const byExtension = {};
     for (const entry of entries) {
         if (entry.decision === 'warned') {

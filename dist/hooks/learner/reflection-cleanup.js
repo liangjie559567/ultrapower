@@ -32,9 +32,9 @@ export async function cleanupReflectionLog(baseDir) {
     const reflectionLog = path.join(baseDir, '.omc/axiom/reflection_log.md');
     const backupPath = path.join(baseDir, '.omc/axiom', `reflection_log_backup_${getTodayString()}.md`);
     // 读取原文件
-    const originalContent = fs.readFileSync(reflectionLog, 'utf-8');
+    const originalContent = await fs.promises.readFile(reflectionLog, 'utf-8');
     // 备份原文件
-    fs.copyFileSync(reflectionLog, backupPath);
+    await fs.promises.copyFile(reflectionLog, backupPath);
     // 解析块列表
     const blocks = parseReflectionLog(originalContent);
     // 分离有效块与空块

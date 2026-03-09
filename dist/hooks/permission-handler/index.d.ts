@@ -43,7 +43,7 @@ export declare function isHeredocWithSafeBase(command: string): boolean;
 /**
  * Check if an active mode (autopilot/ultrawork/ralph/swarm) is running
  */
-export declare function isActiveModeRunning(directory: string): boolean;
+export declare function isActiveModeRunning(directory: string): Promise<boolean>;
 /**
  * Process permission request and decide whether to auto-allow
  */

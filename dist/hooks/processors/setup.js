@@ -1,4 +1,4 @@
-export async function processSetup(input) {
+export async function processSetup(_input) {
     return { continue: true };
 }
 //# sourceMappingURL=setup.js.map

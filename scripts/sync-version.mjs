@@ -12,7 +12,12 @@ const files = [
   'CLAUDE.md',
   'docs/standards/README.md',
   'docs/REFERENCE.md',
-  'docs/INSTALL.md'
+  'docs/INSTALL.md',
+  '.claude-plugin/plugin.json',
+  '.claude-plugin/marketplace.json',
+  '.cursor-plugin/plugin.json',
+  'marketplace.json',
+  'packages/mcp-server/package.json'
 ];
 
 const versionPatterns = [

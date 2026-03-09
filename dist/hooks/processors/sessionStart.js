@@ -1,5 +1,5 @@
 import { loadConfig } from "../../config/loader.js";
-export async function processSessionStart(input) {
+export async function processSessionStart(_input) {
     const config = await loadConfig();
     const mode = config.defaultExecutionMode || "sequential";
     const messages = [];

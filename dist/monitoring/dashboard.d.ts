@@ -6,8 +6,8 @@ export declare class Dashboard {
     private formatDuration;
     private formatMemory;
     private checkRegression;
-    display(hours?: number): void;
-    setBaselines(): void;
-    export(format: 'json' | 'csv', outputPath: string, type?: Metric['type']): void;
+    display(hours?: number): Promise<void>;
+    setBaselines(): Promise<void>;
+    export(format: 'json' | 'csv', outputPath: string, type?: Metric['type']): Promise<void>;
 }
 //# sourceMappingURL=dashboard.d.ts.map

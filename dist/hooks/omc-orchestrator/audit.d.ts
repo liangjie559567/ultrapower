@@ -18,14 +18,14 @@ export declare function logAuditEntry(entry: Omit<AuditEntry, 'timestamp'>): voi
 /**
  * Read audit log entries (for analysis)
  */
-export declare function readAuditLog(directory?: string): AuditEntry[];
+export declare function readAuditLog(directory?: string): Promise<AuditEntry[]>;
 /**
  * Get audit summary statistics
  */
-export declare function getAuditSummary(directory?: string): {
+export declare function getAuditSummary(directory?: string): Promise<{
     total: number;
     allowed: number;
     warned: number;
     byExtension: Record<string, number>;
-};
+}>;
 //# sourceMappingURL=audit.d.ts.map

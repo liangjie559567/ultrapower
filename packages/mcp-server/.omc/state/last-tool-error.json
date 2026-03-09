@@ -1,7 +1,7 @@
 {
-  "tool_name": "Read",
-  "tool_input_preview": "{\"file_path\":\"CHANGELOG.md\"}",
-  "error": "File does not exist. Note: your current working directory is C:\\Users\\ljyih\\Desktop\\ultrapower\\packages\\mcp-server.",
-  "timestamp": "2026-03-05T03:31:34.445Z",
-  "retry_count": 1
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"grep \\\"version\\\" .claude-plugin/plugin.json .cursor-plugin/plugin.json marketplace.json\",\"description\":\"检查插件配置版本号\"}",
+  "error": "Exit code 2\ngrep: .claude-plugin/plugin.json: No such file or directory\ngrep: .cursor-plugin/plugin.json: No such file or directory\ngrep: marketplace.json: No such file or directory",
+  "timestamp": "2026-03-09T13:31:54.636Z",
+  "retry_count": 2
 }
