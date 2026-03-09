@@ -265,6 +265,64 @@ claude plugin install omc@ultrapower
 
 > ⚠️ 仅执行步骤 3（清除插件缓存）不够——npm-cache 仍会导致安装器复用旧内容。必须同时清除 npm-cache。
 
+### GitHub Actions 发布失败
+
+当 GitHub Actions 自动发布失败时，按以下流程恢复：
+
+#### 1. 验证当前状态
+
+```bash
+# 检查 npm 是否已发布
+npm view @liangjie559567/ultrapower version
+
+# 检查 GitHub Release 是否已创建
+gh release view v<version>
+```
+
+#### 2. 识别缺失步骤
+
+根据验证结果确定需要补充的步骤：
+- npm 未发布 → 执行步骤 3
+- GitHub Release 未创建 → 执行步骤 4
+- 两者都缺失 → 执行步骤 3 和 4
+
+#### 3. 手动发布到 npm
+
+```bash
+npm publish --access public --no-provenance
+```
+
+如果报错 "cannot publish over the previously published versions"，说明已发布，跳过此步。
+
+#### 4. 手动创建 GitHub Release
+
+```bash
+# 确保 tag 已推送
+git push origin v<version>
+
+# 创建 Release
+gh release create v<version> --title "v<version>" --notes "<release notes>"
+```
+
+#### 5. 验证最终状态
+
+```bash
+# 验证 npm
+npm view @liangjie559567/ultrapower version
+
+# 验证 GitHub Release
+gh release view v<version> --json tagName,publishedAt
+```
+
+#### 常见失败原因
+
+| 错误 | 原因 | 解决方案 |
+|------|------|---------|
+| "GitHub Actions is not permitted to create or approve pull requests" | changesets action 缺少 PR 创建权限 | 使用 `npm run release:local` 手动发布 |
+| "tag already exists" | 手动推送的 tag 与 CI 冲突 | 删除远程 tag：`git push origin :refs/tags/v<version>` |
+| "cannot publish over the previously published versions" | npm 版本已存在 | 验证是否已发布，跳过重复发布 |
+| "Updates were rejected because the remote contains work" | 远程有新提交 | 执行 `git stash && git pull --rebase && git push` |
+
 ## 路由触发
 
 发布流程完成后调用 `next-step-router`：
