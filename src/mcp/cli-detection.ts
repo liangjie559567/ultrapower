@@ -38,7 +38,7 @@ export function detectCodexCli(useCache = true): CliDetectionResult {
   try {
     const codexCmd = getCliCommand('codex');
     const cmd = process.platform === 'win32' ? 'where' : 'which';
-    const pathResult = spawnSync(cmd, ['codex'], { encoding: 'utf-8', timeout: 5000 });
+    const pathResult = spawnSync(cmd, [codexCmd], { encoding: 'utf-8', timeout: 5000 });
     if (pathResult.status !== 0) throw new Error('codex not found');
     const path = pathResult.stdout.trim();
     let version: string | undefined;
@@ -74,7 +74,7 @@ export function detectGeminiCli(useCache = true): CliDetectionResult {
   try {
     const geminiCmd = getCliCommand('gemini');
     const cmd = process.platform === 'win32' ? 'where' : 'which';
-    const pathResult = spawnSync(cmd, ['gemini'], { encoding: 'utf-8', timeout: 5000 });
+    const pathResult = spawnSync(cmd, [geminiCmd], { encoding: 'utf-8', timeout: 5000 });
     if (pathResult.status !== 0) throw new Error('gemini not found');
     const path = pathResult.stdout.trim();
     let version: string | undefined;

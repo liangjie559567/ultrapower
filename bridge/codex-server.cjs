@@ -14509,7 +14509,7 @@ function detectCodexCli(useCache = true) {
   try {
     const codexCmd = getCliCommand("codex");
     const cmd = process.platform === "win32" ? "where" : "which";
-    const pathResult = (0, import_child_process.spawnSync)(cmd, ["codex"], { encoding: "utf-8", timeout: 5e3 });
+    const pathResult = (0, import_child_process.spawnSync)(cmd, [codexCmd], { encoding: "utf-8", timeout: 5e3 });
     if (pathResult.status !== 0) throw new Error("codex not found");
     const path = pathResult.stdout.trim();
     let version2;
@@ -16786,10 +16786,12 @@ function executeCodex(prompt, model, cwd, reasoningEffort) {
     if (reasoningEffort && VALID_REASONING_EFFORTS.includes(reasoningEffort)) {
       args.push("-c", `model_reasoning_effort="${reasoningEffort}"`);
     }
-    const child = (0, import_child_process3.spawn)(getCliCommand("codex"), args, {
+    const codexCmd = getCliCommand("codex");
+    console.error(`[DEBUG] Spawning: ${codexCmd} with shell=${process.platform === "win32"}`);
+    const child = (0, import_child_process3.spawn)(codexCmd, args, {
       stdio: ["pipe", "pipe", "pipe"],
       ...cwd ? { cwd } : {},
-      shell: false
+      shell: process.platform === "win32"
     });
     const timeoutHandle = setTimeout(() => {
       if (!settled) {
@@ -16913,7 +16915,7 @@ function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingDirector
         detached: process.platform !== "win32",
         stdio: ["pipe", "pipe", "pipe"],
         ...workingDirectory ? { cwd: workingDirectory } : {},
-        shell: false
+        shell: process.platform === "win32"
       });
       if (!child.pid) {
         return { error: "Failed to get process ID" };

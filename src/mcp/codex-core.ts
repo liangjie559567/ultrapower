@@ -225,10 +225,12 @@ export function executeCodex(prompt: string, model: string, cwd?: string, reason
     if (reasoningEffort && VALID_REASONING_EFFORTS.includes(reasoningEffort)) {
       args.push('-c', `model_reasoning_effort="${reasoningEffort}"`);
     }
-    const child = spawn(getCliCommand('codex'), args, {
+    const codexCmd = getCliCommand('codex');
+    console.error(`[DEBUG] Spawning: ${codexCmd} with shell=${process.platform === 'win32'}`);
+    const child = spawn(codexCmd, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...(cwd ? { cwd } : {}),
-      shell: false
+      shell: process.platform === 'win32'
     });
 
     // Manual timeout handling to ensure proper cleanup
@@ -406,7 +408,7 @@ export function executeCodexBackground(
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],
         ...(workingDirectory ? { cwd: workingDirectory } : {}),
-        shell: false
+        shell: process.platform === 'win32'
       });
 
       if (!child.pid) {

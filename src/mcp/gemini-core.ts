@@ -114,7 +114,7 @@ export function executeGemini(prompt: string, model?: string, cwd?: string): Pro
     const child = spawn(getCliCommand('gemini'), args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...(cwd ? { cwd } : {}),
-      shell: false
+      shell: process.platform === 'win32'
     });
 
     const timeoutHandle = setTimeout(() => {
@@ -217,7 +217,7 @@ export function executeGeminiBackground(
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],
         ...(workingDirectory ? { cwd: workingDirectory } : {}),
-        shell: false
+        shell: process.platform === 'win32'
       });
 
       if (!child.pid) {

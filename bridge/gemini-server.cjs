@@ -14357,7 +14357,7 @@ function detectGeminiCli(useCache = true) {
   try {
     const geminiCmd = getCliCommand("gemini");
     const cmd = process.platform === "win32" ? "where" : "which";
-    const pathResult = (0, import_child_process.spawnSync)(cmd, ["gemini"], { encoding: "utf-8", timeout: 5e3 });
+    const pathResult = (0, import_child_process.spawnSync)(cmd, [geminiCmd], { encoding: "utf-8", timeout: 5e3 });
     if (pathResult.status !== 0) throw new Error("gemini not found");
     const path = pathResult.stdout.trim();
     let version2;
@@ -16547,7 +16547,7 @@ function executeGemini(prompt, model, cwd) {
     const child = (0, import_child_process3.spawn)(getCliCommand("gemini"), args, {
       stdio: ["pipe", "pipe", "pipe"],
       ...cwd ? { cwd } : {},
-      shell: false
+      shell: process.platform === "win32"
     });
     const timeoutHandle = setTimeout(() => {
       if (!settled) {
@@ -16623,7 +16623,7 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
         detached: process.platform !== "win32",
         stdio: ["pipe", "pipe", "pipe"],
         ...workingDirectory ? { cwd: workingDirectory } : {},
-        shell: false
+        shell: process.platform === "win32"
       });
       if (!child.pid) {
         return { error: "Failed to get process ID" };

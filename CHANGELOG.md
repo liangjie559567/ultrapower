@@ -1,3 +1,16 @@
+# ultrapower v5.6.4
+
+**发布日期**: 2026-03-09
+
+## Bug Fixes
+
+- **Windows MCP CLI 兼容性** - 修复 Windows 下 Codex/Gemini CLI spawn 失败
+  - 确保 bridge 文件正确使用 `getCliCommand()` 添加 `.cmd` 扩展名
+  - 所有 spawn 调用在 Windows 下使用 `shell: true`
+  - 重新构建 bridge/codex-server.cjs 和 bridge/gemini-server.cjs
+
+---
+
 # ultrapower v5.6.1
 
 **发布日期**: 2026-03-08
