@@ -78,7 +78,7 @@ async function detectMonorepo(workingDir: string): Promise<boolean> {
     const packageJsonPath = path.join(workingDir, 'package.json');
     const content = await fs.readFile(packageJsonPath, 'utf-8');
     const pkg = JSON.parse(content);
-    return !!(pkg.workspaces || pkg.private);
+    return !!pkg.workspaces;
   } catch {
     return false;
   }

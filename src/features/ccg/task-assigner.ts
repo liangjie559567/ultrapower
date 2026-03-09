@@ -54,7 +54,7 @@ function isUIFile(file: string): boolean {
 }
 
 function isLogicFile(file: string): boolean {
-  return /\.(ts|js)$/.test(file) && !isTestFile(file) && !isUIFile(file);
+  return /\.(ts|js)$/.test(file) && !isTestFile(file) && !/\.(tsx|jsx)$/.test(file);
 }
 
 function isTestFile(file: string): boolean {

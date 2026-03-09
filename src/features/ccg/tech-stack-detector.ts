@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import { promises as fs } from 'fs';
 import * as path from 'path';
 
 export interface TechStack {
@@ -16,13 +16,19 @@ interface PackageJson {
 export async function detectTechStack(workingDir: string): Promise<TechStack> {
   const packageJsonPath = path.join(workingDir, 'package.json');
 
-  if (!fs.existsSync(packageJsonPath)) {
+  try {
+    await fs.access(packageJsonPath);
+  } catch {
     return { language: 'javascript', frontend: 'none', backend: 'none' };
   }
 
-  const packageJson: PackageJson = JSON.parse(
-    fs.readFileSync(packageJsonPath, 'utf-8')
-  );
+  let packageJson: PackageJson;
+  try {
+    const content = await fs.readFile(packageJsonPath, 'utf-8');
+    packageJson = JSON.parse(content);
+  } catch {
+    return { language: 'javascript', frontend: 'none', backend: 'none' };
+  }
 
   const allDeps = {
     ...packageJson.dependencies,
@@ -32,7 +38,7 @@ export async function detectTechStack(workingDir: string): Promise<TechStack> {
   return {
     frontend: detectFrontend(allDeps),
     backend: detectBackend(allDeps),
-    language: detectLanguage(workingDir, allDeps),
+    language: await detectLanguage(workingDir, allDeps),
     buildTool: detectBuildTool(allDeps)
   };
 }
@@ -52,10 +58,14 @@ function detectBackend(deps: Record<string, string>): TechStack['backend'] {
   return 'none';
 }
 
-function detectLanguage(workingDir: string, deps: Record<string, string>): TechStack['language'] {
+async function detectLanguage(workingDir: string, deps: Record<string, string>): Promise<TechStack['language']> {
   if (deps['typescript']) {
-    const hasTsConfig = fs.existsSync(path.join(workingDir, 'tsconfig.json'));
-    return hasTsConfig ? 'typescript' : 'mixed';
+    try {
+      await fs.access(path.join(workingDir, 'tsconfig.json'));
+      return 'typescript';
+    } catch {
+      return 'mixed';
+    }
   }
   return 'javascript';
 }
