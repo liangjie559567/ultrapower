@@ -16,12 +16,6 @@ async function getAgentCounts(directory: string): Promise<{ spawned: number; com
   const trackingPath = path.join(directory, '.omc', 'state', 'subagent-tracking.json');
 
   try {
-    await fs.promises.access(trackingPath);
-  } catch {
-    return { spawned: 0, completed: 0 };
-  }
-
-  try {
     const content = await fs.promises.readFile(trackingPath, 'utf-8');
     const tracking = JSON.parse(content);
 
@@ -40,12 +34,6 @@ async function getAgentCounts(directory: string): Promise<{ spawned: number; com
 async function getModesUsed(directory: string): Promise<string[]> {
   const stateDir = path.join(directory, '.omc', 'state');
   const modes: string[] = [];
-
-  try {
-    await fs.promises.access(stateDir);
-  } catch {
-    return modes;
-  }
 
   const modeStateFiles = [
     { file: 'autopilot-state.json', mode: 'autopilot' },
@@ -176,16 +164,9 @@ export async function cleanupTransientState(directory: string): Promise<number> 
   let filesRemoved = 0;
   const omcDir = path.join(directory, '.omc');
 
-  try {
-    await fs.promises.access(omcDir);
-  } catch {
-    return filesRemoved;
-  }
-
   // Remove transient agent tracking
   const trackingPath = path.join(omcDir, 'state', 'subagent-tracking.json');
   try {
-    await fs.promises.access(trackingPath);
     await fs.promises.unlink(trackingPath);
     filesRemoved++;
   } catch {
@@ -342,17 +323,10 @@ export async function cleanupModeStates(directory: string, sessionId?: string): 
   const modesCleaned: string[] = [];
   const stateDir = path.join(directory, '.omc', 'state');
 
-  try {
-    await fs.promises.access(stateDir);
-  } catch {
-    return { filesRemoved, modesCleaned };
-  }
-
   for (const { file, mode } of MODE_STATE_FILES) {
     const localPath = path.join(stateDir, file);
 
     try {
-      await fs.promises.access(localPath);
 
       // For JSON files, check if active before removing
       if (file.endsWith('.json')) {
@@ -393,9 +367,9 @@ export async function exportSessionSummary(directory: string, metrics: SessionMe
   const sessionsDir = path.join(directory, '.omc', 'sessions');
 
   try {
-    await fs.promises.access(sessionsDir);
-  } catch {
     await fs.promises.mkdir(sessionsDir, { recursive: true });
+  } catch {
+    // Directory exists or creation failed
   }
 
   const sessionFile = path.join(sessionsDir, `${metrics.session_id}.json`);
