@@ -27,9 +27,9 @@ describe('acquireLock', () => {
   });
 
   afterEach(async () => {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 200));
     try {
-      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
     } catch (err) {
       // Ignore cleanup errors on Windows
     }
@@ -217,9 +217,9 @@ describe('withFileLock', () => {
   });
 
   afterEach(async () => {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 200));
     try {
-      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
     } catch (err) {
       // Ignore cleanup errors on Windows
     }
