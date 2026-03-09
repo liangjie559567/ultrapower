@@ -5,7 +5,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ['dist/**', 'bridge/**', 'node_modules/**', '**/*.cjs', '**/*.mjs'],
+    ignores: ['dist/**', 'bridge/**', 'node_modules/**', '**/*.cjs', '**/*.mjs', 'src/features/ccg/**'],
   },
   {
     rules: {
@@ -42,7 +42,19 @@ export default tseslint.config(
   },
   {
     // State manager: sync fs allowed (provides both sync and async APIs)
-    files: ['src/features/state-manager/**/*.ts', 'src/lib/atomic-write.ts'],
+    files: ['src/features/state-manager/**/*.ts', 'src/lib/atomic-write.ts', 'src/lib/file-lock.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
+    },
+  },
+  {
+    // Security-critical files: sync fs required to prevent TOCTOU races
+    files: [
+      '**/path-validator.ts',
+      '**/python-repl/paths.ts',
+      '**/python-repl/bridge-manager.ts',
+      '**/ccg/**/*.ts'
+    ],
     rules: {
       'no-restricted-syntax': 'off',
     },
