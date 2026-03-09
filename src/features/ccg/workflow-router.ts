@@ -1,12 +1,14 @@
 import { detectProjectType, ProjectType } from './project-detector.js';
 import { detectTechStack, TechStack } from './tech-stack-detector.js';
 import { analyzeProjectStructure, ProjectStructure, StructureAnalysis } from './structure-analyzer.js';
+import { assignTask, TaskAssignment, ModelType, ChangeType } from './task-assigner.js';
 
 export interface WorkflowContext {
   workingDir: string;
   projectType: ProjectType;
   techStack?: TechStack;
   structure?: StructureAnalysis;
+  taskAssignment?: TaskAssignment;
   userInput?: string;
 }
 
@@ -26,5 +28,6 @@ export async function routeWorkflow(
   };
 }
 
-export type { ProjectStructure, StructureAnalysis };
+export type { ProjectStructure, StructureAnalysis, ModelType, ChangeType, TaskAssignment };
+export { assignTask };
 
