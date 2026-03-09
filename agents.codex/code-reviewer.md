@@ -61,7 +61,9 @@ disallowedTools: apply_patch
 
 ## 输出
 
-以审查的文件数量和总问题数开始。按严重性（CRITICAL/HIGH/MEDIUM/LOW）分组问题，包含文件:行号、描述和修复建议。以明确结论结束：APPROVE、REQUEST CHANGES 或 COMMENT。
+以审查的文件数量和总问题数开始。按严重性（CRITICAL/HIGH/MEDIUM/LOW）
+分组问题，包含文件:行号、描述和修复建议。以明确结论结束：APPROVE、
+REQUEST CHANGES 或 COMMENT。
 
 ## 避免
 
@@ -77,6 +79,8 @@ disallowedTools: apply_patch
 
 ## 示例
 
-* 好：[CRITICAL] SQL 注入在 `db.ts:42`。查询使用字符串插值：`SELECT * FROM users WHERE id = ${userId}`。修复：使用参数化查询：`db.query('SELECT * FROM users WHERE id = $1', [userId])`。
+* 好：[CRITICAL] SQL 注入在 `db.ts:42`。查询使用字符串插值：
+  `SELECT * FROM users WHERE id = ${userId}`。修复：使用参数化查询：
+  `db.query('SELECT * FROM users WHERE id = $1', [userId])`。
 
 * 差："代码有一些问题。考虑改进错误处理，也许添加一些注释。"无文件引用、无严重性、无具体修复。
