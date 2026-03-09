@@ -15,6 +15,13 @@ export default tseslint.config(
       'no-control-regex': 'off',
       'no-useless-escape': 'warn',
       'no-useless-catch': 'warn',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "MemberExpression[object.name='fs'][property.name=/.*Sync$/]",
+          message: 'Avoid synchronous fs operations. Use fs.promises instead to prevent blocking the event loop.',
+        },
+      ],
     },
   },
   {
@@ -23,6 +30,14 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-require-imports': 'off',
+      'no-restricted-syntax': 'off', // Allow sync fs in tests
+    },
+  },
+  {
+    // CLI and installer scripts: sync fs operations are acceptable for simplicity
+    files: ['src/cli/**/*.ts', 'src/installer/**/*.ts', 'scripts/**/*.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
     },
   }
 );
