@@ -27,6 +27,7 @@ jobs:
         with:
           files: '**/*.md'
           ignore: node_modules
+          config: .markdownlint.json
 
   build:
     runs-on: ubuntu-latest
