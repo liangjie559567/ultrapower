@@ -1,5 +1,12 @@
 # ultrapower v5.6.5
 
+## 5.6.6
+
+### Patch Changes
+
+- 389a6d4: fix(ccg): address code review HIGH issues - async file I/O, monorepo detection, file type routing
+- fix(types): add type assertion for state.active in hasActiveState
+
 **发布日期**: 2026-03-09
 
 ## Bug Fixes
