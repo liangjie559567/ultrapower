@@ -103,25 +103,25 @@ async function getSgModule(): Promise<typeof import("@ast-grep/napi") | null> {
 function toLangEnum(
   sg: typeof import("@ast-grep/napi"),
   language: string,
-): import("@ast-grep/napi").Lang {
-  const langMap: Record<string, import("@ast-grep/napi").Lang> = {
+): import("@ast-grep/napi").Lang | string {
+  const langMap: Record<string, import("@ast-grep/napi").Lang | string> = {
     javascript: sg.Lang.JavaScript,
     typescript: sg.Lang.TypeScript,
     tsx: sg.Lang.Tsx,
-    python: sg.Lang.Python,
-    ruby: sg.Lang.Ruby,
-    go: sg.Lang.Go,
-    rust: sg.Lang.Rust,
-    java: sg.Lang.Java,
-    kotlin: sg.Lang.Kotlin,
-    swift: sg.Lang.Swift,
-    c: sg.Lang.C,
-    cpp: sg.Lang.Cpp,
-    csharp: sg.Lang.CSharp,
     html: sg.Lang.Html,
     css: sg.Lang.Css,
-    json: sg.Lang.Json,
-    yaml: sg.Lang.Yaml,
+    python: 'Python',
+    ruby: 'Ruby',
+    go: 'Go',
+    rust: 'Rust',
+    java: 'Java',
+    kotlin: 'Kotlin',
+    swift: 'Swift',
+    c: 'C',
+    cpp: 'Cpp',
+    csharp: 'CSharp',
+    json: 'Json',
+    yaml: 'Yaml',
   };
 
   const lang = langMap[language];

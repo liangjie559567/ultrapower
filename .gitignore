@@ -6,6 +6,8 @@ node_modules/
 .omc/state/
 .omc/logs/
 .omc/prompts/
+.omc/*-report.md
+.test-ralph-*/
 
 # Temp lint/build scripts
 *.cjs
