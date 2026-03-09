@@ -16,7 +16,7 @@ import { spawn } from 'child_process';
 import { mkdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'fs';
 import { resolve, relative, sep, isAbsolute, join } from 'path';
 import { createStdoutCollector, safeWriteOutputFile } from './shared-exec.js';
-import { detectGeminiCli, getCliCommand } from './cli-detection.js';
+import { detectGeminiCli, getCliCommand, getSpawnEnv } from './cli-detection.js';
 import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { isExternalPromptAllowed } from './mcp-config.js';
 import { resolveSystemPrompt, buildPromptWithSystemContext, wrapUntrustedFileContent, wrapUntrustedCliResponse, isValidAgentRoleName, VALID_AGENT_ROLES, singleErrorBlock, inlineSuccessBlocks } from './prompt-injection.js';
@@ -114,7 +114,8 @@ export function executeGemini(prompt: string, model?: string, cwd?: string): Pro
     const child = spawn(getCliCommand('gemini'), args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...(cwd ? { cwd } : {}),
-      shell: process.platform === 'win32'
+      shell: process.platform === 'win32',
+      env: getSpawnEnv()
     });
 
     const timeoutHandle = setTimeout(() => {
@@ -217,7 +218,8 @@ export function executeGeminiBackground(
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],
         ...(workingDirectory ? { cwd: workingDirectory } : {}),
-        shell: process.platform === 'win32'
+        shell: process.platform === 'win32',
+        env: getSpawnEnv()
       });
 
       if (!child.pid) {

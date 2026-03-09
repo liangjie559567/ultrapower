@@ -14502,6 +14502,16 @@ var import_child_process = require("child_process");
 function getCliCommand(baseName) {
   return process.platform === "win32" ? `${baseName}.cmd` : baseName;
 }
+function getSpawnEnv() {
+  const env = { ...process.env };
+  if (process.platform === "win32" && process.env.APPDATA) {
+    const npmPath = `${process.env.APPDATA}\\npm`;
+    if (!env.PATH?.includes(npmPath)) {
+      env.PATH = `${npmPath};${env.PATH || ""}`;
+    }
+  }
+  return env;
+}
 var codexCache = null;
 function detectCodexCli(useCache = true) {
   if (useCache && codexCache) return codexCache;
@@ -16791,7 +16801,8 @@ function executeCodex(prompt, model, cwd, reasoningEffort) {
     const child = (0, import_child_process3.spawn)(codexCmd, args, {
       stdio: ["pipe", "pipe", "pipe"],
       ...cwd ? { cwd } : {},
-      shell: process.platform === "win32"
+      shell: process.platform === "win32",
+      env: getSpawnEnv()
     });
     const timeoutHandle = setTimeout(() => {
       if (!settled) {
@@ -16915,7 +16926,8 @@ function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingDirector
         detached: process.platform !== "win32",
         stdio: ["pipe", "pipe", "pipe"],
         ...workingDirectory ? { cwd: workingDirectory } : {},
-        shell: process.platform === "win32"
+        shell: process.platform === "win32",
+        env: getSpawnEnv()
       });
       if (!child.pid) {
         return { error: "Failed to get process ID" };

@@ -12,7 +12,7 @@ import { spawn } from 'child_process';
 import { mkdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'fs';
 import { resolve, relative, sep, isAbsolute, join } from 'path';
 import { createStdoutCollector, safeWriteOutputFile } from './shared-exec.js';
-import { detectCodexCli, getCliCommand } from './cli-detection.js';
+import { detectCodexCli, getCliCommand, getSpawnEnv } from './cli-detection.js';
 import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { isExternalPromptAllowed } from './mcp-config.js';
 import { resolveSystemPrompt, buildPromptWithSystemContext, wrapUntrustedFileContent, wrapUntrustedCliResponse, isValidAgentRoleName, VALID_AGENT_ROLES, singleErrorBlock, inlineSuccessBlocks } from './prompt-injection.js';
@@ -230,7 +230,8 @@ export function executeCodex(prompt: string, model: string, cwd?: string, reason
     const child = spawn(codexCmd, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       ...(cwd ? { cwd } : {}),
-      shell: process.platform === 'win32'
+      shell: process.platform === 'win32',
+      env: getSpawnEnv()
     });
 
     // Manual timeout handling to ensure proper cleanup
@@ -408,7 +409,8 @@ export function executeCodexBackground(
         detached: process.platform !== 'win32',
         stdio: ['pipe', 'pipe', 'pipe'],
         ...(workingDirectory ? { cwd: workingDirectory } : {}),
-        shell: process.platform === 'win32'
+        shell: process.platform === 'win32',
+        env: getSpawnEnv()
       });
 
       if (!child.pid) {

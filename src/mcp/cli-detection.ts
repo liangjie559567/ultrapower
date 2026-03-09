@@ -15,6 +15,20 @@ export function getCliCommand(baseName: string): string {
   return process.platform === 'win32' ? `${baseName}.cmd` : baseName;
 }
 
+/**
+ * Get spawn environment with npm global path included
+ */
+export function getSpawnEnv(): NodeJS.ProcessEnv {
+  const env = { ...process.env };
+  if (process.platform === 'win32' && process.env.APPDATA) {
+    const npmPath = `${process.env.APPDATA}\\npm`;
+    if (!env.PATH?.includes(npmPath)) {
+      env.PATH = `${npmPath};${env.PATH || ''}`;
+    }
+  }
+  return env;
+}
+
 export interface CliDetectionResult {
   available: boolean;
   path?: string;
