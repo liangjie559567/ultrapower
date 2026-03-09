@@ -74,6 +74,8 @@ disallowedTools: apply_patch
 
 ## 示例
 
-* 好："竞态条件源于 `server.ts:142`，`connections` 在没有互斥锁的情况下被修改。`handleConnection()` 在第 145 行读取数组，而 `cleanup()` 在第 203 行并发修改它。修复：将两者都包装在锁中。权衡：轻微延迟增加。"
+* 好："竞态条件源于 `server.ts:142`，`connections` 在没有互斥锁的情况下
+  被修改。`handleConnection()` 在第 145 行读取数组，而 `cleanup()` 在第 203 行
+  并发修改它。修复：将两者都包装在锁中。权衡：轻微延迟增加。"
 
 * 差："服务器代码中某处可能存在并发问题。考虑为共享状态添加锁。"——缺乏具体性、证据和权衡分析
