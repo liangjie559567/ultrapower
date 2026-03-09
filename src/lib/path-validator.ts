@@ -70,17 +70,17 @@ export function validatePath(userPath: string, baseDir: string): string {
 
   // Vector 1: Path normalization (handles ../, ./, etc)
   const joined = path.join(baseDir, normalized);
-  const resolvedBase = fs.realpathSync(baseDir);
+  const resolvedBase = fs.realpathSync.native(baseDir);
 
   // Vector 3: Symlink resolution
   let resolved: string;
   try {
-    resolved = fs.realpathSync(joined);
+    resolved = fs.realpathSync.native(joined);
   } catch (_err) {
     // Path doesn't exist yet - validate parent directory
     const parent = path.dirname(joined);
     if (fs.existsSync(parent)) {
-      const resolvedParent = fs.realpathSync(parent);
+      const resolvedParent = fs.realpathSync.native(parent);
       if (!resolvedParent.startsWith(resolvedBase)) {
         throw new SecurityError('Path traversal detected via parent directory');
       }

@@ -52,7 +52,7 @@ function isSecureRuntimeDir(dir: string): boolean {
   // Must be absolute path (prevents XDG_RUNTIME_DIR="." exploits)
   if (!path.isAbsolute(dir)) return false;
   try {
-    const stat = fs.lstatSync(dir);
+    const stat = fs.lstatSync.native(dir);
     if (!stat.isDirectory() || stat.isSymbolicLink()) return false;
     // Skip uid/mode checks on Windows (not supported)
     if (process.platform !== 'win32') {

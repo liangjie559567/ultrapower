@@ -13,16 +13,20 @@ export class MetricsCollector {
 
   constructor(baseDir: string = '.omc/metrics') {
     this.metricsDir = path.resolve(baseDir);
-    this.ensureDir();
+    this.ensureDir().catch(() => {
+      // Ignore initialization errors
+    });
   }
 
-  private ensureDir(): void {
-    if (!fs.existsSync(this.metricsDir)) {
-      fs.mkdirSync(this.metricsDir, { recursive: true });
+  private async ensureDir(): Promise<void> {
+    try {
+      await fs.promises.access(this.metricsDir);
+    } catch {
+      await fs.promises.mkdir(this.metricsDir, { recursive: true });
     }
   }
 
-  record(type: Metric['type'], value: number, metadata?: Record<string, unknown>): void {
+  async record(type: Metric['type'], value: number, metadata?: Record<string, unknown>): Promise<void> {
     const metric: Metric = {
       timestamp: Date.now(),
       type,
@@ -31,52 +35,68 @@ export class MetricsCollector {
     };
 
     const file = path.join(this.metricsDir, `${type}.jsonl`);
-    fs.appendFileSync(file, JSON.stringify(metric) + '\n');
+    await fs.promises.appendFile(file, JSON.stringify(metric) + '\n');
   }
 
-  getMetrics(type: Metric['type'], since?: number): Metric[] {
+  async getMetrics(type: Metric['type'], since?: number): Promise<Metric[]> {
     const file = path.join(this.metricsDir, `${type}.jsonl`);
-    if (!fs.existsSync(file)) return [];
+    try {
+      await fs.promises.access(file);
+    } catch {
+      return [];
+    }
 
-    const lines = fs.readFileSync(file, 'utf-8').trim().split('\n').filter(Boolean);
+    const content = await fs.promises.readFile(file, 'utf-8');
+    const lines = content.trim().split('\n').filter(Boolean);
     const metrics = lines.map(line => JSON.parse(line) as Metric);
 
     return since ? metrics.filter(m => m.timestamp >= since) : metrics;
   }
 
-  getBaseline(type: Metric['type']): number | null {
+  async getBaseline(type: Metric['type']): Promise<number | null> {
     const file = path.join(this.metricsDir, 'baseline.json');
-    if (!fs.existsSync(file)) return null;
+    try {
+      await fs.promises.access(file);
+    } catch {
+      return null;
+    }
 
-    const baseline = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    const content = await fs.promises.readFile(file, 'utf-8');
+    const baseline = JSON.parse(content);
     return baseline[type] || null;
   }
 
-  setBaseline(type: Metric['type'], value: number): void {
+  async setBaseline(type: Metric['type'], value: number): Promise<void> {
     const file = path.join(this.metricsDir, 'baseline.json');
-    const baseline = fs.existsSync(file)
-      ? JSON.parse(fs.readFileSync(file, 'utf-8'))
-      : {};
+    let baseline: Record<string, number> = {};
+
+    try {
+      await fs.promises.access(file);
+      const content = await fs.promises.readFile(file, 'utf-8');
+      baseline = JSON.parse(content);
+    } catch {
+      // File doesn't exist, use empty baseline
+    }
 
     baseline[type] = value;
-    fs.writeFileSync(file, JSON.stringify(baseline, null, 2));
+    await fs.promises.writeFile(file, JSON.stringify(baseline, null, 2));
   }
 
-  exportToJSON(outputPath: string): void {
+  async exportToJSON(outputPath: string): Promise<void> {
     const types: Metric['type'][] = ['build', 'worker_health', 'worker_status', 'lsp_init', 'memory'];
     const data: Record<string, Metric[]> = {};
 
-    types.forEach(type => {
-      data[type] = this.getMetrics(type);
-    });
+    for (const type of types) {
+      data[type] = await this.getMetrics(type);
+    }
 
-    fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
+    await fs.promises.writeFile(outputPath, JSON.stringify(data, null, 2));
   }
 
-  exportToCSV(type: Metric['type'], outputPath: string): void {
-    const metrics = this.getMetrics(type);
+  async exportToCSV(type: Metric['type'], outputPath: string): Promise<void> {
+    const metrics = await this.getMetrics(type);
     if (metrics.length === 0) {
-      fs.writeFileSync(outputPath, 'timestamp,type,value\n');
+      await fs.promises.writeFile(outputPath, 'timestamp,type,value\n');
       return;
     }
 
@@ -85,6 +105,6 @@ export class MetricsCollector {
       csv.push(`${m.timestamp},${m.type},${m.value}`);
     });
 
-    fs.writeFileSync(outputPath, csv.join('\n'));
+    await fs.promises.writeFile(outputPath, csv.join('\n'));
   }
 }
