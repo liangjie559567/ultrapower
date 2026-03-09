@@ -35,7 +35,7 @@ export class QueueArchiver {
   async archive(): Promise<ArchiveResult> {
     let text: string;
     try {
-      text = fs.readFileSync(this.queueFile, 'utf-8');
+      text = await fs.promises.readFile(this.queueFile, 'utf-8');
     } catch {
       return { archived: 0, kept: 0, message: '[归档] learning_queue: 文件不存在，跳过' };
     }
@@ -63,10 +63,10 @@ export class QueueArchiver {
       const toKeep = sortedDone.slice(sortedDone.length - DONE_KEEP_COUNT);
 
       // 确保归档目录存在
-      fs.mkdirSync(path.dirname(this.archiveFile), { recursive: true });
+      await fs.promises.mkdir(path.dirname(this.archiveFile), { recursive: true });
 
       // 追加到归档文件（ID 去重）
-      const existingIds = this.loadArchiveIds();
+      const existingIds = await this.loadArchiveIds();
       const newBlocks = toArchive.filter(b => {
         const id = extractId(b);
         return id.length > 0 && !existingIds.has(id);
@@ -75,7 +75,7 @@ export class QueueArchiver {
       if (newBlocks.length > 0) {
         let archiveText = '';
         try {
-          archiveText = fs.readFileSync(this.archiveFile, 'utf-8');
+          archiveText = await fs.promises.readFile(this.archiveFile, 'utf-8');
         } catch { /* 文件不存在，从空内容开始 */ }
 
         const newArchiveText =
@@ -146,10 +146,10 @@ export class QueueArchiver {
     return { header, blocks };
   }
 
-  private loadArchiveIds(): Set<string> {
+  private async loadArchiveIds(): Promise<Set<string>> {
     const ids = new Set<string>();
     try {
-      const text = fs.readFileSync(this.archiveFile, 'utf-8');
+      const text = await fs.promises.readFile(this.archiveFile, 'utf-8');
       for (const line of text.split('\n')) {
         const m = line.match(/^### ([A-Za-z0-9-]+):/);
         if (m?.[1]) ids.add(m[1]);

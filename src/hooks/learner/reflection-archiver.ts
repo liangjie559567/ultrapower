@@ -39,7 +39,7 @@ export async function archiveReflections(
   const evolutionDir = path.join(baseDir, '.omc/axiom/evolution');
 
   // 步骤 1：确保归档目录存在
-  fs.mkdirSync(evolutionDir, { recursive: true });
+  await fs.promises.mkdir(evolutionDir, { recursive: true });
 
   // 步骤 2：获取锁
   const unlock = await acquireLock(lockPath, 30000);
@@ -48,7 +48,7 @@ export async function archiveReflections(
     // 步骤 3：读取并解析主文件
     let content: string;
     try {
-      content = fs.readFileSync(logPath, 'utf8');
+      content = await fs.promises.readFile(logPath, 'utf8');
     } catch (err) {
       const nodeErr = err as NodeJS.ErrnoException;
       if (nodeErr.code === 'ENOENT') {
@@ -76,7 +76,7 @@ export async function archiveReflections(
     const archivedContent = archivedBlocks
       .map(b => b.rawContent)
       .join('\n') + '\n';
-    fs.appendFileSync(archivePath, archivedContent, 'utf8');
+    await fs.promises.appendFile(archivePath, archivedContent, 'utf8');
 
     // 步骤 8：原子写回主文件（保留文件头 + 前 MAX_WINDOW 块）
     const fileHeader = extractFileHeader(content);
@@ -90,7 +90,7 @@ export async function archiveReflections(
     // 步骤 9：检查归档文件行数
     let warning: string | undefined;
     try {
-      const archiveContent = fs.readFileSync(archivePath, 'utf8');
+      const archiveContent = await fs.promises.readFile(archivePath, 'utf8');
       const lineCount = archiveContent.split('\n').length;
       if (lineCount > ARCHIVE_WARN_LINES) {
         warning = `[归档] 归档文件已超过 ${ARCHIVE_WARN_LINES} 行（当前 ${lineCount} 行），建议手动清理 ${REFLECTION_ARCHIVE_FILE}`;

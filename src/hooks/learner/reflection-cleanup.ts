@@ -42,10 +42,10 @@ export async function cleanupReflectionLog(
   );
 
   // 读取原文件
-  const originalContent = fs.readFileSync(reflectionLog, 'utf-8');
+  const originalContent = await fs.promises.readFile(reflectionLog, 'utf-8');
 
   // 备份原文件
-  fs.copyFileSync(reflectionLog, backupPath);
+  await fs.promises.copyFile(reflectionLog, backupPath);
 
   // 解析块列表
   const blocks = parseReflectionLog(originalContent);
