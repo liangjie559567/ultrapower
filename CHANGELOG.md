@@ -1,3 +1,16 @@
+# ultrapower v5.6.5
+
+**发布日期**: 2026-03-09
+
+## Bug Fixes
+
+- **MCP Codex 环境变量传递** - 修复同步执行模式缺少环境变量导致的 spawn ENOENT 错误
+  - 在 `codex-core.ts` 同步 spawn 调用中添加 `env: getSpawnEnv()`
+  - 确保 Windows 下 npm 全局包路径正确传递到子进程
+  - 后台模式已正确使用环境变量，本次修复同步模式
+
+---
+
 # ultrapower v5.6.4
 
 **发布日期**: 2026-03-09
