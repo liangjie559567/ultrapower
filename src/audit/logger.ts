@@ -18,11 +18,12 @@ class AuditLogger {
   private logPath: string;
   private secretKey: Buffer | null;
   private maxSize = SIZE_LIMIT.AUDIT_LOG_MAX;
+  private initPromise: Promise<void>;
 
   constructor(logDir: string) {
     this.logPath = path.join(logDir, 'audit.log');
     this.secretKey = this.deriveSecretKey();
-    this.ensureLogDir(logDir);
+    this.initPromise = this.ensureLogDir(logDir);
   }
 
   private deriveSecretKey(): Buffer | null {
@@ -39,29 +40,29 @@ class AuditLogger {
     return createHmac('sha256', this.secretKey).update(payload).digest('hex');
   }
 
-  log(entry: Omit<AuditEntry, 'timestamp' | 'signature'>): Promise<void> {
-    if (!this.secretKey) return Promise.resolve();
+  async log(entry: Omit<AuditEntry, 'timestamp' | 'signature'>): Promise<void> {
+    await this.initPromise;
+    if (!this.secretKey) return;
     const fullEntry: AuditEntry = {
       ...entry,
       timestamp: new Date().toISOString(),
     };
     fullEntry.signature = this.sign(fullEntry);
 
-    this.appendLog(JSON.stringify(fullEntry) + '\n');
-    this.rotateIfNeeded();
-    return Promise.resolve();
+    await this.appendLog(JSON.stringify(fullEntry) + '\n');
+    await this.rotateIfNeeded();
   }
 
-  private appendLog(line: string) {
-    fs.appendFileSync(this.logPath, line, 'utf8');
+  private async appendLog(line: string) {
+    await fs.promises.appendFile(this.logPath, line, 'utf8');
   }
 
-  private rotateIfNeeded() {
+  private async rotateIfNeeded() {
     try {
-      const stats = fs.statSync(this.logPath);
+      const stats = await fs.promises.stat(this.logPath);
       if (stats.size >= this.maxSize) {
         const rotatedPath = `${this.logPath}.${Date.now()}`;
-        fs.renameSync(this.logPath, rotatedPath);
+        await fs.promises.rename(this.logPath, rotatedPath);
       }
     } catch (err: unknown) {
       if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
@@ -100,9 +101,11 @@ class AuditLogger {
     }
   }
 
-  private ensureLogDir(dir: string) {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+  private async ensureLogDir(dir: string) {
+    try {
+      await fs.promises.access(dir);
+    } catch {
+      await fs.promises.mkdir(dir, { recursive: true });
     }
   }
 }
