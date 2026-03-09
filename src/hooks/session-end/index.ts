@@ -12,15 +12,17 @@ export type { SessionEndInput, SessionMetrics, HookOutput };
 /**
  * Read agent tracking to get spawn/completion counts
  */
-function getAgentCounts(directory: string): { spawned: number; completed: number } {
+async function getAgentCounts(directory: string): Promise<{ spawned: number; completed: number }> {
   const trackingPath = path.join(directory, '.omc', 'state', 'subagent-tracking.json');
 
-  if (!fs.existsSync(trackingPath)) {
+  try {
+    await fs.promises.access(trackingPath);
+  } catch {
     return { spawned: 0, completed: 0 };
   }
 
   try {
-    const content = fs.readFileSync(trackingPath, 'utf-8');
+    const content = await fs.promises.readFile(trackingPath, 'utf-8');
     const tracking = JSON.parse(content);
 
     const spawned = tracking.agents?.length || 0;
@@ -35,11 +37,13 @@ function getAgentCounts(directory: string): { spawned: number; completed: number
 /**
  * Detect which modes were used during the session
  */
-function getModesUsed(directory: string): string[] {
+async function getModesUsed(directory: string): Promise<string[]> {
   const stateDir = path.join(directory, '.omc', 'state');
   const modes: string[] = [];
 
-  if (!fs.existsSync(stateDir)) {
+  try {
+    await fs.promises.access(stateDir);
+  } catch {
     return modes;
   }
 
@@ -54,8 +58,11 @@ function getModesUsed(directory: string): string[] {
 
   for (const { file, mode } of modeStateFiles) {
     const statePath = path.join(stateDir, file);
-    if (fs.existsSync(statePath)) {
+    try {
+      await fs.promises.access(statePath);
       modes.push(mode);
+    } catch {
+      // File doesn't exist, skip
     }
   }
 
@@ -77,14 +84,15 @@ function getModesUsed(directory: string): string[] {
  * duration reflects the full session span (e.g. autopilot started before
  * ultrawork).
  */
-export function getSessionStartTime(directory: string, sessionId?: string): string | undefined {
+export async function getSessionStartTime(directory: string, sessionId?: string): Promise<string | undefined> {
   const stateDir = path.join(directory, '.omc', 'state');
 
-  if (!fs.existsSync(stateDir)) {
+  let stateFiles: string[];
+  try {
+    stateFiles = (await fs.promises.readdir(stateDir)).filter(f => f.endsWith('.json'));
+  } catch {
     return undefined;
   }
-
-  const stateFiles = fs.readdirSync(stateDir).filter(f => f.endsWith('.json'));
 
   let matchedStartTime: string | undefined;
   let matchedEpoch = Infinity;
@@ -94,7 +102,7 @@ export function getSessionStartTime(directory: string, sessionId?: string): stri
   for (const file of stateFiles) {
     try {
       const statePath = path.join(stateDir, file);
-      const content = fs.readFileSync(statePath, 'utf-8');
+      const content = await fs.promises.readFile(statePath, 'utf-8');
       const state = JSON.parse(content);
 
       if (!state.started_at) {
@@ -131,11 +139,11 @@ export function getSessionStartTime(directory: string, sessionId?: string): stri
 /**
  * Record session metrics
  */
-export function recordSessionMetrics(directory: string, input: SessionEndInput): SessionMetrics {
+export async function recordSessionMetrics(directory: string, input: SessionEndInput): Promise<SessionMetrics> {
   const endedAt = new Date().toISOString();
-  const startedAt = getSessionStartTime(directory, input.session_id);
-  const { spawned, completed } = getAgentCounts(directory);
-  const modesUsed = getModesUsed(directory);
+  const startedAt = await getSessionStartTime(directory, input.session_id);
+  const { spawned, completed } = await getAgentCounts(directory);
+  const modesUsed = await getModesUsed(directory);
 
   const metrics: SessionMetrics = {
     session_id: input.session_id,
@@ -397,7 +405,7 @@ export function exportSessionSummary(directory: string, metrics: SessionMetrics)
  */
 export async function processSessionEnd(input: SessionEndInput): Promise<HookOutput> {
   // Record and export session metrics to disk
-  const metrics = recordSessionMetrics(input.cwd, input);
+  const metrics = await recordSessionMetrics(input.cwd, input);
   exportSessionSummary(input.cwd, metrics);
 
   // Clean up transient state files

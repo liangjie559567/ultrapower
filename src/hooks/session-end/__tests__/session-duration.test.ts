@@ -44,25 +44,25 @@ afterEach(() => {
 });
 
 describe('getSessionStartTime', () => {
-  it('returns undefined when state dir does not exist', () => {
-    expect(getSessionStartTime(tmpDir, 'any-session')).toBeUndefined();
+  it('returns undefined when state dir does not exist', async () => {
+    expect(await getSessionStartTime(tmpDir, 'any-session')).toBeUndefined();
   });
 
-  it('returns undefined when no state files have started_at', () => {
+  it('returns undefined when no state files have started_at', async () => {
     writeState('ultrawork-state.json', { active: true, session_id: 'current-session' });
-    expect(getSessionStartTime(tmpDir, 'current-session')).toBeUndefined();
+    expect(await getSessionStartTime(tmpDir, 'current-session')).toBeUndefined();
   });
 
-  it('returns started_at from matching session_id', () => {
+  it('returns started_at from matching session_id', async () => {
     writeState('autopilot-state.json', {
       active: true,
       session_id: 'current-session',
       started_at: '2026-02-11T10:00:00.000Z',
     });
-    expect(getSessionStartTime(tmpDir, 'current-session')).toBe('2026-02-11T10:00:00.000Z');
+    expect(await getSessionStartTime(tmpDir, 'current-session')).toBe('2026-02-11T10:00:00.000Z');
   });
 
-  it('skips stale state files from other sessions (issue #573)', () => {
+  it('skips stale state files from other sessions (issue #573)', async () => {
     // Stale state from a session 3 days ago
     writeState('autopilot-state.json', {
       active: true,
@@ -77,12 +77,12 @@ describe('getSessionStartTime', () => {
       started_at: '2026-02-11T10:00:00.000Z',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     // Must pick current session, NOT the stale one from 3 days ago
     expect(result).toBe('2026-02-11T10:00:00.000Z');
   });
 
-  it('returns earliest started_at when multiple files match the session', () => {
+  it('returns earliest started_at when multiple files match the session', async () => {
     // Autopilot started first
     writeState('autopilot-state.json', {
       active: true,
@@ -97,23 +97,23 @@ describe('getSessionStartTime', () => {
       started_at: '2026-02-11T10:30:00.000Z',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     // Should pick the earliest to reflect the full session span
     expect(result).toBe('2026-02-11T09:00:00.000Z');
   });
 
-  it('falls back to legacy state files (no session_id) when no match', () => {
+  it('falls back to legacy state files (no session_id) when no match', async () => {
     // Legacy state without session_id
     writeState('ralph-state.json', {
       active: true,
       started_at: '2026-02-11T12:00:00.000Z',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     expect(result).toBe('2026-02-11T12:00:00.000Z');
   });
 
-  it('prefers session-matched over legacy state', () => {
+  it('prefers session-matched over legacy state', async () => {
     // Legacy state (no session_id) with earlier timestamp
     writeState('ralph-state.json', {
       active: true,
@@ -127,12 +127,12 @@ describe('getSessionStartTime', () => {
       started_at: '2026-02-11T10:00:00.000Z',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     // Should prefer the session-matched one, not the earlier legacy one
     expect(result).toBe('2026-02-11T10:00:00.000Z');
   });
 
-  it('ignores non-JSON files', () => {
+  it('ignores non-JSON files', async () => {
     const dir = stateDir();
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'swarm-active.marker'), 'active', 'utf-8');
@@ -143,10 +143,10 @@ describe('getSessionStartTime', () => {
       started_at: '2026-02-11T10:00:00.000Z',
     });
 
-    expect(getSessionStartTime(tmpDir, 'current-session')).toBe('2026-02-11T10:00:00.000Z');
+    expect(await getSessionStartTime(tmpDir, 'current-session')).toBe('2026-02-11T10:00:00.000Z');
   });
 
-  it('skips files with invalid JSON gracefully', () => {
+  it('skips files with invalid JSON gracefully', async () => {
     const dir = stateDir();
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'broken-state.json'), '{invalid json', 'utf-8');
@@ -157,20 +157,20 @@ describe('getSessionStartTime', () => {
       started_at: '2026-02-11T10:00:00.000Z',
     });
 
-    expect(getSessionStartTime(tmpDir, 'current-session')).toBe('2026-02-11T10:00:00.000Z');
+    expect(await getSessionStartTime(tmpDir, 'current-session')).toBe('2026-02-11T10:00:00.000Z');
   });
 
-  it('works without sessionId parameter (legacy call pattern)', () => {
+  it('works without sessionId parameter (legacy call pattern)', async () => {
     writeState('autopilot-state.json', {
       active: true,
       started_at: '2026-02-11T10:00:00.000Z',
     });
 
     // No sessionId passed — should still find legacy states
-    expect(getSessionStartTime(tmpDir)).toBe('2026-02-11T10:00:00.000Z');
+    expect(await getSessionStartTime(tmpDir)).toBe('2026-02-11T10:00:00.000Z');
   });
 
-  it('skips malformed timestamps and still returns valid ones', () => {
+  it('skips malformed timestamps and still returns valid ones', async () => {
     // Malformed timestamp
     writeState('autopilot-state.json', {
       active: true,
@@ -185,11 +185,11 @@ describe('getSessionStartTime', () => {
       started_at: '2026-02-11T10:00:00.000Z',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     expect(result).toBe('2026-02-11T10:00:00.000Z');
   });
 
-  it('returns undefined when all timestamps are malformed', () => {
+  it('returns undefined when all timestamps are malformed', async () => {
     writeState('autopilot-state.json', {
       active: true,
       session_id: 'current-session',
@@ -202,11 +202,11 @@ describe('getSessionStartTime', () => {
       started_at: '',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     expect(result).toBeUndefined();
   });
 
-  it('skips malformed legacy timestamps gracefully', () => {
+  it('skips malformed legacy timestamps gracefully', async () => {
     // Malformed legacy timestamp
     writeState('ralph-state.json', {
       active: true,
@@ -219,31 +219,31 @@ describe('getSessionStartTime', () => {
       started_at: '2026-02-11T14:00:00.000Z',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     expect(result).toBe('2026-02-11T14:00:00.000Z');
   });
 
-  it('returns undefined when only stale states exist and no legacy fallback', () => {
+  it('returns undefined when only stale states exist and no legacy fallback', async () => {
     writeState('autopilot-state.json', {
       active: true,
       session_id: 'completely-different-session',
       started_at: '2026-02-08T08:00:00.000Z',
     });
 
-    const result = getSessionStartTime(tmpDir, 'current-session');
+    const result = await getSessionStartTime(tmpDir, 'current-session');
     expect(result).toBeUndefined();
   });
 });
 
 describe('recordSessionMetrics - duration accuracy (issue #573)', () => {
-  it('computes correct duration when matching session state exists', () => {
+  it('computes correct duration when matching session state exists', async () => {
     writeState('ultrawork-state.json', {
       active: true,
       session_id: 'current-session',
       started_at: '2026-02-11T10:00:00.000Z',
     });
 
-    const metrics = recordSessionMetrics(tmpDir, makeInput());
+    const metrics = await recordSessionMetrics(tmpDir, makeInput());
 
     expect(metrics.started_at).toBe('2026-02-11T10:00:00.000Z');
     expect(metrics.duration_ms).toBeDefined();
@@ -251,7 +251,7 @@ describe('recordSessionMetrics - duration accuracy (issue #573)', () => {
     expect(metrics.duration_ms!).toBeGreaterThan(0);
   });
 
-  it('does not overreport duration from stale session state', () => {
+  it('does not overreport duration from stale session state', async () => {
     // Stale state from 3 days ago
     writeState('autopilot-state.json', {
       active: true,
@@ -267,7 +267,7 @@ describe('recordSessionMetrics - duration accuracy (issue #573)', () => {
       started_at: fiveMinAgo,
     });
 
-    const metrics = recordSessionMetrics(tmpDir, makeInput());
+    const metrics = await recordSessionMetrics(tmpDir, makeInput());
 
     // Duration should be ~5 minutes, not ~3 days
     expect(metrics.duration_ms).toBeDefined();
@@ -275,8 +275,8 @@ describe('recordSessionMetrics - duration accuracy (issue #573)', () => {
     expect(metrics.duration_ms!).toBeGreaterThan(0);
   });
 
-  it('returns undefined duration when no state files exist', () => {
-    const metrics = recordSessionMetrics(tmpDir, makeInput());
+  it('returns undefined duration when no state files exist', async () => {
+    const metrics = await recordSessionMetrics(tmpDir, makeInput());
 
     expect(metrics.started_at).toBeUndefined();
     expect(metrics.duration_ms).toBeUndefined();
