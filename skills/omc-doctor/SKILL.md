@@ -40,7 +40,7 @@ const d=process.env.CLAUDE_CONFIG_DIR | |p.join(h,'.claude');
 const b=p.join(d,'plugins','cache','omc','ultrapower');
 try {
   const vs=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));
-  if(!vs.length){console.log('No cache versions found');process.exit();}
+  if(!vs.length){console.log('No cache versions found');process.exit(0);}
   const latest=vs[vs.length-1];
   const pkgPath=p.join(b,latest,'package.json');
   if(f.existsSync(pkgPath)){
