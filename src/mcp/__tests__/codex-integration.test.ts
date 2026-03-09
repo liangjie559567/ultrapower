@@ -5,6 +5,11 @@ import { EventEmitter } from 'events';
 
 vi.mock('child_process');
 
+vi.mock('../cli-detection.js', () => ({
+  detectCodexCli: vi.fn(() => ({ available: true })),
+  getCliCommand: vi.fn((name: string) => process.platform === 'win32' ? `${name}.cmd` : name),
+}));
+
 class MockChildProcess extends EventEmitter {
   stdout = new EventEmitter();
   stderr = new EventEmitter();
@@ -68,7 +73,8 @@ describe('Codex Integration', () => {
       }, 10);
 
       await promise;
-      expect(spawn).toHaveBeenCalledWith('codex', expect.arrayContaining(['-c', 'model_reasoning_effort="high"']), expect.any(Object));
+      const expectedCmd = process.platform === 'win32' ? 'codex.cmd' : 'codex';
+      expect(spawn).toHaveBeenCalledWith(expectedCmd, expect.arrayContaining(['-c', 'model_reasoning_effort="high"']), expect.any(Object));
     });
   });
 });

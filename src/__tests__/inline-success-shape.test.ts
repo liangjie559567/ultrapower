@@ -13,6 +13,7 @@ import { handleAskGemini } from '../mcp/gemini-core.js';
 vi.mock('../mcp/cli-detection.js', () => ({
   detectCodexCli: vi.fn(() => ({ available: true, path: '/usr/bin/codex', version: '1.0.0', installHint: '' })),
   detectGeminiCli: vi.fn(() => ({ available: true, path: '/usr/bin/gemini', version: '1.0.0', installHint: '' })),
+  getCliCommand: vi.fn((name: string) => process.platform === 'win32' ? `${name}.cmd` : name),
   resetDetectionCache: vi.fn(),
 }));
 
