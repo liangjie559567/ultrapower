@@ -32,9 +32,14 @@ wait_for_job({ job_id: "...", timeout_ms: 60000 })
 
 ### 方案 2：超时配置
 
-已在 `.mcp.json` 中配置 25 秒超时：
-- `OMC_CODEX_TIMEOUT=25000`
-- `OMC_GEMINI_TIMEOUT=25000`
+**默认超时**（v5.6.10+）：
+- Codex: 5 分钟（300000ms）
+- Gemini: 5 分钟（300000ms）
+
+**自定义超时**（可选）：
+在 `.mcp.json` 中配置：
+- `OMC_CODEX_TIMEOUT=25000`（25秒）
+- `OMC_GEMINI_TIMEOUT=25000`（25秒）
 
 ## 最佳实践
 
