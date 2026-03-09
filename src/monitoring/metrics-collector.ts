@@ -35,33 +35,45 @@ export class MetricsCollector {
     };
 
     const file = path.join(this.metricsDir, `${type}.jsonl`);
-    await fs.promises.appendFile(file, JSON.stringify(metric) + '\n');
+    try {
+      await fs.promises.appendFile(file, JSON.stringify(metric) + '\n');
+    } catch (error) {
+      throw new Error(`Failed to record metric: ${error instanceof Error ? error.message : String(error)}`);
+    }
   }
 
   async getMetrics(type: Metric['type'], since?: number): Promise<Metric[]> {
     const file = path.join(this.metricsDir, `${type}.jsonl`);
+
+    let content: string;
     try {
-      await fs.promises.access(file);
+      content = await fs.promises.readFile(file, 'utf-8');
     } catch {
       return [];
     }
 
-    const content = await fs.promises.readFile(file, 'utf-8');
     const lines = content.trim().split('\n').filter(Boolean);
-    const metrics = lines.map(line => JSON.parse(line) as Metric);
+    const metrics = lines.map(line => {
+      try {
+        return JSON.parse(line) as Metric;
+      } catch {
+        return null;
+      }
+    }).filter((m): m is Metric => m !== null);
 
     return since ? metrics.filter(m => m.timestamp >= since) : metrics;
   }
 
   async getBaseline(type: Metric['type']): Promise<number | null> {
     const file = path.join(this.metricsDir, 'baseline.json');
+
+    let content: string;
     try {
-      await fs.promises.access(file);
+      content = await fs.promises.readFile(file, 'utf-8');
     } catch {
       return null;
     }
 
-    const content = await fs.promises.readFile(file, 'utf-8');
     const baseline = JSON.parse(content);
     return baseline[type] || null;
   }
@@ -71,7 +83,6 @@ export class MetricsCollector {
     let baseline: Record<string, number> = {};
 
     try {
-      await fs.promises.access(file);
       const content = await fs.promises.readFile(file, 'utf-8');
       baseline = JSON.parse(content);
     } catch {
@@ -79,7 +90,11 @@ export class MetricsCollector {
     }
 
     baseline[type] = value;
-    await fs.promises.writeFile(file, JSON.stringify(baseline, null, 2));
+
+    // Atomic write: temp file + rename
+    const tmpFile = `${file}.tmp`;
+    await fs.promises.writeFile(tmpFile, JSON.stringify(baseline, null, 2));
+    await fs.promises.rename(tmpFile, file);
   }
 
   async exportToJSON(outputPath: string): Promise<void> {
