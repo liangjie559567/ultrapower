@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"npm run bump -- patch\",\"description\":\"升级 patch 版本号\"}",
-  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@5.6.8 bump\n> node scripts/bump-version.mjs patch\n\nfile:///C:/Users/ljyih/Desktop/ultrapower/scripts/bump-version.mjs:50\r\n    throw new Error(`Invalid version format: ${newVersion}`);\r\n          ^\r\n\r\nError: Invalid version format: patch\r\n    at bumpVersion (file:///C:/Users/ljyih/Desktop/ultrapower/scripts/bump-version.mjs:50:11)\r\n    at file:///C:/Users/ljyih/Desktop/ultrapower/scripts/bump-version.mjs:89:5\r\n    at ModuleJob.run (node:internal/modules/es...",
-  "timestamp": "2026-03-09T13:41:12.730Z",
+  "tool_input_preview": "{\"command\":\"gh run watch 22868559692 --exit-status\",\"timeout\":300000,\"description\":\"Monitor CI workflow progress\"}",
+  "error": "Exit code 1\nRefreshing run status every 3 seconds. Press Ctrl+C to quit.\n\n* main CI liangjie559567/ultrapower#30 · 22868559692\nTriggered via push about 2 minutes ago\n\nJOBS\n* Test (ID 66341915043)\n  ✓ Set up job\n  ✓ Run actions/checkout@v4\n  ✓ Run actions/setup-node@v4\n  ✓ Run npm ci\n  ✓ Run npm run build\n  X Run npm test\n  - Run npm run lint\n  - Post Run actions/setup-node@v4\n  * Post Run actions/checkout@v4\nX main CI liangjie559567/ultrapower#30 · 22868559692\nTriggered via push about 2 minutes ...",
+  "timestamp": "2026-03-09T18:29:45.582Z",
   "retry_count": 1
 }

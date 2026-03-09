@@ -88,7 +88,7 @@ describe('acquireLock', () => {
       await acquireLock(lockPath);
       expect.fail('应该抛出错误');
     } catch (_err) {
-      expect((err as Error).message).toContain(lockPath);
+      expect((_err as Error).message).toContain(lockPath);
     } finally {
       await unlock();
     }
