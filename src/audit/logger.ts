@@ -23,7 +23,9 @@ class AuditLogger {
   constructor(logDir: string) {
     this.logPath = path.join(logDir, 'audit.log');
     this.secretKey = this.deriveSecretKey();
-    this.initPromise = this.ensureLogDir(logDir);
+    this.initPromise = this.ensureLogDir(logDir).catch(err => {
+      console.error('[AuditLogger] Failed to initialize log directory:', err);
+    });
   }
 
   private deriveSecretKey(): Buffer | null {

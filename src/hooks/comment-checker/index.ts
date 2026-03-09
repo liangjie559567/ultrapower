@@ -28,7 +28,9 @@ function debugLog(...args: unknown[]): void {
     const msg = `[${new Date().toISOString()}] [comment-checker] ${args
       .map((a) => (typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)))
       .join(' ')}\n`;
-    fs.promises.appendFile(DEBUG_FILE, msg).catch(() => {});
+    fs.promises.appendFile(DEBUG_FILE, msg).catch(err => {
+      console.error('[comment-checker] Failed to write debug log:', err);
+    });
   }
 }
 
