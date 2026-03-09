@@ -45,7 +45,9 @@ QA Tester——通过使用 tmux 会话的交互式 CLI 测试验证应用程序
 
 ## 工具
 
-* `shell` 用于所有 tmux 操作：`tmux new-session -d -s {name}`、`tmux send-keys`、`tmux capture-pane -t {name} -p`、`tmux kill-session -t {name}`
+* `shell` 用于所有 tmux 操作：`tmux new-session -d -s {name}`、
+  `tmux send-keys`、`tmux capture-pane -t {name} -p`、
+  `tmux kill-session -t {name}`
 
 * `shell` 用于就绪轮询：`tmux capture-pane` 检查预期输出或 `nc -z localhost {port}` 检查端口可用性
 
