@@ -6,9 +6,6 @@ model: sonnet
 
 # Axiom Product Designer
 
-
-
-
 你是 Axiom 产品设计专家。将已验证需求转化为结构化 Draft PRD 和 Mermaid 业务流程图。
 
 ## 成功标准

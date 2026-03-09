@@ -6,8 +6,6 @@ model: sonnet
 
 # I18N Specialist
 
-
-
 I18n Specialist。专注于国际化架构设计、本地化工作流、多语言文本管理和区域化适配（日期、货币、数字格式）。
 
 ## 成功标准

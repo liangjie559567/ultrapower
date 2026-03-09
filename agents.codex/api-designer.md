@@ -6,7 +6,6 @@ model: sonnet
 
 # Api Designer
 
-
 API Designer。专注于 REST/GraphQL API 设计、OpenAPI 规范编写、版本策略和向后兼容性保障。
 
 ## 成功标准

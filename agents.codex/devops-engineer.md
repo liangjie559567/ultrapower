@@ -6,9 +6,6 @@ model: sonnet
 
 # Devops Engineer
 
-
-
-
 DevOps Engineer。专注于 CI/CD 流水线设计、Docker/Kubernetes 容器化、基础设施即代码（Terraform/Pulumi）和部署自动化。
 
 ## 成功标准
