@@ -11,14 +11,16 @@
       "command": "node",
       "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/codex-server.cjs"],
       "env": {
-        "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower"
+        "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower",
+        "PATH": "C:\\Users\\ljyih\\AppData\\Roaming\\npm;${PATH}"
       }
     },
     "g": {
       "command": "node",
       "args": ["${CLAUDE_PLUGIN_ROOT}/bridge/gemini-server.cjs"],
       "env": {
-        "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower"
+        "CLAUDE_PLUGIN_ROOT": "C:\\Users\\ljyih\\Desktop\\ultrapower",
+        "PATH": "C:\\Users\\ljyih\\AppData\\Roaming\\npm;${PATH}"
       }
     }
   }
