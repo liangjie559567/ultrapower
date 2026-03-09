@@ -18,5 +18,5 @@ export declare function acquireLock(lockPath: string, staleMs?: number): Promise
 /**
  * 在文件锁保护下执行异步操作
  */
-export declare function withFileLock<T>(filePath: string, fn: () => T | Promise<T>, maxRetries?: number, retryDelay?: number): Promise<T>;
+export declare function withFileLock<T>(filePath: string, fn: () => T | Promise<T>, maxRetries?: number, _retryDelay?: number): Promise<T>;
 //# sourceMappingURL=file-lock.d.ts.map

@@ -988,7 +988,7 @@ function parseEnvInt(envVal, fallback) {
   return isNaN(n) ? fallback : n;
 }
 var GEMINI_DEFAULT_MODEL = process.env.OMC_GEMINI_DEFAULT_MODEL || "gemini-3-pro-preview";
-var GEMINI_TIMEOUT = Math.min(Math.max(5e3, parseEnvInt(process.env.OMC_GEMINI_TIMEOUT, 36e5)), 36e5);
+var GEMINI_TIMEOUT = Math.min(Math.max(5e3, parseEnvInt(process.env.OMC_GEMINI_TIMEOUT, 3e5)), 36e5);
 var _yoloEnv = process.env.OMC_GEMINI_YOLO;
 var GEMINI_YOLO = _yoloEnv === "false" || _yoloEnv === "0" ? false : true;
 var MAX_FILE_SIZE = 5 * 1024 * 1024;

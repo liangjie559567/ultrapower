@@ -25,7 +25,7 @@ export declare const memoryTools: ({
     };
     handler: (args: {
         workingDirectory?: string | undefined;
-        section?: "build" | "all" | "techStack" | "conventions" | "structure" | "notes" | "directives" | undefined;
+        section?: "all" | "build" | "techStack" | "conventions" | "structure" | "notes" | "directives" | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";
@@ -142,9 +142,9 @@ export declare const memoryTools: ({
     };
     handler: (args: {
         directive: string;
+        priority?: "high" | "normal" | undefined;
         context?: string | undefined;
         workingDirectory?: string | undefined;
-        priority?: "high" | "normal" | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";

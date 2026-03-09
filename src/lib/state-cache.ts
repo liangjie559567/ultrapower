@@ -29,7 +29,11 @@ export function readStateWithCache(path: string, data: unknown, ttl: number = 50
 
     // Cache hit: mtime matches and within TTL
     if (cached && cached.mtime === mtime && Date.now() - cached.cachedAt < ttl) {
-      return { ...cached.data }; // Shallow copy (Copy-on-Write)
+      // Shallow copy (Copy-on-Write) - only if data is an object
+      if (typeof cached.data === 'object' && cached.data !== null) {
+        return { ...cached.data as Record<string, unknown> };
+      }
+      return cached.data;
     }
 
     // Cache miss: update cache

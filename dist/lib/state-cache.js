@@ -19,7 +19,11 @@ export function readStateWithCache(path, data, ttl = 5000) {
         const cached = stateCache.get(path);
         // Cache hit: mtime matches and within TTL
         if (cached && cached.mtime === mtime && Date.now() - cached.cachedAt < ttl) {
-            return { ...cached.data }; // Shallow copy (Copy-on-Write)
+            // Shallow copy (Copy-on-Write) - only if data is an object
+            if (typeof cached.data === 'object' && cached.data !== null) {
+                return { ...cached.data };
+            }
+            return cached.data;
         }
         // Cache miss: update cache
         stateCache.set(path, { data, mtime, cachedAt: Date.now() });

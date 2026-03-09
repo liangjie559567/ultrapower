@@ -146,6 +146,7 @@ export class FileStateAdapter {
             return [];
         }
         try {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { readdirSync } = require('fs');
             const entries = readdirSync(sessionsDir, { withFileTypes: true });
             return entries

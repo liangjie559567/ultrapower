@@ -27,7 +27,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
       }
 
       const dbPath = join(stateDir, 'workers.db');
-      this.db = new (DatabaseConstructor as typeof Database)(dbPath) as Database;
+      this.db = new (DatabaseConstructor as any)(dbPath) as Database;
       if (this.db) {
         this.db.pragma('journal_mode = WAL');
         this.db.exec(`

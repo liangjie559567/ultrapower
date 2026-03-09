@@ -99,7 +99,7 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
         }
       }
 
-      return readStateWithCache(stateFile, state);
+      return readStateWithCache(stateFile, state) as T | null;
     } catch {
       return null;
     }

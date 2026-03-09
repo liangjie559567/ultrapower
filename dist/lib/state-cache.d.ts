@@ -11,7 +11,7 @@
  * @param ttl - Cache TTL in milliseconds (default: 5000ms)
  * @returns Shallow copy of cached data
  */
-export declare function readStateWithCache(path: string, data: any, ttl?: number): any;
+export declare function readStateWithCache(path: string, data: unknown, ttl?: number): unknown;
 /**
  * Invalidate cache entry for a path
  */

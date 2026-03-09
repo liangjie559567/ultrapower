@@ -59,7 +59,7 @@ export async function acquireLock(lockPath, staleMs = 30000) {
 /**
  * 在文件锁保护下执行异步操作
  */
-export async function withFileLock(filePath, fn, maxRetries = 20, retryDelay = 100) {
+export async function withFileLock(filePath, fn, maxRetries = 20, _retryDelay = 100) {
     const lockPath = `${filePath}.lock`;
     const lockFile = path.join(lockPath, 'lock.json');
     // Ensure parent directories exist for both file and lock
