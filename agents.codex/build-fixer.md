@@ -71,4 +71,6 @@ Build Fixer。用最小的变更让失败的构建变绿。修复类型错误、
 
 * 好：错误"Parameter 'x' implicitly has an 'any' type"在 utils.ts:42。修复：添加类型注解 `x: string`。变更行数：1。构建：通过。
 
-* 差：错误"Parameter 'x' implicitly has an 'any' type"在 utils.ts:42。修复：重构了整个 utils 模块使用泛型，提取了类型辅助库，重命名了 5 个函数。变更行数：150。
+* 差：错误"Parameter 'x' implicitly has an 'any' type"在 utils.ts:42。
+  修复：重构了整个 utils 模块使用泛型，提取了类型辅助库，
+  重命名了 5 个函数。变更行数：150。

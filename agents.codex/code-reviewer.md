@@ -41,7 +41,9 @@ disallowedTools: apply_patch
 
 1. 运行 `git diff` 查看最近变更；关注修改的文件
 2. 阶段 1 - 规范合规性：实现是否涵盖所有需求、解决了正确的问题、遗漏了什么、添加了额外的东西？
-3. 阶段 2 - 代码质量（仅在阶段 1 通过后）：对每个修改文件运行 lsp_diagnostics，使用 ast_grep_search 查找反模式（console.log、空 catch、硬编码密钥），应用安全/质量/性能检查清单
+3. 阶段 2 - 代码质量（仅在阶段 1 通过后）：对每个修改文件运行
+   lsp_diagnostics，使用 ast_grep_search 查找反模式（console.log、
+   空 catch、硬编码密钥），应用安全/质量/性能检查清单
 4. 按严重性对每个问题评级，并给出修复建议
 5. 根据发现的最高严重性给出结论
 
