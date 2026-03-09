@@ -1,95 +1,19 @@
 # Knowledge Base
 
-## Entries
+## Patterns
 
-### KB-001: Skill Frontmatter 必需字段
+### MCP 超时配置
+**置信度：** 高（已验证）
+**应用：** 在 .mcp.json 中设置 OMC_CODEX_TIMEOUT=25000 和 OMC_GEMINI_TIMEOUT=25000
+**原因：** MCP 客户端默认超时小于 CLI 执行时间会导致 AbortError
 
-**置信度**: 95%
-**来源**: v5.6.0 测试失败分析
-**内容**: 所有 skill 必须包含 YAML frontmatter，包含 `name` 和 `description` 字段
-**验证**: skills.test.ts 强制验证
-**应用场景**: 创建新 skill 时
+### 退出码规范
+**置信度：** 高（已验证）
+**应用：** 诊断脚本正常退出使用 process.exit(0)
+**原因：** process.exit() 默认返回 1（错误状态）
 
-### KB-002: 测试同步三要素
+## Insights
 
-**置信度**: 100%
-**来源**: ccg-workflow skill 集成
-**内容**: 新增 skill 需同步更新：
-1. skill 数量断言 (toHaveLength)
-2. expectedSkills 数组
-3. listBuiltinSkillNames 测试
-**验证**: 所有测试通过
-**应用场景**: skill 增删时
-
-### KB-003: npm Provenance 环境限制
-
-**置信度**: 90%
-**来源**: 本地发布失败
-**内容**: `npm publish --provenance` 仅在 GitHub Actions 中可用，本地发布需 `--no-provenance`
-**验证**: 成功发布 v5.6.0
-**应用场景**: 手动发布流程
-
-### KB-004: CCG 功能模块化设计模式
-
-**置信度**: 90%
-**来源**: CCG workflow routing 实现
-**内容**: 新功能应拆分为独立模块（detector/router/sanitizer/workflow），通过统一入口点组合，避免单体文件膨胀
-**验证**: ccg-skill.ts 仅 31 行，职责清晰
-**应用场景**: 添加新功能模块时
-
-### KB-005: Ultrapilot 可选功能扩展模式
-
-**置信度**: 95%
-**来源**: Architect 任务分解集成
-**内容**: 向后兼容的功能扩展应通过可选配置标志（useAIDecomposition）+ 默认值（false）实现，保持既有行为不变
-**验证**: 所有 6411 测试通过，无破坏性变更
-**应用场景**: 扩展现有系统功能时
-
-### KB-006: 增量功能开发模式
-
-**置信度**: 95%
-**来源**: CCG Workflow 路由增强实现
-**内容**: 复杂功能应分 3 个 Phase 实现，每个 Phase 独立测试和提交：Phase 1 技术栈检测（5 测试）、Phase 2 项目结构分析（5 测试）、Phase 3 智能任务分配（5 测试）
-**验证**: 所有 6426 测试通过，每个 Phase 独立可验证
-**应用场景**: 实现跨多个模块的复杂功能时
-
-### KB-007: 文件类型路由模式
-
-**置信度**: 90%
-**来源**: CCG task-assigner 实现
-**内容**: 基于文件扩展名进行任务分配：UI 文件（.tsx/.jsx/.vue/.css）→ Gemini，逻辑文件（.ts/.js）→ Codex，测试文件 → Codex，混合变更 → Claude 协调
-**验证**: 5 个测试用例覆盖所有路由场景
-**应用场景**: 多模型协作系统的任务路由设计
-
-### KB-008: 异步文件 I/O 最佳实践
-
-**置信度**: 95%
-**来源**: CCG 代码审查修复
-**内容**: Node.js 中始终使用 fs.promises 而非同步操作（fs.existsSync/readFileSync），避免阻塞事件循环
-**验证**: 修复后所有 6426 测试通过，性能提升
-**应用场景**: 所有涉及文件系统操作的代码
-
-### KB-009: 代码审查分级修复策略
-
-**置信度**: 90%
-**来源**: CCG 代码审查流程
-**内容**: 代码审查问题按严重程度分级修复：CRITICAL/HIGH 优先修复，MEDIUM/LOW 可延后。确保关键问题优先解决
-**验证**: 3 个 HIGH 问题全部修复后验证通过
-**应用场景**: 代码审查反馈处理流程
-
-### KB-010: 异步初始化模式
-
-**置信度**: 90%
-**来源**: 异步 fs 重构 - audit/logger.ts
-**内容**: 构造函数需要异步操作时，使用 initPromise 模式：构造函数中创建 Promise，操作方法中 await Promise，捕获初始化错误防止静默失败
-**验证**: 所有 6426 测试通过，错误可观测性提升
-**应用场景**: 类初始化需要异步操作（文件 I/O、网络请求）
-
-### KB-011: 双 API 重构策略
-
-**置信度**: 95%
-**来源**: state-manager 异步重构
-**内容**: 大规模 API 迁移（sync → async）应采用双 API 模式：保留现有同步 API，新增异步 API (xxxAsync)，渐进迁移调用方，最终废弃同步 API
-**验证**: 零破坏性变更，35 处调用方无需立即修改
-**应用场景**: 影响面大的 API 重构（>20 处调用方）
-
+### CCG 工作流诊断策略
+**发现：** 使用 debugger agent 可以快速定位 MCP 和脚本问题
+**应用：** 老项目 Bug 修复流程
