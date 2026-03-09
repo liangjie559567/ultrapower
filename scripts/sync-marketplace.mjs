@@ -8,6 +8,7 @@ const rootMarketplace = JSON.parse(readFileSync('marketplace.json', 'utf8'));
 
 // 同步版本号
 marketplace.plugins[0].version = pkg.version;
+marketplace.plugins[0].source.version = pkg.version;
 plugin.version = pkg.version;
 rootMarketplace.version = pkg.version;
 
