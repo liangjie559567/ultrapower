@@ -14,6 +14,6 @@ export function readStateFile(mode: string, cwd: string): unknown {
 }
 
 export function hasActiveState(mode: string, cwd: string): boolean {
-  const state = readStateFile(mode, cwd);
+  const state = readStateFile(mode, cwd) as { active?: boolean } | null;
   return state?.active === true;
 }
