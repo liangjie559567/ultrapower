@@ -36,6 +36,7 @@
 * `<Final_Checklist>` -> 删除（Codex 自主处理）或压缩为最多 2-3 条
 
 ### 2. 工具名称映射
+
 * `Read` -> `read_file` / 使用 `multi_tool_use.parallel` 批量处理
 * `Write` -> `apply_patch`（编辑）或 `write_file`（新文件）
 * `Edit` -> `apply_patch`
@@ -47,6 +48,7 @@
 * `ask_gemini` -> 保留（MCP 工具引用）
 
 ### 3. 平铺和压缩
+
 * 最多为原始行数的 60%
 * 无嵌套项目符号层级
 * 全程使用主动语态
@@ -55,6 +57,7 @@
 * 类似条目使用平行措辞
 
 ### 4. 自主性优先框架
+
 * 移除"you must"/"you are required to" -> 直接陈述要做什么
 * 移除明确的"do not stop"/"keep working"指令
 * 移除明确的输出模板（让模型使用自然结构）
@@ -62,6 +65,7 @@
 * 移除 `<Final_Checklist>` 部分（Codex 自我验证）
 
 ### 5. 保留语义内容
+
 * 保留角色身份和边界（负责/不负责）
 * 保留核心领域专业知识和调查模式
 * 保留好/差示例（重新格式化为纯文本）
@@ -69,6 +73,7 @@
 * 在 frontmatter 中保留 disallowedTools
 
 ### 6. Codex 特定添加
+
 * 在适当位置添加"偏向行动"框架
 * 为探索 agent 添加"使用 multi_tool_use.parallel 批量读取"
 * 为实现 agent 添加"使用 apply_patch 进行单文件编辑"
