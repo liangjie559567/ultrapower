@@ -39,5 +39,12 @@ export default tseslint.config(
     rules: {
       'no-restricted-syntax': 'off',
     },
+  },
+  {
+    // State manager: sync fs allowed (provides both sync and async APIs)
+    files: ['src/features/state-manager/**/*.ts', 'src/lib/atomic-write.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
+    },
   }
 );
