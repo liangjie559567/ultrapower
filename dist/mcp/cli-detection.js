@@ -5,6 +5,13 @@
  * Results are cached per-session to avoid repeated filesystem checks.
  */
 import { spawnSync } from 'child_process';
+/**
+ * Get platform-specific CLI command name
+ * On Windows, npm global binaries need .cmd extension
+ */
+export function getCliCommand(baseName) {
+    return process.platform === 'win32' ? `${baseName}.cmd` : baseName;
+}
 // Session-level cache for detection results
 let codexCache = null;
 let geminiCache = null;
@@ -16,6 +23,7 @@ export function detectCodexCli(useCache = true) {
         return codexCache;
     const installHint = 'Install Codex CLI: npm install -g @openai/codex';
     try {
+        const codexCmd = getCliCommand('codex');
         const cmd = process.platform === 'win32' ? 'where' : 'which';
         const pathResult = spawnSync(cmd, ['codex'], { encoding: 'utf-8', timeout: 5000 });
         if (pathResult.status !== 0)
@@ -23,7 +31,7 @@ export function detectCodexCli(useCache = true) {
         const path = pathResult.stdout.trim();
         let version;
         try {
-            const versionResult = spawnSync('codex', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+            const versionResult = spawnSync(codexCmd, ['--version'], { encoding: 'utf-8', timeout: 5000 });
             if (versionResult.status === 0)
                 version = versionResult.stdout.trim();
         }
@@ -52,6 +60,7 @@ export function detectGeminiCli(useCache = true) {
         return geminiCache;
     const installHint = 'Install Gemini CLI: npm install -g @google/gemini-cli (see https://github.com/google-gemini/gemini-cli)';
     try {
+        const geminiCmd = getCliCommand('gemini');
         const cmd = process.platform === 'win32' ? 'where' : 'which';
         const pathResult = spawnSync(cmd, ['gemini'], { encoding: 'utf-8', timeout: 5000 });
         if (pathResult.status !== 0)
@@ -59,7 +68,7 @@ export function detectGeminiCli(useCache = true) {
         const path = pathResult.stdout.trim();
         let version;
         try {
-            const versionResult = spawnSync('gemini', ['--version'], { encoding: 'utf-8', timeout: 5000 });
+            const versionResult = spawnSync(geminiCmd, ['--version'], { encoding: 'utf-8', timeout: 5000 });
             if (versionResult.status === 0)
                 version = versionResult.stdout.trim();
         }

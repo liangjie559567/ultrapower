@@ -14499,18 +14499,22 @@ init_define_AGENT_PROMPTS_CODEX();
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
 var import_child_process = require("child_process");
+function getCliCommand(baseName) {
+  return process.platform === "win32" ? `${baseName}.cmd` : baseName;
+}
 var codexCache = null;
 function detectCodexCli(useCache = true) {
   if (useCache && codexCache) return codexCache;
   const installHint = "Install Codex CLI: npm install -g @openai/codex";
   try {
+    const codexCmd = getCliCommand("codex");
     const cmd = process.platform === "win32" ? "where" : "which";
     const pathResult = (0, import_child_process.spawnSync)(cmd, ["codex"], { encoding: "utf-8", timeout: 5e3 });
     if (pathResult.status !== 0) throw new Error("codex not found");
     const path = pathResult.stdout.trim();
     let version2;
     try {
-      const versionResult = (0, import_child_process.spawnSync)("codex", ["--version"], { encoding: "utf-8", timeout: 5e3 });
+      const versionResult = (0, import_child_process.spawnSync)(codexCmd, ["--version"], { encoding: "utf-8", timeout: 5e3 });
       if (versionResult.status === 0) version2 = versionResult.stdout.trim();
     } catch {
     }
@@ -16782,7 +16786,7 @@ function executeCodex(prompt, model, cwd, reasoningEffort) {
     if (reasoningEffort && VALID_REASONING_EFFORTS.includes(reasoningEffort)) {
       args.push("-c", `model_reasoning_effort="${reasoningEffort}"`);
     }
-    const child = (0, import_child_process3.spawn)("codex", args, {
+    const child = (0, import_child_process3.spawn)(getCliCommand("codex"), args, {
       stdio: ["pipe", "pipe", "pipe"],
       ...cwd ? { cwd } : {},
       shell: false
@@ -16905,7 +16909,7 @@ function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingDirector
       if (reasoningEffort && VALID_REASONING_EFFORTS.includes(reasoningEffort)) {
         args.push("-c", `model_reasoning_effort="${reasoningEffort}"`);
       }
-      const child = (0, import_child_process3.spawn)("codex", args, {
+      const child = (0, import_child_process3.spawn)(getCliCommand("codex"), args, {
         detached: process.platform !== "win32",
         stdio: ["pipe", "pipe", "pipe"],
         ...workingDirectory ? { cwd: workingDirectory } : {},

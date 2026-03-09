@@ -14347,18 +14347,22 @@ Suggested: remove the symlink and retry`;
 init_define_AGENT_PROMPTS();
 init_define_AGENT_ROLES();
 var import_child_process = require("child_process");
+function getCliCommand(baseName) {
+  return process.platform === "win32" ? `${baseName}.cmd` : baseName;
+}
 var geminiCache = null;
 function detectGeminiCli(useCache = true) {
   if (useCache && geminiCache) return geminiCache;
   const installHint = "Install Gemini CLI: npm install -g @google/gemini-cli (see https://github.com/google-gemini/gemini-cli)";
   try {
+    const geminiCmd = getCliCommand("gemini");
     const cmd = process.platform === "win32" ? "where" : "which";
     const pathResult = (0, import_child_process.spawnSync)(cmd, ["gemini"], { encoding: "utf-8", timeout: 5e3 });
     if (pathResult.status !== 0) throw new Error("gemini not found");
     const path = pathResult.stdout.trim();
     let version2;
     try {
-      const versionResult = (0, import_child_process.spawnSync)("gemini", ["--version"], { encoding: "utf-8", timeout: 5e3 });
+      const versionResult = (0, import_child_process.spawnSync)(geminiCmd, ["--version"], { encoding: "utf-8", timeout: 5e3 });
       if (versionResult.status === 0) version2 = versionResult.stdout.trim();
     } catch {
     }
@@ -16540,7 +16544,7 @@ function executeGemini(prompt, model, cwd) {
     if (model) {
       args.push("--model", model);
     }
-    const child = (0, import_child_process3.spawn)("gemini", args, {
+    const child = (0, import_child_process3.spawn)(getCliCommand("gemini"), args, {
       stdio: ["pipe", "pipe", "pipe"],
       ...cwd ? { cwd } : {},
       shell: false
@@ -16615,7 +16619,7 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
     const trySpawnWithModel = (tryModel, remainingModels) => {
       validateModelName(tryModel);
       const args = ["-p=.", ...GEMINI_YOLO ? ["--yolo"] : [], "--model", tryModel];
-      const child = (0, import_child_process3.spawn)("gemini", args, {
+      const child = (0, import_child_process3.spawn)(getCliCommand("gemini"), args, {
         detached: process.platform !== "win32",
         stdio: ["pipe", "pipe", "pipe"],
         ...workingDirectory ? { cwd: workingDirectory } : {},

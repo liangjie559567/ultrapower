@@ -4,6 +4,11 @@
  * Detects whether Codex and Gemini CLIs are installed and available on the system PATH.
  * Results are cached per-session to avoid repeated filesystem checks.
  */
+/**
+ * Get platform-specific CLI command name
+ * On Windows, npm global binaries need .cmd extension
+ */
+export declare function getCliCommand(baseName: string): string;
 export interface CliDetectionResult {
     available: boolean;
     path?: string;
