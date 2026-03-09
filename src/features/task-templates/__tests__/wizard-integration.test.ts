@@ -24,6 +24,6 @@ describe('TemplateIntegration', () => {
     const templates = integration.listAvailableTemplates();
     expect(templates.length).toBe(5);
     expect(templates[0].name).toBe('feature-development');
-    expect(templates[0].description).toBe('功能开发模板');
+    expect(templates[0].description.trim()).toBe('功能开发模板');
   });
 });

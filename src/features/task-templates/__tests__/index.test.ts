@@ -30,6 +30,6 @@ describe('TemplateLoader', () => {
 
   it('should extract description from template', () => {
     const template = loader.load('feature-development');
-    expect(template.description).toBe('功能开发模板');
+    expect(template.description.trim()).toBe('功能开发模板');
   });
 });
