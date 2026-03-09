@@ -77,7 +77,7 @@ describe('loadAgentPrompt', () => {
 
     test('loadAgentPrompt with codex provider returns flat markdown style', () => {
       const prompt = loadAgentPrompt('architect', 'codex');
-      expect(prompt).toContain('**Role**');
+      expect(prompt).toContain('# Architect');
     });
 
     test('loadAgentPrompt with codex provider falls back for nonexistent agent', () => {
