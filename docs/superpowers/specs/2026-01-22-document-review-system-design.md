@@ -18,7 +18,7 @@ Both follow the iterative loop pattern used by implementation reviews.
 **What it checks for:**
 
 | Category | What to Look For |
-|----------|------------------|
+| ---------- | ------------------ |
 | Completeness | TODOs, placeholders, "TBD", incomplete sections |
 | Coverage | Missing error handling, edge cases, integration points |
 | Consistency | Internal contradictions, conflicting requirements |
@@ -27,15 +27,18 @@ Both follow the iterative loop pattern used by implementation reviews.
 
 **Output format:**
 ```
+
 ## Spec Review
 
 **Status:** Approved | Issues Found
 
 **Issues (if any):**
-- [Section X]: [issue] - [why it matters]
+
+* [Section X]: [issue] - [why it matters]
 
 **Recommendations (advisory):**
-- [suggestions that don't block approval]
+
+* [suggestions that don't block approval]
 ```
 
 **Review loop:** Issues found -> brainstorming agent fixes -> re-review -> repeat until approved.
@@ -51,7 +54,7 @@ Both follow the iterative loop pattern used by implementation reviews.
 **What it checks for:**
 
 | Category | What to Look For |
-|----------|------------------|
+| ---------- | ------------------ |
 | Completeness | TODOs, placeholders, incomplete tasks |
 | Spec Alignment | Plan covers spec requirements, no scope creep |
 | Task Decomposition | Tasks atomic, clear boundaries |
@@ -101,9 +104,10 @@ brainstorming -> spec -> SPEC REVIEW LOOP -> writing-plans -> plan -> PLAN REVIE
 Tasks and steps use checkbox syntax:
 
 ```markdown
-- [ ] ### Task 1: Name
 
-- [ ] **Step 1:** Description
+* [ ] ### Task 1: Name
+
+* [ ] **Step 1:** Description
   - File: path
   - Command: cmd
 ```
@@ -111,26 +115,39 @@ Tasks and steps use checkbox syntax:
 ## Error Handling
 
 **Review loop termination:**
-- No hard iteration limit - loops continue until reviewer approves
-- If loop exceeds 5 iterations, the controller should surface this to the human for guidance
-- The human can choose to: continue iterating, approve with known issues, or abort
+
+* No hard iteration limit - loops continue until reviewer approves
+
+* If loop exceeds 5 iterations, the controller should surface this to the human for guidance
+
+* The human can choose to: continue iterating, approve with known issues, or abort
 
 **Disagreement handling:**
-- Reviewers are advisory - they flag issues but don't block
-- If the agent believes reviewer feedback is incorrect, it should explain why in its fix
-- If disagreement persists after 3 iterations on the same issue, surface to human
+
+* Reviewers are advisory - they flag issues but don't block
+
+* If the agent believes reviewer feedback is incorrect, it should explain why in its fix
+
+* If disagreement persists after 3 iterations on the same issue, surface to human
 
 **Malformed reviewer output:**
-- Controller should validate reviewer output has required fields (Status, Issues if applicable)
-- If malformed, re-dispatch reviewer with a note about expected format
-- After 2 malformed responses, surface to human
+
+* Controller should validate reviewer output has required fields (Status, Issues if applicable)
+
+* If malformed, re-dispatch reviewer with a note about expected format
+
+* After 2 malformed responses, surface to human
 
 ## Files to Change
 
 **New files:**
-- `skills/brainstorming/spec-document-reviewer-prompt.md`
-- `skills/writing-plans/plan-document-reviewer-prompt.md`
+
+* `skills/brainstorming/spec-document-reviewer-prompt.md`
+
+* `skills/writing-plans/plan-document-reviewer-prompt.md`
 
 **Modified files:**
-- `skills/brainstorming/SKILL.md` - add review loop after spec written
-- `skills/writing-plans/SKILL.md` - add chunk-by-chunk review loop, update task syntax examples
+
+* `skills/brainstorming/SKILL.md` - add review loop after spec written
+
+* `skills/writing-plans/SKILL.md` - add chunk-by-chunk review loop, update task syntax examples

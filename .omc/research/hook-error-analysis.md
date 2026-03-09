@@ -24,8 +24,10 @@
 ```
 
 **影响范围：**
-- 除 `permission-request` 外的所有 hook 类型
-- 包括关键的 `session-end`、`pre-compact`、`subagent-start/stop` 等
+
+* 除 `permission-request` 外的所有 hook 类型
+
+* 包括关键的 `session-end`、`pre-compact`、`subagent-start/stop` 等
 
 **潜在后果：**
 1. 状态文件写入失败被忽略，导致状态不一致
@@ -35,10 +37,14 @@
 [/FINDING]
 
 [EVIDENCE:H1]
-- File: src/hooks/bridge.ts
-- Lines: 1280-1288
-- Content: 全局 catch 块默认返回 `{ continue: true }`
-- Context: 仅 permission-request 实现了 fail-closed 策略
+
+* File: src/hooks/bridge.ts
+
+* Lines: 1280-1288
+
+* Content: 全局 catch 块默认返回 `{ continue: true }`
+
+* Context: 仅 permission-request 实现了 fail-closed 策略
 [/EVIDENCE]
 
 [CONFIDENCE:HIGH]
@@ -70,14 +76,22 @@ case "ralph":
 ```
 
 **缺少验证的 hook 类型：**
-- `keyword-detector`
-- `stop-continuation`
-- `ralph`
-- `persistent-mode`
-- `session-start`
-- `pre-tool-use`
-- `post-tool-use`
-- `autopilot`
+
+* `keyword-detector`
+
+* `stop-continuation`
+
+* `ralph`
+
+* `persistent-mode`
+
+* `session-start`
+
+* `pre-tool-use`
+
+* `post-tool-use`
+
+* `autopilot`
 
 **潜在后果：**
 1. 处理函数内部可能访问 undefined 字段导致运行时错误
@@ -87,10 +101,14 @@ case "ralph":
 [/FINDING]
 
 [EVIDENCE:H2]
-- File: src/hooks/bridge.ts
-- Lines: 1136-1228
-- Content: switch-case 中仅 4 个 hook 类型调用 validateHookInput
-- Pattern: 懒加载的 hook（session-end, subagent-*, pre-compact, setup, permission-request）有验证，热路径 hook 无验证
+
+* File: src/hooks/bridge.ts
+
+* Lines: 1136-1228
+
+* Content: switch-case 中仅 4 个 hook 类型调用 validateHookInput
+
+* Pattern: 懒加载的 hook（session-end, subagent-*, pre-compact, setup, permission-request）有验证，热路径 hook 无验证
 [/EVIDENCE]
 
 [CONFIDENCE:HIGH]
@@ -128,16 +146,22 @@ const REQUIRED_KEYS: Record<string, string[]> = {
   'permission-request': ['toolName'],
 };
 ```
-- `permission-request` 仅要求 `toolName`，但白名单允许 8 个字段
-- 多余的 6 个字段（toolInput, directory, permission_mode, tool_use_id, transcript_path, agent_id）未被标记为必需，但可以传递
+
+* `permission-request` 仅要求 `toolName`，但白名单允许 8 个字段
+
+* 多余的 6 个字段（toolInput, directory, permission_mode, tool_use_id, transcript_path, agent_id）未被标记为必需，但可以传递
 
 [/FINDING]
 
 [EVIDENCE:H3]
-- File: src/hooks/bridge-normalize.ts
-- Lines: 114-125
-- Content: STRICT_WHITELIST 与 REQUIRED_KEYS 定义不对称
-- Security Impact: toolInput 和 agent_id 字段可能成为攻击向量
+
+* File: src/hooks/bridge-normalize.ts
+
+* Lines: 114-125
+
+* Content: STRICT_WHITELIST 与 REQUIRED_KEYS 定义不对称
+
+* Security Impact: toolInput 和 agent_id 字段可能成为攻击向量
 [/EVIDENCE]
 
 [CONFIDENCE:MEDIUM]
@@ -180,8 +204,10 @@ try {
 ```
 
 **使用情况统计：**
-- `safeJsonParse` 使用：bridge.ts（2 处）
-- 裸 `JSON.parse` 使用：autopilot/state.ts, agent-usage-reminder/storage.ts, 多个测试文件
+
+* `safeJsonParse` 使用：bridge.ts（2 处）
+
+* 裸 `JSON.parse` 使用：autopilot/state.ts, agent-usage-reminder/storage.ts, 多个测试文件
 
 **潜在后果：**
 1. 错误信息丢失，难以调试状态文件损坏问题
@@ -191,10 +217,14 @@ try {
 [/FINDING]
 
 [EVIDENCE:H4]
-- File: src/lib/safe-json.ts (安全实现)
-- File: src/hooks/autopilot/state.ts:98 (不安全使用)
-- File: src/hooks/agent-usage-reminder/storage.ts:30 (不安全使用)
-- Pattern: 状态管理模块普遍使用裸 JSON.parse + 空 catch
+
+* File: src/lib/safe-json.ts (安全实现)
+
+* File: src/hooks/autopilot/state.ts:98 (不安全使用)
+
+* File: src/hooks/agent-usage-reminder/storage.ts:30 (不安全使用)
+
+* Pattern: 状态管理模块普遍使用裸 JSON.parse + 空 catch
 [/EVIDENCE]
 
 [CONFIDENCE:HIGH]
@@ -216,10 +246,10 @@ export function assertValidMode(mode: unknown): ValidMode {
   if (!validateMode(mode)) {
     // 检测路径遍历字符
     if (typeof mode === 'string' && (
-      mode.includes('..') ||
-      mode.includes('/') ||
-      mode.includes('\\') ||
-      mode.startsWith('.') ||
+      mode.includes('..') | |
+      mode.includes('/') | |
+      mode.includes('\\') | |
+      mode.startsWith('.') | |
       /^[a-zA-Z]:/.test(mode)
     )) {
       throw new Error(`Path traversal attempt detected: "${display}"`);
@@ -256,16 +286,22 @@ agent_id = "../../../tmp/malicious"
 ```
 
 **现有防护措施：**
-- `path.join()` 会规范化路径，但不会阻止遍历到父目录
-- 文件系统权限可能限制实际危害，但不应作为唯一防线
+
+* `path.join()` 会规范化路径，但不会阻止遍历到父目录
+
+* 文件系统权限可能限制实际危害，但不应作为唯一防线
 
 [/FINDING]
 
 [EVIDENCE:H5]
-- File: src/lib/validateMode.ts (仅验证 mode)
-- File: src/hooks/bridge.ts:165 (sessionId 未验证)
-- File: src/hooks/bridge.ts:1181-1186 (directory, agent_id 未验证)
-- Reference: docs/standards/runtime-protection.md 应该定义这些验证规则
+
+* File: src/lib/validateMode.ts (仅验证 mode)
+
+* File: src/hooks/bridge.ts:165 (sessionId 未验证)
+
+* File: src/hooks/bridge.ts:1181-1186 (directory, agent_id 未验证)
+
+* Reference: docs/standards/runtime-protection.md 应该定义这些验证规则
 [/EVIDENCE]
 
 [CONFIDENCE:HIGH]
@@ -314,7 +350,7 @@ export async function withTimeout<T>(fn: () => Promise<T>, options: TimeoutOptio
    - 操作成功返回 undefined
    - 操作超时返回 undefined
    - 操作失败返回 fallback
-3. **未广泛应用**：bridge.ts 中未见 `withTimeout` 的使用
+1. **未广泛应用**：bridge.ts 中未见 `withTimeout` 的使用
 
 **正确的超时模式应该是：**
 ```typescript
@@ -343,10 +379,14 @@ export async function withTimeout<T>(
 [/FINDING]
 
 [EVIDENCE:H6]
-- File: src/hooks/timeout-wrapper.ts:17-51
-- Issue 1: fn() 不接收 AbortSignal 参数
-- Issue 2: 返回类型 T | undefined 存在歧义
-- Issue 3: bridge.ts 中未使用 withTimeout
+
+* File: src/hooks/timeout-wrapper.ts:17-51
+
+* Issue 1: fn() 不接收 AbortSignal 参数
+
+* Issue 2: 返回类型 T | undefined 存在歧义
+
+* Issue 3: bridge.ts 中未使用 withTimeout
 [/EVIDENCE]
 
 [CONFIDENCE:HIGH]
@@ -363,12 +403,12 @@ export async function withTimeout<T>(
 2. [H1] 全局错误处理静默失败 - 为关键 hook（session-end, pre-compact）实现 fail-fast
 
 **P1（短期修复）：**
-3. [H2] 输入验证不一致 - 为所有 hook 类型添加必需字段校验
-4. [H4] JSON 解析不一致 - 全面采用 safeJsonParse
+1. [H2] 输入验证不一致 - 为所有 hook 类型添加必需字段校验
+2. [H4] JSON 解析不一致 - 全面采用 safeJsonParse
 
 **P2（中期改进）：**
-5. [H3] 敏感 hook 白名单过于宽松 - 审查并收紧 STRICT_WHITELIST
-6. [H6] 超时机制不完整 - 重新设计或移除未使用的 timeout-wrapper
+1. [H3] 敏感 hook 白名单过于宽松 - 审查并收紧 STRICT_WHITELIST
+2. [H6] 超时机制不完整 - 重新设计或移除未使用的 timeout-wrapper
 
 ### 架构建议
 
@@ -377,12 +417,12 @@ export async function withTimeout<T>(
    - Critical hook 失败应阻止执行（fail-fast）
    - Warning hook 失败应记录但继续（当前行为）
 
-2. **输入验证框架**：
+1. **输入验证框架**：
    - 使用 Zod schema 为每个 hook 类型定义输入契约
    - 在 bridge-normalize 中集成 schema 验证
    - 生成类型安全的 HookInput 子类型
 
-3. **路径安全库**：
+1. **路径安全库**：
    - 创建 `validatePathInput(input: string, context: string): string` 通用函数
    - 集成到所有路径构造点
    - 添加审计日志记录可疑输入

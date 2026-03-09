@@ -12,7 +12,7 @@ critical_path: T-01 → T-03 → T-08
 ## Impact Scope
 
 | 文件 | 变更类型 | 任务 |
-|------|---------|------|
+| ------ | --------- | ------ |
 | `src/lib/plugin-registry.ts` | CREATE | T-01 |
 | `src/features/__tests__/plugin-registry.test.ts` | CREATE | T-02 |
 | `src/features/auto-update.ts` | MODIFY | T-03, T-05, T-06 |
@@ -38,7 +38,7 @@ T-01 (plugin-registry.ts) → T-02 (tests)                    T-08 (CI Gate)
 ## 任务清单
 
 | ID | 任务 | 估时 | 依赖 | 状态 |
-|----|------|------|------|------|
+| ---- | ------ | ------ | ------ | ------ |
 | T-01 | 创建 `src/lib/plugin-registry.ts` | M | - | done |
 | T-02 | 单元测试 `plugin-registry.test.ts` | M | T-01 | done |
 | T-03 | 修改 `performUpdate()` plugin 分支 | M | T-01 | done |

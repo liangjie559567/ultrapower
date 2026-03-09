@@ -10,9 +10,12 @@
 3. Review recent changes
 
 **Solutions**:
-- Close unnecessary applications
-- Reduce concurrent operations
-- Optimize hook logic
+
+* Close unnecessary applications
+
+* Reduce concurrent operations
+
+* Optimize hook logic
 
 ## Memory Leak
 
@@ -24,18 +27,27 @@
 3. Review agent lifecycle
 
 **Solutions**:
-- Close file handles properly
-- Clear caches periodically
-- Restart long-running sessions
+
+* Close file handles properly
+
+* Clear caches periodically
+
+* Restart long-running sessions
 
 ## High CPU Usage
 
 **Causes**:
-- Too many parallel agents
-- Infinite loops in hooks
-- Large file processing
+
+* Too many parallel agents
+
+* Infinite loops in hooks
+
+* Large file processing
 
 **Solutions**:
-- Limit concurrent agents
-- Add loop guards
-- Process files in chunks
+
+* Limit concurrent agents
+
+* Add loop guards
+
+* Process files in chunks

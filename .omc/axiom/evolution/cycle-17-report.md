@@ -39,14 +39,20 @@ const mockIsSocket = vi.spyOn(bridgeManager, 'isSocket').mockReturnValue(true);
 ```
 
 **验证指标:**
-- 修复前：4/17 测试超时（30s）
-- 修复后：17/17 测试通过（25s）
-- 性能提升：测试时间减少 5s
+
+* 修复前：4/17 测试超时（30s）
+
+* 修复后：17/17 测试通过（25s）
+
+* 性能提升：测试时间减少 5s
 
 **适用场景:**
-- 测试包含轮询循环的异步函数（while/for + sleep/await）
-- 测试包含条件等待的函数（waitFor、waitUntil 模式）
-- 测试包含重试逻辑的函数
+
+* 测试包含轮询循环的异步函数（while/for + sleep/await）
+
+* 测试包含条件等待的函数（waitFor、waitUntil 模式）
+
+* 测试包含重试逻辑的函数
 
 **检查清单扩展（基于 Cycle 15 的 TEST-MOCK-001）:**
 1. Mock 所有外部依赖（fs、child_process、网络调用）
@@ -71,17 +77,26 @@ const mockIsSocket = vi.spyOn(bridgeManager, 'isSocket').mockReturnValue(true);
 ## 工作流指标
 
 **本周期统计：**
-- 处理的学习队列条目：1 个
-- 提取的新模式：1 个
-- HIGH 置信度模式：1 个
-- 知识库条目增长：+1（从 71 到 72）
-- 新增分类：testing（首次出现）
+
+* 处理的学习队列条目：1 个
+
+* 提取的新模式：1 个
+
+* HIGH 置信度模式：1 个
+
+* 知识库条目增长：+1（从 71 到 72）
+
+* 新增分类：testing（首次出现）
 
 **累计指标：**
-- 总模式数：72 个
-- 分类数：8 个
-- 平均置信度：HIGH (0.93)
-- 模式应用成功率：>95%
+
+* 总模式数：72 个
+
+* 分类数：8 个
+
+* 平均置信度：HIGH (0.93)
+
+* 模式应用成功率：>95%
 
 ---
 

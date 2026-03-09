@@ -10,11 +10,16 @@
 ### [FINDING-1] 插件使用"自动组件发现"机制，不依赖 plugin.json 中的声明
 
 Claude Code 的插件系统采用**目录扫描自动发现**机制：
-- `agents/` 目录中的所有 `.md` 文件自动加载为 subagents
-- `hooks/hooks.json` 自动加载为 hook 配置
-- `skills/` 目录中包含 `SKILL.md` 的子目录自动发现
-- `commands/` 目录中的 `.md` 文件自动加载为 slash commands
-- `.mcp.json` 自动加载为 MCP 服务器配置
+
+* `agents/` 目录中的所有 `.md` 文件自动加载为 subagents
+
+* `hooks/hooks.json` 自动加载为 hook 配置
+
+* `skills/` 目录中包含 `SKILL.md` 的子目录自动发现
+
+* `commands/` 目录中的 `.md` 文件自动加载为 slash commands
+
+* `.mcp.json` 自动加载为 MCP 服务器配置
 
 **关键点**: plugin.json 中的 `commands`、`agents`、`skills`、`hooks` 字段是**补充路径**（supplement），不是替代默认目录。即使 plugin.json 中不声明这些字段，验证器仍会扫描默认目录。
 

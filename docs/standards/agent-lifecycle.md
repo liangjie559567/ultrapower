@@ -15,17 +15,17 @@
    - 1.3 成本超限（Excessive Cost）
    - 1.4 死锁检测（Deadlock）
    - 1.5 文件冲突（File Conflict）
-2. [SubagentStopInput.success 废弃说明](#2-subagentstopinutsuccess-废弃说明)
+1. [SubagentStopInput.success 废弃说明](#2-subagentstopinutsuccess-废弃说明)
    - 2.1 废弃原因
    - 2.2 推断机制替代方案
    - 2.3 迁移指南
-3. [孤儿 Agent 检测与清理](#3-孤儿-agent-检测与清理)
+1. [孤儿 Agent 检测与清理](#3-孤儿-agent-检测与清理)
    - 3.1 孤儿 Agent 定义
    - 3.2 session-end hook 清理机制
    - 3.3 清理流程详解
-4. [关键常量汇总](#4-关键常量汇总)
-5. [AgentIntervention 接口规范](#5-agentintervention-接口规范)
-6. [并发保护与状态合并](#6-并发保护与状态合并)
+1. [关键常量汇总](#4-关键常量汇总)
+2. [AgentIntervention 接口规范](#5-agentintervention-接口规范)
+3. [并发保护与状态合并](#6-并发保护与状态合并)
 
 ---
 
@@ -36,7 +36,7 @@
 ### 1.1 超时（Timeout）
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 检测阈值 | `STALE_THRESHOLD_MS = 5 * 60 * 1000`（5 分钟） | `subagent-tracker/index.ts` |
 | 警告触发 | agent 运行超过 5 分钟 | `getStaleAgents()` |
 | 自动终止触发 | agent 运行超过 **10 分钟** | `suggestInterventions()` |
@@ -78,7 +78,7 @@ function suggestInterventions(agents: SubagentInfo[]): AgentIntervention[] {
 ### 1.2 孤儿状态（Orphan）
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 定义 | 父会话已结束但 agent 记录仍存在于 tracking 文件中 | session-end hook |
 | 检测时机 | `SessionEnd` 事件触发时 | `session-end/index.ts` |
 | 处理策略 | 删除整个 `subagent-tracking.json` 文件 | `cleanupTransientState()` |
@@ -89,7 +89,7 @@ function suggestInterventions(agents: SubagentInfo[]): AgentIntervention[] {
 ### 1.3 成本超限（Excessive Cost）
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 常量名 | `COST_LIMIT_USD` | `subagent-tracker/index.ts` |
 | 限制值 | `1.0`（美元） | 代码定义 |
 | 检测字段 | `agent.token_usage.cost_usd` | `suggestInterventions()` |
@@ -117,7 +117,7 @@ if (agent.token_usage && agent.token_usage.cost_usd > COST_LIMIT_USD) {
 ### 1.4 死锁检测（Deadlock）
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 常量名 | `DEADLOCK_CHECK_THRESHOLD` | `subagent-tracker/index.ts` |
 | 阈值值 | `3` | 代码定义 |
 | 实现状态 | **常量已定义，检测逻辑未实现** | 差异点 D-10 |
@@ -143,7 +143,7 @@ export const DEADLOCK_CHECK_THRESHOLD = 3; // 已定义但未使用
 ### 1.5 文件冲突（File Conflict）
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 检测函数 | `detectFileConflicts()` | `subagent-tracker/index.ts` |
 | 检测条件 | 同一文件被多个 `RUNNING` 状态的 agent 修改 | `detectFileConflicts()` |
 | 处理策略 | 生成 `AgentIntervention`，`suggested_action: "warn"` | `suggestInterventions()` |
@@ -176,9 +176,12 @@ export interface SubagentStopInput {
 ```
 
 **废弃背景**：
-- SDK 在 `SubagentStop` 事件中不传递 `success` 字段
-- 历史代码依赖此字段判断 agent 是否成功完成
-- 直接读取 `input.success` 会导致始终得到 `undefined`，进而错误地将所有 agent 标记为失败
+
+* SDK 在 `SubagentStop` 事件中不传递 `success` 字段
+
+* 历史代码依赖此字段判断 agent 是否成功完成
+
+* 直接读取 `input.success` 会导致始终得到 `undefined`，进而错误地将所有 agent 标记为失败
 
 ### 2.2 推断机制替代方案
 
@@ -193,15 +196,18 @@ const succeeded = input.success !== false;
 **推断规则**：
 
 | `input.success` 值 | `succeeded` 结果 | 说明 |
-|---------------------|-----------------|------|
+| --------------------- | ----------------- | ------ |
 | `undefined`（SDK 默认） | `true` | SDK 不提供此字段，默认视为成功 |
 | `true` | `true` | 显式成功（向后兼容） |
 | `false` | `false` | 显式失败（向后兼容） |
 
 **设计理由**：
-- `input.success !== false` 等价于"除非明确为 false，否则视为成功"
-- 这是对 SDK 行为的最保守假设：agent 完成即视为成功
-- 保留向后兼容性：如果未来 SDK 提供此字段，`false` 值仍能正确处理
+
+* `input.success !== false` 等价于"除非明确为 false，否则视为成功"
+
+* 这是对 SDK 行为的最保守假设：agent 完成即视为成功
+
+* 保留向后兼容性：如果未来 SDK 提供此字段，`false` 值仍能正确处理
 
 ### 2.3 迁移指南
 
@@ -237,10 +243,14 @@ const succeeded = input.success !== false;
 **孤儿 Agent**：父会话（parent session）已通过 `SessionEnd` 事件结束，但 agent 的状态记录仍存在于 `subagent-tracking.json` 中的 agent。
 
 **产生原因**：
-- 会话异常终止（`reason: "other"`）
-- 用户强制退出（`reason: "logout"`）
-- 上下文清除（`reason: "clear"`）
-- Agent 在会话结束时仍处于 `RUNNING` 或 `WAITING` 状态
+
+* 会话异常终止（`reason: "other"`）
+
+* 用户强制退出（`reason: "logout"`）
+
+* 上下文清除（`reason: "clear"`）
+
+* Agent 在会话结束时仍处于 `RUNNING` 或 `WAITING` 状态
 
 ### 3.2 session-end hook 清理机制
 
@@ -291,7 +301,7 @@ export function cleanupModeStates(directory: string, sessionId?: string): {
 **清理范围**：
 
 | 文件 | 清理条件 |
-|------|---------|
+| ------ | --------- |
 | `subagent-tracking.json` | 无条件删除（所有孤儿 agent 记录） |
 | `autopilot-state.json` | `active=true` 且 session_id 匹配 |
 | `ultrapilot-state.json` | `active=true` 且 session_id 匹配 |
@@ -309,7 +319,7 @@ export function cleanupModeStates(directory: string, sessionId?: string): {
 ```typescript
 // 防止跨会话误清理
 const stateSessionId = state.session_id as string | undefined;
-if (!sessionId || !stateSessionId || stateSessionId === sessionId) {
+if (!sessionId | | !stateSessionId | | stateSessionId === sessionId) {
   // 清理：无 sessionId 参数 OR 状态无 session_id（旧版）OR session_id 匹配
   fs.unlinkSync(localPath);
 }
@@ -323,7 +333,7 @@ if (!sessionId || !stateSessionId || stateSessionId === sessionId) {
 来源：`src/hooks/subagent-tracker/index.ts`
 
 | 常量名 | 值 | 用途 | 导出状态 |
-|--------|-----|------|---------|
+| -------- | ----- | ------ | --------- |
 | `COST_LIMIT_USD` | `1.0` | 单 agent 成本上限（美元） | `export const` |
 | `DEADLOCK_CHECK_THRESHOLD` | `3` | 死锁检测阈值（未实现） | `export const` |
 | `STALE_THRESHOLD_MS` | `5 * 60 * 1000`（5 分钟） | Agent stale 检测阈值 | 模块内部 |
@@ -363,7 +373,7 @@ export interface AgentIntervention {
 **各类型的默认行为**：
 
 | `type` | `suggested_action` | `auto_execute` | 实现状态 |
-|--------|-------------------|----------------|---------|
+| -------- | ------------------- | ---------------- | --------- |
 | `timeout` | `"kill"` | `elapsed > 10`（10 分钟后为 true） | ✅ 已实现 |
 | `excessive_cost` | `"warn"` | `false` | ✅ 已实现 |
 | `file_conflict` | `"warn"` | `false` | ✅ 已实现 |
@@ -371,8 +381,9 @@ export interface AgentIntervention {
 
 **`auto_execute` 语义**：
 
-- `true`：系统自动执行 `suggested_action`，无需人工确认
-- `false`：仅生成建议，需人工或上层逻辑决定是否执行
+* `true`：系统自动执行 `suggested_action`，无需人工确认
+
+* `false`：仅生成建议，需人工或上层逻辑决定是否执行
 
 ---
 
@@ -453,9 +464,12 @@ TaskUpdate({ taskId: "4", addBlockedBy: ["2", "3"] });
 ```
 
 **规范要求**：
-- 依赖关系必须在任务创建后立即声明
-- 禁止隐式依赖（agent 内部轮询其他任务状态）
-- 依赖图必须是 DAG（无环图），循环依赖会导致死锁
+
+* 依赖关系必须在任务创建后立即声明
+
+* 禁止隐式依赖（agent 内部轮询其他任务状态）
+
+* 依赖图必须是 DAG（无环图），循环依赖会导致死锁
 
 ### 7.2 反模式：Agent 内部轮询
 
@@ -508,7 +522,7 @@ TaskUpdate({ taskId: "6", addBlockedBy: ["4", "5"] });
 ### 7.4 预期收益
 
 | 场景 | 时间节省 | 证据 |
-|------|---------|------|
+| ------ | --------- | ------ |
 | P0 修复（6 任务） | 70% | v5.5.18 (20h → 2h) |
 | 文档项目（10 任务） | 99.4% | v5.5.18 用户指南 (28h → 10min) |
 | 代码审查（5 维度） | 80% | v5.5.18 综合审查 |
@@ -518,7 +532,7 @@ TaskUpdate({ taskId: "6", addBlockedBy: ["4", "5"] });
 ## 差异点说明
 
 | 差异点 | 描述 | 当前状态 | 规范要求 |
-|--------|------|---------|---------|
+| -------- | ------ | --------- | --------- |
 | D-07 | subagent-tracker 内部写入 | `writeFileSync` 直接写入（无原子保护） | v2 统一为 atomicWriteJsonSync |
 | D-08 | 超时阈值双重含义 | 5 分钟（stale 检测）vs 10 分钟（自动终止） | 必须区分，不得混淆 |
 | D-10 | 死锁检测未实现 | `DEADLOCK_CHECK_THRESHOLD = 3` 已定义，逻辑未实现 | v2 实现死锁检测逻辑 |

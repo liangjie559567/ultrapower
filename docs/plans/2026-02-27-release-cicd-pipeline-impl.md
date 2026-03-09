@@ -13,7 +13,8 @@
 ### Task 1: 创建共享核心 `scripts/release-steps.mjs`
 
 **Files:**
-- Create: `scripts/release-steps.mjs`
+
+* Create: `scripts/release-steps.mjs`
 
 **Step 1: 写失败测试**
 
@@ -115,11 +116,11 @@ export async function publishNpm(opts = {}) {
 
 export async function createGithubRelease(opts = {}) {
   const { version, notes = '', dryRun = false } = opts;
-  const v = version || getVersion();
+  const v = version | | getVersion();
   try {
     const notesFlag = notes ? `--notes "${notes}"` : '--generate-notes';
     run(`gh release create v${v} ${notesFlag}`, dryRun);
-    return { success: true, url: `https://github.com/liangjie559567/ultrapower/releases/tag/v${v}` };
+    return { success: true, url: `<https://github.com/liangjie559567/ultrapower/releases/tag/v${v}`> };
   } catch (err) {
     return { success: false, url: '', output: err.message };
   }
@@ -127,7 +128,7 @@ export async function createGithubRelease(opts = {}) {
 
 export async function syncMarketplace(opts = {}) {
   const { version, dryRun = false } = opts;
-  const v = version || getVersion();
+  const v = version | | getVersion();
   try {
     // marketplace.json version 字段由 release skill 手动更新，此步骤负责 git commit + push
     run(`git add .claude-plugin/marketplace.json`, dryRun);
@@ -149,7 +150,7 @@ export async function runReleasePipeline(opts = {}) {
     process.exit(1);
   }
 
-  const v = version || getVersion();
+  const v = version | | getVersion();
 
   if (startIdx <= 0) {
     console.log('Step 1/4: validateBuild...');
@@ -199,8 +200,10 @@ git commit -m "feat(release): add shared release-steps.mjs core with dry-run sup
 ### Task 2: 创建本地入口 `scripts/release-local.mjs`
 
 **Files:**
-- Create: `scripts/release-local.mjs`
-- Modify: `package.json` (scripts 字段)
+
+* Create: `scripts/release-local.mjs`
+
+* Modify: `package.json` (scripts 字段)
 
 **Step 1: 写失败测试**
 
@@ -303,7 +306,8 @@ git commit -m "feat(release): add release-local.mjs entry point and package.json
 ### Task 3: 创建 GitHub Actions Workflow
 
 **Files:**
-- Create: `.github/workflows/release.yml`
+
+* Create: `.github/workflows/release.yml`
 
 **Step 1: 写 workflow 语法验证测试**
 
@@ -343,7 +347,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: '<https://registry.npmjs.org'>
           cache: 'npm'
       - run: npm ci
       - run: node scripts/release-steps.mjs publish
@@ -384,7 +388,7 @@ jobs:
 const cliStep = process.argv[2];
 if (cliStep && ['validate', 'publish', 'release', 'sync'].includes(cliStep)) {
   const dryRun = process.argv.includes('--dry-run');
-  const version = process.env.GITHUB_REF_NAME?.replace(/^v/, '') || undefined;
+  const version = process.env.GITHUB_REF_NAME?.replace(/^v/, '') | | undefined;
   const stepMap = { validate: validateBuild, publish: publishNpm, release: createGithubRelease, sync: syncMarketplace };
   stepMap[cliStep]({ dryRun, version }).then(r => {
     if (!r.success) { console.error(`Step ${cliStep} failed`); process.exit(1); }
@@ -423,21 +427,26 @@ git commit -m "feat(ci): add GitHub Actions release workflow with 4-job dependen
 ### Task 4: 更新 `skills/release/SKILL.md`
 
 **Files:**
-- Modify: `skills/release/SKILL.md`
+
+* Modify: `skills/release/SKILL.md`
 
 **Step 1: 在"发布步骤"末尾添加 CI 说明**
 
 在 `### 4. 创建并推送 Tag` 步骤之后，`### 5. 刷新本地 marketplace 缓存` 之前，插入：
 
 ```markdown
+
 ### 4b. GitHub Actions 自动接管（推荐）
 
 执行 `git push --tags` 后，GitHub Actions 自动接管后续步骤：
-- **npm 发布**（`publish` job）
-- **GitHub Release 创建**（`github-release` job）
-- **marketplace.json 版本同步**（`marketplace-sync` job）
 
-在 GitHub Actions 页面查看进度：https://github.com/liangjie559567/ultrapower/actions
+* **npm 发布**（`publish` job）
+
+* **GitHub Release 创建**（`github-release` job）
+
+* **marketplace.json 版本同步**（`marketplace-sync` job）
+
+在 GitHub Actions 页面查看进度：<https://github.com/liangjie559567/ultrapower/actions>
 
 如需手动执行（紧急发布或 CI 不可用）：
 ```bash
@@ -501,7 +510,9 @@ ls .github/workflows/release.yml
 
 ```bash
 git status
+
 # 确认无未提交变更
+
 ```
 
 ---
@@ -509,7 +520,7 @@ git status
 ## 任务队列
 
 | ID | 名称 | 依赖 | 并行组 | 预估 |
-|----|------|------|--------|------|
+| ---- | ------ | ------ | -------- | ------ |
 | T1 | 创建 release-steps.mjs | 无 | G1 | 30min |
 | T2 | 创建 release-local.mjs + package.json | T1 | G2 | 20min |
 | T3 | 创建 GitHub Actions workflow | T1 | G2 | 20min |

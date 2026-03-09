@@ -5,23 +5,32 @@ Category-based delegation system that layers on top of the ComplexityTier system
 ## Overview
 
 Categories provide a high-level semantic interface for delegation while maintaining full compatibility with the underlying ComplexityTier system. Each category maps to:
-- **Complexity Tier**: LOW, MEDIUM, or HIGH (which determines the model)
-- **Temperature**: Controls randomness/creativity (0-1)
-- **Thinking Budget**: Token budget for extended thinking
-- **Prompt Appendix**: Category-specific guidance
+
+* **Complexity Tier**: LOW, MEDIUM, or HIGH (which determines the model)
+
+* **Temperature**: Controls randomness/creativity (0-1)
+
+* **Thinking Budget**: Token budget for extended thinking
+
+* **Prompt Appendix**: Category-specific guidance
 
 ## Categories
 
 ### visual-engineering
+
 **Tier:** HIGH | **Temperature:** 0.7 | **Thinking:** high (10k tokens)
 
 For UI/visual reasoning, frontend work, design systems, and aesthetic decisions.
 
 **Best for:**
-- Component design and styling
-- Layout and responsive design
-- Visual hierarchy and accessibility
-- Animation and interaction design
+
+* Component design and styling
+
+* Layout and responsive design
+
+* Visual hierarchy and accessibility
+
+* Animation and interaction design
 
 **Example:**
 ```typescript
@@ -30,15 +39,20 @@ const config = resolveCategory('visual-engineering');
 ```
 
 ### ultrabrain
+
 **Tier:** HIGH | **Temperature:** 0.3 | **Thinking:** max (32k tokens)
 
 For complex reasoning, architecture decisions, deep debugging, and systematic analysis.
 
 **Best for:**
-- Architecture and design patterns
-- Complex debugging and root cause analysis
-- Performance optimization
-- Concurrency and race condition analysis
+
+* Architecture and design patterns
+
+* Complex debugging and root cause analysis
+
+* Performance optimization
+
+* Concurrency and race condition analysis
 
 **Example:**
 ```typescript
@@ -47,15 +61,20 @@ const config = resolveCategory('ultrabrain');
 ```
 
 ### artistry
+
 **Tier:** MEDIUM | **Temperature:** 0.9 | **Thinking:** medium (5k tokens)
 
 For creative writing, novel approaches, and innovative solutions.
 
 **Best for:**
-- Creative problem-solving
-- Novel approaches to challenges
-- Brainstorming and ideation
-- Exploratory design
+
+* Creative problem-solving
+
+* Novel approaches to challenges
+
+* Brainstorming and ideation
+
+* Exploratory design
 
 **Example:**
 ```typescript
@@ -64,15 +83,20 @@ const config = resolveCategory('artistry');
 ```
 
 ### quick
+
 **Tier:** LOW | **Temperature:** 0.1 | **Thinking:** low (1k tokens)
 
 For simple lookups, straightforward tasks, and basic operations.
 
 **Best for:**
-- Finding files or functions
-- Simple search operations
-- Basic information retrieval
-- Quick status checks
+
+* Finding files or functions
+
+* Simple search operations
+
+* Basic information retrieval
+
+* Quick status checks
 
 **Example:**
 ```typescript
@@ -81,15 +105,20 @@ const config = resolveCategory('quick');
 ```
 
 ### writing
+
 **Tier:** MEDIUM | **Temperature:** 0.5 | **Thinking:** medium (5k tokens)
 
 For documentation, technical writing, and content creation.
 
 **Best for:**
-- API documentation
-- README files
-- Technical guides and tutorials
-- Code comments and explanations
+
+* API documentation
+
+* README files
+
+* Technical guides and tutorials
+
+* Code comments and explanations
 
 **Example:**
 ```typescript
@@ -98,6 +127,7 @@ const config = resolveCategory('writing');
 ```
 
 ### unspecified-low / unspecified-high
+
 **Tiers:** LOW / HIGH | **Default categories**
 
 Used when no specific category is detected or when explicit tiers are provided.
@@ -236,19 +266,28 @@ npx tsx src/features/delegation-categories/test-categories.ts
 ```
 
 Tests cover:
-- Category resolution
-- Validation
-- Auto-detection from prompts
-- Explicit category/tier handling
-- Backward compatibility
-- Prompt enhancement
+
+* Category resolution
+
+* Validation
+
+* Auto-detection from prompts
+
+* Explicit category/tier handling
+
+* Backward compatibility
+
+* Prompt enhancement
 
 ## Integration Points
 
 This system integrates with:
-- **Model Routing** (`src/features/model-routing/`): Categories resolve to ComplexityTier
-- **Task Delegation**: Categories can be specified when delegating to agents
-- **Orchestration**: Orchestrator can use categories for semantic routing
+
+* **Model Routing** (`src/features/model-routing/`): Categories resolve to ComplexityTier
+
+* **Task Delegation**: Categories can be specified when delegating to agents
+
+* **Orchestration**: Orchestrator can use categories for semantic routing
 
 ## Design Decisions
 
@@ -261,7 +300,11 @@ This system integrates with:
 ## Future Extensions
 
 Potential enhancements:
-- Agent-specific category defaults
-- User-defined custom categories
-- Category learning from successful delegations
-- Dynamic category detection using model analysis
+
+* Agent-specific category defaults
+
+* User-defined custom categories
+
+* Category learning from successful delegations
+
+* Dynamic category detection using model analysis

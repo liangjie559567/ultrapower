@@ -4,12 +4,13 @@
 # src/hud/elements/
 
 ## Purpose
+
 HUD 元素组件目录。包含各 HUD 显示元素的 TypeScript 实现，如 agent 状态、autopilot、Axiom、git 信息等。
 
 ## Key Files
 
 | File | Description |
-|------|-------------|
+| ------ | ------------- |
 | `agents.ts` | Agent 状态 HUD 元素 |
 | `autopilot.ts` | Autopilot 模式 HUD 元素 |
 | `axiom.ts` | Axiom 状态 HUD 元素 |
@@ -34,12 +35,15 @@ HUD 元素组件目录。包含各 HUD 显示元素的 TypeScript 实现，如 a
 ## For AI Agents
 
 ### 修改此目录时
-- 运行测试：`npm test`
-- 参见父级目录了解被测模块实现
+
+* 运行测试：`npm test`
+
+* 参见父级目录了解被测模块实现
 
 ## Dependencies
 
 ### Internal
-- `src/hud/` — 相关模块
+
+* `src/hud/` — 相关模块
 
 <!-- MANUAL: -->

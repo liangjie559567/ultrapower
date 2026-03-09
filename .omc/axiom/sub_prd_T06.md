@@ -40,7 +40,10 @@ lines.push(updateInstruction);
 
 ## 验收标准
 
-- [ ] plugin 模式：通知只显示 `/plugin install ultrapower`
-- [ ] npm 模式：通知只显示 `/update`
-- [ ] 不再同时显示两个命令
-- [ ] TypeScript 编译无错误
+* [ ] plugin 模式：通知只显示 `/plugin install ultrapower`
+
+* [ ] npm 模式：通知只显示 `/update`
+
+* [ ] 不再同时显示两个命令
+
+* [ ] TypeScript 编译无错误

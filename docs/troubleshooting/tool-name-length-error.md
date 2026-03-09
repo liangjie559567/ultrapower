@@ -46,7 +46,7 @@ ultrapower omc-setup
 v5.5.16 中的修复（提交 f9f2967）将工具名称缩短：
 
 | 旧名称 | 新名称 |
-|--------|--------|
+| -------- | -------- |
 | `ultrapower_project_memory_read` | `mem_read` |
 | `ultrapower_project_memory_write` | `mem_write` |
 | `ultrapower_project_memory_add_note` | `mem_add_note` |

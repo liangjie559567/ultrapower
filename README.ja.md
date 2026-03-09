@@ -20,7 +20,7 @@
 
 **ステップ 1: インストール**
 ```bash
-/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin marketplace add <<https://github.com/liangjie559567/ultrapower>>
 /plugin install omc@ultrapower
 ```
 
@@ -41,10 +41,13 @@ autopilot: build a REST API for managing tasks
 ### アップデート
 
 ```bash
+
 # 1. マーケットプレイスクローンを更新
+
 /plugin marketplace update omc
 
 # 2. セットアップを再実行して設定を更新
+
 /omc:omc-setup
 ```
 
@@ -66,23 +69,30 @@ autopilot: build a REST API for managing tasks
 
 ## なぜ ultrapower なのか?
 
-- **設定不要** - 賢いデフォルト設定ですぐに使える
-- **自然言語インターフェース** - コマンドを覚える必要なし、やりたいことを話すだけ
-- **自動並列化** - 複雑なタスクを専門エージェントに自動分散
-- **粘り強い実行** - 検証完了まで諦めない
-- **コスト最適化** - スマートなモデルルーティングでトークンを30〜50%節約
-- **経験から学習** - 問題解決パターンを自動抽出して再利用
-- **リアルタイム可視化** - HUD ステータスラインで裏側の動きが見える
+* **設定不要** - 賢いデフォルト設定ですぐに使える
+
+* **自然言語インターフェース** - コマンドを覚える必要なし、やりたいことを話すだけ
+
+* **自動並列化** - 複雑なタスクを専門エージェントに自動分散
+
+* **粘り強い実行** - 検証完了まで諦めない
+
+* **コスト最適化** - スマートなモデルルーティングでトークンを30〜50%節約
+
+* **経験から学習** - 問題解決パターンを自動抽出して再利用
+
+* **リアルタイム可視化** - HUD ステータスラインで裏側の動きが見える
 
 ---
 
 ## 機能
 
 ### 実行モード
+
 用途に応じた複数の戦略 - 完全自律ビルドからトークン効率の良いリファクタリングまで。[詳しくはこちら →](https://yeachan-heo.github.io/ultrapower-website/docs.html#execution-modes)
 
 | モード | スピード | 用途 |
-|------|-------|------|
+| ------ | ------- | ------ |
 | **Autopilot** | 高速 | 完全自律ワークフロー |
 | **Ultrawork** | 並列 | あらゆるタスクの最大並列化 |
 | **Ralph** | 粘り強い | 必ず完遂すべきタスク |
@@ -92,16 +102,21 @@ autopilot: build a REST API for managing tasks
 
 ### インテリジェント・オーケストレーション
 
-- **44の専門エージェント** - アーキテクチャ、リサーチ、デザイン、テスト、データサイエンス対応
-- **スマートモデルルーティング** - シンプルなタスクは Haiku、複雑な推論は Opus
-- **自動委譲** - 常に適材適所
+* **44の専門エージェント** - アーキテクチャ、リサーチ、デザイン、テスト、データサイエンス対応
+
+* **スマートモデルルーティング** - シンプルなタスクは Haiku、複雑な推論は Opus
+
+* **自動委譲** - 常に適材適所
 
 ### 開発者体験
 
-- **マジックキーワード** - `ralph`、`ulw`、`plan` で明示的制御
-- **HUD ステータスライン** - ステータスバーでリアルタイムのオーケストレーション指標を表示
-- **スキル学習** - セッションから再利用可能なパターンを抽出
-- **分析とコスト追跡** - 全セッションのトークン使用状況を把握
+* **マジックキーワード** - `ralph`、`ulw`、`plan` で明示的制御
+
+* **HUD ステータスライン** - ステータスバーでリアルタイムのオーケストレーション指標を表示
+
+* **スキル学習** - セッションから再利用可能なパターンを抽出
+
+* **分析とコスト追跡** - 全セッションのトークン使用状況を把握
 
 [全機能リスト →](docs/REFERENCE.md)
 
@@ -112,7 +127,7 @@ autopilot: build a REST API for managing tasks
 パワーユーザー向けのオプション・ショートカット。自然言語でも問題なく動作します。
 
 | キーワード | 効果 | 例 |
-|---------|-----|-----|
+| --------- | ----- | ----- |
 | `autopilot` | 完全自律実行 | `autopilot: build a todo app` |
 | `ralph` | 粘り強いモード | `ralph: refactor auth` |
 | `ulw` | 最大並列化 | `ulw fix all errors` |
@@ -142,20 +157,26 @@ omc wait --stop   # デーモンを無効化
 stop コールバックがセッション要約を送るときに、誰をタグ付けするか設定できます。
 
 ```bash
+
 # タグ一覧を設定/置換
+
 omc config-stop-callback telegram --enable --token <bot_token> --chat <chat_id> --tag-list "@alice,bob"
 omc config-stop-callback discord --enable --webhook <url> --tag-list "@here,123456789012345678,role:987654321098765432"
 
 # 追加・削除・クリア
+
 omc config-stop-callback telegram --add-tag charlie
 omc config-stop-callback discord --remove-tag @here
 omc config-stop-callback discord --clear-tags
 ```
 
 タグの挙動:
-- Telegram: `alice` は `@alice` に正規化
-- Discord: `@here`、`@everyone`、数値ユーザーID、`role:<id>` をサポート
-- `file` コールバックはタグオプションを無視
+
+* Telegram: `alice` は `@alice` に正規化
+
+* Discord: `@here`、`@everyone`、数値ユーザーID、`role:<id>` をサポート
+
+* `file` コールバックはタグオプションを無視
 
 ---
 
@@ -164,24 +185,33 @@ omc config-stop-callback discord --clear-tags
 セッションのライフサイクルイベントに対してリアルタイム通知を受け取れます。
 
 対象イベント:
-- `session-start`
-- `session-stop`（persistent モードが待機/ブロック状態に入ったとき）
-- `session-end`
-- `ask-user-question`
+
+* `session-start`
+
+* `session-stop`（persistent モードが待機/ブロック状態に入ったとき）
+
+* `session-end`
+
+* `ask-user-question`
 
 ### 設定
+
 シェルプロファイル（例: `~/.zshrc`, `~/.bashrc`）に環境変数を追加してください:
 
 ```bash
+
 # Discord Bot
+
 export OMC_DISCORD_NOTIFIER_BOT_TOKEN="your_bot_token"
 export OMC_DISCORD_NOTIFIER_CHANNEL="your_channel_id"
 
 # Telegram
+
 export OMC_TELEGRAM_BOT_TOKEN="your_bot_token"
 export OMC_TELEGRAM_CHAT_ID="your_chat_id"
 
 # Optional webhooks
+
 export OMC_DISCORD_WEBHOOK_URL="your_webhook_url"
 export OMC_SLACK_WEBHOOK_URL="your_webhook_url"
 ```
@@ -192,26 +222,31 @@ export OMC_SLACK_WEBHOOK_URL="your_webhook_url"
 
 ## ドキュメント
 
-- **[完全リファレンス](docs/REFERENCE.md)** - 全機能の詳細ドキュメント
-- **[パフォーマンス監視](docs/PERFORMANCE-MONITORING.md)** - エージェント追跡、デバッグ、最適化
-- **[ウェブサイト](https://yeachan-heo.github.io/ultrapower-website)** - インタラクティブガイドと例
-- **[移行ガイド](docs/MIGRATION.md)** - v2.x からのアップグレード
-- **[アーキテクチャ](docs/ARCHITECTURE.md)** - 内部の仕組み
+* **[完全リファレンス](docs/REFERENCE.md)** - 全機能の詳細ドキュメント
+
+* **[パフォーマンス監視](docs/PERFORMANCE-MONITORING.md)** - エージェント追跡、デバッグ、最適化
+
+* **[ウェブサイト](https://yeachan-heo.github.io/ultrapower-website)** - インタラクティブガイドと例
+
+* **[移行ガイド](docs/MIGRATION.md)** - v2.x からのアップグレード
+
+* **[アーキテクチャ](docs/ARCHITECTURE.md)** - 内部の仕組み
 
 ---
 
 ## 動作環境
 
-- [Claude Code](https://docs.anthropic.com/claude-code) CLI
-- Claude Max/Pro サブスクリプション または Anthropic API キー
+* [Claude Code](https://docs.anthropic.com/claude-code) CLI
+
+* Claude Max/Pro サブスクリプション または Anthropic API キー
 
 ### オプション：マルチ AI オーケストレーション
 
 OMC はクロスバリデーションとデザイン一貫性のために、外部 AI プロバイダーをオプションで活用できます。**必須ではありません** — これらがなくても OMC は完全に動作します。
 
 | プロバイダー | インストール | 機能 |
-|-------------|-------------|------|
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` | デザインレビュー、UI 一貫性（1M トークンコンテキスト）|
+| ------------- | ------------- | ------ |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` | デザインレビュー、UI 一貫性（1M トークンコンテキスト） |
 | [Codex CLI](https://github.com/openai/codex) | `npm install -g @openai/codex` | アーキテクチャ検証、コードレビュークロスチェック |
 
 **コスト：** 3つの Pro プラン（Claude + Gemini + ChatGPT）で月額約 $60 ですべてをカバーできます。
@@ -244,14 +279,20 @@ Oh-My-ClaudeCode があなたのワークフローに役立っているなら、
 
 ### スポンサーになる理由は?
 
-- 開発を活発に保つ
-- スポンサー向け優先サポート
-- ロードマップと機能に影響力
-- 無料オープンソースの維持を支援
+* 開発を活発に保つ
+
+* スポンサー向け優先サポート
+
+* ロードマップと機能に影響力
+
+* 無料オープンソースの維持を支援
 
 ### その他の協力方法
 
-- ⭐ リポジトリにスター
-- 🐛 バグ報告
-- 💡 機能提案
-- 📝 コード貢献
+* ⭐ リポジトリにスター
+
+* 🐛 バグ報告
+
+* 💡 機能提案
+
+* 📝 コード貢献

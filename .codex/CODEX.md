@@ -1,5 +1,7 @@
 # ultrapower — Codex 适配器 (CLI Worker)
+
 # Provider: Codex (OpenAI via CLI)
+
 # Version: 1.0 | Updated: 2026-02-24
 
 > 本文件是 Codex CLI Worker 的核心配置。
@@ -10,9 +12,11 @@
 
 ## 0. 强制规则 (Mandatory)
 
-- **语言**: 中文（用户界面），英文（提交信息）
-- **模式**: Headless Mode（无交互模式）
-- **输出**: JSON 格式结果或必要的 Terminal Log
+* **语言**: 中文（用户界面），英文（提交信息）
+
+* **模式**: Headless Mode（无交互模式）
+
+* **输出**: JSON 格式结果或必要的 Terminal Log
 
 ---
 
@@ -38,23 +42,29 @@
 
 ## 3. CI Gate（编译提交门禁）
 
-- **触发**: 代码变更结束
-- **动作**: `tsc --noEmit && npm run build && npm test`
-- **强制**: 失败则禁止提交，触发重试（最多 3 次）
+* **触发**: 代码变更结束
+
+* **动作**: `tsc --noEmit && npm run build && npm test`
+
+* **强制**: 失败则禁止提交，触发重试（最多 3 次）
 
 ---
 
 ## 4. Worker 输出格式
 
 ```
+
 ## COMPLETE
+
 完成: [任务描述]
 变更: [修改的文件列表]
 验证: [CI 命令输出]
 ```
 
 ```
+
 ## BLOCKED
+
 原因: [阻塞原因]
 已尝试: [尝试过的方法]
 需要: [需要什么帮助]
@@ -65,7 +75,7 @@
 ## 5. 进化引擎自动行为
 
 | 触发事件 | 自动行为 |
-|---------|---------|
+| --------- | --------- |
 | 修复成功 | 记录 Error Pattern → `.omc/axiom/evolution/knowledge_base.md` |
 | 会话结束 | 反思日志 → `.omc/axiom/reflection_log.md` |
 

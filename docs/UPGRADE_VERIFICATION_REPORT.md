@@ -8,12 +8,17 @@
 ## ✅ 验证通过项
 
 ### 1. 构建系统
-- TypeScript 编译成功
-- Skill bridge 构建完成
-- MCP servers 打包完成 (codex/gemini/team)
-- 文档组合完成
+
+* TypeScript 编译成功
+
+* Skill bridge 构建完成
+
+* MCP servers 打包完成 (codex/gemini/team)
+
+* 文档组合完成
 
 ### 2. plugin.json 格式
+
 ```json
 {
   "name": "ultrapower",
@@ -26,12 +31,17 @@
 ✓ 无 `agents` 字段（正确，通过目录自动发现）
 
 ### 3. postinstall 修复
-- ✓ npm-cache 版本已更新: `^5.5.13` → `5.5.14`
-- ✓ plugin.json 已重建
-- ✓ HUD wrapper 已安装
-- ✓ settings.json 已配置
+
+* ✓ npm-cache 版本已更新: `^5.5.13` → `5.5.14`
+
+* ✓ plugin.json 已重建
+
+* ✓ HUD wrapper 已安装
+
+* ✓ settings.json 已配置
 
 ### 4. templates/hooks/ 完整性
+
 ```
 templates/hooks/
 ├── AGENTS.md
@@ -52,16 +62,22 @@ templates/hooks/
 ## 📋 升级流程验证
 
 ### 方式一：npm 全局安装（已验证）
+
 ```bash
 npm install -g @liangjie559567/ultrapower@5.5.14
+
 # postinstall 自动运行，修复所有已知问题
+
 ```
 
 ### 方式二：本地构建（已验证）
+
 ```bash
 cd ultrapower
 npm run build
+
 # 构建成功，所有产物正常生成
+
 ```
 
 ---
@@ -69,7 +85,7 @@ npm run build
 ## 🔧 自动修复机制验证
 
 | 修复函数 | 状态 | 说明 |
-|---------|------|------|
+| --------- | ------ | ------ |
 | `fixNpmCacheVersion()` | ✅ 已执行 | 版本范围 `^5.5.13` → `5.5.14` |
 | `fixMissingPluginJson()` | ✅ 已执行 | 重建 plugin.json |
 | `copyTemplatesToCache()` | ⏭️ 跳过 | 缓存目录不存在（首次安装） |

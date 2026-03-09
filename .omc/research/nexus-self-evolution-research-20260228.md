@@ -9,7 +9,7 @@
 ## 研究概览
 
 | 切面 | 方向 | 状态 | 关键发现数 |
-|------|------|------|-----------|
+| ------ | ------ | ------ | ----------- |
 | F1 | AI Agent 自反思框架 | 完成 | 8 个框架 + 4 个设计模式 |
 | F2 | 知识图谱驱动自进化 | 完成 | 5 个方向 + 混合架构 |
 | F3 | 代码健康评估与自动优化 | 完成 | 6 个工具/方法 |
@@ -23,7 +23,7 @@
 ### 核心框架
 
 | 框架 | 核心机制 | 效果 | 适用性 |
-|------|---------|------|--------|
+| ------ | --------- | ------ | -------- |
 | **Reflexion** | 情景记忆 + 语言强化学习 | HumanEval 80%→91% | 高：nexus 可用情景记忆存储历史执行反思 |
 | **Self-Refine** | 同一 LLM 生成→批评→精炼 | ~20% 提升 | 高：无需额外模型，直接迭代改进 |
 | **LATS** | MCTS + LLM 搜索与反思结合 | 优于 Reflexion | 中：适合复杂决策树场景 |
@@ -57,7 +57,7 @@
 ### 核心方向
 
 | 方向 | 核心概念 | 适用性 |
-|------|---------|--------|
+| ------ | --------- | -------- |
 | **GraphRAG** (Microsoft) | 层级社区检测 + 双模式查询路由 | 高：agent 能力关系天然是图结构 |
 | **MemGPT/Letta** | OS 虚拟内存思想的三层记忆 | 高：升级现有 learning_queue |
 | **置信度系统** | 艾宾浩斯衰减 + 证据强化 + 惩罚 | 高：知识条目动态评分 |
@@ -118,7 +118,7 @@ class KnowledgeNode:
 ### 核心工具/方法
 
 | 工具/方法 | 核心机制 | 适用性 |
-|-----------|---------|--------|
+| ----------- | --------- | -------- |
 | **CodeScene CodeHealth™** | 25-30 个生物标记指标 | 高：多维评分 |
 | **Maintainability Index** | MI 公式 (radon 库) | 高：零依赖 |
 | **SATD 检测** | NLP 检测技术债务注释 | 中：辅助指标 |
@@ -128,8 +128,9 @@ class KnowledgeNode:
 
 ### 关键公式
 
-- MI = `max(0, (171 - 5.2*ln(HV) - 0.23*CC - 16.2*ln(SLOC)) * 100/171)`
-- Hotspot = `Code_Complexity × Change_Frequency`
+* MI = `max(0, (171 - 5.2*ln(HV) - 0.23*CC - 16.2*ln(SLOC)) * 100/171)`
+
+* Hotspot = `Code_Complexity × Change_Frequency`
 
 ---
 
@@ -138,7 +139,7 @@ class KnowledgeNode:
 ### 核心方向
 
 | 方向 | 核心概念 | 适用性 |
-|------|---------|--------|
+| ------ | --------- | -------- |
 | **OpenTelemetry for AI** | 每个 agent 轮次/LLM 调用/工具执行建模为 span | 高：Python SDK 直接集成 |
 | **LangSmith/Langfuse** | 自动捕获 token 消耗和延迟 | 中：Langfuse 可自托管 |
 | **异常检测三算法** | Z-score + IQR + EWMA 组合 | 高：纯 Python 实现 |
@@ -147,9 +148,11 @@ class KnowledgeNode:
 
 ### 异常检测组合策略
 
-- **Z-score**: 捕捉突发尖峰（均值偏移）
-- **IQR**: 捕捉极端离群值（对异常值鲁棒）
-- **EWMA**: 捕捉缓慢退化（趋势漂移）
+* **Z-score**: 捕捉突发尖峰（均值偏移）
+
+* **IQR**: 捕捉极端离群值（对异常值鲁棒）
+
+* **EWMA**: 捕捉缓慢退化（趋势漂移）
 
 ### 自愈可靠性数据
 
@@ -163,7 +166,7 @@ class KnowledgeNode:
 ### 核心算法
 
 | 算法 | 类型 | 适用场景 |
-|------|------|---------|
+| ------ | ------ | --------- |
 | **ALS 协同过滤** | CF | 基于历史使用模式推荐 agent |
 | **TF-IDF 内容过滤** | CB | 基于任务描述匹配 agent 能力 |
 | **混合推荐器** | CF+CB | 两者加权组合 |
@@ -173,9 +176,11 @@ class KnowledgeNode:
 
 ### 关键公式
 
-- LinUCB: `score(a) = θ̂_a^T x + α √(x^T A_a^{-1} x)`
-- Thompson Sampling: `θ ~ Beta(α_success, β_failure)`
-- UCB1: `score = x̄ + c√(ln(N)/n_i)`
+* LinUCB: `score(a) = θ̂_a^T x + α √(x^T A_a^{-1} x)`
+
+* Thompson Sampling: `θ ~ Beta(α_success, β_failure)`
+
+* UCB1: `score = x̄ + c√(ln(N)/n_i)`
 
 ### A/B 测试框架
 
@@ -190,7 +195,7 @@ class KnowledgeNode:
 ### 现有任务增强
 
 | 任务 | 增强方向 |
-|------|---------|
+| ------ | --------- |
 | T1 多维模式检测 | 新增 skill_chain 维度，使用滑动窗口 n-gram |
 | T2 六维健康评估 | 引入 CodeScene 生物标记模型，加权公式优化 |
 | T4 异常检测 | 升级为 Z-score + IQR + EWMA 三算法组合 |
@@ -201,7 +206,7 @@ class KnowledgeNode:
 ### 新增任务
 
 | ID | 名称 | 依赖 | 核心内容 |
-|----|------|------|---------|
+| ---- | ------ | ------ | --------- |
 | T13 | 自愈引擎 (self_healer.py) | T6 | Circuit Breaker + Retry Backoff + Fallback Chain |
 | T14 | 瓶颈分析器 (bottleneck_analyzer.py) | T6 | OTel span 收集 + 延迟/token/错误热点分析 |
 | T15 | 代码健康评分 (code_health_scorer.py) | T2 | radon MI + 圈复杂度 + Git Churn 热点 |
@@ -259,7 +264,7 @@ T18 进化仪表盘
 ## 技术栈总结
 
 | 层 | 依赖 | 用途 |
-|----|------|------|
+| ---- | ------ | ------ |
 | 核心 | Python 3.11+ stdlib | 数据结构、算法 |
 | 指标 | radon | 代码复杂度/MI |
 | 向量 | chromadb | 语义检索 |

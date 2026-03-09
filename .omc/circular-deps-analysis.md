@@ -7,45 +7,65 @@
 ## 修复方案总结
 
 ### 1. ✅ hooks/bridge.ts ↔ hooks/bridge-normalize.ts
+
 **解决方案**: 创建 `hooks/bridge-types.ts` 提取共享类型
-- 将 `HookInput`, `HookOutput`, `HookType` 移至独立类型文件
-- 两个模块都从 `bridge-types.ts` 导入
+
+* 将 `HookInput`, `HookOutput`, `HookType` 移至独立类型文件
+
+* 两个模块都从 `bridge-types.ts` 导入
 
 ### 2. ✅ hooks/session-end/index.ts ↔ callbacks.ts
+
 **解决方案**: 创建 `hooks/session-end/types.ts` 提取类型
-- 将 `SessionEndInput`, `SessionMetrics`, `HookOutput` 移至独立类型文件
-- 两个模块都从 `types.ts` 导入
+
+* 将 `SessionEndInput`, `SessionMetrics`, `HookOutput` 移至独立类型文件
+
+* 两个模块都从 `types.ts` 导入
 
 ### 3. ✅ hud/state.ts ↔ background-cleanup.ts
+
 **解决方案**: 将 cleanup 函数内联到 `state.ts`
-- 将 `cleanupStaleBackgroundTasks`, `detectOrphanedTasks`, `markOrphanedTasksAsStale` 移入 `state.ts`
-- 删除 `background-cleanup.ts` 的导入依赖
+
+* 将 `cleanupStaleBackgroundTasks`, `detectOrphanedTasks`, `markOrphanedTasksAsStale` 移入 `state.ts`
+
+* 删除 `background-cleanup.ts` 的导入依赖
 
 ### 4. ✅ tools/diagnostics/index.ts ↔ lsp-aggregator.ts
+
 **解决方案**: 创建 `tools/diagnostics/constants.ts` 提取常量
-- 将 `LSP_DIAGNOSTICS_WAIT_MS` 移至独立常量文件
-- 两个模块都从 `constants.ts` 导入
+
+* 将 `LSP_DIAGNOSTICS_WAIT_MS` 移至独立常量文件
+
+* 两个模块都从 `constants.ts` 导入
 
 ### 5. ✅ hooks/learner/index.ts ↔ detection-hook.ts
+
 **解决方案**: 使用 `config.ts` 替代函数导入
-- `detection-hook.ts` 直接调用 `loadConfig().enabled` 而非 `isLearnerEnabled()`
-- 移除循环导入依赖
+
+* `detection-hook.ts` 直接调用 `loadConfig().enabled` 而非 `isLearnerEnabled()`
+
+* 移除循环导入依赖
 
 ### 6. ✅ team/capabilities.ts ↔ unified-team.ts
+
 **解决方案**: 将类型定义移至 `team/types.ts`
-- 将 `UnifiedTeamMember`, `WorkerBackend`, `WorkerCapability` 移至 `types.ts`
-- 两个模块都从 `types.ts` 导入
+
+* 将 `UnifiedTeamMember`, `WorkerBackend`, `WorkerCapability` 移至 `types.ts`
+
+* 两个模块都从 `types.ts` 导入
 
 ---
 
 ## 验证结果
 
 ### madge 检测
+
 ```
 ✔ No circular dependency found!
 ```
 
 ### 测试结果
+
 ```
 Test Files  1 failed | 318 passed (319)
 Tests       1 failed | 5782 passed | 10 skipped (5793)

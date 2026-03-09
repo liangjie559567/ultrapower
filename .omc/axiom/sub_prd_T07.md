@@ -51,7 +51,10 @@ if (!report.consistent && !report.isUpdating) {
 
 ## 验收标准
 
-- [ ] `omc doctor` 输出包含版本一致性检查结果
-- [ ] 版本一致时显示 `✓ Version consistency: OK`
-- [ ] 版本漂移时显示 `[WARN]` + 各源版本 + `Fix:` 命令
-- [ ] TypeScript 编译无错误
+* [ ] `omc doctor` 输出包含版本一致性检查结果
+
+* [ ] 版本一致时显示 `✓ Version consistency: OK`
+
+* [ ] 版本漂移时显示 `[WARN]` + 各源版本 + `Fix:` 命令
+
+* [ ] TypeScript 编译无错误

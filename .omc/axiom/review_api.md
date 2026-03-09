@@ -9,16 +9,24 @@
 ## 执行摘要
 
 本次审查覆盖 ultrapower 代码库的所有公共 API，包括：
-- 工具接口（MCP Tools）
-- Agent 接口
-- Hook 接口
-- 状态管理 API
-- 配置接口
+
+* 工具接口（MCP Tools）
+
+* Agent 接口
+
+* Hook 接口
+
+* 状态管理 API
+
+* 配置接口
 
 **关键发现**:
-- 🔴 严重问题: 3 个
-- 🟡 中等问题: 8 个
-- 🟢 轻微问题: 12 个
+
+* 🔴 严重问题: 3 个
+
+* 🟡 中等问题: 8 个
+
+* 🟢 轻微问题: 12 个
 
 ---
 
@@ -62,10 +70,14 @@ export interface GenericToolDefinition {
 
 **问题描述**:
 `HookInput` 接口缺少关键字段，与实际 hook 实现不匹配：
-- 缺少 `tool_name`（snake_case，实际使用）
-- 缺少 `tool_input`（snake_case，实际使用）
-- 缺少 `tool_response`（实际使用）
-- 缺少 `hook_event_name`（实际使用）
+
+* 缺少 `tool_name`（snake_case，实际使用）
+
+* 缺少 `tool_input`（snake_case，实际使用）
+
+* 缺少 `tool_response`（实际使用）
+
+* 缺少 `hook_event_name`（实际使用）
 
 **影响范围**: 所有 hook 桥接逻辑
 
@@ -101,8 +113,10 @@ export interface HookInput {
 > "When provided, the tool operates only within that session. When omitted, the tool aggregates legacy state plus all session-scoped state (may include other sessions)."
 
 这个描述自相矛盾：
-- "operates only within that session" 暗示隔离
-- "aggregates... may include other sessions" 暗示聚合
+
+* "operates only within that session" 暗示隔离
+
+* "aggregates... may include other sessions" 暗示聚合
 
 **影响范围**: 状态管理工具的使用者
 
@@ -144,7 +158,7 @@ export function registerToolWithBothNames(tool: GenericToolDefinition): GenericT
   return [tool, legacyTool];
 }
 ```
-2. 在 CHANGELOG 中添加迁移指南
+1. 在 CHANGELOG 中添加迁移指南
 
 ---
 
@@ -180,11 +194,16 @@ export { documentSpecialistAgent as researcherAgent } from './document-specialis
 
 **问题描述**:
 错误处理模式不一致：
-- `state_read`: 返回 `isError: true`（第 89, 210 行）
-- `state_write`: 返回 `isError: true`（第 279, 295, 362 行）
-- `state_clear`: 返回 `isError: true`（第 397, 528 行）
-- `state_list_active`: 返回 `isError: true`（第 673 行）
-- `state_get_status`: 返回 `isError: true`（第 850 行）
+
+* `state_read`: 返回 `isError: true`（第 89, 210 行）
+
+* `state_write`: 返回 `isError: true`（第 279, 295, 362 行）
+
+* `state_clear`: 返回 `isError: true`（第 397, 528 行）
+
+* `state_list_active`: 返回 `isError: true`（第 673 行）
+
+* `state_get_status`: 返回 `isError: true`（第 850 行）
 
 但 `GenericToolDefinition` 接口不包含 `isError` 字段。
 
@@ -201,8 +220,10 @@ export { documentSpecialistAgent as researcherAgent } from './document-specialis
 
 **问题描述**:
 路径验证失败时，错误消息格式不一致：
-- 有些使用中文：`[ultrapower] 错误：无效的状态模式：${mode}`
-- 有些使用英文：`Error reading state for ${mode}`
+
+* 有些使用中文：`[ultrapower] 错误：无效的状态模式：${mode}`
+
+* 有些使用英文：`Error reading state for ${mode}`
 
 **影响范围**: 用户体验
 
@@ -242,9 +263,12 @@ return {
 
 **问题描述**:
 代码库没有 API 版本控制机制：
-- 没有版本号标识
-- 没有 API 稳定性标记（stable/beta/experimental）
-- 没有破坏性变更策略
+
+* 没有版本号标识
+
+* 没有 API 稳定性标记（stable/beta/experimental）
+
+* 没有破坏性变更策略
 
 **影响范围**: API 演进和用户迁移
 
@@ -256,7 +280,7 @@ export const API_VERSION = '1.0.0';
 export const API_STABILITY = 'stable' as const;
 ```
 
-2. 在工具/agent 元数据中添加稳定性标记：
+1. 在工具/agent 元数据中添加稳定性标记：
 ```typescript
 export interface GenericToolDefinition {
   name: string;
@@ -297,9 +321,12 @@ args: ['-y', 'exa-mcp-server@^1.0.0']  // 添加版本约束
 
 **问题描述**:
 `createSisyphusSession` 函数有示例代码但缺少参数文档：
-- `options.skipConfigLoad` 没有说明副作用
-- `options.skipContextInjection` 没有说明影响范围
-- 返回值的 `queryOptions` 结构没有详细说明
+
+* `options.skipConfigLoad` 没有说明副作用
+
+* `options.skipContextInjection` 没有说明影响范围
+
+* 返回值的 `queryOptions` 结构没有详细说明
 
 **影响范围**: API 使用者理解
 
@@ -327,8 +354,10 @@ args: ['-y', 'exa-mcp-server@^1.0.0']  // 添加版本约束
 
 **问题描述**:
 `AgentPromptMetadata` 接口缺少使用示例，字段语义不清：
-- `triggers` vs `useWhen` 的区别不明确
-- `promptAlias` 的用途不清楚
+
+* `triggers` vs `useWhen` 的区别不明确
+
+* `promptAlias` 的用途不清楚
 
 **影响范围**: Agent 开发者
 
@@ -362,9 +391,12 @@ args: ['-y', 'exa-mcp-server@^1.0.0']  // 添加版本约束
 
 **问题描述**:
 `HookType` 枚举缺少每个类型的说明：
-- 何时触发
-- 预期输入
-- 预期输出
+
+* 何时触发
+
+* 预期输入
+
+* 预期输出
 
 **影响范围**: Hook 开发者
 
@@ -402,9 +434,12 @@ export type HookType = ...
 
 **问题描述**:
 大量使用 `unknown` 类型导致类型安全性降低：
-- `GenericToolDefinition.handler: (args: unknown)`（`src/tools/index.ts:35`）
-- `HookInput.toolInput?: unknown`（`src/hooks/bridge-types.ts:26`）
-- `state: z.record(z.string(), z.unknown())`（`src/tools/state-tools.ts:250`）
+
+* `GenericToolDefinition.handler: (args: unknown)`（`src/tools/index.ts:35`）
+
+* `HookInput.toolInput?: unknown`（`src/hooks/bridge-types.ts:26`）
+
+* `state: z.record(z.string(), z.unknown())`（`src/tools/state-tools.ts:250`）
 
 **影响范围**: 类型检查和 IDE 支持
 
@@ -456,17 +491,23 @@ export type StateData = BaseStateData & Record<string, unknown>;
 
 **问题描述**:
 API 中同时使用 camelCase 和 snake_case：
-- Hook 输入使用 snake_case：`tool_name`, `session_id`
-- TypeScript 接口使用 camelCase：`toolName`, `sessionId`
-- 工具参数使用 snake_case：`session_id`, `working_directory`
+
+* Hook 输入使用 snake_case：`tool_name`, `session_id`
+
+* TypeScript 接口使用 camelCase：`toolName`, `sessionId`
+
+* 工具参数使用 snake_case：`session_id`, `working_directory`
 
 **影响范围**: API 一致性
 
 **修复建议**:
 制定命名规范：
-- 内部 TypeScript 代码：camelCase
-- 外部 API（工具参数、Hook 输入）：snake_case
-- 在边界处进行转换
+
+* 内部 TypeScript 代码：camelCase
+
+* 外部 API（工具参数、Hook 输入）：snake_case
+
+* 在边界处进行转换
 
 ---
 
@@ -476,8 +517,10 @@ API 中同时使用 camelCase 和 snake_case：
 
 **问题描述**:
 Agent 导出名称不一致：
-- 有些使用完整名称：`architectAgent`
-- 有些使用缩写：`SISYPHUS_JUNIOR_PROMPT_METADATA`（应该是 `EXECUTOR_PROMPT_METADATA`）
+
+* 有些使用完整名称：`architectAgent`
+
+* 有些使用缩写：`SISYPHUS_JUNIOR_PROMPT_METADATA`（应该是 `EXECUTOR_PROMPT_METADATA`）
 
 **影响范围**: 代码可读性
 
@@ -583,24 +626,28 @@ lspTools.forEach(t => toolRegistry.register(t));
 ## 优先级修复建议
 
 ### P0 - 立即修复（破坏性问题）
+
 1. ✅ 修复 `GenericToolDefinition.handler` 返回类型（问题 1.1）
 2. ✅ 完善 `HookInput` 接口（问题 1.2）
 3. ✅ 统一状态工具错误处理（问题 3.1）
 
 ### P1 - 短期修复（兼容性问题）
-4. ✅ 明确 `session_id` 参数语义（问题 1.3）
-5. ✅ 添加工具弃用警告（问题 2.1）
-6. ✅ 修复 Agent 别名注释（问题 2.2）
-7. ✅ 统一错误消息语言（问题 3.2）
+
+1. ✅ 明确 `session_id` 参数语义（问题 1.3）
+2. ✅ 添加工具弃用警告（问题 2.1）
+3. ✅ 修复 Agent 别名注释（问题 2.2）
+4. ✅ 统一错误消息语言（问题 3.2）
 
 ### P2 - 中期改进（质量提升）
-8. ✅ 添加 API 版本控制（问题 4.1）
-9. ✅ 完善核心函数文档（问题 5.1）
-10. ✅ 减少 `unknown` 类型使用（问题 6.1）
+
+1. ✅ 添加 API 版本控制（问题 4.1）
+2. ✅ 完善核心函数文档（问题 5.1）
+3. ✅ 减少 `unknown` 类型使用（问题 6.1）
 
 ### P3 - 长期优化（架构改进）
-11. ✅ 实现工具注册机制（问题 10.1）
-12. ✅ 统一命名规范（问题 7.1, 7.2）
+
+1. ✅ 实现工具注册机制（问题 10.1）
+2. ✅ 统一命名规范（问题 7.1, 7.2）
 
 ---
 
@@ -609,15 +656,22 @@ lspTools.forEach(t => toolRegistry.register(t));
 ultrapower 的 API 设计整体结构良好，但存在以下主要问题：
 
 **优势**:
-- ✅ 使用 Zod 进行运行时验证
-- ✅ 路径遍历防护机制完善
-- ✅ 状态管理支持会话隔离
+
+* ✅ 使用 Zod 进行运行时验证
+
+* ✅ 路径遍历防护机制完善
+
+* ✅ 状态管理支持会话隔离
 
 **需要改进**:
-- ❌ 类型定义不完整，存在契约不一致
-- ❌ 缺少版本控制和稳定性标记
-- ❌ 错误处理模式不统一
-- ❌ 文档覆盖率不足
+
+* ❌ 类型定义不完整，存在契约不一致
+
+* ❌ 缺少版本控制和稳定性标记
+
+* ❌ 错误处理模式不统一
+
+* ❌ 文档覆盖率不足
 
 **建议行动**:
 1. 优先修复 P0 问题，确保 API 契约正确

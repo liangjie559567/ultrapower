@@ -9,10 +9,13 @@
 
 ## 1. Architecture Impact (架构影响)
 
-- Schema Changes: No（纯文档工程，不涉及数据模型变更）
-- API Changes: No（不修改任何运行时接口）
-- Runtime Impact: No（仅新增 docs/ 文件，修改 README.md 和 CLAUDE.md）
-- Build Pipeline Impact: No（无需修改 tsconfig.json、vitest.config.ts）
+* Schema Changes: No（纯文档工程，不涉及数据模型变更）
+
+* API Changes: No（不修改任何运行时接口）
+
+* Runtime Impact: No（仅新增 docs/ 文件，修改 README.md 和 CLAUDE.md）
+
+* Build Pipeline Impact: No（无需修改 tsconfig.json、vitest.config.ts）
 
 **关键发现**：本 PRD 的 Impact Scope 定义为"纯文档工程"，但存在一个隐性架构影响被忽略——CLAUDE.md 的修改会直接影响所有 agent 的运行时行为（CLAUDE.md 在每次会话启动时被注入为系统上下文）。这不是普通文档修改，属于**运行时配置变更**，需要单独的回归测试策略。
 
@@ -20,10 +23,13 @@
 
 ## 2. Risk Assessment (风险评估)
 
-- Complexity Score (1-10): **3**
-- POC Required: No
-- Regression Risk: Medium（CLAUDE.md 修改影响 agent 行为）
-- Consistency Risk: High（规范文档与现有代码实现存在潜在不一致）
+* Complexity Score (1-10): **3**
+
+* POC Required: No
+
+* Regression Risk: Medium（CLAUDE.md 修改影响 agent 行为）
+
+* Consistency Risk: High（规范文档与现有代码实现存在潜在不一致）
 
 ### 风险明细
 
@@ -48,7 +54,7 @@ PRD P0 提到"禁止并发写入同一状态文件"，但 `mode-registry/index.t
 ### PRD 已列出文件（合理）
 
 | 文件 | 评估 |
-|------|------|
+| ------ | ------ |
 | `docs/standards/runtime-protection.md` | 合理，对应 P0 Hook/状态规范 |
 | `docs/standards/user-guide.md` | 合理，对应 P1 决策树/路由规范 |
 | `docs/standards/contribution-guide.md` | 合理，对应 P2 贡献检查清单 |
@@ -83,26 +89,35 @@ PRD P1 包含"常见反模式清单"，但 Impact Scope 中未列出对应文件
 
 从现有代码反向提取规范，确保文档与实现一致：
 
-- 从 `src/hooks/bridge-normalize.ts` 提取 Hook 字段白名单规范
-- 从 `src/hooks/mode-registry/index.ts` 提取状态机转换规则和 stale marker 阈值
-- 从 `src/agents/definitions.ts` 提取 Agent 生命周期规范
-- 从 `src/hooks/guards/pre-tool.ts`、`post-tool.ts` 提取 Hook 执行顺序
+* 从 `src/hooks/bridge-normalize.ts` 提取 Hook 字段白名单规范
+
+* 从 `src/hooks/mode-registry/index.ts` 提取状态机转换规则和 stale marker 阈值
+
+* 从 `src/agents/definitions.ts` 提取 Agent 生命周期规范
+
+* 从 `src/hooks/guards/pre-tool.ts`、`post-tool.ts` 提取 Hook 执行顺序
 
 撰写文件：`runtime-protection.md`、`hook-execution-order.md`、`state-machine.md`、`agent-lifecycle.md`
 
 ### 阶段二：规范扩展（2-3天）
 
-- 撰写 `user-guide.md`（Skill 调用决策树 + Agent 路由规范）
-- 撰写 `anti-patterns.md`（常见反模式清单）
-- 撰写 `contribution-guide.md`（贡献检查清单）
-- 撰写 3 个模板文件（skill/agent/hook）
-- 撰写 `docs/standards/README.md`（目录索引）
+* 撰写 `user-guide.md`（Skill 调用决策树 + Agent 路由规范）
+
+* 撰写 `anti-patterns.md`（常见反模式清单）
+
+* 撰写 `contribution-guide.md`（贡献检查清单）
+
+* 撰写 3 个模板文件（skill/agent/hook）
+
+* 撰写 `docs/standards/README.md`（目录索引）
 
 ### 阶段三：集成与验证（1天）
 
-- 更新 `README.md` 指向新规范
-- 审慎修改 `CLAUDE.md`（仅追加，不删除现有规则）
-- 人工验证：用新模板创建一个 demo skill，确认模板可用
+* 更新 `README.md` 指向新规范
+
+* 审慎修改 `CLAUDE.md`（仅追加，不删除现有规则）
+
+* 人工验证：用新模板创建一个 demo skill，确认模板可用
 
 ---
 
@@ -124,9 +139,11 @@ P0 规范"禁止并发写入同一状态文件"目前仅靠约定，`mode-regist
 
 ## Conclusion (结论)
 
-- **结论**: Pass（条件通过）
-- **Estimated Effort**: 6-8 天（1 名工程师）
-- **综合评分**: 7/10
+* **结论**: Pass（条件通过）
+
+* **Estimated Effort**: 6-8 天（1 名工程师）
+
+* **综合评分**: 7/10
 
 **通过理由**：技术可行性高，纯文档工程，无运行时风险，团队具备完整技术栈。
 
@@ -137,6 +154,9 @@ P0 规范"禁止并发写入同一状态文件"目前仅靠约定，`mode-regist
 4. TD-4（并发写入原子性）建议在本次迭代中一并解决，避免规范与实现脱节
 
 **扣分项（-3分）**：
-- Impact Scope 遗漏 5 个关键文件（-1.5）
-- 未识别 CLAUDE.md 的运行时影响（-1）
-- 未规划规范与代码的同步机制（-0.5）
+
+* Impact Scope 遗漏 5 个关键文件（-1.5）
+
+* 未识别 CLAUDE.md 的运行时影响（-1）
+
+* 未规划规范与代码的同步机制（-0.5）

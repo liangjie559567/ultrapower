@@ -22,11 +22,16 @@
 2. 使用 `console.log()` 写入 STDOUT
 
 然而，如果错误与损坏的 stdout/stderr 流相关（在 bash 错误或其他系统问题期间可能发生）：
-- `console.error()` 调用会抛出 EPIPE
-- catch 块本身在到达 `console.log()` 之前就会出错
-- 没有 JSON 输出到达 Claude Code
-- hook 会挂起等待响应
-- 会话冻结
+
+* `console.error()` 调用会抛出 EPIPE
+
+* catch 块本身在到达 `console.log()` 之前就会出错
+
+* 没有 JSON 输出到达 Claude Code
+
+* hook 会挂起等待响应
+
+* 会话冻结
 
 ### 为何在 Bash 错误时发生
 
@@ -47,7 +52,7 @@
 ```javascript
 } catch (error) {
   try {
-    process.stderr.write(`[persistent-mode] Error: ${error?.message || error}\n`);
+    process.stderr.write(`[persistent-mode] Error: ${error?.message | | error}\n`);
   } catch {
     // Ignore stderr errors - we just need to return valid JSON
   }
@@ -67,7 +72,7 @@
 ```javascript
 process.on('uncaughtException', (error) => {
   try {
-    process.stderr.write(`[persistent-mode] Uncaught exception: ${error?.message || error}\n`);
+    process.stderr.write(`[persistent-mode] Uncaught exception: ${error?.message | | error}\n`);
   } catch { }
   try {
     process.stdout.write(JSON.stringify({ continue: true }) + '\n');
@@ -117,28 +122,41 @@ try {
 ## 测试
 
 所有测试通过：
-- ✓ 正常空输入返回 continue:true
-- ✓ 空 stdin（管道损坏）返回 continue:true 且不挂起
-- ✓ 无效 JSON 返回 continue:true 且不挂起
-- ✓ Hook 在超时内完成（< 1 秒）
+
+* ✓ 正常空输入返回 continue:true
+
+* ✓ 空 stdin（管道损坏）返回 continue:true 且不挂起
+
+* ✓ 无效 JSON 返回 continue:true 且不挂起
+
+* ✓ Hook 在超时内完成（< 1 秒）
 
 ## 变更的文件
 
-- `templates/hooks/persistent-mode.mjs` - 主要修复
-- `src/hooks/persistent-mode/__tests__/error-handling.test.ts` - 测试覆盖
-- `CHANGELOG.md` - 文档
+* `templates/hooks/persistent-mode.mjs` - 主要修复
+
+* `src/hooks/persistent-mode/__tests__/error-handling.test.ts` - 测试覆盖
+
+* `CHANGELOG.md` - 文档
 
 ## 影响
 
 此修复确保 Stop hook 在任何情况下都不会挂起会话，即使在灾难性错误条件下也是如此。Hook 现在对以下情况具有弹性：
-- 损坏的 stdout/stderr 流
-- EPIPE 错误
-- 无效 JSON 输入
-- 未捕获的异常
-- 未处理的 promise rejection
-- 任何不可预见的错误（通过安全超时）
+
+* 损坏的 stdout/stderr 流
+
+* EPIPE 错误
+
+* 无效 JSON 输入
+
+* 未捕获的异常
+
+* 未处理的 promise rejection
+
+* 任何不可预见的错误（通过安全超时）
 
 ## 相关 Issue
 
-- Issue #240：stdin 超时问题（与 hook 挂起相关）
-- Issue #213：上下文限制停止死锁（不同但相关的 stop hook 问题）
+* Issue #240：stdin 超时问题（与 hook 挂起相关）
+
+* Issue #213：上下文限制停止死锁（不同但相关的 stop hook 问题）

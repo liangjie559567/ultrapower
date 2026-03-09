@@ -8,14 +8,17 @@
 ## 用途
 
 此目录提供全项目类型检查和错误检测：
-- **主要方式**：`tsc --noEmit` 用于快速、全面的 TypeScript 检查
-- **回退方式**：当 tsc 不可用时使用 LSP 迭代
-- 驱动 `lsp_diagnostics_directory` 工具
+
+* **主要方式**：`tsc --noEmit` 用于快速、全面的 TypeScript 检查
+
+* **回退方式**：当 tsc 不可用时使用 LSP 迭代
+
+* 驱动 `lsp_diagnostics_directory` 工具
 
 ## 关键文件
 
 | 文件 | 描述 |
-|------|------|
+| ------ | ------ |
 | `index.ts` | 主入口 - 带策略选择的 `runDirectoryDiagnostics()` |
 | `tsc-runner.ts` | TypeScript 编译器运行器 - 解析 `tsc --noEmit` 输出 |
 | `lsp-aggregator.ts` | LSP 回退 - 迭代文件并收集诊断 |
@@ -47,13 +50,16 @@ if (strategy === 'auto') {
 使用 `tsc --noEmit --pretty false` 生成可解析的输出：
 ```typescript
 // 输出格式：file(line,col): error TS1234: message
-const regex = /^(.+)\((\d+),(\d+)\):\s+(error|warning)\s+(TS\d+):\s+(.+)$/gm;
+const regex = /^(.+)\((\d+),(\d+)\):\s+(error | warning)\s+(TS\d+):\s+(.+)$/gm;
 ```
 
 **优势：**
-- 快速（单进程）
-- 全面（完整项目类型检查）
-- 准确（使用 tsconfig.json）
+
+* 快速（单进程）
+
+* 全面（完整项目类型检查）
+
+* 准确（使用 tsconfig.json）
 
 #### LSP 聚合器
 
@@ -68,9 +74,12 @@ for (const file of files) {
 ```
 
 **适用场景：**
-- 无 tsconfig.json
-- 多语言项目
-- 需要逐文件增量检查
+
+* 无 tsconfig.json
+
+* 多语言项目
+
+* 需要逐文件增量检查
 
 ### 常见模式
 
@@ -89,25 +98,29 @@ interface DirectoryDiagnosticResult {
 ### 测试要求
 
 ```bash
+
 # 用 TypeScript 项目测试
+
 npm test -- --grep "diagnostics"
 ```
 
 ## 依赖
 
 ### 内部
-- `../lsp/` - 聚合模式的 LSP 客户端
+
+* `../lsp/` - 聚合模式的 LSP 客户端
 
 ### 外部
+
 | 包 | 用途 |
-|----|------|
+| ---- | ------ |
 | `child_process` | 运行 tsc |
 | `fs`, `path` | 文件系统操作 |
 
 ## 性能对比
 
 | 策略 | 速度 | 准确性 | 要求 |
-|------|------|--------|------|
+| ------ | ------ | -------- | ------ |
 | `tsc` | 快（约 1-5 秒） | 高 | tsconfig.json |
 | `lsp` | 慢（约 0.3 秒/文件） | 中 | 已安装语言服务器 |
 

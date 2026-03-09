@@ -7,16 +7,21 @@
 ## 用法
 
 ```bash
+
 # Sierpinski 三角形
+
 fractals sierpinski --size 32 --depth 5
 
 # Mandelbrot 集合
+
 fractals mandelbrot --width 80 --height 24 --iterations 100
 
 # 自定义字符
+
 fractals sierpinski --size 16 --char '#'
 
 # 帮助
+
 fractals --help
 fractals sierpinski --help
 ```
@@ -28,9 +33,12 @@ fractals sierpinski --help
 使用递归细分生成 Sierpinski 三角形。
 
 参数：
-- `--size`（默认：32）- 三角形底边的字符宽度
-- `--depth`（默认：5）- 递归深度
-- `--char`（默认：'*'）- 填充点使用的字符
+
+* `--size`（默认：32）- 三角形底边的字符宽度
+
+* `--depth`（默认：5）- 递归深度
+
+* `--char`（默认：'*'）- 填充点使用的字符
 
 输出：三角形打印到 stdout，每行一行。
 
@@ -39,10 +47,14 @@ fractals sierpinski --help
 将 Mandelbrot 集合渲染为 ASCII 艺术。将迭代次数映射到字符。
 
 参数：
-- `--width`（默认：80）- 输出宽度（字符数）
-- `--height`（默认：24）- 输出高度（字符数）
-- `--iterations`（默认：100）- 逃逸计算的最大迭代次数
-- `--char`（默认：渐变）- 单个字符，或省略以使用渐变 " .:-=+*#%@"
+
+* `--width`（默认：80）- 输出宽度（字符数）
+
+* `--height`（默认：24）- 输出高度（字符数）
+
+* `--iterations`（默认：100）- 逃逸计算的最大迭代次数
+
+* `--char`（默认：渐变）- 单个字符，或省略以使用渐变 " .:-=+*#%@"
 
 输出：矩形打印到 stdout。
 
@@ -67,8 +79,9 @@ internal/
 
 ## 依赖
 
-- Go 1.21+
-- `github.com/spf13/cobra` 用于 CLI
+* Go 1.21+
+
+* `github.com/spf13/cobra` 用于 CLI
 
 ## 验收标准
 

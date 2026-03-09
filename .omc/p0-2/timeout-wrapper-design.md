@@ -49,9 +49,9 @@ export function loadTimeoutConfig(): TimeoutConfig;
 // src/hooks/timeout-wrapper.ts
 export function loadTimeoutConfig(): TimeoutConfig {
   return {
-    preToolUseTimeout: parseInt(process.env.OMC_HOOK_TIMEOUT_MS || '5000', 10),
-    postToolUseTimeout: parseInt(process.env.OMC_HOOK_TIMEOUT_MS || '5000', 10),
-    orchestratorTimeout: parseInt(process.env.OMC_ORCHESTRATOR_TIMEOUT_MS || '3000', 10),
+    preToolUseTimeout: parseInt(process.env.OMC_HOOK_TIMEOUT_MS | | '5000', 10),
+    postToolUseTimeout: parseInt(process.env.OMC_HOOK_TIMEOUT_MS | | '5000', 10),
+    orchestratorTimeout: parseInt(process.env.OMC_ORCHESTRATOR_TIMEOUT_MS | | '3000', 10),
     strictMode: process.env.OMC_HOOK_TIMEOUT_STRICT === 'true',
   };
 }
@@ -79,7 +79,6 @@ export async function withTimeout<T>(
   return result;
 }
 ```
-
 
 ### 2.2 PreToolUse 集成
 
@@ -117,7 +116,7 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
 ## 3. 集成点清单
 
 | 文件 | 修改内容 | 行号 | 优先级 |
-|------|---------|------|--------|
+| ------ | --------- | ------ | -------- |
 | `src/hooks/timeout-wrapper.ts` | 新建文件 | - | P0 |
 | `src/hooks/bridge.ts` | 包装 processPreToolUse | 715 | P0 |
 | `src/hooks/bridge.ts` | 包装 processPostToolUse | 883 | P0 |
@@ -129,7 +128,7 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
 ## 4. 超时策略
 
 | Hook 类型 | 默认超时 | 环境变量 | 理由 |
-|-----------|---------|---------|------|
+| ----------- | --------- | --------- | ------ |
 | PreToolUse | 5000ms | `OMC_HOOK_TIMEOUT_MS` | 包含委托检查、背景进程守卫 |
 | PostToolUse | 5000ms | `OMC_HOOK_TIMEOUT_MS` | 包含 ralph 激活、dashboard |
 | Orchestrator | 3000ms | `OMC_ORCHESTRATOR_TIMEOUT_MS` | 仅委托检查和验证 |
@@ -143,7 +142,7 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
 ## 5. 环境变量
 
 | 变量名 | 默认值 | 说明 |
-|--------|--------|------|
+| -------- | -------- | ------ |
 | `OMC_HOOK_TIMEOUT_MS` | 5000 | PreToolUse/PostToolUse 超时 |
 | `OMC_ORCHESTRATOR_TIMEOUT_MS` | 3000 | Orchestrator 超时 |
 | `OMC_HOOK_TIMEOUT_STRICT` | false | 严格模式 |
@@ -153,7 +152,7 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
 ## 6. 测试场景
 
 | 场景 | 输入 | 期望输出 |
-|------|------|---------|
+| ------ | ------ | --------- |
 | 正常执行 | Hook 1s | 返回正常结果 |
 | PreToolUse 超时 | Hook 6s | `{ continue: true }` |
 | PostToolUse 超时 | Hook 6s | `{ continue: true }` |
@@ -164,7 +163,7 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
 ## 7. 风险评估
 
 | 风险 | 严重性 | 缓解措施 |
-|------|--------|---------|
+| ------ | -------- | --------- |
 | 超时值过小 | 高 | 环境变量自定义 |
 | 内存泄漏 | 中 | Promise 自然完成 |
 | 日志增长 | 低 | 后续日志轮转 |
@@ -173,14 +172,21 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
 
 ## 8. 实现清单
 
-- [ ] 创建 `timeout-wrapper.ts`
-- [ ] 实现 `withTimeout()`
-- [ ] 实现 `loadTimeoutConfig()`
-- [ ] 修改 bridge.ts PreToolUse
-- [ ] 修改 bridge.ts PostToolUse
-- [ ] 修改 orchestrator
-- [ ] 单元测试
-- [ ] 集成测试
+* [ ] 创建 `timeout-wrapper.ts`
+
+* [ ] 实现 `withTimeout()`
+
+* [ ] 实现 `loadTimeoutConfig()`
+
+* [ ] 修改 bridge.ts PreToolUse
+
+* [ ] 修改 bridge.ts PostToolUse
+
+* [ ] 修改 orchestrator
+
+* [ ] 单元测试
+
+* [ ] 集成测试
 
 ---
 

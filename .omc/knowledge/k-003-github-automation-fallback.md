@@ -9,9 +9,11 @@ references: [evolution-engine-v1]
 ---
 
 ## Summary
+
 在执行 GitHub 自动化任务时，需考虑到环境缺失（无 CLI、无浏览器）的情况，预备降级方案。
 
 ## Details
+
 **优先级策略**:
 1. **P0 (Browser)**: 使用浏览器模拟用户操作（最直观，但依赖环境）。
 2. **P1 (CLI)**: 使用 `gh` 命令行工具（最稳定，需预装）。

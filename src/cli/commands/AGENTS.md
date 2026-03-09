@@ -4,12 +4,13 @@
 # src/cli/commands/
 
 ## Purpose
+
 CLI 命令实现目录。包含 ultrapower CLI 的各子命令实现，如 agents、sessions、stats、cleanup 等管理命令。
 
 ## Key Files
 
 | File | Description |
-|------|-------------|
+| ------ | ------------- |
 | `agents.ts` | agent 列表和管理命令 |
 | `backfill.ts` | 数据回填命令 |
 | `cleanup.ts` | 清理命令 |
@@ -24,19 +25,23 @@ CLI 命令实现目录。包含 ultrapower CLI 的各子命令实现，如 agent
 ## Subdirectories
 
 | Directory | Purpose |
-|-----------|----------|
+| ----------- | ---------- |
 | `__tests__/` | 命令单元测试 |
 
 ## For AI Agents
 
 ### 修改此目录时
-- 运行测试：`npm test`
-- 参见父级目录了解被测模块实现
+
+* 运行测试：`npm test`
+
+* 参见父级目录了解被测模块实现
 
 ## Dependencies
 
 ### Internal
-- `src/cli/` — 相关模块
-- `src/features/` — 相关模块
+
+* `src/cli/` — 相关模块
+
+* `src/features/` — 相关模块
 
 <!-- MANUAL: -->

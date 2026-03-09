@@ -14,38 +14,49 @@
 **推荐模式**: Team Pipeline（分阶段并行执行）
 
 ```bash
+
 # 启动 Team Pipeline
+
 /team "执行文档体系重构任务，按 docs/tasks/documentation-system/manifest.md 执行"
 ```
 
 **替代模式**:
-- `/ultrawork` - 最大并行度执行（适合独立任务）
-- `/ralph` - 持续执行直到完成（适合需要迭代的任务）
+
+* `/ultrawork` - 最大并行度执行（适合独立任务）
+
+* `/ralph` - 持续执行直到完成（适合需要迭代的任务）
 
 ### 1.2 资源分配确认
 
 | 角色 | 工时 | 可用性确认 |
-|------|------|-----------|
+| ------ | ------ | ----------- |
 | Technical Writer | 48h | [ ] 已确认 |
 | DevOps Engineer | 16h | [ ] 已确认 |
 | QA Reviewer | 10h | [ ] 已确认 |
 
 ### 1.3 前置检查清单
 
-- [ ] Git 工作区干净（无未提交变更）
-- [ ] 当前分支：`dev`（或创建新分支 `feature/docs-restructure`）
-- [ ] Node.js 版本 >= 18
-- [ ] 已安装依赖：`npm install`
-- [ ] CI 环境可用（GitHub Actions）
+* [ ] Git 工作区干净（无未提交变更）
+
+* [ ] 当前分支：`dev`（或创建新分支 `feature/docs-restructure`）
+
+* [ ] Node.js 版本 >= 18
+
+* [ ] 已安装依赖：`npm install`
+
+* [ ] CI 环境可用（GitHub Actions）
 
 ---
 
 ## 2. Phase 1: 基础框架（Week 1）
 
 ### 执行策略
-- **并行任务**: T-002, T-003, T-005, T-006（T-001 完成后）
-- **顺序任务**: T-001 → T-004（依赖 T-003）
-- **预计工时**: 15 小时
+
+* **并行任务**: T-002, T-003, T-005, T-006（T-001 完成后）
+
+* **顺序任务**: T-001 → T-004（依赖 T-003）
+
+* **预计工时**: 15 小时
 
 ### T-001: 创建文档目录结构
 
@@ -80,10 +91,14 @@ git commit -m "feat(docs): Phase 1 - 基础框架完成"
 ## 3. Phase 2: 核心示例（Week 2）
 
 ### 执行策略
-- **并行任务**: T-007~T-011（features 文档）
-- **顺序任务**: T-012 → T-013（示例编写）
-- **并行任务**: T-014, T-015（CI 脚本）
-- **预计工时**: 39 小时
+
+* **并行任务**: T-007~T-011（features 文档）
+
+* **顺序任务**: T-012 → T-013（示例编写）
+
+* **并行任务**: T-014, T-015（CI 脚本）
+
+* **预计工时**: 39 小时
 
 ### 关键任务：T-012 编写 P0 示例
 
@@ -98,6 +113,7 @@ state_read, state_write
 
 **示例模板**:
 ```markdown
+
 ## /ultrapower:autopilot
 
 **用途**: 从想法到可运行代码的全自主执行
@@ -112,15 +128,19 @@ state_read, state_write
 **预期输出**: Agent 自动生成代码并运行测试
 
 **常见错误**:
-- 错误：`Mode not found` → 解决：确保已安装 ultrapower
+
+* 错误：`Mode not found` → 解决：确保已安装 ultrapower
 ```
 
 ### Phase 2 完成检查点
 
 **中期用户测试**:
 ```bash
+
 # 邀请 10 位新用户测试
+
 # 收集反馈并记录到 docs/tasks/documentation-system/user-feedback.md
+
 ```
 
 ---
@@ -128,9 +148,12 @@ state_read, state_write
 ## 4. Phase 3: 场景指南（Week 3）
 
 ### 执行策略
-- **并行任务**: T-016, T-017, T-018（guides 文档）
-- **并行任务**: T-019, T-020（API 重构 + architecture 整合）
-- **预计工时**: 23 小时
+
+* **并行任务**: T-016, T-017, T-018（guides 文档）
+
+* **并行任务**: T-019, T-020（API 重构 + architecture 整合）
+
+* **预计工时**: 23 小时
 
 ### Phase 3 完成检查点
 
@@ -153,16 +176,21 @@ npm install --save-dev markdown-link-check markdownlint-cli remark-lint
 
 **更新 CI 配置**:
 ```yaml
-- run: tsc --noEmit  # TypeScript 语法检查
-- run: npm run test:docs  # 示例代码测试
+
+* run: tsc --noEmit  # TypeScript 语法检查
+
+* run: npm run test:docs  # 示例代码测试
 ```
 
 ### T-022: 用户测试反馈
 
 **测试清单**:
-- [ ] 10 位新用户完成 20 分钟快速开始
-- [ ] 收集反馈（满意度 > 4.0/5.0）
-- [ ] 识别改进点并优化
+
+* [ ] 10 位新用户完成 20 分钟快速开始
+
+* [ ] 收集反馈（满意度 > 4.0/5.0）
+
+* [ ] 识别改进点并优化
 
 ### T-023: 文档质量打磨
 
@@ -179,22 +207,29 @@ npm run test:docs      # 所有示例可运行
 每个 Phase 完成后必须通过：
 
 ```bash
+
 # 1. 链接检查
+
 npx markdown-link-check docs/**/*.md
 
 # 2. 格式检查
+
 npx markdownlint docs/**/*.md
 
 # 3. TypeScript 语法
+
 tsc --noEmit
 
 # 4. 构建测试
+
 npm run build
 
 # 5. 单元测试
+
 npm test
 
 # 6. 文档示例测试
+
 npm run test:docs
 ```
 
@@ -209,7 +244,7 @@ npm run test:docs
 **日期**: YYYY-MM-DD
 
 | 任务 | 状态 | 负责人 | 阻塞问题 |
-|------|------|--------|---------|
+| ------ | ------ | -------- | --------- |
 | T-001 | ✅ 完成 | Writer | 无 |
 | T-002 | 🔄 进行中 | Writer | 无 |
 | T-003 | ⏸️ 待开始 | Writer | 等待 T-001 |
@@ -217,10 +252,14 @@ npm run test:docs
 ### 周报模板
 
 **Week X 总结**:
-- 已完成: X 个任务
-- 进行中: X 个任务
-- 阻塞问题: [列出]
-- 下周计划: [列出]
+
+* 已完成: X 个任务
+
+* 进行中: X 个任务
+
+* 阻塞问题: [列出]
+
+* 下周计划: [列出]
 
 ---
 
@@ -258,19 +297,28 @@ npm run test:docs
 ## 9. 完成标准
 
 ### 功能完整性
-- [x] 50 个核心功能有完整示例
-- [x] 所有文档包含 Front Matter
-- [x] 6 层文档结构完整
+
+* [x] 50 个核心功能有完整示例
+
+* [x] 所有文档包含 Front Matter
+
+* [x] 6 层文档结构完整
 
 ### 可用性指标
-- [x] 新用户 20 分钟内跑通示例
-- [x] 任何信息 ≤ 3 次点击可达
-- [x] 用户满意度 > 4.0/5.0
+
+* [x] 新用户 20 分钟内跑通示例
+
+* [x] 任何信息 ≤ 3 次点击可达
+
+* [x] 用户满意度 > 4.0/5.0
 
 ### 质量门禁
-- [x] CI 自动化检查全部通过
-- [x] 名称一致性校验通过
-- [x] 安全扫描无泄露风险
+
+* [x] CI 自动化检查全部通过
+
+* [x] 名称一致性校验通过
+
+* [x] 安全扫描无泄露风险
 
 ---
 

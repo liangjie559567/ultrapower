@@ -23,11 +23,16 @@
 ### 解决方案
 
 一个自动化脚本：
-- 从 `package.json` 读取规范元数据
-- 一次性更新所有文档文件
-- 可以验证同步状态（用于 CI/CD）
-- 支持 dry-run 模式以确保安全
-- 报告具体更改内容
+
+* 从 `package.json` 读取规范元数据
+
+* 一次性更新所有文档文件
+
+* 可以验证同步状态（用于 CI/CD）
+
+* 支持 dry-run 模式以确保安全
+
+* 报告具体更改内容
 
 ## 工作原理
 
@@ -36,7 +41,7 @@
 `package.json` 是以下内容的**唯一可信来源**：
 
 | 字段 | 用途 |
-|-------|----------|
+| ------- | ---------- |
 | `version` | 版本徽章、标题、引用 |
 | `name` | npm 包链接、下载徽章 |
 | `description` | 项目标语（未来） |
@@ -49,7 +54,7 @@
 脚本同步以下文件：
 
 | 文件 | 更新内容 |
-|------|-------------------|
+| ------ | ------------------- |
 | `README.md` | npm 版本/下载徽章 |
 | `docs/REFERENCE.md` | 版本徽章、版本标题 |
 | `.github/CLAUDE.md` | Agent 数量、skill 数量 |
@@ -60,8 +65,9 @@
 
 部分元数据是计算得出的，而非直接读取：
 
-- **Agent 数量** - 统计 `agents/` 目录中的 `.yaml`/`.yml` 文件
-- **Skill 数量** - 统计 `skills/` 目录中的 `.md` 文件
+* **Agent 数量** - 统计 `agents/` 目录中的 `.yaml`/`.yml` 文件
+
+* **Skill 数量** - 统计 `skills/` 目录中的 `.md` 文件
 
 这确保文档始终反映当前状态。
 
@@ -125,8 +131,10 @@ npm run sync-metadata -- --verify
 ```
 
 检查文件是否同步。退出状态码：
-- `0` - 所有文件已同步
-- `1` - 文件未同步（显示哪些文件）
+
+* `0` - 所有文件已同步
+
+* `1` - 文件未同步（显示哪些文件）
 
 ```
 🔍 Verifying metadata sync...
@@ -151,13 +159,17 @@ npm run sync-metadata -- --help
 在提交版本更改**之前**运行同步：
 
 ```bash
+
 # 1. 升级版本
+
 npm version patch
 
 # 2. 同步元数据
+
 npm run sync-metadata
 
 # 3. 一起提交所有内容
+
 git add .
 git commit -m "chore: release v3.5.0"
 ```
@@ -189,6 +201,7 @@ git commit -m "chore: release v3.5.0"
 . "$(dirname "$0")/_/husky.sh"
 
 # 验证元数据已同步
+
 npm run sync-metadata -- --verify
 
 if [ $? -ne 0 ]; then
@@ -202,7 +215,8 @@ fi
 在 GitHub Actions 中添加验证步骤：
 
 ```yaml
-- name: Verify Metadata Sync
+
+* name: Verify Metadata Sync
   run: npm run sync-metadata -- --verify
 ```
 
@@ -284,9 +298,9 @@ function loadMetadata(): Metadata {
 
   return {
     // ... 现有字段 ...
-    author: packageJson.author || '',
-    license: packageJson.license || '',
-    engines: packageJson.engines || { node: '>=20.0.0' },
+    author: packageJson.author | | '',
+    license: packageJson.license | | '',
+    engines: packageJson.engines | | { node: '>=20.0.0' },
   };
 }
 ```
@@ -303,9 +317,12 @@ function loadMetadata(): Metadata {
 4. **仅在**内容发生变化时写入
 
 这防止了：
-- 不必要的文件写入（保留时间戳）
-- 部分更新（原子操作）
-- 权限错误（写入前失败）
+
+* 不必要的文件写入（保留时间戳）
+
+* 部分更新（原子操作）
+
+* 权限错误（写入前失败）
 
 ### 模式设计
 
@@ -330,17 +347,23 @@ function loadMetadata(): Metadata {
 
 脚本处理：
 
-- **文件缺失** - 警告但继续
-- **无效的 package.json** - 快速失败并给出清晰错误
-- **权限错误** - 报告并退出
-- **正则表达式失败** - 报告失败的模式
+* **文件缺失** - 警告但继续
+
+* **无效的 package.json** - 快速失败并给出清晰错误
+
+* **权限错误** - 报告并退出
+
+* **正则表达式失败** - 报告失败的模式
 
 ### 性能
 
 对于典型项目：
-- **读取文件数：** 5-10
-- **执行时间：** <100ms
-- **内存使用：** <10MB
+
+* **读取文件数：** 5-10
+
+* **执行时间：** <100ms
+
+* **内存使用：** <10MB
 
 随目标文件数量线性扩展。
 
@@ -349,16 +372,21 @@ function loadMetadata(): Metadata {
 ### 手动测试
 
 ```bash
+
 # 1. 修改 package.json
+
 npm version patch
 
 # 2. 运行 dry-run 预览
+
 npm run sync-metadata -- --dry-run
 
 # 3. 应用更改
+
 npm run sync-metadata
 
 # 4. 用 git 验证
+
 git diff
 ```
 
@@ -416,7 +444,9 @@ test('syncs README badges', () => {
 **修复：**
 ```bash
 chmod +w docs/*.md
+
 # 或
+
 sudo chown $USER docs/*.md
 ```
 
@@ -442,7 +472,8 @@ npm run sync-metadata && git add -A
 
 在 pull request 中捕获过时的文档：
 ```yaml
-- run: npm run sync-metadata -- --verify
+
+* run: npm run sync-metadata -- --verify
 ```
 
 ### 4. 保持模式可维护
@@ -501,6 +532,7 @@ npm run sync-metadata
 
 更新 CONTRIBUTING.md：
 ```markdown
+
 ## Releasing
 
 1. Bump version: `npm version patch`
@@ -512,15 +544,22 @@ npm run sync-metadata
 
 潜在改进：
 
-- [ ] 支持多语言文档（i18n）
-- [ ] 同步到网站/落地页
-- [ ] 从源代码提取功能数量
-- [ ] 自动更新文档中的依赖版本
-- [ ] 与发布工作流集成
-- [ ] 基于 Markdown AST 的更新（比正则表达式更安全）
-- [ ] 自定义模式的配置文件
-- [ ] 自定义元数据来源的插件系统
+* [ ] 支持多语言文档（i18n）
+
+* [ ] 同步到网站/落地页
+
+* [ ] 从源代码提取功能数量
+
+* [ ] 自动更新文档中的依赖版本
+
+* [ ] 与发布工作流集成
+
+* [ ] 基于 Markdown AST 的更新（比正则表达式更安全）
+
+* [ ] 自定义模式的配置文件
+
+* [ ] 自定义元数据来源的插件系统
 
 ## 相关
 
-- [CI/CD Pipeline](../.github/workflows/)
+* [CI/CD Pipeline](../.github/workflows/)

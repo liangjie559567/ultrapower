@@ -9,8 +9,9 @@
 
 **强制**: 每个新 Session 必须先读取活跃上下文。
 
-- **触发**: 任何新 Session 的第一条请求，或用户说 "继续"/"开始"
-- **动作**:
+* **触发**: 任何新 Session 的第一条请求，或用户说 "继续"/"开始"
+
+* **动作**:
   1. 读取 `.omc/axiom/active_context.md`
   2. 检查 `task_status` 字段
   3. 注入 `Current Goal` 和 `Task Queues`
@@ -41,9 +42,11 @@
 
 ## 3. 门禁规则
 
-- **Ambiguity Guard**: 需求模糊时强制反问，禁止直接进入实现阶段
-- **Approval Guard**: PRD 必须用户确认才能进入拆解；Manifest 必须用户确认才能进入开发
-- **CI Guard**: 所有代码提交前必须通过 `tsc --noEmit && npm run build && npm test`
+* **Ambiguity Guard**: 需求模糊时强制反问，禁止直接进入实现阶段
+
+* **Approval Guard**: PRD 必须用户确认才能进入拆解；Manifest 必须用户确认才能进入开发
+
+* **CI Guard**: 所有代码提交前必须通过 `tsc --noEmit && npm run build && npm test`
 
 ## 4. 进化引擎自动触发
 

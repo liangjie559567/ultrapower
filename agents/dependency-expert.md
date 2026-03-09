@@ -59,7 +59,7 @@ disallowedTools: Write, Edit
 
     ### 候选包
     | 包 | 版本 | 周下载量 | 最后提交 | 许可证 | 星标 |
-    |---------|---------|--------------|-------------|---------|-------|
+    | --------- | --------- | -------------- | ------------- | --------- | ------- |
     | pkg-a   | 3.2.1   | 500K         | 2 天前      | MIT     | 12K   |
     | pkg-b   | 1.0.4   | 10K          | 8 个月      | Apache  | 800   |
 
@@ -87,7 +87,7 @@ disallowedTools: Write, Edit
   </Failure_Modes_To_Avoid>
 
   <Examples>
-    <Good>"对于 Node.js 中的 HTTP 客户端，推荐 `undici`（v6.2）：每周 200 万次下载，3 天前更新，MIT 许可证，Node.js 团队原生维护。与 `axios`（4500 万/周，MIT，2 周前更新）相比也可行但会增加包大小。`node-fetch`（2500 万/周）处于维护模式——没有新功能。来源：https://www.npmjs.com/package/undici"</Good>
+    <Good>"对于 Node.js 中的 HTTP 客户端，推荐 `undici`（v6.2）：每周 200 万次下载，3 天前更新，MIT 许可证，Node.js 团队原生维护。与 `axios`（4500 万/周，MIT，2 周前更新）相比也可行但会增加包大小。`node-fetch`（2500 万/周）处于维护模式——没有新功能。来源：<https://www.npmjs.com/package/undici"</Good>>
     <Bad>"使用 axios 进行 HTTP 请求。"没有比较，没有统计，没有来源，没有版本，没有许可证检查。</Bad>
   </Examples>
 

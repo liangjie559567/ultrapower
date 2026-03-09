@@ -16,9 +16,11 @@
 
 Axiom 进化引擎通过三个核心 Markdown 文件维持跨会话记忆：`learning_queue.md`（学习队列）、`reflection_log.md`（反思日志）、`knowledge_base.md`（知识图谱索引）。随着系统持续运行，这三个文件因"只增不减"设计持续膨胀：
 
-- `learning_queue.md`：327 行，LQ-001~LQ-030 全部 `done`，零 `pending`，仍全量载入
-- `reflection_log.md`：681 行 / 46KB，含大量历史遗留空条目噪音
-- `knowledge_base.md`：177 行 / 8KB，62 条，每次 ax-evolve / ax-knowledge 全量读取
+* `learning_queue.md`：327 行，LQ-001~LQ-030 全部 `done`，零 `pending`，仍全量载入
+
+* `reflection_log.md`：681 行 / 46KB，含大量历史遗留空条目噪音
+
+* `knowledge_base.md`：177 行 / 8KB，62 条，每次 ax-evolve / ax-knowledge 全量读取
 
 文件膨胀直接导致每次会话的上下文 token 消耗不必要地增长，且随时间线性恶化。
 
@@ -31,7 +33,7 @@ Axiom 进化引擎通过三个核心 Markdown 文件维持跨会话记忆：`lea
 ## 2. 用户故事
 
 | # | 角色 | 目标 | 收益 |
-|---|------|------|------|
+| --- | ------ | ------ | ------ |
 | U1 | Axiom 系统（自动化） | 当 learning_queue.md 中 done 条目超出阈值时，自动将其归档到独立文件 | 主文件始终只保留需要关注的 pending/in-progress 条目，token 消耗与待处理量成正比 |
 | U2 | Axiom 系统（自动化） | 清理 reflection_log.md 中的历史遗留空条目，并建立滚动窗口机制 | 反思日志保持可读性，旧噪音不再占据上下文 token |
 | U3 | 开发者（调用 ax-knowledge） | 按关键词或类别查询知识库，只获取相关条目 | 不再加载全部 62 条，响应更快，token 消耗更低 |
@@ -65,12 +67,12 @@ Axiom 进化引擎通过三个核心 Markdown 文件维持跨会话记忆：`lea
 3. 无参数时的默认行为：仍返回全量索引（向后兼容）
 
 **进阶方案（v2，引入 MiniSearch，开源研究推荐）：**
-4. 引入 `minisearch`（5.7K⭐，MIT，零外部依赖，TypeScript 原生，7KB minified）作为知识库检索引擎
-5. 知识库条目格式升级：在每条 entry 头部添加结构化 YAML front-matter 标签（`tags`、`category`、`created_at`、`last_accessed`、`priority`）
-6. MiniSearch 索引字段：`title`（权重 2x）、`content`（权重 1x）、`tags`（权重 1.5x），支持模糊匹配（fuzzy: 0.2）和前缀搜索（prefix: true）
-7. 时间衰减评分（源自 OpenClaw 242K⭐ 模式）：`finalScore = score × e^(-0.023 × ageInDays) × (1 + 0.2 × (3 - priority))`（30天半衰期，近期条目自动上浮）
-8. 实现层：TypeScript hook/skill 层，引入 `minisearch` 为唯一新增运行时依赖
-9. 降级路径：若 MiniSearch 加载失败，自动回退至基础方案（grep 过滤），不阻断主流程
+1. 引入 `minisearch`（5.7K⭐，MIT，零外部依赖，TypeScript 原生，7KB minified）作为知识库检索引擎
+2. 知识库条目格式升级：在每条 entry 头部添加结构化 YAML front-matter 标签（`tags`、`category`、`created_at`、`last_accessed`、`priority`）
+3. MiniSearch 索引字段：`title`（权重 2x）、`content`（权重 1x）、`tags`（权重 1.5x），支持模糊匹配（fuzzy: 0.2）和前缀搜索（prefix: true）
+4. 时间衰减评分（源自 OpenClaw 242K⭐ 模式）：`finalScore = score × e^(-0.023 × ageInDays) × (1 + 0.2 × (3 - priority))`（30天半衰期，近期条目自动上浮）
+5. 实现层：TypeScript hook/skill 层，引入 `minisearch` 为唯一新增运行时依赖
+6. 降级路径：若 MiniSearch 加载失败，自动回退至基础方案（grep 过滤），不阻断主流程
 
 ### T4: ax-evolve 会话结束自动小批量触发（SessionEnd hook 专用）
 
@@ -96,19 +98,19 @@ graph TD
 
     C[开发工作进行中] --> D[ax-reflect 写入新反思]
     D --> D1{反思条目数 > 20?}
-    D1 -->|是| D2[超出条目移至\nreflection_log_archive.md]
-    D1 -->|否| D3[直接写入主文件]
+    D1 --> | 是 | D2[超出条目移至\nreflection_log_archive.md]
+    D1 --> | 否 | D3[直接写入主文件]
 
     E[ax-evolve 执行] --> F[处理 pending 条目\n状态变为 done]
     F --> G{done 条目数 > 10?}
-    G -->|是| H[超出 done 条目\n归档至 learning_queue_archive.md]
-    G -->|否| I[保留在主文件]
+    G --> | 是 | H[超出 done 条目\n归档至 learning_queue_archive.md]
+    G --> | 否 | I[保留在主文件]
 
     J{会话结束检测} --> K{learning_queue\n有 pending 条目?}
-    K -->|是| L{本会话已手动\n触发 ax-evolve?}
-    L -->|否| M[自动触发小批量\nax-evolve: 最多3条]
-    L -->|是| N[跳过自动触发]
-    K -->|否| N
+    K --> | 是 | L{本会话已手动\n触发 ax-evolve?}
+    L --> | 否 | M[自动触发小批量\nax-evolve: 最多3条]
+    L --> | 是 | N[跳过自动触发]
+    K --> | 否 | N
 ```
 
 ### 4.2 T1 学习队列归档流程
@@ -135,14 +137,14 @@ sequenceDiagram
 ```mermaid
 graph LR
     A[ax-knowledge 调用] --> B{携带参数?}
-    B -->|--filter / --search| C[MiniSearch 全文检索\n字段权重 + 模糊匹配 + 前缀]
-    B -->|--category cat| D[MiniSearch 分类过滤\n精确匹配 Category 字段]
-    B -->|无参数| E[全量读取\n向后兼容]
+    B --> | --filter / --search | C[MiniSearch 全文检索\n字段权重 + 模糊匹配 + 前缀]
+    B --> | --category cat | D[MiniSearch 分类过滤\n精确匹配 Category 字段]
+    B --> | 无参数 | E[全量读取\n向后兼容]
     C --> F[时间衰减评分\nscore × e^-0.023×age\n30天半衰期]
     D --> F
     F --> G[返回 Top-K 匹配条目]
     E --> H[返回全部 62 条]
-    C -->|MiniSearch 加载失败| I[降级: grep 过滤\n基础方案兜底]
+    C --> | MiniSearch 加载失败 | I[降级: grep 过滤\n基础方案兜底]
 ```
 
 ---
@@ -152,7 +154,7 @@ graph LR
 ### 5.1 Token 效率指标（量化目标）
 
 | 文件 | 当前行数 | 优化后主文件上限 | 预期 token 降幅 |
-|------|---------|-----------------|----------------|
+| ------ | --------- | ----------------- | ---------------- |
 | learning_queue.md | ~327 行 | ~60 行（头部20行 + 最多10条done + pending区） | ~82%（MemGPT two-tier 模式） |
 | reflection_log.md | ~681 行 | ~400 行（最近20条完整反思） | ~41%（滚动窗口） |
 | knowledge_base.md | ~177 行 | 按需：平均返回 ~10 条（时间衰减Top-K） | ~85%（MiniSearch + 时间衰减，qmd 96% 参照） |
@@ -160,17 +162,23 @@ graph LR
 
 ### 5.2 向后兼容性要求
 
-- 现有 ax-evolve、ax-knowledge、ax-reflect skill 调用语法不变
-- 归档文件格式与主文件格式一致（可手动审查）
-- ax-knowledge 无参数时行为与优化前完全一致
-- 归档操作为幂等操作：重复执行不产生重复归档
-- 不修改已处理的 done 条目内容（仅移动位置）
+* 现有 ax-evolve、ax-knowledge、ax-reflect skill 调用语法不变
+
+* 归档文件格式与主文件格式一致（可手动审查）
+
+* ax-knowledge 无参数时行为与优化前完全一致
+
+* 归档操作为幂等操作：重复执行不产生重复归档
+
+* 不修改已处理的 done 条目内容（仅移动位置）
 
 ### 5.3 可靠性要求
 
-- 归档操作失败时，主文件内容不受影响（先写归档，再清理主文件）
-- 自动 ax-evolve 触发失败时，不阻断会话结束流程
-- 滚动窗口阈值通过配置项控制，不硬编码（默认值在 SKILL.md 中声明）
+* 归档操作失败时，主文件内容不受影响（先写归档，再清理主文件）
+
+* 自动 ax-evolve 触发失败时，不阻断会话结束流程
+
+* 滚动窗口阈值通过配置项控制，不硬编码（默认值在 SKILL.md 中声明）
 
 ---
 
@@ -178,44 +186,62 @@ graph LR
 
 ### T1 验收标准
 
-- [ ] `learning_queue.md` 主文件行数稳定在 60 行以内（正常使用状态）
-- [ ] `learning_queue_archive.md` 存在且包含所有历史 done 条目（无内容丢失）
-- [ ] 触发归档后，主文件 done 条目数 <= 10
-- [ ] 归档操作在 ax-evolve 执行后自动发生，无需手动干预
-- [ ] 归档文件每条记录带有 `归档时间: YYYY-MM-DD` 标记
+* [ ] `learning_queue.md` 主文件行数稳定在 60 行以内（正常使用状态）
+
+* [ ] `learning_queue_archive.md` 存在且包含所有历史 done 条目（无内容丢失）
+
+* [ ] 触发归档后，主文件 done 条目数 <= 10
+
+* [ ] 归档操作在 ax-evolve 执行后自动发生，无需手动干预
+
+* [ ] 归档文件每条记录带有 `归档时间: YYYY-MM-DD` 标记
 
 ### T2 验收标准
 
-- [ ] 执行一次性清理后，`reflection_log.md` 中无空条目（空标题块）
-- [ ] 新写入反思后，主文件反思条目数 <= 20
-- [ ] `reflection_log_archive.md` 包含被滚出窗口的历史反思（无内容丢失）
-- [ ] ax-reflect 正常写入新反思，与优化前行为一致
+* [ ] 执行一次性清理后，`reflection_log.md` 中无空条目（空标题块）
+
+* [ ] 新写入反思后，主文件反思条目数 <= 20
+
+* [ ] `reflection_log_archive.md` 包含被滚出窗口的历史反思（无内容丢失）
+
+* [ ] ax-reflect 正常写入新反思，与优化前行为一致
 
 ### T3 验收标准
 
-- [ ] `ax-knowledge --filter typescript` 只返回 Title/Tags 含 "typescript" 的条目（MiniSearch 全文匹配）
-- [ ] `ax-knowledge --category architecture` 只返回 Category = "architecture" 的条目
-- [ ] `ax-knowledge`（无参数）返回全量 62 条，与优化前一致
-- [ ] MiniSearch 返回结果按时间衰减评分排序（近期条目优先）
-- [ ] MiniSearch 加载失败时自动降级至 grep 过滤，不抛异常
-- [ ] 过滤结果正确（无漏匹配、无误匹配）
+* [ ] `ax-knowledge --filter typescript` 只返回 Title/Tags 含 "typescript" 的条目（MiniSearch 全文匹配）
+
+* [ ] `ax-knowledge --category architecture` 只返回 Category = "architecture" 的条目
+
+* [ ] `ax-knowledge`（无参数）返回全量 62 条，与优化前一致
+
+* [ ] MiniSearch 返回结果按时间衰减评分排序（近期条目优先）
+
+* [ ] MiniSearch 加载失败时自动降级至 grep 过滤，不抛异常
+
+* [ ] 过滤结果正确（无漏匹配、无误匹配）
 
 ### T4 验收标准
 
-- [ ] 会话结束时，触发的是 SessionEnd hook（不是 Stop hook）
-- [ ] 若有 pending 条目且本会话未手动触发，自动执行 ax-evolve（最多3条）
-- [ ] `stop_hook_active=true` 时 hook 立即退出，不执行归档（无限循环防护）
-- [ ] 已手动执行 ax-evolve 的会话，结束时不重复触发
-- [ ] 自动触发标记 `auto_evolve: true` 写入 active_context.md
-- [ ] 无 pending 条目时，会话结束不触发自动 ax-evolve
-- [ ] hook 执行时间 < 30 秒（SessionEnd 超时安全）
+* [ ] 会话结束时，触发的是 SessionEnd hook（不是 Stop hook）
+
+* [ ] 若有 pending 条目且本会话未手动触发，自动执行 ax-evolve（最多3条）
+
+* [ ] `stop_hook_active=true` 时 hook 立即退出，不执行归档（无限循环防护）
+
+* [ ] 已手动执行 ax-evolve 的会话，结束时不重复触发
+
+* [ ] 自动触发标记 `auto_evolve: true` 写入 active_context.md
+
+* [ ] 无 pending 条目时，会话结束不触发自动 ax-evolve
+
+* [ ] hook 执行时间 < 30 秒（SessionEnd 超时安全）
 
 ---
 
 ## 7. 风险与约束
 
 | 风险 | 严重程度 | 缓解措施 |
-|------|---------|---------|
+| ------ | --------- | --------- |
 | 归档操作在写归档与清理主文件之间崩溃，导致数据重复 | 中 | 归档前先备份主文件到临时文件，操作完成后删除临时文件 |
 | 滚动窗口阈值设置过小，导致有价值的历史反思被过早归档 | 低 | 默认 20 条反思 / 10 条 done，通过 SKILL.md 配置项暴露给用户 |
 | T4 Stop hook 无限循环（claude-mem bug #987 教训） | **已通过设计规避** | 仅使用 SessionEnd hook；stop_hook_active 守卫；不在 hook 输出中写"next steps"等触发词 |
@@ -226,22 +252,31 @@ graph LR
 
 ### 实现约束
 
-- 所有操作在 TypeScript 层实现（hooks / skills），符合项目技术栈
-- CI 门禁必须通过：`tsc --noEmit && npm run build && npm test`
-- 允许引入 `minisearch`（MIT 许可，零外部依赖，7KB minified）作为 T3 v2 的唯一新增运行时依赖；其余任务不引入新依赖
-- 归档文件路径固定为 `.omc/axiom/evolution/` 目录下
-- T4 hook 脚本必须在 30 秒内执行完毕（SessionEnd 时间限制）
+* 所有操作在 TypeScript 层实现（hooks / skills），符合项目技术栈
+
+* CI 门禁必须通过：`tsc --noEmit && npm run build && npm test`
+
+* 允许引入 `minisearch`（MIT 许可，零外部依赖，7KB minified）作为 T3 v2 的唯一新增运行时依赖；其余任务不引入新依赖
+
+* 归档文件路径固定为 `.omc/axiom/evolution/` 目录下
+
+* T4 hook 脚本必须在 30 秒内执行完毕（SessionEnd 时间限制）
 
 ---
 
 ## 8. 暂不包含（v2 延期）
 
-- `workflow_metrics.md` 的类似优化（用户已明确排除）
-- Python nexus daemon 的 token 追踪
-- `knowledge_base.md` 内容重构（语义去重、质量评分等）
-- 跨会话 token 预算追踪与报警
-- 知识库条目的向量化检索（语义搜索）
-- 归档文件的自动压缩或清理策略
+* `workflow_metrics.md` 的类似优化（用户已明确排除）
+
+* Python nexus daemon 的 token 追踪
+
+* `knowledge_base.md` 内容重构（语义去重、质量评分等）
+
+* 跨会话 token 预算追踪与报警
+
+* 知识库条目的向量化检索（语义搜索）
+
+* 归档文件的自动压缩或清理策略
 
 ---
 

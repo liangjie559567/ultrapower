@@ -12,18 +12,23 @@
 
 ## Pre-flight: Key Numbers (v5.5.5)
 
-- **Agents:** 49 (50 .md files, 1 is templates/base-agent.md)
-- **Skills:** 71 (72 directories, 1 is superpowers/ parent)
-- **Hooks:** 35 (36 index.ts files counting index of index)
-- **Custom Tools:** 35 (8 categories: LSP×12, AST×2, Python×1, Notepad×6, State×5, ProjectMemory×4, Trace×2, Skills×3)
-- **Version:** 5.5.5
+* **Agents:** 49 (50 .md files, 1 is templates/base-agent.md)
+
+* **Skills:** 71 (72 directories, 1 is superpowers/ parent)
+
+* **Hooks:** 35 (36 index.ts files counting index of index)
+
+* **Custom Tools:** 35 (8 categories: LSP×12, AST×2, Python×1, Notepad×6, State×5, ProjectMemory×4, Trace×2, Skills×3)
+
+* **Version:** 5.5.5
 
 ---
 
 ## Task 1: Create feature branch
 
 **Files:**
-- No file changes
+
+* No file changes
 
 **Step 1: Create branch from dev**
 
@@ -48,8 +53,10 @@ Expected: nothing to commit
 ## Task 2: Rewrite docs/REFERENCE.md
 
 **Files:**
-- Modify: `docs/REFERENCE.md` (full rewrite)
-- Read first: `src/agents/definitions.ts`, `agents/*.md`, `skills/*/SKILL.md`, `src/tools/index.ts`, `src/mcp/omc-tools-server.ts`
+
+* Modify: `docs/REFERENCE.md` (full rewrite)
+
+* Read first: `src/agents/definitions.ts`, `agents/*.md`, `skills/*/SKILL.md`, `src/tools/index.ts`, `src/mcp/omc-tools-server.ts`
 
 **Step 1: Read current file and key sources**
 
@@ -61,9 +68,11 @@ Write the full file following this structure. All counts must match actual code:
 
 ```markdown
 <!-- version: 5.5.5, updated: 2026-03-02 -->
+
 # ultrapower Reference Manual — v5.5.5
 
 ## Table of Contents
+
 1. [Installation](#installation)
 2. [Configuration](#configuration)
 3. [Execution Modes](#execution-modes)
@@ -79,6 +88,7 @@ Write the full file following this structure. All counts must match actual code:
 ## Installation
 
 ### As Claude Code Plugin (recommended)
+
 Add to `.mcp.json`:
 \`\`\`json
 {
@@ -93,6 +103,7 @@ Add to `.mcp.json`:
 \`\`\`
 
 ### Global npm install
+
 \`\`\`bash
 npm install -g @liangjie559567/ultrapower
 ultrapower install
@@ -116,7 +127,7 @@ Config file: `~/.claude/.omc-config.json`
 \`\`\`
 
 | Key | Type | Default | Description |
-|-----|------|---------|-------------|
+| ----- | ------ | --------- | ------------- |
 | `defaultExecutionMode` | string | `"ultrawork"` | Default execution mode when "fast"/"parallel" detected |
 | `hudEnabled` | boolean | `true` | Enable/disable HUD status line |
 
@@ -125,7 +136,7 @@ Config file: `~/.claude/.omc-config.json`
 ## Execution Modes
 
 | Mode | Trigger Keywords | Description |
-|------|-----------------|-------------|
+| ------ | ----------------- | ------------- |
 | `autopilot` | "autopilot", "build me", "I want a" | Fully autonomous execution from idea to running code |
 | `ultrawork` | "ulw", "ultrawork" | Maximum parallel agent orchestration |
 | `ralph` | "ralph", "don't stop", "must complete" | Self-referential loop with verifier validation |
@@ -142,7 +153,7 @@ Total: **49 agents** across 6 lanes. Use `ultrapower:` prefix in Task subagent_t
 ### Build/Analysis Lane (8)
 
 | Agent | Model | Purpose |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | `explore` | haiku | Codebase discovery, symbol/file mapping |
 | `analyst` | opus | Requirements clarification, acceptance criteria |
 | `planner` | opus | Task ordering, execution plans, risk flagging |
@@ -155,7 +166,7 @@ Total: **49 agents** across 6 lanes. Use `ultrapower:` prefix in Task subagent_t
 ### Review Lane (6)
 
 | Agent | Model | Purpose |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | `style-reviewer` | haiku | Formatting, naming, idioms, lint rules |
 | `quality-reviewer` | sonnet | Logic defects, maintainability, anti-patterns |
 | `api-reviewer` | sonnet | API contracts, versioning, backward compat |
@@ -166,7 +177,7 @@ Total: **49 agents** across 6 lanes. Use `ultrapower:` prefix in Task subagent_t
 ### Domain Specialists (16)
 
 | Agent | Model | Purpose |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | `dependency-expert` | sonnet | External SDK/API/package evaluation |
 | `test-engineer` | sonnet | Test strategy, coverage, flaky test hardening |
 | `quality-strategist` | sonnet | Quality strategy, release readiness, risk |
@@ -187,7 +198,7 @@ Total: **49 agents** across 6 lanes. Use `ultrapower:` prefix in Task subagent_t
 ### Product Lane (4)
 
 | Agent | Model | Purpose |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | `product-manager` | sonnet | Problem framing, user personas/JTBD, PRD |
 | `ux-researcher` | sonnet | Heuristic audits, usability, accessibility |
 | `information-architect` | sonnet | Taxonomy, navigation, discoverability |
@@ -196,7 +207,7 @@ Total: **49 agents** across 6 lanes. Use `ultrapower:` prefix in Task subagent_t
 ### Axiom Lane (14)
 
 | Agent | Model | Purpose |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | `axiom-requirement-analyst` | sonnet | Three-state gate: PASS/CLARIFY/REJECT |
 | `axiom-product-designer` | sonnet | Draft PRD + Mermaid flow diagram |
 | `axiom-review-aggregator` | sonnet | 5-expert parallel review + conflict arbitration |
@@ -215,13 +226,13 @@ Total: **49 agents** across 6 lanes. Use `ultrapower:` prefix in Task subagent_t
 ### Coordination (1)
 
 | Agent | Model | Purpose |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | `critic` | opus | Critical challenge of plans/designs |
 
 ### Deprecated Aliases
 
 | Alias | Maps To |
-|-------|---------|
+| ------- | --------- |
 | `researcher` | `document-specialist` |
 | `tdd-guide` | `test-engineer` |
 
@@ -234,7 +245,7 @@ Total: **71 skills**. Invoke with `/ultrapower:<name>` or via Skill tool.
 ### Workflow Skills
 
 | Skill | Trigger | Purpose |
-|-------|---------|---------|
+| ------- | --------- | --------- |
 | `autopilot` | "autopilot", "build me", "I want a" | Full autonomous execution |
 | `ralph` | "ralph", "don't stop", "must complete" | Persistent loop with verifier |
 | `ultrawork` | "ulw", "ultrawork" | Max parallel agent orchestration |
@@ -253,7 +264,7 @@ Total: **71 skills**. Invoke with `/ultrapower:<name>` or via Skill tool.
 ### Axiom Skills
 
 | Skill | Command | Purpose |
-|-------|---------|---------|
+| ------- | --------- | --------- |
 | `ax-draft` | `/ax-draft` | Requirements → Draft PRD → user confirmation |
 | `ax-review` | `/ax-review` | 5-expert review → aggregation → Rough PRD |
 | `ax-decompose` | `/ax-decompose` | Rough PRD → atomic task DAG |
@@ -272,7 +283,7 @@ Total: **71 skills**. Invoke with `/ultrapower:<name>` or via Skill tool.
 ### Agent Shortcut Skills
 
 | Skill | Maps To | Auto-trigger |
-|-------|---------|-------------|
+| ------- | --------- | ------------- |
 | `analyze` | `debugger` | "analyze", "debug", "investigate" |
 | `deepsearch` | `explore` | "search", "find in codebase" |
 | `tdd` | `test-engineer` | "tdd", "test first", "red green" |
@@ -399,7 +410,7 @@ Total: **35 hooks** in `src/hooks/`.
 ### Core Hooks
 
 | Hook | Event | Purpose |
-|------|-------|---------|
+| ------ | ------- | --------- |
 | `bridge-normalize` | all | Normalize snake_case input, whitelist filtering for SENSITIVE_HOOKS |
 | `keyword-detector` | PreToolUse | Magic keyword detection → skill activation |
 | `pre-tool-use` | PreToolUse | Path safety, delegation enforcement |
@@ -410,7 +421,7 @@ Total: **35 hooks** in `src/hooks/`.
 ### Mode Hooks
 
 | Hook | Purpose |
-|------|---------|
+| ------ | --------- |
 | `autopilot/` | Full autonomous execution loop |
 | `ralph/` | Persistent execution with verifier |
 | `ultrawork/` | Parallel agent orchestration |
@@ -424,10 +435,13 @@ Total: **35 hooks** in `src/hooks/`.
 
 ### Security Guarantees
 
-- Hook inputs use snake_case: `tool_name`, `tool_input`, `tool_response`, `session_id`, `cwd`, `hook_event_name`
-- Kill switch: `DISABLE_OMC` (all hooks), `OMC_SKIP_HOOKS` (comma-separated names)
-- `SENSITIVE_HOOKS` types (permission-request, setup, session-end) bypass fast path in bridge-normalize
-- Required key validation per hook event type
+* Hook inputs use snake_case: `tool_name`, `tool_input`, `tool_response`, `session_id`, `cwd`, `hook_event_name`
+
+* Kill switch: `DISABLE_OMC` (all hooks), `OMC_SKIP_HOOKS` (comma-separated names)
+
+* `SENSITIVE_HOOKS` types (permission-request, setup, session-end) bypass fast path in bridge-normalize
+
+* Required key validation per hook event type
 
 ---
 
@@ -436,7 +450,7 @@ Total: **35 hooks** in `src/hooks/`.
 ### Available Providers
 
 | Provider | Tool | Best For |
-|----------|------|---------|
+| ---------- | ------ | --------- |
 | Codex | `mcp__x__ask_codex` | Architecture review, planning, code review |
 | Gemini | `mcp__g__ask_gemini` | UI/UX design, large-context (1M tokens) |
 | sequential-thinking | `mcp__sequential-thinking__*` | Step-by-step reasoning |
@@ -494,20 +508,28 @@ LSP servers.ts uses `execFileSync` (not `execSync`) for all command execution. N
 ### 5. Write Path Restrictions
 
 `src/hooks/guards/pre-tool.ts` blocks writes to:
-- `path.resolve(filePath).startsWith(path.join(os.homedir(), '.claude'))`
-- Paths containing `node_modules`
+
+* `path.resolve(filePath).startsWith(path.join(os.homedir(), '.claude'))`
+
+* Paths containing `node_modules`
 ```
 
 **Step 3: Verify counts match code**
 
 ```bash
+
 # Verify agent count
+
 ls agents/*.md | grep -v templates | wc -l
+
 # Expected: 49 (50 total - 1 template)
 
 # Verify skills count
+
 ls skills/ | grep -v superpowers | wc -l
+
 # Expected: 71 (72 - 1 superpowers parent)
+
 ```
 
 **Step 4: Commit**
@@ -522,8 +544,10 @@ git commit -m "docs: rewrite REFERENCE.md for v5.5.5 (49 agents, 71 skills, 35 t
 ## Task 3: Rewrite docs/ARCHITECTURE.md
 
 **Files:**
-- Modify: `docs/ARCHITECTURE.md` (full rewrite)
-- Read first: `src/hooks/bridge.ts`, `src/hooks/bridge-normalize.ts`, `src/features/delegation-enforcer.ts`, `src/tools/state-tools.ts`, `src/lib/validateMode.ts`
+
+* Modify: `docs/ARCHITECTURE.md` (full rewrite)
+
+* Read first: `src/hooks/bridge.ts`, `src/hooks/bridge-normalize.ts`, `src/features/delegation-enforcer.ts`, `src/tools/state-tools.ts`, `src/lib/validateMode.ts`
 
 **Step 1: Read current file and key sources**
 
@@ -533,6 +557,7 @@ Read `docs/ARCHITECTURE.md` (current) and the source files listed above.
 
 ```markdown
 <!-- version: 5.5.5, updated: 2026-03-02 -->
+
 # ultrapower Architecture — v5.5.5
 
 ## System Overview
@@ -573,9 +598,12 @@ Hook Event → bridge-normalize → keyword-detector → pre-tool-use guards
 \`\`\`
 
 **bridge-normalize** (`src/hooks/bridge-normalize.ts`):
-- Converts all hook input fields to camelCase
-- Applies field whitelist per hook type
-- **Security (v5.5.0):** `SENSITIVE_HOOKS` types (permission-request, setup, session-end) bypass the `isAlreadyCamelCase()` fast path, forcing full Zod validation. This prevents malicious camelCase inputs from bypassing whitelist checks.
+
+* Converts all hook input fields to camelCase
+
+* Applies field whitelist per hook type
+
+* **Security (v5.5.0):** `SENSITIVE_HOOKS` types (permission-request, setup, session-end) bypass the `isAlreadyCamelCase()` fast path, forcing full Zod validation. This prevents malicious camelCase inputs from bypassing whitelist checks.
 
 ```typescript
 const SENSITIVE_HOOKS = new Set(['permission-request', 'setup', 'session-end']);
@@ -589,7 +617,7 @@ if (!SENSITIVE_HOOKS.has(hookType) && isAlreadyCamelCase(input)) {
 **Added in v5.5.2.** Intercepts `pre-tool-use` for `Task`/`Agent` tool calls. When no `model` parameter is specified, automatically injects the appropriate default:
 
 | Agent Type | Auto-injected Model |
-|-----------|-------------------|
+| ----------- | ------------------- |
 | `explore`, `style-reviewer`, `writer` | `haiku` |
 | `executor`, `debugger`, `verifier`, and most others | `sonnet` |
 | `architect`, `analyst`, `planner`, `deep-executor`, `critic`, `code-reviewer` | `opus` |
@@ -626,8 +654,10 @@ export function assertValidMode(mode: string): string {
 Background daemon for rate limit management.
 
 **v5.5.0 fixes:**
-- **Windows ESM import:** `pathToFileURL(modulePath).href` replaces raw Windows path in `import()` calls
-- **Config injection:** Config is written to a UUID-named tmpfile via `os.tmpdir()` and passed via env var, replacing the previous `JSON.stringify` code injection pattern
+
+* **Windows ESM import:** `pathToFileURL(modulePath).href` replaces raw Windows path in `import()` calls
+
+* **Config injection:** Config is written to a UUID-named tmpfile via `os.tmpdir()` and passed via env var, replacing the previous `JSON.stringify` code injection pattern
 
 ### python-repl (`src/tools/python-repl/tool.ts`)
 
@@ -638,8 +668,10 @@ Persistent Python REPL with pandas/numpy/matplotlib.
 ### LSP Client (`src/tools/lsp/client.ts`)
 
 **v5.5.0 fixes:**
-- `disconnect()` iterates all pending timers with `clearTimeout` before `Map.clear()`
-- Buffer has a 64MB hard cap; exceeding it disconnects the client with a warning
+
+* `disconnect()` iterates all pending timers with `clearTimeout` before `Map.clear()`
+
+* Buffer has a 64MB hard cap; exceeding it disconnects the client with a warning
 
 ### rules-injector (`src/hooks/rules-injector/finder.ts`)
 
@@ -658,7 +690,7 @@ IDLE → PLANNING → CONFIRMING → EXECUTING → AUTO_FIX → BLOCKED → ARCH
 ```
 
 | State | Trigger | Action |
-|-------|---------|--------|
+| ------- | --------- | -------- |
 | IDLE | User request | Load context, route to workflow |
 | PLANNING | /ax-draft or /ax-decompose | Requirements clarification loop |
 | CONFIRMING | PRD complete | User gate: "Confirm execution?" |
@@ -712,7 +744,7 @@ Claude Code
 ## Security Boundaries (v5.5.5)
 
 | Boundary | Mechanism | File |
-|----------|-----------|------|
+| ---------- | ----------- | ------ |
 | Path traversal | `assertValidMode()` whitelist | `src/lib/validateMode.ts` |
 | Hook input injection | Zod schema + field whitelist | `src/hooks/bridge-normalize.ts` |
 | Shell injection | `execFileSync` (not `execSync`) | `src/tools/lsp/servers.ts` |
@@ -734,8 +766,10 @@ git commit -m "docs: rewrite ARCHITECTURE.md for v5.5.5 (security boundaries, de
 ## Task 4: Rewrite docs/FEATURES.md
 
 **Files:**
-- Modify: `docs/FEATURES.md` (full rewrite)
-- Read first: `src/tools/state-tools.ts`, `src/tools/python-repl/tool.ts`, `src/features/delegation-enforcer.ts`, `src/mcp/omc-tools-server.ts`
+
+* Modify: `docs/FEATURES.md` (full rewrite)
+
+* Read first: `src/tools/state-tools.ts`, `src/tools/python-repl/tool.ts`, `src/features/delegation-enforcer.ts`, `src/mcp/omc-tools-server.ts`
 
 **Step 1: Read current file**
 
@@ -745,6 +779,7 @@ Read `docs/FEATURES.md` (current).
 
 ```markdown
 <!-- version: 5.5.5, updated: 2026-03-02 -->
+
 # ultrapower Features — v5.5.5
 
 Developer reference for all ultrapower feature systems.
@@ -758,7 +793,7 @@ Session memory for the current conversation. Stored at `{worktree}/.omc/notepad.
 ### Tools (6)
 
 | Tool | Purpose |
-|------|---------|
+| ------ | --------- |
 | `notepad_read(section)` | Read all/priority/working/manual sections |
 | `notepad_write_priority(content)` | Write priority context (≤500 chars, auto-loaded at session start) |
 | `notepad_write_working(content)` | Write timestamped working memory (auto-pruned after 7 days) |
@@ -779,7 +814,7 @@ Execution mode state files at `{worktree}/.omc/state/{mode}-state.json`.
 ### Tools (5)
 
 | Tool | Purpose |
-|------|---------|
+| ------ | --------- |
 | `state_read(mode)` | Read state JSON for a mode |
 | `state_write(mode, data)` | Write/merge state data |
 | `state_clear(mode)` | Delete state file |
@@ -809,7 +844,7 @@ Persistent cross-session project knowledge at `{worktree}/.omc/project-memory.js
 ### Tools (4)
 
 | Tool | Section Keys | Purpose |
-|------|-------------|---------|
+| ------ | ------------- | --------- |
 | `project_memory_read(section?)` | techStack, build, conventions, structure, notes, directives | Read project knowledge |
 | `project_memory_write(section, data)` | same | Write/merge section data |
 | `project_memory_add_note(category, content)` | — | Append categorized note |
@@ -874,16 +909,18 @@ Session state persists between calls within a conversation.
 ### Model Routing Table
 
 | Agent Pattern | Auto-injected Model |
-|--------------|-------------------|
+| -------------- | ------------------- |
 | `explore`, `style-reviewer`, `writer` | `haiku` |
 | `executor`, `debugger`, `verifier`, `test-engineer`, `build-fixer`, `designer`, `qa-tester`, `scientist`, `git-master`, `document-specialist`, `dependency-expert`, all Axiom agents | `sonnet` |
 | `architect`, `analyst`, `planner`, `deep-executor`, `critic`, `code-reviewer` | `opus` |
 
 ### Behavior
 
-- Explicit `model` parameter is **never** overridden
-- Only `Task` and `Agent` tool calls are intercepted
-- Injection happens in `processPreToolUse` via `bridge.ts`
+* Explicit `model` parameter is **never** overridden
+
+* Only `Task` and `Agent` tool calls are intercepted
+
+* Injection happens in `processPreToolUse` via `bridge.ts`
 
 ---
 
@@ -905,7 +942,7 @@ See [Agents section in REFERENCE.md](./REFERENCE.md#axiom-lane-14) for full list
 ### 14 Axiom Skills
 
 | Skill | Purpose |
-|-------|---------|
+| ------- | --------- |
 | `ax-draft` | Requirements clarification → Draft PRD → user confirmation gate |
 | `ax-review` | 5-expert parallel review → Rough PRD with arbitrated decisions |
 | `ax-decompose` | Rough PRD → atomic task DAG → Manifest.md |
@@ -924,14 +961,14 @@ See [Agents section in REFERENCE.md](./REFERENCE.md#axiom-lane-14) for full list
 ### 2 Axiom Hooks
 
 | Hook | Event | Purpose |
-|------|-------|---------|
+| ------ | ------- | --------- |
 | `axiom-boot` | SessionStart | Inject memory context from active_context.md |
 | `axiom-guards` | PreToolUse | Enforce gate rules (Expert/User/CI Gate/Scope Gate) |
 
 ### Gate Rules
 
 | Gate | Trigger | Action |
-|------|---------|--------|
+| ------ | --------- | -------- |
 | Expert Gate | New feature request | Must go through /ax-draft → /ax-review |
 | User Gate | PRD finalized | Show confirmation: "Confirm execution? (Yes/No)" |
 | CI Gate | Code modified | Run `tsc --noEmit && npm run build && npm test` |
@@ -948,11 +985,16 @@ team-plan → team-prd → team-exec → team-verify → team-fix (loop)
 ```
 
 Phase routing:
-- **team-plan:** `explore` (haiku) + `planner` (opus)
-- **team-prd:** `analyst` (opus)
-- **team-exec:** `executor` (sonnet) + domain specialists
-- **team-verify:** `verifier` (sonnet) + optional reviewers
-- **team-fix:** `executor`/`build-fixer`/`debugger` based on defect type
+
+* **team-plan:** `explore` (haiku) + `planner` (opus)
+
+* **team-prd:** `analyst` (opus)
+
+* **team-exec:** `executor` (sonnet) + domain specialists
+
+* **team-verify:** `verifier` (sonnet) + optional reviewers
+
+* **team-fix:** `executor`/`build-fixer`/`debugger` based on defect type
 
 State: `state_write(mode="team")` tracks `current_phase`, `fix_loop_count`, `linked_ralph`.
 
@@ -975,12 +1017,18 @@ Self-terminates when all acceptance criteria are met. Combine with `team` for te
 ### Input Contract
 
 All hooks receive snake_case fields:
-- `tool_name` — name of the tool being called
-- `tool_input` — tool input parameters
-- `tool_response` — tool output (post-tool-use only)
-- `session_id` — current session identifier
-- `cwd` — current working directory
-- `hook_event_name` — hook type
+
+* `tool_name` — name of the tool being called
+
+* `tool_input` — tool input parameters
+
+* `tool_response` — tool output (post-tool-use only)
+
+* `session_id` — current session identifier
+
+* `cwd` — current working directory
+
+* `hook_event_name` — hook type
 
 ### Security: SENSITIVE_HOOKS (v5.5.0)
 
@@ -995,8 +1043,9 @@ if (SENSITIVE_HOOKS.has(hookEventName)) {
 
 ### Kill Switch
 
-- `DISABLE_OMC=1` — disable all hooks
-- `OMC_SKIP_HOOKS=keyword-detector,pre-tool-use` — skip specific hooks by name
+* `DISABLE_OMC=1` — disable all hooks
+
+* `OMC_SKIP_HOOKS=keyword-detector,pre-tool-use` — skip specific hooks by name
 
 ---
 
@@ -1005,7 +1054,7 @@ if (SENSITIVE_HOOKS.has(hookEventName)) {
 All Windows-specific fixes shipped in v5.5.0–v5.5.1:
 
 | Issue | Fix | File |
-|-------|-----|------|
+| ------- | ----- | ------ |
 | Windows paths fail in ESM `import()` | `pathToFileURL(path).href` | `src/features/rate-limit-wait/daemon.ts` |
 | `which` not available on Windows | Use `where` when `process.platform === 'win32'` | `src/features/auto-update.ts` |
 | Backslash paths in path comparisons | `path.relative()` + `path.resolve()` normalization | `src/hooks/subagent-tracker/index.ts`, `src/hooks/guards/pre-tool.ts` |
@@ -1018,7 +1067,7 @@ All Windows-specific fixes shipped in v5.5.0–v5.5.1:
 ### Provider Selection Guide
 
 | Task Type | Preferred Provider |
-|-----------|------------------|
+| ----------- | ------------------ |
 | Architecture review, planning validation | Codex (`mcp__x__ask_codex`, role: `architect`) |
 | Code review, security analysis | Codex (role: `code-reviewer`, `security-reviewer`) |
 | UI/UX design review, large context | Gemini (`mcp__g__ask_gemini`, role: `designer`) |
@@ -1056,8 +1105,10 @@ git commit -m "docs: rewrite FEATURES.md for v5.5.5 (delegation-enforcer, Axiom,
 ## Task 5: Update CHANGELOG.md
 
 **Files:**
-- Modify: `CHANGELOG.md` (prepend v5.5.0–v5.5.4 entries before existing v5.5.5 entry)
-- Read first: `CHANGELOG.md` (find the `## [5.5.5]` line)
+
+* Modify: `CHANGELOG.md` (prepend v5.5.0–v5.5.4 entries before existing v5.5.5 entry)
+
+* Read first: `CHANGELOG.md` (find the `## [5.5.5]` line)
 
 **Step 1: Read current CHANGELOG**
 
@@ -1068,44 +1119,74 @@ Read `CHANGELOG.md` to find the exact line of `## [5.5.5]`.
 Insert the following block immediately before the `## [5.5.5]` line:
 
 ```markdown
+
 ## [5.5.4] - 2026-03-02
+
 ### Code Quality
-- Expand `generatePromptId` entropy from 4 to 8 bytes
-- Add 4MB prompt size limit to `executeGemini` in gemini-core.ts
-- Unify catch blocks across notepads-tools.ts to return `isError: true`
-- Replace hardcoded `ALLOWED_BOUNDARIES` with dynamic calculation in skills-tools
+
+* Expand `generatePromptId` entropy from 4 to 8 bytes
+
+* Add 4MB prompt size limit to `executeGemini` in gemini-core.ts
+
+* Unify catch blocks across notepads-tools.ts to return `isError: true`
+
+* Replace hardcoded `ALLOWED_BOUNDARIES` with dynamic calculation in skills-tools
 
 ## [5.5.3] - 2026-03-02
+
 ### Documentation & Namespace
-- Replace all `superpowers:` prefix residuals with `ultrapower:` across commands/skills/docs
-- Add deprecation notice for legacy namespace with user migration hints
-- Sync AGENTS.md version number and agent count with package.json
-- Fix `$` anchor in bump-version.mjs version regex to prevent false matches
-- Fix ax-status SKILL.md path reference to .omc/axiom/active_context.md
-- Add GitHub Actions windows-latest CI matrix for Windows regression validation
+
+* Replace all `superpowers:` prefix residuals with `ultrapower:` across commands/skills/docs
+
+* Add deprecation notice for legacy namespace with user migration hints
+
+* Sync AGENTS.md version number and agent count with package.json
+
+* Fix `$` anchor in bump-version.mjs version regex to prevent false matches
+
+* Fix ax-status SKILL.md path reference to .omc/axiom/active_context.md
+
+* Add GitHub Actions windows-latest CI matrix for Windows regression validation
 
 ## [5.5.2] - 2026-03-02
+
 ### Feature
-- Add delegation-enforcer: auto-inject model tier for Task/Agent calls when unspecified
-- explore/style-reviewer/writer → haiku; most agents → sonnet; architect/planner → opus
-- Explicit model parameters are never overridden
+
+* Add delegation-enforcer: auto-inject model tier for Task/Agent calls when unspecified
+
+* explore/style-reviewer/writer → haiku; most agents → sonnet; architect/planner → opus
+
+* Explicit model parameters are never overridden
 
 ## [5.5.1] - 2026-03-02
+
 ### Fix (Windows & Features)
-- Fix `which`/`where` platform branch in auto-update.ts for Windows compatibility
-- Fix path comparisons: use `path.relative()` in subagent-tracker, `path.resolve()` in pre-tool guards
-- Add 60-second timeout cap to `handleWaitForJob` to prevent event loop blocking
-- Fix `handleKillJob` operation order: kill process before writing status file
+
+* Fix `which`/`where` platform branch in auto-update.ts for Windows compatibility
+
+* Fix path comparisons: use `path.relative()` in subagent-tracker, `path.resolve()` in pre-tool guards
+
+* Add 60-second timeout cap to `handleWaitForJob` to prevent event loop blocking
+
+* Fix `handleKillJob` operation order: kill process before writing status file
 
 ## [5.5.0] - 2026-03-02
+
 ### Security
-- Add `assertValidMode()` path traversal guard at state_read/state_write handler entry
-- Replace `execSync` string interpolation with `execFileSync` in LSP servers.ts
-- Disable `isAlreadyCamelCase()` fast path for SENSITIVE_HOOKS in bridge-normalize.ts
-- Fix `Atomics.wait()` TypeError on main thread: fall back to setTimeout in subagent-tracker and session-registry
-- Fix Windows ESM import: use `pathToFileURL(modulePath).href` in daemon.ts
-- Replace `JSON.stringify` config injection with UUID tmpfile + env-var pattern in daemon.ts
-- Add 64MB buffer cap and `clearTimeout` on disconnect in LSP client.ts
+
+* Add `assertValidMode()` path traversal guard at state_read/state_write handler entry
+
+* Replace `execSync` string interpolation with `execFileSync` in LSP servers.ts
+
+* Disable `isAlreadyCamelCase()` fast path for SENSITIVE_HOOKS in bridge-normalize.ts
+
+* Fix `Atomics.wait()` TypeError on main thread: fall back to setTimeout in subagent-tracker and session-registry
+
+* Fix Windows ESM import: use `pathToFileURL(modulePath).href` in daemon.ts
+
+* Replace `JSON.stringify` config injection with UUID tmpfile + env-var pattern in daemon.ts
+
+* Add 64MB buffer cap and `clearTimeout` on disconnect in LSP client.ts
 
 ```
 
@@ -1129,25 +1210,40 @@ git commit -m "docs(changelog): add v5.5.0-v5.5.4 entries (Batch 1-4 fixes)"
 ## Task 6: Update docs/standards/ version numbers
 
 **Files:**
-- Modify: `docs/standards/README.md` (5.0.22 → 5.5.5)
-- Modify: `docs/standards/runtime-protection.md` (5.0.21 → 5.5.5)
-- Modify: `docs/standards/hook-execution-order.md` (5.0.21 → 5.5.5)
-- Modify: `docs/standards/state-machine.md` (5.0.21 → 5.5.5)
-- Modify: `docs/standards/agent-lifecycle.md` (5.0.21 → 5.5.5)
-- Modify: `docs/standards/user-guide.md` (5.0.21 → 5.5.5)
-- Modify: `docs/standards/anti-patterns.md` (5.0.21 → 5.5.5)
-- Modify: `docs/standards/contribution-guide.md` (5.0.21 → 5.5.5)
-- Modify: `docs/standards/audit-report.md` (5.0.22 → 5.5.5)
+
+* Modify: `docs/standards/README.md` (5.0.22 → 5.5.5)
+
+* Modify: `docs/standards/runtime-protection.md` (5.0.21 → 5.5.5)
+
+* Modify: `docs/standards/hook-execution-order.md` (5.0.21 → 5.5.5)
+
+* Modify: `docs/standards/state-machine.md` (5.0.21 → 5.5.5)
+
+* Modify: `docs/standards/agent-lifecycle.md` (5.0.21 → 5.5.5)
+
+* Modify: `docs/standards/user-guide.md` (5.0.21 → 5.5.5)
+
+* Modify: `docs/standards/anti-patterns.md` (5.0.21 → 5.5.5)
+
+* Modify: `docs/standards/contribution-guide.md` (5.0.21 → 5.5.5)
+
+* Modify: `docs/standards/audit-report.md` (5.0.22 → 5.5.5)
 
 **Step 1: Batch replace version strings**
 
 ```bash
 cd docs/standards
+
 # Replace 5.0.21 with 5.5.5 in all files
+
 sed -i 's/version: 5\.0\.21/version: 5.5.5/g' runtime-protection.md hook-execution-order.md state-machine.md agent-lifecycle.md user-guide.md anti-patterns.md contribution-guide.md
+
 # Replace 5.0.22 with 5.5.5
+
 sed -i 's/version: 5\.0\.22/version: 5.5.5/g' README.md audit-report.md
+
 # Update 'updated' dates
+
 sed -i 's/updated: 2026-02-[0-9]*/updated: 2026-03-02/g' *.md
 ```
 
@@ -1177,11 +1273,16 @@ Append to `docs/standards/audit-report.md`:
 
 Standards version updated from 5.0.21/5.0.22 to 5.5.5 to align with package version.
 Key changes reflected in this version:
-- `runtime-protection.md`: `assertValidMode()` whitelist documented for state_read/state_write
-- `hook-execution-order.md`: SENSITIVE_HOOKS fast-path bypass documented
-- `state-machine.md`: delegation-enforcer model injection added to pre-tool-use flow
-- `agent-lifecycle.md`: Atomics.wait main-thread fix documented
-- `contribution-guide.md`: Windows CI matrix requirement added
+
+* `runtime-protection.md`: `assertValidMode()` whitelist documented for state_read/state_write
+
+* `hook-execution-order.md`: SENSITIVE_HOOKS fast-path bypass documented
+
+* `state-machine.md`: delegation-enforcer model injection added to pre-tool-use flow
+
+* `agent-lifecycle.md`: Atomics.wait main-thread fix documented
+
+* `contribution-guide.md`: Windows CI matrix requirement added
 ```
 
 **Step 4: Commit**
@@ -1196,13 +1297,20 @@ git commit -m "docs(standards): update version numbers 5.0.21/5.0.22 → 5.5.5"
 ## Task 7: Clean up outdated files
 
 **Files:**
-- Delete: `docs/reviews/ultrapower-full-bugfix-plan/` (entire directory)
-- Delete: `docs/reviews/draft-prd-ultrapower-pain-fix/` (entire directory)
-- Delete: `docs/reviews/draft_prd_pain_points/` (entire directory)
-- Delete: `docs/prd/ultrapower-standards-draft.md`
-- Delete: `docs/prd/ultrapower-standards-rough.md`
-- Keep: `docs/reviews/ultrapower-pain-points/` (original pain points, historical value)
-- Keep: `docs/reviews/ultrapower-standards/` (standards review, active reference)
+
+* Delete: `docs/reviews/ultrapower-full-bugfix-plan/` (entire directory)
+
+* Delete: `docs/reviews/draft-prd-ultrapower-pain-fix/` (entire directory)
+
+* Delete: `docs/reviews/draft_prd_pain_points/` (entire directory)
+
+* Delete: `docs/prd/ultrapower-standards-draft.md`
+
+* Delete: `docs/prd/ultrapower-standards-rough.md`
+
+* Keep: `docs/reviews/ultrapower-pain-points/` (original pain points, historical value)
+
+* Keep: `docs/reviews/ultrapower-standards/` (standards review, active reference)
 
 **Step 1: Confirm files exist before deletion**
 
@@ -1241,8 +1349,10 @@ git commit -m "docs: remove stale review drafts and outdated PRD files"
 ## Task 8: Merge docs/shared/ into docs/partials/
 
 **Files:**
-- `docs/shared/` contains: `AGENTS.md`, `agent-tiers.md`, `features.md`, `mode-hierarchy.md`, `mode-selection-guide.md`, `verification-tiers.md`
-- `docs/partials/` contains identical files (confirmed by pre-flight scan)
+
+* `docs/shared/` contains: `AGENTS.md`, `agent-tiers.md`, `features.md`, `mode-hierarchy.md`, `mode-selection-guide.md`, `verification-tiers.md`
+
+* `docs/partials/` contains identical files (confirmed by pre-flight scan)
 
 **Step 1: Diff to confirm they are identical**
 
@@ -1259,7 +1369,9 @@ Expected: no differences
 **Step 2: If any diff found, copy newer content to partials/**
 
 ```bash
+
 # Only if diff showed differences — copy shared/ files to partials/
+
 cp docs/shared/*.md docs/partials/
 ```
 
@@ -1289,10 +1401,14 @@ git commit -m "docs: merge docs/shared/ into docs/partials/ (remove duplicate)"
 ## Task 9: Add version headers to main docs + CI verify
 
 **Files:**
-- Verify: `docs/REFERENCE.md` (should already have header from Task 2)
-- Verify: `docs/ARCHITECTURE.md` (should already have header from Task 3)
-- Verify: `docs/FEATURES.md` (should already have header from Task 4)
-- Verify: `docs/MIGRATION.md` (add header if missing)
+
+* Verify: `docs/REFERENCE.md` (should already have header from Task 2)
+
+* Verify: `docs/ARCHITECTURE.md` (should already have header from Task 3)
+
+* Verify: `docs/FEATURES.md` (should already have header from Task 4)
+
+* Verify: `docs/MIGRATION.md` (add header if missing)
 
 **Step 1: Check MIGRATION.md header**
 
@@ -1303,7 +1419,9 @@ head -3 docs/MIGRATION.md
 If missing `<!-- version: ... -->`, insert:
 
 ```bash
+
 # Prepend version header
+
 sed -i '1s/^/<!-- version: 5.5.5, updated: 2026-03-02 -->\n/' docs/MIGRATION.md
 ```
 
@@ -1344,22 +1462,34 @@ git push origin docs/v5.5.5-comprehensive-update
 gh pr create --base dev \
   --title "docs: comprehensive documentation update for v5.5.5" \
   --body "$(cat <<'EOF'
+
 ## Summary
 
-- Rewrite REFERENCE.md (49 agents, 71 skills, 35 tools, 35 hooks)
-- Rewrite ARCHITECTURE.md (delegation-enforcer, bridge-normalize security, Axiom state machine)
-- Rewrite FEATURES.md (all feature systems, Windows support, Axiom integration)
-- Add CHANGELOG entries for v5.5.0–v5.5.4 (Batch 1–4 fixes)
-- Update docs/standards/ version numbers: 5.0.21/5.0.22 → 5.5.5
-- Remove stale review drafts and outdated PRD files
-- Merge docs/shared/ into docs/partials/
+* Rewrite REFERENCE.md (49 agents, 71 skills, 35 tools, 35 hooks)
+
+* Rewrite ARCHITECTURE.md (delegation-enforcer, bridge-normalize security, Axiom state machine)
+
+* Rewrite FEATURES.md (all feature systems, Windows support, Axiom integration)
+
+* Add CHANGELOG entries for v5.5.0–v5.5.4 (Batch 1–4 fixes)
+
+* Update docs/standards/ version numbers: 5.0.21/5.0.22 → 5.5.5
+
+* Remove stale review drafts and outdated PRD files
+
+* Merge docs/shared/ into docs/partials/
 
 ## Test plan
-- [ ] `npm run build` passes with no errors
-- [ ] `npm test` passes with 0 failures
-- [ ] All version numbers in docs/ match 5.5.5
-- [ ] `grep -r "5\.0\.2[12]" docs/` returns no results
-- [ ] `grep -r "docs/shared" docs/ skills/ commands/` returns no results
+
+* [ ] `npm run build` passes with no errors
+
+* [ ] `npm test` passes with 0 failures
+
+* [ ] All version numbers in docs/ match 5.5.5
+
+* [ ] `grep -r "5\.0\.2[12]" docs/` returns no results
+
+* [ ] `grep -r "docs/shared" docs/ skills/ commands/` returns no results
 
 🤖 Generated with Claude Code
 EOF
@@ -1387,7 +1517,9 @@ Task 1 (branch) → Tasks 2–7 (parallel) → Task 8 (merge shared/) → Task 9
 ### Verification Commands
 
 ```bash
+
 # After all tasks:
+
 grep -r "5\.0\.2[12]" docs/            # Expected: 0 results
 grep -r "docs/shared" . --include="*.md"  # Expected: 0 results
 npm run build                              # Expected: 0 errors

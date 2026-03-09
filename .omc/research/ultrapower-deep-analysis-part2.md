@@ -5,10 +5,14 @@
 ### 3.1 静态代码分析
 
 **代码规范:**
-- ✅ TypeScript strict mode 启用
-- ✅ ESLint 配置完整
-- ✅ Prettier 格式化一致
-- ⚠️ 部分文件超过 500 行（需拆分）
+
+* ✅ TypeScript strict mode 启用
+
+* ✅ ESLint 配置完整
+
+* ✅ Prettier 格式化一致
+
+* ⚠️ 部分文件超过 500 行（需拆分）
 
 **潜在问题:**
 1. **循环依赖风险:** `src/features/` 和 `src/hooks/` 之间存在交叉引用
@@ -37,15 +41,19 @@ src/index.ts (入口)
 ```
 
 **外部依赖:**
-- Claude Agent SDK → Agent 执行
-- MCP SDK → 工具协议
-- SQLite → 状态存储
-- AST Grep → 代码搜索
+
+* Claude Agent SDK → Agent 执行
+
+* MCP SDK → 工具协议
+
+* SQLite → 状态存储
+
+* AST Grep → 代码搜索
 
 ### 3.3 设计模式识别
 
 | 模式 | 应用位置 | 用途 |
-|------|---------|------|
+| ------ | --------- | ------ |
 | **工厂模式** | `src/agents/definitions.ts` | Agent 创建 |
 | **策略模式** | `src/features/delegation-enforcer/` | 委派策略 |
 | **观察者模式** | `src/hooks/` | 事件监听 |
@@ -82,31 +90,45 @@ IDLE → PLANNING → CONFIRMING → EXECUTING →
   AUTO_FIX → BLOCKED → ARCHIVING → IDLE
 
 // 转换条件:
-- PLANNING → CONFIRMING: 规划完成
-- CONFIRMING → EXECUTING: 用户确认
-- EXECUTING → AUTO_FIX: 测试失败
-- AUTO_FIX → EXECUTING: 修复完成
+
+* PLANNING → CONFIRMING: 规划完成
+
+* CONFIRMING → EXECUTING: 用户确认
+
+* EXECUTING → AUTO_FIX: 测试失败
+
+* AUTO_FIX → EXECUTING: 修复完成
 ```
 
 **3. 任务调度 (`src/team/task-router.ts`)**
-- **策略:** 优先级队列 + 依赖图
-- **并发控制:** 最多 20 个并发 Agent
-- **负载均衡:** 基于 Agent 类型和模型
+
+* **策略:** 优先级队列 + 依赖图
+
+* **并发控制:** 最多 20 个并发 Agent
+
+* **负载均衡:** 基于 Agent 类型和模型
 
 ### 3.5 单元测试覆盖率
 
 **测试框架:** Vitest 4.0.17
 
 **覆盖情况 (估算):**
-- 核心模块: ~60% 覆盖
-- Hooks 系统: ~40% 覆盖
-- MCP 服务器: ~30% 覆盖
-- CLI 命令: ~50% 覆盖
+
+* 核心模块: ~60% 覆盖
+
+* Hooks 系统: ~40% 覆盖
+
+* MCP 服务器: ~30% 覆盖
+
+* CLI 命令: ~50% 覆盖
 
 **测试类型:**
-- 单元测试: `src/**/*.test.ts`
-- 集成测试: 部分存在
-- E2E 测试: 缺失
+
+* 单元测试: `src/**/*.test.ts`
+
+* 集成测试: 部分存在
+
+* E2E 测试: 缺失
 
 **改进建议:**
 1. 提升 Hooks 测试覆盖到 70%+
@@ -134,21 +156,31 @@ ultrapower/omc
 ```
 
 **参数解析:**
-- 使用 Commander 内置解析器
-- 支持短选项 (`-f`) 和长选项 (`--force`)
-- 子命令嵌套支持
+
+* 使用 Commander 内置解析器
+
+* 支持短选项 (`-f`) 和长选项 (`--force`)
+
+* 子命令嵌套支持
 
 ### 4.2 HUD 系统
 
 **位置:** `src/hud/`
 
 **功能:**
-- 实时显示 Agent 状态
-- Token 使用追踪
-- 任务进度条
-- 错误提示
+
+* 实时显示 Agent 状态
+
+* Token 使用追踪
+
+* 任务进度条
+
+* 错误提示
 
 **更新机制:**
-- 事件驱动更新
-- 最小重绘策略
-- 终端兼容性检测
+
+* 事件驱动更新
+
+* 最小重绘策略
+
+* 终端兼容性检测

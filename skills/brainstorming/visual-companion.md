@@ -8,19 +8,27 @@ Decide per-question, not per-session. The test: **would the user understand this
 
 **Use the browser** when the content itself is visual:
 
-- **UI mockups** — wireframes, layouts, navigation structures, component designs
-- **Architecture diagrams** — system components, data flow, relationship maps
-- **Side-by-side visual comparisons** — comparing two layouts, two color schemes, two design directions
-- **Design polish** — when the question is about look and feel, spacing, visual hierarchy
-- **Spatial relationships** — state machines, flowcharts, entity relationships rendered as diagrams
+* **UI mockups** — wireframes, layouts, navigation structures, component designs
+
+* **Architecture diagrams** — system components, data flow, relationship maps
+
+* **Side-by-side visual comparisons** — comparing two layouts, two color schemes, two design directions
+
+* **Design polish** — when the question is about look and feel, spacing, visual hierarchy
+
+* **Spatial relationships** — state machines, flowcharts, entity relationships rendered as diagrams
 
 **Use the terminal** when the content is text or tabular:
 
-- **Requirements and scope questions** — "what does X mean?", "which features are in scope?"
-- **Conceptual A/B/C choices** — picking between approaches described in words
-- **Tradeoff lists** — pros/cons, comparison tables
-- **Technical decisions** — API design, data modeling, architectural approach selection
-- **Clarifying questions** — anything where the answer is words, not a visual preference
+* **Requirements and scope questions** — "what does X mean?", "which features are in scope?"
+
+* **Conceptual A/B/C choices** — picking between approaches described in words
+
+* **Tradeoff lists** — pros/cons, comparison tables
+
+* **Technical decisions** — API design, data modeling, architectural approach selection
+
+* **Clarifying questions** — anything where the answer is words, not a visual preference
 
 A question *about* a UI topic is not automatically a visual question. "What kind of wizard do you want?" is conceptual — use the terminal. "Which of these wizard layouts feels right?" is visual — use the browser.
 
@@ -33,11 +41,15 @@ The server watches a directory for HTML files and serves the newest one to the b
 ## Starting a Session
 
 ```bash
+
 # Start server with persistence (mockups saved to project)
+
 ${CLAUDE_PLUGIN_ROOT}/lib/brainstorm-server/start-server.sh --project-dir /path/to/project
 
-# Returns: {"type":"server-started","port":52341,"url":"http://localhost:52341",
+# Returns: {"type":"server-started","port":52341,"url":"<http://localhost:52341",>
+
 #           "screen_dir":"/path/to/project/.superpowers/brainstorm/12345-1706000000"}
+
 ```
 
 Save `screen_dir` from the response. Tell user to open the URL.
@@ -73,19 +85,19 @@ Use `--url-host` to control what hostname is printed in the returned URL JSON.
    - Use Write tool — **never use cat/heredoc** (dumps noise into terminal)
    - Server automatically serves the newest file
 
-2. **Tell user what to expect and end your turn:**
+1. **Tell user what to expect and end your turn:**
    - Remind them of the URL (every step, not just first)
    - Give a brief text summary of what's on screen (e.g., "Showing 3 layout options for the homepage")
    - Ask them to respond in the terminal: "Take a look and let me know what you think. Click to select an option if you'd like."
 
-3. **On your next turn** — after the user responds in the terminal:
+1. **On your next turn** — after the user responds in the terminal:
    - Read `$SCREEN_DIR/.events` if it exists — this contains the user's browser interactions (clicks, selections) as JSON lines
    - Merge with the user's terminal text to get the full picture
    - The terminal message is the primary feedback; `.events` provides structured interaction data
 
-4. **Iterate or advance** — if feedback changes current screen, write a new file (e.g., `layout-v2.html`). Only move to the next question when the current step is validated.
+1. **Iterate or advance** — if feedback changes current screen, write a new file (e.g., `layout-v2.html`). Only move to the next question when the current step is validated.
 
-5. Repeat until done.
+1. Repeat until done.
 
 ## Writing Content Fragments
 
@@ -199,11 +211,15 @@ The frame template provides these CSS classes for your content:
 
 ### Typography and sections
 
-- `h2` — page title
-- `h3` — section heading
-- `.subtitle` — secondary text below title
-- `.section` — content block with bottom margin
-- `.label` — small uppercase label text
+* `h2` — page title
+
+* `h3` — section heading
+
+* `.subtitle` — secondary text below title
+
+* `.section` — content block with bottom margin
+
+* `.label` — small uppercase label text
 
 ## Browser Events Format
 
@@ -221,19 +237,27 @@ If `.events` doesn't exist, the user didn't interact with the browser — use on
 
 ## Design Tips
 
-- **Scale fidelity to the question** — wireframes for layout, polish for polish questions
-- **Explain the question on each page** — "Which layout feels more professional?" not just "Pick one"
-- **Iterate before advancing** — if feedback changes current screen, write a new version
-- **2-4 options max** per screen
-- **Use real content when it matters** — for a photography portfolio, use actual images (Unsplash). Placeholder content obscures design issues.
-- **Keep mockups simple** — focus on layout and structure, not pixel-perfect design
+* **Scale fidelity to the question** — wireframes for layout, polish for polish questions
+
+* **Explain the question on each page** — "Which layout feels more professional?" not just "Pick one"
+
+* **Iterate before advancing** — if feedback changes current screen, write a new version
+
+* **2-4 options max** per screen
+
+* **Use real content when it matters** — for a photography portfolio, use actual images (Unsplash). Placeholder content obscures design issues.
+
+* **Keep mockups simple** — focus on layout and structure, not pixel-perfect design
 
 ## File Naming
 
-- Use semantic names: `platform.html`, `visual-style.html`, `layout.html`
-- Never reuse filenames — each screen must be a new file
-- For iterations: append version suffix like `layout-v2.html`, `layout-v3.html`
-- Server serves newest file by modification time
+* Use semantic names: `platform.html`, `visual-style.html`, `layout.html`
+
+* Never reuse filenames — each screen must be a new file
+
+* For iterations: append version suffix like `layout-v2.html`, `layout-v3.html`
+
+* Server serves newest file by modification time
 
 ## Cleaning Up
 
@@ -245,5 +269,6 @@ If the session used `--project-dir`, mockup files persist in `.superpowers/brain
 
 ## Reference
 
-- Frame template (CSS reference): `${CLAUDE_PLUGIN_ROOT}/lib/brainstorm-server/frame-template.html`
-- Helper script (client-side): `${CLAUDE_PLUGIN_ROOT}/lib/brainstorm-server/helper.js`
+* Frame template (CSS reference): `${CLAUDE_PLUGIN_ROOT}/lib/brainstorm-server/frame-template.html`
+
+* Helper script (client-side): `${CLAUDE_PLUGIN_ROOT}/lib/brainstorm-server/helper.js`

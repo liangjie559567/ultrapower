@@ -26,29 +26,33 @@
   "author": {                      // 可选
     "name": "Author Name",
     "email": "author@example.com",
-    "url": "https://github.com/author"
+    "url": "<https://github.com/author">
   },
-  "homepage": "https://...",       // 可选
-  "repository": "https://...",     // 可选
+  "homepage": "<https://...",>       // 可选
+  "repository": "<https://...",>     // 可选
   "license": "MIT",                // 可选
   "keywords": ["kw1", "kw2"],      // 可选，数组
-  "commands": "./custom/cmd.md",   // 可选，string|array
-  "agents": "./custom/agents/",    // 可选，string|array
-  "skills": "./custom/skills/",    // 可选，string|array
-  "hooks": "./config/hooks.json",  // 可选，string|array|object（内联配置）
-  "mcpServers": "./mcp.json",      // 可选，string|array|object
-  "outputStyles": "./styles/",     // 可选，string|array
-  "lspServers": "./.lsp.json"      // 可选，string|array|object
+  "commands": "./custom/cmd.md",   // 可选，string | array
+  "agents": "./custom/agents/",    // 可选，string | array
+  "skills": "./custom/skills/",    // 可选，string | array
+  "hooks": "./config/hooks.json",  // 可选，string | array | object（内联配置）
+  "mcpServers": "./mcp.json",      // 可选，string | array | object
+  "outputStyles": "./styles/",     // 可选，string | array
+  "lspServers": "./.lsp.json"      // 可选，string | array | object
 }
 ```
 
 ### 1.3 关键验证规则
 
-- `name` 是唯一必填字段（如果包含 manifest 文件）
-- manifest 文件本身是可选的——省略时 Claude Code 从目录名推断插件名
-- 所有路径必须是相对路径，以 `./` 开头
-- 自定义路径是**补充**默认目录，不是替换
-- `hooks` 字段支持三种格式：路径字符串、路径数组、内联对象
+* `name` 是唯一必填字段（如果包含 manifest 文件）
+
+* manifest 文件本身是可选的——省略时 Claude Code 从目录名推断插件名
+
+* 所有路径必须是相对路径，以 `./` 开头
+
+* 自定义路径是**补充**默认目录，不是替换
+
+* `hooks` 字段支持三种格式：路径字符串、路径数组、内联对象
 
 ### 1.4 hooks 字段的三种合法格式
 
@@ -68,7 +72,7 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write | Edit",
         "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/scripts/format.sh" }]
       }
     ]
@@ -108,7 +112,7 @@
         "matcher": "<regex-pattern>",
         "hooks": [
           {
-            "type": "command|http|prompt|agent",
+            "type": "command | http | prompt | agent",
             "command": "<shell-command>",
             "async": false,
             "timeout": 600,
@@ -133,7 +137,7 @@
 ### 2.4 所有合法的 EventName（大小写敏感）
 
 | 事件名 | 触发时机 |
-|--------|---------|
+| -------- | --------- |
 | `SessionStart` | 会话开始或恢复时 |
 | `UserPromptSubmit` | 用户提交 prompt 时 |
 | `PreToolUse` | 工具调用前 |
@@ -154,41 +158,44 @@
 
 ### 2.5 matcher 字段规则
 
-- 是正则表达式字符串
-- 使用 `""`, `"*"` 或省略 matcher 表示匹配所有
-- 不同事件类型 matcher 过滤不同字段：
+* 是正则表达式字符串
+
+* 使用 `""`, `"*"` 或省略 matcher 表示匹配所有
+
+* 不同事件类型 matcher 过滤不同字段：
   - `PreToolUse/PostToolUse/PostToolUseFailure/PermissionRequest`：过滤工具名
   - `SessionStart`：过滤启动方式（startup/resume/clear/compact）
   - `SessionEnd`：过滤结束原因
   - `SubagentStart/SubagentStop`：过滤 agent 类型名
-- `UserPromptSubmit`, `Stop`, `TeammateIdle`, `TaskCompleted`, `WorktreeCreate`, `WorktreeRemove` **不支持 matcher**，始终触发
+
+* `UserPromptSubmit`, `Stop`, `TeammateIdle`, `TaskCompleted`, `WorktreeCreate`, `WorktreeRemove` **不支持 matcher**，始终触发
 
 ### 2.6 hook handler 字段
 
 **通用字段（所有类型）**：
 | 字段 | 必填 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `type` | 是 | `"command"`, `"http"`, `"prompt"`, `"agent"` |
-| `timeout` | 否 | 超时秒数（command 默认 600，prompt 默认 30，agent 默认 60）|
+| `timeout` | 否 | 超时秒数（command 默认 600，prompt 默认 30，agent 默认 60） |
 | `statusMessage` | 否 | 运行时显示的 spinner 消息 |
-| `once` | 否 | true 则每会话只运行一次（仅 skills，不适用 agents）|
+| `once` | 否 | true 则每会话只运行一次（仅 skills，不适用 agents） |
 
 **command 类型额外字段**：
 | 字段 | 必填 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `command` | 是 | shell 命令 |
 | `async` | 否 | true 则后台运行不阻塞 |
 
 **http 类型额外字段**：
 | 字段 | 必填 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `url` | 是 | POST 请求 URL |
 | `headers` | 否 | 额外 HTTP 头 |
 | `allowedEnvVars` | 否 | 允许插值的环境变量列表 |
 
 **prompt/agent 类型额外字段**：
 | 字段 | 必填 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `prompt` | 是 | 发送给模型的 prompt，用 `$ARGUMENTS` 作为 hook 输入 JSON 的占位符 |
 | `model` | 否 | 使用的模型 |
 
@@ -214,20 +221,20 @@ System prompt content here...
 ### 3.2 所有合法的 frontmatter 字段
 
 | 字段 | 必填 | 类型 | 说明 |
-|------|------|------|------|
+| ------ | ------ | ------ | ------ |
 | `name` | **是** | string | 小写字母和连字符，唯一标识符 |
 | `description` | **是** | string | Claude 何时委派给此 agent |
-| `tools` | 否 | string（逗号分隔）| 允许的工具列表，省略则继承所有工具 |
+| `tools` | 否 | string（逗号分隔） | 允许的工具列表，省略则继承所有工具 |
 | `disallowedTools` | 否 | string | 拒绝的工具列表 |
-| `model` | 否 | string | `sonnet`, `opus`, `haiku`, `inherit`（默认 inherit）|
+| `model` | 否 | string | `sonnet`, `opus`, `haiku`, `inherit`（默认 inherit） |
 | `permissionMode` | 否 | string | `default`, `acceptEdits`, `dontAsk`, `bypassPermissions`, `plan` |
 | `maxTurns` | 否 | number | 最大 agentic 轮次 |
 | `skills` | 否 | array | 预加载到 agent 上下文的 skill 列表 |
 | `mcpServers` | 否 | array/object | 可用的 MCP 服务器 |
-| `hooks` | 否 | object | agent 生命周期 hooks（仅在该 agent 活跃时运行）|
-| `memory` | 否 | string | `user`, `project`, `local`（持久记忆范围）|
+| `hooks` | 否 | object | agent 生命周期 hooks（仅在该 agent 活跃时运行） |
+| `memory` | 否 | string | `user`, `project`, `local`（持久记忆范围） |
 | `background` | 否 | boolean | true 则始终作为后台任务运行 |
-| `isolation` | 否 | string | `worktree`（在临时 git worktree 中运行）|
+| `isolation` | 否 | string | `worktree`（在临时 git worktree 中运行） |
 
 ### 3.3 agent frontmatter 中的 hooks 格式
 
@@ -244,7 +251,7 @@ hooks:
         - type: command
           command: "./scripts/validate-command.sh"
   PostToolUse:
-    - matcher: "Edit|Write"
+    - matcher: "Edit | Write"
       hooks:
         - type: command
           command: "./scripts/run-linter.sh"
@@ -309,8 +316,10 @@ Claude Code 自动发现 `hooks/hooks.json` 时，会验证其内容。如果某
 ### 5.1 hooks/hooks.json 格式验证
 
 当前格式基本正确。建议检查：
-- 将 `"async": false` 改为省略该字段（默认就是同步）
-- 确认所有事件名的大小写（`TeammateIdle` 不是 `teammateIdle`）
+
+* 将 `"async": false` 改为省略该字段（默认就是同步）
+
+* 确认所有事件名的大小写（`TeammateIdle` 不是 `teammateIdle`）
 
 ### 5.2 agents/*.md 格式验证
 

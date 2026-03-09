@@ -43,7 +43,7 @@ describe('performUpdate plugin mode', () => {
       ok: true,
       json: async () => ({ tag_name: 'v4.1.5', name: '4.1.5',
         published_at: '2026-02-09T00:00:00.000Z',
-        html_url: 'https://example.com', body: 'notes',
+        html_url: '<<https://example.com',>> body: 'notes',
         prerelease: false, draft: false }),
     }));
     mockedExistsSync.mockReturnValue(true);
@@ -93,10 +93,12 @@ describe('performUpdate plugin mode', () => {
 
 ## 注意事项
 
-- `isRunningAsPlugin` 需加入 `installer/index.js` mock 并在 import 列表中引入
-- `process.stdout.write` 在插件模式中被调用（`[1/2] Syncing...`），测试中可 spy 或忽略
+* `isRunningAsPlugin` 需加入 `installer/index.js` mock 并在 import 列表中引入
+
+* `process.stdout.write` 在插件模式中被调用（`[1/2] Syncing...`），测试中可 spy 或忽略
 
 ## 验收标准
 
-- 3 个新测试全部通过
-- `tsc --noEmit` 零错误
+* 3 个新测试全部通过
+
+* `tsc --noEmit` 零错误

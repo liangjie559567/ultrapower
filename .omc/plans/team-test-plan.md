@@ -5,14 +5,17 @@
 ## 1. 现状评估
 
 ### 已有覆盖
-- 25 个测试文件，363 个测试用例，全部通过
-- 每个源文件都有对应的 `__tests__/*.test.ts`
-- 测试风格统一：vitest + 临时目录隔离 + vi.mock 外部依赖
+
+* 25 个测试文件，363 个测试用例，全部通过
+
+* 每个源文件都有对应的 `__tests__/*.test.ts`
+
+* 测试风格统一：vitest + 临时目录隔离 + vi.mock 外部依赖
 
 ### 关键覆盖缺口
 
 | 优先级 | 文件 | 行数 | 现有测试 | 缺口描述 |
-|--------|------|------|----------|----------|
+| -------- | ------ | ------ | ---------- | ---------- |
 | **P0** | `mcp-team-bridge.ts` | 785 | 仅 `sanitizePromptContent` | `runBridge` 主循环、`spawnCliProcess`、`handleShutdown`、权限执行流、重试逻辑完全未测 |
 | **P1** | `task-file-ops.ts` | 373 | 有基础测试 | 缺少并发竞态、claim 锁定、retry exhaustion 边界 |
 | **P1** | `inbox-outbox.ts` | 353 | 有基础测试 | 缺少 rotation 阈值边界、drain signal、cursor 持久化 |
@@ -26,14 +29,20 @@
 ### 单元测试 vs 集成测试划分
 
 **单元测试**（mock 所有外部依赖）：
-- `mcp-team-bridge.ts` 内部纯函数：`buildTaskPrompt`、`parseCodexOutput`、`diffSnapshots`、`captureFileSnapshot`、`buildEffectivePermissions`、`readOutputSummary`
-- `permissions.ts`：`matchGlob` 边界、`findPermissionViolations`
-- `task-file-ops.ts`：claim 竞态模拟
+
+* `mcp-team-bridge.ts` 内部纯函数：`buildTaskPrompt`、`parseCodexOutput`、`diffSnapshots`、`captureFileSnapshot`、`buildEffectivePermissions`、`readOutputSummary`
+
+* `permissions.ts`：`matchGlob` 边界、`findPermissionViolations`
+
+* `task-file-ops.ts`：claim 竞态模拟
 
 **集成测试**（使用临时目录，mock 进程/tmux）：
-- `mcp-team-bridge.ts`：`runBridge` 主循环（mock `spawn`、`execSync`）
-- `bridge-entry.ts`：`validateConfigPath` 实际调用（已有部分）
-- 权限执行流端到端：config -> permission check -> violation report
+
+* `mcp-team-bridge.ts`：`runBridge` 主循环（mock `spawn`、`execSync`）
+
+* `bridge-entry.ts`：`validateConfigPath` 实际调用（已有部分）
+
+* 权限执行流端到端：config -> permission check -> violation report
 
 ---
 
@@ -199,7 +208,7 @@
 ### 依赖 Mock 映射表
 
 | 被 Mock 模块 | 使用场景 | Mock 方式 |
-|-------------|---------|----------|
+| ------------- | --------- | ---------- |
 | `child_process.spawn` | `spawnCliProcess` 测试 | `vi.mock('child_process')` — 返回 fake ChildProcess（EventEmitter + stdout/stderr/stdin） |
 | `child_process.execSync` | `captureFileSnapshot`（git status） | `vi.mock('child_process')` — 返回预设 git status 字符串 |
 | `./inbox-outbox.js` | runBridge 消息读写 | `vi.mock('./inbox-outbox.js')` — mock `readNewInboxMessages`、`writeOutbox`、`checkShutdownSignal`、`checkDrainSignal` 等 |
@@ -228,7 +237,7 @@
 ### 按模块估算
 
 | 优先级 | 测试文件 | 新增用例数 | 预估行数 | 复杂度 | 前置条件 |
-|--------|---------|-----------|---------|--------|---------|
+| -------- | --------- | ----------- | --------- | -------- | --------- |
 | **P0** | `mcp-team-bridge.test.ts`（新建） | ~45 | 800-1000 | 高 | 需先导出 `parseCodexOutput`、`buildTaskPrompt` 等内部函数 |
 | **P1** | `task-file-ops.test.ts`（追加） | ~6 | 120-150 | 中 | 无 |
 | **P1** | `inbox-outbox.test.ts`（追加） | ~5 | 100-130 | 中 | 无 |
@@ -264,16 +273,20 @@ export { parseCodexOutput, buildTaskPrompt, diffSnapshots, readOutputSummary, ca
 ### 阶段 3：P1 — 补充测试
 
 并行执行：
-- `task-file-ops.test.ts` 追加 6 个用例
-- `inbox-outbox.test.ts` 追加 5 个用例
+
+* `task-file-ops.test.ts` 追加 6 个用例
+
+* `inbox-outbox.test.ts` 追加 5 个用例
 
 完成后运行 `npx vitest run src/team/__tests__/task-file-ops.test.ts src/team/__tests__/inbox-outbox.test.ts`。
 
 ### 阶段 4：P2 — 补充测试
 
 并行执行：
-- `permissions.test.ts` 追加 8 个用例
-- `bridge-entry.test.ts` 重写/追加 14 个用例
+
+* `permissions.test.ts` 追加 8 个用例
+
+* `bridge-entry.test.ts` 重写/追加 14 个用例
 
 完成后运行全量测试：`npx vitest run src/team/__tests__/`。
 
@@ -292,7 +305,7 @@ export { parseCodexOutput, buildTaskPrompt, diffSnapshots, readOutputSummary, ca
 ### 按优先级验收
 
 | 优先级 | 验收条件 |
-|--------|---------|
+| -------- | --------- |
 | P0 | `mcp-team-bridge.test.ts` 存在且 >= 40 个用例通过，覆盖纯函数 + spawnCliProcess + handleShutdown + runBridge 主循环 |
 | P1 | `task-file-ops.test.ts` 新增 >= 5 个用例（含 claim 竞态），`inbox-outbox.test.ts` 新增 >= 4 个用例（含 rotation + drain） |
 | P2 | `permissions.test.ts` 新增 >= 6 个用例（含 ReDoS 防护），`bridge-entry.test.ts` 新增 >= 10 个实际函数调用测试 |

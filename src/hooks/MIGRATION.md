@@ -7,11 +7,16 @@
 ## Phase 1: 基础架构 ✅ 已完成
 
 已创建的模块：
-- `registry/HookRegistry.ts` - 处理器注册表
-- `registry/registerProcessors.ts` - 注册逻辑
-- `processors/*.ts` - 11个基础处理器
-- `state/StateReader.ts` - 状态读取工具
-- `bridge-new.ts` - 精简路由层示例
+
+* `registry/HookRegistry.ts` - 处理器注册表
+
+* `registry/registerProcessors.ts` - 注册逻辑
+
+* `processors/*.ts` - 11个基础处理器
+
+* `state/StateReader.ts` - 状态读取工具
+
+* `bridge-new.ts` - 精简路由层示例
 
 ## Phase 2: 复杂处理器迁移
 
@@ -23,14 +28,14 @@
 3. `keyword-detector` - 每次用户输入触发
 
 **P1 - 核心功能：**
-4. `ralph` - 持久循环模式
-5. `autopilot` - 自主执行模式
-6. `stop-continuation` - 停止继续逻辑
+1. `ralph` - 持久循环模式
+2. `autopilot` - 自主执行模式
+3. `stop-continuation` - 停止继续逻辑
 
 **P2 - 辅助功能：**
-7. `persistent-mode` - 持久模式检测
-8. `subagent-start/stop` - 子 agent 追踪
-9. `pre-compact` - 压缩前处理
+1. `persistent-mode` - 持久模式检测
+2. `subagent-start/stop` - 子 agent 追踪
+3. `pre-compact` - 压缩前处理
 
 ### 迁移步骤模板
 
@@ -60,13 +65,19 @@ registry.register("ralph", processRalph);
 ## Phase 3: 完全替换
 
 ### 验证清单
-- [ ] 所有 hook 类型已迁移
-- [ ] 单元测试覆盖率 >80%
-- [ ] 集成测试通过
-- [ ] 性能无退化（<5% 差异）
-- [ ] 内存使用无增长
+
+* [ ] 所有 hook 类型已迁移
+
+* [ ] 单元测试覆盖率 >80%
+
+* [ ] 集成测试通过
+
+* [ ] 性能无退化（<5% 差异）
+
+* [ ] 内存使用无增长
 
 ### 替换步骤
+
 1. 重命名 `bridge.ts` -> `bridge-legacy.ts`
 2. 重命名 `bridge-new.ts` -> `bridge.ts`
 3. 更新所有导入引用
@@ -79,7 +90,9 @@ registry.register("ralph", processRalph);
 如发现问题：
 ```bash
 git revert <commit-hash>
+
 # 或
+
 mv bridge-legacy.ts bridge.ts
 ```
 

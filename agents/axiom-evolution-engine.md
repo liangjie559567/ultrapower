@@ -13,7 +13,7 @@ model: sonnet
 
   <Modules>
     | 模块 | 文件 | 触发时机 | 描述 |
-    |------|------|---------|------|
+    | ------ | ------ | --------- | ------ |
     | 知识收割机 | `.omc/axiom/evolution/knowledge_base.md` | 任务完成后 | 从对话中提取可复用知识 |
     | 工作流优化器 | `.omc/axiom/evolution/workflow_metrics.md` | 工作流完成后 | 追踪效能并提出优化建议 |
     | 模式检测器 | `.omc/axiom/evolution/pattern_library.md` | 代码提交后 | 识别代码中的可复用模式 |
@@ -46,7 +46,7 @@ model: sonnet
   <Knowledge_Harvester>
     知识提取规则：
     | 来源 | 提取条件 | 分类 |
-    |------|---------|------|
+    | ------ | --------- | ------ |
     | 错误修复 | 新的错误类型或解决方案 | debugging |
     | 架构决策 | 重大技术选型 | architecture |
     | 代码模式 | 重复出现 3+ 次 | pattern |

@@ -20,6 +20,7 @@
 ## 场景 1: 环境验证与配置
 
 ### 目标
+
 验证 ultrapower 安装正确，配置基本环境。
 
 ### 步骤
@@ -48,15 +49,19 @@
 ```
 
 ### 验证
-- [ ] omc-doctor 显示全部 ✅
-- [ ] 能看到 50+ agents 列表
-- [ ] 能看到 70+ skills 列表
+
+* [ ] omc-doctor 显示全部 ✅
+
+* [ ] 能看到 50+ agents 列表
+
+* [ ] 能看到 70+ skills 列表
 
 ---
 
 ## 场景 2: 使用第一个 agent（executor）
 
 ### 目标
+
 学习如何调用 agent 执行代码任务。
 
 ### 步骤
@@ -90,15 +95,19 @@ describe('add', () => {
 ```
 
 ### 验证
-- [ ] 函数代码已生成
-- [ ] 测试代码已生成
-- [ ] 测试通过
+
+* [ ] 函数代码已生成
+
+* [ ] 测试代码已生成
+
+* [ ] 测试通过
 
 ---
 
 ## 场景 3: 创建自定义 skill
 
 ### 目标
+
 学习如何创建自定义 skill。
 
 ### 步骤
@@ -110,14 +119,17 @@ mkdir -p skills/my-skill
 
 **3.2 创建 SKILL.md**
 ```markdown
+
 # My Custom Skill
 
 触发词: "my-skill"
 
 ## 描述
+
 这是我的第一个自定义 skill。
 
 ## 执行逻辑
+
 1. 读取用户输入
 2. 调用 executor agent
 3. 返回结果
@@ -129,15 +141,19 @@ mkdir -p skills/my-skill
 ```
 
 ### 验证
-- [ ] skill 文件已创建
-- [ ] skill 可以被触发
-- [ ] skill 执行成功
+
+* [ ] skill 文件已创建
+
+* [ ] skill 可以被触发
+
+* [ ] skill 执行成功
 
 ---
 
 ## 场景 4: 配置 hook 自动化
 
 ### 目标
+
 学习如何配置 hook 实现自动化。
 
 ### 步骤
@@ -155,10 +171,13 @@ mkdir -p skills/my-skill
 
 **4.2 测试 hook**
 ```
+
 # 编辑任意文件
+
 Edit(file_path="test.ts", old_string="...", new_string="...")
 
 # hook 会自动运行 prettier
+
 ```
 
 **4.3 验证 hook 执行**
@@ -167,15 +186,19 @@ cat .omc/logs/hook-execution.log
 ```
 
 ### 验证
-- [ ] hook 配置已创建
-- [ ] 编辑文件后 hook 自动触发
-- [ ] 文件已格式化
+
+* [ ] hook 配置已创建
+
+* [ ] 编辑文件后 hook 自动触发
+
+* [ ] 文件已格式化
 
 ---
 
 ## 场景 5: 团队协作模式（team）
 
 ### 目标
+
 学习如何使用 team 模式进行多 agent 协作。
 
 ### 步骤
@@ -197,14 +220,20 @@ TaskList()
 
 **5.4 查看执行结果**
 ```
+
 # team 会自动完成所有阶段
+
 # 最终输出验证报告
+
 ```
 
 ### 验证
-- [ ] team 模式启动成功
-- [ ] 所有阶段顺序执行
-- [ ] 最终状态为 complete
+
+* [ ] team 模式启动成功
+
+* [ ] 所有阶段顺序执行
+
+* [ ] 最终状态为 complete
 
 ---
 
@@ -212,9 +241,11 @@ TaskList()
 
 恭喜完成教程！你现在可以：
 
-- 查看 [USER_GUIDE.md](USER_GUIDE.md) 了解更多功能
-- 查看 [REFERENCE.md](REFERENCE.md) 获取完整参考
-- 加入社区讨论：[GitHub Discussions](https://github.com/liangjie559567/ultrapower/discussions)
+* 查看 [USER_GUIDE.md](USER_GUIDE.md) 了解更多功能
+
+* 查看 [REFERENCE.md](REFERENCE.md) 获取完整参考
+
+* 加入社区讨论：[GitHub Discussions](https://github.com/liangjie559567/ultrapower/discussions)
 
 ---
 

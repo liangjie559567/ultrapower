@@ -12,7 +12,7 @@ This directory contains rule templates that you can copy to your project's `.cla
 ## Available Templates
 
 | Template | Purpose |
-|----------|---------|
+| ---------- | --------- |
 | `coding-style.md` | Code style and formatting guidelines |
 | `testing.md` | Testing requirements and coverage targets |
 | `security.md` | Security checklist and best practices |
@@ -26,13 +26,17 @@ When you place rules in `.claude/rules/`, they are automatically discovered by u
 ## Example
 
 ```bash
+
 # Copy templates to your project
+
 mkdir -p .claude/rules
 cp templates/rules/security.md .claude/rules/
 cp templates/rules/testing.md .claude/rules/
 
 # Customize for your project
+
 # Edit .claude/rules/security.md to add project-specific checks
+
 ```
 
 ## Customization

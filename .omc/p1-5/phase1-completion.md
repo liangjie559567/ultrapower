@@ -15,13 +15,18 @@
 ## 已完成的变更
 
 ### 1. 核心类型定义 (`src/workers/types.ts`)
-- `WorkerState`: 统一状态模型，兼容 MCP 和 Team
-- `WorkerStatus`: 8 种状态枚举
-- `HealthStatus`: 健康检查结果
-- `WorkerFilter`: 查询过滤器
+
+* `WorkerState`: 统一状态模型，兼容 MCP 和 Team
+
+* `WorkerStatus`: 8 种状态枚举
+
+* `HealthStatus`: 健康检查结果
+
+* `WorkerFilter`: 查询过滤器
 
 ### 2. 适配器接口 (`src/workers/adapter.ts`)
-- `WorkerStateAdapter`: 9 个核心方法
+
+* `WorkerStateAdapter`: 9 个核心方法
   - `init()`: 初始化
   - `upsert()`: 插入/更新
   - `get()`: 单个查询
@@ -33,37 +38,54 @@
   - `close()`: 关闭连接
 
 ### 3. SQLite 实现 (`src/workers/sqlite-adapter.ts`)
-- 基于 better-sqlite3
-- WAL 模式支持并发
-- 索引优化查询性能
-- 事务支持批量操作
-- 优雅降级（better-sqlite3 不可用时返回 false）
+
+* 基于 better-sqlite3
+
+* WAL 模式支持并发
+
+* 索引优化查询性能
+
+* 事务支持批量操作
+
+* 优雅降级（better-sqlite3 不可用时返回 false）
 
 ### 4. JSON 实现 (`src/workers/json-adapter.ts`)
-- 基于文件系统
-- 原子写入（temp + rename）
-- 无外部依赖
-- 跨平台兼容（Windows/Linux/macOS）
+
+* 基于文件系统
+
+* 原子写入（temp + rename）
+
+* 无外部依赖
+
+* 跨平台兼容（Windows/Linux/macOS）
 
 ### 5. 工厂函数 (`src/workers/factory.ts`)
-- `createWorkerAdapter()`: 自动检测和回退
-- 支持 'sqlite' | 'json' | 'auto' 三种模式
-- SQLite 失败时自动回退到 JSON
+
+* `createWorkerAdapter()`: 自动检测和回退
+
+* 支持 'sqlite' | 'json' | 'auto' 三种模式
+
+* SQLite 失败时自动回退到 JSON
 
 ### 6. 导出入口 (`src/workers/index.ts`)
-- 统一导出所有类型和实现
+
+* 统一导出所有类型和实现
 
 ---
 
 ## 验证结果
 
 ### ✅ TypeScript 编译
+
 ```bash
 npx tsc --noEmit src/workers/*.ts
+
 # 结果: 无错误
+
 ```
 
 ### ✅ 单元测试
+
 ```
 SQLite Adapter: 11/11 通过 (431ms)
 JSON Adapter:   13/13 通过 (73ms)
@@ -71,6 +93,7 @@ JSON Adapter:   13/13 通过 (73ms)
 ```
 
 ### ✅ 测试覆盖率
+
 ```
 src/workers/
   json-adapter.ts:   77.45% 语句, 72.13% 分支, 100% 函数, 81.81% 行
@@ -79,9 +102,12 @@ src/workers/
 ```
 
 ### ✅ 构建验证
+
 ```bash
 npm run build
+
 # 结果: 成功编译，无错误
+
 ```
 
 ---
@@ -89,6 +115,7 @@ npm run build
 ## 测试用例覆盖
 
 ### SQLite Adapter (11 个测试)
+
 1. ✅ 数据库初始化
 2. ✅ 插入和查询 Worker
 3. ✅ 更新现有 Worker
@@ -102,6 +129,7 @@ npm run build
 11. ✅ 元数据处理
 
 ### JSON Adapter (13 个测试)
+
 1. ✅ 目录初始化
 2. ✅ 插入和查询 Worker
 3. ✅ 更新现有 Worker
@@ -140,7 +168,7 @@ src/workers/
 ## 验收标准检查
 
 | 标准 | 状态 | 证据 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 所有类型定义完整 | ✅ | `types.ts` 包含 WorkerState、HealthStatus、WorkerFilter |
 | 两个 adapter 实现完成 | ✅ | `sqlite-adapter.ts` 和 `json-adapter.ts` |
 | 工厂函数支持自动检测和回退 | ✅ | `factory.ts` 实现 'auto' 模式 |
@@ -155,25 +183,36 @@ src/workers/
 ## 性能特性
 
 ### SQLite Adapter
-- **并发安全**: WAL 模式支持多进程读写
-- **查询优化**: 4 个索引（worker_type, status, team_name, spawned_at）
-- **批量操作**: 事务支持，10 个 workers 批量插入 < 50ms
-- **自动清理**: 支持按时间清理过期数据
+
+* **并发安全**: WAL 模式支持多进程读写
+
+* **查询优化**: 4 个索引（worker_type, status, team_name, spawned_at）
+
+* **批量操作**: 事务支持，10 个 workers 批量插入 < 50ms
+
+* **自动清理**: 支持按时间清理过期数据
 
 ### JSON Adapter
-- **原子写入**: temp + rename 模式防止数据损坏
-- **无依赖**: 仅使用 Node.js 内置 fs 模块
-- **跨平台**: Windows/Linux/macOS 兼容
-- **容错性**: 自动跳过损坏的 JSON 文件
+
+* **原子写入**: temp + rename 模式防止数据损坏
+
+* **无依赖**: 仅使用 Node.js 内置 fs 模块
+
+* **跨平台**: Windows/Linux/macOS 兼容
+
+* **容错性**: 自动跳过损坏的 JSON 文件
 
 ---
 
 ## 向后兼容性
 
-- ✅ 不修改现有 MCP 和 Team 代码
-- ✅ 独立模块，可选择性使用
-- ✅ 环境变量控制（预留 `OMC_WORKER_BACKEND`）
-- ✅ 优雅降级（SQLite 不可用时回退到 JSON）
+* ✅ 不修改现有 MCP 和 Team 代码
+
+* ✅ 独立模块，可选择性使用
+
+* ✅ 环境变量控制（预留 `OMC_WORKER_BACKEND`）
+
+* ✅ 优雅降级（SQLite 不可用时回退到 JSON）
 
 ---
 
@@ -184,12 +223,12 @@ src/workers/
    - 添加数据迁移工具（`src/workers/migration.ts`）
    - 保留向后兼容（环境变量切换）
 
-2. **集成测试**
+1. **集成测试**
    - MCP Codex/Gemini 任务完整流程
    - 并发写入压力测试
    - 数据迁移验证
 
-3. **文档更新**
+1. **文档更新**
    - 更新 `docs/standards/state-machine.md`
    - 添加 Worker Adapter 使用指南
 
@@ -198,7 +237,7 @@ src/workers/
 ## 风险与缓解
 
 | 风险 | 影响 | 缓解措施 |
-|------|------|----------|
+| ------ | ------ | ---------- |
 | better-sqlite3 安装失败 | 中 | ✅ 自动回退到 JSON |
 | 测试覆盖率不足 | 低 | ⚠️ 核心功能已覆盖，边界情况待补充 |
 | 性能开销 | 低 | ✅ 索引优化 + 缓存层（Phase 4） |

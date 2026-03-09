@@ -49,13 +49,13 @@ const daemonScript = `
    - Windows：`C:\Users\ljyih\Desktop\ultrapower\dist\features\rate-limit-wait\daemon.js`
    - Unix：`/home/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
 
-2. Node.js ESM loader 对 `import()` specifier 的处理规则：
+1. Node.js ESM loader 对 `import()` specifier 的处理规则：
    - 接受：`file:///C:/Users/.../daemon.js`（file URL）
    - 接受：`./daemon.js`（相对路径，但跨进程不适用）
    - **拒绝**：`C:\Users\...\daemon.js`（Win32 绝对路径，协议头被识别为 `c:`）
    - Unix 绝对路径（`/home/...`）在部分 Node.js 版本中可工作，但非规范行为
 
-3. `daemonScript` 是注入到子进程 `-e` 参数中执行的内联 JS，子进程无法通过相对路径定位文件，必须使用绝对 file URL。
+1. `daemonScript` 是注入到子进程 `-e` 参数中执行的内联 JS，子进程无法通过相对路径定位文件，必须使用绝对 file URL。
 
 ### 参考实现
 
@@ -70,8 +70,10 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 ```
 
 `pathToFileURL` 是 Node.js `url` 模块内置函数，正确处理跨平台路径转换：
-- 输入：`C:\Users\ljyih\Desktop\ultrapower\dist\features\rate-limit-wait\daemon.js`
-- 输出：`file:///C:/Users/ljyih/Desktop/ultrapower/dist/features/rate-limit-wait/daemon.js`
+
+* 输入：`C:\Users\ljyih\Desktop\ultrapower\dist\features\rate-limit-wait\daemon.js`
+
+* 输出：`file:///C:/Users/ljyih/Desktop/ultrapower/dist/features/rate-limit-wait/daemon.js`
 
 ---
 
@@ -82,7 +84,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 **文件：** `src/features/rate-limit-wait/daemon.ts`
 
 | 行号 | 当前内容 | 变更类型 |
-|------|---------|---------|
+| ------ | --------- | --------- |
 | 17 | `import { fileURLToPath } from 'url';` | 修改：追加 `pathToFileURL` 导入 |
 | 424 | `const modulePath = __filename.replace(/\.ts$/, '.js');` | 保留 |
 | 425-430 | `import('${modulePath}')...` | 修改：将 `modulePath` 替换为 `moduleUrl` |
@@ -155,14 +157,16 @@ const daemonScript = `
 `pathToFileURL` 的行为：
 
 | 平台 | 输入 | 输出 |
-|------|------|------|
+| ------ | ------ | ------ |
 | Windows | `C:\Users\ljyih\Desktop\ultrapower\dist\features\rate-limit-wait\daemon.js` | `file:///C:/Users/ljyih/Desktop/ultrapower/dist/features/rate-limit-wait/daemon.js` |
 | macOS | `/Users/user/ultrapower/dist/features/rate-limit-wait/daemon.js` | `file:///Users/user/ultrapower/dist/features/rate-limit-wait/daemon.js` |
 | Linux | `/home/user/ultrapower/dist/features/rate-limit-wait/daemon.js` | `file:///home/user/ultrapower/dist/features/rate-limit-wait/daemon.js` |
 
-- `pathToFileURL` 是 Node.js 标准库函数，无需额外依赖
-- 对 Unix 路径，输出也是合法 file URL，不破坏现有行为
-- `.href` 属性返回字符串形式的 URL（如 `file:///...`），可直接嵌入模板字符串
+* `pathToFileURL` 是 Node.js 标准库函数，无需额外依赖
+
+* 对 Unix 路径，输出也是合法 file URL，不破坏现有行为
+
+* `.href` 属性返回字符串形式的 URL（如 `file:///...`），可直接嵌入模板字符串
 
 ---
 
@@ -175,11 +179,14 @@ const daemonScript = `
 **POC 验证脚本（在 Windows PowerShell 中执行）：**
 
 ```powershell
+
 # 步骤 1：构建项目
+
 cd C:\Users\ljyih\Desktop\ultrapower
 npm run build
 
 # 步骤 2：验证 pathToFileURL 行为
+
 node -e "
 const { pathToFileURL } = require('url');
 const path = 'C:\\\\Users\\\\ljyih\\\\Desktop\\\\ultrapower\\\\dist\\\\features\\\\rate-limit-wait\\\\daemon.js';
@@ -190,6 +197,7 @@ console.log('Valid:', url.startsWith('file:///'));
 "
 
 # 步骤 3：验证修复后的 import() 可正常加载
+
 node -e "
 const { pathToFileURL } = require('url');
 const modulePath = 'C:\\\\Users\\\\ljyih\\\\Desktop\\\\ultrapower\\\\dist\\\\features\\\\rate-limit-wait\\\\daemon.js';
@@ -220,20 +228,28 @@ Exports: [ 'startDaemon', 'stopDaemon', 'getDaemonStatus', 'pollLoop', ... ]
 ### 打包产物验证（dist/）
 
 ```bash
+
 # 验证 dist/ 中的编译输出包含修复
+
 grep -n "pathToFileURL" dist/features/rate-limit-wait/daemon.js
 grep -n "moduleUrl" dist/features/rate-limit-wait/daemon.js
 
 # 期望输出：
+
 # 1: import { fileURLToPath, pathToFileURL } from 'url';（或编译后的等效形式）
+
 # 424: const moduleUrl = pathToFileURL(modulePath).href;
+
 # 426: import('file:///...') 或 import('${moduleUrl}')
+
 ```
 
 ### macOS/Linux 回归验证
 
 ```bash
+
 # 在 macOS 或 Linux 上执行
+
 node -e "
 import { pathToFileURL } from 'url';
 const modulePath = '/home/user/ultrapower/dist/features/rate-limit-wait/daemon.js';
@@ -254,10 +270,10 @@ console.log('PASS: Unix path correctly converted');
    ```typescript
    const moduleUrl = pathToFileURL(modulePath).href;
    ```
-4. 修改第 426 行：将模板字符串中的 `${modulePath}` 替换为 `${moduleUrl}`
-5. 运行 `tsc --noEmit` 确认无类型错误
-6. 运行 `npm run build` 生成 dist/
-7. 验证 dist/ 中的产物包含 `pathToFileURL` 调用
+1. 修改第 426 行：将模板字符串中的 `${modulePath}` 替换为 `${moduleUrl}`
+2. 运行 `tsc --noEmit` 确认无类型错误
+3. 运行 `npm run build` 生成 dist/
+4. 验证 dist/ 中的产物包含 `pathToFileURL` 调用
 
 ---
 
@@ -265,44 +281,59 @@ console.log('PASS: Unix path correctly converted');
 
 ### 场景 1：Windows 路径格式转换（核心场景）
 
-- **输入：** `__filename` = `C:\Users\ljyih\Desktop\ultrapower\dist\features\rate-limit-wait\daemon.js`
-- **期望：** `moduleUrl` = `file:///C:/Users/ljyih/Desktop/ultrapower/dist/features/rate-limit-wait/daemon.js`
-- **验证：** `import(moduleUrl)` 成功加载模块，不抛出 `ERR_UNSUPPORTED_ESM_URL_SCHEME`
+* **输入：** `__filename` = `C:\Users\ljyih\Desktop\ultrapower\dist\features\rate-limit-wait\daemon.js`
+
+* **期望：** `moduleUrl` = `file:///C:/Users/ljyih/Desktop/ultrapower/dist/features/rate-limit-wait/daemon.js`
+
+* **验证：** `import(moduleUrl)` 成功加载模块，不抛出 `ERR_UNSUPPORTED_ESM_URL_SCHEME`
 
 ### 场景 2：macOS 路径格式（回归）
 
-- **输入：** `__filename` = `/Users/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
-- **期望：** `moduleUrl` = `file:///Users/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
-- **验证：** `import(moduleUrl)` 成功加载模块
+* **输入：** `__filename` = `/Users/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
+
+* **期望：** `moduleUrl` = `file:///Users/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
+
+* **验证：** `import(moduleUrl)` 成功加载模块
 
 ### 场景 3：Linux 路径格式（回归）
 
-- **输入：** `__filename` = `/home/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
-- **期望：** `moduleUrl` = `file:///home/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
-- **验证：** `import(moduleUrl)` 成功加载模块
+* **输入：** `__filename` = `/home/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
+
+* **期望：** `moduleUrl` = `file:///home/user/ultrapower/dist/features/rate-limit-wait/daemon.js`
+
+* **验证：** `import(moduleUrl)` 成功加载模块
 
 ### 场景 4：守护进程 startDaemon() 端到端
 
-- **操作：** 在 Windows 11 上调用 `startDaemon()`
-- **期望：** 子进程成功启动，`pollLoop` 被正确调用，`writePidFile` 写入有效 PID
-- **验证：** PID 文件存在且进程正在运行
+* **操作：** 在 Windows 11 上调用 `startDaemon()`
+
+* **期望：** 子进程成功启动，`pollLoop` 被正确调用，`writePidFile` 写入有效 PID
+
+* **验证：** PID 文件存在且进程正在运行
 
 ### 场景 5：TypeScript 编译无错误
 
-- **操作：** 修改后运行 `tsc --noEmit`
-- **期望：** 零编译错误，`pathToFileURL` 类型正确（接受 `string`，返回 `URL`，`.href` 为 `string`）
+* **操作：** 修改后运行 `tsc --noEmit`
+
+* **期望：** 零编译错误，`pathToFileURL` 类型正确（接受 `string`，返回 `URL`，`.href` 为 `string`）
 
 ---
 
 ## 验收标准
 
-- [ ] **Windows 路径转换正确：** `C:\Users\...` 格式的路径被转换为 `file:///C:/Users/...` 格式
-- [ ] **子进程 import() 成功：** 守护进程子进程能够通过 file URL 正确加载 `daemon.js` 模块
-- [ ] **POC 在 Windows 11 真实环境验证通过：** 步骤 2 和步骤 3 的 POC 脚本均输出期望结果
-- [ ] **打包产物（dist/）同步验证：** 修复体现在编译后的 `dist/features/rate-limit-wait/daemon.js` 中
-- [ ] **macOS/Linux 行为不退化：** Unix 路径同样被正确转换，现有测试通过
-- [ ] **TypeScript 编译无错误：** `tsc --noEmit` 通过，无新增类型错误
-- [ ] **变更最小化：** 仅修改 2 处（import 声明 + `moduleUrl` 赋值 + 模板字符串），不涉及其他逻辑
+* [ ] **Windows 路径转换正确：** `C:\Users\...` 格式的路径被转换为 `file:///C:/Users/...` 格式
+
+* [ ] **子进程 import() 成功：** 守护进程子进程能够通过 file URL 正确加载 `daemon.js` 模块
+
+* [ ] **POC 在 Windows 11 真实环境验证通过：** 步骤 2 和步骤 3 的 POC 脚本均输出期望结果
+
+* [ ] **打包产物（dist/）同步验证：** 修复体现在编译后的 `dist/features/rate-limit-wait/daemon.js` 中
+
+* [ ] **macOS/Linux 行为不退化：** Unix 路径同样被正确转换，现有测试通过
+
+* [ ] **TypeScript 编译无错误：** `tsc --noEmit` 通过，无新增类型错误
+
+* [ ] **变更最小化：** 仅修改 2 处（import 声明 + `moduleUrl` 赋值 + 模板字符串），不涉及其他逻辑
 
 ---
 
@@ -311,18 +342,19 @@ console.log('PASS: Unix path correctly converted');
 ### 低风险
 
 | 风险 | 描述 | 缓解措施 |
-|------|------|---------|
+| ------ | ------ | --------- |
 | `pathToFileURL` API 变更 | Node.js 标准库 API，极稳定，已在 `bridge.ts` 使用多年 | 无需特殊处理 |
 | Unix 路径行为变化 | Unix 绝对路径原本可能直接传给 `import()` 而无错误 | `pathToFileURL` 对 Unix 路径同样产生有效 file URL，行为等价 |
 
 ### 中风险
 
 | 风险 | 描述 | 缓解措施 |
-|------|------|---------|
+| ------ | ------ | --------- |
 | 路径含特殊字符 | 用户名或路径含空格、Unicode 字符时 URL 编码行为 | `pathToFileURL` 自动处理 URL 编码，无需手动处理 |
 | dist/ 编译输出格式 | tsc/esbuild 编译后 `pathToFileURL` 调用形式可能变化 | 在 dist/ 上实际执行 import() 验证（场景 1/2/3） |
 
 ### 排除在外的风险
 
-- 守护进程功能逻辑（轮询、tmux 恢复等）：此次变更不涉及这些逻辑
-- 跨平台 spawn 参数：`-e daemonScript` 方式在 Windows 上已工作，仅修复 import specifier
+* 守护进程功能逻辑（轮询、tmux 恢复等）：此次变更不涉及这些逻辑
+
+* 跨平台 spawn 参数：`-e daemonScript` 方式在 Windows 上已工作，仅修复 import specifier

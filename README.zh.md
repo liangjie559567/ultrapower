@@ -22,7 +22,7 @@
 
 **第一步：安装**
 ```bash
-/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin marketplace add <<https://github.com/liangjie559567/ultrapower>>
 /plugin install omc@ultrapower
 ```
 
@@ -43,10 +43,13 @@ autopilot: build a REST API for managing tasks
 ### 更新
 
 ```bash
+
 # 1. 更新 marketplace 克隆
+
 /plugin marketplace update omc
 
 # 2. 重新运行设置以刷新配置
+
 /omc:omc-setup
 ```
 
@@ -68,23 +71,30 @@ autopilot: build a REST API for managing tasks
 
 ## 为什么选择 ultrapower？
 
-- **无需配置** - 开箱即用，智能默认设置
-- **自然语言交互** - 无需记忆命令，只需描述你的需求
-- **自动并行化** - 复杂任务自动分配给专业智能体
-- **持久执行** - 不会半途而废，直到任务验证完成
-- **成本优化** - 智能模型路由节省 30-50% 的 token
-- **从经验中学习** - 自动提取并复用问题解决模式
-- **实时可见性** - HUD 状态栏显示底层运行状态
+* **无需配置** - 开箱即用，智能默认设置
+
+* **自然语言交互** - 无需记忆命令，只需描述你的需求
+
+* **自动并行化** - 复杂任务自动分配给专业智能体
+
+* **持久执行** - 不会半途而废，直到任务验证完成
+
+* **成本优化** - 智能模型路由节省 30-50% 的 token
+
+* **从经验中学习** - 自动提取并复用问题解决模式
+
+* **实时可见性** - HUD 状态栏显示底层运行状态
 
 ---
 
 ## 功能特性
 
 ### 执行模式
+
 针对不同场景的多种策略 - 从全自动构建到 token 高效重构。[了解更多 →](https://yeachan-heo.github.io/ultrapower-website/docs.html#execution-modes)
 
 | 模式 | 速度 | 适用场景 |
-|------|-------|---------|
+| ------ | ------- | --------- |
 | **Autopilot** | 快速 | 全自动工作流 |
 | **Ultrawork** | 并行 | 任何任务的最大并行化 |
 | **Ralph** | 持久 | 必须完整完成的任务 |
@@ -94,16 +104,21 @@ autopilot: build a REST API for managing tasks
 
 ### 智能编排
 
-- **49 个专业智能体** 涵盖架构、研究、设计、测试、数据科学
-- **智能模型路由** - 简单任务用 Haiku，复杂推理用 Opus
-- **自动委派** - 每次都选择最合适的智能体
+* **49 个专业智能体** 涵盖架构、研究、设计、测试、数据科学
+
+* **智能模型路由** - 简单任务用 Haiku，复杂推理用 Opus
+
+* **自动委派** - 每次都选择最合适的智能体
 
 ### 开发者体验
 
-- **魔法关键词** - `ralph`、`ulw`、`plan` 提供显式控制
-- **HUD 状态栏** - 状态栏实时显示编排指标
-- **技能学习** - 从会话中提取可复用模式
-- **分析与成本追踪** - 了解所有会话的 token 使用情况
+* **魔法关键词** - `ralph`、`ulw`、`plan` 提供显式控制
+
+* **HUD 状态栏** - 状态栏实时显示编排指标
+
+* **技能学习** - 从会话中提取可复用模式
+
+* **分析与成本追踪** - 了解所有会话的 token 使用情况
 
 [完整功能列表 →](docs/REFERENCE.md)
 
@@ -114,7 +129,7 @@ autopilot: build a REST API for managing tasks
 为高级用户提供的可选快捷方式。不用它们，自然语言也能很好地工作。
 
 | 关键词 | 效果 | 示例 |
-|---------|--------|---------|
+| --------- | -------- | --------- |
 | `autopilot` | 全自动执行 | `autopilot: build a todo app` |
 | `ralph` | 持久模式 | `ralph: refactor auth` |
 | `ulw` | 最大并行化 | `ulw fix all errors` |
@@ -144,20 +159,26 @@ omc wait --stop   # 禁用守护进程
 你可以配置 stop 回调发送会话摘要时要 @ 谁。
 
 ```bash
+
 # 设置/替换标签列表
+
 omc config-stop-callback telegram --enable --token <bot_token> --chat <chat_id> --tag-list "@alice,bob"
 omc config-stop-callback discord --enable --webhook <url> --tag-list "@here,123456789012345678,role:987654321098765432"
 
 # 增量更新
+
 omc config-stop-callback telegram --add-tag charlie
 omc config-stop-callback discord --remove-tag @here
 omc config-stop-callback discord --clear-tags
 ```
 
 标签规则：
-- Telegram：`alice` 会规范化为 `@alice`
-- Discord：支持 `@here`、`@everyone`、纯数字用户 ID、`role:<id>`
-- `file` 回调会忽略标签选项
+
+* Telegram：`alice` 会规范化为 `@alice`
+
+* Discord：支持 `@here`、`@everyone`、纯数字用户 ID、`role:<id>`
+
+* `file` 回调会忽略标签选项
 
 ---
 
@@ -166,24 +187,33 @@ omc config-stop-callback discord --clear-tags
 你可以为会话生命周期事件接收实时通知。
 
 支持的事件：
-- `session-start`
-- `session-stop`（当 persistent 模式进入等待/阻塞状态时）
-- `session-end`
-- `ask-user-question`
+
+* `session-start`
+
+* `session-stop`（当 persistent 模式进入等待/阻塞状态时）
+
+* `session-end`
+
+* `ask-user-question`
 
 ### 配置
+
 在 Shell 配置文件（例如 `~/.zshrc`, `~/.bashrc`）中添加以下环境变量：
 
 ```bash
+
 # Discord Bot
+
 export OMC_DISCORD_NOTIFIER_BOT_TOKEN="your_bot_token"
 export OMC_DISCORD_NOTIFIER_CHANNEL="your_channel_id"
 
 # Telegram
+
 export OMC_TELEGRAM_BOT_TOKEN="your_bot_token"
 export OMC_TELEGRAM_CHAT_ID="your_chat_id"
 
 # 可选 webhook
+
 export OMC_DISCORD_WEBHOOK_URL="your_webhook_url"
 export OMC_SLACK_WEBHOOK_URL="your_webhook_url"
 ```
@@ -194,26 +224,31 @@ export OMC_SLACK_WEBHOOK_URL="your_webhook_url"
 
 ## 文档
 
-- **[完整参考](docs/REFERENCE.md)** - 完整功能文档
-- **[性能监控](docs/PERFORMANCE-MONITORING.md)** - 智能体追踪、调试和优化
-- **[网站](https://yeachan-heo.github.io/ultrapower-website)** - 交互式指南和示例（ultrapower）
-- **[迁移指南](docs/MIGRATION.md)** - 从 v2.x 升级
-- **[架构](docs/ARCHITECTURE.md)** - 底层工作原理
+* **[完整参考](docs/REFERENCE.md)** - 完整功能文档
+
+* **[性能监控](docs/PERFORMANCE-MONITORING.md)** - 智能体追踪、调试和优化
+
+* **[网站](https://yeachan-heo.github.io/ultrapower-website)** - 交互式指南和示例（ultrapower）
+
+* **[迁移指南](docs/MIGRATION.md)** - 从 v2.x 升级
+
+* **[架构](docs/ARCHITECTURE.md)** - 底层工作原理
 
 ---
 
 ## 环境要求
 
-- [Claude Code](https://docs.anthropic.com/claude-code) CLI
-- Claude Max/Pro 订阅 或 Anthropic API 密钥
+* [Claude Code](https://docs.anthropic.com/claude-code) CLI
+
+* Claude Max/Pro 订阅 或 Anthropic API 密钥
 
 ### 可选：多 AI 编排
 
 OMC 可以选择性地调用外部 AI 提供商进行交叉验证和设计一致性检查。**非必需** — 没有它们 OMC 也能完整运行。
 
 | 提供商 | 安装 | 功能 |
-|--------|------|------|
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` | 设计审查、UI 一致性（1M token 上下文）|
+| -------- | ------ | ------ |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` | 设计审查、UI 一致性（1M token 上下文） |
 | [Codex CLI](https://github.com/openai/codex) | `npm install -g @openai/codex` | 架构验证、代码审查交叉检查 |
 
 **费用：** 3 个 Pro 计划（Claude + Gemini + ChatGPT）每月约 $60 即可覆盖所有功能。
@@ -246,14 +281,20 @@ MIT
 
 ### 为什么赞助？
 
-- 保持项目活跃开发
-- 赞助者获得优先支持
-- 影响路线图和功能
-- 帮助维护自由开源
+* 保持项目活跃开发
+
+* 赞助者获得优先支持
+
+* 影响路线图和功能
+
+* 帮助维护自由开源
 
 ### 其他帮助方式
 
-- ⭐ 为仓库加星
-- 🐛 报告问题
-- 💡 提出功能建议
-- 📝 贡献代码
+* ⭐ 为仓库加星
+
+* 🐛 报告问题
+
+* 💡 提出功能建议
+
+* 📝 贡献代码

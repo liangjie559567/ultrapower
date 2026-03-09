@@ -17,28 +17,46 @@
 ### Task 1: 创建 AI 适配器目录结构（7 个新文件 + 2 个合并）
 
 **Files:**
-- Merge: `CLAUDE.md`（项目根）← `adapters/claude/CLAUDE.md`
-- Merge: `docs/CLAUDE.md` ← `adapters/claude-code/CLAUDE-CODE.md`
-- Create: `.codex/AGENTS.md`
-- Create: `.gemini/GEMINI.md`
-- Create: `.gemini/GEMINI-CLI.md`
-- Create: `.github/copilot-instructions.md`
-- Create: `.cursorrules`
-- Create: `.kiro/steering/axiom.md`
-- Create: `.opencode/AGENTS.md`
+
+* Merge: `CLAUDE.md`（项目根）← `adapters/claude/CLAUDE.md`
+
+* Merge: `docs/CLAUDE.md` ← `adapters/claude-code/CLAUDE-CODE.md`
+
+* Create: `.codex/AGENTS.md`
+
+* Create: `.gemini/GEMINI.md`
+
+* Create: `.gemini/GEMINI-CLI.md`
+
+* Create: `.github/copilot-instructions.md`
+
+* Create: `.cursorrules`
+
+* Create: `.kiro/steering/axiom.md`
+
+* Create: `.opencode/AGENTS.md`
 
 **Step 1: 读取 Axiom 适配器源文件**
 
 并行读取以下文件：
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\claude\CLAUDE.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\claude-code\CLAUDE-CODE.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\codex\CODEX.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\gemini\GEMINI.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\gemini-cli\GEMINI-CLI.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\copilot\copilot-instructions.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\cursor\.cursorrules`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\kiro\KIRO.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\opencode\OPENCODE.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\claude\CLAUDE.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\claude-code\CLAUDE-CODE.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\codex\CODEX.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\gemini\GEMINI.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\gemini-cli\GEMINI-CLI.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\copilot\copilot-instructions.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\cursor\.cursorrules`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\kiro\KIRO.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\adapters\opencode\OPENCODE.md`
 
 **Step 2: 合并 CLAUDE.md（项目根）**
 
@@ -77,10 +95,14 @@ git commit -m "feat(adapters): add Axiom AI tool adapters and merge PM→Worker 
 ### Task 2: 合并增强 Agent 提示词（critic + architect）
 
 **Files:**
-- Modify: `agents/critic.md`
-- Modify: `agents/architect.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\critic.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\tech_lead.md`
+
+* Modify: `agents/critic.md`
+
+* Modify: `agents/architect.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\critic.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\tech_lead.md`
 
 **Step 1: 并行读取所有文件**
 
@@ -90,19 +112,27 @@ git commit -m "feat(adapters): add Axiom AI tool adapters and merge PM→Worker 
 
 在 `agents/critic.md` 末尾追加：
 ```markdown
+
 ## Axiom Review Criteria (增强)
 
 ### Security Audit (P0)
-- Data Privacy: 用户数据存储位置、加密状态、访问权限
-- Authentication: IDOR/SQLi/XSS 潜在绕过
-- Compliance: GDPR/CCPA 合规性
+
+* Data Privacy: 用户数据存储位置、加密状态、访问权限
+
+* Authentication: IDOR/SQLi/XSS 潜在绕过
+
+* Compliance: GDPR/CCPA 合规性
 
 ### Edge Cases (P1)
-- Extreme Inputs: 空字符串、超大文件、Unicode
-- Concurrency: 竞态条件、死锁、双重提交
-- User Errors: 重复点击、断网、中途取消
+
+* Extreme Inputs: 空字符串、超大文件、Unicode
+
+* Concurrency: 竞态条件、死锁、双重提交
+
+* User Errors: 重复点击、断网、中途取消
 
 ### Review Output Format
+
 输出到 `docs/reviews/[feature]/review_critic.md`，格式：Pass | Conditional Pass | Reject
 ```
 
@@ -122,14 +152,22 @@ git commit -m "feat(agents): enhance critic and architect with Axiom role prompt
 ### Task 3: 合并增强 Agent 提示词（product-manager + ux-researcher + analyst + writer）
 
 **Files:**
-- Modify: `agents/product-manager.md`
-- Modify: `agents/ux-researcher.md`
-- Modify: `agents/analyst.md`
-- Modify: `agents/writer.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\product_director.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\ux_director.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\domain_expert.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\sub_prd_writer.md`
+
+* Modify: `agents/product-manager.md`
+
+* Modify: `agents/ux-researcher.md`
+
+* Modify: `agents/analyst.md`
+
+* Modify: `agents/writer.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\product_director.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\ux_director.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\domain_expert.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\roles\sub_prd_writer.md`
 
 **Step 1: 并行读取所有文件**
 
@@ -151,20 +189,28 @@ git commit -m "feat(agents): enhance product-manager/ux-researcher/analyst/write
 ### Task 4: 合并增强现有 Skills（brainstorming + systematic-debugging + requesting-code-review）
 
 **Files:**
-- Modify: `skills/brainstorming/SKILL.md`
-- Modify: `skills/systematic-debugging/SKILL.md`
-- Modify: `skills/requesting-code-review/SKILL.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\1-drafting.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\analyze-error.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\2-reviewing.md`
+
+* Modify: `skills/brainstorming/SKILL.md`
+
+* Modify: `skills/systematic-debugging/SKILL.md`
+
+* Modify: `skills/requesting-code-review/SKILL.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\1-drafting.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\analyze-error.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\2-reviewing.md`
 
 **Step 1: 并行读取所有文件**
 
 **Step 2: 提取 Axiom 独特内容并追加**
 
-- `1-drafting.md` 的草稿阶段独特步骤 → `brainstorming`
-- `analyze-error.md` 的错误分析独特步骤 → `systematic-debugging`
-- `2-reviewing.md` 的评审流程独特步骤 → `requesting-code-review`
+* `1-drafting.md` 的草稿阶段独特步骤 → `brainstorming`
+
+* `analyze-error.md` 的错误分析独特步骤 → `systematic-debugging`
+
+* `2-reviewing.md` 的评审流程独特步骤 → `requesting-code-review`
 
 **Step 3: Commit**
 
@@ -178,30 +224,48 @@ git commit -m "feat(skills): enhance brainstorming/systematic-debugging/requesti
 ### Task 5: 合并增强现有 Skills（writing-plans + executing-plans + subagent-driven-development + deepinit + learner + ccg）
 
 **Files:**
-- Modify: `skills/writing-plans/SKILL.md`
-- Modify: `skills/executing-plans/SKILL.md`
-- Modify: `skills/subagent-driven-development/SKILL.md`
-- Modify: `skills/deepinit/SKILL.md`
-- Modify: `skills/learner/SKILL.md`
-- Modify: `skills/ccg/SKILL.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\3-decomposing.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\4-implementing.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\feature-flow.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\init.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\start.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\evolve.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\codex-dispatch.md`
+
+* Modify: `skills/writing-plans/SKILL.md`
+
+* Modify: `skills/executing-plans/SKILL.md`
+
+* Modify: `skills/subagent-driven-development/SKILL.md`
+
+* Modify: `skills/deepinit/SKILL.md`
+
+* Modify: `skills/learner/SKILL.md`
+
+* Modify: `skills/ccg/SKILL.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\3-decomposing.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\4-implementing.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\feature-flow.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\init.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\start.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\evolve.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\codex-dispatch.md`
 
 **Step 1: 并行读取所有文件**
 
 **Step 2: 提取并追加独特内容**
 
-- `3-decomposing.md` 的 DAG 任务分解方法 → `writing-plans`
-- `4-implementing.md` 的 PM→Worker 协议 → `executing-plans`
-- `feature-flow.md` 的完整功能流程 → `subagent-driven-development`
-- `init.md` + `start.md` 的初始化步骤 → `deepinit`
-- `evolve.md` 的进化触发逻辑 → `learner`
-- `codex-dispatch.md` 的 Codex 调度协议 → `ccg`
+* `3-decomposing.md` 的 DAG 任务分解方法 → `writing-plans`
+
+* `4-implementing.md` 的 PM→Worker 协议 → `executing-plans`
+
+* `feature-flow.md` 的完整功能流程 → `subagent-driven-development`
+
+* `init.md` + `start.md` 的初始化步骤 → `deepinit`
+
+* `evolve.md` 的进化触发逻辑 → `learner`
+
+* `codex-dispatch.md` 的 Codex 调度协议 → `ccg`
 
 **Step 3: Commit**
 
@@ -215,21 +279,36 @@ git commit -m "feat(skills): enhance writing-plans/executing-plans/subagent-driv
 ### Task 6: 新建 Axiom 专属 Skills（ax-reflect/ax-rollback/ax-status/ax-suspend/ax-knowledge/ax-export）
 
 **Files:**
-- Create: `skills/ax-reflect/SKILL.md`
-- Create: `skills/ax-rollback/SKILL.md`
-- Create: `skills/ax-status/SKILL.md`
-- Create: `skills/ax-suspend/SKILL.md`
-- Create: `skills/ax-knowledge/SKILL.md`
-- Create: `skills/ax-export/SKILL.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\reflect.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\rollback.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\status.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\meta.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\suspend.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\suspend1.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\knowledge.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\patterns.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\export.md`
+
+* Create: `skills/ax-reflect/SKILL.md`
+
+* Create: `skills/ax-rollback/SKILL.md`
+
+* Create: `skills/ax-status/SKILL.md`
+
+* Create: `skills/ax-suspend/SKILL.md`
+
+* Create: `skills/ax-knowledge/SKILL.md`
+
+* Create: `skills/ax-export/SKILL.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\reflect.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\rollback.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\status.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\meta.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\suspend.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\suspend1.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\knowledge.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\patterns.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\workflows\export.md`
 
 **Step 1: 并行读取所有 Axiom 工作流源文件**
 
@@ -249,9 +328,12 @@ triggers: ["[触发词1]", "[触发词2]"]
 ```
 
 合并规则：
-- `ax-status`：合并 `status.md` + `meta.md`
-- `ax-suspend`：合并 `suspend.md` + `suspend1.md`（去重）
-- `ax-knowledge`：合并 `knowledge.md` + `patterns.md`
+
+* `ax-status`：合并 `status.md` + `meta.md`
+
+* `ax-suspend`：合并 `suspend.md` + `suspend1.md`（去重）
+
+* `ax-knowledge`：合并 `knowledge.md` + `patterns.md`
 
 **Step 3: 验证文件创建**
 
@@ -273,18 +355,30 @@ git commit -m "feat(skills): add new Axiom skills ax-reflect/rollback/status/sus
 ### Task 7: 迁移规则引擎文件 + prompts/templates
 
 **Files:**
-- Create: `templates/rules/axiom-gatekeepers.md`
-- Create: `templates/rules/axiom-provider-router.md`
-- Create: `templates/rules/axiom-router.md`
-- Create: `templates/rules/axiom-skills.md`
-- Create: `templates/axiom/dag-analysis.md`
-- Create: `templates/axiom/task-execution.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\gatekeepers.rule`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\provider_router.rule`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\router.rule`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\skills.rule`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\templates\dag_analysis.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\templates\task_execution.md`
+
+* Create: `templates/rules/axiom-gatekeepers.md`
+
+* Create: `templates/rules/axiom-provider-router.md`
+
+* Create: `templates/rules/axiom-router.md`
+
+* Create: `templates/rules/axiom-skills.md`
+
+* Create: `templates/axiom/dag-analysis.md`
+
+* Create: `templates/axiom/task-execution.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\gatekeepers.rule`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\provider_router.rule`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\router.rule`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\rules\skills.rule`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\templates\dag_analysis.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\prompts\templates\task_execution.md`
 
 **Step 1: 并行读取所有源文件**
 
@@ -311,8 +405,10 @@ git commit -m "feat(templates): migrate Axiom rule engine files and prompts/temp
 ### Task 8: 迁移 memory/knowledge 知识库（25+ 条目）
 
 **Files:**
-- Create: `.omc/knowledge/` 目录（25+ 条目）
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\memory\knowledge\`
+
+* Create: `.omc/knowledge/` 目录（25+ 条目）
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\memory\knowledge\`
 
 **Step 1: 列出所有知识条目**
 
@@ -331,16 +427,20 @@ cp -r C:/Users/ljyih/Desktop/Axiom/.agent/memory/knowledge/* .omc/knowledge/
 
 在 `.omc/knowledge/index.md` 中创建索引，格式：
 ```markdown
+
 # Axiom Knowledge Base Index
 
 ## 通用 Agent 模式（直接适用）
-- k-001 ~ k-005: [条目标题]
+
+* k-001 ~ k-005: [条目标题]
 
 ## Flutter/Dart 相关（项目特定，保留供参考）
-- k-006 ~ k-020: [条目标题]
+
+* k-006 ~ k-020: [条目标题]
 
 ## 通用开发规范（直接适用）
-- k-021 ~ k-025: [条目标题]
+
+* k-021 ~ k-025: [条目标题]
 ```
 
 **Step 4: 验证**
@@ -363,8 +463,10 @@ git commit -m "feat(knowledge): migrate Axiom memory/knowledge 25+ entries to .o
 ### Task 9: 迁移 knowledge/ 独立目录
 
 **Files:**
-- Create: `.omc/knowledge/axiom-patterns/` 目录
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\knowledge\`
+
+* Create: `.omc/knowledge/axiom-patterns/` 目录
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\knowledge\`
 
 **Step 1: 列出子目录结构**
 
@@ -399,19 +501,28 @@ git commit -m "feat(knowledge): migrate Axiom knowledge/ independent dir to .omc
 ### Task 10: 迁移 Axiom 记忆 Markdown 文件
 
 **Files:**
-- Create: `.omc/axiom/` 目录（7 个文件）
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\memory\`
+
+* Create: `.omc/axiom/` 目录（7 个文件）
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\memory\`
 
 **Step 1: 并行读取所有记忆文件**
 
 并行读取：
-- `C:\Users\ljyih\Desktop\Axiom\.agent\memory\project_decisions.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\memory\user_preferences.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\memory\active_context.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\memory\reflection_log.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\memory\state_machine.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\memory\evolution\knowledge_base.md`
-- `C:\Users\ljyih\Desktop\Axiom\.agent\memory\evolution\pattern_library.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\memory\project_decisions.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\memory\user_preferences.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\memory\active_context.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\memory\reflection_log.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\memory\state_machine.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\memory\evolution\knowledge_base.md`
+
+* `C:\Users\ljyih\Desktop\Axiom\.agent\memory\evolution\pattern_library.md`
 
 **Step 2: 创建目录并写入**
 
@@ -442,16 +553,22 @@ git commit -m "feat(memory): migrate Axiom memory Markdown files to .omc/axiom/"
 ### Task 11: 实现 axiom-config.ts
 
 **Files:**
-- Create: `src/config/axiom-config.ts`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\config\config_loader.py`
+
+* Create: `src/config/axiom-config.ts`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\config\config_loader.py`
 
 **Step 1: 读取源文件**
 
 读取 `C:\Users\ljyih\Desktop\Axiom\.agent\config\config_loader.py`，提取：
-- `ACTIVE_PROVIDER` 路由逻辑
-- Evolution 参数值（min_confidence、seed_confidence 等）
-- Dispatcher timeout tiers
-- max_restarts 值
+
+* `ACTIVE_PROVIDER` 路由逻辑
+
+* Evolution 参数值（min_confidence、seed_confidence 等）
+
+* Dispatcher timeout tiers
+
+* max_restarts 值
 
 **Step 2: 创建 TypeScript 实现**
 
@@ -513,8 +630,10 @@ git commit -m "feat(config): add axiom-config.ts with AxiomConfig interface and 
 ### Task 12: 归档 scripts/ 到 templates/axiom/scripts/
 
 **Files:**
-- Create: `templates/axiom/scripts/` 目录（5 个 PowerShell 脚本）
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\scripts\`
+
+* Create: `templates/axiom/scripts/` 目录（5 个 PowerShell 脚本）
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\scripts\`
 
 **Step 1: 列出脚本文件**
 
@@ -533,17 +652,23 @@ cp C:/Users/ljyih/Desktop/Axiom/.agent/scripts/*.ps1 templates/axiom/scripts/
 
 在 `templates/axiom/scripts/README.md` 中写入：
 ```markdown
+
 # Axiom PowerShell Scripts (归档)
 
 这些脚本来自 Axiom `.agent/scripts/`，仅供参考。
 ultrapower 是跨平台的，不直接集成这些 Windows 专用脚本。
 
 ## 文件列表
-- `agent-runner.ps1`: Axiom agent 运行器
-- `Check-Memory.ps1`: 记忆检查工具
-- `Poll-Memory.ps1`: 记忆轮询工具
-- `start-reviews.ps1`: 启动审查流程
-- `Watch-Memory.ps1`: 记忆监控工具
+
+* `agent-runner.ps1`: Axiom agent 运行器
+
+* `Check-Memory.ps1`: 记忆检查工具
+
+* `Poll-Memory.ps1`: 记忆轮询工具
+
+* `start-reviews.ps1`: 启动审查流程
+
+* `Watch-Memory.ps1`: 记忆监控工具
 ```
 
 **Step 4: Commit**
@@ -562,17 +687,24 @@ git commit -m "feat(templates): archive Axiom PowerShell scripts to templates/ax
 **前置依赖：** Task 10（`.omc/axiom/` 目录已创建）
 
 **Files:**
-- Create: `src/hooks/memory/index.ts`
-- Create: `src/hooks/memory/types.ts`
-- Create: `src/hooks/memory/constants.ts`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\memory\context_manager.py`
+
+* Create: `src/hooks/memory/index.ts`
+
+* Create: `src/hooks/memory/types.ts`
+
+* Create: `src/hooks/memory/constants.ts`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\memory\context_manager.py`
 
 **Step 1: 读取源文件**
 
 读取 `C:\Users\ljyih\Desktop\Axiom\.agent\memory\context_manager.py`，理解：
-- 7 个操作的实现逻辑（read/write/merge/clear/checkpoint/restore/status）
-- 文件路径约定
-- 上下文窗口管理逻辑
+
+* 7 个操作的实现逻辑（read/write/merge/clear/checkpoint/restore/status）
+
+* 文件路径约定
+
+* 上下文窗口管理逻辑
 
 **Step 2: 创建 types.ts**
 
@@ -635,14 +767,22 @@ git commit -m "feat(hooks): add Context Manager TypeScript with 7-operation inte
 **前置依赖：** Task 11（axiom-config.ts）、Task 13（Context Manager）
 
 **Files:**
-- Create: `src/hooks/learner/harvester.ts`
-- Create: `src/hooks/learner/pattern-detector.ts`
-- Create: `src/hooks/learner/confidence.ts`
-- Create: `src/hooks/learner/metrics.ts`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\harvester.py`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\pattern_detector.py`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\confidence.py`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\metrics.py`
+
+* Create: `src/hooks/learner/harvester.ts`
+
+* Create: `src/hooks/learner/pattern-detector.ts`
+
+* Create: `src/hooks/learner/confidence.ts`
+
+* Create: `src/hooks/learner/metrics.ts`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\harvester.py`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\pattern_detector.py`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\confidence.py`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\metrics.py`
 
 **Step 1: 并行读取 4 个 Python 源文件**
 
@@ -684,16 +824,26 @@ git commit -m "feat(learner): add Evolution Engine core modules (harvester/patte
 **前置依赖：** Task 14（核心模块）
 
 **Files:**
-- Create: `src/hooks/learner/orchestrator.ts`
-- Create: `src/hooks/learner/reflection.ts`
-- Create: `src/hooks/learner/learning-queue.ts`
-- Create: `src/hooks/learner/index-manager.ts`
-- Create: `src/hooks/learner/seed-knowledge.ts`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\orchestrator.py`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\reflection.py`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\learning_queue.py`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\index_manager.py`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\seed_knowledge.py`
+
+* Create: `src/hooks/learner/orchestrator.ts`
+
+* Create: `src/hooks/learner/reflection.ts`
+
+* Create: `src/hooks/learner/learning-queue.ts`
+
+* Create: `src/hooks/learner/index-manager.ts`
+
+* Create: `src/hooks/learner/seed-knowledge.ts`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\orchestrator.py`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\reflection.py`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\learning_queue.py`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\index_manager.py`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\evolution\seed_knowledge.py`
 
 **Step 1: 并行读取 5 个 Python 源文件**
 
@@ -741,12 +891,18 @@ git commit -m "feat(learner): add Evolution Engine orchestration modules (orches
 **层 A：Git Hooks（Shell 脚本）**
 
 **Files:**
-- Create: `scripts/hooks/pre-commit.sh`
-- Create: `scripts/hooks/post-commit.sh`
-- Create: `scripts/hooks/install-hooks.sh`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\guards\pre-commit`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\guards\post-commit`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\guards\install_hooks.py`
+
+* Create: `scripts/hooks/pre-commit.sh`
+
+* Create: `scripts/hooks/post-commit.sh`
+
+* Create: `scripts/hooks/install-hooks.sh`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\guards\pre-commit`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\guards\post-commit`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\guards\install_hooks.py`
 
 **Step 1: 读取 Axiom guards 源文件**
 
@@ -761,10 +917,14 @@ mkdir -p scripts/hooks
 **层 B：Claude Code Hooks（TypeScript）**
 
 **Files:**
-- Create: `src/hooks/guards/pre-tool.ts`
-- Create: `src/hooks/guards/post-tool.ts`
-- Create: `src/hooks/guards/session-watchdog.ts`
-- Create: `src/hooks/guards/status-dashboard.ts`
+
+* Create: `src/hooks/guards/pre-tool.ts`
+
+* Create: `src/hooks/guards/post-tool.ts`
+
+* Create: `src/hooks/guards/session-watchdog.ts`
+
+* Create: `src/hooks/guards/status-dashboard.ts`
 
 **Step 3: 实现 pre-tool.ts**
 
@@ -804,14 +964,22 @@ git commit -m "feat(guards): add dual-layer Guards (Git hooks shell scripts + Cl
 **重要：** 以下 7 个文件已存在，本任务为增强，不是新建。
 
 **Files:**
-- Modify: `agents/axiom-requirement-analyst.md`
-- Modify: `agents/axiom-product-designer.md`
-- Modify: `agents/axiom-review-aggregator.md`
-- Modify: `agents/axiom-prd-crafter.md`
-- Modify: `agents/axiom-system-architect.md`
-- Modify: `agents/axiom-evolution-engine.md`
-- Modify: `agents/axiom-context-manager.md`
-- Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\skills\` 对应子目录
+
+* Modify: `agents/axiom-requirement-analyst.md`
+
+* Modify: `agents/axiom-product-designer.md`
+
+* Modify: `agents/axiom-review-aggregator.md`
+
+* Modify: `agents/axiom-prd-crafter.md`
+
+* Modify: `agents/axiom-system-architect.md`
+
+* Modify: `agents/axiom-evolution-engine.md`
+
+* Modify: `agents/axiom-context-manager.md`
+
+* Reference: `C:\Users\ljyih\Desktop\Axiom\.agent\skills\` 对应子目录
 
 **Step 1: 验证 7 个文件存在**
 
@@ -841,8 +1009,10 @@ git commit -m "feat(agents): enhance existing axiom-* agents with Axiom skill in
 ### Task 18: 更新文档
 
 **Files:**
-- Modify: `CLAUDE.md`（项目根）
-- Modify: `README.md`（如存在）
+
+* Modify: `CLAUDE.md`（项目根）
+
+* Modify: `README.md`（如存在）
 
 **Step 1: 读取当前 CLAUDE.md**
 
@@ -850,12 +1020,18 @@ git commit -m "feat(agents): enhance existing axiom-* agents with Axiom skill in
 
 在 CLAUDE.md 的 skills 部分追加：
 ```markdown
-- `ax-reflect`（"reflect"、"反思"）：Axiom 反思工作流
-- `ax-rollback`（"rollback"、"回滚"）：Axiom 回滚工作流
-- `ax-status`（"ax-status"、"axiom status"）：Axiom 状态查看
-- `ax-suspend`（"suspend"、"暂停任务"）：Axiom 任务暂停
-- `ax-knowledge`（"knowledge"、"知识库"）：Axiom 知识库管理
-- `ax-export`（"ax-export"、"导出"）：Axiom 导出工作流
+
+* `ax-reflect`（"reflect"、"反思"）：Axiom 反思工作流
+
+* `ax-rollback`（"rollback"、"回滚"）：Axiom 回滚工作流
+
+* `ax-status`（"ax-status"、"axiom status"）：Axiom 状态查看
+
+* `ax-suspend`（"suspend"、"暂停任务"）：Axiom 任务暂停
+
+* `ax-knowledge`（"knowledge"、"知识库"）：Axiom 知识库管理
+
+* `ax-export`（"ax-export"、"导出"）：Axiom 导出工作流
 ```
 
 **Step 3: 运行构建验证**
@@ -877,20 +1053,36 @@ git commit -m "docs: update CLAUDE.md with new Axiom ax-* skills"
 
 ## 验收标准
 
-- [ ] 9 个 AI 适配器文件就位（含 CLAUDE.md 合并到项目根）
-- [ ] 6 个 agent 提示词已合并增强（critic/architect/product-manager/ux-researcher/analyst/writer）
-- [ ] 10 个工作流已合并增强到现有 skills
-- [ ] 6 个新 ax-* skills 已创建（ax-reflect/rollback/status/suspend/knowledge/export）
-- [ ] 4 个规则文件已迁移到 templates/rules/
-- [ ] 2 个 prompts/templates 文件已迁移到 templates/axiom/
-- [ ] 25+ memory/knowledge 条目已迁移到 `.omc/knowledge/`
-- [ ] knowledge/ 独立目录已迁移到 `.omc/knowledge/axiom-patterns/`
-- [ ] 7 个记忆文件已迁移到 `.omc/axiom/`
-- [ ] scripts/ 已归档到 `templates/axiom/scripts/`
-- [ ] axiom-config.ts 实现通过类型检查
-- [ ] Context Manager TypeScript 实现通过类型检查（7 操作含 merge/clear）
-- [ ] Evolution Engine TypeScript 实现通过类型检查（9 个模块）
-- [ ] Guards 双层架构：Git hooks（scripts/hooks/）+ Claude Code hooks（src/hooks/guards/）
-- [ ] 7 个现有 axiom-* agents 已增强（非新建）
-- [ ] `npm run build` 无错误
-- [ ] 新增 skill 可通过 `/ultrapower:ax-*` 调用
+* [ ] 9 个 AI 适配器文件就位（含 CLAUDE.md 合并到项目根）
+
+* [ ] 6 个 agent 提示词已合并增强（critic/architect/product-manager/ux-researcher/analyst/writer）
+
+* [ ] 10 个工作流已合并增强到现有 skills
+
+* [ ] 6 个新 ax-* skills 已创建（ax-reflect/rollback/status/suspend/knowledge/export）
+
+* [ ] 4 个规则文件已迁移到 templates/rules/
+
+* [ ] 2 个 prompts/templates 文件已迁移到 templates/axiom/
+
+* [ ] 25+ memory/knowledge 条目已迁移到 `.omc/knowledge/`
+
+* [ ] knowledge/ 独立目录已迁移到 `.omc/knowledge/axiom-patterns/`
+
+* [ ] 7 个记忆文件已迁移到 `.omc/axiom/`
+
+* [ ] scripts/ 已归档到 `templates/axiom/scripts/`
+
+* [ ] axiom-config.ts 实现通过类型检查
+
+* [ ] Context Manager TypeScript 实现通过类型检查（7 操作含 merge/clear）
+
+* [ ] Evolution Engine TypeScript 实现通过类型检查（9 个模块）
+
+* [ ] Guards 双层架构：Git hooks（scripts/hooks/）+ Claude Code hooks（src/hooks/guards/）
+
+* [ ] 7 个现有 axiom-* agents 已增强（非新建）
+
+* [ ] `npm run build` 无错误
+
+* [ ] 新增 skill 可通过 `/ultrapower:ax-*` 调用

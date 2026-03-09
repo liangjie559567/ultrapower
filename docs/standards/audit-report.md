@@ -15,13 +15,13 @@
    - 1.2 Stop 阶段优先级链
    - 1.3 Hook 失败降级策略
    - 1.4 bridge-normalize.ts 白名单覆盖范围
-2. [T-01b：Mode/Agent/State 审计](#t-01b-modeagentstate-审计)
+1. [T-01b：Mode/Agent/State 审计](#t-01b-modeagentstate-审计)
    - 2.1 关键常量
    - 2.2 SubagentStopInput.success 废弃说明
    - 2.3 Windows rename 语义差异
    - 2.4 状态文件并发保护级别对照表
-3. [差异点汇总](#差异点汇总)
-4. [对后续规范任务的影响](#对后续规范任务的影响)
+1. [差异点汇总](#差异点汇总)
+2. [对后续规范任务的影响](#对后续规范任务的影响)
 
 ---
 
@@ -53,7 +53,7 @@ type HookType =
 **分类表（六个阶段）：**
 
 | 阶段 | HookType | 必需字段 | 敏感级别 |
-|------|----------|----------|----------|
+| ------ | ---------- | ---------- | ---------- |
 | UserPromptSubmit | keyword-detector | `[]`（默认） | 普通 |
 | Stop（P1，最高） | ralph | `[]`（默认） | 普通 |
 | Stop（P1.5） | persistent-mode（含 ultrawork） | `[]`（默认） | 普通 |
@@ -71,8 +71,10 @@ type HookType =
 | 系统维护 | permission-request | `["sessionId", "directory", "toolName"]` | **敏感，不可静默降级** |
 
 **终止开关：**
-- `DISABLE_OMC` 环境变量：禁用所有 hooks
-- `OMC_SKIP_HOOKS` 环境变量：按逗号分隔名称跳过特定 hooks
+
+* `DISABLE_OMC` 环境变量：禁用所有 hooks
+
+* `OMC_SKIP_HOOKS` 环境变量：按逗号分隔名称跳过特定 hooks
 
 ---
 
@@ -100,7 +102,7 @@ Ultrawork/persistent-mode（P2，最低优先级）
 export function createHookOutput(result: PersistentModeResult): {
   continue: boolean; message?: string;
 } {
-  return { continue: true, message: result.message || undefined };
+  return { continue: true, message: result.message | | undefined };
 }
 ```
 
@@ -127,8 +129,10 @@ permission-request 是安全边界，失败时**理论上**不应静默降级。
 **规范要求（待实现）：** permission-request 类型失败时必须阻塞，不得返回 `{ continue: true }`。
 
 **Hook 超时处理（当前代码未见明确超时限制）：**
-- 规范要求：PreToolUse hook 超时（默认 5s）时，Claude 继续执行工具调用（不阻塞）
-- 规范要求：PostToolUse hook 超时时，状态写入标记为"待重试"，不回滚已执行的工具调用
+
+* 规范要求：PreToolUse hook 超时（默认 5s）时，Claude 继续执行工具调用（不阻塞）
+
+* 规范要求：PostToolUse hook 超时时，状态写入标记为"待重试"，不回滚已执行的工具调用
 
 ---
 
@@ -189,8 +193,10 @@ const STALE_MARKER_THRESHOLD = 60 * 60 * 1000;  // 模式 stale marker 阈值：
 ```
 
 **注意：** 两个"stale"阈值用途不同（见差异点 D-09）：
-- `STALE_MARKER_THRESHOLD`（1 小时）：用于模式状态文件的 stale marker 检测
-- `STALE_THRESHOLD_MS`（5 分钟）：用于 agent 运行状态的 stale 检测
+
+* `STALE_MARKER_THRESHOLD`（1 小时）：用于模式状态文件的 stale marker 检测
+
+* `STALE_THRESHOLD_MS`（5 分钟）：用于 agent 运行状态的 stale 检测
 
 **来源：`src/hooks/mode-registry/index.ts`**
 
@@ -207,7 +213,7 @@ const EXCLUSIVE_MODES = ['autopilot', 'ultrapilot', 'swarm', 'pipeline'];
 **Agent 边界情况矩阵（来源：subagent-tracker/index.ts）：**
 
 | 边界情况 | 触发条件 | 处理策略 |
-|---------|---------|---------|
+| --------- | --------- | --------- |
 | 超时 | `STALE_THRESHOLD_MS = 5 * 60 * 1000`（5 分钟） | 标记为 stale，触发清理 |
 | 孤儿状态 | 父 session 结束但 agent 仍在运行 | session-end hook 触发孤儿检测，强制 SHUTDOWN |
 | 成本超限 | `COST_LIMIT_USD = 1.0` | 触发强制终止，记录到 last-tool-error.json |
@@ -260,7 +266,7 @@ const succeeded = input.success !== false;
 ```typescript
 export function atomicWriteFileSync(filePath: string, content: string): void {
   ensureDirSync(dir);
-  // 1. 独占创建临时文件（wx 标志 = O_CREAT|O_EXCL|O_WRONLY，权限 0o600）
+  // 1. 独占创建临时文件（wx 标志 = O_CREAT | O_EXCL | O_WRONLY，权限 0o600）
   const tmpPath = path.join(dir, `.${base}.tmp.${randomUUID()}`);
   const fd = fs.openSync(tmpPath, 'wx', 0o600);
   // 2. 写入内容
@@ -282,10 +288,14 @@ export function atomicWriteFileSync(filePath: string, content: string): void {
 ```
 
 **Windows 平台差异：**
-- Windows 上 `fs.rename` 使用 `MoveFileExW with MOVEFILE_REPLACE_EXISTING`
-- 当目标文件被其他进程持有时会**失败**（不同于 POSIX 的原子替换语义）
-- 代码已处理此情况：目录级 fsync 失败时静默捕获异常
-- **规范要求：** 实现者不得假设 Windows 和 POSIX 的 rename 行为一致
+
+* Windows 上 `fs.rename` 使用 `MoveFileExW with MOVEFILE_REPLACE_EXISTING`
+
+* 当目标文件被其他进程持有时会**失败**（不同于 POSIX 的原子替换语义）
+
+* 代码已处理此情况：目录级 fsync 失败时静默捕获异常
+
+* **规范要求：** 实现者不得假设 Windows 和 POSIX 的 rename 行为一致
 
 **文件权限：** 所有原子写入文件权限为 `0o600`（仅所有者可读写）
 
@@ -303,7 +313,7 @@ export function safeReadJson<T>(filePath: string): T | null {
 来源：`src/hooks/subagent-tracker/index.ts`、`src/lib/atomic-write.ts`
 
 | 状态文件 | 并发保护机制 | 保护级别 |
-|---------|------------|---------|
+| --------- | ------------ | --------- |
 | `subagent-tracking.json` | debounce（100ms）+ flushInProgress Set + mergeTrackerStates + 文件锁（PID:timestamp） | **最高**（四层保护） |
 | `team-state.json` | atomicWriteJsonSync | 中（原子写入，无 debounce） |
 | `ralph-state.json` | atomicWriteJsonSync | 中（原子写入，无 debounce） |
@@ -312,18 +322,26 @@ export function safeReadJson<T>(filePath: string): T | null {
 | subagent-tracker 内部即时写入 | `writeFileSync`（直接写入，见差异点 D-07） | **低**（无原子保护） |
 
 **subagent-tracking.json 锁机制详情：**
-- 锁文件格式：`PID:timestamp`
-- stale 检测：锁持有超过 5 秒，或持有进程已死亡
-- 等待机制：`Atomics.wait`（syncSleep）
-- 锁超时：`LOCK_TIMEOUT_MS = 5000`（5 秒）
+
+* 锁文件格式：`PID:timestamp`
+
+* stale 检测：锁持有超过 5 秒，或持有进程已死亡
+
+* 等待机制：`Atomics.wait`（syncSleep）
+
+* 锁超时：`LOCK_TIMEOUT_MS = 5000`（5 秒）
 
 **mergeTrackerStates 合并策略：**
-- 计数器（tool_calls、cost 等）：取 `Math.max`
-- 同一 agent_id 的状态：newer timestamp wins
+
+* 计数器（tool_calls、cost 等）：取 `Math.max`
+
+* 同一 agent_id 的状态：newer timestamp wins
 
 **规范目标：**
-- v1：明确记录此不一致性（本文档已完成）
-- v2：统一为 debounce + atomic 双层保护
+
+* v1：明确记录此不一致性（本文档已完成）
+
+* v2：统一为 debounce + atomic 双层保护
 
 ---
 
@@ -332,7 +350,7 @@ export function safeReadJson<T>(filePath: string): T | null {
 以下差异点均为 PRD/manifest 描述与实际代码实现之间的不符项。
 
 | 编号 | 差异描述 | PRD/manifest 描述 | 实际代码 | 影响任务 |
-|------|---------|------------------|---------|---------|
+| ------ | --------- | ------------------ | --------- | --------- |
 | D-01 | 敏感 hook 数量 | "3 类（permission-request、setup、session-end）" | 4 类（setup 拆分为 setup-init + setup-maintenance） | T-03a、T-04a |
 | D-02 | Stop 阶段优先级链 | "Ralph > Ultrawork > Todo-Continuation" | Ralph > Autopilot > Ultrawork（Todo-Continuation 已移除） | T-04b |
 | D-03 | 合法 mode 数量 | "7 个合法值" | 8 个（包含 swarm） | T-03b、T-07 |
@@ -351,37 +369,52 @@ export function safeReadJson<T>(filePath: string): T | null {
 ## 对后续规范任务的影响
 
 ### T-02（规范体系入口 README.md）
-- 无直接影响，按原计划执行
+
+* 无直接影响，按原计划执行
 
 ### T-03a（Hook 输入防护规范）
-- **D-01**：敏感 hook 白名单应为 4 类，不是 3 类
-- **D-05**：permission-request 当前实现未阻塞，规范需明确要求修复
-- **D-06**：非敏感 hook 未知字段透传，规范需明确要求扩展白名单至 15 类
+
+* **D-01**：敏感 hook 白名单应为 4 类，不是 3 类
+
+* **D-05**：permission-request 当前实现未阻塞，规范需明确要求修复
+
+* **D-06**：非敏感 hook 未知字段透传，规范需明确要求扩展白名单至 15 类
 
 ### T-03b（State/Mode 防护规范）
-- **D-03**：validateMode 白名单应包含 8 个合法值（含 swarm）
-- **D-07**：`writeTrackingStateImmediate` 使用直接写入，规范需记录此不一致性
+
+* **D-03**：validateMode 白名单应包含 8 个合法值（含 swarm）
+
+* **D-07**：`writeTrackingStateImmediate` 使用直接写入，规范需记录此不一致性
 
 ### T-04a（HookType 枚举与路由规范）
-- **D-01**：setup 类型需拆分为 setup-init 和 setup-maintenance 分别描述
+
+* **D-01**：setup 类型需拆分为 setup-init 和 setup-maintenance 分别描述
 
 ### T-04b（执行顺序与优先级规范）
-- **D-02**：Stop 阶段优先级链需更新为 Ralph > Autopilot > Ultrawork
-- **D-05**：permission-request 失败处理需明确当前实现与规范要求的差距
+
+* **D-02**：Stop 阶段优先级链需更新为 Ralph > Autopilot > Ultrawork
+
+* **D-05**：permission-request 失败处理需明确当前实现与规范要求的差距
 
 ### T-05（状态机规范）
-- **D-04**：互斥模式规则需更新为 4 个互斥模式
-- **D-09**：需区分 mode stale（1 小时）和 agent stale（5 分钟）两个概念
+
+* **D-04**：互斥模式规则需更新为 4 个互斥模式
+
+* **D-09**：需区分 mode stale（1 小时）和 agent stale（5 分钟）两个概念
 
 ### T-06（Agent 生命周期规范）
-- **D-08**：DEADLOCK_CHECK_THRESHOLD 的实际使用位置需进一步确认
-- **D-09**：agent stale 阈值（5 分钟）与 mode stale 阈值（1 小时）需分别说明
+
+* **D-08**：DEADLOCK_CHECK_THRESHOLD 的实际使用位置需进一步确认
+
+* **D-09**：agent stale 阈值（5 分钟）与 mode stale 阈值（1 小时）需分别说明
 
 ### T-07（validateMode.ts 实现）
-- **D-03**：VALID_MODES 应包含 8 个值：`['autopilot', 'ultrapilot', 'team', 'pipeline', 'ralph', 'ultrawork', 'ultraqa', 'swarm']`
+
+* **D-03**：VALID_MODES 应包含 8 个值：`['autopilot', 'ultrapilot', 'team', 'pipeline', 'ralph', 'ultrawork', 'ultraqa', 'swarm']`
 
 ### T-08a/T-08b（用户指南）
-- **D-04**：autopilot 与 ultrapilot 互斥说明需扩展为 4 个互斥模式的说明
+
+* **D-04**：autopilot 与 ultrapilot 互斥说明需扩展为 4 个互斥模式的说明
 
 ---
 

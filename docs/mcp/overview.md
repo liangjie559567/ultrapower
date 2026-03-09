@@ -4,18 +4,23 @@
 
 Model Context Protocol (MCP) is an open standard for connecting AI assistants to external tools and data sources. ultrapower implements MCP to:
 
-- Expose custom tools (LSP, AST, State, Memory)
-- Integrate external AI providers (Codex, Gemini)
-- Connect to community servers (sequential-thinking, context7)
+* Expose custom tools (LSP, AST, State, Memory)
+
+* Integrate external AI providers (Codex, Gemini)
+
+* Connect to community servers (sequential-thinking, context7)
 
 ## Architecture
 
 ### Transport Layer
 
 ultrapower uses **stdio transport** for all MCP servers:
-- Server reads JSON-RPC from stdin
-- Server writes responses to stdout
-- Errors logged to stderr
+
+* Server reads JSON-RPC from stdin
+
+* Server writes responses to stdout
+
+* Errors logged to stderr
 
 ### Tool Discovery
 
@@ -32,9 +37,12 @@ mcp__<server_name>__<tool_name>
 ```
 
 Examples:
-- `mcp__plugin_ultrapower_t__lsp_hover`
-- `mcp__x__ask_codex`
-- `mcp__context7__query_docs`
+
+* `mcp__plugin_ultrapower_t__lsp_hover`
+
+* `mcp__x__ask_codex`
+
+* `mcp__context7__query_docs`
 
 ## Built-in Servers
 
@@ -43,13 +51,20 @@ Examples:
 **Purpose**: Expose ultrapower's code intelligence and state management
 
 **Tools** (32 total):
-- LSP: hover, definition, references, symbols, diagnostics, rename, code actions
-- AST: search, replace
-- Python: REPL
-- Notepad: read, write (priority/working/manual), prune, stats
-- State: read, write, clear, list, status
-- Memory: read, write, add note, add directive
-- Trace: summary, timeline
+
+* LSP: hover, definition, references, symbols, diagnostics, rename, code actions
+
+* AST: search, replace
+
+* Python: REPL
+
+* Notepad: read, write (priority/working/manual), prune, stats
+
+* State: read, write, clear, list, status
+
+* Memory: read, write, add note, add directive
+
+* Trace: summary, timeline
 
 **Configuration**:
 ```json
@@ -68,11 +83,16 @@ Examples:
 **Purpose**: Delegate to OpenAI GPT-5.3-Codex for analysis
 
 **Tools**:
-- `ask_codex` - Send task with agent role
-- `check_job_status` - Poll background jobs
-- `wait_for_job` - Block until completion
-- `kill_job` - Cancel running job
-- `list_jobs` - Show all jobs
+
+* `ask_codex` - Send task with agent role
+
+* `check_job_status` - Poll background jobs
+
+* `wait_for_job` - Block until completion
+
+* `kill_job` - Cancel running job
+
+* `list_jobs` - Show all jobs
 
 **Best for**: Architecture review, planning, code review, security audit
 
@@ -128,9 +148,12 @@ if (!absolutePath.startsWith(workdir)) {
 ### Input Sanitization
 
 Hook inputs filtered through whitelist:
-- Known fields passed through
-- Unknown fields dropped
-- Prevents injection attacks
+
+* Known fields passed through
+
+* Unknown fields dropped
+
+* Prevents injection attacks
 
 ### Mode Validation
 
@@ -145,23 +168,32 @@ assertValidMode(mode);
 ### Retry Logic
 
 Transient failures auto-retry with exponential backoff:
-- Max 3 attempts
-- Delays: 1s, 2s, 4s
-- Only for network/timeout errors
+
+* Max 3 attempts
+
+* Delays: 1s, 2s, 4s
+
+* Only for network/timeout errors
 
 ### Timeout Management
 
 Per-tool timeouts prevent hangs:
-- LSP tools: 30s
-- AST tools: 60s
-- AI providers: 300s (5min)
+
+* LSP tools: 30s
+
+* AST tools: 60s
+
+* AI providers: 300s (5min)
 
 ### Connection Pooling
 
 LSP servers reuse connections:
-- One server per language
-- Persistent across tool calls
-- Auto-restart on crash
+
+* One server per language
+
+* Persistent across tool calls
+
+* Auto-restart on crash
 
 ## Integration Patterns
 
@@ -199,6 +231,8 @@ await mcp__g__wait_for_job({ job_id: job.job_id });
 
 ## Next Steps
 
-- [Server Guide](./server-guide.md) - Build custom servers
-- [Client Guide](./client-guide.md) - Consume tools in agents
-- [Configuration](./configuration.md) - Environment setup
+* [Server Guide](./server-guide.md) - Build custom servers
+
+* [Client Guide](./client-guide.md) - Consume tools in agents
+
+* [Configuration](./configuration.md) - Environment setup

@@ -12,7 +12,7 @@
 ### P0 (Critical) - 3个
 
 | ID | 问题 | 状态 | 修改文件 |
-|----|------|------|----------|
+| ---- | ------ | ------ | ---------- |
 | C1 | 状态缓存竞态条件 | ✅ 误报（代码已正确） | - |
 | C2 | SQLite 连接泄漏 | ✅ 已修复 | `src/mcp/job-state-db.ts` |
 | C3 | Bridge.ts 静默失败 | ✅ 已修复 | `src/hooks/bridge.ts` (3处) |
@@ -20,7 +20,7 @@
 ### P1 (High) - 7个
 
 | ID | 问题 | 状态 | 修改文件 |
-|----|------|------|----------|
+| ---- | ------ | ------ | ---------- |
 | C4 | SessionLock TOCTOU | ✅ 误报（已用 O_EXCL） | - |
 | C5 | MCP 子进程泄漏 | ✅ 已修复 | `src/mcp/client/MCPClient.ts` |
 | C6 | Windows shell 注入 | ✅ 已修复 | `src/mcp/gemini-core.ts`, `src/mcp/codex-core.ts` |
@@ -31,12 +31,13 @@
 ### 额外修复
 
 | 问题 | 状态 | 修改文件 |
-|------|------|----------|
+| ------ | ------ | ---------- |
 | TypeScript 编译错误 | ✅ 已修复 | `src/shared/types.ts` |
 
 ## 修改详情
 
 ### C2: SQLite 连接泄漏
+
 ```typescript
 // src/mcp/job-state-db.ts:152-164
 try {
@@ -49,6 +50,7 @@ try {
 ```
 
 ### C3: Bridge.ts 静默失败
+
 ```typescript
 // src/hooks/bridge.ts (3处)
 .catch((err) => {
@@ -59,6 +61,7 @@ try {
 ```
 
 ### C5: MCP 子进程泄漏
+
 ```typescript
 // src/mcp/client/MCPClient.ts:41
 catch (error) {
@@ -68,18 +71,21 @@ catch (error) {
 ```
 
 ### C6: Windows shell 注入
+
 ```typescript
 // src/mcp/gemini-core.ts, src/mcp/codex-core.ts (4处)
 spawn(command, args, { shell: false })  // 禁用 shell
 ```
 
 ### R2: MCP Bridge 监听器累积
+
 ```typescript
 // src/mcp/client.ts:44-45
 this.client.removeAllListeners?.();  // 清理监听器
 ```
 
 ### TypeScript 编译错误
+
 ```typescript
 // src/shared/types.ts:103-106
 hooks?: {
@@ -98,17 +104,24 @@ hooks?: {
 ### P2 (Medium) - 29个
 
 延后到 v5.5.31：
-- T1: 652 处 any 类型使用
-- E1: 错误处理不一致
-- 其他代码质量改进
+
+* T1: 652 处 any 类型使用
+
+* E1: 错误处理不一致
+
+* 其他代码质量改进
 
 ## 统计
 
-- **修复时间**: ~2 小时
-- **修改文件**: 6 个
-- **新增代码**: 66 行
-- **删除代码**: 7 行
-- **测试覆盖**: 100% 通过率
+* **修复时间**: ~2 小时
+
+* **修改文件**: 6 个
+
+* **新增代码**: 66 行
+
+* **删除代码**: 7 行
+
+* **测试覆盖**: 100% 通过率
 
 ## 结论
 

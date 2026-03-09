@@ -11,16 +11,24 @@
 ### 1.1 阶段转换逻辑（HIGH RISK）
 
 **未覆盖路径**:
-- `plan → prd` 转换：缺少错误恢复分支
-- `prd → exec` 转换：缺少验收标准验证失败场景
-- `exec → verify` 转换：缺少部分任务完成场景
-- `verify → fix` 循环：缺少 fix_loop_count 超限场景
-- `fix → complete/failed` 终态：缺少异常终止场景
+
+* `plan → prd` 转换：缺少错误恢复分支
+
+* `prd → exec` 转换：缺少验收标准验证失败场景
+
+* `exec → verify` 转换：缺少部分任务完成场景
+
+* `verify → fix` 循环：缺少 fix_loop_count 超限场景
+
+* `fix → complete/failed` 终态：缺少异常终止场景
 
 **风险评估**: 🔴 高
-- 影响: 核心工作流状态机
-- 后果: 任务可能卡在中间状态，无法恢复
-- 覆盖率缺口: 分支覆盖 12.37%
+
+* 影响: 核心工作流状态机
+
+* 后果: 任务可能卡在中间状态，无法恢复
+
+* 覆盖率缺口: 分支覆盖 12.37%
 
 **测试场景**:
 ```
@@ -34,15 +42,22 @@
 ### 1.2 错误处理与回滚（HIGH RISK）
 
 **未覆盖路径**:
-- 状态文件损坏恢复
-- 并发写入冲突处理
-- 网络中断导致的部分更新
-- 磁盘满导致的状态持久化失败
+
+* 状态文件损坏恢复
+
+* 并发写入冲突处理
+
+* 网络中断导致的部分更新
+
+* 磁盘满导致的状态持久化失败
 
 **风险评估**: 🔴 高
-- 影响: 数据一致性
-- 后果: 状态不可恢复，需手动干预
-- 文件: `src/team/unified-team.ts`, `src/team/task-file-ops.ts`
+
+* 影响: 数据一致性
+
+* 后果: 状态不可恢复，需手动干预
+
+* 文件: `src/team/unified-team.ts`, `src/team/task-file-ops.ts`
 
 **测试场景**:
 ```
@@ -55,13 +70,18 @@
 ### 1.3 状态持久化（MEDIUM RISK）
 
 **未覆盖路径**:
-- 大型状态文件序列化性能
-- 状态版本迁移（schema 升级）
-- 跨 worktree 状态同步
+
+* 大型状态文件序列化性能
+
+* 状态版本迁移（schema 升级）
+
+* 跨 worktree 状态同步
 
 **风险评估**: 🟡 中
-- 影响: 性能和兼容性
-- 文件: `src/team/task-file-ops.ts`
+
+* 影响: 性能和兼容性
+
+* 文件: `src/team/task-file-ops.ts`
 
 **测试场景**:
 ```
@@ -77,16 +97,24 @@
 ### 2.1 15 类 HookType 执行顺序（HIGH RISK）
 
 **未覆盖路径**:
-- `keyword-detector` → `auto-slash-command` 链式触发
-- `permission-request` 阻塞模式（用户确认超时）
-- `session-end` 清理顺序（状态保存 → 资源释放）
-- Hook 优先级冲突（同时触发多个 hook）
-- Hook 间依赖关系（A 的输出作为 B 的输入）
+
+* `keyword-detector` → `auto-slash-command` 链式触发
+
+* `permission-request` 阻塞模式（用户确认超时）
+
+* `session-end` 清理顺序（状态保存 → 资源释放）
+
+* Hook 优先级冲突（同时触发多个 hook）
+
+* Hook 间依赖关系（A 的输出作为 B 的输入）
 
 **风险评估**: 🔴 高
-- 影响: 所有工作流
-- 后果: Hook 执行顺序错误导致状态不一致
-- 文件: `src/hooks/bridge.ts`, `src/hooks/omc-orchestrator/index.ts`
+
+* 影响: 所有工作流
+
+* 后果: Hook 执行顺序错误导致状态不一致
+
+* 文件: `src/hooks/bridge.ts`, `src/hooks/omc-orchestrator/index.ts`
 
 **HookType 覆盖清单**:
 ```
@@ -120,14 +148,20 @@
 ### 2.2 超时与降级逻辑（HIGH RISK）
 
 **未覆盖路径**:
-- Hook 执行超时（默认 30s）
-- 降级到同步执行
-- 降级到跳过 hook
-- 环境变量 `DISABLE_OMC` 和 `OMC_SKIP_HOOKS` 交互
+
+* Hook 执行超时（默认 30s）
+
+* 降级到同步执行
+
+* 降级到跳过 hook
+
+* 环境变量 `DISABLE_OMC` 和 `OMC_SKIP_HOOKS` 交互
 
 **风险评估**: 🔴 高
-- 影响: Hook 可靠性
-- 文件: `src/hooks/bridge.ts`
+
+* 影响: Hook 可靠性
+
+* 文件: `src/hooks/bridge.ts`
 
 **测试场景**:
 ```
@@ -141,14 +175,20 @@
 ### 2.3 Permission-Request 阻塞模式（HIGH RISK）
 
 **未覆盖路径**:
-- 用户确认超时处理
-- 多个 permission-request 并发
-- 权限拒绝后的重试逻辑
-- 权限缓存失效
+
+* 用户确认超时处理
+
+* 多个 permission-request 并发
+
+* 权限拒绝后的重试逻辑
+
+* 权限缓存失效
 
 **风险评估**: 🔴 高
-- 影响: 安全性和用户体验
-- 文件: `src/hooks/bridge.ts`
+
+* 影响: 安全性和用户体验
+
+* 文件: `src/hooks/bridge.ts`
 
 **测试场景**:
 ```
@@ -166,15 +206,22 @@
 ### 3.1 Worker 生命周期（HIGH RISK）
 
 **未覆盖路径**:
-- Worker 启动失败恢复
-- Worker 心跳丢失检测
-- Worker 自动隔离（quarantine）
-- Worker 重启策略
-- Worker 资源清理
+
+* Worker 启动失败恢复
+
+* Worker 心跳丢失检测
+
+* Worker 自动隔离（quarantine）
+
+* Worker 重启策略
+
+* Worker 资源清理
 
 **风险评估**: 🔴 高
-- 影响: 外部集成可靠性
-- 文件: `src/mcp/job-management.ts`, `src/team/worker-health.ts`, `src/team/worker-restart.ts`
+
+* 影响: 外部集成可靠性
+
+* 文件: `src/mcp/job-management.ts`, `src/team/worker-health.ts`, `src/team/worker-restart.ts`
 
 **测试场景**:
 ```
@@ -188,15 +235,22 @@
 ### 3.2 任务分配与执行（HIGH RISK）
 
 **未覆盖路径**:
-- 任务分配到不可用 worker
-- 任务执行超时（600s）
-- 任务重试策略（max_retries=5）
-- 任务优先级抢占
-- 任务结果序列化失败
+
+* 任务分配到不可用 worker
+
+* 任务执行超时（600s）
+
+* 任务重试策略（max_retries=5）
+
+* 任务优先级抢占
+
+* 任务结果序列化失败
 
 **风险评估**: 🔴 高
-- 影响: 任务可靠性
-- 文件: `src/mcp/job-management.ts`
+
+* 影响: 任务可靠性
+
+* 文件: `src/mcp/job-management.ts`
 
 **测试场景**:
 ```
@@ -211,14 +265,20 @@
 ### 3.3 心跳机制（MEDIUM RISK）
 
 **未覆盖路径**:
-- 心跳间隔变化（3s → 30s）
-- 心跳数据损坏
-- 心跳文件权限问题
-- 心跳时钟偏差
+
+* 心跳间隔变化（3s → 30s）
+
+* 心跳数据损坏
+
+* 心跳文件权限问题
+
+* 心跳时钟偏差
 
 **风险评估**: 🟡 中
-- 影响: Worker 状态监控
-- 文件: `src/team/heartbeat.ts`
+
+* 影响: Worker 状态监控
+
+* 文件: `src/team/heartbeat.ts`
 
 **测试场景**:
 ```
@@ -235,15 +295,22 @@
 ### 4.1 4 阶段工作流（HIGH RISK）
 
 **未覆盖路径**:
-- `IDLE → EXECUTING` 转换
-- `EXECUTING → BLOCKED` 错误恢复
-- `BLOCKED → IDLE` 用户干预
-- `EXECUTING → ARCHIVING` 完成归档
-- 阶段间数据传递
+
+* `IDLE → EXECUTING` 转换
+
+* `EXECUTING → BLOCKED` 错误恢复
+
+* `BLOCKED → IDLE` 用户干预
+
+* `EXECUTING → ARCHIVING` 完成归档
+
+* 阶段间数据传递
 
 **风险评估**: 🔴 高
-- 影响: Axiom 核心工作流
-- 文件: `.omc/axiom/active_context.md` (状态文件)
+
+* 影响: Axiom 核心工作流
+
+* 文件: `.omc/axiom/active_context.md` (状态文件)
 
 **测试场景**:
 ```
@@ -257,14 +324,20 @@
 ### 4.2 Expert Gate（PRD 评审门禁）（HIGH RISK）
 
 **未覆盖路径**:
-- `/ax-draft` 生成 PRD
-- `/ax-review` 专家评审
-- 评审拒绝 → 返回 draft
-- 评审通过 → 进入 exec
+
+* `/ax-draft` 生成 PRD
+
+* `/ax-review` 专家评审
+
+* 评审拒绝 → 返回 draft
+
+* 评审通过 → 进入 exec
 
 **风险评估**: 🔴 高
-- 影响: 需求质量
-- 文件: `src/hooks/axiom-guards/index.ts`
+
+* 影响: 需求质量
+
+* 文件: `src/hooks/axiom-guards/index.ts`
 
 **测试场景**:
 ```
@@ -277,14 +350,20 @@
 ### 4.3 CI Gate（编译提交门禁）（HIGH RISK）
 
 **未覆盖路径**:
-- `tsc --noEmit` 失败
-- `npm run build` 失败
-- `npm test` 失败
-- 部分失败（e.g., 仅 test 失败）
+
+* `tsc --noEmit` 失败
+
+* `npm run build` 失败
+
+* `npm test` 失败
+
+* 部分失败（e.g., 仅 test 失败）
 
 **风险评估**: 🔴 高
-- 影响: 代码质量
-- 文件: `src/hooks/axiom-guards/index.ts`
+
+* 影响: 代码质量
+
+* 文件: `src/hooks/axiom-guards/index.ts`
 
 **测试场景**:
 ```
@@ -297,13 +376,18 @@
 ### 4.4 Scope Gate（范围门禁）（MEDIUM RISK）
 
 **未覆盖路径**:
-- 修改文件超出 `Impact Scope`
-- 用户确认越界修改
-- 范围定义更新
+
+* 修改文件超出 `Impact Scope`
+
+* 用户确认越界修改
+
+* 范围定义更新
 
 **风险评估**: 🟡 中
-- 影响: 变更范围控制
-- 文件: `src/hooks/axiom-guards/index.ts`
+
+* 影响: 变更范围控制
+
+* 文件: `src/hooks/axiom-guards/index.ts`
 
 **测试场景**:
 ```
@@ -320,7 +404,7 @@
 ### P0 - 关键路径（必须覆盖）
 
 | 路径 | 模块 | 当前覆盖 | 风险 | 工作量 | 优先级 |
-|------|------|---------|------|--------|--------|
+| ------ | ------ | --------- | ------ | -------- | -------- |
 | Team 阶段转换 | team/ | 72.63% branches | 🔴 高 | 8h | P0-1 |
 | Hook 执行顺序 | hooks/ | 68.11% lines | 🔴 高 | 12h | P0-2 |
 | MCP Worker 生命周期 | mcp/ | 58.86% lines | 🔴 高 | 10h | P0-3 |
@@ -330,7 +414,7 @@
 ### P1 - 重要功能（应该覆盖）
 
 | 路径 | 模块 | 当前覆盖 | 风险 | 工作量 | 优先级 |
-|------|------|---------|------|--------|--------|
+| ------ | ------ | --------- | ------ | -------- | -------- |
 | Hook 超时与降级 | hooks/ | 68.11% lines | 🟡 中 | 6h | P1-1 |
 | Permission-Request 阻塞 | hooks/ | 68.11% lines | 🟡 中 | 5h | P1-2 |
 | 心跳机制 | team/ | 83.77% lines | 🟡 中 | 4h | P1-3 |
@@ -339,7 +423,7 @@
 ### P2 - 辅助功能（可选覆盖）
 
 | 路径 | 模块 | 当前覆盖 | 风险 | 工作量 | 优先级 |
-|------|------|---------|------|--------|--------|
+| ------ | ------ | --------- | ------ | -------- | -------- |
 | Axiom Scope Gate | axiom/ | 0% | 🟢 低 | 3h | P2-1 |
 | 状态持久化性能 | team/ | 83.77% lines | 🟢 低 | 4h | P2-2 |
 
@@ -353,14 +437,22 @@
 
 ```typescript
 // 关键测试用例
-- plan → prd 正常转换
-- plan → prd 异常恢复
-- prd → exec 验收标准验证
-- exec → verify 部分完成处理
-- verify → fix 循环计数
-- fix 超限 → failed
-- 并发转换冲突
-- 状态文件损坏恢复
+
+* plan → prd 正常转换
+
+* plan → prd 异常恢复
+
+* prd → exec 验收标准验证
+
+* exec → verify 部分完成处理
+
+* verify → fix 循环计数
+
+* fix 超限 → failed
+
+* 并发转换冲突
+
+* 状态文件损坏恢复
 ```
 
 ### 6.2 Hook 系统测试
@@ -369,14 +461,22 @@
 
 ```typescript
 // 关键测试用例
-- 15 类 HookType 执行顺序
-- Hook 优先级冲突
-- Hook 超时处理
-- permission-request 用户确认
-- permission-request 超时
-- DISABLE_OMC 全局禁用
-- OMC_SKIP_HOOKS 选择性跳过
-- Hook 间依赖关系
+
+* 15 类 HookType 执行顺序
+
+* Hook 优先级冲突
+
+* Hook 超时处理
+
+* permission-request 用户确认
+
+* permission-request 超时
+
+* DISABLE_OMC 全局禁用
+
+* OMC_SKIP_HOOKS 选择性跳过
+
+* Hook 间依赖关系
 ```
 
 ### 6.3 MCP Worker 生命周期测试
@@ -385,13 +485,20 @@
 
 ```typescript
 // 关键测试用例
-- Worker 启动失败
-- 心跳丢失检测
-- 自动隔离与恢复
-- 任务分配到不可用 worker
-- 任务超时重试
-- 并发 worker 故障
-- 资源清理
+
+* Worker 启动失败
+
+* 心跳丢失检测
+
+* 自动隔离与恢复
+
+* 任务分配到不可用 worker
+
+* 任务超时重试
+
+* 并发 worker 故障
+
+* 资源清理
 ```
 
 ### 6.4 Axiom 工作流测试
@@ -400,12 +507,18 @@
 
 ```typescript
 // 关键测试用例
-- IDLE → EXECUTING 转换
-- EXECUTING → BLOCKED 错误恢复
-- Expert Gate 拦截
-- CI Gate 编译检查
-- Scope Gate 范围验证
-- 并发状态修改
+
+* IDLE → EXECUTING 转换
+
+* EXECUTING → BLOCKED 错误恢复
+
+* Expert Gate 拦截
+
+* CI Gate 编译检查
+
+* Scope Gate 范围验证
+
+* 并发状态修改
 ```
 
 ---
@@ -426,23 +539,23 @@
 **周期**: 2 周
 **目标**: 状态机 + MCP 达到 85%+ 覆盖率
 
-4. **P0-3.6**: 状态机边界条件测试 (6h)
-5. **P0-3.7**: MCP worker 生命周期测试 (10h)
+1. **P0-3.6**: 状态机边界条件测试 (6h)
+2. **P0-3.7**: MCP worker 生命周期测试 (10h)
 
 ### 第 3 阶段（P0-3.8 ~ P0-3.9）- 集成验证
 
 **周期**: 1 周
 **目标**: 端到端工作流验证 + 覆盖率达标
 
-6. **P0-3.8**: 集成测试：端到端工作流 (8h)
-7. **P0-3.9**: 覆盖率验证（目标 85%+）(4h)
+1. **P0-3.8**: 集成测试：端到端工作流 (8h)
+2. **P0-3.9**: 覆盖率验证（目标 85%+）(4h)
 
 ---
 
 ## 8. 风险评估总结
 
 | 模块 | 当前覆盖率 | 风险等级 | 影响范围 | 建议行动 |
-|------|-----------|---------|---------|---------|
+| ------ | ----------- | --------- | --------- | --------- |
 | Team Pipeline | 83.77% | 🟡 中 | 核心工作流 | 补充分支覆盖 |
 | Hooks System | 68.11% | 🔴 高 | 所有工作流 | 优先级链测试 |
 | MCP Integration | 58.86% | 🔴 高 | 外部集成 | Worker 生命周期测试 |

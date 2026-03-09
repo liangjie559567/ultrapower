@@ -17,9 +17,12 @@
 ### Task 1: nexus 配置类型和存储结构
 
 **Files:**
-- Create: `src/hooks/nexus/types.ts`
-- Create: `src/hooks/nexus/config.ts`
-- Create: `src/hooks/nexus/__tests__/config.test.ts`
+
+* Create: `src/hooks/nexus/types.ts`
+
+* Create: `src/hooks/nexus/config.ts`
+
+* Create: `src/hooks/nexus/__tests__/config.test.ts`
 
 **Step 1: 写失败测试**
 
@@ -192,8 +195,10 @@ git commit -m "feat(nexus): add config types and loader"
 ### Task 2: data-collector hook（收集会话数据）
 
 **Files:**
-- Create: `src/hooks/nexus/data-collector.ts`
-- Create: `src/hooks/nexus/__tests__/data-collector.test.ts`
+
+* Create: `src/hooks/nexus/data-collector.ts`
+
+* Create: `src/hooks/nexus/__tests__/data-collector.test.ts`
 
 **Step 1: 写失败测试**
 
@@ -329,8 +334,10 @@ git commit -m "feat(nexus): add data-collector for session events"
 ### Task 3: consciousness-sync hook（SessionEnd 后 git push）
 
 **Files:**
-- Create: `src/hooks/nexus/consciousness-sync.ts`
-- Create: `src/hooks/nexus/__tests__/consciousness-sync.test.ts`
+
+* Create: `src/hooks/nexus/consciousness-sync.ts`
+
+* Create: `src/hooks/nexus/__tests__/consciousness-sync.test.ts`
 
 **Step 1: 写失败测试**
 
@@ -459,8 +466,10 @@ git commit -m "feat(nexus): add consciousness-sync for git push on session end"
 ### Task 4: SessionEnd hook 集成（连接 data-collector + consciousness-sync）
 
 **Files:**
-- Create: `src/hooks/nexus/session-end-hook.ts`
-- Modify: `src/hooks/index.ts`（注册新 hook）
+
+* Create: `src/hooks/nexus/session-end-hook.ts`
+
+* Modify: `src/hooks/index.ts`（注册新 hook）
 
 **Step 1: 写失败测试**
 
@@ -623,7 +632,8 @@ git commit -m "feat(nexus): add session-end hook integration"
 ### Task 5: 注册 nexus hook 到 processSessionEnd
 
 **Files:**
-- Modify: `src/hooks/session-end/index.ts`（在 reflectOnSessionEnd 之后添加 nexus 调用）
+
+* Modify: `src/hooks/session-end/index.ts`（在 reflectOnSessionEnd 之后添加 nexus 调用）
 
 **Step 1: 写失败测试**
 
@@ -710,19 +720,24 @@ git commit -m "feat(nexus): register nexus hook in processSessionEnd"
 
 ---
 
-
 ### Task 6: nexus-daemon 基础框架（Python）
 
 **Files:**
-- Create: `nexus-daemon/daemon.py`
-- Create: `nexus-daemon/requirements.txt`
-- Create: `nexus-daemon/README.md`
-- Create: `nexus-daemon/tests/test_daemon.py`
+
+* Create: `nexus-daemon/daemon.py`
+
+* Create: `nexus-daemon/requirements.txt`
+
+* Create: `nexus-daemon/README.md`
+
+* Create: `nexus-daemon/tests/test_daemon.py`
 
 **Step 1: 写失败测试**
 
 ```python
+
 # nexus-daemon/tests/test_daemon.py
+
 import pytest
 import json
 import os
@@ -730,6 +745,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 # Add parent to path
+
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -797,7 +813,9 @@ Expected: FAIL — `ModuleNotFoundError: No module named 'daemon'`
 **Step 3: 实现 daemon.py**
 
 ```python
+
 # nexus-daemon/daemon.py
+
 """
 nexus-daemon: VPS 守护进程
 每分钟 git pull 拉取新事件，运行进化引擎，生成改进建议推回仓库。
@@ -820,7 +838,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger('nexus-daemon')
 
-
 @dataclass
 class DaemonConfig:
     poll_interval: int = 60          # seconds between git pull cycles
@@ -830,7 +847,6 @@ class DaemonConfig:
     telegram_chat_id: str = ''
     consciousness_interval: int = 300  # seconds between consciousness loops
     consciousness_budget_percent: int = 10
-
 
 def load_config(config_path: Path) -> DaemonConfig:
     """Load config from JSON file, return defaults on missing/error."""
@@ -849,7 +865,6 @@ def load_config(config_path: Path) -> DaemonConfig:
         )
     except Exception:
         return DaemonConfig()
-
 
 class NexusDaemon:
     """Core daemon: git pull loop + event processing."""
@@ -982,14 +997,12 @@ class NexusDaemon:
                 logger.error('run_once error: %s', e)
             await asyncio.sleep(self.config.poll_interval)
 
-
 def main() -> None:
     repo_path = Path(os.environ.get('NEXUS_REPO_PATH', '.'))
     config_path = repo_path / 'config.json'
     config = load_config(config_path)
     daemon = NexusDaemon(repo_path=repo_path, config=config)
     asyncio.run(daemon.run())
-
 
 if __name__ == '__main__':
     main()
@@ -998,7 +1011,9 @@ if __name__ == '__main__':
 **Step 4: 创建 requirements.txt**
 
 ```
+
 # nexus-daemon/requirements.txt
+
 aiohttp>=3.9.0
 pytest>=7.0.0
 pytest-asyncio>=0.23.0
@@ -1025,14 +1040,19 @@ git commit -m "feat(nexus): add nexus-daemon Python base framework"
 ### Task 7: Evolution Engine MVP（模式检测 + knowledge_base 写入）
 
 **Files:**
-- Create: `nexus-daemon/evolution_engine.py`
-- Create: `nexus-daemon/tests/test_evolution_engine.py`
-- Modify: `nexus-daemon/daemon.py`
+
+* Create: `nexus-daemon/evolution_engine.py`
+
+* Create: `nexus-daemon/tests/test_evolution_engine.py`
+
+* Modify: `nexus-daemon/daemon.py`
 
 **Step 1: 写失败测试**
 
 ```python
+
 # nexus-daemon/tests/test_evolution_engine.py
+
 import pytest
 import json
 from pathlib import Path
@@ -1103,7 +1123,9 @@ Expected: FAIL — `ModuleNotFoundError: No module named 'evolution_engine'`
 **Step 3: 实现 evolution_engine.py**
 
 ```python
+
 # nexus-daemon/evolution_engine.py
+
 from __future__ import annotations
 import logging
 from collections import Counter
@@ -1244,8 +1266,10 @@ git commit -m "feat(nexus): add Evolution Engine MVP with pattern detection"
 ### Task 8: improvement-puller hook（拉取并应用改进建议）
 
 **Files:**
-- Create: `src/hooks/nexus/improvement-puller.ts`
-- Create: `src/hooks/nexus/__tests__/improvement-puller.test.ts`
+
+* Create: `src/hooks/nexus/improvement-puller.ts`
+
+* Create: `src/hooks/nexus/__tests__/improvement-puller.test.ts`
 
 **Step 1: 写失败测试**
 
@@ -1407,14 +1431,19 @@ git commit -m "feat(nexus): add improvement-puller hook"
 ### Task 9: Telegram Bot 通知（Python）
 
 **Files:**
-- Create: `nexus-daemon/telegram_bot.py`
-- Create: `nexus-daemon/tests/test_telegram_bot.py`
-- Modify: `nexus-daemon/daemon.py`（集成 Telegram 通知）
+
+* Create: `nexus-daemon/telegram_bot.py`
+
+* Create: `nexus-daemon/tests/test_telegram_bot.py`
+
+* Modify: `nexus-daemon/daemon.py`（集成 Telegram 通知）
 
 **Step 1: 写失败测试**
 
 ```python
+
 # nexus-daemon/tests/test_telegram_bot.py
+
 import pytest
 from unittest.mock import patch, AsyncMock, MagicMock
 import sys
@@ -1482,12 +1511,12 @@ cd nexus-daemon && pip install pytest pytest-asyncio && python -m pytest tests/t
 ```
 Expected: FAIL — `ModuleNotFoundError: No module named 'telegram_bot'`
 
-
-
 **Step 3: 实现 telegram_bot.py**
 
 ```python
+
 # nexus-daemon/telegram_bot.py
+
 """
 Telegram Bot: 发送改进通知，接收用户确认指令。
 """
@@ -1499,7 +1528,6 @@ from typing import Any
 logger = logging.getLogger('nexus.telegram')
 
 AUTO_APPLY_THRESHOLD = 80
-
 
 def format_improvement_message(imp: dict[str, Any], auto_apply_threshold: int = AUTO_APPLY_THRESHOLD) -> str:
     """格式化改进建议为 Telegram 消息。"""
@@ -1514,11 +1542,10 @@ def format_improvement_message(imp: dict[str, Any], auto_apply_threshold: int = 
         f"Reason: {imp.get('reason', '?')}"
     )
 
-
 class TelegramBot:
     """Telegram Bot 客户端，用于发送通知和接收确认。"""
 
-    API_BASE = 'https://api.telegram.org/bot{token}/{method}'
+    API_BASE = '<https://api.telegram.org/bot{token}/{method}'>
 
     def __init__(self, token: str, chat_id: str):
         self.enabled = bool(token and chat_id)
@@ -1566,7 +1593,9 @@ self._notified_improvements: set[str] = set()  # dedup: avoid re-notifying same 
 在 `run_once` 的进化引擎调用后追加：
 
 ```python
+
 # Notify via Telegram for improvements needing review (with deduplication)
+
 if self._telegram.enabled:
     improvements_dir = self.repo_path / 'improvements'
     import json as _json
@@ -1600,20 +1629,24 @@ git commit -m "feat(nexus): add Telegram Bot notifications"
 
 ---
 
-
 ---
 
 ### Task 10: Consciousness Loop（后台意识循环）
 
 **Files:**
-- Create: `nexus-daemon/tests/test_consciousness_loop.py`
-- Create: `nexus-daemon/consciousness_loop.py`
-- Modify: `nexus-daemon/daemon.py`
+
+* Create: `nexus-daemon/tests/test_consciousness_loop.py`
+
+* Create: `nexus-daemon/consciousness_loop.py`
+
+* Modify: `nexus-daemon/daemon.py`
 
 **Step 1: 编写失败测试**
 
 ```python
+
 # nexus-daemon/tests/test_consciousness_loop.py
+
 import pytest
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -1621,13 +1654,11 @@ import json
 
 from consciousness_loop import ConsciousnessLoop, ConsciousnessConfig
 
-
 @pytest.fixture
 def tmp_repo(tmp_path):
     (tmp_path / 'consciousness').mkdir()
     (tmp_path / 'consciousness' / 'rounds').mkdir()
     return tmp_path
-
 
 def make_loop(tmp_repo):
     cfg = ConsciousnessConfig(
@@ -1637,22 +1668,18 @@ def make_loop(tmp_repo):
     )
     return ConsciousnessLoop(repo_path=tmp_repo, config=cfg)
 
-
 def test_scratchpad_path(tmp_repo):
     loop = make_loop(tmp_repo)
     assert loop.scratchpad_path == tmp_repo / 'consciousness' / 'scratchpad.md'
-
 
 def test_rounds_dir(tmp_repo):
     loop = make_loop(tmp_repo)
     assert loop.rounds_dir == tmp_repo / 'consciousness' / 'rounds'
 
-
 def test_write_scratchpad(tmp_repo):
     loop = make_loop(tmp_repo)
     loop._write_scratchpad('test content')
     assert loop.scratchpad_path.read_text() == 'test content'
-
 
 def test_write_round_record(tmp_repo):
     loop = make_loop(tmp_repo)
@@ -1661,13 +1688,11 @@ def test_write_round_record(tmp_repo):
     assert len(files) == 1
     assert 'round 1 thoughts' in files[0].read_text()
 
-
 def test_is_paused_when_busy(tmp_repo):
     loop = make_loop(tmp_repo)
     # Create a busy marker
     (tmp_repo / '.nexus-busy').write_text('1')
     assert loop.is_paused() is True
-
 
 def test_not_paused_when_idle(tmp_repo):
     loop = make_loop(tmp_repo)
@@ -1684,7 +1709,9 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'consciousness_loop'`
 **Step 3: 实现 `nexus-daemon/consciousness_loop.py`**
 
 ```python
+
 # nexus-daemon/consciousness_loop.py
+
 from __future__ import annotations
 import asyncio
 from dataclasses import dataclass, field
@@ -1692,13 +1719,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-
 @dataclass
 class ConsciousnessConfig:
     interval_seconds: int = 300
     budget_percent: int = 10
     max_rounds_per_session: int = 5
-
 
 class ConsciousnessLoop:
     def __init__(self, repo_path: Path, config: ConsciousnessConfig):
@@ -1759,6 +1784,7 @@ class ConsciousnessLoop:
 from consciousness_loop import ConsciousnessLoop, ConsciousnessConfig
 
 # 在 __init__ 末尾添加：
+
 self._consciousness = ConsciousnessLoop(
     repo_path=self.repo_path,
     config=ConsciousnessConfig(
@@ -1804,26 +1830,29 @@ git commit -m "feat(nexus): add Consciousness Loop background awareness"
 ### Task 11: Self-Evaluator（健康报告）
 
 **Files:**
-- Create: `nexus-daemon/tests/test_self_evaluator.py`
-- Create: `nexus-daemon/self_evaluator.py`
-- Modify: `nexus-daemon/daemon.py`
+
+* Create: `nexus-daemon/tests/test_self_evaluator.py`
+
+* Create: `nexus-daemon/self_evaluator.py`
+
+* Modify: `nexus-daemon/daemon.py`
 
 **Step 1: 编写失败测试**
 
 ```python
+
 # nexus-daemon/tests/test_self_evaluator.py
+
 import pytest
 from pathlib import Path
 import json
 from self_evaluator import SelfEvaluator, SkillStats, HealthReport
-
 
 @pytest.fixture
 def tmp_repo(tmp_path):
     events_dir = tmp_path / 'events'
     events_dir.mkdir()
     return tmp_path
-
 
 def make_event(session_id: str, skills_triggered: list[str]) -> dict:
     return {
@@ -1832,14 +1861,12 @@ def make_event(session_id: str, skills_triggered: list[str]) -> dict:
         'skillsTriggered': skills_triggered,
     }
 
-
 def test_empty_events_returns_empty_report(tmp_repo):
     ev = SelfEvaluator(repo_path=tmp_repo)
     report = ev.generate_report()
     assert isinstance(report, HealthReport)
     assert report.total_sessions == 0
     assert report.skill_stats == {}
-
 
 def test_counts_skill_usage(tmp_repo):
     (tmp_repo / 'events').mkdir(exist_ok=True)
@@ -1849,7 +1876,6 @@ def test_counts_skill_usage(tmp_repo):
     report = ev.generate_report()
     assert report.skill_stats['learner'].trigger_count == 1
     assert report.skill_stats['autopilot'].trigger_count == 1
-
 
 def test_detects_zombie_skills(tmp_repo):
     (tmp_repo / 'events').mkdir(exist_ok=True)
@@ -1861,7 +1887,6 @@ def test_detects_zombie_skills(tmp_repo):
     report = ev.generate_report()
     assert 'zombie-skill' not in report.skill_stats
     assert report.total_sessions == 10
-
 
 def test_format_report_markdown(tmp_repo):
     ev = SelfEvaluator(repo_path=tmp_repo)
@@ -1881,7 +1906,9 @@ Expected: FAIL with `ModuleNotFoundError: No module named 'self_evaluator'`
 **Step 3: 实现 `nexus-daemon/self_evaluator.py`**
 
 ```python
+
 # nexus-daemon/self_evaluator.py
+
 from __future__ import annotations
 import json
 from dataclasses import dataclass, field
@@ -1889,11 +1916,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-
 @dataclass
 class SkillStats:
     trigger_count: int = 0
-
 
 @dataclass
 class HealthReport:
@@ -1901,7 +1926,6 @@ class HealthReport:
     skill_stats: dict[str, SkillStats]
     zombie_skills: list[str] = field(default_factory=list)
     generated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
-
 
 class SelfEvaluator:
     def __init__(self, repo_path: Path, zombie_threshold: int = 10):
@@ -1974,10 +1998,12 @@ class SelfEvaluator:
 from self_evaluator import SelfEvaluator
 
 # 在 __init__ 末尾：
+
 self._evaluator = SelfEvaluator(repo_path=self.repo_path)
 self._last_report_date: str = ''
 
 # 在 run_once() 末尾：
+
 today = datetime.utcnow().strftime('%Y-%m-%d')
 if today != self._last_report_date:
     self._last_report_date = today
@@ -2009,9 +2035,12 @@ git commit -m "feat(nexus): add Self-Evaluator health reports"
 ### Task 12: nexus 管理 Skills（nexus-status / nexus-evolve / nexus-review）
 
 **Files:**
-- Create: `skills/nexus/nexus-status/SKILL.md`
-- Create: `skills/nexus/nexus-evolve/SKILL.md`
-- Create: `skills/nexus/nexus-review/SKILL.md`
+
+* Create: `skills/nexus/nexus-status/SKILL.md`
+
+* Create: `skills/nexus/nexus-evolve/SKILL.md`
+
+* Create: `skills/nexus/nexus-review/SKILL.md`
 
 **Step 1: 创建 `skills/nexus/nexus-status/SKILL.md`**
 
@@ -2110,7 +2139,7 @@ triggers:
    - 原因和证据摘要
    - diff 内容
 
-4. 询问用户对每个建议的操作：
+1. 询问用户对每个建议的操作：
    - `apply`：应用改进，更新 status 为 `applied`
    - `skip`：跳过，更新 status 为 `rejected`
    - `auto`：自动应用所有置信度 ≥80 的建议
@@ -2129,13 +2158,17 @@ nexus Improvements (N pending)
 **Step 4: 验证 skill 文件格式正确**
 
 ```bash
+
 # 确认文件存在
+
 ls skills/nexus/nexus-status/SKILL.md skills/nexus/nexus-evolve/SKILL.md skills/nexus/nexus-review/SKILL.md
 ```
 Expected: 3 files listed without error
 
 ```bash
+
 # 确认每个文件包含必要的 frontmatter 字段
+
 grep -l "^name:" skills/nexus/*/SKILL.md | wc -l
 grep -l "^triggers:" skills/nexus/*/SKILL.md | wc -l
 ```
@@ -2153,8 +2186,10 @@ git commit -m "feat(nexus): add nexus-status, nexus-evolve, nexus-review managem
 ### Task 13: systemd 服务文件（VPS 部署）
 
 **Files:**
-- Create: `nexus-daemon/nexus-daemon.service`
-- Create: `nexus-daemon/install.sh`
+
+* Create: `nexus-daemon/nexus-daemon.service`
+
+* Create: `nexus-daemon/install.sh`
 
 **Step 1: 创建 `nexus-daemon/nexus-daemon.service`**
 
@@ -2176,6 +2211,7 @@ StandardError=journal
 SyslogIdentifier=nexus-daemon
 
 # Environment
+
 Environment=PYTHONUNBUFFERED=1
 
 [Install]
@@ -2194,18 +2230,22 @@ SERVICE_FILE=/etc/systemd/system/nexus-daemon.service
 echo "Installing nexus-daemon..."
 
 # Create user
-id nexus &>/dev/null || useradd -r -s /bin/false nexus
+
+id nexus &>/dev/null | | useradd -r -s /bin/false nexus
 
 # Copy files
+
 mkdir -p "$INSTALL_DIR"
 cp -r . "$INSTALL_DIR/"
 chown -R nexus:nexus "$INSTALL_DIR"
 
 # Create virtualenv and install deps
+
 python3 -m venv "$INSTALL_DIR/venv"
 "$INSTALL_DIR/venv/bin/pip" install -r "$INSTALL_DIR/requirements.txt"
 
 # Install systemd service
+
 cp nexus-daemon.service "$SERVICE_FILE"
 systemctl daemon-reload
 systemctl enable nexus-daemon
@@ -2218,7 +2258,7 @@ echo "Check status: systemctl status nexus-daemon"
 **Step 3: 验证文件内容**
 
 ```bash
-cat nexus-daemon/nexus-daemon.service | grep -E "^(Description|ExecStart|Restart)"
+cat nexus-daemon/nexus-daemon.service | grep -E "^(Description | ExecStart | Restart)"
 ```
 Expected:
 ```
@@ -2239,14 +2279,19 @@ git commit -m "feat(nexus): add systemd service file and install script"
 ### Task 14: Self-Modifier（代码自动修改模块）
 
 **Files:**
-- Create: `nexus-daemon/self_modifier.py`
-- Modify: `nexus-daemon/daemon.py`（在 `run_once` 中集成 Self-Modifier）
-- Create: `nexus-daemon/tests/test_self_modifier.py`
+
+* Create: `nexus-daemon/self_modifier.py`
+
+* Modify: `nexus-daemon/daemon.py`（在 `run_once` 中集成 Self-Modifier）
+
+* Create: `nexus-daemon/tests/test_self_modifier.py`
 
 **Step 1: 写失败测试**
 
 ```python
+
 # nexus-daemon/tests/test_self_modifier.py
+
 import pytest
 import json
 from pathlib import Path
@@ -2255,7 +2300,6 @@ import tempfile
 import shutil
 
 from self_modifier import SelfModifier, ModificationResult
-
 
 @pytest.fixture
 def repo(tmp_path):
@@ -2280,7 +2324,6 @@ def repo(tmp_path):
     )
     return tmp_path
 
-
 def test_apply_skill_update_low_confidence_skipped(repo):
     """Improvements with confidence < 70 are skipped."""
     modifier = SelfModifier(repo_path=repo)
@@ -2296,7 +2339,6 @@ def test_apply_skill_update_low_confidence_skipped(repo):
     result = modifier.apply(improvement)
     assert result.status == 'skipped'
     assert result.reason == 'confidence below threshold'
-
 
 def test_apply_skill_update_high_confidence_applies(repo):
     """Improvements with confidence >= 70 on skill files are applied."""
@@ -2316,7 +2358,6 @@ def test_apply_skill_update_high_confidence_applies(repo):
     assert result.status == 'applied'
     applied_content = (repo / 'skills' / 'learner' / 'SKILL.md').read_text()
     assert 'study' in applied_content
-
 
 def test_apply_rejects_path_traversal(repo):
     """Path traversal in targetFile is rejected."""
@@ -2344,7 +2385,9 @@ Expected: FAIL — `ModuleNotFoundError: No module named 'self_modifier'`
 **Step 3: 实现 `nexus-daemon/self_modifier.py`**
 
 ```python
+
 # nexus-daemon/self_modifier.py
+
 """Self-Modifier: applies improvement suggestions to the ultrapower repo."""
 from __future__ import annotations
 
@@ -2356,17 +2399,18 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 # Only these path prefixes are allowed for auto-modification
-ALLOWED_PREFIXES = ('skills/', 'agents/')
-# Confidence threshold: below this, skip without applying
-CONFIDENCE_THRESHOLD = 70
 
+ALLOWED_PREFIXES = ('skills/', 'agents/')
+
+# Confidence threshold: below this, skip without applying
+
+CONFIDENCE_THRESHOLD = 70
 
 @dataclass
 class ModificationResult:
     status: str   # 'applied' | 'skipped' | 'rejected' | 'error'
     reason: str
     improvement_id: str
-
 
 class SelfModifier:
     """Applies improvement suggestions to skill/agent Markdown files."""
@@ -2458,13 +2502,16 @@ Expected: PASS (3 tests)
 from self_modifier import SelfModifier
 
 # 在 __init__ 末尾：
+
 self._modifier = SelfModifier(repo_path=self.repo_path)
 ```
 
 在 `run_once` 的改进通知循环中，在 `notify_improvement` 调用之后添加自动应用逻辑：
 
 ```python
+
 # Auto-apply high-confidence improvements (confidence >= 80)
+
 if imp.get('confidence', 0) >= 80 and imp.get('status') == 'pending':
     result = self._modifier.apply(imp)
     if result.status == 'applied':
@@ -2495,44 +2542,70 @@ git commit -m "feat(nexus): add Self-Modifier module for auto-applying skill imp
 ## 实现完成检查清单
 
 ### P0 核心功能（Tasks 1-5）
-- [ ] Task 1: nexus 配置类型和加载器
-- [ ] Task 2: data-collector hook（收集会话数据）
-- [ ] Task 3: consciousness-sync hook（SessionEnd 后 git push）
-- [ ] Task 4: session-end hook 集成
-- [ ] Task 5: processSessionEnd 注册 nexus hook
+
+* [ ] Task 1: nexus 配置类型和加载器
+
+* [ ] Task 2: data-collector hook（收集会话数据）
+
+* [ ] Task 3: consciousness-sync hook（SessionEnd 后 git push）
+
+* [ ] Task 4: session-end hook 集成
+
+* [ ] Task 5: processSessionEnd 注册 nexus hook
 
 ### P1 重要功能（Tasks 6-9, 14）
-- [ ] Task 6: nexus-daemon Python 基础框架
-- [ ] Task 7: Evolution Engine MVP（模式检测 + knowledge_base）
-- [ ] Task 8: improvement-puller hook（拉取改进）
-- [ ] Task 9: Telegram Bot 通知
-- [ ] Task 14: Self-Modifier（代码自动修改模块）
+
+* [ ] Task 6: nexus-daemon Python 基础框架
+
+* [ ] Task 7: Evolution Engine MVP（模式检测 + knowledge_base）
+
+* [ ] Task 8: improvement-puller hook（拉取改进）
+
+* [ ] Task 9: Telegram Bot 通知
+
+* [ ] Task 14: Self-Modifier（代码自动修改模块）
 
 ### P2 增强功能（Tasks 10-13）
-- [ ] Task 10: Consciousness Loop（后台意识循环）
-- [ ] Task 11: Self-Evaluator（健康报告）
-- [ ] Task 12: nexus 管理 Skills（nexus-status / nexus-evolve / nexus-review）
-- [ ] Task 13: systemd 服务文件（VPS 部署）
+
+* [ ] Task 10: Consciousness Loop（后台意识循环）
+
+* [ ] Task 11: Self-Evaluator（健康报告）
+
+* [ ] Task 12: nexus 管理 Skills（nexus-status / nexus-evolve / nexus-review）
+
+* [ ] Task 13: systemd 服务文件（VPS 部署）
 
 ### 验收标准（来自设计文档）
-- [ ] 会话结束后，数据自动推送到 nexus-daemon 仓库
-- [ ] VPS 守护进程每分钟拉取新事件并处理
-- [ ] 后台意识循环每 5 分钟运行一次，写入 scratchpad.md
-- [ ] 同类模式出现 ≥ 3 次后，Evolution Engine 生成改进建议
-- [ ] 置信度 ≥ 80 的改进自动通过测试后合并
-- [ ] 置信度 < 80 的改进通过 Telegram 发送确认请求
-- [ ] 所有代码修改必须通过 `tsc --noEmit && npm test`
-- [ ] 不破坏 ultrapower 现有任何功能
+
+* [ ] 会话结束后，数据自动推送到 nexus-daemon 仓库
+
+* [ ] VPS 守护进程每分钟拉取新事件并处理
+
+* [ ] 后台意识循环每 5 分钟运行一次，写入 scratchpad.md
+
+* [ ] 同类模式出现 ≥ 3 次后，Evolution Engine 生成改进建议
+
+* [ ] 置信度 ≥ 80 的改进自动通过测试后合并
+
+* [ ] 置信度 < 80 的改进通过 Telegram 发送确认请求
+
+* [ ] 所有代码修改必须通过 `tsc --noEmit && npm test`
+
+* [ ] 不破坏 ultrapower 现有任何功能
 
 ### 最终验证命令
 
 ```bash
+
 # TypeScript 层
+
 npm run build && npm test
 
 # Python 层
+
 cd nexus-daemon && python -m pytest -v
 
 # 检查所有 skill 文件存在
+
 ls skills/nexus/*/SKILL.md
 ```

@@ -27,15 +27,22 @@ WHEN receiving code review feedback:
 ## 禁止的响应
 
 **绝不：**
-- "You're absolutely right!"（明确违反 CLAUDE.md）
-- "Great point!" / "Excellent feedback!"（表演性）
-- "Let me implement that now"（验证前）
+
+* "You're absolutely right!"（明确违反 CLAUDE.md）
+
+* "Great point!" / "Excellent feedback!"（表演性）
+
+* "Let me implement that now"（验证前）
 
 **替代方案：**
-- 重述技术需求
-- 提出澄清问题
-- 如有错误则用技术理由反驳
-- 直接开始工作（行动胜于言辞）
+
+* 重述技术需求
+
+* 提出澄清问题
+
+* 如有错误则用技术理由反驳
+
+* 直接开始工作（行动胜于言辞）
 
 ## 处理不清晰的反馈
 
@@ -59,12 +66,17 @@ You understand 1,2,3,6. Unclear on 4,5.
 ## 按来源分类处理
 
 ### 来自你的人类合作伙伴
-- **可信任** - 理解后实施
-- **仍需询问** 如果范围不清晰
-- **不要表演性认同**
-- **直接行动** 或技术确认
+
+* **可信任** - 理解后实施
+
+* **仍需询问** 如果范围不清晰
+
+* **不要表演性认同**
+
+* **直接行动** 或技术确认
 
 ### 来自外部审查者
+
 ```
 BEFORE implementing:
   1. Check: Technically correct for THIS codebase?
@@ -113,18 +125,28 @@ FOR multi-item feedback:
 ## 何时反驳
 
 以下情况反驳：
-- 建议破坏现有功能
-- 审查者缺乏完整上下文
-- 违反 YAGNI（未使用的功能）
-- 对此技术栈技术上不正确
-- 存在遗留/兼容性原因
-- 与你的人类合作伙伴的架构决策冲突
+
+* 建议破坏现有功能
+
+* 审查者缺乏完整上下文
+
+* 违反 YAGNI（未使用的功能）
+
+* 对此技术栈技术上不正确
+
+* 存在遗留/兼容性原因
+
+* 与你的人类合作伙伴的架构决策冲突
 
 **如何反驳：**
-- 使用技术理由，而非防御性态度
-- 提出具体问题
-- 引用有效的测试/代码
-- 如涉及架构，请让你的人类合作伙伴参与
+
+* 使用技术理由，而非防御性态度
+
+* 提出具体问题
+
+* 引用有效的测试/代码
+
+* 如涉及架构，请让你的人类合作伙伴参与
 
 **如果不方便大声反驳，发出信号：** "Strange things are afoot at the Circle K"
 
@@ -164,7 +186,7 @@ FOR multi-item feedback:
 ## 常见错误
 
 | 错误 | 修复 |
-|---------|-----|
+| --------- | ----- |
 | 表演性认同 | 陈述需求或直接行动 |
 | 盲目实施 | 先对照代码库验证 |
 | 批量处理不测试 | 逐一处理，每个都测试 |
@@ -215,6 +237,9 @@ You understand 1,2,3,6. Unclear on 4,5.
 ## 路由触发
 
 所有审查意见处理完毕后调用 `next-step-router`：
-- current_skill: "receiving-code-review"
-- stage: "review_addressed"
-- output_summary: 处理的意见数、修改的文件列表
+
+* current_skill: "receiving-code-review"
+
+* stage: "review_addressed"
+
+* output_summary: 处理的意见数、修改的文件列表

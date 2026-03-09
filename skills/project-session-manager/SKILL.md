@@ -19,7 +19,7 @@ aliases: [psm]
 ## 命令
 
 | 命令 | 描述 | 示例 |
-|---------|-------------|---------|
+| --------- | ------------- | --------- |
 | `review <ref>` | PR 审查 session | `/psm review omc#123` |
 | `fix <ref>` | Issue 修复 session | `/psm fix omc#42` |
 | `feature <proj> <name>` | 功能开发 | `/psm feature omc add-webhooks` |
@@ -32,10 +32,14 @@ aliases: [psm]
 ## 项目引用
 
 支持的格式：
-- **别名**: `omc#123`（需要 `~/.psm/projects.json`）
-- **完整**: `owner/repo#123`
-- **URL**: `https://github.com/owner/repo/pull/123`
-- **当前**: `#123`（使用当前目录的仓库）
+
+* **别名**: `omc#123`（需要 `~/.psm/projects.json`）
+
+* **完整**: `owner/repo#123`
+
+* **URL**: `<https://github.com/owner/repo/pull/123`>
+
+* **当前**: `#123`（使用当前目录的仓库）
 
 ## 配置
 
@@ -62,7 +66,7 @@ aliases: [psm]
 PSM 支持多种 issue 追踪 provider：
 
 | Provider | 所需 CLI | 引用格式 | 命令 |
-|----------|--------------|-------------------|----------|
+| ---------- | -------------- | ------------------- | ---------- |
 | GitHub（默认） | `gh` | `owner/repo#123`、`alias#123`、GitHub URL | review, fix, feature |
 | Jira | `jira` | `PROJ-123`（需配置 PROJ）、`alias#123` | fix, feature |
 
@@ -107,30 +111,40 @@ PSM 仅在 `PROJ` 已在别名中明确配置为 `jira_project` 时，才将 `PR
 ### Jira 示例
 
 ```bash
+
 # 修复 Jira issue（MYPROJ 必须已配置）
+
 psm fix MYPROJ-123
 
 # 使用别名修复（推荐）
+
 psm fix mywork#123
 
 # 功能开发（与 GitHub 相同）
+
 psm feature mywork add-webhooks
 
 # 注意：'psm review' 不支持 Jira（无 PR 概念）
+
 # Jira issue 请使用 'psm fix'
+
 ```
 
 ### Jira CLI 安装
 
 安装 Jira CLI：
 ```bash
+
 # macOS
+
 brew install ankitpokhrel/jira-cli/jira-cli
 
 # Linux
-# 参见：https://github.com/ankitpokhrel/jira-cli#installation
+
+# 参见：<https://github.com/ankitpokhrel/jira-cli#installation>
 
 # 配置（交互式）
+
 jira init
 ```
 
@@ -150,7 +164,7 @@ Jira CLI 独立于 PSM 处理认证。
 ## Session 命名
 
 | 类型 | Tmux Session | Worktree 目录 |
-|------|--------------|--------------|
+| ------ | -------------- | -------------- |
 | PR 审查 | `psm:omc:pr-123` | `~/.psm/worktrees/omc/pr-123` |
 | Issue 修复 | `psm:omc:issue-42` | `~/.psm/worktrees/omc/issue-42` |
 | 功能开发 | `psm:omc:feat-auth` | `~/.psm/worktrees/omc/feat-auth` |
@@ -177,26 +191,26 @@ Jira CLI 独立于 PSM 处理认证。
 1. **解析引用**：
    ```bash
    # 读取项目别名
-   cat ~/.psm/projects.json 2>/dev/null || echo '{"aliases":{}}'
+   cat ~/.psm/projects.json 2>/dev/null | | echo '{"aliases":{}}'
 
    # 解析引用格式：alias#num、owner/repo#num 或 URL
    # 提取：project_alias、repo (owner/repo)、pr_number、local_path
    ```
 
-2. **获取 PR 信息**：
+1. **获取 PR 信息**：
    ```bash
    gh pr view <pr_number> --repo <repo> --json number,title,author,headRefName,baseRefName,body,files,url
    ```
 
-3. **确保本地仓库存在**：
+1. **确保本地仓库存在**：
    ```bash
    # 若本地路径不存在则克隆
    if [[ ! -d "$local_path" ]]; then
-     git clone "https://github.com/$repo.git" "$local_path"
+     git clone "<https://github.com/$repo.git"> "$local_path"
    fi
    ```
 
-4. **创建 worktree**：
+1. **创建 worktree**：
    ```bash
    worktree_path="$HOME/.psm/worktrees/$project_alias/pr-$pr_number"
 
@@ -208,7 +222,7 @@ Jira CLI 独立于 PSM 处理认证。
    git worktree add "$worktree_path" "pr-$pr_number-review"
    ```
 
-5. **创建 session 元数据**：
+1. **创建 session 元数据**：
    ```bash
    cat > "$worktree_path/.psm-session.json" << EOF
    {
@@ -233,22 +247,22 @@ Jira CLI 独立于 PSM 处理认证。
    EOF
    ```
 
-6. **更新 session 注册表**：
+1. **更新 session 注册表**：
    ```bash
    # 添加到 ~/.psm/sessions.json
    ```
 
-7. **创建 tmux session**：
+1. **创建 tmux session**：
    ```bash
    tmux new-session -d -s "psm:$project_alias:pr-$pr_number" -c "$worktree_path"
    ```
 
-8. **启动 Claude Code**（除非使用 --no-claude）：
+1. **启动 Claude Code**（除非使用 --no-claude）：
    ```bash
    tmux send-keys -t "psm:$project_alias:pr-$pr_number" "claude" Enter
    ```
 
-9. **输出 session 信息**：
+1. **输出 session 信息**：
    ```
    Session ready!
 
@@ -267,12 +281,12 @@ Jira CLI 独立于 PSM 处理认证。
 
 1. **解析引用**（同 review）
 
-2. **获取 issue 信息**：
+1. **获取 issue 信息**：
    ```bash
    gh issue view <issue_number> --repo <repo> --json number,title,body,labels,url
    ```
 
-3. **创建功能分支**：
+1. **创建功能分支**：
    ```bash
    cd "$local_path"
    git fetch origin main
@@ -280,15 +294,15 @@ Jira CLI 独立于 PSM 处理认证。
    git checkout -b "$branch_name" origin/main
    ```
 
-4. **创建 worktree**：
+1. **创建 worktree**：
    ```bash
    worktree_path="$HOME/.psm/worktrees/$project_alias/issue-$issue_number"
    git worktree add "$worktree_path" "$branch_name"
    ```
 
-5. **创建 session 元数据**（类似 review，type="fix"）
+1. **创建 session 元数据**（类似 review，type="fix"）
 
-6. **更新注册表、创建 tmux、启动 claude**（同 review）
+1. **更新注册表、创建 tmux、启动 claude**（同 review）
 
 ### 子命令：`feature <project> <name>`
 
@@ -298,7 +312,7 @@ Jira CLI 独立于 PSM 处理认证。
 
 1. **解析项目**（从别名或路径）
 
-2. **创建功能分支**：
+1. **创建功能分支**：
    ```bash
    cd "$local_path"
    git fetch origin main
@@ -306,13 +320,13 @@ Jira CLI 独立于 PSM 处理认证。
    git checkout -b "$branch_name" origin/main
    ```
 
-3. **创建 worktree**：
+1. **创建 worktree**：
    ```bash
    worktree_path="$HOME/.psm/worktrees/$project_alias/feat-$feature_name"
    git worktree add "$worktree_path" "$branch_name"
    ```
 
-4. **创建 session、tmux、启动 claude**（同上模式）
+1. **创建 session、tmux、启动 claude**（同上模式）
 
 ### 子命令：`list [project]`
 
@@ -322,25 +336,25 @@ Jira CLI 独立于 PSM 处理认证。
 
 1. **读取 session 注册表**：
    ```bash
-   cat ~/.psm/sessions.json 2>/dev/null || echo '{"sessions":{}}'
+   cat ~/.psm/sessions.json 2>/dev/null | | echo '{"sessions":{}}'
    ```
 
-2. **检查 tmux session**：
+1. **检查 tmux session**：
    ```bash
    tmux list-sessions -F "#{session_name}" 2>/dev/null | grep "^psm:"
    ```
 
-3. **检查 worktree**：
+1. **检查 worktree**：
    ```bash
    ls -la ~/.psm/worktrees/*/ 2>/dev/null
    ```
 
-4. **格式化输出**：
+1. **格式化输出**：
    ```
    Active PSM Sessions:
 
    ID                 | Type    | Status   | Worktree
-   -------------------|---------|----------|---------------------------
+   ------------------- | --------- | ---------- | ---------------------------
    omc:pr-123        | review  | active   | ~/.psm/worktrees/omc/pr-123
    omc:issue-42      | fix     | detached | ~/.psm/worktrees/omc/issue-42
    ```
@@ -353,12 +367,12 @@ Jira CLI 独立于 PSM 处理认证。
 
 1. **解析 session ID**：`project:type-number`
 
-2. **验证 session 存在**：
+1. **验证 session 存在**：
    ```bash
    tmux has-session -t "psm:$session_id" 2>/dev/null
    ```
 
-3. **附加**：
+1. **附加**：
    ```bash
    tmux attach -t "psm:$session_id"
    ```
@@ -374,7 +388,7 @@ Jira CLI 独立于 PSM 处理认证。
    tmux kill-session -t "psm:$session_id" 2>/dev/null
    ```
 
-2. **移除 worktree**：
+1. **移除 worktree**：
    ```bash
    worktree_path=$(jq -r ".sessions[\"$session_id\"].worktree" ~/.psm/sessions.json)
    source_repo=$(jq -r ".sessions[\"$session_id\"].source_repo" ~/.psm/sessions.json)
@@ -383,7 +397,7 @@ Jira CLI 独立于 PSM 处理认证。
    git worktree remove "$worktree_path" --force
    ```
 
-3. **更新注册表**：
+1. **更新注册表**：
    ```bash
    # 从 sessions.json 中移除
    ```
@@ -396,22 +410,22 @@ Jira CLI 独立于 PSM 处理认证。
 
 1. **读取所有 session**
 
-2. **对每个 PR session，检查是否已合并**：
+1. **对每个 PR session，检查是否已合并**：
    ```bash
    gh pr view <pr_number> --repo <repo> --json merged,state
    ```
 
-3. **对每个 issue session，检查是否已关闭**：
+1. **对每个 issue session，检查是否已关闭**：
    ```bash
    gh issue view <issue_number> --repo <repo> --json closed,state
    ```
 
-4. **清理已合并/关闭的 session**：
+1. **清理已合并/关闭的 session**：
    - 终止 tmux session
    - 移除 worktree
    - 更新注册表
 
-5. **报告**：
+1. **报告**：
    ```
    Cleanup complete:
      Removed: omc:pr-123 (merged)
@@ -431,12 +445,12 @@ Jira CLI 独立于 PSM 处理认证。
    # 或检查 cwd 是否在 worktree 内
    ```
 
-2. **读取 session 元数据**：
+1. **读取 session 元数据**：
    ```bash
    cat .psm-session.json 2>/dev/null
    ```
 
-3. **显示状态**：
+1. **显示状态**：
    ```
    Current Session: omc:pr-123
    Type: review
@@ -450,7 +464,7 @@ Jira CLI 独立于 PSM 处理认证。
 ## 错误处理
 
 | 错误 | 解决方案 |
-|-------|------------|
+| ------- | ------------ |
 | Worktree 已存在 | 提供选项：附加、重建或中止 |
 | PR 未找到 | 验证 URL/编号，检查权限 |
 | 无 tmux | 警告并跳过 session 创建 |
@@ -463,18 +477,23 @@ Jira CLI 独立于 PSM 处理认证。
 ### 用法
 
 ```bash
+
 # 为 issue 或 PR 创建 worktree
+
 omc teleport #123
 omc teleport owner/repo#123
-omc teleport https://github.com/owner/repo/issues/42
+omc teleport <https://github.com/owner/repo/issues/42>
 
 # 为功能创建 worktree
+
 omc teleport my-feature
 
 # 列出已有 worktree
+
 omc teleport list
 
 # 移除 worktree
+
 omc teleport remove issue/my-repo-123
 omc teleport remove --force feat/my-repo-my-feature
 ```
@@ -482,7 +501,7 @@ omc teleport remove --force feat/my-repo-my-feature
 ### 选项
 
 | 标志 | 描述 | 默认值 |
-|------|-------------|---------|
+| ------ | ------------- | --------- |
 | `--worktree` | 创建 worktree（默认，保留兼容性） | `true` |
 | `--path <path>` | 自定义 worktree 根目录 | `~/Workspace/omc-worktrees/` |
 | `--base <branch>` | 创建时的基础分支 | `main` |
@@ -503,7 +522,7 @@ omc teleport remove --force feat/my-repo-my-feature
 ### PSM 与 Teleport 对比
 
 | 功能 | PSM | Teleport |
-|---------|-----|----------|
+| --------- | ----- | ---------- |
 | Git worktree | 是 | 是 |
 | Tmux session | 是 | 否 |
 | Claude Code 启动 | 是 | 否 |
@@ -518,13 +537,18 @@ omc teleport remove --force feat/my-repo-my-feature
 ## 依赖
 
 必需：
-- `git` - 版本控制（需 worktree 支持 v2.5+）
-- `jq` - JSON 解析
-- `tmux` - Session 管理（可选，但推荐）
+
+* `git` - 版本控制（需 worktree 支持 v2.5+）
+
+* `jq` - JSON 解析
+
+* `tmux` - Session 管理（可选，但推荐）
 
 可选（按 provider）：
-- `gh` - GitHub CLI（用于 GitHub 工作流）
-- `jira` - Jira CLI（用于 Jira 工作流）
+
+* `gh` - GitHub CLI（用于 GitHub 工作流）
+
+* `jira` - Jira CLI（用于 Jira 工作流）
 
 ## 初始化
 
@@ -534,6 +558,7 @@ omc teleport remove --force feat/my-repo-my-feature
 mkdir -p ~/.psm/worktrees ~/.psm/logs
 
 # 若不存在则创建默认 projects.json
+
 if [[ ! -f ~/.psm/projects.json ]]; then
   cat > ~/.psm/projects.json << 'EOF'
 {
@@ -554,6 +579,7 @@ EOF
 fi
 
 # 若不存在则创建 sessions.json
+
 if [[ ! -f ~/.psm/sessions.json ]]; then
   echo '{"version":1,"sessions":{},"stats":{"total_created":0,"total_cleaned":0}}' > ~/.psm/sessions.json
 fi

@@ -5,13 +5,20 @@
 ## 背景
 
 Phase 1（被动学习 MVP）已完成并合并到 main。它建立了：
-- Skill 文件发现、解析、匹配、注入基础设施
-- 基于触发词的被动注入（用户消息 → 匹配 → 注入上下文）
-- 模式检测（`auto-learner.ts`）：问题-解决方案对，置信度评分
-- 自动调用决策（`auto-invoke.ts`）：置信度阈值、冷却时间
-- 使用指标追踪（`usage-tracker.ts`）
-- 会话结束自动反思（`session-reflector.ts`）
-- 进化引擎编排（`orchestrator.ts`）
+
+* Skill 文件发现、解析、匹配、注入基础设施
+
+* 基于触发词的被动注入（用户消息 → 匹配 → 注入上下文）
+
+* 模式检测（`auto-learner.ts`）：问题-解决方案对，置信度评分
+
+* 自动调用决策（`auto-invoke.ts`）：置信度阈值、冷却时间
+
+* 使用指标追踪（`usage-tracker.ts`）
+
+* 会话结束自动反思（`session-reflector.ts`）
+
+* 进化引擎编排（`orchestrator.ts`）
 
 **Phase 1 的核心局限：**
 1. 没有用户反馈回路——skill 注入后不知道是否有用
@@ -115,14 +122,20 @@ function parseFeedbackFromMessage(message: string): FeedbackResponse | null;
 ```
 
 **`storage.ts`**
-- 存储路径：`.omc/axiom/evolution/skill_feedback.json`
-- 结构：`{ skillId: { ratings: [], averageScore: number, lastUpdated: string } }`
-- 使用 `atomicWriteJson` 防止并发写入
+
+* 存储路径：`.omc/axiom/evolution/skill_feedback.json`
+
+* 结构：`{ skillId: { ratings: [], averageScore: number, lastUpdated: string } }`
+
+* 使用 `atomicWriteJson` 防止并发写入
 
 **触发时机：**
-- 注入 skill 后的第 2-3 条消息（给用户时间使用 skill）
-- 每个 skill 每会话最多请求一次反馈
-- 置信度 > 80% 的 skill 才请求反馈（避免噪音）
+
+* 注入 skill 后的第 2-3 条消息（给用户时间使用 skill）
+
+* 每个 skill 每会话最多请求一次反馈
+
+* 置信度 > 80% 的 skill 才请求反馈（避免噪音）
 
 ---
 
@@ -133,9 +146,12 @@ function parseFeedbackFromMessage(message: string): FeedbackResponse | null;
 **`adoption-detector.ts`**
 
 检测信号：
-- **代码模式匹配**：助手响应中是否出现 skill 建议的代码模式
-- **行为关键词**：响应中是否包含 skill 中的关键术语
-- **问题解决**：用户后续消息是否表明问题已解决（"谢谢"、"成功了"、"works"）
+
+* **代码模式匹配**：助手响应中是否出现 skill 建议的代码模式
+
+* **行为关键词**：响应中是否包含 skill 中的关键术语
+
+* **问题解决**：用户后续消息是否表明问题已解决（"谢谢"、"成功了"、"works"）
 
 ```typescript
 interface AdoptionSignal {
@@ -159,9 +175,12 @@ function detectAdoption(
 ```
 
 **`tracker.ts`**
-- 维护会话内的 skill 注入记录
-- 在每条助手响应后检测采纳信号
-- 将采纳结果写入 `usage_metrics.json`（扩展 Phase 1 的 `UsageMetrics`）
+
+* 维护会话内的 skill 注入记录
+
+* 在每条助手响应后检测采纳信号
+
+* 将采纳结果写入 `usage_metrics.json`（扩展 Phase 1 的 `UsageMetrics`）
 
 ---
 
@@ -235,9 +254,12 @@ function parseRecommendationResponse(message: string): {
 **`improver.ts`** — Skill 内容改进
 
 改进策略：
-- **触发词优化**：基于实际触发场景，添加/删除触发词
-- **内容精炼**：基于采纳模式，突出最有效的部分
-- **示例更新**：用实际使用案例替换通用示例
+
+* **触发词优化**：基于实际触发场景，添加/删除触发词
+
+* **内容精炼**：基于采纳模式，突出最有效的部分
+
+* **示例更新**：用实际使用案例替换通用示例
 
 ```typescript
 interface ImprovementSuggestion {
@@ -288,17 +310,24 @@ function insightsToImprovements(insights: AggregatedInsight[]): ImprovementSugge
 ### Hook 集成
 
 **`UserPromptSubmit` hook（`skill-injector.mjs`）**
-- 现有：触发词匹配 → 被动注入
-- 新增：检查是否有待推荐的 skill → 附加推荐消息
+
+* 现有：触发词匹配 → 被动注入
+
+* 新增：检查是否有待推荐的 skill → 附加推荐消息
 
 **`PostToolUse` hook（新增 `skill-feedback.mjs`）**
-- 在助手响应后触发
-- 运行采纳检测
-- 判断是否需要请求反馈
+
+* 在助手响应后触发
+
+* 运行采纳检测
+
+* 判断是否需要请求反馈
 
 **`SessionEnd` hook（`session-reflector.ts`）**
-- 现有：触发 Axiom 反思
-- 新增：运行跨会话聚合，生成改进建议
+
+* 现有：触发 Axiom 反思
+
+* 新增：运行跨会话聚合，生成改进建议
 
 ### 配置扩展（`.omc-config.json`）
 
@@ -337,26 +366,29 @@ function insightsToImprovements(insights: AggregatedInsight[]): ImprovementSugge
 ## 实现优先级
 
 ### P0（核心功能，必须实现）
+
 1. **反馈收集**（`feedback/collector.ts` + `storage.ts`）
 2. **主动推荐引擎**（`recommender/engine.ts` + `timing.ts`）
 3. **Hook 集成**（扩展 `skill-injector.mjs`，新增 `skill-feedback.mjs`）
 
 ### P1（重要功能）
-4. **采纳检测**（`effectiveness/adoption-detector.ts`）
-5. **触发词优化**（`quality/improver.ts` 的触发词部分）
-6. **配置扩展**（`config.ts` 扩展）
+
+1. **采纳检测**（`effectiveness/adoption-detector.ts`）
+2. **触发词优化**（`quality/improver.ts` 的触发词部分）
+3. **配置扩展**（`config.ts` 扩展）
 
 ### P2（增强功能）
-7. **跨会话聚合**（`quality/aggregator.ts`）
-8. **内容精炼**（`quality/improver.ts` 的内容部分）
-9. **效果仪表盘**（`/ultrapower:learner` skill 扩展）
+
+1. **跨会话聚合**（`quality/aggregator.ts`）
+2. **内容精炼**（`quality/improver.ts` 的内容部分）
+3. **效果仪表盘**（`/ultrapower:learner` skill 扩展）
 
 ---
 
 ## 风险与约束
 
 | 风险 | 影响 | 缓解策略 |
-|------|------|---------|
+| ------ | ------ | --------- |
 | 反馈请求打扰用户 | 高 | 严格冷却时间 + 每会话上限 |
 | 采纳检测误报 | 中 | 多信号 AND 逻辑，高置信度阈值 |
 | 自动改进破坏 skill | 高 | 默认关闭自动改进，需用户确认 |
@@ -367,11 +399,18 @@ function insightsToImprovements(insights: AggregatedInsight[]): ImprovementSugge
 
 ## 验收标准
 
-- [ ] 用户注入 skill 后，系统能在适当时机请求反馈
-- [ ] 反馈数据正确持久化到 `skill_feedback.json`
-- [ ] 系统能检测到 skill 被采纳的信号（≥ 70% 准确率）
-- [ ] 当模式置信度 ≥ 70 且出现 ≥ 2 次时，系统主动推荐保存 skill
-- [ ] 用户确认后，推荐的 skill 正确保存到 `.omc/skills/`
-- [ ] 所有新功能可通过配置独立开关
-- [ ] 新增代码通过 `npm test` 和 `tsc --noEmit`
-- [ ] 不破坏 Phase 1 的任何现有功能
+* [ ] 用户注入 skill 后，系统能在适当时机请求反馈
+
+* [ ] 反馈数据正确持久化到 `skill_feedback.json`
+
+* [ ] 系统能检测到 skill 被采纳的信号（≥ 70% 准确率）
+
+* [ ] 当模式置信度 ≥ 70 且出现 ≥ 2 次时，系统主动推荐保存 skill
+
+* [ ] 用户确认后，推荐的 skill 正确保存到 `.omc/skills/`
+
+* [ ] 所有新功能可通过配置独立开关
+
+* [ ] 新增代码通过 `npm test` 和 `tsc --noEmit`
+
+* [ ] 不破坏 Phase 1 的任何现有功能

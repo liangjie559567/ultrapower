@@ -14,33 +14,33 @@
    - 故障排除
    - 回滚方案
 
-2. **docs/UPGRADE_VERIFICATION_REPORT.md**
+1. **docs/UPGRADE_VERIFICATION_REPORT.md**
    - 构建验证报告
    - postinstall 修复验证
 
-3. **docs/PLUGIN_MARKETPLACE_VERIFICATION.md**
+1. **docs/PLUGIN_MARKETPLACE_VERIFICATION.md**
    - 插件市场验证
    - 组件清单（50 agents, 71 skills, 14 hooks）
 
-4. **docs/LOCAL_INSTALL_VERIFICATION.md**
+1. **docs/LOCAL_INSTALL_VERIFICATION.md**
    - 本地环境验证
    - Tarball 内容验证
 
-5. **docs/LOCAL_TEST_INSTALL_REPORT.md**
+1. **docs/LOCAL_TEST_INSTALL_REPORT.md**
    - 本地测试安装报告
    - CLI 可用性验证
 
-6. **docs/VERIFICATION_SUMMARY.md**
+1. **docs/VERIFICATION_SUMMARY.md**
    - 总结报告
    - 所有验证结果汇总
 
-7. **docs/RELEASE_NOTES_v5.5.14.md**
+1. **docs/RELEASE_NOTES_v5.5.14.md**
    - GitHub Release notes
    - 核心改进和修复项
 
 ### 自动化脚本
 
-8. **scripts/verify-all.sh**
+1. **scripts/verify-all.sh**
    - 7 项自动化检查
    - 版本、构建、组件、打包验证
 
@@ -49,10 +49,14 @@
 ## ✅ 已更新文档
 
 ### CHANGELOG.md
+
 添加 v5.5.14 条目：
-- 修复：6 个插件安装问题
-- 安全：路径遍历防护
-- 验证：完整验证流程
+
+* 修复：6 个插件安装问题
+
+* 安全：路径遍历防护
+
+* 验证：完整验证流程
 
 ---
 
@@ -78,12 +82,17 @@ CHANGELOG.md                         # 已更新
 
 ## 📊 验证覆盖
 
-- ✅ 构建系统（3524 文件）
-- ✅ 组件完整性（50/71/14）
-- ✅ 插件结构（plugin.json 格式）
-- ✅ postinstall 修复（6 个问题）
-- ✅ 本地安装（npm install -g）
-- ✅ CLI 可用性（omc --version）
+* ✅ 构建系统（3524 文件）
+
+* ✅ 组件完整性（50/71/14）
+
+* ✅ 插件结构（plugin.json 格式）
+
+* ✅ postinstall 修复（6 个问题）
+
+* ✅ 本地安装（npm install -g）
+
+* ✅ CLI 可用性（omc --version）
 
 ---
 

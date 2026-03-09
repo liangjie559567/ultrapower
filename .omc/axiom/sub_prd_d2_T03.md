@@ -7,6 +7,7 @@ depends: [T-01, T-02]
 # T-03: Agent 追踪器
 
 ## 目标
+
 创建 `src/hooks/observability/agent-tracker.ts`，记录 agent run 生命周期。
 
 ## 接口
@@ -31,10 +32,15 @@ export class AgentTracker {
 ```
 
 ## 实现要点
-- `startRun` 生成 `crypto.randomUUID()` 作为 id，enqueue 到 WriteQueue
-- `endRun` 用 `db.prepare('UPDATE agent_runs SET ...')` 直接同步更新（end 时数据已存在）
-- 导出单例 `agentTracker`
+
+* `startRun` 生成 `crypto.randomUUID()` 作为 id，enqueue 到 WriteQueue
+
+* `endRun` 用 `db.prepare('UPDATE agent_runs SET ...')` 直接同步更新（end 时数据已存在）
+
+* 导出单例 `agentTracker`
 
 ## 验收
-- startRun 返回 id，DB 中有对应 running 记录
-- endRun 后 status=completed，duration_ms 已计算
+
+* startRun 返回 id，DB 中有对应 running 记录
+
+* endRun 后 status=completed，duration_ms 已计算

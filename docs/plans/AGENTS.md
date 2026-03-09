@@ -4,12 +4,13 @@
 # docs/plans/
 
 ## Purpose
+
 规划文档目录。存放功能开发的设计方案和实现计划，按日期命名，记录各版本功能的架构决策和实施路径。
 
 ## Key Files
 
 | File | Description |
-|------|-------------|
+| ------ | ------------- |
 | `2025-11-22-opencode-support-design.md` | OpenCode 支持设计方案 |
 | `2025-11-22-opencode-support-implementation.md` | OpenCode 支持实现计划 |
 | `2025-11-28-skills-improvements-from-user-feedback.md` | 基于用户反馈的 skill 改进计划 |
@@ -27,7 +28,9 @@
 ## For AI Agents
 
 ### 修改此目录时
-- 规划文档是历史记录，通常不修改已有文档
-- 新功能规划使用日期前缀命名
+
+* 规划文档是历史记录，通常不修改已有文档
+
+* 新功能规划使用日期前缀命名
 
 <!-- MANUAL: -->

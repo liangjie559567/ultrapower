@@ -19,11 +19,16 @@ team-plan → team-prd → team-exec → team-verify → team-fix (循环)
 ```
 
 **关键特性**：
-- **阶段感知路由**：每个阶段使用专业 agents，而非通用 executors
-- **状态持久化**：通过 `.omc/state/sessions/{sessionId}/team-state.json` 跟踪进度
-- **恢复机制**：从中断点恢复，支持取消后恢复
-- **死锁检测**：DFS 算法检测任务依赖循环
-- **混合后端**：统一管理 Claude native + MCP workers (Codex/Gemini)
+
+* **阶段感知路由**：每个阶段使用专业 agents，而非通用 executors
+
+* **状态持久化**：通过 `.omc/state/sessions/{sessionId}/team-state.json` 跟踪进度
+
+* **恢复机制**：从中断点恢复，支持取消后恢复
+
+* **死锁检测**：DFS 算法检测任务依赖循环
+
+* **混合后端**：统一管理 Claude native + MCP workers (Codex/Gemini)
 
 ---
 
@@ -48,7 +53,7 @@ type TeamPipelinePhase =
 **允许的转换** (`src/hooks/team-pipeline/transitions.ts`):
 
 | From         | To                                    |
-|--------------|---------------------------------------|
+| -------------- | --------------------------------------- |
 | team-plan    | team-prd                              |
 | team-prd     | team-exec                             |
 | team-exec    | team-verify                           |
@@ -59,9 +64,12 @@ type TeamPipelinePhase =
 | failed       | (终态)                                |
 
 **转换守卫**：
-- `team-exec`: 需要 `plan_path` 或 `prd_path` artifact
-- `team-verify`: 需要 `tasks_total > 0` 且 `tasks_completed >= tasks_total`
-- `cancelled → *`: 需要 `preserve_for_resume = true`
+
+* `team-exec`: 需要 `plan_path` 或 `prd_path` artifact
+
+* `team-verify`: 需要 `tasks_total > 0` 且 `tasks_completed >= tasks_total`
+
+* `cancelled → *`: 需要 `preserve_for_resume = true`
 
 ### 2.3 Fix Loop 机制
 
@@ -86,17 +94,24 @@ interface TeamPipelineFixLoop {
 ### 3.1 阶段 Agent 映射
 
 **team-plan** (探索与规划):
-- `explore` (haiku): 代码库发现、符号映射
-- `planner` (opus): 任务排序、执行计划
-- 可选: `analyst` (opus), `architect` (opus)
+
+* `explore` (haiku): 代码库发现、符号映射
+
+* `planner` (opus): 任务排序、执行计划
+
+* 可选: `analyst` (opus), `architect` (opus)
 
 **team-prd** (需求文档):
-- `analyst` (opus): 需求澄清、验收标准
-- 可选: `product-manager` (sonnet), `critic` (opus)
+
+* `analyst` (opus): 需求澄清、验收标准
+
+* 可选: `product-manager` (sonnet), `critic` (opus)
 
 **team-exec** (执行实现):
-- `executor` (sonnet): 标准代码实现
-- 任务适配专家:
+
+* `executor` (sonnet): 标准代码实现
+
+* 任务适配专家:
   - `designer` (sonnet): UI/UX 工作
   - `build-fixer` (sonnet): 构建/类型错误
   - `writer` (haiku): 文档编写
@@ -104,15 +119,18 @@ interface TeamPipelineFixLoop {
   - `deep-executor` (opus): 复杂自主任务
 
 **team-verify** (验证测试):
-- `verifier` (sonnet): 完成证据、测试充分性
-- 按需使用:
+
+* `verifier` (sonnet): 完成证据、测试充分性
+
+* 按需使用:
   - `security-reviewer` (sonnet)
   - `code-reviewer` (opus)
   - `quality-reviewer` (sonnet)
   - `performance-reviewer` (sonnet)
 
 **team-fix** (修复缺陷):
-- 根据缺陷类型路由:
+
+* 根据缺陷类型路由:
   - `executor` (sonnet): 逻辑错误
   - `build-fixer` (sonnet): 编译错误
   - `debugger` (sonnet): 复杂 bug
@@ -146,16 +164,21 @@ const DEFAULT_CAPABILITIES = {
 ### 3.3 适应度评分算法
 
 **评分规则** (`scoreWorkerFitness`):
-- 每个匹配能力 = 1.0 分
-- `general` 能力作为通配符 = 0.5 分
-- 最终分数归一化到 0-1 范围
+
+* 每个匹配能力 = 1.0 分
+
+* `general` 能力作为通配符 = 0.5 分
+
+* 最终分数归一化到 0-1 范围
 
 **负载均衡** (`routeTasks`):
 ```typescript
 finalScore = fitnessScore - (currentLoad × 0.2) + (isIdle ? 0.1 : 0)
 ```
-- 每个已分配任务减少 0.2 分
-- 空闲 worker 获得 0.1 分加成
+
+* 每个已分配任务减少 0.2 分
+
+* 空闲 worker 获得 0.1 分加成
 
 ---
 
@@ -236,8 +259,10 @@ interface UnifiedTeamMember {
 ### 5.2 消息路由
 
 **路由策略** (`src/team/message-router.ts`):
-- **Claude native**: 返回指令使用 `SendMessage` 工具
-- **MCP workers**: 追加到 `~/.claude/teams/{team}/inbox/{worker}.jsonl`
+
+* **Claude native**: 返回指令使用 `SendMessage` 工具
+
+* **MCP workers**: 追加到 `~/.claude/teams/{team}/inbox/{worker}.jsonl`
 
 **广播机制**：
 ```typescript
@@ -273,8 +298,12 @@ isWorkerAlive(workingDirectory, teamName, workerName, maxAgeMs) {
 ```
 
 **干预触发条件**：
-- Heartbeat 过期 + tmux session 不存在 → `dead`
-- Heartbeat 过期但 tmux 存在 → `hung` (挂起)
-- `status === 'quarantined'` → 自我隔离
-- `consecutiveErrors >= 2` → 隔离风险
+
+* Heartbeat 过期 + tmux session 不存在 → `dead`
+
+* Heartbeat 过期但 tmux 存在 → `hung` (挂起)
+
+* `status === 'quarantined'` → 自我隔离
+
+* `consecutiveErrors >= 2` → 隔离风险
 

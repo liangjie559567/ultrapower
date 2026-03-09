@@ -11,15 +11,22 @@
 ### 问题陈述
 
 当前 ultrapower 发布流程依赖手动执行 `skills/release/SKILL.md` 中的步骤：
-- 手动更新版本号（多个文件）
-- 手动运行 `npm publish`
-- 手动创建 GitHub Release
-- 手动更新 `marketplace.json`
+
+* 手动更新版本号（多个文件）
+
+* 手动运行 `npm publish`
+
+* 手动创建 GitHub Release
+
+* 手动更新 `marketplace.json`
 
 这导致：
-- 发布步骤容易遗漏（如 REFERENCE.md 双重数量声明 — k-047）
-- 发布者机器环境依赖（NPM_TOKEN 本地配置）
-- 无法并行执行独立步骤
+
+* 发布步骤容易遗漏（如 REFERENCE.md 双重数量声明 — k-047）
+
+* 发布者机器环境依赖（NPM_TOKEN 本地配置）
+
+* 无法并行执行独立步骤
 
 ### 目标
 
@@ -52,7 +59,7 @@
 ### 文件变更清单
 
 | 操作 | 文件 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 新增 | `.github/workflows/release.yml` | GitHub Actions 主流程 |
 | 新增 | `scripts/release-steps.mjs` | 共享核心逻辑 |
 | 新增 | `scripts/release-local.mjs` | 本地执行入口 |
@@ -112,9 +119,11 @@ export async function runReleasePipeline(opts = {})
 
 ### 错误处理原则
 
-- 每步失败输出明确错误信息（步骤名 + 错误内容 + 建议操作）
-- 支持 `--start-from` 从失败步骤重试（跳过已完成步骤）
-- dry-run 模式：打印将执行的命令，不实际执行
+* 每步失败输出明确错误信息（步骤名 + 错误内容 + 建议操作）
+
+* 支持 `--start-from` 从失败步骤重试（跳过已完成步骤）
+
+* dry-run 模式：打印将执行的命令，不实际执行
 
 ---
 
@@ -140,14 +149,16 @@ build-test
           └── marketplace-sync
 ```
 
-- `build-test` → `publish`：串行（确保验证通过才发布）
-- `publish` → `github-release`：串行（确保 npm 包存在才创建 Release）
-- `publish` → `marketplace-sync`：并行（与 github-release 独立）
+* `build-test` → `publish`：串行（确保验证通过才发布）
+
+* `publish` → `github-release`：串行（确保 npm 包存在才创建 Release）
+
+* `publish` → `marketplace-sync`：并行（与 github-release 独立）
 
 ### Secrets 需求
 
 | Secret | 用途 | 配置位置 |
-|--------|------|---------|
+| -------- | ------ | --------- |
 | `NPM_TOKEN` | npm publish 权限 | GitHub repo Settings → Secrets |
 | `GITHUB_TOKEN` | GitHub Release 创建 | Actions 内置，无需手动配置 |
 
@@ -174,7 +185,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: '<https://registry.npmjs.org'>
       - run: npm ci
       - run: node scripts/release-steps.mjs publish
         env:
@@ -232,7 +243,7 @@ jobs:
 ## 6. 与现有 Release Skill 的分工
 
 | 步骤 | 负责方 | 工具 |
-|------|--------|------|
+| ------ | -------- | ------ |
 | 版本号更新（package.json、CHANGELOG、文档） | release skill（手动） | 编辑文件 |
 | git commit + tag + push | release skill（手动） | git |
 | npm publish | **GitHub Actions（自动）** | release-steps.mjs |
@@ -247,7 +258,7 @@ jobs:
 ## 7. 测试策略
 
 | 测试类型 | 覆盖内容 |
-|---------|---------|
+| --------- | --------- |
 | 单元测试 | `release-steps.mjs` 各函数（mock exec） |
 | dry-run 测试 | 验证 dry-run 模式不执行实际命令 |
 | 集成测试 | GitHub Actions workflow 语法验证（`actionlint`） |
@@ -258,7 +269,7 @@ jobs:
 ## 8. 风险与缓解
 
 | 风险 | 缓解措施 |
-|------|---------|
+| ------ | --------- |
 | NPM_TOKEN 过期 | CI 失败时发邮件通知，本地脚本作为备用 |
 | marketplace-sync 提交冲突 | 使用 `git pull --rebase` 后再 push |
 | 版本号不一致 | validateBuild 步骤检查 package.json vs git tag 一致性 |

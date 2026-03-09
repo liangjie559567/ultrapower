@@ -10,9 +10,12 @@
 3. Identify slow operations
 
 **Solutions**:
-- Increase timeout in hook configuration
-- Optimize hook logic
-- Break into smaller operations
+
+* Increase timeout in hook configuration
+
+* Optimize hook logic
+
+* Break into smaller operations
 
 ## Hook Crash
 
@@ -24,6 +27,9 @@
 3. Verify dependencies loaded
 
 **Solutions**:
-- Add error handling
-- Validate inputs before processing
-- Check for missing dependencies
+
+* Add error handling
+
+* Validate inputs before processing
+
+* Check for missing dependencies

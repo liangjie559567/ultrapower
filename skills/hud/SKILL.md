@@ -14,7 +14,7 @@ scope: ~/.claude/**  # 仅文档说明 - 允许的写入范围
 ## 快速命令
 
 | 命令 | 描述 |
-|---------|-------------|
+| --------- | ------------- |
 | `/ultrapower:hud` | 显示当前 HUD 状态（如需则自动设置） |
 | `/ultrapower:hud setup` | 安装/修复 HUD 状态栏 |
 | `/ultrapower:hud minimal` | 切换到最小显示 |
@@ -36,19 +36,19 @@ scope: ~/.claude/**  # 仅文档说明 - 允许的写入范围
 
 **步骤 1：** 检查是否需要设置：
 ```bash
-node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude');console.log(f.existsSync(p.join(d,'hud','omc-hud.mjs'))?'EXISTS':'MISSING')"
+node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR | |p.join(require('os').homedir(),'.claude');console.log(f.existsSync(p.join(d,'hud','omc-hud.mjs'))?'EXISTS':'MISSING')"
 ```
 
 **步骤 2：** 验证插件已安装：
 ```bash
-node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude');const bases=['liangjie559567','omc'].map(ns=>p.join(d,'plugins','cache',ns,'ultrapower'));let found=false;for(const b of bases){try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length===0)continue;const l=v[v.length-1],h=p.join(b,l,'dist','hud','index.js');console.log('Version:',l,'Path:',b);console.log(f.existsSync(h)?'READY':'NOT_FOUND - try reinstalling: /plugin install omc@ultrapower');found=true;break}catch{}}if(found===false)console.log('Plugin not installed - run: /plugin install omc@ultrapower')"
+node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR | |p.join(require('os').homedir(),'.claude');const bases=['liangjie559567','omc'].map(ns=>p.join(d,'plugins','cache',ns,'ultrapower'));let found=false;for(const b of bases){try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length===0)continue;const l=v[v.length-1],h=p.join(b,l,'dist','hud','index.js');console.log('Version:',l,'Path:',b);console.log(f.existsSync(h)?'READY':'NOT_FOUND - try reinstalling: /plugin install omc@ultrapower');found=true;break}catch{}}if(found===false)console.log('Plugin not installed - run: /plugin install omc@ultrapower')"
 ```
 
 **步骤 3：** 若 omc-hud.mjs 缺失或参数为 `setup`，创建 HUD 目录和脚本：
 
 首先，创建目录：
 ```bash
-node -e "require('fs').mkdirSync(require('path').join(process.env.CLAUDE_CONFIG_DIR||require('path').join(require('os').homedir(),'.claude'),'hud'),{recursive:true})"
+node -e "require('fs').mkdirSync(require('path').join(process.env.CLAUDE_CONFIG_DIR | |require('path').join(require('os').homedir(),'.claude'),'hud'),{recursive:true})"
 ```
 
 然后，使用 Write 工具创建 `~/.claude/hud/omc-hud.mjs`，内容如下：
@@ -68,11 +68,11 @@ import { pathToFileURL } from "node:url";
 // Semantic version comparison: returns negative if a < b, positive if a > b, 0 if equal
 function semverCompare(a, b) {
   // Use parseInt to handle pre-release suffixes (e.g. "0-beta" -> 0)
-  const pa = a.replace(/^v/, "").split(".").map(s => parseInt(s, 10) || 0);
-  const pb = b.replace(/^v/, "").split(".").map(s => parseInt(s, 10) || 0);
+  const pa = a.replace(/^v/, "").split(".").map(s => parseInt(s, 10) | | 0);
+  const pb = b.replace(/^v/, "").split(".").map(s => parseInt(s, 10) | | 0);
   for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const na = pa[i] || 0;
-    const nb = pb[i] || 0;
+    const na = pa[i] | | 0;
+    const nb = pb[i] | | 0;
     if (na !== nb) return na - nb;
   }
   // If numeric parts equal, non-pre-release > pre-release
@@ -87,7 +87,7 @@ async function main() {
   const home = homedir();
   let pluginCacheDir = null;
 
-  const claudeConfigDir = process.env.CLAUDE_CONFIG_DIR || join(home, ".claude");
+  const claudeConfigDir = process.env.CLAUDE_CONFIG_DIR | | join(home, ".claude");
 
   // 1. Try plugin cache - check multiple marketplace/publisher namespaces
   const pluginCacheBases = [
@@ -141,7 +141,7 @@ main();
 
 **步骤 3（续）：** 设置可执行权限（仅 Unix，Windows 跳过）：
 ```bash
-node -e "if(process.platform==='win32'){console.log('Skipped (Windows)')}else{require('fs').chmodSync(require('path').join(process.env.CLAUDE_CONFIG_DIR||require('path').join(require('os').homedir(),'.claude'),'hud','omc-hud.mjs'),0o755);console.log('Done')}"
+node -e "if(process.platform==='win32'){console.log('Skipped (Windows)')}else{require('fs').chmodSync(require('path').join(process.env.CLAUDE_CONFIG_DIR | |require('path').join(require('os').homedir(),'.claude'),'hud','omc-hud.mjs'),0o755);console.log('Done')}"
 ```
 
 **步骤 4：** 更新 settings.json 以使用 HUD：
@@ -179,7 +179,7 @@ Windows 上如下所示：
 
 **步骤 5：** 清理旧 HUD 脚本（如有）：
 ```bash
-node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR||p.join(require('os').homedir(),'.claude'),t=p.join(d,'hud','sisyphus-hud.mjs');try{if(f.existsSync(t)){f.unlinkSync(t);console.log('Removed legacy script')}else{console.log('No legacy script found')}}catch{}"
+node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR | |p.join(require('os').homedir(),'.claude'),t=p.join(d,'hud','sisyphus-hud.mjs');try{if(f.existsSync(t)){f.unlinkSync(t);console.log('Removed legacy script')}else{console.log('No legacy script found')}}catch{}"
 ```
 
 **步骤 6：** 告知用户重启 Claude Code 以使变更生效。
@@ -187,15 +187,18 @@ node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR
 ## 显示预设
 
 ### 最小（Minimal）
+
 仅显示必要信息：
 
 ### 专注（Focused，默认）
+
 显示所有相关元素：
 ```
 [OMC] branch:main | ralph:3/10 | US-002 | ultrawork skill:planner | ctx:67% | agents:2 | bg:3/5 | todos:2/5
 ```
 
 ### 完整（Full）
+
 显示所有内容，包括多行 agent 详情：
 ```
 [OMC] repo:ultrapower branch:main | ralph:3/10 | US-002 (2/5) | ultrawork | ctx:[████░░]67% | agents:3 | bg:3/5 | todos:2/5
@@ -207,15 +210,19 @@ node -e "const p=require('path'),f=require('fs'),d=process.env.CLAUDE_CONFIG_DIR
 ## 多行 Agent 显示
 
 Agent 运行时，HUD 在独立行显示详细信息：
-- **树形字符**（`├─`、`└─`）显示视觉层级
-- **Agent 代码**（O、e、s）表示 agent 类型及模型层级颜色
-- **持续时间** 显示每个 agent 已运行多长时间
-- **描述** 显示每个 agent 正在做什么（最多 45 个字符）
+
+* **树形字符**（`├─`、`└─`）显示视觉层级
+
+* **Agent 代码**（O、e、s）表示 agent 类型及模型层级颜色
+
+* **持续时间** 显示每个 agent 已运行多长时间
+
+* **描述** 显示每个 agent 正在做什么（最多 45 个字符）
 
 ## 显示元素
 
 | 元素 | 描述 |
-|---------|-------------|
+| --------- | ------------- |
 | `[OMC]` | 模式标识符 |
 | `repo:name` | Git 仓库名称（青色） |
 | `branch:name` | Git 分支名称（青色） |
@@ -230,9 +237,11 @@ Agent 运行时，HUD 在独立行显示详细信息：
 
 ## 颜色编码
 
-- **绿色**：正常/健康
-- **黄色**：警告（上下文 >70%，ralph >7）
-- **红色**：严重（上下文 >85%，ralph 达到最大值）
+* **绿色**：正常/健康
+
+* **黄色**：警告（上下文 >70%，ralph >7）
+
+* **红色**：严重（上下文 >85%，ralph 达到最大值）
 
 ## 配置位置
 
@@ -275,8 +284,10 @@ HUD 配置存储于：`~/.claude/.omc/hud-config.json`
 3. 若仍不工作，运行 `/ultrapower:omc-doctor` 进行完整诊断
 
 手动验证：
-- HUD 脚本：`~/.claude/hud/omc-hud.mjs`
-- 设置：`~/.claude/settings.json` 应已配置 `statusLine`
+
+* HUD 脚本：`~/.claude/hud/omc-hud.mjs`
+
+* 设置：`~/.claude/settings.json` 应已配置 `statusLine`
 
 ---
 

@@ -69,10 +69,14 @@ echo "$INPUT" | node ~/.claude/omc/hook-bridge.mjs --hook=keyword-detector
 **文件**: `src/hooks/bridge-normalize.ts` (347 行)
 
 **安全策略**:
-- **敏感 Hook 白名单**: `permission-request`, `setup-init`, `setup-maintenance`, `session-end`
-- **Zod 结构验证**: 所有输入经过 schema 验证
-- **snake_case → camelCase 规范化**: Claude Code 发送 snake_case，内部使用 camelCase
-- **未知字段处理**:
+
+* **敏感 Hook 白名单**: `permission-request`, `setup-init`, `setup-maintenance`, `session-end`
+
+* **Zod 结构验证**: 所有输入经过 schema 验证
+
+* **snake_case → camelCase 规范化**: Claude Code 发送 snake_case，内部使用 camelCase
+
+* **未知字段处理**:
   - 敏感 Hook: 丢弃未知字段并警告
   - 普通 Hook: 通过但记录 debug 日志
 
@@ -86,8 +90,10 @@ const STRICT_WHITELIST: Record<string, string[]> = {
 ```
 
 **快速路径优化**:
-- 检测已规范化的 camelCase 输入，跳过 Zod 解析
-- 敏感 Hook 强制走完整验证流程
+
+* 检测已规范化的 camelCase 输入，跳过 Zod 解析
+
+* 敏感 Hook 强制走完整验证流程
 
 ### 2.3 安全防护
 
@@ -110,8 +116,10 @@ if (runningCount >= maxBgTasks) {
 ```
 
 **委派模型强制** (L828-832):
-- 强制 Task 调用必须指定 `model` 参数
-- 防止默认使用昂贵模型
+
+* 强制 Task 调用必须指定 `model` 参数
+
+* 防止默认使用昂贵模型
 
 ## 3. MCP 服务器架构
 
@@ -138,7 +146,7 @@ const TOOL_CATEGORIES = {
 // 环境变量: OMC_DISABLE_TOOLS=lsp,python-repl,project-memory
 const disabledGroups = parseDisabledGroups();
 const enabledTools = allTools.filter(t =>
-  !t.category || !disabledGroups.has(t.category)
+  !t.category | | !disabledGroups.has(t.category)
 );
 ```
 
@@ -149,16 +157,24 @@ const enabledTools = allTools.filter(t =>
 **文件**: `src/mcp/codex-server.ts` (113 行)
 
 **核心工具**: `ask_codex`
-- **推荐角色**: architect, planner, critic, analyst, code-reviewer, security-reviewer, tdd-guide
-- **默认模型**: gpt-5.3-codex
-- **推理级别**: minimal, low, medium, high, xhigh
-- **后台执行**: 支持 `background: true`
+
+* **推荐角色**: architect, planner, critic, analyst, code-reviewer, security-reviewer, tdd-guide
+
+* **默认模型**: gpt-5.3-codex
+
+* **推理级别**: minimal, low, medium, high, xhigh
+
+* **后台执行**: 支持 `background: true`
 
 **任务管理工具**:
-- `wait_for_job` - 阻塞等待任务完成
-- `check_job_status` - 非阻塞状态检查
-- `kill_job` - 终止运行中任务
-- `list_jobs` - 列出任务列表
+
+* `wait_for_job` - 阻塞等待任务完成
+
+* `check_job_status` - 非阻塞状态检查
+
+* `kill_job` - 终止运行中任务
+
+* `list_jobs` - 列出任务列表
 
 **MCP 命名空间**: `mcp__x__<tool_name>`
 
@@ -167,10 +183,14 @@ const enabledTools = allTools.filter(t =>
 **文件**: `src/mcp/gemini-server.ts` (116 行)
 
 **核心工具**: `ask_gemini`
-- **推荐角色**: designer, writer, vision
-- **默认模型**: gemini-3-pro-preview
-- **回退链**: gemini-3-pro-preview → gemini-3-flash-preview → gemini-2.5-pro → gemini-2.5-flash
-- **上下文窗口**: 1M tokens (适合大规模设计审查)
+
+* **推荐角色**: designer, writer, vision
+
+* **默认模型**: gemini-3-pro-preview
+
+* **回退链**: gemini-3-pro-preview → gemini-3-flash-preview → gemini-2.5-pro → gemini-2.5-flash
+
+* **上下文窗口**: 1M tokens (适合大规模设计审查)
 
 **MCP 命名空间**: `mcp__g__<tool_name>`
 
@@ -200,8 +220,10 @@ await lspClientManager.runWithClientLease(filePath, async (client) => {
   return client.hover(file, line - 1, character);
 });
 ```
-- 租约机制防止空闲驱逐
-- 自动服务器启动和连接管理
+
+* 租约机制防止空闲驱逐
+
+* 自动服务器启动和连接管理
 
 ### 4.2 AST Tools (2 工具)
 
@@ -212,8 +234,10 @@ await lspClientManager.runWithClientLease(filePath, async (client) => {
 2. `ast_grep_replace` - AST 结构化替换
 
 **元变量支持**:
-- `$NAME` - 匹配单个 AST 节点
-- `$$$ARGS` - 匹配多个节点
+
+* `$NAME` - 匹配单个 AST 节点
+
+* `$$$ARGS` - 匹配多个节点
 
 **支持语言** (25+):
 javascript, typescript, tsx, python, ruby, go, rust, java, kotlin, swift, c, cpp, csharp, html, css, json, yaml
@@ -231,17 +255,26 @@ sgModule = require("@ast-grep/napi");
 **文件**: `src/tools/python-repl/index.ts`
 
 **核心能力**:
-- **持久化命名空间**: 变量在调用间保持
-- **会话锁**: 防止并发冲突
-- **结构化输出**: `[OBJECTIVE]`, `[DATA]`, `[FINDING]`, `[STAT:*]`, `[LIMITATION]`
-- **内存追踪**: RSS/VMS 监控
-- **超时处理**: 默认 5 分钟
+
+* **持久化命名空间**: 变量在调用间保持
+
+* **会话锁**: 防止并发冲突
+
+* **结构化输出**: `[OBJECTIVE]`, `[DATA]`, `[FINDING]`, `[STAT:*]`, `[LIMITATION]`
+
+* **内存追踪**: RSS/VMS 监控
+
+* **超时处理**: 默认 5 分钟
 
 **动作**:
-- `execute` - 执行代码
-- `reset` - 清空命名空间
-- `get_state` - 获取状态
-- `interrupt` - 中断执行
+
+* `execute` - 执行代码
+
+* `reset` - 清空命名空间
+
+* `get_state` - 获取状态
+
+* `interrupt` - 中断执行
 
 ### 4.4 State Management (6 工具)
 
@@ -259,28 +292,42 @@ sgModule = require("@ast-grep/napi");
 autopilot, ultrapilot, team, pipeline, ralph, ultrawork, ultraqa, swarm
 
 **状态路径**:
-- 会话级: `.omc/state/sessions/{sessionId}/{mode}-state.json`
-- 全局级: `.omc/state/{mode}-state.json`
+
+* 会话级: `.omc/state/sessions/{sessionId}/{mode}-state.json`
+
+* 全局级: `.omc/state/{mode}-state.json`
 
 ### 4.5 Notepad & Memory (7 工具)
 
 **Notepad** (3 工具) - 会话记忆:
-- `notepad_read` - 读取 (all/priority/working/manual)
-- `notepad_write_priority` - 写入优先级上下文 (<500 字符)
-- `notepad_write_working` - 写入工作记忆 (7 天自动清理)
-- `notepad_write_manual` - 写入手动记忆 (永久保存)
-- `notepad_prune` - 清理旧条目
-- `notepad_stats` - 统计信息
+
+* `notepad_read` - 读取 (all/priority/working/manual)
+
+* `notepad_write_priority` - 写入优先级上下文 (<500 字符)
+
+* `notepad_write_working` - 写入工作记忆 (7 天自动清理)
+
+* `notepad_write_manual` - 写入手动记忆 (永久保存)
+
+* `notepad_prune` - 清理旧条目
+
+* `notepad_stats` - 统计信息
 
 **Memory** (4 工具) - 项目记忆:
-- `mem_read` - 读取项目记忆
-- `mem_write` - 写入项目记忆
-- `mem_add_note` - 添加分类笔记
-- `mem_add_directive` - 添加用户指令
+
+* `mem_read` - 读取项目记忆
+
+* `mem_write` - 写入项目记忆
+
+* `mem_add_note` - 添加分类笔记
+
+* `mem_add_directive` - 添加用户指令
 
 **存储位置**:
-- Notepad: `{worktree}/.omc/notepad.md`
-- Memory: `{worktree}/.omc/project-memory.json`
+
+* Notepad: `{worktree}/.omc/notepad.md`
+
+* Memory: `{worktree}/.omc/project-memory.json`
 
 ### 4.6 Trace Tools (2 工具)
 
@@ -289,12 +336,18 @@ autopilot, ultrapilot, team, pipeline, ralph, ultrawork, ultraqa, swarm
 2. `trace_summary` - 聚合统计
 
 **追踪事件**:
-- Hooks 执行
-- Skills 激活
-- Agents 调用
-- Keywords 检测
-- Tools 使用
-- Modes 转换
+
+* Hooks 执行
+
+* Skills 激活
+
+* Agents 调用
+
+* Keywords 检测
+
+* Tools 使用
+
+* Modes 转换
 
 ## 5. 安全架构
 
@@ -312,7 +365,7 @@ export const VALID_MODES = [
 export function assertValidMode(mode: unknown): ValidMode {
   if (!validateMode(mode)) {
     // 检测路径遍历尝试
-    if (mode.includes('..') || mode.includes('/') || mode.includes('\\')) {
+    if (mode.includes('..') | | mode.includes('/') | | mode.includes('\\')) {
       auditLogger.log({
         action: 'path_validation_failed',
         metadata: { reason: 'path_traversal_attempt' }
@@ -342,11 +395,11 @@ const path = `.omc/state/${mode}-state.json`;
 ```typescript
 const DANGEROUS_PATTERNS = [
   { pattern: /\brequire\s*\(\s*['"]child_process['"]\s*\)/, label: 'child_process' },
-  { pattern: /\bexecSync\s*\(|\bspawnSync\s*\(/, label: 'shell execution' },
+  { pattern: /\bexecSync\s*\( | \bspawnSync\s*\(/, label: 'shell execution' },
   { pattern: /\beval\s*\(/, label: 'eval' },
   { pattern: /\bnew\s+Function\s*\(/, label: 'Function constructor' },
   { pattern: /\bprocess\.env\b/, label: 'process.env access' },
-  { pattern: /\bfs\.(?:writeFile|unlink|rmdir|rm)\b/, label: 'destructive fs' },
+  { pattern: /\bfs\.(?:writeFile | unlink | rmdir | rm)\b/, label: 'destructive fs' },
 ];
 ```
 
@@ -375,9 +428,12 @@ interface AuditEntry {
 ```
 
 **防篡改机制**:
-- HMAC-SHA256 签名每条日志
-- 密钥派生: `OMC_AUDIT_SECRET` 环境变量
-- 日志轮转: 10MB 自动轮转
+
+* HMAC-SHA256 签名每条日志
+
+* 密钥派生: `OMC_AUDIT_SECRET` 环境变量
+
+* 日志轮转: 10MB 自动轮转
 
 **验证接口**:
 ```typescript
@@ -470,9 +526,12 @@ async function getSgModule() {
 ```
 
 **优势**:
-- 减少启动时间
-- 按需加载依赖
-- 优雅降级 (模块不可用时返回错误而非崩溃)
+
+* 减少启动时间
+
+* 按需加载依赖
+
+* 优雅降级 (模块不可用时返回错误而非崩溃)
 
 ## 7. 性能优化
 
@@ -513,9 +572,12 @@ await lspClientManager.runWithClientLease(filePath, async (client) => {
 ### 7.3 后台任务管理
 
 **限流机制**:
-- 默认最大 5 个并发后台任务
-- 可通过 `OMC_MAX_BACKGROUND_TASKS` 配置
-- 超限时阻止新任务启动
+
+* 默认最大 5 个并发后台任务
+
+* 可通过 `OMC_MAX_BACKGROUND_TASKS` 配置
+
+* 超限时阻止新任务启动
 
 **任务追踪**:
 ```typescript
@@ -530,48 +592,70 @@ getRunningTaskCount(directory);
 **问题**: Claude Code 是 shell 环境，复杂逻辑难以用 bash 实现
 
 **解决方案**: Hook Bridge 作为 shell → TypeScript 桥接层
-- Shell 脚本读取 stdin，传递给 Node.js
-- TypeScript 处理复杂逻辑，返回 JSON
-- Shell 脚本解析 JSON，注入消息或阻止执行
+
+* Shell 脚本读取 stdin，传递给 Node.js
+
+* TypeScript 处理复杂逻辑，返回 JSON
+
+* Shell 脚本解析 JSON，注入消息或阻止执行
 
 ### 8.2 为什么需要输入消毒?
 
 **威胁模型**:
-- 恶意输入可能包含路径遍历 (`../../etc/passwd`)
-- 未知字段可能触发意外行为
-- 敏感 Hook (权限请求) 需要严格验证
+
+* 恶意输入可能包含路径遍历 (`../../etc/passwd`)
+
+* 未知字段可能触发意外行为
+
+* 敏感 Hook (权限请求) 需要严格验证
 
 **防御策略**:
-- Zod 结构验证
-- 敏感 Hook 白名单
-- snake_case 规范化
-- 路径遍历检测
+
+* Zod 结构验证
+
+* 敏感 Hook 白名单
+
+* snake_case 规范化
+
+* 路径遍历检测
 
 ### 8.3 为什么分离 Codex 和 Gemini?
 
 **设计理念**: 不同模型擅长不同任务
 
 **Codex 优势**:
-- 架构审查
-- 规划验证
-- 批判性分析
-- 代码/安全审查
+
+* 架构审查
+
+* 规划验证
+
+* 批判性分析
+
+* 代码/安全审查
 
 **Gemini 优势**:
-- UI/UX 设计审查
-- 大上下文任务 (1M tokens)
-- 视觉分析
-- 文档生成
+
+* UI/UX 设计审查
+
+* 大上下文任务 (1M tokens)
+
+* 视觉分析
+
+* 文档生成
 
 **实现**: 独立 MCP 服务器 + 统一任务管理接口
 
 ### 8.4 为什么使用 MCP?
 
 **Model Context Protocol 优势**:
-- 标准化工具接口
-- 进程内服务器 (低延迟)
-- 命名空间隔离 (`mcp__t__`, `mcp__x__`, `mcp__g__`)
-- 动态工具禁用
+
+* 标准化工具接口
+
+* 进程内服务器 (低延迟)
+
+* 命名空间隔离 (`mcp__t__`, `mcp__x__`, `mcp__g__`)
+
+* 动态工具禁用
 
 **架构**:
 ```typescript
@@ -587,95 +671,138 @@ export const omcToolsServer = createSdkMcpServer({
 ### 9.1 安全性
 
 ✅ **多层防护**:
-- 路径遍历防护 (assertValidMode)
-- 输入消毒 (bridge-normalize)
-- 插件静态分析 (plugin-security)
-- 审计日志 (HMAC 签名)
+
+* 路径遍历防护 (assertValidMode)
+
+* 输入消毒 (bridge-normalize)
+
+* 插件静态分析 (plugin-security)
+
+* 审计日志 (HMAC 签名)
 
 ✅ **失败安全**:
-- 权限请求默认拒绝
-- 敏感 Hook 严格验证
-- 错误不阻塞执行 (除权限请求)
+
+* 权限请求默认拒绝
+
+* 敏感 Hook 严格验证
+
+* 错误不阻塞执行 (除权限请求)
 
 ### 9.2 可扩展性
 
 ✅ **模块化设计**:
-- Hook 类型易于添加
-- 工具分类清晰
-- MCP 服务器独立
+
+* Hook 类型易于添加
+
+* 工具分类清晰
+
+* MCP 服务器独立
 
 ✅ **动态配置**:
-- `OMC_DISABLE_TOOLS` 禁用工具组
-- `OMC_SKIP_HOOKS` 跳过 Hook
-- 环境变量驱动
+
+* `OMC_DISABLE_TOOLS` 禁用工具组
+
+* `OMC_SKIP_HOOKS` 跳过 Hook
+
+* 环境变量驱动
 
 ### 9.3 性能
 
 ✅ **优化策略**:
-- 懒加载模块
-- 缓存环境变量
-- 快速路径检测
-- LSP 客户端租约
+
+* 懒加载模块
+
+* 缓存环境变量
+
+* 快速路径检测
+
+* LSP 客户端租约
 
 ✅ **资源管理**:
-- 后台任务限流
-- 日志自动轮转
-- 空闲客户端驱逐
+
+* 后台任务限流
+
+* 日志自动轮转
+
+* 空闲客户端驱逐
 
 ### 9.4 可观测性
 
 ✅ **追踪能力**:
-- Trace 工具 (timeline + summary)
-- 审计日志 (防篡改)
-- Agent 仪表盘
-- 会话重放
+
+* Trace 工具 (timeline + summary)
+
+* 审计日志 (防篡改)
+
+* Agent 仪表盘
+
+* 会话重放
 
 ✅ **调试支持**:
-- `OMC_DEBUG` 环境变量
-- 详细错误消息
-- LSP 服务器状态
+
+* `OMC_DEBUG` 环境变量
+
+* 详细错误消息
+
+* LSP 服务器状态
 
 ## 10. 潜在改进点
 
 ### 10.1 性能优化
 
 🔧 **LSP 客户端池化**:
-- 当前: 每个文件类型一个客户端
-- 改进: 客户端池 + 连接复用
+
+* 当前: 每个文件类型一个客户端
+
+* 改进: 客户端池 + 连接复用
 
 🔧 **Hook 输入缓存**:
-- 当前: 每次调用都解析 JSON
-- 改进: 缓存最近 N 次输入
+
+* 当前: 每次调用都解析 JSON
+
+* 改进: 缓存最近 N 次输入
 
 ### 10.2 安全增强
 
 🔧 **沙箱隔离**:
-- 当前: Worker Threads (同进程)
-- 改进: VM2 或 isolated-vm (真隔离)
+
+* 当前: Worker Threads (同进程)
+
+* 改进: VM2 或 isolated-vm (真隔离)
 
 🔧 **审计日志加密**:
-- 当前: HMAC 签名
-- 改进: AES-256 加密 + 签名
+
+* 当前: HMAC 签名
+
+* 改进: AES-256 加密 + 签名
 
 ### 10.3 可靠性
 
 🔧 **Hook 重试机制**:
-- 当前: 失败即返回
-- 改进: 指数退避重试
+
+* 当前: 失败即返回
+
+* 改进: 指数退避重试
 
 🔧 **LSP 服务器健康检查**:
-- 当前: 启动时检查
-- 改进: 定期心跳 + 自动重启
+
+* 当前: 启动时检查
+
+* 改进: 定期心跳 + 自动重启
 
 ### 10.4 可观测性
 
 🔧 **结构化日志**:
-- 当前: console.error
-- 改进: Winston/Pino + 日志级别
+
+* 当前: console.error
+
+* 改进: Winston/Pino + 日志级别
 
 🔧 **性能指标**:
-- 当前: 无
-- 改进: Prometheus metrics (Hook 延迟、工具调用次数)
+
+* 当前: 无
+
+* 改进: Prometheus metrics (Hook 延迟、工具调用次数)
 
 ---
 

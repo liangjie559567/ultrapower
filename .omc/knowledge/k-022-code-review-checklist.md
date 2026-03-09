@@ -9,10 +9,13 @@ references: [seed-knowledge-pack-v1]
 ---
 
 ## Summary
+
 代码审查五要素: 正确性 > 可读性 > 性能 > 安全性 > 测试覆盖。重点关注边界条件和错误处理。
 
 ## Details
+
 ### Review Checklist
+
 1. **正确性**: 逻辑是否正确? 边界条件?
 2. **可读性**: 命名清晰? 注释充分?
 3. **性能**: 有无 N+1 查询? 不必要的计算?
@@ -20,7 +23,11 @@ references: [seed-knowledge-pack-v1]
 5. **测试**: 有测试? 覆盖边界情况?
 
 ### Anti-patterns
-- 函数过长 (> 30 行)
-- 参数过多 (> 4 个)
-- 深层嵌套 (> 3 层)
-- Magic Numbers
+
+* 函数过长 (> 30 行)
+
+* 参数过多 (> 4 个)
+
+* 深层嵌套 (> 3 层)
+
+* Magic Numbers

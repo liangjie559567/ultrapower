@@ -54,11 +54,16 @@ ultrapower transforms Claude Code into an intelligent orchestrator of specialize
 ```
 
 **Key numbers (v5.5.5):**
-- 49 specialized agents across 6 lanes (Build, Review, Domain, Product, Coordination, Axiom)
-- 71 skills for workflow automation
-- 47 hooks for event-driven lifecycle control
-- 35 custom tools (LSP x12, AST x2, REPL x1, Notepad x6, State x5, Memory x4, Trace x2, Skills x3)
-- 8 validated execution modes (autopilot, ultrapilot, team, pipeline, ralph, ultrawork, ultraqa, swarm)
+
+* 49 specialized agents across 6 lanes (Build, Review, Domain, Product, Coordination, Axiom)
+
+* 71 skills for workflow automation
+
+* 47 hooks for event-driven lifecycle control
+
+* 35 custom tools (LSP x12, AST x2, REPL x1, Notepad x6, State x5, Memory x4, Trace x2, Skills x3)
+
+* 8 validated execution modes (autopilot, ultrapilot, team, pipeline, ralph, ultrawork, ultraqa, swarm)
 
 ---
 
@@ -75,10 +80,12 @@ The Hook Bridge is the entry point for all Claude Code hook events. It normalize
 #### Normalization Flow
 
 Claude Code sends hook inputs with snake_case field names:
-- `tool_name`, `tool_input`, `tool_response`, `session_id`, `cwd`, `hook_event_name`
+
+* `tool_name`, `tool_input`, `tool_response`, `session_id`, `cwd`, `hook_event_name`
 
 `normalizeHookInput()` maps these to camelCase:
-- `toolName`, `toolInput`, `toolOutput`, `sessionId`, `directory`, `hookEventName`
+
+* `toolName`, `toolInput`, `toolOutput`, `sessionId`, `directory`, `hookEventName`
 
 A **fast-path** optimization skips Zod parsing when the input is already camelCase (detected by presence of `sessionId`, `toolName`, or `directory` keys and absence of any underscore keys). This reduces overhead for internally-generated hook calls.
 
@@ -106,7 +113,7 @@ The fast-path **does not apply** to sensitive hooks. Even if an input appears ca
 #### Hook Type Classification (15 types)
 
 | Hook Type | Sensitivity | Unknown Fields |
-|---|---|---|
+| --- | --- | --- |
 | `permission-request` | SENSITIVE (non-degradable) | Dropped |
 | `setup-init` | SENSITIVE | Dropped |
 | `setup-maintenance` | SENSITIVE | Dropped |
@@ -129,7 +136,7 @@ The Delegation Enforcer ensures that substantial code changes are routed to spec
 When a Task call specifies `subagent_type` but omits `model`, the Delegation Enforcer injects the canonical default:
 
 | Agent / Category | Injected Model |
-|---|---|
+| --- | --- |
 | `explore`, `style-reviewer`, `writer` | `haiku` |
 | `executor`, `debugger`, `verifier`, `build-fixer` | `sonnet` |
 | `designer`, `test-engineer`, `security-reviewer` | `sonnet` |
@@ -142,10 +149,13 @@ This prevents agents from defaulting to an unintended model when callers omit th
 
 The enforcer applies these rules to determine whether direct handling or delegation is required:
 
-- **Multi-file implementation** → must delegate to `executor` (or `deep-executor` for complex autonomous tasks)
-- **Complex refactoring** → must delegate to `deep-executor`
-- **Architecture decisions** → must delegate to `architect`
-- **Single-line or trivial changes** → may be handled directly
+* **Multi-file implementation** → must delegate to `executor` (or `deep-executor` for complex autonomous tasks)
+
+* **Complex refactoring** → must delegate to `deep-executor`
+
+* **Architecture decisions** → must delegate to `architect`
+
+* **Single-line or trivial changes** → may be handled directly
 
 Violations emit a warning to stderr; the enforcer does not hard-block (to avoid interrupting valid edge cases).
 
@@ -194,7 +204,7 @@ Note (D-03): The original PRD listed 7 modes; `swarm` was added in a subsequent 
 #### State File Paths
 
 | Scope | Path |
-|---|---|
+| --- | --- |
 | Global mode state | `{worktree}/.omc/state/{mode}-state.json` |
 | Session-scoped state | `{worktree}/.omc/state/sessions/{sessionId}/{mode}-state.json` |
 | Swarm (SQLite) | `{worktree}/.omc/state/swarm-state.db` |
@@ -208,7 +218,7 @@ All state access must go through the `state_read` / `state_write` MCP tools, not
 The Feature Layer sits above the Core Pipeline and provides cross-cutting capabilities consumed by skills, agents, and hooks.
 
 | Module | Location | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | `model-routing` | `src/features/model-routing/` | Task complexity → model tier mapping (Haiku/Sonnet/Opus) |
 | `boulder-state` | `src/features/boulder-state/` | Ralph/ultrawork "boulder never stops" persistence |
 | `verification` | `src/features/verification/` | Evidence-based completion checks (BUILD/TEST/LINT/TODO) |
@@ -263,7 +273,7 @@ State transitions are persisted in `.omc/axiom/active_context.md`. The system re
 Three mandatory gates prevent low-quality work from advancing:
 
 | Gate | Trigger | Condition |
-|---|---|---|
+| --- | --- | --- |
 | **Expert Gate** | All new feature requirements | Must pass `/ax-draft` → `/ax-review` (5 parallel expert reviews) |
 | **User Gate** | PRD finalized | Display "PRD generated, confirm? (Yes/No)" — blocks until confirmed |
 | **CI Gate** | Code changes complete | Must run `tsc --noEmit && npm run build && npm test` with zero errors |
@@ -289,7 +299,7 @@ Axiom uses a layered file-based memory system under `.omc/axiom/`:
 ### Axiom Agents (14)
 
 | Agent | Purpose |
-|---|---|
+| --- | --- |
 | `axiom-requirement-analyst` | Three-gate requirement screening (PASS/CLARIFY/REJECT) |
 | `axiom-product-designer` | Draft PRD generation with Mermaid flow diagrams |
 | `axiom-review-aggregator` | 5-expert parallel review aggregation and conflict arbitration |
@@ -308,7 +318,7 @@ Axiom uses a layered file-based memory system under `.omc/axiom/`:
 ### Axiom Skills (14)
 
 | Skill | Command | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | `ax-draft` | `/ax-draft` | Requirement clarification → Draft PRD → user confirm |
 | `ax-review` | `/ax-review` | 5-expert parallel review → aggregate → Rough PRD |
 | `ax-decompose` | `/ax-decompose` | Rough PRD → system architecture → atomic task DAG |
@@ -327,7 +337,7 @@ Axiom uses a layered file-based memory system under `.omc/axiom/`:
 ### Axiom Hooks (2)
 
 | Hook | Location | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | `axiom-boot` | `src/hooks/axiom-boot/` | Session startup memory context injection |
 | `axiom-guards` | `src/hooks/axiom-guards/` | Gate rule enforcement (Expert/User/CI Gate) |
 
@@ -338,7 +348,7 @@ Axiom uses a layered file-based memory system under `.omc/axiom/`:
 ultrapower ships four pre-packaged MCP servers under `bridge/`:
 
 | Server | Model | Primary Use |
-|---|---|---|
+| --- | --- | --- |
 | `codex-server` | gpt-5.3-codex | Architecture review, planning validation, code analysis |
 | `gemini-server` | gemini-3-pro-preview | Large-context tasks (1M tokens), UI/UX design review |
 | `mcp-server` | — | General MCP tool service (tool discovery, skill loading) |
@@ -353,7 +363,7 @@ If discovery returns no results, the MCP server is not configured. The system fa
 ### Provider Selection Guide
 
 | Task Type | Preferred Provider | Agent Role |
-|---|---|---|
+| --- | --- | --- |
 | Architecture review, planning validation | Codex | `architect`, `planner`, `critic` |
 | Security review, code review | Codex | `security-reviewer`, `code-reviewer` |
 | Test strategy | Codex | `test-engineer` |
@@ -447,7 +457,7 @@ HIGH   → Opus    (complex reasoning, architecture, deep debugging)
 ### Agent Tier Assignments
 
 | Lane | Agent | Default Model |
-|---|---|---|
+| --- | --- | --- |
 | Build/Analysis | `explore` | haiku |
 | Build/Analysis | `analyst`, `planner`, `architect` | opus |
 | Build/Analysis | `debugger`, `executor`, `verifier` | sonnet |
@@ -493,7 +503,7 @@ Skills are behavior injectors that modify how the orchestrator runs. They compos
 ### Execution Modes
 
 | Mode | Trigger Keywords | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | `autopilot` | "autopilot", "build me", "I want a" | Fully autonomous idea-to-code |
 | `ultrawork` | "ulw", "ultrawork" | Maximum parallelism agent orchestration |
 | `ralph` | "ralph", "don't stop" | Persistent loop until verifier confirms done |
@@ -512,7 +522,7 @@ Hooks provide event-driven lifecycle control across 15 hook event types register
 ### Key Hook Modules
 
 | Hook Module | Location | Event | Purpose |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `keyword-detector` | `src/hooks/keyword-detector/` | UserPromptSubmit | Magic keyword detection → skill/mode activation |
 | `autopilot` | `src/hooks/autopilot/` | UserPromptSubmit | Autopilot mode loop management |
 | `ralph` | `src/hooks/ralph/` | SubagentStop | Ralph persistence loop |
@@ -579,7 +589,7 @@ state_get_status(mode?)             // Detailed status for one or all modes
 Before claiming completion, all work must pass the verification protocol:
 
 | Check | What is Verified |
-|---|---|
+| --- | --- |
 | BUILD | TypeScript compiles without errors (`tsc --noEmit && npm run build`) |
 | TEST | All tests pass (`npm test`) |
 | LINT | No lint errors (`npm run lint`) |
@@ -590,16 +600,19 @@ Before claiming completion, all work must pass the verification protocol:
 Evidence must be fresh (within 5 minutes) and include actual command output. The `verifier` agent collects evidence and reports with explicit pass/fail per check.
 
 **Model selection for verification:**
-- Small changes (<5 files, <100 lines): `verifier` with `model="haiku"`
-- Standard changes: `verifier` with `model="sonnet"`
-- Large or security/architecture changes (>20 files): `verifier` with `model="opus"`
+
+* Small changes (<5 files, <100 lines): `verifier` with `model="haiku"`
+
+* Standard changes: `verifier` with `model="sonnet"`
+
+* Large or security/architecture changes (>20 files): `verifier` with `model="opus"`
 
 ---
 
 ## Further Reading
 
 | Document | Content |
-|---|---|
+| --- | --- |
 | [REFERENCE.md](./REFERENCE.md) | Complete agent, skill, hook, and tool reference |
 | [FEATURES.md](./FEATURES.md) | Internal API and feature module documentation |
 | [MIGRATION.md](./MIGRATION.md) | Breaking changes and migration guides |

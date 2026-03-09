@@ -10,7 +10,7 @@ description: ultrapower 插件使用指南
 ## 自动发生的事情
 
 | 当你... | 我会自动... |
-|-------------|-------------------|
+| ------------- | ------------------- |
 | 给我一个复杂任务 | 并行化并委托给专业 agent |
 | 让我规划某事 | 启动规划访谈 |
 | 需要彻底完成某事 | 持续执行直到验证完成 |
@@ -22,7 +22,7 @@ description: ultrapower 插件使用指南
 你可以在请求中自然地包含这些词来进行显式控制：
 
 | 关键词 | 效果 | 示例 |
-|---------|--------|---------|
+| --------- | -------- | --------- |
 | **ralph** | 持久化模式 | "ralph: fix all the bugs" |
 | **ralplan** | 迭代规划 | "ralplan this feature" |
 | **ulw** | 最大并行度 | "ulw refactor the API" |
@@ -33,9 +33,12 @@ description: ultrapower 插件使用指南
 ## 停止操作
 
 直接说：
-- "stop"
-- "cancel"
-- "abort"
+
+* "stop"
+
+* "cancel"
+
+* "abort"
 
 我会根据上下文判断停止什么。
 
@@ -74,7 +77,9 @@ description: ultrapower 插件使用指南
 ### 第一步：收集数据
 
 ```bash
+
 # 检查 token 追踪数据
+
 TOKEN_FILE="$HOME/.omc/state/token-tracking.jsonl"
 SESSION_FILE=".omc/state/session-history.json"
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
@@ -83,6 +88,7 @@ echo "Analyzing OMC Usage..."
 echo ""
 
 # 检查可用数据
+
 HAS_TOKENS=false
 HAS_SESSIONS=false
 HAS_CONFIG=false
@@ -95,7 +101,7 @@ fi
 
 if [[ -f "$SESSION_FILE" ]]; then
   HAS_SESSIONS=true
-  SESSION_COUNT=$(cat "$SESSION_FILE" | jq '.sessions | length' 2>/dev/null || echo "0")
+  SESSION_COUNT=$(cat "$SESSION_FILE" | jq '.sessions | length' 2>/dev/null | | echo "0")
   echo "Sessions found: $SESSION_COUNT"
 fi
 
@@ -125,24 +131,32 @@ fi
 根据发现的模式输出建议：
 
 **如果 Opus 使用率高（>40%）且无相应配置：**
-- "考虑对常规任务使用更低级别模型以节省 token"
+
+* "考虑对常规任务使用更低级别模型以节省 token"
 
 **如果未使用 pipeline：**
-- "尝试 /pipeline 用于代码审查工作流"
+
+* "尝试 /pipeline 用于代码审查工作流"
 
 **如果未使用 security-reviewer：**
-- "在 auth/API 更改后使用 security-reviewer"
+
+* "在 auth/API 更改后使用 security-reviewer"
 
 **如果未设置 defaultExecutionMode：**
-- "在 /omc-setup 中设置 defaultExecutionMode 以获得一致行为"
+
+* "在 /omc-setup 中设置 defaultExecutionMode 以获得一致行为"
 
 ### 第四步：输出报告
 
 格式化摘要，包含：
-- Token 摘要（总计、按模型分类）
-- 最常用的 agent
-- 未充分利用的功能
-- 个性化建议
+
+* Token 摘要（总计、按模型分类）
+
+* 最常用的 agent
+
+* 未充分利用的功能
+
+* 个性化建议
 
 ### 示例输出
 
@@ -150,8 +164,10 @@ fi
 📊 你的 OMC 使用分析
 
 TOKEN 摘要：
-- 总记录数：1,234
-- 按模型：opus 45%，sonnet 40%，haiku 15%
+
+* 总记录数：1,234
+
+* 按模型：opus 45%，sonnet 40%，haiku 15%
 
 最常用 AGENT：
 1. executor（234 次）
@@ -159,8 +175,10 @@ TOKEN 摘要：
 3. explore（67 次）
 
 未充分利用的功能：
-- 低级别模型：0 次使用（可节省约 30% 常规任务费用）
-- pipeline：0 次使用（非常适合审查工作流）
+
+* 低级别模型：0 次使用（可节省约 30% 常规任务费用）
+
+* pipeline：0 次使用（非常适合审查工作流）
 
 建议：
 1. 设置 defaultExecutionMode 以节省 token
@@ -184,8 +202,9 @@ TOKEN 摘要：
 
 ## 需要更多帮助？
 
-- **README**：https://github.com/liangjie559567/ultrapower
-- **Issues**：https://github.com/liangjie559567/ultrapower/issues
+* **README**：<https://github.com/liangjie559567/ultrapower>
+
+* **Issues**：<https://github.com/liangjie559567/ultrapower/issues>
 
 ---
 

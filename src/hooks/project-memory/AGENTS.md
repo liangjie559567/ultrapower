@@ -4,12 +4,13 @@
 # src/hooks/project-memory/
 
 ## Purpose
+
 项目记忆 hook。在工具调用前后自动读取和更新项目记忆（`.omc/project-memory.json`），将技术栈、构建规范、约定等持久化信息注入 agent 上下文。
 
 ## Key Files
 
 | File | Description |
-|------|-------------|
+| ------ | ------------- |
 | `index.ts` | Hook 入口，注入项目记忆上下文 |
 | `constants.ts` | 记忆字段和注入规则常量 |
 | `detector.ts` | 检测需要更新记忆的事件 |
@@ -25,11 +26,13 @@
 ## For AI Agents
 
 ### 修改此目录时
-- 记忆字段变更需同步更新 `src/tools/` 中的 `project_memory_*` 工具接口
+
+* 记忆字段变更需同步更新 `src/tools/` 中的 `project_memory_*` 工具接口
 
 ## Dependencies
 
 ### Internal
-- `src/hooks/memory/` — 通用记忆系统 hook
+
+* `src/hooks/memory/` — 通用记忆系统 hook
 
 <!-- MANUAL: -->

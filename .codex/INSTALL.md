@@ -4,16 +4,16 @@
 
 ## 前提条件
 
-- Git
+* Git
 
 ## 安装步骤
 
 1. **克隆 ultrapower 仓库：**
    ```bash
-   git clone https://github.com/liangjie559567/ultrapower.git ~/.codex/ultrapower
+   git clone <<https://github.com/liangjie559567/ultrapower.git>> ~/.codex/ultrapower
    ```
 
-2. **创建 skills 符号链接：**
+1. **创建 skills 符号链接：**
    ```bash
    mkdir -p ~/.agents/skills
    ln -s ~/.codex/ultrapower/skills ~/.agents/skills/ultrapower
@@ -25,7 +25,7 @@
    cmd /c mklink /J "$env:USERPROFILE\.agents\skills\ultrapower" "$env:USERPROFILE\.codex\ultrapower\skills"
    ```
 
-3. **重启 Codex**（退出并重新启动 CLI）以发现 skills。
+1. **重启 Codex**（退出并重新启动 CLI）以发现 skills。
 
 ## 从旧版 bootstrap 迁移
 
@@ -36,11 +36,11 @@
    cd ~/.codex/ultrapower && git pull
    ```
 
-2. **创建 skills 符号链接**（上方步骤 2）——这是新的发现机制。
+1. **创建 skills 符号链接**（上方步骤 2）——这是新的发现机制。
 
-3. **从 `~/.codex/AGENTS.md` 中删除旧的 bootstrap 块** ——任何引用 `ultrapower-codex bootstrap` 的块都不再需要。
+1. **从 `~/.codex/AGENTS.md` 中删除旧的 bootstrap 块** ——任何引用 `ultrapower-codex bootstrap` 的块都不再需要。
 
-4. **重启 Codex。**
+1. **重启 Codex。**
 
 ## 验证
 

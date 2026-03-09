@@ -49,12 +49,15 @@ npm run lint    # ESLint 检查
 **默认基础分支：`dev`**（不是 `main`）
 
 ```bash
+
 # 从 dev 创建功能分支
+
 git checkout dev
 git pull origin dev
 git checkout -b feat/your-feature-name
 
 # 使用 worktree 隔离（推荐）
+
 git worktree add ../ultrapower-feat -b feat/your-feature-name dev
 ```
 
@@ -66,9 +69,11 @@ git worktree add ../ultrapower-feat -b feat/your-feature-name dev
 
 ### 3.1 TypeScript 规范
 
-- 所有公共 API 必须有 JSDoc 注释
-- 使用 `as const` 定义枚举类型常量
-- 安全边界函数必须接受 `unknown` 类型参数
+* 所有公共 API 必须有 JSDoc 注释
+
+* 使用 `as const` 定义枚举类型常量
+
+* 安全边界函数必须接受 `unknown` 类型参数
 
 ```typescript
 // ✅ 正确示例
@@ -84,16 +89,18 @@ export function validateMode(mode: unknown): mode is ValidMode {
 
 ### 3.2 安全规范
 
-- mode 参数用于路径构建前必须调用 `assertValidMode()`
-- 禁止直接字符串插值未校验的用户输入到文件路径
-- 详见 `docs/standards/runtime-protection.md` §2.4
+* mode 参数用于路径构建前必须调用 `assertValidMode()`
+
+* 禁止直接字符串插值未校验的用户输入到文件路径
+
+* 详见 `docs/standards/runtime-protection.md` §2.4
 
 ### 3.3 提交信息规范
 
 格式：`type(scope): description`（英文）
 
 | type | 用途 |
-|------|------|
+| ------ | ------ |
 | `feat` | 新功能 |
 | `fix` | Bug 修复 |
 | `docs` | 文档更新 |
@@ -124,16 +131,18 @@ npm test        # 所有测试通过
 
 ### 4.2 安全检查（必须）
 
-- 无未校验的 mode 参数路径拼接
-- 无 `SubagentStopInput.success` 直接读取
-- 无敏感信息写入状态文件
+* 无未校验的 mode 参数路径拼接
+
+* 无 `SubagentStopInput.success` 直接读取
+
+* 无敏感信息写入状态文件
 
 ### 4.3 文档同步（必须）
 
 修改以下内容时，对应文档必须同步更新：
 
 | 修改内容 | 必须更新 |
-|---------|---------|
+| --------- | --------- |
 | `agents/*.md` | `src/agents/definitions.ts`、`docs/REFERENCE.md` |
 | `skills/*/SKILL.md` | `commands/*.md`（镜像） |
 | `src/hooks/*` | `src/hooks/index.ts`、`src/hooks/bridge.ts` |
@@ -148,23 +157,33 @@ npm test        # 所有测试通过
 
 以下情况必须创建 ADR：
 
-- **重大架构变更**: 影响多个模块或系统设计的决策
-- **长期技术方向**: 可能影响未来 6 个月以上的决策
-- **权衡决策**: 需要在多个方案间做出选择
-- **性能优化**: 引入新的性能优化策略
+* **重大架构变更**: 影响多个模块或系统设计的决策
+
+* **长期技术方向**: 可能影响未来 6 个月以上的决策
+
+* **权衡决策**: 需要在多个方案间做出选择
+
+* **性能优化**: 引入新的性能优化策略
 
 **不需要 ADR 的情况**:
-- Bug 修复
-- 小型功能增强
-- 文档更新
-- 依赖升级
+
+* Bug 修复
+
+* 小型功能增强
+
+* 文档更新
+
+* 依赖升级
 
 ### 5.2 ADR 编号规则
 
-- 格式: `ADR-XXX: [决策名称]`
-- 编号递增，从 001 开始
-- 位置: `docs/adr/ADR-XXX.md`
-- 模板: 参考 `docs/adr/template.md`
+* 格式: `ADR-XXX: [决策名称]`
+
+* 编号递增，从 001 开始
+
+* 位置: `docs/adr/ADR-XXX.md`
+
+* 模板: 参考 `docs/adr/template.md`
 
 ### 5.3 ADR 审查流程
 
@@ -177,10 +196,13 @@ npm test        # 所有测试通过
 
 每个 ADR 必须包含：
 
-- **背景**: 问题陈述、约束条件
-- **决策**: 选择的方案、实施方式
-- **后果**: 正面影响、负面影响、权衡
-- **替代方案**: 至少 2 个未采用的方案及原因
+* **背景**: 问题陈述、约束条件
+
+* **决策**: 选择的方案、实施方式
+
+* **后果**: 正面影响、负面影响、权衡
+
+* **替代方案**: 至少 2 个未采用的方案及原因
 
 ---
 
@@ -206,31 +228,40 @@ npm test        # 所有测试通过
 
 **示例**:
 ```markdown
+
 ## 架构决策
 
 本 PR 实现 ADR-001 中的 WorkerStateAdapter 抽象层。
 
-- 创建 `src/workers/` 目录
-- 实现 SQLite 和 JSON 适配器
-- 详见 `docs/adr/001-worker-state-adapter.md`
+* 创建 `src/workers/` 目录
+
+* 实现 SQLite 和 JSON 适配器
+
+* 详见 `docs/adr/001-worker-state-adapter.md`
 ```
 
 ### 5.3 新增 Skill 或 Init/Setup 命令
 
 新增 skill 或 init/setup 类命令时，必须包含可执行指令：
 
-- skill 的 `### /skill-name init` 章节必须包含具体的 `Bash`/`Write` 调用，不能只有描述性文字
-- setup 命令必须包含完整的目录创建和文件初始化步骤
-- 禁止只写"初始化系统"而不提供实际命令
+* skill 的 `### /skill-name init` 章节必须包含具体的 `Bash`/`Write` 调用，不能只有描述性文字
+
+* setup 命令必须包含完整的目录创建和文件初始化步骤
+
+* 禁止只写"初始化系统"而不提供实际命令
 
 ```markdown
 <!-- ✅ 正确：包含可执行指令 -->
+
 ### /ax-context init
+
 1. Bash("mkdir -p .omc/axiom/evolution")
 2. Write(".omc/axiom/active_context.md", "...")
 
 <!-- ❌ 错误：只有描述 -->
+
 ### /ax-context init
+
 初始化 Axiom 记忆系统。
 ```
 
@@ -287,18 +318,25 @@ PR merge → 删除特性分支（本地 + 远程）→ dev 同步到 main（发
 **操作命令：**
 
 ```bash
+
 # PR 合并后删除远程分支（GitHub 可配置自动删除）
+
 git push origin --delete feat/my-feature
 
 # 删除本地分支
+
 git branch -d feat/my-feature
 
 # 确认清理完成
+
 git branch -a | grep feat/my-feature  # 应无输出
 ```
 
 **规则：**
-- PR merge 后 24 小时内删除对应特性分支
-- 禁止在已合并的特性分支上继续开发
-- 发布完成后：`dev` → `main`（tag + push），然后 `main` → `dev`（同步）
+
+* PR merge 后 24 小时内删除对应特性分支
+
+* 禁止在已合并的特性分支上继续开发
+
+* 发布完成后：`dev` → `main`（tag + push），然后 `main` → `dev`（同步）
 

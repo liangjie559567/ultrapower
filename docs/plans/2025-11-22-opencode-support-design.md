@@ -14,16 +14,21 @@ OpenCode.ai 是一个类似于 Claude Code 和 Codex 的编程 agent。之前将
 
 ### 平台间的主要差异
 
-- **Claude Code**：原生 Anthropic 插件系统 + 基于文件的 skills
-- **Codex**：无插件系统 → bootstrap markdown + CLI 脚本
-- **OpenCode**：带事件钩子和自定义工具 API 的 JavaScript/TypeScript 插件
+* **Claude Code**：原生 Anthropic 插件系统 + 基于文件的 skills
+
+* **Codex**：无插件系统 → bootstrap markdown + CLI 脚本
+
+* **OpenCode**：带事件钩子和自定义工具 API 的 JavaScript/TypeScript 插件
 
 ### OpenCode 的 Agent 系统
 
-- **主要 agents**：Build（默认，完全访问权限）和 Plan（受限，只读）
-- **子 agents**：General（研究、搜索、多步骤任务）
-- **调用方式**：主 agents 自动调度，或手动使用 `@mention` 语法
-- **配置**：在 `opencode.json` 或 `~/.config/opencode/agent/` 中自定义 agents
+* **主要 agents**：Build（默认，完全访问权限）和 Plan（受限，只读）
+
+* **子 agents**：General（研究、搜索、多步骤任务）
+
+* **调用方式**：主 agents 自动调度，或手动使用 `@mention` 语法
+
+* **配置**：在 `opencode.json` 或 `~/.config/opencode/agent/` 中自定义 agents
 
 ## 架构
 
@@ -33,11 +38,11 @@ OpenCode.ai 是一个类似于 Claude Code 和 Codex 的编程 agent。之前将
    - 通用 skill 发现和解析逻辑
    - 供 Codex 和 OpenCode 实现共同使用
 
-2. **平台特定包装器**
+1. **平台特定包装器**
    - Codex：CLI 脚本（`.codex/superpowers-codex`）
    - OpenCode：插件模块（`.opencode/plugin/superpowers.js`）
 
-3. **Skill 目录**
+1. **Skill 目录**
    - 核心：`~/.config/opencode/superpowers/skills/`（或安装位置）
    - 个人：`~/.config/opencode/skills/`（覆盖核心 skills）
 
@@ -87,8 +92,11 @@ description: Use when [condition] - [what it does]; [additional context]
     const skillDir = path.dirname(skillPath);
 
     return `# ${frontmatter.name}
+
 # ${frontmatter.description}
+
 # Supporting tools and docs are in ${skillDir}
+
 # ============================================
 
 ${content}`;
@@ -124,11 +132,11 @@ ${content}`;
    - using-superpowers skill 的完整内容
    - 建立强制工作流
 
-2. **自动运行 find_skills**
+1. **自动运行 find_skills**
    - 预先显示所有可用 skills 的完整列表
    - 包含每个 skill 的目录
 
-3. **注入工具映射说明**
+1. **注入工具映射说明**
    ```markdown
    **OpenCode 的工具映射：**
    当 skills 引用你没有的工具时，请替换为：
@@ -143,7 +151,7 @@ ${content}`;
    - 该 skill 专用的工具
    ```
 
-4. **检查更新**（非阻塞）
+1. **检查更新**（非阻塞）
    - 带超时的快速 git fetch
    - 如有更新则通知
 
@@ -222,12 +230,12 @@ superpowers/
    - 提取路径解析（含覆盖机制）
    - 更新为仅使用 `name` 和 `description`（无 `when_to_use`）
 
-2. 更新 `.codex/superpowers-codex` 以使用共享核心
+1. 更新 `.codex/superpowers-codex` 以使用共享核心
    - 从 `../lib/skills-core.js` 导入
    - 移除重复代码
    - 保留 CLI 包装器逻辑
 
-3. 测试 Codex 实现仍然正常工作
+1. 测试 Codex 实现仍然正常工作
    - 验证 bootstrap 命令
    - 验证 use-skill 命令
    - 验证 find-skills 命令
@@ -240,12 +248,12 @@ superpowers/
    - 定义自定义工具（use_skill、find_skills）
    - 实现 session.started 钩子
 
-2. 创建 `.opencode/INSTALL.md`
+1. 创建 `.opencode/INSTALL.md`
    - 安装说明
    - 目录设置
    - 配置指南
 
-3. 测试 OpenCode 实现
+1. 测试 OpenCode 实现
    - 验证会话启动 bootstrap
    - 验证 use_skill 工具正常工作
    - 验证 find_skills 工具正常工作
@@ -263,32 +271,36 @@ superpowers/
 1. **创建隔离工作区**（使用 git worktrees）
    - 分支：`feature/opencode-support`
 
-2. **尽量遵循 TDD**
+1. **尽量遵循 TDD**
    - 测试共享核心函数
    - 测试 skill 发现和解析
    - 两个平台的集成测试
 
-3. **增量实现**
+1. **增量实现**
    - 阶段 1：重构共享核心 + 更新 Codex
    - 继续前验证 Codex 仍然正常工作
    - 阶段 2：构建 OpenCode 插件
    - 阶段 3：文档和完善
 
-4. **测试策略**
+1. **测试策略**
    - 使用真实 OpenCode 安装进行手动测试
    - 验证 skill 加载、目录、脚本正常工作
    - 并排测试 Codex 和 OpenCode
    - 验证工具映射正确工作
 
-5. **PR 和合并**
+1. **PR 和合并**
    - 创建包含完整实现的 PR
    - 在干净环境中测试
    - 合并到 main
 
 ## 优势
 
-- **代码复用**：skill 发现/解析的单一真实来源
-- **可维护性**：bug 修复同时适用于两个平台
-- **可扩展性**：易于添加未来平台（Cursor、Windsurf 等）
-- **原生集成**：正确使用 OpenCode 的插件系统
-- **一致性**：跨所有平台的相同 skill 体验
+* **代码复用**：skill 发现/解析的单一真实来源
+
+* **可维护性**：bug 修复同时适用于两个平台
+
+* **可扩展性**：易于添加未来平台（Cursor、Windsurf 等）
+
+* **原生集成**：正确使用 OpenCode 的插件系统
+
+* **一致性**：跨所有平台的相同 skill 体验

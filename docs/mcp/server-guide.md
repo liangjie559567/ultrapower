@@ -90,10 +90,13 @@ function zodToJsonSchema(schema: z.ZodObject<any>) {
 ### Local Development
 
 ```bash
+
 # Build server
+
 npm run build
 
 # Test manually
+
 node dist/my-server.js
 ```
 
@@ -167,7 +170,7 @@ handler: async (args) => {
 ### Logging
 
 ```typescript
-const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
+const LOG_LEVEL = process.env.LOG_LEVEL | | 'info';
 
 function log(level: string, message: string) {
   if (shouldLog(level)) {
@@ -295,6 +298,8 @@ it('server responds to list_tools', async () => {
 
 ## Next Steps
 
-- [Client Guide](./client-guide.md) - Use tools in agents
-- [Configuration](./configuration.md) - Environment variables
-- [Performance](./performance.md) - Optimization tips
+* [Client Guide](./client-guide.md) - Use tools in agents
+
+* [Configuration](./configuration.md) - Environment variables
+
+* [Performance](./performance.md) - Optimization tips

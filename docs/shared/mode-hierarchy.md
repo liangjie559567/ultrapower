@@ -37,7 +37,7 @@ ultrawork（并行化引擎）
 ## 模式关系
 
 | 模式 | 类型 | 包含 | 互斥 |
-|------|------|----------|------------------------|
+| ------ | ------ | ---------- | ------------------------ |
 | autopilot | 独立模式 | ralph、ultraqa、plan | ultrapilot |
 | ultrapilot | 独立模式 | 文件所有权、workers | autopilot |
 | swarm | 独立模式 | SQLite 认领 | - |
@@ -68,7 +68,7 @@ ultrawork（并行化引擎）
 ## 模式差异矩阵
 
 | 模式 | 最适合 | 并行化 | 持久化 | 验证 | 文件所有权 |
-|------|----------|-------------|-------------|--------------|----------------|
+| ------ | ---------- | ------------- | ------------- | -------------- | ---------------- |
 | autopilot | "帮我构建 X" | 通过 ralph | 是 | 是 | 不适用 |
 | ultrapilot | 多组件 | 20 个 worker | 是 | 是 | 分区 |
 | swarm | 同质任务 | N 个 worker | 按任务 | 按任务 | 按任务 |
@@ -88,24 +88,33 @@ ultrawork（并行化引擎）
 ## 组合模式
 
 有效组合：
-- `eco ralph` = 使用更便宜 agent 的 ralph 循环
-- `eco ultrawork` = 使用更便宜 agent 的并行执行
-- `eco autopilot` = 带成本优化的完整自主执行
+
+* `eco ralph` = 使用更便宜 agent 的 ralph 循环
+
+* `eco ultrawork` = 使用更便宜 agent 的并行执行
+
+* `eco autopilot` = 带成本优化的完整自主执行
 
 无效组合：
-- `autopilot ultrapilot` = 互斥（两者都是独立模式）
-- `` 单独使用 = 无意义（需要一个执行模式）
+
+* `autopilot ultrapilot` = 互斥（两者都是独立模式）
+
+* `` 单独使用 = 无意义（需要一个执行模式）
 
 ## 状态管理
 
 ### 标准路径
+
 所有模式状态文件使用标准化位置：
-- 主路径：`.omc/state/{name}.json`（本地，按项目）
-- 全局备份：`~/.omc/state/{name}.json`（全局，session 连续性）
+
+* 主路径：`.omc/state/{name}.json`（本地，按项目）
+
+* 全局备份：`~/.omc/state/{name}.json`（全局，session 连续性）
 
 ### 模式状态文件
+
 | 模式 | 状态文件 |
-|------|-----------|
+| ------ | ----------- |
 | ralph | `ralph-state.json` |
 | autopilot | `autopilot-state.json` |
 | ultrapilot | `ultrapilot-state.json` |

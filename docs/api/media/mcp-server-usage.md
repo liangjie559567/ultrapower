@@ -11,21 +11,31 @@ The MCP server is built into ultrapower. To use it, configure your editor to con
 ### Starting the Server
 
 ```bash
+
 # Start the MCP server on stdio
+
 node bridge/mcp-server.cjs
 
 # Or with npm
+
 npm run mcp:start
 ```
 
 The server listens on stdio and exposes 32 custom tools:
-- 12 LSP tools (code navigation, diagnostics)
-- 2 AST tools (pattern matching)
-- 1 Python REPL tool
-- 6 Notepad tools (session memory)
-- 5 State tools (mode state management)
-- 4 Project Memory tools (persistent memory)
-- 2 Trace tools (agent flow analysis)
+
+* 12 LSP tools (code navigation, diagnostics)
+
+* 2 AST tools (pattern matching)
+
+* 1 Python REPL tool
+
+* 6 Notepad tools (session memory)
+
+* 5 State tools (mode state management)
+
+* 4 Project Memory tools (persistent memory)
+
+* 2 Trace tools (agent flow analysis)
 
 ---
 
@@ -182,7 +192,7 @@ node --version
 Set these to customize behavior:
 
 | Variable | Values | Default |
-|----------|--------|---------|
+| ---------- | -------- | --------- |
 | `OMC_LOG_LEVEL` | `debug`, `info`, `warn`, `error` | `info` |
 | `OMC_MCP_OUTPUT_PATH_POLICY` | `strict`, `redirect_output` | `strict` |
 | `OMC_MCP_OUTPUT_REDIRECT_DIR` | path | `.omc/outputs` |
@@ -235,6 +245,9 @@ Redirect MCP tool outputs to a specific directory:
 ## Support
 
 For issues or questions:
-- Check [REFERENCE.md](../REFERENCE.md) for complete tool documentation
-- Review [Troubleshooting Guide](./troubleshooting-guide.md)
-- Check server logs with `OMC_LOG_LEVEL=debug`
+
+* Check [REFERENCE.md](../REFERENCE.md) for complete tool documentation
+
+* Review [Troubleshooting Guide](./troubleshooting-guide.md)
+
+* Check server logs with `OMC_LOG_LEVEL=debug`

@@ -52,7 +52,10 @@ try {
 
 ## 验收标准
 
-- [ ] marketplace sync 成功后，`installed_plugins.json.version` 更新
-- [ ] marketplace clone 不存在时（`ok: true, message: 'skipping'`），不调用 syncPluginRegistry
-- [ ] sync 失败时（`ok: false`），不调用 syncPluginRegistry
-- [ ] TypeScript 编译无错误
+* [ ] marketplace sync 成功后，`installed_plugins.json.version` 更新
+
+* [ ] marketplace clone 不存在时（`ok: true, message: 'skipping'`），不调用 syncPluginRegistry
+
+* [ ] sync 失败时（`ok: false`），不调用 syncPluginRegistry
+
+* [ ] TypeScript 编译无错误

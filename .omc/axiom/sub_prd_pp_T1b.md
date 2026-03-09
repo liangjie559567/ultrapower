@@ -4,8 +4,10 @@
 **依赖：** T-1a（已完成）
 **估计工时：** 5h
 **目标文件：**
-- `src/tools/state-tools.ts`（类型审查，可能需要修改）
-- `src/lib/__tests__/atomic-write.test.ts`（新建）
+
+* `src/tools/state-tools.ts`（类型审查，可能需要修改）
+
+* `src/lib/__tests__/atomic-write.test.ts`（新建）
 
 ---
 
@@ -22,7 +24,7 @@ mode-registry 中），但 `assertValidMode()` 的白名单无法覆盖 `ralplan
 两者之间存在语义分裂：
 
 | 来源 | 包含的 modes | 是否含 ralplan |
-|------|-------------|----------------|
+| ------ | ------------- | ---------------- |
 | `VALID_MODES`（validateMode.ts） | autopilot, ultrapilot, team, pipeline, ralph, ultrawork, ultraqa, swarm | **否** |
 | `EXECUTION_MODES`（state-tools.ts） | autopilot, ultrapilot, swarm, pipeline, team, ralph, ultrawork, ultraqa | **否** |
 | `STATE_TOOL_MODES`（state-tools.ts） | 上述 8 个 + ralplan | **是** |
@@ -33,12 +35,18 @@ mode-registry 中），但 `assertValidMode()` 的白名单无法覆盖 `ralplan
 ### 问题 2：atomic-write 缺乏测试覆盖
 
 `src/lib/atomic-write.ts` 导出了 4 个函数：
-- `ensureDirSync(dir)`
-- `atomicWriteJson(filePath, data)` — 异步
-- `atomicWriteSync(filePath, content)` — 同步文本（已被 `atomicWriteFileSync` 替代，功能重叠）
-- `atomicWriteFileSync(filePath, content)` — 同步文本
-- `atomicWriteJsonSync(filePath, data)` — 同步 JSON（= atomicWriteFileSync + JSON.stringify）
-- `safeReadJson<T>(filePath)` — 异步读取
+
+* `ensureDirSync(dir)`
+
+* `atomicWriteJson(filePath, data)` — 异步
+
+* `atomicWriteSync(filePath, content)` — 同步文本（已被 `atomicWriteFileSync` 替代，功能重叠）
+
+* `atomicWriteFileSync(filePath, content)` — 同步文本
+
+* `atomicWriteJsonSync(filePath, data)` — 同步 JSON（= atomicWriteFileSync + JSON.stringify）
+
+* `safeReadJson<T>(filePath)` — 异步读取
 
 当前 `src/lib/__tests__/` 目录下尚无 `atomic-write.test.ts`，6 个核心场景均未被测试。
 
@@ -134,7 +142,7 @@ T-1a 若在 handler 入口使用了 `assertValidMode(mode)`，
 // state-tools.ts 顶部
 const STATE_TOOL_MODES_SET = new Set(STATE_TOOL_MODES);
 function assertStateToolMode(mode: unknown): StateToolMode {
-  if (typeof mode !== 'string' || !STATE_TOOL_MODES_SET.has(mode)) {
+  if (typeof mode !== 'string' | | !STATE_TOOL_MODES_SET.has(mode)) {
     throw new Error(`Invalid state tool mode: "${mode}"`);
   }
   return mode as StateToolMode;
@@ -464,34 +472,48 @@ src/lib/__tests__/
 
 ### StateToolMode 类型
 
-- [ ] `STATE_TOOL_MODES` 数组使用 `as const`，TypeScript 能推导出精确字面量联合类型
-- [ ] `StateToolMode` 联合类型包含所有 9 个合法值：
+* [ ] `STATE_TOOL_MODES` 数组使用 `as const`，TypeScript 能推导出精确字面量联合类型
+
+* [ ] `StateToolMode` 联合类型包含所有 9 个合法值：
   `autopilot | ultrapilot | swarm | pipeline | team | ralph | ultrawork | ultraqa | ralplan`
-- [ ] `ralplan` 明确包含在类型中（有代码注释说明它不在 mode-registry）
-- [ ] Zod schema 仍能正确验证 9 个合法 mode，拒绝非法值
-- [ ] 若 T-1a 引入了 `assertValidMode(mode)` 调用，确认 `ralplan` 不会被拒绝
+
+* [ ] `ralplan` 明确包含在类型中（有代码注释说明它不在 mode-registry）
+
+* [ ] Zod schema 仍能正确验证 9 个合法 mode，拒绝非法值
+
+* [ ] 若 T-1a 引入了 `assertValidMode(mode)` 调用，确认 `ralplan` 不会被拒绝
   （旁路处理或使用独立的 `assertStateToolMode`）
-- [ ] `tsc --noEmit` 无新增类型错误
+
+* [ ] `tsc --noEmit` 无新增类型错误
 
 ### atomic-write 测试
 
-- [ ] `src/lib/__tests__/atomic-write.test.ts` 文件存在
-- [ ] 至少 6 个独立 `it/test` 测试场景（场景 1-6 必须覆盖）
-- [ ] 所有测试使用隔离的临时目录（beforeEach 创建，afterEach 清理）
-- [ ] 场景 1：正常写入内容验证通过
-- [ ] 场景 2：无权限写入在 Unix 下抛出错误，在 Windows 下 skip
-- [ ] 场景 3：模拟中断后目标文件不存在
-- [ ] 场景 4：并发写入后文件内容是合法完整 JSON
-- [ ] 场景 5：>1MB 大文件写入成功且可完整读回
-- [ ] 场景 6：含空格/中文路径写入成功
-- [ ] 全部测试在 `npm test` 或 `npx jest src/lib/__tests__/atomic-write.test.ts` 下通过
+* [ ] `src/lib/__tests__/atomic-write.test.ts` 文件存在
+
+* [ ] 至少 6 个独立 `it/test` 测试场景（场景 1-6 必须覆盖）
+
+* [ ] 所有测试使用隔离的临时目录（beforeEach 创建，afterEach 清理）
+
+* [ ] 场景 1：正常写入内容验证通过
+
+* [ ] 场景 2：无权限写入在 Unix 下抛出错误，在 Windows 下 skip
+
+* [ ] 场景 3：模拟中断后目标文件不存在
+
+* [ ] 场景 4：并发写入后文件内容是合法完整 JSON
+
+* [ ] 场景 5：>1MB 大文件写入成功且可完整读回
+
+* [ ] 场景 6：含空格/中文路径写入成功
+
+* [ ] 全部测试在 `npm test` 或 `npx jest src/lib/__tests__/atomic-write.test.ts` 下通过
 
 ---
 
 ## 风险评估
 
 | 风险 | 严重性 | 可能性 | 缓解措施 |
-|------|--------|--------|---------|
+| ------ | -------- | -------- | --------- |
 | `ralplan` 被 `assertValidMode()` 拒绝（T-1a 兼容性） | 高 | 中 | 实现前先检查 T-1a 的 handler 修改；若存在问题，用 `assertStateToolMode` 替代 |
 | Windows 上无权限测试（场景 2）无法执行 | 中 | 高 | 用 `process.platform !== 'win32'` 条件跳过，标注 skip 原因 |
 | 场景 3 的 spyOn 在不同测试框架下行为差异 | 中 | 低 | 先确认框架（jest vs vitest），调整 mock API |
@@ -503,7 +525,7 @@ src/lib/__tests__/
 ## 附录：当前 StateToolMode 覆盖情况对照表
 
 | Mode 值 | 在 VALID_MODES | 在 EXECUTION_MODES | 在 STATE_TOOL_MODES | 在 ExecutionMode（mode-registry） |
-|---------|--------------|-------------------|---------------------|---------------------------------|
+| --------- | -------------- | ------------------- | --------------------- | --------------------------------- |
 | autopilot | ✓ | ✓ | ✓ | ✓ |
 | ultrapilot | ✓ | ✓ | ✓ | ✓ |
 | swarm | ✓ | ✓ | ✓ | ✓ |

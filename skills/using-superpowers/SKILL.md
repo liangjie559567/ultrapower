@@ -62,21 +62,27 @@ digraph skill_flow {
 3. 设计批准后 → next-step-router 推荐下一步
 
 **判断是否为新功能：**
-- 包含"添加"、"新增"、"实现"、"构建"、"创建" → 新功能流程
-- 包含"修复"、"bug"、"错误"、"不工作" → 调试流程（systematic-debugging）
-- 包含"重构"、"优化"、"改进" → 先 explore，再判断
+
+* 包含"添加"、"新增"、"实现"、"构建"、"创建" → 新功能流程
+
+* 包含"修复"、"bug"、"错误"、"不工作" → 调试流程（systematic-debugging）
+
+* 包含"重构"、"优化"、"改进" → 先 explore，再判断
 
 **路由触发（每次消息到达后）：**
-- 新功能 → explore agent → brainstorming
-- 已知 bug → systematic-debugging
-- 不确定 → AskUserQuestion 询问用户意图
+
+* 新功能 → explore agent → brainstorming
+
+* 已知 bug → systematic-debugging
+
+* 不确定 → AskUserQuestion 询问用户意图
 
 ## 红旗
 
 这些想法意味着停下——你在自我合理化：
 
 | 想法 | 现实 |
-|------|------|
+| ------ | ------ |
 | "这只是个简单问题" | 问题也是任务。检查 skill。 |
 | "我需要先了解更多上下文" | Skill 检查在澄清问题之前。 |
 | "让我先探索代码库" | Skill 告诉你如何探索。先检查。 |

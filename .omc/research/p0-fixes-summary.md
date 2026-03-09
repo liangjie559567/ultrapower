@@ -13,9 +13,12 @@
 **问题：** Read-Modify-Write 竞态导致 session ID 丢失
 
 **修复：**
-- 文件：`src/features/boulder-state/storage.ts`
-- 添加文件锁保护
-- 函数签名改为异步：`async function appendSessionId(...): Promise<BoulderState | null>`
+
+* 文件：`src/features/boulder-state/storage.ts`
+
+* 添加文件锁保护
+
+* 函数签名改为异步：`async function appendSessionId(...): Promise<BoulderState | null>`
 
 **代码变更：**
 ```typescript
@@ -62,9 +65,12 @@ export async function appendSessionId(directory: string, sessionId: string): Pro
 **问题：** 状态写入缺少锁保护，导致 lost update
 
 **修复：**
-- 文件：`src/tools/state-tools.ts`
-- 导入 `acquireLock` 模块
-- 在 `atomicWriteJsonSync` 前后添加锁保护
+
+* 文件：`src/tools/state-tools.ts`
+
+* 导入 `acquireLock` 模块
+
+* 在 `atomicWriteJsonSync` 前后添加锁保护
 
 **代码变更：**
 ```typescript
@@ -85,9 +91,12 @@ try {
 ```
 
 **锁机制：**
-- 锁路径：`{statePath}.lock`（例如 `.omc/state/autopilot-state.json.lock`）
-- 超时：30 秒
-- 陈旧锁自动清理
+
+* 锁路径：`{statePath}.lock`（例如 `.omc/state/autopilot-state.json.lock`）
+
+* 超时：30 秒
+
+* 陈旧锁自动清理
 
 ---
 
@@ -104,13 +113,13 @@ try {
    - 路径遍历检测（`..`, `/`, `\`）
    - 审计日志记录
 
-2. **sessionId 参数** - `src/lib/worktree-paths.ts:283`
+1. **sessionId 参数** - `src/lib/worktree-paths.ts:283`
    ```typescript
    export function validateSessionId(sessionId: string): void {
      if (!sessionId) {
        throw new Error('Session ID cannot be empty');
      }
-     if (sessionId.includes('..') || sessionId.includes('/') || sessionId.includes('\\')) {
+     if (sessionId.includes('..') | | sessionId.includes('/') | | sessionId.includes('\\')) {
        throw new Error(`Invalid session ID: path traversal not allowed`);
      }
      if (!SESSION_ID_REGEX.test(sessionId)) {
@@ -119,12 +128,12 @@ try {
    }
    ```
 
-3. **workingDirectory 参数** - `src/lib/worktree-paths.ts:408`
+1. **workingDirectory 参数** - `src/lib/worktree-paths.ts:408`
    - Git worktree 根目录验证
    - 符号链接解析（`realpathSync`）
    - 跨 worktree 访问拒绝
 
-4. **通用路径验证** - `src/lib/path-validator.ts`
+1. **通用路径验证** - `src/lib/path-validator.ts`
    - URL 编码防护（双重解码）
    - Unicode 规范化
    - 符号链接遍历防护
@@ -140,9 +149,12 @@ try {
 **状态：** 未在当前错误日志中复现
 
 **原因：**
-- 报告中的错误（双重 `C:\c\`）来自 2026-03-06T17:33:09 的历史日志
-- 当前错误日志（17:46:59）已更新，不包含此问题
-- 项目已使用 Node.js 原生 API（`homedir()`, `path.join()`）
+
+* 报告中的错误（双重 `C:\c\`）来自 2026-03-06T17:33:09 的历史日志
+
+* 当前错误日志（17:46:59）已更新，不包含此问题
+
+* 项目已使用 Node.js 原生 API（`homedir()`, `path.join()`）
 
 **验证：**
 ```typescript
@@ -151,7 +163,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 export function getConfigDir(): string {
-  return process.env.CLAUDE_CONFIG_DIR || join(homedir(), ".claude");
+  return process.env.CLAUDE_CONFIG_DIR | | join(homedir(), ".claude");
 }
 ```
 
@@ -162,19 +174,24 @@ export function getConfigDir(): string {
 ## 测试验证
 
 ### 编译检查
+
 ```bash
 npm run build
 ```
 **结果：** ✅ 成功，无类型错误
 
 ### 测试套件
+
 ```bash
 npm test -- --run
 ```
 **结果：** ✅ 全部通过
-- 测试文件：360 passed
-- 测试用例：6266 passed, 10 skipped
-- 耗时：26.85s
+
+* 测试文件：360 passed
+
+* 测试用例：6266 passed, 10 skipped
+
+* 耗时：26.85s
 
 ---
 
@@ -183,42 +200,60 @@ npm test -- --run
 ### 破坏性变更
 
 **appendSessionId 签名变更：**
-- 从同步改为异步
-- 返回类型：`BoulderState | null` → `Promise<BoulderState | null>`
-- 影响：仅导出使用，无内部调用
+
+* 从同步改为异步
+
+* 返回类型：`BoulderState | null` → `Promise<BoulderState | null>`
+
+* 影响：仅导出使用，无内部调用
 
 **向后兼容性：**
-- 调用方需要添加 `await`
-- 建议在下一个主版本发布时更新文档
+
+* 调用方需要添加 `await`
+
+* 建议在下一个主版本发布时更新文档
 
 ### 性能影响
 
 **文件锁开销：**
-- 每次状态写入增加 ~1-5ms（锁获取/释放）
-- 并发场景下防止数据损坏，收益远大于成本
+
+* 每次状态写入增加 ~1-5ms（锁获取/释放）
+
+* 并发场景下防止数据损坏，收益远大于成本
 
 **缓存失效：**
-- 现有缓存机制保持不变
-- 锁仅保护写入，不影响读取性能
+
+* 现有缓存机制保持不变
+
+* 锁仅保护写入，不影响读取性能
 
 ---
 
 ## 后续建议
 
 ### 立即行动（已完成）
-- ✅ 修复 appendSessionId 竞态
-- ✅ 修复 state_write 并发控制
-- ✅ 验证路径遍历防护
+
+* ✅ 修复 appendSessionId 竞态
+
+* ✅ 修复 state_write 并发控制
+
+* ✅ 验证路径遍历防护
 
 ### 短期改进（1-2 周）
-- [ ] 为 appendSessionId 添加单元测试（并发场景）
-- [ ] 为 state_write 添加并发测试用例
-- [ ] 更新 API 文档说明异步变更
+
+* [ ] 为 appendSessionId 添加单元测试（并发场景）
+
+* [ ] 为 state_write 添加并发测试用例
+
+* [ ] 更新 API 文档说明异步变更
 
 ### 中期改进（1 个月）
-- [ ] 考虑使用数据库替代文件系统状态存储
-- [ ] 统一锁超时配置（当前硬编码 30 秒）
-- [ ] 添加锁竞争监控指标
+
+* [ ] 考虑使用数据库替代文件系统状态存储
+
+* [ ] 统一锁超时配置（当前硬编码 30 秒）
+
+* [ ] 添加锁竞争监控指标
 
 ---
 
@@ -229,13 +264,18 @@ npm test -- --run
 2. `src/tools/state-tools.ts` - 添加锁保护
 
 **未修改的文件（已有防护）：**
-- `src/lib/validateMode.ts` - mode 参数验证
-- `src/lib/worktree-paths.ts` - sessionId/workingDirectory 验证
-- `src/lib/path-validator.ts` - 通用路径验证
-- `src/utils/config-dir.ts` - 路径处理已正确
+
+* `src/lib/validateMode.ts` - mode 参数验证
+
+* `src/lib/worktree-paths.ts` - sessionId/workingDirectory 验证
+
+* `src/lib/path-validator.ts` - 通用路径验证
+
+* `src/utils/config-dir.ts` - 路径处理已正确
 
 **新增依赖：**
-- 无（使用现有 `src/lib/file-lock.ts`）
+
+* 无（使用现有 `src/lib/file-lock.ts`）
 
 ---
 

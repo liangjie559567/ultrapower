@@ -38,9 +38,12 @@ claude chat
 ```
 
 **预期输出**:
-- Agent 自动分析需求
-- 生成代码文件
-- 运行测试验证
+
+* Agent 自动分析需求
+
+* 生成代码文件
+
+* 运行测试验证
 
 ✅ **检查点 3**: 生成了 `server.js` 或类似文件
 
@@ -50,7 +53,9 @@ claude chat
 
 ```bash
 node server.js
-# 访问 http://localhost:3000
+
+# 访问 <http://localhost:3000>
+
 ```
 
 ✅ **检查点 4**: 服务器正常运行
@@ -66,12 +71,16 @@ node server.js
 ## 下一步学习
 
 ### 理解核心概念
-- [什么是 Agents？](./concepts.md#agents)
-- [什么是 Skills？](./concepts.md#skills)
+
+* [什么是 Agents？](./concepts.md#agents)
+
+* [什么是 Skills？](./concepts.md#skills)
 
 ### 尝试更多功能
-- [Team 协作](../guides/workflow-team-pipeline.md) - 多 agent 并行工作
-- [Ralph 循环](../guides/workflow-ralph-loop.md) - 持续执行直到完成
+
+* [Team 协作](../guides/workflow-team-pipeline.md) - 多 agent 并行工作
+
+* [Ralph 循环](../guides/workflow-ralph-loop.md) - 持续执行直到完成
 
 ---
 

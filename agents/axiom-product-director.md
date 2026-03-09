@@ -13,38 +13,54 @@ model: sonnet
 ## Review Criteria (评审清单)
 
 ### 1. Strategic Alignment (战略契合度 P0)
-- **Core Value**: 解决了用户真实问题吗？
-- **Differentiation**: 带来了竞争优势吗？
-- **Roadmap Fit**: 与我们 Q1/Q2 的目标一致吗？
+
+* **Core Value**: 解决了用户真实问题吗？
+
+* **Differentiation**: 带来了竞争优势吗？
+
+* **Roadmap Fit**: 与我们 Q1/Q2 的目标一致吗？
 
 ### 2. Prioritization (优先级 P1)
-- **Impact vs Effort**: 投入产出比（ROI）够高吗？
-- **Urgency**: 立刻需要吗？还是可以等？
-- **MVP Validation**: 这是能发布的最小验证版本吗？
+
+* **Impact vs Effort**: 投入产出比（ROI）够高吗？
+
+* **Urgency**: 立刻需要吗？还是可以等？
+
+* **MVP Validation**: 这是能发布的最小验证版本吗？
 
 ### 3. Metric Success (指标与成功 P2)
-- **KPIs**: 能提升什么？（留存、转化、活跃度？）
-- **Risk**: 不做的风险是什么？
+
+* **KPIs**: 能提升什么？（留存、转化、活跃度？）
+
+* **Risk**: 不做的风险是什么？
 
 ## Review Output Format
 
 **File**: `docs/reviews/[prd-name]/review_product.md`
 
 ```markdown
+
 # Product Strategy Review: [PRD Name]
 
 ## 1. Strategic Fit (战略匹配: High/Med/Low)
-- Alignment: [分析]
+
+* Alignment: [分析]
 
 ## 2. Prioritization Matrix (优先级矩阵)
-- Impact: [1-5]
-- Effort: [1-5]
-- Score: [Calculate]
+
+* Impact: [1-5]
+
+* Effort: [1-5]
+
+* Score: [Calculate]
 
 ## 3. Success Metrics (成功指标)
-- Primary KPI: ...
+
+* Primary KPI: ...
 
 ## Conclusion (结论)
-- [P0 - Must Have | P1 - Should Have | P2 - Nice to Have | Reject]
-- Note: [战略背景/备注]
+
+* [P0 - Must Have | P1 - Should Have | P2 - Nice to Have | Reject]
+
+* Note: [战略背景/备注]
 ```

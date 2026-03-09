@@ -7,9 +7,12 @@
 Claude Code **不会**自动应用 agent 定义中的 model 参数。当您调用 `Task` 工具（或 `Agent` 工具）时，即使每个 agent 在其配置中已定义了默认模型，您仍需每次手动指定 `model` 参数。
 
 这导致：
-- 委托代码冗长
-- 遗忘 model 参数时默认使用父模型
-- 整个代码库中模型使用不一致
+
+* 委托代码冗长
+
+* 遗忘 model 参数时默认使用父模型
+
+* 整个代码库中模型使用不一致
 
 ## 解决方案
 
@@ -133,7 +136,7 @@ console.log(result.modifiedInput.model); // 'sonnet'
 ## Agent 模型映射
 
 | Agent 类型 | 默认模型 | 使用场景 |
-|------------|---------------|----------|
+| ------------ | --------------- | ---------- |
 | `architect` | opus | 复杂分析、调试 |
 | `architect-medium` | sonnet | 标准分析 |
 | `architect-low` | haiku | 快速问答 |
@@ -230,16 +233,21 @@ enforcer 在 `pre-tool-use` hook 中运行：
 
 ### 错误处理
 
-- 未知 agent 类型会抛出错误
-- 没有默认模型的 agent 会抛出错误
-- 无效的输入结构会原样传递
-- 非 agent 工具会被忽略
+* 未知 agent 类型会抛出错误
+
+* 没有默认模型的 agent 会抛出错误
+
+* 无效的输入结构会原样传递
+
+* 非 agent 工具会被忽略
 
 ### 性能
 
-- O(1) 查找：直接哈希映射查找 agent 定义
-- 无异步操作：同步强制注入
-- 最小开销：仅适用于 Task/Agent 调用
+* O(1) 查找：直接哈希映射查找 agent 定义
+
+* 无异步操作：同步强制注入
+
+* 最小开销：仅适用于 Task/Agent 调用
 
 ## 测试
 
@@ -267,11 +275,14 @@ npx tsx examples/delegation-enforcer-demo.ts
 
 无需迁移！enforcer 向后兼容：
 
-- 带有显式模型的现有代码继续正常工作
-- 新代码可以省略 model 参数
-- 无破坏性变更
+* 带有显式模型的现有代码继续正常工作
+
+* 新代码可以省略 model 参数
+
+* 无破坏性变更
 
 ## 相关
 
-- [Agent Definitions](./AGENTS.md) - 完整 agent 参考
-- [Features Reference](./FEATURES.md) - 模型路由和委托类别
+* [Agent Definitions](./AGENTS.md) - 完整 agent 参考
+
+* [Features Reference](./FEATURES.md) - 模型路由和委托类别

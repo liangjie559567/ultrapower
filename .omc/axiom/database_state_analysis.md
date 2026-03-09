@@ -24,17 +24,22 @@ ultrapower 采用混合存储架构：JSON 文件用于轻量状态，SQLite 用
 ### 1.2 状态模式支持
 
 **核心模式（8个）**：
-- `autopilot`, `ultrapilot`, `team`, `ralph`, `ultrawork`, `ultraqa`, `pipeline`, `swarm`
+
+* `autopilot`, `ultrapilot`, `team`, `ralph`, `ultrawork`, `ultraqa`, `pipeline`, `swarm`
 
 **扩展模式**：
-- `ralplan`（规划共识模式，不在 mode-registry 但有状态支持）
+
+* `ralplan`（规划共识模式，不在 mode-registry 但有状态支持）
 
 ### 1.3 会话隔离机制
 
 **设计原则**：
-- 提供 `session_id` → 会话级隔离路径
-- 省略 `session_id` → 遗留共享路径（向后兼容）
-- 警告机制：无 session_id 时提示跨会话泄漏风险
+
+* 提供 `session_id` → 会话级隔离路径
+
+* 省略 `session_id` → 遗留共享路径（向后兼容）
+
+* 警告机制：无 session_id 时提示跨会话泄漏风险
 
 **实现**：
 ```typescript
@@ -54,9 +59,12 @@ resolveStatePath(mode, root)
 **用途**：存储 Codex/Gemini 后台任务元数据
 
 **技术栈**：
-- `better-sqlite3`（同步 API，性能优异）
-- WAL 模式（Write-Ahead Logging）支持并发读写
-- 动态导入，优雅降级（未安装时不阻塞主流程）
+
+* `better-sqlite3`（同步 API，性能优异）
+
+* WAL 模式（Write-Ahead Logging）支持并发读写
+
+* 动态导入，优雅降级（未安装时不阻塞主流程）
 
 **Schema**：
 ```sql
@@ -86,15 +94,20 @@ CREATE INDEX idx_jobs_spawned_at ON jobs(spawned_at);
 ```
 
 **多 worktree 支持**：
-- 每个 worktree 独立 DB 实例（`dbMap: Map<resolvedPath, Database>`）
-- 避免跨项目状态污染
+
+* 每个 worktree 独立 DB 实例（`dbMap: Map<resolvedPath, Database>`）
+
+* 避免跨项目状态污染
 
 ### 2.2 Swarm 模式的 SQLite 使用
 
 **特殊性**：
-- Swarm 使用 `swarm.db`（SQLite），而非 JSON
-- 不支持通过 `state_write` 工具写入（只读查询）
-- 需使用 swarm 专用 API 修改状态
+
+* Swarm 使用 `swarm.db`（SQLite），而非 JSON
+
+* 不支持通过 `state_write` 工具写入（只读查询）
+
+* 需使用 swarm 专用 API 修改状态
 
 ---
 
@@ -106,24 +119,33 @@ CREATE INDEX idx_jobs_spawned_at ON jobs(spawned_at);
 
 **结构**：
 ```markdown
+
 # Priority Context
+
 [500字符以内，会话启动时自动加载]
 
 # Working Memory
-- [2024-03-05 08:25] Entry 1
-- [2024-03-04 10:30] Entry 2
+
+* [2024-03-05 08:25] Entry 1
+
+* [2024-03-04 10:30] Entry 2
 [自动清理：7天后删除]
 
 # MANUAL
-- Permanent entry 1
-- Permanent entry 2
+
+* Permanent entry 1
+
+* Permanent entry 2
 [永不自动清理]
 ```
 
 **设计亮点**：
-- 分层存储：优先级上下文 + 临时记忆 + 永久笔记
-- 自动清理：`pruneOldEntries(root, daysOld)` 定期清理过期条目
-- 时间戳追踪：每条 Working Memory 带 ISO 时间戳
+
+* 分层存储：优先级上下文 + 临时记忆 + 永久笔记
+
+* 自动清理：`pruneOldEntries(root, daysOld)` 定期清理过期条目
+
+* 时间戳追踪：每条 Working Memory 带 ISO 时间戳
 
 ### 3.2 Project Memory（项目记忆）
 
@@ -174,9 +196,12 @@ interface ProjectMemory {
 ```
 
 **特性**：
-- 持久化：跨会话保留
-- 可扩展：支持自定义笔记和用户指令
-- 版本化：`version` 字段支持未来迁移
+
+* 持久化：跨会话保留
+
+* 可扩展：支持自定义笔记和用户指令
+
+* 版本化：`version` 字段支持未来迁移
 
 ### 3.3 Team Pipeline State
 
@@ -221,9 +246,12 @@ interface TeamPipelineState {
 ```
 
 **状态机设计**：
-- 阶段转换：`markTeamPhase()` 处理状态迁移
-- 历史追踪：`phase_history` 记录所有阶段转换
-- 失败保护：`fix_loop.max_attempts` 防止无限循环
+
+* 阶段转换：`markTeamPhase()` 处理状态迁移
+
+* 历史追踪：`phase_history` 记录所有阶段转换
+
+* 失败保护：`fix_loop.max_attempts` 防止无限循环
 
 ### 3.4 Autopilot State
 
@@ -240,9 +268,12 @@ type AutopilotPhase =
 ```
 
 **阶段转换逻辑**：
-- `transitionRalphToUltraQA()`：执行 → QA（清理 Ralph 状态，启动 UltraQA）
-- `transitionUltraQAToValidation()`：QA → 验证（保存 QA 结果，启动并行验证）
-- 互斥保证：通过 `canStartMode()` 检查模式冲突
+
+* `transitionRalphToUltraQA()`：执行 → QA（清理 Ralph 状态，启动 UltraQA）
+
+* `transitionUltraQAToValidation()`：QA → 验证（保存 QA 结果，启动并行验证）
+
+* 互斥保证：通过 `canStartMode()` 检查模式冲突
 
 ---
 
@@ -262,26 +293,38 @@ idx_jobs_provider_status ON jobs(provider, status) -- 组合查询优化
 ```
 
 **查询模式优化**：
-- `getActiveJobs()`：使用 `status IN ('spawned', 'running')` + 索引
-- `getRecentJobs()`：使用 `spawned_at > cutoff` + 索引
-- `getJobsByStatus()`：使用复合索引 `(provider, status)`
+
+* `getActiveJobs()`：使用 `status IN ('spawned', 'running')` + 索引
+
+* `getRecentJobs()`：使用 `spawned_at > cutoff` + 索引
+
+* `getJobsByStatus()`：使用复合索引 `(provider, status)`
 
 ### 4.2 JSON 文件性能考量
 
 **优势**：
-- 简单场景无需数据库开销
-- 原子写入保证一致性
-- 易于调试和手动编辑
+
+* 简单场景无需数据库开销
+
+* 原子写入保证一致性
+
+* 易于调试和手动编辑
 
 **限制**：
-- 不适合频繁更新（每次全量重写）
-- 无索引支持（需全文件扫描）
-- 并发写入需外部锁机制
+
+* 不适合频繁更新（每次全量重写）
+
+* 无索引支持（需全文件扫描）
+
+* 并发写入需外部锁机制
 
 **适用场景**：
-- 状态文件：低频更新，小数据量（< 100KB）
-- 配置文件：一次写入，多次读取
-- 会话状态：单进程独占访问
+
+* 状态文件：低频更新，小数据量（< 100KB）
+
+* 配置文件：一次写入，多次读取
+
+* 会话状态：单进程独占访问
 
 ---
 
@@ -299,7 +342,7 @@ export function validatePath(inputPath: string): void {
   }
 
   // 拒绝绝对路径
-  if (inputPath.startsWith('~') || isAbsolute(inputPath)) {
+  if (inputPath.startsWith('~') | | isAbsolute(inputPath)) {
     throw new Error(`Invalid path: absolute paths not allowed`);
   }
 }
@@ -307,7 +350,7 @@ export function validatePath(inputPath: string): void {
 export function resolveOmcPath(relativePath: string, worktreeRoot?: string): string {
   validatePath(relativePath);
 
-  const root = worktreeRoot || getWorktreeRoot() || process.cwd();
+  const root = worktreeRoot | | getWorktreeRoot() | | process.cwd();
   const fullPath = normalize(resolve(join(root, '.omc'), relativePath));
 
   // 验证解析后路径仍在 worktree 内
@@ -353,16 +396,22 @@ export function atomicWriteJsonSync(filePath: string, data: unknown): void {
 ```
 
 **保证**：
-- 原子性：rename 操作是原子的（POSIX 保证）
-- 持久性：fsync 确保数据落盘
-- 权限控制：0o600 限制文件访问
+
+* 原子性：rename 操作是原子的（POSIX 保证）
+
+* 持久性：fsync 确保数据落盘
+
+* 权限控制：0o600 限制文件访问
 
 ### 5.3 SQLite 并发安全
 
 **WAL 模式优势**：
-- 读写不阻塞：多个读者 + 单个写者并发
-- 崩溃恢复：WAL 日志保证事务完整性
-- 检查点机制：自动合并 WAL 到主数据库
+
+* 读写不阻塞：多个读者 + 单个写者并发
+
+* 崩溃恢复：WAL 日志保证事务完整性
+
+* 检查点机制：自动合并 WAL 到主数据库
 
 **多进程安全**：
 ```typescript
@@ -383,9 +432,12 @@ importAll();  // 原子执行
 **设计目标**：防止跨会话状态泄漏
 
 **实现**：
-- 会话 ID 验证：读取时检查 `state.session_id === sessionId`
-- 路径隔离：`.omc/state/sessions/{sessionId}/`
-- 警告机制：无 session_id 时显式警告
+
+* 会话 ID 验证：读取时检查 `state.session_id === sessionId`
+
+* 路径隔离：`.omc/state/sessions/{sessionId}/`
+
+* 警告机制：无 session_id 时显式警告
 
 **示例**：
 ```typescript
@@ -414,7 +466,7 @@ export function readAutopilotState(directory: string, sessionId?: string): Autop
 ### 6.1 混合存储策略
 
 | 存储类型 | 适用场景 | 优势 | 劣势 |
-|---------|---------|------|------|
+| --------- | --------- | ------ | ------ |
 | JSON 文件 | 状态文件、配置 | 简单、易调试、原子写入 | 无索引、全量重写 |
 | SQLite | 任务队列、历史查询 | 索引、事务、并发 | 需额外依赖 |
 | Markdown | 会话记忆 | 人类可读、版本控制友好 | 无结构化查询 |
@@ -422,22 +474,32 @@ export function readAutopilotState(directory: string, sessionId?: string): Autop
 ### 6.2 设计模式
 
 **1. 状态机模式**：
-- Team Pipeline：5 阶段流水线（plan → prd → exec → verify → fix）
-- Autopilot：7 阶段生命周期（expansion → ... → complete）
+
+* Team Pipeline：5 阶段流水线（plan → prd → exec → verify → fix）
+
+* Autopilot：7 阶段生命周期（expansion → ... → complete）
 
 **2. 会话隔离模式**：
-- 可选 session_id 参数
-- 遗留路径向后兼容
-- 显式警告防止误用
+
+* 可选 session_id 参数
+
+* 遗留路径向后兼容
+
+* 显式警告防止误用
 
 **3. 优雅降级**：
-- SQLite 未安装时不阻塞主流程
-- 动态导入 + 错误处理
+
+* SQLite 未安装时不阻塞主流程
+
+* 动态导入 + 错误处理
 
 **4. 原子操作**：
-- 临时文件 + 原子 rename
-- fsync 保证持久性
-- 事务批量操作
+
+* 临时文件 + 原子 rename
+
+* fsync 保证持久性
+
+* 事务批量操作
 
 ---
 
@@ -446,24 +508,36 @@ export function readAutopilotState(directory: string, sessionId?: string): Autop
 ### 7.1 当前问题
 
 **1. 遗留路径污染风险**：
-- 无 session_id 时写入共享路径
-- 多会话并发可能互相覆盖
-- **建议**：强制要求 session_id，废弃遗留路径
+
+* 无 session_id 时写入共享路径
+
+* 多会话并发可能互相覆盖
+
+* **建议**：强制要求 session_id，废弃遗留路径
 
 **2. JSON 文件并发写入**：
-- 无文件锁机制
-- 多进程同时写入可能丢失数据
-- **建议**：引入文件锁（flock）或迁移到 SQLite
+
+* 无文件锁机制
+
+* 多进程同时写入可能丢失数据
+
+* **建议**：引入文件锁（flock）或迁移到 SQLite
 
 **3. Notepad 清理策略**：
-- 仅基于时间清理（7天）
-- 无大小限制，可能无限增长
-- **建议**：增加大小阈值（如 1MB）触发清理
+
+* 仅基于时间清理（7天）
+
+* 无大小限制，可能无限增长
+
+* **建议**：增加大小阈值（如 1MB）触发清理
 
 **4. SQLite 清理策略**：
-- `cleanupOldJobs()` 默认 24 小时
-- 无自动触发机制
-- **建议**：Hook 自动清理或定时任务
+
+* `cleanupOldJobs()` 默认 24 小时
+
+* 无自动触发机制
+
+* **建议**：Hook 自动清理或定时任务
 
 ### 7.2 性能优化建议
 
@@ -501,16 +575,22 @@ const dbPool = new ConnectionPool({ maxIdle: 5, idleTimeout: 60000 });
 ### 7.3 安全加固建议
 
 **1. 加密敏感数据**：
-- Project Memory 可能包含 API keys
-- **建议**：敏感字段加密存储
+
+* Project Memory 可能包含 API keys
+
+* **建议**：敏感字段加密存储
 
 **2. 审计日志**：
-- 记录状态修改操作
-- **建议**：`.omc/logs/state-audit.log`
+
+* 记录状态修改操作
+
+* **建议**：`.omc/logs/state-audit.log`
 
 **3. 权限最小化**：
-- 当前文件权限 0o600（仅所有者）
-- **建议**：SQLite 文件也应用相同权限
+
+* 当前文件权限 0o600（仅所有者）
+
+* **建议**：SQLite 文件也应用相同权限
 
 ---
 
@@ -526,11 +606,15 @@ const dbPool = new ConnectionPool({ maxIdle: 5, idleTimeout: 60000 });
 
 ### 8.2 关键指标
 
-- **状态文件数量**：9 种模式 × 2 路径（遗留 + 会话）= 18+ 文件
-- **SQLite 表数量**：1 个（jobs 表）
-- **索引数量**：4 个（优化查询性能）
-- **原子写入延迟**：< 10ms（本地 SSD）
-- **并发支持**：WAL 模式支持多读单写
+* **状态文件数量**：9 种模式 × 2 路径（遗留 + 会话）= 18+ 文件
+
+* **SQLite 表数量**：1 个（jobs 表）
+
+* **索引数量**：4 个（优化查询性能）
+
+* **原子写入延迟**：< 10ms（本地 SSD）
+
+* **并发支持**：WAL 模式支持多读单写
 
 ### 8.3 技术债务
 

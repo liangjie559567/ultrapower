@@ -28,13 +28,15 @@ export const GEMINI_YOLO: boolean
 ```
 
 **语义**：
-- `true` — 向 Gemini CLI 传入 `--yolo` 标志（非交互模式，CI/Hook 默认）
-- `false` — 不传入 `--yolo`，Gemini CLI 在遇到需确认操作时会等待用户输入
+
+* `true` — 向 Gemini CLI 传入 `--yolo` 标志（非交互模式，CI/Hook 默认）
+
+* `false` — 不传入 `--yolo`，Gemini CLI 在遇到需确认操作时会等待用户输入
 
 **解析规则**（精确）：
 
 | `OMC_GEMINI_YOLO` 值 | `GEMINI_YOLO` 结果 |
-|---------------------|--------------------|
+| --------------------- | -------------------- |
 | 未设置（`undefined`） | `true`（默认） |
 | `'false'`（字符串） | `false` |
 | `'0'`（字符串） | `false` |
@@ -63,7 +65,7 @@ export function spawnCliProcess(
 ### 2.3 Input / Output / Side Effects
 
 | 维度 | 描述 |
-|------|------|
+| ------ | ------ |
 | Input | `process.env.OMC_GEMINI_YOLO` — 字符串或 `undefined` |
 | Output | `GEMINI_YOLO: boolean` — 模块级常量，进程生命周期内固定 |
 | Side Effects | 无文件写入、无网络请求；影响 Gemini CLI 子进程参数数组 |
@@ -110,8 +112,8 @@ GEMINI_YOLO =
 **当前（行 53-55）：**
 
 ```typescript
-export const GEMINI_DEFAULT_MODEL = process.env.OMC_GEMINI_DEFAULT_MODEL || 'gemini-3-pro-preview';
-export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseInt(process.env.OMC_GEMINI_TIMEOUT || '3600000', 10) || 3600000), 3600000);
+export const GEMINI_DEFAULT_MODEL = process.env.OMC_GEMINI_DEFAULT_MODEL | | 'gemini-3-pro-preview';
+export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseInt(process.env.OMC_GEMINI_TIMEOUT | | '3600000', 10) | | 3600000), 3600000);
 ```
 
 **修改后（在 GEMINI_TIMEOUT 之后新增）：**
@@ -120,7 +122,7 @@ export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseInt(process.env.OMC_G
 // 伪代码逻辑
 const _yoloEnv = process.env.OMC_GEMINI_YOLO;
 export const GEMINI_YOLO: boolean =
-  _yoloEnv === 'false' || _yoloEnv === '0' ? false : true;
+  _yoloEnv === 'false' | | _yoloEnv === '0' ? false : true;
 // 注释块（见 3.2 节要求）
 ```
 
@@ -189,7 +191,7 @@ args.push('--model', tryModel);
 ### 4.4 变更范围确认
 
 | 文件 | 行范围 | 变更类型 |
-|------|--------|----------|
+| ------ | -------- | ---------- |
 | `src/mcp/gemini-core.ts` | 第 55 行后新增 ~8 行 | 新增常量 `GEMINI_YOLO` 及注释 |
 | `src/mcp/gemini-core.ts` | 第 89 行 | 条件化 `--yolo` 插入（`executeGemini` 前台路径） |
 | `src/mcp/gemini-core.ts` | 第 191 行 | 条件化 `--yolo` 插入（`executeGeminiBackground` 后台路径） |
@@ -207,11 +209,13 @@ args.push('--model', tryModel);
 ### 5.1 测试文件位置
 
 #### gemini-core 测试
+
 新建文件：`src/mcp/__tests__/gemini-yolo-env.test.ts`
 
 参考同目录已有测试 `codex-reasoning-effort.test.ts` 的 mock 结构（`vi.mock('child_process')`、`setupSpawnMock()` 模式）。
 
 #### mcp-team-bridge 测试
+
 在现有文件 `src/team/__tests__/mcp-team-bridge.test.ts` 的 `spawnCliProcess` describe 块（行 312）中追加新测试用例。
 
 ### 5.2 Mock 策略
@@ -387,16 +391,21 @@ Feature: OMC_GEMINI_YOLO 环境变量控制 Gemini CLI --yolo 标志
 按 Axiom CI Gate 规则，实现完成后必须执行：
 
 ```bash
+
 # 1. TypeScript 编译检查
+
 tsc --noEmit
 
 # 2. 构建验证
+
 npm run build
 
 # 3. 单元测试（新增文件）
+
 npm test -- src/mcp/__tests__/gemini-yolo-env.test.ts
 
 # 4. 单元测试（回归）
+
 npm test -- src/team/__tests__/mcp-team-bridge.test.ts
 ```
 
@@ -406,7 +415,10 @@ npm test -- src/team/__tests__/mcp-team-bridge.test.ts
 
 ## 8. 不在本次范围内
 
-- 不修改 `executeGeminiWithFallback` 的签名或逻辑
-- 不修改 `codex-core.ts` 或任何 Codex CLI 调用路径
-- 不为 `GEMINI_YOLO` 添加运行时动态读取机制（常量在进程启动时固定，重置须重启进程）
-- 不引入用户配置文件（`.omc/config` 等）中的 `geminiYolo` 字段，此为未来独立任务
+* 不修改 `executeGeminiWithFallback` 的签名或逻辑
+
+* 不修改 `codex-core.ts` 或任何 Codex CLI 调用路径
+
+* 不为 `GEMINI_YOLO` 添加运行时动态读取机制（常量在进程启动时固定，重置须重启进程）
+
+* 不引入用户配置文件（`.omc/config` 等）中的 `geminiYolo` 字段，此为未来独立任务

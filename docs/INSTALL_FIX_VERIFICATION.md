@@ -6,6 +6,7 @@
 ## ✅ 验证结果
 
 ### npm 包名检查
+
 ```bash
 grep -r "npm install -g ultrapower[^@]" --include="*.md" docs/ | grep -v "INSTALL_FIX_SUMMARY"
 ```
@@ -14,6 +15,7 @@ grep -r "npm install -g ultrapower[^@]" --include="*.md" docs/ | grep -v "INSTAL
 所有 npm 安装命令都使用正确的 scoped 包名：`@liangjie559567/ultrapower`
 
 ### 插件安装命令检查
+
 ```bash
 grep -r "/plugin install ultrapower[^@]" --include="*.md" docs/ | grep -v "INSTALL_FIX_SUMMARY"
 ```
@@ -22,6 +24,7 @@ grep -r "/plugin install ultrapower[^@]" --include="*.md" docs/ | grep -v "INSTA
 所有插件安装命令都使用正确的格式：`/plugin install omc@ultrapower`
 
 ### 插件更新命令检查
+
 ```bash
 grep -r "/plugin update ultrapower" --include="*.md" docs/
 ```
@@ -40,18 +43,21 @@ grep -r "/plugin update ultrapower" --include="*.md" docs/
 ## 正确的命令格式
 
 ### 插件市场安装（推荐）
+
 ```bash
-/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin marketplace add <https://github.com/liangjie559567/ultrapower>
 /plugin install omc@ultrapower
 /ultrapower:omc-setup
 ```
 
 ### npm 全局安装
+
 ```bash
 npm install -g @liangjie559567/ultrapower
 ```
 
 ### 更新
+
 ```bash
 /plugin update omc@ultrapower
 ```

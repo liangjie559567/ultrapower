@@ -29,7 +29,7 @@ describe('syncMarketplaceClone via performUpdate plugin mode', () => {
       ok: true,
       json: async () => ({ tag_name: 'v4.1.5', name: '4.1.5',
         published_at: '2026-02-09T00:00:00.000Z',
-        html_url: 'https://example.com', body: 'notes',
+        html_url: '<<https://example.com',>> body: 'notes',
         prerelease: false, draft: false }),
     }));
   });
@@ -70,11 +70,14 @@ describe('syncMarketplaceClone via performUpdate plugin mode', () => {
 
 ## 注意事项
 
-- `syncMarketplaceClone` 是模块内私有函数，需通过 `performUpdate` 间接测试
-- 需要额外 mock `isRunningAsPlugin`（来自 `installer/index.js`）
-- `execSync` 在 `syncMarketplaceClone` 中被调用 3 次（fetch、checkout、pull），需用 `mockReturnValueOnce` 精确控制
+* `syncMarketplaceClone` 是模块内私有函数，需通过 `performUpdate` 间接测试
+
+* 需要额外 mock `isRunningAsPlugin`（来自 `installer/index.js`）
+
+* `execSync` 在 `syncMarketplaceClone` 中被调用 3 次（fetch、checkout、pull），需用 `mockReturnValueOnce` 精确控制
 
 ## 验收标准
 
-- 4 个新测试全部通过
-- `tsc --noEmit` 零错误
+* 4 个新测试全部通过
+
+* `tsc --noEmit` 零错误

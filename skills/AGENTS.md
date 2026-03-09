@@ -9,7 +9,7 @@
 ## 关键文件
 
 | 文件 | 描述 |
-|------|------|
+| ------ | ------ |
 | `AGENTS.md` | 本文件 - Skills 系统概览 |
 | `*/SKILL.md` | 每个 skill 的定义文档 |
 | `*/index.ts` | Skill 实现入口 |
@@ -17,7 +17,7 @@
 ## Skills 分类
 
 | 分类 | 数量 | 示例 | 用途 |
-|------|------|------|------|
+| ------ | ------ | ------ | ------ |
 | 执行模式 | 8 | autopilot, ralph, ultrawork, team, pipeline | 自主执行和编排 |
 | 工作流 | 25+ | plan, analyze, code-review, security-review | 专业工作流 |
 | Axiom 命令 | 15 | ax-draft, ax-review, ax-implement, ax-reflect | Axiom 系统命令 |
@@ -56,26 +56,28 @@ skills/
    - 实现 `index.ts` 处理逻辑
    - 在 `src/skills/index.ts` 中注册
 
-2. **修改现有 skill**
+1. **修改现有 skill**
    - 更新 `SKILL.md` 文档
    - 修改 `index.ts` 实现
    - 同步 `commands/*.md` 中的对应命令定义
 
-3. **测试 skill**
+1. **测试 skill**
    - 使用 `/skill-name` 触发 skill
    - 验证输出和状态变化
    - 检查与其他 skills 的交互
 
 ### Skill 与 Command 关系
 
-- `skills/*/SKILL.md` - Skill 完整定义（包含提示词）
-- `commands/*.md` - 命令定义（引用 skill）
-- 两者应保持功能同步
+* `skills/*/SKILL.md` - Skill 完整定义（包含提示词）
+
+* `commands/*.md` - 命令定义（引用 skill）
+
+* 两者应保持功能同步
 
 ### 修改检查清单
 
 | 修改位置 | 更新位置 |
-|---------|---------|
+| --------- | --------- |
 | `skills/*/SKILL.md` | `skills/AGENTS.md` (本文件) |
 | `skills/*/index.ts` | 对应 `SKILL.md` |
 | 新增 skill | `src/skills/index.ts` 注册 |
@@ -84,13 +86,17 @@ skills/
 ### 常见任务
 
 ```bash
+
 # 查看所有 skills
+
 ls -la skills/
 
 # 测试 skill
+
 /skill-name "prompt"
 
 # 查看 skill 定义
+
 cat skills/my-skill/SKILL.md
 ```
 

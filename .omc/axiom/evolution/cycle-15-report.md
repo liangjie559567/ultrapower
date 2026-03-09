@@ -59,14 +59,20 @@ beforeEach(() => {
 ```
 
 **验证指标:**
-- 修复前：4 个测试超时（30s）
-- 修复后：17 个测试全部通过（145.32s 总计，平均 8.5s/测试）
-- Mock 覆盖率：100%（所有使用的 fs 方法都已 mock）
+
+* 修复前：4 个测试超时（30s）
+
+* 修复后：17 个测试全部通过（145.32s 总计，平均 8.5s/测试）
+
+* Mock 覆盖率：100%（所有使用的 fs 方法都已 mock）
 
 **适用场景:**
-- 任何涉及文件系统操作的单元测试
-- 需要 mock Node.js 内置模块的测试
-- 跨平台测试（避免真实文件系统差异）
+
+* 任何涉及文件系统操作的单元测试
+
+* 需要 mock Node.js 内置模块的测试
+
+* 跨平台测试（避免真实文件系统差异）
 
 ---
 
@@ -95,15 +101,22 @@ const finalStatus = await state_list_active();
 ```
 
 **验证指标:**
-- 清理前：4 个活跃模式（ralph, ultrawork, ultraqa, autopilot）
-- 清理后：0 个活跃模式
-- 清理成功率：100% (4/4)
+
+* 清理前：4 个活跃模式（ralph, ultrawork, ultraqa, autopilot）
+
+* 清理后：0 个活跃模式
+
+* 清理成功率：100% (4/4)
 
 **适用场景:**
-- 测试套件的 afterEach/afterAll 钩子
-- 会话结束时的清理逻辑
-- 错误恢复流程
-- CI/CD 环境的测试隔离
+
+* 测试套件的 afterEach/afterAll 钩子
+
+* 会话结束时的清理逻辑
+
+* 错误恢复流程
+
+* CI/CD 环境的测试隔离
 
 ---
 
@@ -120,7 +133,9 @@ const finalStatus = await state_list_active();
 ```typescript
 // 关键节点：测试修复完成
 await notepad_write_working(`
+
 ## 路由决策点
+
 当前阶段：测试修复完成
 产出：17 个测试全部通过
 下一步选项：
@@ -134,15 +149,22 @@ await notepad_write_working(`
 ```
 
 **验证指标:**
-- 路由决策准确率：100% (1/1 次成功应用)
-- 避免的无效操作：2 个（跳过了不必要的重复测试）
-- 工作流完成时间：减少 ~15 分钟
+
+* 路由决策准确率：100% (1/1 次成功应用)
+
+* 避免的无效操作：2 个（跳过了不必要的重复测试）
+
+* 工作流完成时间：减少 ~15 分钟
 
 **适用场景:**
-- 测试修复完成后的下一步决策
-- 功能开发完成后的整合决策
-- 错误修复后的验证流程
-- 任何需要多步骤工作流协调的场景
+
+* 测试修复完成后的下一步决策
+
+* 功能开发完成后的整合决策
+
+* 错误修复后的验证流程
+
+* 任何需要多步骤工作流协调的场景
 
 ---
 
@@ -155,12 +177,12 @@ await notepad_write_working(`
    - 应用次数：1
    - 成功率：100%
 
-2. **State-Management/Cleanup-Protocol** (HIGH 置信度)
+1. **State-Management/Cleanup-Protocol** (HIGH 置信度)
    - 关键词：state_clear, state_list_active, cleanup
    - 应用次数：1
    - 成功率：100%
 
-3. **Workflow/Routing-Decisions** (MEDIUM 置信度)
+1. **Workflow/Routing-Decisions** (MEDIUM 置信度)
    - 关键词：next-step-router, workflow, decision
    - 应用次数：1
    - 成功率：100%
@@ -170,16 +192,24 @@ await notepad_write_working(`
 ## 工作流指标
 
 **本周期统计：**
-- 处理的学习队列条目：3 个
-- 提取的新模式：3 个
-- HIGH 置信度模式：2 个
-- MEDIUM 置信度模式：1 个
-- 知识库条目增长：+3
+
+* 处理的学习队列条目：3 个
+
+* 提取的新模式：3 个
+
+* HIGH 置信度模式：2 个
+
+* MEDIUM 置信度模式：1 个
+
+* 知识库条目增长：+3
 
 **累计指标：**
-- 总模式数：15+ 个
-- 平均置信度：HIGH
-- 模式应用成功率：>95%
+
+* 总模式数：15+ 个
+
+* 平均置信度：HIGH
+
+* 模式应用成功率：>95%
 
 ---
 

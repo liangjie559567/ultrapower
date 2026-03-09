@@ -9,10 +9,13 @@ references: [seed-knowledge-pack-v1]
 ---
 
 ## Summary
+
 使用 ThemeData 统一管理颜色、字体、间距。创建 AppTheme 类集中定义, 通过 Theme.of(context) 访问。
 
 ## Details
+
 ### 设计系统要素
+
 1. **Colors**: 定义 ColorScheme, 支持 Light/Dark
 2. **Typography**: 定义 TextTheme (headline, body, label)
 3. **Spacing**: 定义 EdgeInsets 常量 (S/M/L/XL)

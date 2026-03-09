@@ -13,7 +13,7 @@
 ### 关键指标
 
 | 指标 | 优化前 | 优化后 | 改进 |
-|------|--------|--------|------|
+| ------ | -------- | -------- | ------ |
 | 构建状态 | ✅ 成功 | ✅ 成功 | 保持 |
 | 测试通过率 | 99.7% (389/390) | 100% (390/390) | +0.3% |
 | Lint 警告 | 40+ | 32 | -20% |
@@ -26,19 +26,30 @@
 ### 1. 代码质量提升
 
 **修复的文件 (10+)**:
-- `src/features/token-tracker/index.ts` - 未使用变量
-- `src/hooks/persistent-mode/event-bus.ts` - 类型安全 (any → unknown)
-- `src/hooks/autopilot/__tests__/enforcement.test.ts` - 未使用异常变量
-- `src/hooks/processors/*.ts` - 7 个文件的未使用参数
-- `src/hooks/ralph/loop.ts` - 未使用辅助函数
-- `src/hooks/timeout-wrapper.ts` - 未使用参数
-- `src/lib/file-lock.ts` - 清理未使用导入
+
+* `src/features/token-tracker/index.ts` - 未使用变量
+
+* `src/hooks/persistent-mode/event-bus.ts` - 类型安全 (any → unknown)
+
+* `src/hooks/autopilot/__tests__/enforcement.test.ts` - 未使用异常变量
+
+* `src/hooks/processors/*.ts` - 7 个文件的未使用参数
+
+* `src/hooks/ralph/loop.ts` - 未使用辅助函数
+
+* `src/hooks/timeout-wrapper.ts` - 未使用参数
+
+* `src/lib/file-lock.ts` - 清理未使用导入
 
 **修复类型**:
-- ✅ 未使用变量/参数 → 添加 `_` 前缀
-- ✅ `any` 类型 → `unknown` (event-bus.ts)
-- ✅ 未使用导入 → 移除
-- ✅ 未使用函数 → 添加 `_` 前缀标记
+
+* ✅ 未使用变量/参数 → 添加 `_` 前缀
+
+* ✅ `any` 类型 → `unknown` (event-bus.ts)
+
+* ✅ 未使用导入 → 移除
+
+* ✅ 未使用函数 → 添加 `_` 前缀标记
 
 ### 2. 验证结果
 
@@ -69,15 +80,18 @@
 ## 剩余优化建议
 
 ### 立即可做 (<30分钟)
+
 1. 修复测试文件中的未使用变量 (低优先级)
 2. 添加 ESLint 规则忽略测试文件的某些警告
 
 ### 中期优化 (1-2小时)
+
 1. 重构使用 `any` 的类型定义
 2. 清理未使用的工具函数
 3. 优化构建脚本性能
 
 ### 长期改进
+
 1. 考虑使用 esbuild 替代 tsc
 2. 实现增量测试策略
 3. 减少包体积

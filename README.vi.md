@@ -20,7 +20,7 @@
 
 **Bước 1: Cài đặt**
 ```bash
-/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin marketplace add <<https://github.com/liangjie559567/ultrapower>>
 /plugin install omc@ultrapower
 ```
 
@@ -65,10 +65,13 @@ Bật Claude Code native teams trong `~/.claude/settings.json`:
 ### Cập nhật
 
 ```bash
+
 # 1. Cập nhật bản sao marketplace
+
 /plugin marketplace update omc
 
 # 2. Chạy lại setup để làm mới cấu hình
+
 /omc:omc-setup
 ```
 
@@ -90,24 +93,32 @@ Nếu gặp sự cố sau khi cập nhật, hãy xóa cache plugin cũ:
 
 ## Vì sao chọn ultrapower?
 
-- **Không cần cấu hình** - Hoạt động ngay với các mặc định thông minh
-- **Điều phối ưu tiên Team** - Team là bề mặt đa tác tử chuẩn (swarm/ultrapilot là lớp tương thích)
-- **Giao diện ngôn ngữ tự nhiên** - Không cần nhớ lệnh, chỉ cần mô tả điều bạn muốn
-- **Song song hóa tự động** - Tác vụ phức tạp được phân bổ cho các tác tử chuyên biệt
-- **Thực thi bền bỉ** - Không bỏ cuộc cho đến khi công việc được xác minh hoàn tất
-- **Tối ưu chi phí** - Định tuyến model thông minh giúp tiết kiệm 30-50% token
-- **Học từ kinh nghiệm** - Tự động trích xuất và tái sử dụng các mẫu giải quyết vấn đề
-- **Hiển thị theo thời gian thực** - HUD statusline cho thấy điều gì đang diễn ra phía sau
+* **Không cần cấu hình** - Hoạt động ngay với các mặc định thông minh
+
+* **Điều phối ưu tiên Team** - Team là bề mặt đa tác tử chuẩn (swarm/ultrapilot là lớp tương thích)
+
+* **Giao diện ngôn ngữ tự nhiên** - Không cần nhớ lệnh, chỉ cần mô tả điều bạn muốn
+
+* **Song song hóa tự động** - Tác vụ phức tạp được phân bổ cho các tác tử chuyên biệt
+
+* **Thực thi bền bỉ** - Không bỏ cuộc cho đến khi công việc được xác minh hoàn tất
+
+* **Tối ưu chi phí** - Định tuyến model thông minh giúp tiết kiệm 30-50% token
+
+* **Học từ kinh nghiệm** - Tự động trích xuất và tái sử dụng các mẫu giải quyết vấn đề
+
+* **Hiển thị theo thời gian thực** - HUD statusline cho thấy điều gì đang diễn ra phía sau
 
 ---
 
 ## Tính năng
 
 ### Các chế độ điều phối
+
 Nhiều chiến lược cho nhiều tình huống — từ điều phối dựa trên Team đến refactor tiết kiệm token. [Tìm hiểu thêm →](https://yeachan-heo.github.io/ultrapower-website/docs.html#execution-modes)
 
 | Mode | Nó là gì | Dùng cho |
-|------|------------|---------|
+| ------ | ------------ | --------- |
 | **Team (khuyến nghị)** | Pipeline chuẩn theo giai đoạn (`team-plan → team-prd → team-exec → team-verify → team-fix`) | Các tác tử phối hợp trên một danh sách nhiệm vụ chung |
 | **Autopilot** | Thực thi tự động (một tác tử dẫn dắt) | Làm tính năng end-to-end với ít thao tác phụ |
 | **Ultrawork** | Song song tối đa (không dùng team) | Sửa lỗi/refactor kiểu burst song song khi không cần Team |
@@ -117,16 +128,21 @@ Nhiều chiến lược cho nhiều tình huống — từ điều phối dựa 
 
 ### Điều phối thông minh
 
-- **44 tác tử chuyên biệt** cho kiến trúc, nghiên cứu, thiết kế, kiểm thử, khoa học dữ liệu
-- **Định tuyến model thông minh** - Haiku cho tác vụ đơn giản, Opus cho suy luận phức tạp
-- **Ủy quyền tự động** - Đúng tác tử cho đúng việc, mọi lúc
+* **44 tác tử chuyên biệt** cho kiến trúc, nghiên cứu, thiết kế, kiểm thử, khoa học dữ liệu
+
+* **Định tuyến model thông minh** - Haiku cho tác vụ đơn giản, Opus cho suy luận phức tạp
+
+* **Ủy quyền tự động** - Đúng tác tử cho đúng việc, mọi lúc
 
 ### Trải nghiệm nhà phát triển
 
-- **Magic keywords** - `ralph`, `ulw`, `plan` để kiểm soát rõ ràng
-- **HUD statusline** - Chỉ số điều phối theo thời gian thực trong status bar
-- **Học kỹ năng** - Trích xuất các mẫu tái sử dụng từ các phiên làm việc
-- **Phân tích & theo dõi chi phí** - Hiểu mức sử dụng token trên mọi phiên
+* **Magic keywords** - `ralph`, `ulw`, `plan` để kiểm soát rõ ràng
+
+* **HUD statusline** - Chỉ số điều phối theo thời gian thực trong status bar
+
+* **Học kỹ năng** - Trích xuất các mẫu tái sử dụng từ các phiên làm việc
+
+* **Phân tích & theo dõi chi phí** - Hiểu mức sử dụng token trên mọi phiên
 
 [Danh sách tính năng đầy đủ →](docs/REFERENCE.md)
 
@@ -137,7 +153,7 @@ Nhiều chiến lược cho nhiều tình huống — từ điều phối dựa 
 Các phím tắt tùy chọn cho người dùng nâng cao. Không dùng chúng thì ngôn ngữ tự nhiên vẫn hoạt động tốt.
 
 | Keyword | Hiệu ứng | Ví dụ |
-|---------|--------|---------|
+| --------- | -------- | --------- |
 | `team` | Điều phối Team chuẩn | `/omc:team 3:executor "fix all TypeScript errors"` |
 | `autopilot` | Thực thi tự động toàn phần | `autopilot: build a todo app` |
 | `ralph` | Chế độ bền bỉ | `ralph: refactor auth` |
@@ -148,8 +164,10 @@ Các phím tắt tùy chọn cho người dùng nâng cao. Không dùng chúng t
 | `ultrapilot` | Từ khóa cũ (chuyển sang Team) | `ultrapilot: build a fullstack app` |
 
 **Ghi chú:**
-- **ralph bao gồm ultrawork**: khi bạn kích hoạt chế độ ralph, nó tự động bao gồm thực thi song song của ultrawork.
-- Cú pháp `swarm N agents` vẫn được nhận diện để trích xuất số lượng tác tử, nhưng runtime ở v4.1.7+ được hỗ trợ bởi Team.
+
+* **ralph bao gồm ultrawork**: khi bạn kích hoạt chế độ ralph, nó tự động bao gồm thực thi song song của ultrawork.
+
+* Cú pháp `swarm N agents` vẫn được nhận diện để trích xuất số lượng tác tử, nhưng runtime ở v4.1.7+ được hỗ trợ bởi Team.
 
 ## Tiện ích
 
@@ -170,44 +188,55 @@ omc wait --stop   # Disable daemon
 Bạn có thể cấu hình ai sẽ được tag khi stop callbacks gửi tóm tắt phiên.
 
 ```bash
+
 # Set/replace tag list
+
 omc config-stop-callback telegram --enable --token <bot_token> --chat <chat_id> --tag-list "@alice,bob"
 omc config-stop-callback discord --enable --webhook <url> --tag-list "@here,123456789012345678,role:987654321098765432"
 
 # Incremental updates
+
 omc config-stop-callback telegram --add-tag charlie
 omc config-stop-callback discord --remove-tag @here
 omc config-stop-callback discord --clear-tags
 ```
 
 Hành vi tag:
-- Telegram: `alice` trở thành `@alice`
-- Discord: hỗ trợ `@here`, `@everyone`, user ID dạng số, và `role:<id>`
-- callbacks kiểu `file` bỏ qua các tùy chọn tag
+
+* Telegram: `alice` trở thành `@alice`
+
+* Discord: hỗ trợ `@here`, `@everyone`, user ID dạng số, và `role:<id>`
+
+* callbacks kiểu `file` bỏ qua các tùy chọn tag
 
 ---
 
 ## Tài liệu
 
-- **[Tham chiếu đầy đủ](docs/REFERENCE.md)** - Tài liệu đầy đủ về tính năng
-- **[Theo dõi hiệu năng](docs/PERFORMANCE-MONITORING.md)** - Theo dõi tác tử, gỡ lỗi và tối ưu
-- **[Website](https://yeachan-heo.github.io/ultrapower-website)** - Hướng dẫn tương tác và ví dụ
-- **[Hướng dẫn di chuyển](docs/MIGRATION.md)** - Nâng cấp từ v2.x
-- **[Kiến trúc](docs/ARCHITECTURE.md)** - Cách nó hoạt động phía sau
+* **[Tham chiếu đầy đủ](docs/REFERENCE.md)** - Tài liệu đầy đủ về tính năng
+
+* **[Theo dõi hiệu năng](docs/PERFORMANCE-MONITORING.md)** - Theo dõi tác tử, gỡ lỗi và tối ưu
+
+* **[Website](https://yeachan-heo.github.io/ultrapower-website)** - Hướng dẫn tương tác và ví dụ
+
+* **[Hướng dẫn di chuyển](docs/MIGRATION.md)** - Nâng cấp từ v2.x
+
+* **[Kiến trúc](docs/ARCHITECTURE.md)** - Cách nó hoạt động phía sau
 
 ---
 
 ## Yêu cầu
 
-- [Claude Code](https://docs.anthropic.com/claude-code) CLI
-- Gói thuê bao Claude Max/Pro HOẶC Anthropic API key
+* [Claude Code](https://docs.anthropic.com/claude-code) CLI
+
+* Gói thuê bao Claude Max/Pro HOẶC Anthropic API key
 
 ### Tùy chọn: Điều phối Multi-AI
 
 OMC có thể tùy chọn điều phối các nhà cung cấp AI bên ngoài để đối chiếu chéo và nhất quán thiết kế. Đây **không bắt buộc** — OMC vẫn hoạt động đầy đủ mà không cần chúng.
 
 | Provider | Cài đặt | Nó mở ra điều gì |
-|----------|---------|-----------------|
+| ---------- | --------- | ----------------- |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm install -g @google/gemini-cli` | Design review, UI consistency (1M token context) |
 | [Codex CLI](https://github.com/openai/codex) | `npm install -g @openai/codex` | Architecture validation, code review cross-check |
 
@@ -241,14 +270,20 @@ Nếu Oh-My-ClaudeCode giúp ích cho quy trình làm việc của bạn, hãy c
 
 ### Vì sao nên tài trợ?
 
-- Duy trì phát triển liên tục
-- Hỗ trợ ưu tiên cho nhà tài trợ
-- Ảnh hưởng đến lộ trình & tính năng
-- Góp phần duy trì mã nguồn mở miễn phí
+* Duy trì phát triển liên tục
+
+* Hỗ trợ ưu tiên cho nhà tài trợ
+
+* Ảnh hưởng đến lộ trình & tính năng
+
+* Góp phần duy trì mã nguồn mở miễn phí
 
 ### Những cách khác để hỗ trợ
 
-- ⭐ Star repo
-- 🐛 Báo lỗi
-- 💡 Đề xuất tính năng
-- 📝 Đóng góp code
+* ⭐ Star repo
+
+* 🐛 Báo lỗi
+
+* 💡 Đề xuất tính năng
+
+* 📝 Đóng góp code

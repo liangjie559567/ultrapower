@@ -14,12 +14,17 @@
 
 ## [DATA]
 
-- 构建脚本数量: 6 个（tsc + 5 个 esbuild 脚本）
-- 发布流水线步骤: 5 步（preflight → validate → publish → release → sync）
-- npm 包 `files` 字段条目: 15 个路径
-- bridge/ 预打包产物: 4 个 .cjs 文件
-- 版本同步文件: 3 个（package.json / plugin.json / marketplace.json）
-- postinstall 修复函数: 4 个（marketplace迁移、缓存嵌套修复、模板复制、plugin.json重建）
+* 构建脚本数量: 6 个（tsc + 5 个 esbuild 脚本）
+
+* 发布流水线步骤: 5 步（preflight → validate → publish → release → sync）
+
+* npm 包 `files` 字段条目: 15 个路径
+
+* bridge/ 预打包产物: 4 个 .cjs 文件
+
+* 版本同步文件: 3 个（package.json / plugin.json / marketplace.json）
+
+* postinstall 修复函数: 4 个（marketplace迁移、缓存嵌套修复、模板复制、plugin.json重建）
 
 ---
 
@@ -33,7 +38,7 @@ tsc && node scripts/build-skill-bridge.mjs && node scripts/build-mcp-server.mjs 
 各步骤产物：
 
 | 步骤 | 入口 | 产物 | 格式 |
-|------|------|------|------|
+| ------ | ------ | ------ | ------ |
 | 1. tsc | src/ | dist/ | ESM .js + .d.ts |
 | 2. build-skill-bridge | src/hooks/learner/bridge.ts | dist/hooks/skill-bridge.cjs | CJS bundle |
 | 3. build-mcp-server | src/mcp/standalone-server.ts | bridge/mcp-server.cjs | CJS bundle |
@@ -75,7 +80,7 @@ preflight → validate → publish → release → sync
 ```
 
 | 步骤 | 函数 | 核心操作 | 失败行为 |
-|------|------|---------|---------|
+| ------ | ------ | --------- | --------- |
 | 1. preflight | assertVersionsSync() | 校验 3 个文件版本一致 | process.exit(1) |
 | 2. validate | tsc --noEmit + npm run build + vitest run | 类型检查 + 构建 + 测试 | process.exit(1) |
 | 3. publish | npm publish --access public --tag latest | 推送到 npm registry | process.exit(1) |
@@ -145,7 +150,7 @@ README.md / LICENSE
 `scripts/plugin-setup.mjs` 在 `npm install` 后自动执行，修复 4 个已知问题：
 
 | 函数 | 修复的问题 | 触发条件 |
-|------|-----------|---------|
+| ------ | ----------- | --------- |
 | migrateMarketplaceName() | marketplace 目录名 ultrapower→omc 迁移 | 旧版用户升级 |
 | fixNestedCacheDir() | Claude Code 安装器 Bug 导致的缓存目录无限嵌套 | Pattern A/B 两种嵌套模式 |
 | copyTemplatesToCache() | npm install 后 templates/ 未被复制到插件缓存 | 每次安装 |

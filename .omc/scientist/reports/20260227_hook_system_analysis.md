@@ -14,13 +14,19 @@
 
 ## [DATA]
 
-- 总 Hook 模块数量: 43 个目录/文件（src/hooks/ 下）
-- HookType 枚举: 15 类（来源: src/hooks/bridge.ts）
-- 模板 Hook 文件: 6 个（templates/hooks/*.mjs）
-- Bridge 文件: 4 个（bridge/ 目录）
-- 规范文档: hook-execution-order.md（版本 5.0.21）
-- 代码行数（bridge.ts）: 1241 行
-- 代码行数（persistent-mode/index.ts）: 656 行
+* 总 Hook 模块数量: 43 个目录/文件（src/hooks/ 下）
+
+* HookType 枚举: 15 类（来源: src/hooks/bridge.ts）
+
+* 模板 Hook 文件: 6 个（templates/hooks/*.mjs）
+
+* Bridge 文件: 4 个（bridge/ 目录）
+
+* 规范文档: hook-execution-order.md（版本 5.0.21）
+
+* 代码行数（bridge.ts）: 1241 行
+
+* 代码行数（persistent-mode/index.ts）: 656 行
 
 ---
 
@@ -76,9 +82,11 @@ P3   Todo-Continuation → 已移除（注释标注）
 
 输入规范化层实现了**敏感度分级过滤**：
 
-- 普通 Hook：passthrough 模式，未知字段透传（附 debug 警告）
-- 敏感 Hook（4 类）：严格白名单，未知字段静默丢弃
-- 快速路径：已 camelCase 的输入跳过 Zod 解析
+* 普通 Hook：passthrough 模式，未知字段透传（附 debug 警告）
+
+* 敏感 Hook（4 类）：严格白名单，未知字段静默丢弃
+
+* 快速路径：已 camelCase 的输入跳过 Zod 解析
 
 [STAT:n] KNOWN_FIELDS 白名单 22 个字段
 [STAT:effect_size] 敏感 Hook 过滤强度：仅允许 KNOWN_FIELDS 中的字段，其余全部丢弃
@@ -92,7 +100,7 @@ P3   Todo-Continuation → 已移除（注释标注）
 存在**两套并行实现**：
 
 | 维度 | templates/hooks/keyword-detector.mjs | src/hooks/keyword-detector/index.ts |
-|------|--------------------------------------|--------------------------------------|
+| ------ | -------------------------------------- | -------------------------------------- |
 | 运行时 | Shell 直接调用 | bridge.ts 路由调用 |
 | 输出格式 | hookSpecificOutput.additionalContext | HookOutput.message |
 | 状态激活 | 直接写文件（activateState） | 调用 TypeScript 模块 |
@@ -141,7 +149,7 @@ if (state.iteration >= state.max_iterations) {
 export function createHookOutput(result: PersistentModeResult): {
   continue: boolean; message?: string;
 } {
-  return { continue: true, message: result.message || undefined };
+  return { continue: true, message: result.message | | undefined };
   // 始终 continue: true，包括 permission-request 失败时
 }
 ```
@@ -186,7 +194,7 @@ export function createHookOutput(result: PersistentModeResult): {
 两层使用不同的 Hook 输出格式：
 
 | 层 | 输出格式 |
-|----|---------|
+| ---- | --------- |
 | templates/*.mjs | `{ continue, hookSpecificOutput: { hookEventName, additionalContext } }` |
 | src/hooks/bridge.ts | `{ continue, message }` |
 
@@ -210,7 +218,7 @@ export function createHookOutput(result: PersistentModeResult): {
 ## 汇总统计
 
 | 指标 | 数值 |
-|------|------|
+| ------ | ------ |
 | 总 HookType 数量 | 15 |
 | 敏感 Hook 数量 | 4（26.7%） |
 | 热路径 Hook 数量 | 2（13.3%） |

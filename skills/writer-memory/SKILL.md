@@ -1,7 +1,7 @@
 ---
 name: writer-memory
 description: 面向作家的智能记忆系统——跟踪角色、关系、场景和主题
-argument-hint: "init|char|rel|scene|query|validate|synopsis|status|export [args]"
+argument-hint: "init | char | rel | scene | query | validate | synopsis | status | export [args]"
 ---
 
 # Writer Memory - 面向作家的智能记忆系统
@@ -12,18 +12,22 @@ argument-hint: "init|char|rel|scene|query|validate|synopsis|status|export [args]
 
 Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 
-- **Characters（캐릭터）**：情感弧（감정궤도）、态度（태도）、对话语气（대사톤）、语言等级
-- **World（세계관）**：设定、规则、氛围、约束
-- **Relationships（관계）**：角色动态及其随时间的演变
-- **Scenes（장면）**：镜头构成（컷구성）、叙述语气、情感标签
-- **Themes（테마）**：情感主题（정서테마）、作者意图
+* **Characters（캐릭터）**：情感弧（감정궤도）、态度（태도）、对话语气（대사톤）、语言等级
+
+* **World（세계관）**：设定、规则、氛围、约束
+
+* **Relationships（관계）**：角色动态及其随时间的演变
+
+* **Scenes（장면）**：镜头构成（컷구성）、叙述语气、情感标签
+
+* **Themes（테마）**：情感主题（정서테마）、作者意图
 
 所有数据持久化在 `.writer-memory/memory.json` 中，便于 git 协作。
 
 ## 命令
 
 | 命令 | 行动 |
-|------|------|
+| ------ | ------ |
 | `/ultrapower:writer-memory init <project-name>` | 初始化新项目记忆 |
 | `/ultrapower:writer-memory status` | 显示记忆概览（角色数、场景数等） |
 | `/ultrapower:writer-memory char add <name>` | 添加新角色 |
@@ -51,7 +55,7 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 跟踪一致描绘所必需的个人角色属性：
 
 | 字段 | 韩语 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `arc` | 감정궤도 | 情感旅程（如"체념 -> 욕망자각 -> 선택"） |
 | `attitude` | 태도 | 对生活/他人的当前态度 |
 | `tone` | 대사톤 | 对话风格（如"담백"、"직설적"、"회피적"） |
@@ -76,7 +80,7 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 建立你的故事所处的宇宙：
 
 | 字段 | 韩语 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `setting` | 배경 | 时间、地点、社会背景 |
 | `rules` | 규칙 | 世界如何运作（魔法系统、社会规范） |
 | `atmosphere` | 분위기 | 整体情绪和基调 |
@@ -88,7 +92,7 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 捕捉角色间随时间变化的动态：
 
 | 字段 | 描述 |
-|------|------|
+| ------ | ------ |
 | `type` | 基础关系：romantic、familial、friendship、rivalry、professional |
 | `status` | 当前状态：budding、stable、strained、broken、healing |
 | `power_dynamic` | 谁占上风（如有） |
@@ -109,7 +113,7 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 跟踪单个场景及其情感架构：
 
 | 字段 | 韩语 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `title` | 제목 | 场景标识符 |
 | `characters` | 등장인물 | 出场人物 |
 | `location` | 장소 | 发生地点 |
@@ -124,7 +128,7 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 捕捉贯穿故事的深层含义：
 
 | 字段 | 韩语 | 描述 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `name` | 이름 | 主题标识符 |
 | `expression` | 표현 방식 | 这个主题如何体现 |
 | `scenes` | 관련 장면 | 体现这个主题的场景 |
@@ -142,21 +146,21 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
    - 他们的核心情感立场
    - 示例："새랑은 상실을 예방하기 위해 먼저 포기하는 사람"
 
-2. **관계 핵심 구도**（核心关系结构）
+1. **관계 핵심 구도**（核心关系结构）
    - 推动故事的中心动态
    - 权力失衡和张力
    - 示例："사랑받는 자와 사랑하는 자의 불균형"
 
-3. **정서적 테마**（情感主题）
+1. **정서적 테마**（情感主题）
    - 故事唤起的感受
    - 不是情节，而是情感真相
    - 示例："손에 쥔 행복을 믿지 못하는 불안"
 
-4. **장르 vs 실제감정 대비**（类型 vs 真实情感对比）
+1. **장르 vs 실제감정 대비**（类型 vs 真实情感对比）
    - 表面类型期望 vs 实际情感内容
    - 示例："로맨스지만 본질은 자기수용 서사"
 
-5. **엔딩 정서 잔상**（结局情感余韵）
+1. **엔딩 정서 잔상**（结局情感余韵）
    - 故事结束后的挥之不去的感受
    - 示例："씁쓸한 안도, 불완전한 해피엔딩의 여운"
 
@@ -167,7 +171,7 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 ### 检查内容
 
 | 检查 | 描述 |
-|------|------|
+| ------ | ------ |
 | **语言等级** | 正式程度是否匹配？（반말/존댓말/해체） |
 | **语气匹配** | 情感基调是否合适？ |
 | **关键词使用** | 使用了特征词吗？ |
@@ -177,9 +181,11 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 
 ### 验证结果
 
-- **PASS**：对话与角色一致
-- **WARN**：轻微不一致，可能是有意为之
-- **FAIL**：与已建立声音有显著偏差
+* **PASS**：对话与角色一致
+
+* **WARN**：轻微不一致，可能是有意为之
+
+* **FAIL**：与已建立声音有显著偏差
 
 **示例：**
 ```
@@ -188,14 +194,20 @@ Writer Memory 跨 Claude session 为小说作家维护上下文。它跟踪：
 输出：
 ```
 [FAIL] 새랑 validation failed:
-- TABOO: "사랑해" - character avoids direct declarations
-- TABOO: "보고싶었어" - character suppresses longing expressions
-- TONE: Too emotionally direct for 새랑's 담백 style
+
+* TABOO: "사랑해" - character avoids direct declarations
+
+* TABOO: "보고싶었어" - character suppresses longing expressions
+
+* TONE: Too emotionally direct for 새랑's 담백 style
 
 Suggested alternatives:
-- "...왔네." (minimal acknowledgment)
-- "늦었다." (deflection to external fact)
-- "밥 먹었어?" (care expressed through practical concern)
+
+* "...왔네." (minimal acknowledgment)
+
+* "늦었다." (deflection to external fact)
+
+* "밥 먹었어?" (care expressed through practical concern)
 ```
 
 ## 上下文查询（맥락 질의）
@@ -226,12 +238,17 @@ Suggested alternatives:
 ## 集成
 
 ### 与 OMC Notepad 系统
+
 Writer Memory 与 `.omc/notepad.md` 集成：
-- 场景想法可以作为笔记捕获
-- 分析 session 中的角色洞察被保留
-- notepad 和记忆之间的交叉引用
+
+* 场景想法可以作为笔记捕获
+
+* 分析 session 中的角色洞察被保留
+
+* notepad 和记忆之间的交叉引用
 
 ### 与 Architect Agent
+
 对于复杂的角色分析：
 ```
 Task(subagent_type="ultrapower:architect",
@@ -240,11 +257,16 @@ Task(subagent_type="ultrapower:architect",
 ```
 
 ### 角色验证 Pipeline
+
 验证从以下来源提取上下文：
-- 角色记忆（语气、关键词、禁忌）
-- 关系记忆（与对话伙伴的动态）
-- 场景记忆（当前情感上下文）
-- 主题记忆（作者意图）
+
+* 角色记忆（语气、关键词、禁忌）
+
+* 关系记忆（与对话伙伴的动态）
+
+* 场景记忆（当前情感上下文）
+
+* 主题记忆（作者意图）
 
 ## 提示
 
@@ -258,16 +280,25 @@ Task(subagent_type="ultrapower:architect",
 ## 故障排除
 
 **记忆未加载？**
-- 检查 `.writer-memory/memory.json` 是否存在
-- 验证 JSON 语法是否有效
-- 运行 `/writer-memory status` 进行诊断
+
+* 检查 `.writer-memory/memory.json` 是否存在
+
+* 验证 JSON 语法是否有效
+
+* 运行 `/writer-memory status` 进行诊断
 
 **验证太严格？**
-- 检查禁忌列表中是否有意外条目
-- 考虑角色是否在成长（弧线进展）
-- 有意打破模式对戏剧性时刻是有效的
+
+* 检查禁忌列表中是否有意外条目
+
+* 考虑角色是否在成长（弧线进展）
+
+* 有意打破模式对戏剧性时刻是有效的
 
 **查询找不到上下文？**
-- 确保相关数据在记忆中
-- 尝试更具体的查询
-- 检查角色名称是否完全匹配
+
+* 确保相关数据在记忆中
+
+* 尝试更具体的查询
+
+* 检查角色名称是否完全匹配

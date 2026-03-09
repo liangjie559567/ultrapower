@@ -11,9 +11,12 @@
 本次审查覆盖 ultrapower 代码库的核心模块，包括 agents/、hooks/、tools/、features/ 等关键目录。总体代码质量良好，安全防护到位，但存在一些可维护性和设计问题需要改进。
 
 **关键发现**:
-- 发现 23 个问题（Critical: 2, High: 6, Medium: 10, Low: 5）
-- 主要问题集中在错误处理、状态管理和代码重复
-- 安全防护（路径遍历、输入验证）实现规范
+
+* 发现 23 个问题（Critical: 2, High: 6, Medium: 10, Low: 5）
+
+* 主要问题集中在错误处理、状态管理和代码重复
+
+* 安全防护（路径遍历、输入验证）实现规范
 
 ---
 
@@ -134,9 +137,12 @@ while (attempt <= maxRetries) {
 **圈复杂度**: 估计 >10
 
 **建议**: 拆分为多个小函数：
-- `validateAndParseInput()`
-- `normalizeCasing()`
-- `applySecurityFilters()`
+
+* `validateAndParseInput()`
+
+* `normalizeCasing()`
+
+* `applySecurityFilters()`
 
 ---
 
@@ -145,8 +151,10 @@ while (attempt <= maxRetries) {
 **文件**: `src/tools/state-tools.ts`
 
 **问题**:
-- `stateReadTool`, `stateClearTool`, `stateGetStatusTool` 中重复的 session 处理逻辑
-- 重复的路径解析代码（出现 8+ 次）
+
+* `stateReadTool`, `stateClearTool`, `stateGetStatusTool` 中重复的 session 处理逻辑
+
+* 重复的路径解析代码（出现 8+ 次）
 
 ```typescript
 // 重复模式 1: session 路径解析
@@ -175,16 +183,24 @@ if (existsSync(statePath)) {
 **文件**: `src/agents/definitions.ts`
 
 **问题**:
-- 单文件包含 49 个 agent 定义
-- 混合了配置、导出、注册逻辑
-- 难以维护和测试
+
+* 单文件包含 49 个 agent 定义
+
+* 混合了配置、导出、注册逻辑
+
+* 难以维护和测试
 
 **建议**: 按功能分组拆分：
-- `definitions/build-analysis.ts`
-- `definitions/review-lane.ts`
-- `definitions/domain-specialists.ts`
-- `definitions/product-lane.ts`
-- `definitions/axiom.ts`
+
+* `definitions/build-analysis.ts`
+
+* `definitions/review-lane.ts`
+
+* `definitions/domain-specialists.ts`
+
+* `definitions/product-lane.ts`
+
+* `definitions/axiom.ts`
 
 ---
 
@@ -206,7 +222,7 @@ if (!rel.startsWith('..') && !isAbsolute(rel)) {
 }
 
 // Line 140: 重复的路径遍历检查
-if (rel.startsWith('..') || isAbsolute(rel)) {
+if (rel.startsWith('..') | | isAbsolute(rel)) {
   throw new Error(`Invalid agent name: path traversal detected`);
 }
 ```
@@ -276,8 +292,10 @@ const CAMEL_CASE_MARKERS = new Set(['sessionId', 'toolName', 'directory']);
 **文件**: `src/tools/state-tools.ts:349,514`
 
 **问题**:
-- Line 349: `WARNING: No session_id provided...`
-- Line 514: `WARNING: No session_id provided...`
+
+* Line 349: `WARNING: No session_id provided...`
+
+* Line 514: `WARNING: No session_id provided...`
 
 两处警告文案略有不同，应统一。
 
@@ -342,9 +360,12 @@ export const tddGuideAgentAlias = testEngineerAgent;
 **文件**: `src/agents/timeout-manager.ts`
 
 **问题**: 虽然有测试文件，但缺少以下场景：
-- 重复调用 `start()` 同一 taskId
-- `stop()` 不存在的 taskId
-- 并发调用 `start()` 和 `stop()`
+
+* 重复调用 `start()` 同一 taskId
+
+* `stop()` 不存在的 taskId
+
+* 并发调用 `start()` 和 `stop()`
 
 ---
 
@@ -435,16 +456,20 @@ updatedBy: 'state_write_tool'
 ### S - Single Responsibility
 
 **违反**:
-- `bridge-normalize.ts:normalizeHookInput()` - 同时负责验证、转换、过滤
-- `state-tools.ts` - 每个 tool handler 包含路径解析、验证、读写逻辑
+
+* `bridge-normalize.ts:normalizeHookInput()` - 同时负责验证、转换、过滤
+
+* `state-tools.ts` - 每个 tool handler 包含路径解析、验证、读写逻辑
 
 ---
 
 ### O - Open/Closed
 
 **良好实践**:
-- `mode-registry` 使用配置驱动，易于扩展新模式
-- Agent 定义通过 metadata 扩展，无需修改核心代码
+
+* `mode-registry` 使用配置驱动，易于扩展新模式
+
+* Agent 定义通过 metadata 扩展，无需修改核心代码
 
 ---
 
@@ -457,7 +482,8 @@ updatedBy: 'state_write_tool'
 ### I - Interface Segregation
 
 **违反**:
-- `HookInput` 接口包含所有可能的字段，不同 hook 类型只使用部分字段
+
+* `HookInput` 接口包含所有可能的字段，不同 hook 类型只使用部分字段
 
 **建议**: 为不同 hook 类型定义专用接口。
 
@@ -466,8 +492,10 @@ updatedBy: 'state_write_tool'
 ### D - Dependency Inversion
 
 **良好实践**:
-- `TimeoutManager` 通过 AbortController 抽象，不依赖具体实现
-- Agent 通过配置注入，符合依赖倒置
+
+* `TimeoutManager` 通过 AbortController 抽象，不依赖具体实现
+
+* Agent 通过配置注入，符合依赖倒置
 
 ---
 
@@ -480,8 +508,10 @@ updatedBy: 'state_write_tool'
 **问题**: 每次调用都进行完整的 Zod schema 验证，即使是简单的 hook。
 
 **建议**:
-- 对非敏感 hook 使用快速路径（已实现）
-- 缓存 Zod 解析结果
+
+* 对非敏感 hook 使用快速路径（已实现）
+
+* 缓存 Zod 解析结果
 
 ---
 
@@ -502,9 +532,12 @@ updatedBy: 'state_write_tool'
 **文件**: `src/lib/validateMode.ts`, `src/agents/utils.ts`
 
 **评价**:
-- 使用白名单验证
-- 多层防护（正则 + 路径解析）
-- 审计日志记录
+
+* 使用白名单验证
+
+* 多层防护（正则 + 路径解析）
+
+* 审计日志记录
 
 **无需改进**
 
@@ -515,9 +548,12 @@ updatedBy: 'state_write_tool'
 **文件**: `src/hooks/bridge-normalize.ts`
 
 **评价**:
-- 敏感 hook 使用严格白名单
-- Zod schema 验证
-- 未知字段自动丢弃
+
+* 敏感 hook 使用严格白名单
+
+* Zod schema 验证
+
+* 未知字段自动丢弃
 
 **无需改进**
 
@@ -526,7 +562,7 @@ updatedBy: 'state_write_tool'
 ## 可维护性评分
 
 | 维度 | 评分 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 代码组织 | 7/10 | 部分文件过大，需拆分 |
 | 命名规范 | 9/10 | 命名清晰，符合约定 |
 | 注释质量 | 8/10 | 关键逻辑有注释，但部分复杂函数缺少 |
@@ -541,19 +577,22 @@ updatedBy: 'state_write_tool'
 ## 优先修复建议
 
 ### 立即修复（本周）
+
 1. **C-1**: TimeoutManager 内存泄漏
 2. **C-2**: JSON.parse 错误边界
 3. **H-1**: 重试逻辑添加延迟
 
 ### 短期修复（本月）
-4. **H-2**: 拆分 bridge-normalize.ts
-5. **H-3**: 消除 state-tools.ts 代码重复
-6. **H-5**: 统一安全验证逻辑
+
+1. **H-2**: 拆分 bridge-normalize.ts
+2. **H-3**: 消除 state-tools.ts 代码重复
+3. **H-5**: 统一安全验证逻辑
 
 ### 长期改进（下季度）
-7. **H-4**: 重构 definitions.ts 文件结构
-8. **AP-1**: 应用 SRP 拆分 God Object
-9. **AP-2**: 引入类型安全的状态模型
+
+1. **H-4**: 重构 definitions.ts 文件结构
+2. **AP-1**: 应用 SRP 拆分 God Object
+3. **AP-2**: 引入类型安全的状态模型
 
 ---
 

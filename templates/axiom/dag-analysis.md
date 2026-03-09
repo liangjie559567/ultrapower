@@ -9,7 +9,7 @@
 
 ## Input
 
-- **Manifest**: `{{manifest_file}}`
+* **Manifest**: `{{manifest_file}}`
 
 ## Goal
 

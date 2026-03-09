@@ -18,7 +18,7 @@ Task tool (general-purpose):
     ## What to Check
 
     | Category | What to Look For |
-    |----------|------------------|
+    | ---------- | ------------------ |
     | Completeness | TODOs, placeholders, incomplete tasks, missing steps |
     | Spec Alignment | Chunk covers relevant spec requirements, no scope creep |
     | Task Decomposition | Tasks atomic, clear boundaries, steps actionable |

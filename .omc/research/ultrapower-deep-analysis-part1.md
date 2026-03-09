@@ -9,21 +9,32 @@
 ## 1. 项目概览
 
 ### 1.1 核心定位
+
 Ultrapower 是一个**多 Agent 编排框架**，为 Claude Code 提供:
-- 49 个专业 Agent (覆盖开发、审查、产品、领域专家)
-- 71 个 Skill 工作流
-- 47 个 Hook 事件驱动系统
-- 35 个自定义工具 (LSP/AST/Python REPL)
+
+* 49 个专业 Agent (覆盖开发、审查、产品、领域专家)
+
+* 71 个 Skill 工作流
+
+* 47 个 Hook 事件驱动系统
+
+* 35 个自定义工具 (LSP/AST/Python REPL)
 
 ### 1.2 技术栈清单
 
 **核心技术:**
-- **语言:** TypeScript 5.7.2 (ES2022, strict mode)
-- **运行时:** Node.js ≥20.0.0
-- **模块系统:** ESM (type: "module")
-- **构建工具:** TypeScript compiler + esbuild
-- **测试框架:** Vitest 4.0.17
-- **代码质量:** ESLint 9.17 + Prettier 3.4
+
+* **语言:** TypeScript 5.7.2 (ES2022, strict mode)
+
+* **运行时:** Node.js ≥20.0.0
+
+* **模块系统:** ESM (type: "module")
+
+* **构建工具:** TypeScript compiler + esbuild
+
+* **测试框架:** Vitest 4.0.17
+
+* **代码质量:** ESLint 9.17 + Prettier 3.4
 
 **关键依赖 (生产):**
 ```json
@@ -41,7 +52,7 @@ Ultrapower 是一个**多 Agent 编排框架**，为 Claude Code 提供:
 ### 1.3 项目规模指标
 
 | 指标 | 数量 |
-|------|------|
+| ------ | ------ |
 | 总代码行数 | ~50,000+ 行 (估算) |
 | TypeScript 文件 | 200+ 个 |
 | Agent 定义 | 49 个 |
@@ -77,15 +88,20 @@ Ultrapower 是一个**多 Agent 编排框架**，为 Claude Code 提供:
 ### 2.2 核心模块职责
 
 **1. Agents 系统 (`src/agents/`)**
-- **职责:** 定义 49 个专业 Agent 的系统提示词和能力
-- **关键文件:**
+
+* **职责:** 定义 49 个专业 Agent 的系统提示词和能力
+
+* **关键文件:**
   - `definitions.ts` - Agent 定义和元数据
   - `index.ts` - Agent 注册和导出
-- **设计模式:** 工厂模式 + 策略模式
+
+* **设计模式:** 工厂模式 + 策略模式
 
 **2. Features 层 (`src/features/`)**
-- **职责:** 核心功能模块化
-- **子模块:**
+
+* **职责:** 核心功能模块化
+
+* **子模块:**
   - `boulder-state/` - 状态持久化 (Ralph/Ultrawork)
   - `delegation-enforcer/` - 委派规则强制执行
   - `context-injector/` - 上下文注入
@@ -93,22 +109,31 @@ Ultrapower 是一个**多 Agent 编排框架**，为 Claude Code 提供:
   - `auto-update/` - 自动版本检查
 
 **3. Hooks 系统 (`src/hooks/`)**
-- **职责:** 事件驱动架构
-- **Hook 类型:** 15 种 (UserPromptSubmit, ToolUse, SessionStart 等)
-- **执行顺序:** 严格定义的优先级系统
-- **关键文件:** `bridge.ts` - Hook 输入消毒和路由
+
+* **职责:** 事件驱动架构
+
+* **Hook 类型:** 15 种 (UserPromptSubmit, ToolUse, SessionStart 等)
+
+* **执行顺序:** 严格定义的优先级系统
+
+* **关键文件:** `bridge.ts` - Hook 输入消毒和路由
 
 **4. Team 协调 (`src/team/`)**
-- **职责:** 多 Agent 任务管理和协调
-- **核心组件:**
+
+* **职责:** 多 Agent 任务管理和协调
+
+* **核心组件:**
   - `unified-team.ts` - Team 生命周期管理
   - `task-router.ts` - 任务路由和分配
   - `stage-pipeline.ts` - 分阶段流水线
-- **状态机:** 5 阶段 (plan → prd → exec → verify → fix)
+
+* **状态机:** 5 阶段 (plan → prd → exec → verify → fix)
 
 **5. MCP 服务器 (`src/mcp/`)**
-- **职责:** 模型上下文协议集成
-- **服务器:**
+
+* **职责:** 模型上下文协议集成
+
+* **服务器:**
   - `omc-tools-server.ts` - 35 个自定义工具
   - `codex-server.ts` - OpenAI Codex 桥接
   - `gemini-server.ts` - Google Gemini 桥接

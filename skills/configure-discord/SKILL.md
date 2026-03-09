@@ -28,7 +28,7 @@ if [ -f "$CONFIG_FILE" ]; then
   WEBHOOK_URL=$(jq -r '.notifications.discord.webhookUrl // empty' "$CONFIG_FILE" 2>/dev/null)
   MENTION=$(jq -r '.notifications.discord.mention // empty' "$CONFIG_FILE" 2>/dev/null)
 
-  if [ "$HAS_DISCORD" = "true" ] || [ "$HAS_DISCORD_BOT" = "true" ]; then
+  if [ "$HAS_DISCORD" = "true" ] | | [ "$HAS_DISCORD_BOT" = "true" ]; then
     echo "EXISTING_CONFIG=true"
     echo "WEBHOOK_CONFIGURED=$HAS_DISCORD"
     echo "BOT_CONFIGURED=$HAS_DISCORD_BOT"
@@ -65,8 +65,10 @@ fi
 用户将在 "Other" 字段中输入 webhook URL。
 
 **验证** URL：
-- 必须以 `https://discord.com/api/webhooks/` 或 `https://discordapp.com/api/webhooks/` 开头
-- 若无效，解释格式并再次询问
+
+* 必须以 `<https://discord.com/api/webhooks/`> 或 `<https://discordapp.com/api/webhooks/`> 开头
+
+* 若无效，解释格式并再次询问
 
 ## 步骤 3B：Bot API 设置
 
@@ -143,7 +145,9 @@ fi
 Build the notifications object with the collected values and merge into `.omc-config.json` using jq:
 
 ```bash
+
 # WEBHOOK_URL, MENTION, USERNAME are collected from user
+
 # EVENTS is the list of enabled events
 
 echo "$EXISTING" | jq \
@@ -182,7 +186,9 @@ echo "$EXISTING" | jq \
 For each event NOT selected, disable it:
 
 ```bash
+
 # Example: disable session-start if not selected
+
 echo "$(cat "$CONFIG_FILE")" | jq \
   '.notifications.events = (.notifications.events // {}) |
    .notifications.events["session-start"] = {enabled: false}' > "$CONFIG_FILE"
@@ -217,7 +223,7 @@ Discord Notifications Configured!
 Config saved to: ~/.claude/.omc-config.json
 
 You can also set these via environment variables:
-  OMC_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
+  OMC_DISCORD_WEBHOOK_URL=<https://discord.com/api/webhooks/...>
   OMC_DISCORD_MENTION=<@1465264645320474637>
 
 To reconfigure: /ultrapower:configure-discord
@@ -230,7 +236,7 @@ To configure Telegram: /ultrapower:configure-telegram
 
 **Webhook 方式：**
 ```bash
-export OMC_DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+export OMC_DISCORD_WEBHOOK_URL="<https://discord.com/api/webhooks/...">
 export OMC_DISCORD_MENTION="<@1465264645320474637>"  # optional
 ```
 

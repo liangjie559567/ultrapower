@@ -9,6 +9,7 @@
 ## ✅ 安装验证
 
 ### 命令执行
+
 ```bash
 npm install -g ./liangjie559567-ultrapower-5.5.14.tgz
 ```
@@ -66,12 +67,14 @@ which omc
 ## ✅ postinstall 效果
 
 ### HUD wrapper
+
 ```bash
 ls ~/.claude/hud/omc-hud.mjs
 ```
 ✓ 文件存在
 
 ### settings.json
+
 ```json
 {
   "statusLine": {
@@ -88,9 +91,12 @@ ls ~/.claude/hud/omc-hud.mjs
 
 **本地测试安装成功**
 
-- 全局安装正常
-- CLI 命令可用
-- postinstall 自动配置
-- 版本号正确
+* 全局安装正常
+
+* CLI 命令可用
+
+* postinstall 自动配置
+
+* 版本号正确
 
 **可以安全发布到 npm registry。**

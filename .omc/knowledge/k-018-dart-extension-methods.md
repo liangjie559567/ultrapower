@@ -9,20 +9,29 @@ references: [seed-knowledge-pack-v1]
 ---
 
 ## Summary
+
 使用 Extension Methods 给现有类添加功能，避免创建工具类。适合字符串处理、日期格式化、集合操作。
 
 ## Details
+
 ### 使用场景
-- 字符串: capitalize, truncate, isEmail
-- DateTime: toReadable, isToday, daysUntil
-- List: groupBy, sortedBy, firstWhereOrNull
-- BuildContext: theme, colorScheme, textTheme shortcuts
+
+* 字符串: capitalize, truncate, isEmail
+
+* DateTime: toReadable, isToday, daysUntil
+
+* List: groupBy, sortedBy, firstWhereOrNull
+
+* BuildContext: theme, colorScheme, textTheme shortcuts
 
 ### 命名规则
-- 文件: `xxx_extensions.dart`
-- 类: `XxxExtension on Type`
+
+* 文件: `xxx_extensions.dart`
+
+* 类: `XxxExtension on Type`
 
 ## Code Example
+
 ```
 extension StringX on String {
   String get capitalized => '${this[0].toUpperCase()}${substring(1)}';

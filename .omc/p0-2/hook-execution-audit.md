@@ -28,8 +28,8 @@ function processPreToolUse(input: HookInput): HookOutput {
 
   // Check delegation enforcement FIRST
   const enforcementResult = processOrchestratorPreTool({
-    toolName: input.toolName || "",
-    toolInput: (input.toolInput as Record<string, unknown>) || {},
+    toolName: input.toolName | | "",
+    toolInput: (input.toolInput as Record<string, unknown>) | | {},
     sessionId: input.sessionId,
     directory,
   });
@@ -76,7 +76,7 @@ processPreToolUse(input)
 ### 1.4 关键检查点
 
 | 检查项 | 位置 | 目的 |
-|--------|------|------|
+| -------- | ------ | ------ |
 | 委托强制执行 | 行 719-733 | 阻止非允许路径的直接修改 |
 | AskUserQuestion 通知 | 行 737-739 | 在工具阻塞前通知用户 |
 | pkill -f 警告 | 行 743-760 | 防止自终止风险 |
@@ -109,7 +109,7 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
   const messages: string[] = [];
 
   // Ensure mode state activation also works when execution starts via Skill tool
-  const toolName = (input.toolName || "").toLowerCase();
+  const toolName = (input.toolName | | "").toLowerCase();
   if (toolName === "skill") {
     const skillName = getInvokedSkillName(input.toolInput);
     if (skillName === "ralph") {
@@ -125,8 +125,8 @@ async function processPostToolUse(input: HookInput): Promise<HookOutput> {
   // Run orchestrator post-tool processing
   const orchestratorResult = processOrchestratorPostTool(
     {
-      toolName: input.toolName || "",
-      toolInput: (input.toolInput as Record<string, unknown>) || {},
+      toolName: input.toolName | | "",
+      toolInput: (input.toolInput as Record<string, unknown>) | | {},
       sessionId: input.sessionId,
       directory,
     },
@@ -190,7 +190,7 @@ processPostToolUse(input)
 ### 2.4 关键处理点
 
 | 处理项 | 位置 | 目的 |
-|--------|------|------|
+| -------- | ------ | ------ |
 | Ralph 激活 | 行 890-901 | 通过 Skill 工具启动 ralph 循环 |
 | 编排器后处理 | 行 904-916 | 添加提醒和验证信息 |
 | Agent Dashboard | 行 919-924 | Task 完成后显示并行 agent 状态 |
@@ -284,19 +284,24 @@ export function getGitDiffStats(directory: string): GitFileStat[] {
 ### 4.2 超时覆盖范围
 
 | 操作 | 超时值 | 位置 | 备注 |
-|------|--------|------|------|
+| ------ | -------- | ------ | ------ |
 | git diff | 5s | 行 173 | execSync 超时 |
 | git status | 5s | 行 180 | execSync 超时 |
 | 其他 hook 操作 | 无 | - | **缺失** |
 
 ### 4.3 缺失的超时配置
 
-- **PreToolUse 整体执行**: 无超时限制
-- **PostToolUse 整体执行**: 无超时限制
-- **orchestrator 处理**: 无超时限制
-- **文件所有权记录**: 无超时限制
-- **使用追踪**: 无超时限制 (虽然是非阻塞)
-- **ralph 激活**: 无超时限制
+* **PreToolUse 整体执行**: 无超时限制
+
+* **PostToolUse 整体执行**: 无超时限制
+
+* **orchestrator 处理**: 无超时限制
+
+* **文件所有权记录**: 无超时限制
+
+* **使用追踪**: 无超时限制 (虽然是非阻塞)
+
+* **ralph 激活**: 无超时限制
 
 ---
 
@@ -309,12 +314,12 @@ export function getGitDiffStats(directory: string): GitFileStat[] {
    - 需求: 添加 5s 超时包装
    - 影响: 防止 hook 无限期阻塞工具执行
 
-2. **PostToolUse 整体超时**
+1. **PostToolUse 整体超时**
    - 位置: `src/hooks/bridge.ts:883-943`
    - 需求: 添加 5s 超时包装
    - 影响: 防止 hook 无限期阻塞工具返回
 
-3. **orchestrator 处理超时**
+1. **orchestrator 处理超时**
    - 位置: `src/hooks/omc-orchestrator/index.ts:363-428` (PreTool)
    - 位置: `src/hooks/omc-orchestrator/index.ts:434-496` (PostTool)
    - 需求: 添加 3s 超时包装
@@ -322,17 +327,17 @@ export function getGitDiffStats(directory: string): GitFileStat[] {
 
 ### P1 优先级 (重要)
 
-4. **文件所有权记录超时**
+1. **文件所有权记录超时**
    - 位置: `src/hooks/bridge.ts:818-824`
    - 需求: 添加 1s 超时
    - 影响: 防止会话回放追踪阻塞
 
-5. **ralph 激活超时**
+1. **ralph 激活超时**
    - 位置: `src/hooks/bridge.ts:890-901`
    - 需求: 添加 2s 超时
    - 影响: 防止 ralph 状态初始化阻塞
 
-6. **Agent Dashboard 获取超时**
+1. **Agent Dashboard 获取超时**
    - 位置: `src/hooks/bridge.ts:920-924`
    - 需求: 添加 1s 超时
    - 影响: 防止 dashboard 生成阻塞
@@ -364,17 +369,23 @@ try {
 
 ### 6.2 错误处理特点
 
-- **全局 try-catch**: 捕获所有 hook 处理错误
-- **日志记录**: 错误输出到 stderr
-- **安全默认**: permission-request 失败关闭，其他继续
-- **非阻塞**: 大多数错误不阻塞工具执行
+* **全局 try-catch**: 捕获所有 hook 处理错误
+
+* **日志记录**: 错误输出到 stderr
+
+* **安全默认**: permission-request 失败关闭，其他继续
+
+* **非阻塞**: 大多数错误不阻塞工具执行
 
 ### 6.3 超时错误处理需求
 
-- 超时应视为可恢复错误
-- 超时时返回 `{ continue: true }` (允许继续)
-- 超时应记录警告日志
-- 超时不应阻塞工具执行
+* 超时应视为可恢复错误
+
+* 超时时返回 `{ continue: true }` (允许继续)
+
+* 超时应记录警告日志
+
+* 超时不应阻塞工具执行
 
 ---
 
@@ -392,10 +403,14 @@ interface HookOutput {
 ```
 
 **处理逻辑**:
-- `continue: false` → 工具执行被阻塞
-- `continue: true` → 工具继续执行
-- `modifiedInput` → 替换原始工具输入
-- `message` → 注入到上下文
+
+* `continue: false` → 工具执行被阻塞
+
+* `continue: true` → 工具继续执行
+
+* `modifiedInput` → 替换原始工具输入
+
+* `message` → 注入到上下文
 
 ### 7.2 PostToolUse 返回值
 
@@ -408,9 +423,12 @@ interface HookOutput {
 ```
 
 **处理逻辑**:
-- `continue` → 总是 true (不阻塞)
-- `modifiedOutput` → 替换原始工具输出
-- `message` → 注入到上下文
+
+* `continue` → 总是 true (不阻塞)
+
+* `modifiedOutput` → 替换原始工具输出
+
+* `message` → 注入到上下文
 
 ---
 
@@ -419,20 +437,32 @@ interface HookOutput {
 ### 当前状态
 
 ✅ **已实现**:
-- PreToolUse 和 PostToolUse 的完整处理流程
-- 委托强制执行检查
-- 背景进程守卫
-- 文件所有权追踪
-- 使用追踪
-- 全局错误处理
+
+* PreToolUse 和 PostToolUse 的完整处理流程
+
+* 委托强制执行检查
+
+* 背景进程守卫
+
+* 文件所有权追踪
+
+* 使用追踪
+
+* 全局错误处理
 
 ❌ **缺失**:
-- PreToolUse 整体执行超时
-- PostToolUse 整体执行超时
-- orchestrator 处理超时
-- 文件所有权记录超时
-- ralph 激活超时
-- Agent Dashboard 获取超时
+
+* PreToolUse 整体执行超时
+
+* PostToolUse 整体执行超时
+
+* orchestrator 处理超时
+
+* 文件所有权记录超时
+
+* ralph 激活超时
+
+* Agent Dashboard 获取超时
 
 ### 建议行动
 

@@ -13,7 +13,7 @@
    - 1.1 全部 15 类 HookType 分类表
    - 1.2 每类 HookType 路由规则
    - 1.3 HookType 完整性验证方法
-2. [执行顺序与优先级（T-04b）](#2-执行顺序与优先级t-04b)
+1. [执行顺序与优先级（T-04b）](#2-执行顺序与优先级t-04b)
    - 2.1 Stop 阶段优先级链
    - 2.2 互斥规则
    - 2.3 Hook 失败降级策略
@@ -50,7 +50,7 @@ type HookType =
 **六阶段完整分类表：**
 
 | 阶段 | HookType | 触发时机 | 必需字段 | 敏感级别 |
-|------|----------|----------|----------|----------|
+| ------ | ---------- | ---------- | ---------- | ---------- |
 | UserPromptSubmit | `keyword-detector` | 用户提交 prompt 时 | `[]`（默认） | 普通 |
 | Stop（P1，最高） | `ralph` | Stop 事件，ralph 模式激活时 | `[]`（默认） | 普通 |
 | Stop（P1.5） | `persistent-mode` | Stop 事件，ultrawork/autopilot 模式激活时 | `[]`（默认） | 普通 |
@@ -74,7 +74,7 @@ type HookType =
 **路由入口**：`src/hooks/bridge.ts`（`routeHook` 函数）
 
 | HookType | 路由目标 | 路由条件 |
-|----------|----------|----------|
+| ---------- | ---------- | ---------- |
 | `keyword-detector` | `src/hooks/keyword-detector/` | 所有 UserPromptSubmit 事件 |
 | `ralph` | `src/hooks/ralph/` | Stop 事件 + ralph 模式激活 |
 | `persistent-mode` | `src/hooks/persistent-mode/` | Stop 事件 + ultrawork/autopilot 模式激活 |
@@ -101,23 +101,27 @@ type HookType =
 
 ```bash
 #!/bin/bash
+
 # 从 bridge.ts 提取 HookType 定义
-BRIDGE_TYPES=$(grep -oP '"[a-z-]+"(?=;?\s*//.*HookType|(?<=\|)\s*"[a-z-]+")' \
+
+BRIDGE_TYPES=$(grep -oP '"[a-z-]+"(?=;?\s*//.*HookType | (?<=\ | )\s*"[a-z-]+")' \
   src/hooks/bridge.ts | sort | uniq)
 
 # 从规范文档提取 HookType 列表
+
 DOC_TYPES=$(grep -oP '`[a-z-]+`' \
   docs/standards/hook-execution-order.md | sort | uniq)
 
 # 对比差异
-diff <(echo "$BRIDGE_TYPES") <(echo "$DOC_TYPES") || \
+
+diff <(echo "$BRIDGE_TYPES") <(echo "$DOC_TYPES") | | \
   echo "ERROR: HookType 规范与实现不一致"
 ```
 
 **手动验证步骤**：
 
 1. 打开 `src/hooks/bridge.ts`，找到 `HookType` 类型定义
-2. 统计 `|` 分隔的类型数量，应为 **15 个**
+2. 统计 ` | ` 分隔的类型数量，应为 **15 个**
 3. 与本文档 1.1 节表格逐一对比
 4. 如有差异，以 `bridge.ts` 为准，更新本文档
 
@@ -192,9 +196,11 @@ const EXCLUSIVE_MODES = ['autopilot', 'ultrapilot', 'swarm', 'pipeline'];
 
 **互斥检测规则**：
 
-- `EXCLUSIVE_MODES` 中的任意两个模式不得同时激活
-- 检测到互斥冲突时，后激活的模式被拒绝，返回错误
-- `ralph` 和 `ultrawork` 不在互斥列表中，可与其他模式组合使用
+* `EXCLUSIVE_MODES` 中的任意两个模式不得同时激活
+
+* 检测到互斥冲突时，后激活的模式被拒绝，返回错误
+
+* `ralph` 和 `ultrawork` 不在互斥列表中，可与其他模式组合使用
 
 ### 2.3 Hook 失败降级策略
 
@@ -218,7 +224,7 @@ try {
 `permission-request` 是安全边界，失败时**不得**静默降级。
 
 | Hook 类型 | 失败时行为 | 规范要求 |
-|-----------|-----------|----------|
+| ----------- | ----------- | ---------- |
 | 普通 hook（11 类） | 静默降级，返回 `{ continue: true }` | 允许（设计选择） |
 | 敏感 hook（session-end、setup-init、setup-maintenance） | 静默降级，返回 `{ continue: true }` | 允许（v1） |
 | `permission-request` | **当前**：静默降级（差异点 D-05） | **规范要求**：失败时必须阻塞，返回 `{ continue: false }` |
@@ -230,7 +236,7 @@ try {
 export function createHookOutput(result: PersistentModeResult): {
   continue: boolean; message?: string;
 } {
-  return { continue: true, message: result.message || undefined };
+  return { continue: true, message: result.message | | undefined };
   // 注意：始终返回 { continue: true }，包括 permission-request 失败时
 }
 ```
@@ -246,7 +252,7 @@ export function createHookOutput(
   if (hookType === 'permission-request' && result.error) {
     return { continue: false, message: result.message };
   }
-  return { continue: true, message: result.message || undefined };
+  return { continue: true, message: result.message | | undefined };
 }
 ```
 
@@ -259,7 +265,7 @@ export function createHookOutput(
 **PreToolUse hook 超时规则**：
 
 | 参数 | 值 | 说明 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 默认超时 | 5 秒 | PreToolUse hook 最长执行时间 |
 | 超时行为 | 继续执行工具调用 | 不阻塞，Claude 继续执行工具 |
 | 超时记录 | 写入 `last-tool-error.json` | 记录超时事件供后续分析 |
@@ -267,7 +273,7 @@ export function createHookOutput(
 **PostToolUse hook 超时规则**：
 
 | 参数 | 值 | 说明 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 默认超时 | 5 秒 | PostToolUse hook 最长执行时间 |
 | 超时行为 | 状态写入标记为"待重试" | 不回滚已执行的工具调用 |
 | 回滚策略 | 禁止回滚 | 工具调用已完成，不可撤销 |
@@ -287,20 +293,24 @@ PostToolUse 超时：
 来源：`src/hooks/bridge.ts`
 
 | 环境变量 | 作用 | 示例 |
-|----------|------|------|
+| ---------- | ------ | ------ |
 | `DISABLE_OMC` | 禁用所有 hooks | `DISABLE_OMC=1 claude` |
 | `OMC_SKIP_HOOKS` | 按逗号分隔名称跳过特定 hooks | `OMC_SKIP_HOOKS=ralph,autopilot claude` |
 
 **使用场景**：
 
 ```bash
+
 # 完全禁用所有 hooks（调试用）
+
 DISABLE_OMC=1 claude
 
 # 跳过特定 hooks（测试用）
+
 OMC_SKIP_HOOKS=permission-request,setup-init claude
 
 # 跳过 Stop 阶段所有 hooks
+
 OMC_SKIP_HOOKS=ralph,persistent-mode,stop-continuation claude
 ```
 
@@ -313,7 +323,7 @@ OMC_SKIP_HOOKS=ralph,persistent-mode,stop-continuation claude
 本规范记录以下与 PRD 的差异点（来源：`audit-report.md`）：
 
 | 差异点 | 描述 | 当前状态 | 规范要求 |
-|--------|------|---------|---------|
+| -------- | ------ | --------- | --------- |
 | D-01 | 敏感 hook 数量 | 4 类（setup 拆分为 setup-init + setup-maintenance） | 以 4 类为准 |
 | D-02 | Stop 阶段优先级链 | Ralph > Autopilot > Ultrawork（Todo-Continuation 已移除） | 以实际代码为准 |
 | D-04 | 互斥模式范围 | 4 个互斥模式（含 swarm、pipeline） | 以 4 个为准 |

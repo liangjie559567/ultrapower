@@ -7,7 +7,7 @@
 在 Claude Code 中运行：
 
 ```bash
-/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin marketplace add <https://github.com/liangjie559567/ultrapower>
 /plugin install omc@ultrapower
 /ultrapower:omc-setup
 ```
@@ -29,7 +29,7 @@ autopilot "创建一个 hello world 函数"
 ## 最常用的 5 个 Skills
 
 | Skill | 用途 | 示例 |
-|-------|------|------|
+| ------- | ------ | ------ |
 | **autopilot** | 全自动从想法到代码 | `autopilot "添加用户认证"` |
 | **ultrawork** | 并行执行多个任务 | `ultrawork "任务1" "任务2"` |
 | **team** | 多 agent 协作编排 | `team "设计并实现登录流程"` |
@@ -77,7 +77,7 @@ team "重构认证模块"
 ### Q1: 如何选择执行模式？
 
 | 场景 | 推荐模式 |
-|------|---------|
+| ------ | --------- |
 | 简单功能，快速交付 | `autopilot` |
 | 复杂任务，需要自动修复 | `ralph` |
 | 大型功能，需要多 agent 协作 | `team` |
@@ -107,7 +107,10 @@ team "重构认证模块"
 
 ## 下一步
 
-- 详细文档：[docs/REFERENCE.md](./REFERENCE.md)
-- 架构设计：[docs/ARCHITECTURE.md](./ARCHITECTURE.md)
-- 故障排查：[docs/guides/troubleshooting-guide.md](./guides/troubleshooting-guide.md)
-- 工作流指南：[docs/guides/workflow-recommendation-guide.md](./guides/workflow-recommendation-guide.md)
+* 详细文档：[docs/REFERENCE.md](./REFERENCE.md)
+
+* 架构设计：[docs/ARCHITECTURE.md](./ARCHITECTURE.md)
+
+* 故障排查：[docs/guides/troubleshooting-guide.md](./guides/troubleshooting-guide.md)
+
+* 工作流指南：[docs/guides/workflow-recommendation-guide.md](./guides/workflow-recommendation-guide.md)

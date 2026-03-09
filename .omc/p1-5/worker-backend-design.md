@@ -11,10 +11,14 @@
 本设计创建 `WorkerStateAdapter` 抽象层，统一 SQLite（MCP）和 JSON（Team）两种后端，消除 400+ 行重复代码，支持跨模式查询，保持向后兼容。
 
 **核心原则**:
-- 最小化改动，渐进式迁移
-- 保留两种存储的优势
-- 向后兼容现有 API
-- 每阶段独立可验证
+
+* 最小化改动，渐进式迁移
+
+* 保留两种存储的优势
+
+* 向后兼容现有 API
+
+* 每阶段独立可验证
 
 ---
 
@@ -385,7 +389,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
       heartbeatAge = now - new Date(worker.lastHeartbeatAt).getTime();
     }
 
-    const isAlive = worker.status === 'running' || worker.status === 'working'
+    const isAlive = worker.status === 'running' | | worker.status === 'working'
       ? (heartbeatAge !== undefined && heartbeatAge < maxHeartbeatAge)
       : worker.status !== 'dead';
 
@@ -617,7 +621,7 @@ export class JsonWorkerAdapter implements WorkerStateAdapter {
       heartbeatAge = now - new Date(worker.lastHeartbeatAt).getTime();
     }
 
-    const isAlive = worker.status === 'running' || worker.status === 'working'
+    const isAlive = worker.status === 'running' | | worker.status === 'working'
       ? (heartbeatAge !== undefined && heartbeatAge < maxHeartbeatAge)
       : worker.status !== 'dead';
 
@@ -651,7 +655,7 @@ export class JsonWorkerAdapter implements WorkerStateAdapter {
 
       for (const worker of workers) {
         const isTerminal = ['completed', 'failed', 'timeout', 'dead'].includes(worker.status);
-        const timestamp = worker.completedAt || worker.spawnedAt;
+        const timestamp = worker.completedAt | | worker.spawnedAt;
         const age = Date.now() - new Date(timestamp).getTime();
 
         if (isTerminal && age > maxAgeMs) {
@@ -850,9 +854,12 @@ if (adapter) {
 ```
 
 **兼容性保证**:
-- 保留 `job-state-db.ts` 作为回退
-- 通过环境变量 `OMC_WORKER_BACKEND=legacy` 切换回旧实现
-- 迁移工具自动转换现有数据
+
+* 保留 `job-state-db.ts` 作为回退
+
+* 通过环境变量 `OMC_WORKER_BACKEND=legacy` 切换回旧实现
+
+* 迁移工具自动转换现有数据
 
 ### 4.2 Team 迁移路径
 
@@ -984,12 +991,12 @@ export async function migrateTeamWorkers(cwd: string): Promise<number> {
             workerId: `team:${teamName}:${workerName}`,
             workerType: 'team',
             name: workerName,
-            status: heartbeat.status || 'unknown',
-            spawnedAt: heartbeat.startedAt || new Date().toISOString(),
+            status: heartbeat.status | | 'unknown',
+            spawnedAt: heartbeat.startedAt | | new Date().toISOString(),
             lastHeartbeatAt: heartbeat.lastPollAt,
             teamName,
             currentTaskId: heartbeat.currentTaskId,
-            consecutiveErrors: heartbeat.consecutiveErrors || 0,
+            consecutiveErrors: heartbeat.consecutiveErrors | | 0,
           };
 
           if (await adapter.upsert(worker)) count++;
@@ -1140,7 +1147,7 @@ export class ConcurrentWorkerAdapter implements WorkerStateAdapter {
 ## 6. 性能基准目标
 
 | 操作 | 当前性能 | 目标性能 | 测量方法 |
-|------|---------|---------|---------|
+| ------ | --------- | --------- | --------- |
 | Worker 健康检查 | ~50ms | <10ms | 单次 healthCheck() |
 | 状态查询（单个） | ~20ms | <5ms | 单次 get() |
 | 批量更新（10 workers） | ~200ms | <50ms | batchUpsert(10) |
@@ -1158,22 +1165,32 @@ export class ConcurrentWorkerAdapter implements WorkerStateAdapter {
 **目标**: 创建核心接口和两种实现
 
 **任务**:
-- [ ] 创建 `src/workers/types.ts` - 定义 WorkerState、HealthStatus、WorkerFilter
-- [ ] 创建 `src/workers/adapter.ts` - 定义 WorkerStateAdapter 接口
-- [ ] 实现 `src/workers/sqlite-adapter.ts` - SQLite 实现
-- [ ] 实现 `src/workers/json-adapter.ts` - JSON 实现
-- [ ] 实现 `src/workers/factory.ts` - 工厂函数
-- [ ] 单元测试覆盖率 > 90%
+
+* [ ] 创建 `src/workers/types.ts` - 定义 WorkerState、HealthStatus、WorkerFilter
+
+* [ ] 创建 `src/workers/adapter.ts` - 定义 WorkerStateAdapter 接口
+
+* [ ] 实现 `src/workers/sqlite-adapter.ts` - SQLite 实现
+
+* [ ] 实现 `src/workers/json-adapter.ts` - JSON 实现
+
+* [ ] 实现 `src/workers/factory.ts` - 工厂函数
+
+* [ ] 单元测试覆盖率 > 90%
 
 **验证标准**:
 ```bash
+
 # 测试 SQLite 适配器
+
 npm test -- src/workers/sqlite-adapter.test.ts
 
 # 测试 JSON 适配器
+
 npm test -- src/workers/json-adapter.test.ts
 
 # 性能基准测试
+
 npm run benchmark:workers
 ```
 
@@ -1186,11 +1203,16 @@ npm run benchmark:workers
 **目标**: 将 `job-management.ts` 迁移到新适配器
 
 **任务**:
-- [ ] 创建 `src/workers/migration.ts` - 数据迁移工具
-- [ ] 重构 `src/mcp/job-management.ts` 使用 WorkerStateAdapter
-- [ ] 添加环境变量 `OMC_WORKER_BACKEND=legacy|unified` 控制切换
-- [ ] 运行迁移工具转换现有 jobs.db 数据
-- [ ] 集成测试：MCP Codex/Gemini 任务完整流程
+
+* [ ] 创建 `src/workers/migration.ts` - 数据迁移工具
+
+* [ ] 重构 `src/mcp/job-management.ts` 使用 WorkerStateAdapter
+
+* [ ] 添加环境变量 `OMC_WORKER_BACKEND=legacy | unified` 控制切换
+
+* [ ] 运行迁移工具转换现有 jobs.db 数据
+
+* [ ] 集成测试：MCP Codex/Gemini 任务完整流程
 
 **代码示例**:
 ```typescript
@@ -1234,13 +1256,17 @@ async function saveJobStatus(cwd: string, jobStatus: JobStatus) {
 
 **验证标准**:
 ```bash
+
 # 运行迁移
+
 npm run migrate:mcp-workers
 
 # 测试 MCP 任务流程
+
 npm test -- src/mcp/job-management.test.ts
 
 # 验证数据一致性
+
 npm run verify:worker-data
 ```
 
@@ -1253,11 +1279,16 @@ npm run verify:worker-data
 **目标**: 将 Team Worker 管理迁移到统一适配器
 
 **任务**:
-- [ ] 重构 `src/team/worker-health.ts` 使用 WorkerStateAdapter
-- [ ] 重构 `src/team/heartbeat.ts` 写入统一格式
-- [ ] 重构 `src/team/worker-restart.ts` 读取统一状态
-- [ ] 运行迁移工具转换现有 heartbeat 文件
-- [ ] 集成测试：Team 模式完整流程
+
+* [ ] 重构 `src/team/worker-health.ts` 使用 WorkerStateAdapter
+
+* [ ] 重构 `src/team/heartbeat.ts` 写入统一格式
+
+* [ ] 重构 `src/team/worker-restart.ts` 读取统一状态
+
+* [ ] 运行迁移工具转换现有 heartbeat 文件
+
+* [ ] 集成测试：Team 模式完整流程
 
 **迁移脚本**:
 ```typescript
@@ -1273,13 +1304,17 @@ console.log(`Migrated ${count} team workers`);
 
 **验证标准**:
 ```bash
+
 # 运行迁移
+
 npm run migrate:team-workers
 
 # 测试 Team 健康检查
+
 npm test -- src/team/worker-health.test.ts
 
 # 端到端测试
+
 npm run test:e2e:team
 ```
 
@@ -1292,13 +1327,20 @@ npm run test:e2e:team
 **目标**: 性能优化、清理遗留代码、文档更新
 
 **任务**:
-- [ ] 实现 `CachedWorkerAdapter` 缓存层
-- [ ] 实现 `ConcurrentWorkerAdapter` 并发控制
-- [ ] 移除 Swarm 遗留 SQLite 引用
-- [ ] 清理未使用的 `job-state-db.ts` 代码（保留作为参考）
-- [ ] 更新 `docs/standards/state-machine.md`
-- [ ] 更新 `docs/standards/agent-lifecycle.md`
-- [ ] 性能基准测试达标
+
+* [ ] 实现 `CachedWorkerAdapter` 缓存层
+
+* [ ] 实现 `ConcurrentWorkerAdapter` 并发控制
+
+* [ ] 移除 Swarm 遗留 SQLite 引用
+
+* [ ] 清理未使用的 `job-state-db.ts` 代码（保留作为参考）
+
+* [ ] 更新 `docs/standards/state-machine.md`
+
+* [ ] 更新 `docs/standards/agent-lifecycle.md`
+
+* [ ] 性能基准测试达标
 
 **性能测试**:
 ```typescript
@@ -1325,9 +1367,12 @@ console.timeEnd('healthCheck-cached');
 ```
 
 **验证标准**:
-- 所有性能基准达标（见第 6 节）
-- 测试覆盖率 > 85%
-- 文档同步率 100%
+
+* 所有性能基准达标（见第 6 节）
+
+* 测试覆盖率 > 85%
+
+* 文档同步率 100%
 
 ---
 
@@ -1336,7 +1381,7 @@ console.timeEnd('healthCheck-cached');
 ### 8.1 技术风险
 
 | 风险 | 影响 | 概率 | 缓解措施 |
-|------|------|------|----------|
+| ------ | ------ | ------ | ---------- |
 | **SQLite 迁移数据丢失** | 高 | 低 | 1. 迁移前自动备份 `.omc/state/`<br>2. 保留原 JSON 文件作为回退<br>3. 迁移工具支持 dry-run 模式 |
 | **抽象层性能开销** | 中 | 中 | 1. 实现缓存层减少 I/O<br>2. 批量操作使用事务<br>3. 性能基准测试门禁 |
 | **better-sqlite3 安装失败** | 中 | 低 | 1. 工厂模式自动回退到 JSON<br>2. 文档说明可选依赖<br>3. CI 测试两种模式 |
@@ -1345,7 +1390,7 @@ console.timeEnd('healthCheck-cached');
 ### 8.2 实施风险
 
 | 风险 | 影响 | 概率 | 缓解措施 |
-|------|------|------|----------|
+| ------ | ------ | ------ | ---------- |
 | **向后兼容性破坏** | 高 | 中 | 1. 环境变量控制新旧切换<br>2. 保留旧 API 作为回退<br>3. 语义化版本（6.0.0）<br>4. 迁移指南文档 |
 | **测试覆盖不足** | 高 | 中 | 1. 每个 PR 要求 80%+ 覆盖率<br>2. 集成测试覆盖完整流程<br>3. 性能回归测试 |
 | **迁移周期过长** | 中 | 高 | 1. 分阶段交付，每阶段独立可用<br>2. Phase 1-2 优先（MCP 影响大）<br>3. Phase 3-4 可延后 |
@@ -1356,6 +1401,7 @@ console.timeEnd('healthCheck-cached');
 ## 9. 回滚方案
 
 ### 9.1 Phase 1 回滚
+
 **触发条件**: 单元测试失败率 > 10%
 
 **操作**:
@@ -1369,14 +1415,18 @@ rm -rf src/workers/
 ---
 
 ### 9.2 Phase 2 回滚
+
 **触发条件**: MCP 任务失败率 > 5%
 
 **操作**:
 ```bash
+
 # 方式 1: 环境变量回退
+
 export OMC_WORKER_BACKEND=legacy
 
 # 方式 2: 代码回退
+
 git revert <commit-hash>
 ```
 
@@ -1385,12 +1435,16 @@ git revert <commit-hash>
 ---
 
 ### 9.3 Phase 3 回滚
+
 **触发条件**: Team 健康检查失败
 
 **操作**:
 ```bash
+
 # 适配器自动回退到 JSON 文件
+
 # 无需手动操作
+
 ```
 
 **影响**: Team 继续使用 JSON 文件，SQLite 数据保留
@@ -1398,17 +1452,22 @@ git revert <commit-hash>
 ---
 
 ### 9.4 完全回滚
+
 **触发条件**: 生产环境严重故障
 
 **操作**:
 ```bash
+
 # 1. 恢复备份
+
 cp -r .omc/state.backup/* .omc/state/
 
 # 2. 回退代码
+
 git checkout v5.5.14
 
 # 3. 重启服务
+
 npm run restart
 ```
 
@@ -1421,7 +1480,7 @@ npm run restart
 ### 10.1 代码质量指标
 
 | 指标 | 当前值 | 目标值 | 测量方法 |
-|------|--------|--------|----------|
+| ------ | -------- | -------- | ---------- |
 | 代码重复率 | ~15% | < 5% | SonarQube duplication |
 | 圈复杂度 | 平均 8 | < 6 | ESLint complexity |
 | 测试覆盖率 | 75% | > 85% | Jest coverage |
@@ -1430,7 +1489,7 @@ npm run restart
 ### 10.2 性能指标
 
 | 指标 | 当前值 | 目标值 | 改进幅度 |
-|------|--------|--------|----------|
+| ------ | -------- | -------- | ---------- |
 | Worker 健康检查 | 50ms | < 10ms | 5x |
 | 状态查询 | 20ms | < 5ms | 4x |
 | 批量更新（10 workers） | 200ms | < 50ms | 4x |
@@ -1439,7 +1498,7 @@ npm run restart
 ### 10.3 维护性指标
 
 | 指标 | 当前值 | 目标值 | 改进幅度 |
-|------|--------|--------|----------|
+| ------ | -------- | -------- | ---------- |
 | 新 Worker 类型接入 | 2 天 | < 4 小时 | 4x |
 | Bug 修复周期 | 3 天 | < 1 天 | 3x |
 | 文档同步率 | ~60% | 100% | 1.7x |
@@ -1458,10 +1517,14 @@ npm run restart
 4. **易于扩展**: 新 Worker 类型接入时间从 2 天降至 4 小时
 
 **关键原则**:
-- 最小化改动，渐进式迁移
-- 保留两种存储的优势（SQLite 查询能力 + JSON 简单性）
-- 向后兼容，环境变量控制切换
-- 每阶段独立可验证，支持快速回滚
+
+* 最小化改动，渐进式迁移
+
+* 保留两种存储的优势（SQLite 查询能力 + JSON 简单性）
+
+* 向后兼容，环境变量控制切换
+
+* 每阶段独立可验证，支持快速回滚
 
 **实施时间线**: 4 周完成，每周一个 Phase，每个 Phase 独立交付
 

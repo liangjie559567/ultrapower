@@ -9,7 +9,7 @@
 ## 关键文件
 
 | 文件 | 描述 |
-|------|------|
+| ------ | ------ |
 | `definitions.ts` | 所有智能体的定义和提示词 |
 | `index.ts` | 智能体导出和注册 |
 | `types.ts` | 智能体类型定义 |
@@ -22,7 +22,7 @@
 ## 智能体分类
 
 | 分类 | 数量 | 示例 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 构建/分析 | 8 | explore, analyst, planner, architect, debugger, executor, deep-executor, verifier |
 | 审查 | 7 | style-reviewer, quality-reviewer, api-reviewer, security-reviewer, performance-reviewer, code-reviewer |
 | 领域专家 | 15+ | dependency-expert, test-engineer, designer, writer, qa-tester, scientist, build-fixer, git-master, database-expert, devops-engineer, i18n-specialist, accessibility-auditor, api-designer |
@@ -38,12 +38,12 @@
    - 在 `definitions.ts` 中查看完整定义
    - 检查 `timeout-config.ts` 中的超时设置
 
-2. **修改智能体提示词**
+1. **修改智能体提示词**
    - 编辑 `definitions.ts` 中的提示词
    - 运行 `npm test` 验证
    - 更新 `agents/AGENTS.md` 文档
 
-3. **添加新智能体**
+1. **添加新智能体**
    - 在 `definitions.ts` 中定义
    - 在 `index.ts` 中导出
    - 在 `timeout-config.ts` 中配置超时
@@ -52,7 +52,7 @@
 ### 修改检查清单
 
 | 修改位置 | 验证步骤 |
-|---------|---------|
+| --------- | --------- |
 | 提示词 | 运行 `npm test` |
 | 超时配置 | 检查 `timeout-config.ts` |
 | 新智能体 | 更新 `definitions.ts` 和 `index.ts` |

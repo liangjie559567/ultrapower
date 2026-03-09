@@ -88,8 +88,12 @@ if (isRunningAsPlugin() && !options?.standalone) {
 
 ## 验收标准
 
-- [ ] plugin 模式下 `/update` 退出码为 0
-- [ ] 输出包含 `[1/2]`、`[2/2]`、`→` 格式
-- [ ] project-scoped 时输出包含"navigate to your project directory"
-- [ ] `--standalone` 标志仍走原有 npm 更新路径（不受影响）
-- [ ] TypeScript 编译无错误
+* [ ] plugin 模式下 `/update` 退出码为 0
+
+* [ ] 输出包含 `[1/2]`、`[2/2]`、`→` 格式
+
+* [ ] project-scoped 时输出包含"navigate to your project directory"
+
+* [ ] `--standalone` 标志仍走原有 npm 更新路径（不受影响）
+
+* [ ] TypeScript 编译无错误

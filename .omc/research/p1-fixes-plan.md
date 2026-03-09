@@ -10,9 +10,12 @@
 ### 问题分析
 
 **当前行为：**
-- 所有 hook 失败时返回 `{ continue: true }`
-- 关键安全检查失败不会阻止操作
-- 30+ 处返回点都是静默失败
+
+* 所有 hook 失败时返回 `{ continue: true }`
+
+* 关键安全检查失败不会阻止操作
+
+* 30+ 处返回点都是静默失败
 
 **风险场景：**
 ```typescript
@@ -66,16 +69,18 @@ const HOOK_SEVERITY: Record<HookType, HookSeverity> = {
 ### 问题分析
 
 **当前状态：**
-- 仅 4/12 hook 类型有必需字段校验
-- 其他 8 个类型缺少验证
+
+* 仅 4/12 hook 类型有必需字段校验
+
+* 其他 8 个类型缺少验证
 
 **已验证的类型：**
 ```typescript
 // src/hooks/bridge-normalize.ts
 case 'session-end':
-  if (!input.sessionId || !input.directory) throw new Error('...');
+  if (!input.sessionId | | !input.directory) throw new Error('...');
 case 'permission-request':
-  if (!input.tool_name || !input.tool_input) throw new Error('...');
+  if (!input.tool_name | | !input.tool_input) throw new Error('...');
 case 'setup':
   if (!input.directory) throw new Error('...');
 case 'subagent-stop':
@@ -189,9 +194,12 @@ function grepFiles(pattern: RegExp, directory: string): string[] {
 ### 问题分析
 
 **统计：**
-- 总计：756 次
-- 密度：0.86/文件
-- 分布：测试 60%，MCP 20%，Logger 10%，其他 10%
+
+* 总计：756 次
+
+* 密度：0.86/文件
+
+* 分布：测试 60%，MCP 20%，Logger 10%，其他 10%
 
 ### 修复策略
 
@@ -313,15 +321,17 @@ function watchStateFile(path: string, cacheKey: string) {
 **中期（1 个月）：** 方案 C - 文件监控失效
 
 **工作量：**
-- 方案 A：5 分钟
-- 方案 C：2-3 天
+
+* 方案 A：5 分钟
+
+* 方案 C：2-3 天
 
 ---
 
 ## 修复优先级
 
 | 问题 | 优先级 | 工作量 | 风险 | 建议时间 |
-|------|--------|--------|------|---------|
+| ------ | -------- | -------- | ------ | --------- |
 | P1-5 缓存 TTL | 🔴 High | 5 分钟 | 低 | 立即 |
 | P1-3 Grep 路径 | 🟡 Medium | 1 天 | 中 | 1 周内 |
 | P1-2 输入验证 | 🟡 Medium | 1-2 天 | 低 | 2 周内 |
@@ -333,19 +343,23 @@ function watchStateFile(path: string, cacheKey: string) {
 ## 下一步行动
 
 ### 立即执行（今天）
+
 1. ✅ 缩短缓存 TTL 至 1 秒（P1-5 方案 A）
 
 ### 本周执行
-2. 验证 Grep 路径问题是否仍存在（P1-3）
-3. 如果存在，实施 Node.js 原生实现
+
+1. 验证 Grep 路径问题是否仍存在（P1-3）
+2. 如果存在，实施 Node.js 原生实现
 
 ### 两周内执行
-4. 实施 Zod schema 验证（P1-2）
-5. 修复接口中的 any（P1-4 阶段 1）
+
+1. 实施 Zod schema 验证（P1-2）
+2. 修复接口中的 any（P1-4 阶段 1）
 
 ### 一个月内执行
-6. 设计 Hook 错误处理分级方案（P1-1）
-7. 与团队讨论破坏性变更策略
+
+1. 设计 Hook 错误处理分级方案（P1-1）
+2. 与团队讨论破坏性变更策略
 
 ---
 

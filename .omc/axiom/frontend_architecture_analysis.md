@@ -11,11 +11,16 @@
 ### 1.1 核心构建配置
 
 **TypeScript 编译器配置** (`tsconfig.json`):
-- **Target**: ES2022 (现代 JavaScript 特性)
-- **Module System**: NodeNext (原生 ESM 支持)
-- **输出目录**: `dist/` (类型声明 + source maps)
-- **严格模式**: 已启用 (`strict: true`)
-- **声明文件**: 自动生成 `.d.ts` + `.d.ts.map`
+
+* **Target**: ES2022 (现代 JavaScript 特性)
+
+* **Module System**: NodeNext (原生 ESM 支持)
+
+* **输出目录**: `dist/` (类型声明 + source maps)
+
+* **严格模式**: 已启用 (`strict: true`)
+
+* **声明文件**: 自动生成 `.d.ts` + `.d.ts.map`
 
 **关键特性**:
 ```json
@@ -67,7 +72,7 @@ npm run compose-docs
 ### 2.2 Bundle 大小分析
 
 | Bundle | 大小 | 用途 |
-|--------|------|------|
+| -------- | ------ | ------ |
 | `codex-server.cjs` | 1.2MB | OpenAI Codex MCP 服务器 |
 | `gemini-server.cjs` | 982KB | Google Gemini MCP 服务器 |
 | `mcp-server.cjs` | 814KB | 通用 MCP 服务器 |
@@ -95,8 +100,10 @@ define: {
   '__AGENT_PROMPTS_CODEX__': JSON.stringify(codexPrompts)
 }
 ```
-- **优势**: 消除运行时文件系统扫描
-- **效果**: 提升启动速度，减少 I/O 操作
+
+* **优势**: 消除运行时文件系统扫描
+
+* **效果**: 提升启动速度，减少 I/O 操作
 
 **3. 全局模块解析 Banner**:
 ```javascript
@@ -105,7 +112,8 @@ var _globalRoot = _cp.execSync('npm root -g').trim();
 process.env.NODE_PATH = _globalRoot;
 _Module._initPaths();
 ```
-- **目的**: 支持从插件缓存运行时查找原生包
+
+* **目的**: 支持从插件缓存运行时查找原生包
 
 ---
 
@@ -114,8 +122,10 @@ _Module._initPaths();
 ### 3.1 命令行框架
 
 **核心依赖**:
-- `commander@^12.1.0`: 命令行参数解析
-- `chalk@^5.3.0`: 终端颜色输出 (277 次使用)
+
+* `commander@^12.1.0`: 命令行参数解析
+
+* `chalk@^5.3.0`: 终端颜色输出 (277 次使用)
 
 ### 3.2 CLI 入口点
 
@@ -132,7 +142,7 @@ _Module._initPaths();
 ### 3.3 主要命令
 
 | 命令 | 功能 | 特性 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `omc launch` | 启动 Claude Code | tmux 原生集成 |
 | `omc dashboard` | 分析仪表板 | 聚合统计 + 成本分析 |
 | `omc interop` | 双窗格会话 | OMC + OMX 分屏 |
@@ -144,7 +154,7 @@ _Module._initPaths();
 
 **1. 默认行为可配置**:
 ```javascript
-const defaultActionMode = process.env.OMC_DEFAULT_ACTION || 'launch';
+const defaultActionMode = process.env.OMC_DEFAULT_ACTION | | 'launch';
 ```
 
 **2. 自动 Backfill 机制**:
@@ -152,7 +162,7 @@ const defaultActionMode = process.env.OMC_DEFAULT_ACTION || 'launch';
 async function checkIfBackfillNeeded() {
   // 检查 token-tracking.jsonl 是否过期
   const ageMs = Date.now() - stats.mtimeMs;
-  return stats.size < 100 || ageMs > 3600000;
+  return stats.size < 100 | | ageMs > 3600000;
 }
 ```
 
@@ -170,17 +180,24 @@ const gradient = await import('gradient-string');
 ### 4.1 构建性能
 
 **构建速度** (估算):
-- TypeScript 编译: ~5-10s (18MB 输出)
-- esbuild bundles: ~2-3s (并行执行)
-- 文档组合: <1s
-- **总计**: ~8-15s (完整构建)
+
+* TypeScript 编译: ~5-10s (18MB 输出)
+
+* esbuild bundles: ~2-3s (并行执行)
+
+* 文档组合: <1s
+
+* **总计**: ~8-15s (完整构建)
 
 ### 4.2 包体积优化
 
 **优化效果**:
-- **原始依赖**: ~50+ npm 包
-- **Bundle 后**: 3MB (3 个 MCP 服务器)
-- **压缩率**: ~94% (通过外部化 + tree-shaking)
+
+* **原始依赖**: ~50+ npm 包
+
+* **Bundle 后**: 3MB (3 个 MCP 服务器)
+
+* **压缩率**: ~94% (通过外部化 + tree-shaking)
 
 ### 4.3 运行时性能
 
@@ -233,14 +250,20 @@ npm run dev  # tsc --watch (热重载)
 ```
 
 **测试工具**:
-- `vitest@^4.0.17`: 单元测试
-- `@vitest/ui`: 可视化测试界面
-- `@vitest/coverage-v8`: 覆盖率报告
+
+* `vitest@^4.0.17`: 单元测试
+
+* `@vitest/ui`: 可视化测试界面
+
+* `@vitest/coverage-v8`: 覆盖率报告
 
 **代码质量**:
-- `eslint@^9.17.0`: 代码检查
-- `prettier@^3.4.2`: 代码格式化
-- `typescript-eslint@^8.53.0`: TS 专用规则
+
+* `eslint@^9.17.0`: 代码检查
+
+* `prettier@^3.4.2`: 代码格式化
+
+* `typescript-eslint@^8.53.0`: TS 专用规则
 
 ### 6.2 发布流程
 
@@ -254,9 +277,12 @@ npm run dev  # tsc --watch (热重载)
 ```
 
 **版本管理**:
-- `scripts/bump-version.mjs`: 版本号自动递增
-- `scripts/release-local.mjs`: 本地发布测试
-- `scripts/sync-metadata.ts`: 元数据同步验证
+
+* `scripts/bump-version.mjs`: 版本号自动递增
+
+* `scripts/release-local.mjs`: 本地发布测试
+
+* `scripts/sync-metadata.ts`: 元数据同步验证
 
 ---
 
@@ -272,10 +298,13 @@ npm run dev  # tsc --watch (热重载)
 
 ### 7.2 性能优势
 
-- **快速启动**: 预编译 prompts (无运行时扫描)
-- **小体积**: 外部化 + tree-shaking (94% 压缩)
-- **并行构建**: 多 bundle 独立打包
-- **智能缓存**: 自动 backfill 检测
+* **快速启动**: 预编译 prompts (无运行时扫描)
+
+* **小体积**: 外部化 + tree-shaking (94% 压缩)
+
+* **并行构建**: 多 bundle 独立打包
+
+* **智能缓存**: 自动 backfill 检测
 
 ---
 
@@ -286,10 +315,10 @@ npm run dev  # tsc --watch (热重载)
 1. **增量构建**: 当前每次全量编译 (18MB)
    - 建议: 使用 `tsc --incremental`
 
-2. **Bundle 分析**: 缺少可视化工具
+1. **Bundle 分析**: 缺少可视化工具
    - 建议: 集成 `esbuild-visualizer`
 
-3. **并行化**: 构建脚本串行执行
+1. **并行化**: 构建脚本串行执行
    - 建议: 使用 `concurrently` 并行打包
 
 ### 8.2 开发体验
@@ -297,7 +326,7 @@ npm run dev  # tsc --watch (热重载)
 1. **热重载**: 仅 TypeScript 支持 watch
    - 建议: 添加 `nodemon` 监听 dist/ 变化
 
-2. **类型检查**: 构建时才检查类型
+1. **类型检查**: 构建时才检查类型
    - 建议: 添加 `tsc --noEmit` 到 pre-commit hook
 
 ### 8.3 性能监控
@@ -305,7 +334,7 @@ npm run dev  # tsc --watch (热重载)
 1. **构建时间**: 无自动化监控
    - 建议: 添加 `time` 命令到 CI
 
-2. **Bundle 大小**: 无自动化追踪
+1. **Bundle 大小**: 无自动化追踪
    - 建议: 添加 size-limit 检查
 
 ---
@@ -315,7 +344,7 @@ npm run dev  # tsc --watch (热重载)
 ### 9.1 架构评分
 
 | 维度 | 评分 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 构建速度 | ⭐⭐⭐⭐ | 8-15s 全量构建 (可优化) |
 | 包体积 | ⭐⭐⭐⭐⭐ | 94% 压缩率 (优秀) |
 | 模块化 | ⭐⭐⭐⭐⭐ | 清晰的职责分离 |
@@ -332,16 +361,22 @@ npm run dev  # tsc --watch (热重载)
 ### 9.3 推荐行动
 
 **短期** (1-2 周):
-- 启用 `tsc --incremental` (提升 50% 构建速度)
-- 添加 bundle 大小监控
+
+* 启用 `tsc --incremental` (提升 50% 构建速度)
+
+* 添加 bundle 大小监控
 
 **中期** (1-2 月):
-- 集成 esbuild-visualizer
-- 优化并行构建流程
+
+* 集成 esbuild-visualizer
+
+* 优化并行构建流程
 
 **长期** (3-6 月):
-- 探索 Turbopack/Vite 替代方案
-- 实现智能增量打包
+
+* 探索 Turbopack/Vite 替代方案
+
+* 实现智能增量打包
 
 ---
 

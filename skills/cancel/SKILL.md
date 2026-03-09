@@ -13,15 +13,24 @@ description: 取消任何活跃的 OMC 模式（autopilot、ralph、ultrawork、
 ## 功能
 
 自动检测活跃模式并取消：
-- **Autopilot**：停止工作流，保留进度以便恢复
-- **Ralph**：停止持久化循环，如适用则清理关联的 ultrawork
-- **Ultrawork**：停止并行执行（独立或关联）
-- **UltraQA**：停止 QA 循环工作流
-- **Swarm**：停止协调 agent swarm，释放已认领的任务
-- **Ultrapilot**：停止并行 autopilot worker
-- **Pipeline**：停止顺序 agent pipeline
-- **Team**：向所有队友发送 shutdown_request，等待响应，调用 TeamDelete，清理关联的 ralph（如存在）
-- **Team+Ralph（关联）**：先取消 team（优雅关闭），再清理 ralph 状态。关联时取消 ralph 也会先取消 team。
+
+* **Autopilot**：停止工作流，保留进度以便恢复
+
+* **Ralph**：停止持久化循环，如适用则清理关联的 ultrawork
+
+* **Ultrawork**：停止并行执行（独立或关联）
+
+* **UltraQA**：停止 QA 循环工作流
+
+* **Swarm**：停止协调 agent swarm，释放已认领的任务
+
+* **Ultrapilot**：停止并行 autopilot worker
+
+* **Pipeline**：停止顺序 agent pipeline
+
+* **Team**：向所有队友发送 shutdown_request，等待响应，调用 TeamDelete，清理关联的 ralph（如存在）
+
+* **Team+Ralph（关联）**：先取消 team（优雅关闭），再清理 ralph 状态。关联时取消 ralph 也会先取消 team。
 
 ## 用法
 
@@ -34,21 +43,25 @@ description: 取消任何活跃的 OMC 模式（autopilot、ralph、ultrawork、
 ## 自动检测
 
 `/ultrapower:cancel` 遵循会话感知状态契约：
-- 默认情况下，命令通过 `state_list_active` 和 `state_get_status` 检查当前会话，导航 `.omc/state/sessions/{sessionId}/…` 发现活跃模式。
-- 当提供或已知 session id 时，该会话范围路径具有权威性。仅当 session id 缺失或为空时，才将 `.omc/state/*.json` 中的旧版文件作为兼容性回退。
-- Swarm 是共享的 SQLite/marker 模式（`.omc/state/swarm.db` / `.omc/state/swarm-active.marker`），不在会话范围内。
-- 默认清理流程使用 session id 调用 `state_clear`，仅删除匹配的会话文件；模式保持绑定到其原始会话。
+
+* 默认情况下，命令通过 `state_list_active` 和 `state_get_status` 检查当前会话，导航 `.omc/state/sessions/{sessionId}/…` 发现活跃模式。
+
+* 当提供或已知 session id 时，该会话范围路径具有权威性。仅当 session id 缺失或为空时，才将 `.omc/state/*.json` 中的旧版文件作为兼容性回退。
+
+* Swarm 是共享的 SQLite/marker 模式（`.omc/state/swarm.db` / `.omc/state/swarm-active.marker`），不在会话范围内。
+
+* 默认清理流程使用 session id 调用 `state_clear`，仅删除匹配的会话文件；模式保持绑定到其原始会话。
 
 活跃模式仍按依赖顺序取消：
 1. Autopilot（包含关联的 ralph/ultraqa/ 清理）
 2. Ralph（清理其关联的 ultrawork）
 3. Ultrawork（独立）
 4. UltraQA（独立）
-6. Swarm（独立）
-7. Ultrapilot（独立）
-8. Pipeline（独立）
-9. Team（Claude Code 原生）
-10. Plan Consensus（独立）
+5. Swarm（独立）
+6. Ultrapilot（独立）
+7. Pipeline（独立）
+8. Team（Claude Code 原生）
+9. Plan Consensus（独立）
 
 ## 强制清除全部
 
@@ -71,30 +84,54 @@ Steps under the hood:
 Every `state_clear` command honors the `session_id` argument, so even force mode still uses the session-aware paths first before deleting legacy files.
 
 Legacy compatibility list (removed only under `--force`/`--all`):
-- `.omc/state/autopilot-state.json`
-- `.omc/state/ralph-state.json`
-- `.omc/state/ralph-plan-state.json`
-- `.omc/state/ralph-verification.json`
-- `.omc/state/ultrawork-state.json`
-- `.omc/state/ultraqa-state.json`
-- `.omc/state/swarm.db`
-- `.omc/state/swarm.db-wal`
-- `.omc/state/swarm.db-shm`
-- `.omc/state/swarm-active.marker`
-- `.omc/state/swarm-tasks.db`
-- `.omc/state/ultrapilot-state.json`
-- `.omc/state/ultrapilot-ownership.json`
-- `.omc/state/pipeline-state.json`
-- `.omc/state/plan-consensus.json`
-- `.omc/state/ralplan-state.json`
-- `.omc/state/boulder.json`
-- `.omc/state/hud-state.json`
-- `.omc/state/subagent-tracking.json`
-- `.omc/state/subagent-tracker.lock`
-- `.omc/state/rate-limit-daemon.pid`
-- `.omc/state/rate-limit-daemon.log`
-- `.omc/state/checkpoints/` (directory)
-- `.omc/state/sessions/` (empty directory cleanup after clearing sessions)
+
+* `.omc/state/autopilot-state.json`
+
+* `.omc/state/ralph-state.json`
+
+* `.omc/state/ralph-plan-state.json`
+
+* `.omc/state/ralph-verification.json`
+
+* `.omc/state/ultrawork-state.json`
+
+* `.omc/state/ultraqa-state.json`
+
+* `.omc/state/swarm.db`
+
+* `.omc/state/swarm.db-wal`
+
+* `.omc/state/swarm.db-shm`
+
+* `.omc/state/swarm-active.marker`
+
+* `.omc/state/swarm-tasks.db`
+
+* `.omc/state/ultrapilot-state.json`
+
+* `.omc/state/ultrapilot-ownership.json`
+
+* `.omc/state/pipeline-state.json`
+
+* `.omc/state/plan-consensus.json`
+
+* `.omc/state/ralplan-state.json`
+
+* `.omc/state/boulder.json`
+
+* `.omc/state/hud-state.json`
+
+* `.omc/state/subagent-tracking.json`
+
+* `.omc/state/subagent-tracker.lock`
+
+* `.omc/state/rate-limit-daemon.pid`
+
+* `.omc/state/rate-limit-daemon.log`
+
+* `.omc/state/checkpoints/` (directory)
+
+* `.omc/state/sessions/` (empty directory cleanup after clearing sessions)
 
 ## Implementation Steps
 
@@ -103,9 +140,11 @@ When you invoke this skill:
 ### 1. Parse Arguments
 
 ```bash
+
 # Check for --force or --all flags
+
 FORCE_MODE=false
-if [[ "$*" == *"--force"* ]] || [[ "$*" == *"--all"* ]]; then
+if [[ "$*" == *"--force"* ]] | | [[ "$*" == *"--all"* ]]; then
   FORCE_MODE=true
 fi
 ```
@@ -129,7 +168,9 @@ Use force mode to clear every session plus legacy artifacts via `state_clear`. D
 Teams are detected by checking for config files in `~/.claude/teams/`:
 
 ```bash
+
 # Check for active teams
+
 TEAM_CONFIGS=$(find ~/.claude/teams -name config.json -maxdepth 2 2>/dev/null)
 ```
 
@@ -195,8 +236,11 @@ Team "{team_name}" cancelled:
 Call `cancelAutopilot()` from `src/hooks/autopilot/cancel.ts:27-78`:
 
 ```bash
+
 # Autopilot handles its own cleanup + ralph + ultraqa
+
 # Just mark autopilot as inactive (preserves state for resume)
+
 if [[ -f .omc/state/autopilot-state.json ]]; then
   # Clean up ralph if active
   if [[ -f .omc/state/ralph-state.json ]]; then
@@ -325,7 +369,7 @@ cancel skill 运行如下：
 ## 消息参考
 
 | 模式 | 成功消息 |
-|------|-----------------|
+| ------ | ----------------- |
 | Autopilot | "Autopilot cancelled at phase: {phase}. Progress preserved for resume." |
 | Ralph | "Ralph cancelled. Persistent mode deactivated." |
 | Ultrawork | "Ultrawork cancelled. Parallel execution mode deactivated." |
@@ -341,7 +385,7 @@ cancel skill 运行如下：
 ## 保留内容
 
 | 模式 | 状态是否保留 | 恢复命令 |
-|------|-----------------|----------------|
+| ------ | ----------------- | ---------------- |
 | Autopilot | 是（阶段、文件、规格说明、计划、裁决） | `/ultrapower:autopilot` |
 | Ralph | 否 | N/A |
 | Ultrawork | 否 | N/A |
@@ -353,12 +397,17 @@ cancel skill 运行如下：
 
 ## 说明
 
-- **依赖感知**：Autopilot 取消时清理 Ralph 和 UltraQA
-- **关联感知**：Ralph 取消时清理关联的 Ultrawork
-- **安全**：仅清理关联的 Ultrawork，保留独立的 Ultrawork
-- **仅本地**：清理 `.omc/state/` 目录中的状态文件
-- **恢复友好**：Autopilot 状态保留以便无缝恢复
-- **Team 感知**：检测原生 Claude Code team 并执行优雅关闭
+* **依赖感知**：Autopilot 取消时清理 Ralph 和 UltraQA
+
+* **关联感知**：Ralph 取消时清理关联的 Ultrawork
+
+* **安全**：仅清理关联的 Ultrawork，保留独立的 Ultrawork
+
+* **仅本地**：清理 `.omc/state/` 目录中的状态文件
+
+* **恢复友好**：Autopilot 状态保留以便无缝恢复
+
+* **Team 感知**：检测原生 Claude Code team 并执行优雅关闭
 
 ## MCP Worker 清理
 
@@ -376,6 +425,8 @@ cancel skill 运行如下：
 ```bash
 rm -rf .omc/state/team-bridge/       # Heartbeat files
 rm -f .omc/state/team-mcp-workers.json  # Shadow registry
+
 # Kill all omc-team-* tmux sessions
+
 tmux list-sessions -F '#{session_name}' 2>/dev/null | grep '^omc-team-' | while read s; do tmux kill-session -t "$s" 2>/dev/null; done
 ```

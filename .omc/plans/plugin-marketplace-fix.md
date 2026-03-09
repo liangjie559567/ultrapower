@@ -9,7 +9,7 @@
 ## 任务总览
 
 | # | 任务 | 优先级 | 影响文件 | 复杂度 |
-|---|------|--------|---------|--------|
+| --- | ------ | -------- | --------- | -------- |
 | 1 | 修复 settings.json agent 字段格式 | P0 | `settings.json` | 低 |
 | 2 | 统一 author 字段 | P0 | `plugin.json`, `marketplace.json`, `package.json` | 低 |
 | 3 | 实现 syncMarketplace() | P1 | `scripts/release-steps.mjs` | 中 |
@@ -44,7 +44,7 @@
 **问题：** author 信息跨 3 个文件不一致。
 
 | 文件 | 当前值 |
-|------|--------|
+| ------ | -------- |
 | plugin.json | `{"name": "Yeachan Heo"}` |
 | marketplace.json (owner) | `{"name": "liangjie559567"}` |
 | marketplace.json (plugin author) | `{"name": "liangjie559567"}` |
@@ -53,8 +53,10 @@
 **修复方案：** 统一为 `"liangjie559567"`（与 GitHub 用户名和 npm 包名一致）。
 
 **变更：**
-- `plugin.json`: `author.name` 改为 `"liangjie559567"`
-- `package.json`: `author` 改为 `"liangjie559567"`
+
+* `plugin.json`: `author.name` 改为 `"liangjie559567"`
+
+* `package.json`: `author` 改为 `"liangjie559567"`
 
 **文件：** `.claude-plugin/plugin.json`, `package.json`
 **验证：** 3 个文件的 author 值一致。
@@ -159,7 +161,7 @@ return {
    node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/marketplace.json','utf-8'))"
    ```
 
-2. **Author 一致性检查：**
+1. **Author 一致性检查：**
    ```bash
    node -e "
      const p = JSON.parse(require('fs').readFileSync('.claude-plugin/plugin.json','utf-8'));
@@ -172,13 +174,13 @@ return {
    ```
    预期：三个值均为 `liangjie559567`。
 
-3. **版本同步校验：**
+1. **版本同步校验：**
    ```bash
    node scripts/bump-version.mjs
    ```
    预期：输出 4 个版本值（pkg、plugin、marketplace、marketplaceSource）且全部一致。
 
-4. **settings.json 无 agent 字段：**
+1. **settings.json 无 agent 字段：**
    ```bash
    node -e "
      const s = JSON.parse(require('fs').readFileSync('settings.json','utf-8'));
@@ -187,13 +189,13 @@ return {
    ```
    预期：`has agent: false`。
 
-5. **syncMarketplace dry-run：**
+1. **syncMarketplace dry-run：**
    ```bash
    node scripts/release-steps.mjs sync --dry-run
    ```
    预期：输出 dry-run 日志，无报错。
 
-6. **构建验证：**
+1. **构建验证：**
    ```bash
    tsc --noEmit && npm run build
    ```

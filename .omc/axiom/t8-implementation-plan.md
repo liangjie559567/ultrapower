@@ -1,20 +1,27 @@
 # T8 实施计划：Hooks 系统测试覆盖 70%+
 
 **任务概览：**
-- 优先级：P1
-- 预计工时：2 周
-- 当前状态：规划阶段
-- 目标：将 hooks 测试覆盖率从 40% 提升到 70%+
+
+* 优先级：P1
+
+* 预计工时：2 周
+
+* 当前状态：规划阶段
+
+* 目标：将 hooks 测试覆盖率从 40% 提升到 70%+
 
 ## 现状分析
 
-- **Hooks 总数：** 40+ 个子目录
-- **现有测试文件：** 57 个 .test.ts 文件
-- **覆盖率工具：** 需要安装 @vitest/coverage-v8
+* **Hooks 总数：** 40+ 个子目录
+
+* **现有测试文件：** 57 个 .test.ts 文件
+
+* **覆盖率工具：** 需要安装 @vitest/coverage-v8
 
 ## 实施策略
 
 ### 阶段 1：环境准备（1 天）
+
 1. 安装覆盖率工具：`npm install -D @vitest/coverage-v8`
 2. 运行基线覆盖率检查：`npm run test:coverage -- src/hooks`
 3. 识别覆盖率最低的 hooks 模块
@@ -22,25 +29,40 @@
 ### 阶段 2：优先级分组（按使用频率和重要性）
 
 **P0 核心 Hooks（必须 >80% 覆盖）：**
-- autopilot
-- ralph
-- ultrawork
-- team-pipeline
-- bridge-normalize（安全关键）
-- permission-handler（安全关键）
+
+* autopilot
+
+* ralph
+
+* ultrawork
+
+* team-pipeline
+
+* bridge-normalize（安全关键）
+
+* permission-handler（安全关键）
 
 **P1 常用 Hooks（目标 70% 覆盖）：**
-- auto-slash-command
-- magic-keywords
-- rules-injector
-- session-end
-- setup
+
+* auto-slash-command
+
+* magic-keywords
+
+* rules-injector
+
+* session-end
+
+* setup
 
 **P2 辅助 Hooks（目标 60% 覆盖）：**
-- agent-usage-reminder
-- think-mode
-- recovery
-- 其他辅助模块
+
+* agent-usage-reminder
+
+* think-mode
+
+* recovery
+
+* 其他辅助模块
 
 ### 阶段 3：测试编写模板
 
@@ -57,15 +79,20 @@
 **批次 4（2 天）：** 覆盖率验证和补充
 
 ### 阶段 5：CI 集成（1 天）
-- 配置 CI 覆盖率门禁
-- 确保所有测试在 CI 环境通过
+
+* 配置 CI 覆盖率门禁
+
+* 确保所有测试在 CI 环境通过
 
 ## 验收标准
 
-- [ ] 每个 hook 类型至少 3 个测试用例
-- [ ] 覆盖正常流程、错误处理、边界情况
-- [ ] 总体覆盖率从 40% 提升到 70%+
-- [ ] CI 集成测试通过
+* [ ] 每个 hook 类型至少 3 个测试用例
+
+* [ ] 覆盖正常流程、错误处理、边界情况
+
+* [ ] 总体覆盖率从 40% 提升到 70%+
+
+* [ ] CI 集成测试通过
 
 ## 下一步行动
 

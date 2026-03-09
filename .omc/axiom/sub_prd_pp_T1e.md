@@ -51,11 +51,11 @@ filterPassthrough（行 195-227）：
 
 1. **纵深防御**：Zod 验证不仅做字段白名单，还做类型检查（防止类型混淆攻击，如将 `sessionId` 传入对象而非字符串）。白名单过滤（方案 B）只能过滤字段名，无法验证字段值的结构。
 
-2. **SENSITIVE_HOOKS 频率低**：`permission-request`、`setup-init`、`setup-maintenance`、`session-end` 均为低频事件（非热路径），禁用 fast path 的性能代价可忽略不计，完全满足验收条件"非敏感 hook 的 fast path 性能不退化"。
+1. **SENSITIVE_HOOKS 频率低**：`permission-request`、`setup-init`、`setup-maintenance`、`session-end` 均为低频事件（非热路径），禁用 fast path 的性能代价可忽略不计，完全满足验收条件"非敏感 hook 的 fast path 性能不退化"。
 
-3. **修改最小化**：只需在 `normalizeHookInput` 中增加一个提前判断，改动范围极小，不影响非敏感 hook 的现有行为，回归风险最低。
+1. **修改最小化**：只需在 `normalizeHookInput` 中增加一个提前判断，改动范围极小，不影响非敏感 hook 的现有行为，回归风险最低。
 
-4. **语义清晰**：fast path 的存在意义是"已归一化、结构可信的输入跳过重复解析"。敏感 hook 的输入来自外部，不可预设信任，禁用 fast path 符合"不信任外部输入"的安全原则。
+1. **语义清晰**：fast path 的存在意义是"已归一化、结构可信的输入跳过重复解析"。敏感 hook 的输入来自外部，不可预设信任，禁用 fast path 符合"不信任外部输入"的安全原则。
 
 ---
 
@@ -68,15 +68,20 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput
 ```
 
 **Input**：
-- `raw`：原始 hook 输入（来自 Claude Code，任意格式）
-- `hookType`：hook 类型字符串，用于敏感性判定
+
+* `raw`：原始 hook 输入（来自 Claude Code，任意格式）
+
+* `hookType`：hook 类型字符串，用于敏感性判定
 
 **Output**：
-- 返回 `HookInput` 对象，字段已归一化为 camelCase
+
+* 返回 `HookInput` 对象，字段已归一化为 camelCase
 
 **Side Effects**：
-- 对非敏感 hook 的未知字段，打印 `console.debug` 警告（现有行为不变）
-- 对 Zod 验证失败的输入，打印 `console.error` 警告（现有行为不变）
+
+* 对非敏感 hook 的未知字段，打印 `console.debug` 警告（现有行为不变）
+
+* 对 Zod 验证失败的输入，打印 `console.error` 警告（现有行为不变）
 
 ### 变化点
 
@@ -101,11 +106,16 @@ if isAlreadyCamelCase(rawObj) && !isSensitive:
 ### 无新增数据结构
 
 现有数据结构均不变：
-- `SENSITIVE_HOOKS: Set<string>`（行 82-87）——已包含正确成员
-- `KNOWN_FIELDS: Set<string>`（行 90-102）——不变
-- `CAMEL_CASE_MARKERS: Set<string>`（行 107）——不变
-- `HookInput` 接口——不变
-- `HookInputSchema`（Zod schema）——不变
+
+* `SENSITIVE_HOOKS: Set<string>`（行 82-87）——已包含正确成员
+
+* `KNOWN_FIELDS: Set<string>`（行 90-102）——不变
+
+* `CAMEL_CASE_MARKERS: Set<string>`（行 107）——不变
+
+* `HookInput` 接口——不变
+
+* `HookInputSchema`（Zod schema）——不变
 
 ---
 
@@ -158,10 +168,13 @@ if isAlreadyCamelCase(rawObj) && !isSensitive:
 
 ### 修改范围
 
-- 仅修改 `normalizeHookInput` 函数内的 fast path 判断条件
-- 不修改 `isAlreadyCamelCase`（保留供测试导出）
-- 不修改 `filterPassthrough`
-- 不修改任何 Zod schema
+* 仅修改 `normalizeHookInput` 函数内的 fast path 判断条件
+
+* 不修改 `isAlreadyCamelCase`（保留供测试导出）
+
+* 不修改 `filterPassthrough`
+
+* 不修改任何 Zod schema
 
 ---
 
@@ -233,11 +246,16 @@ Then:  normalized.sessionId === 'snake'（snake_case 优先）
 ### 现有测试覆盖确认
 
 以下现有测试必须继续通过（验证无回归）：
-- `"should skip Zod parse on camelCase-only input"`（非敏感 hook，fast path 仍有效）
-- `"should invoke Zod parse on snake_case input"`（慢路径不变）
-- `"should apply sensitive filtering on fast-path too"`（新增条件后此测试描述需更新：敏感 hook 不再走 fast path，该测试改为验证敏感 hook 走完整路径后的过滤结果是否正确）
-- `"should drop unknown fields for sensitive hooks"`（白名单过滤逻辑不变）
-- `"should allow known fields through for sensitive hooks"`（已知字段透传不变）
+
+* `"should skip Zod parse on camelCase-only input"`（非敏感 hook，fast path 仍有效）
+
+* `"should invoke Zod parse on snake_case input"`（慢路径不变）
+
+* `"should apply sensitive filtering on fast-path too"`（新增条件后此测试描述需更新：敏感 hook 不再走 fast path，该测试改为验证敏感 hook 走完整路径后的过滤结果是否正确）
+
+* `"should drop unknown fields for sensitive hooks"`（白名单过滤逻辑不变）
+
+* `"should allow known fields through for sensitive hooks"`（已知字段透传不变）
 
 ---
 
@@ -285,16 +303,23 @@ Feature: bridge-normalize fast path 安全修复
 ## 8. 影响范围与风险
 
 ### 影响文件
-- **修改**：`src/hooks/bridge-normalize.ts`（仅 `normalizeHookInput` 函数，约 1 行条件判断变更）
-- **新增测试**：`src/hooks/__tests__/bridge-security.test.ts`（在现有 "Normalization Fast-Path" describe 块追加约 60-80 行测试代码）
+
+* **修改**：`src/hooks/bridge-normalize.ts`（仅 `normalizeHookInput` 函数，约 1 行条件判断变更）
+
+* **新增测试**：`src/hooks/__tests__/bridge-security.test.ts`（在现有 "Normalization Fast-Path" describe 块追加约 60-80 行测试代码）
 
 ### 风险评估
-- **风险级别**：低
-- **性能影响**：仅影响 4 种低频 hook 类型，Zod 解析耗时约 0.1-0.5ms，对整体性能无可测量影响
-- **回归风险**：极低，修改范围仅一个条件判断；现有测试覆盖所有非敏感 hook 路径
-- **注意事项**：现有测试 `"should apply sensitive filtering on fast-path too"` 的描述将在修复后出现语义偏差（敏感 hook 不再走 fast path），建议同步更新该测试的描述字符串，但其断言逻辑（验证字段过滤结果）仍然正确，无需修改断言
+
+* **风险级别**：低
+
+* **性能影响**：仅影响 4 种低频 hook 类型，Zod 解析耗时约 0.1-0.5ms，对整体性能无可测量影响
+
+* **回归风险**：极低，修改范围仅一个条件判断；现有测试覆盖所有非敏感 hook 路径
+
+* **注意事项**：现有测试 `"should apply sensitive filtering on fast-path too"` 的描述将在修复后出现语义偏差（敏感 hook 不再走 fast path），建议同步更新该测试的描述字符串，但其断言逻辑（验证字段过滤结果）仍然正确，无需修改断言
 
 ### CI 门禁要求
+
 修改完成后须通过：
 ```
 tsc --noEmit && npm run build && npm test

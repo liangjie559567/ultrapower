@@ -264,7 +264,7 @@ const agentMap = {
   'quick': 'explorer',
 };
 
-const agent = agentMap[detected.category] || 'executor';
+const agent = agentMap[detected.category] | | 'executor';
 delegateTo(agent, taskPrompt, detected);
 ```
 
@@ -307,8 +307,13 @@ const customConfig = { ...config, temperature: 0.5 }; // 降低创意度
 ## 示例
 
 参见 `test-categories.ts` 获取以下内容的完整示例：
-- 基本解析
-- 自动检测
-- 显式控制
-- 提示词增强
-- 向后兼容性
+
+* 基本解析
+
+* 自动检测
+
+* 显式控制
+
+* 提示词增强
+
+* 向后兼容性

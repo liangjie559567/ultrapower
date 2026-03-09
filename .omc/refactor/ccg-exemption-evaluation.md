@@ -10,7 +10,7 @@
 ## 剩余错误分布（7 个文件）
 
 | 文件 | 类型 | 优先级 |
-|------|------|--------|
+| ------ | ------ | -------- |
 | src/hooks/preemptive-compaction/index.ts | Hook | 高 |
 | src/hooks/recovery/context-window.ts | Hook | 高 |
 | src/hooks/session-end/index.ts | Hook | 高 |
@@ -22,21 +22,32 @@
 ## 建议策略
 
 ### 批次 6：Hooks 模块（3 个文件）
-- preemptive-compaction
-- recovery/context-window
-- session-end
-- 预计修复：~30 个错误
+
+* preemptive-compaction
+
+* recovery/context-window
+
+* session-end
+
+* 预计修复：~30 个错误
 
 ### 批次 7：工具库和监控（2 个文件）
-- lib/path-validator
-- monitoring/metrics-collector
-- 预计修复：~20 个错误
+
+* lib/path-validator
+
+* monitoring/metrics-collector
+
+* 预计修复：~20 个错误
 
 ### 批次 8：Python REPL（2 个文件）
-- tools/python-repl/bridge-manager
-- tools/python-repl/paths
-- 预计修复：~20 个错误
-- 或考虑豁免（CLI 工具特性）
+
+* tools/python-repl/bridge-manager
+
+* tools/python-repl/paths
+
+* 预计修复：~20 个错误
+
+* 或考虑豁免（CLI 工具特性）
 
 ## 结论
 

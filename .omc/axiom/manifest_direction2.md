@@ -44,7 +44,7 @@ T-08 (skill 集成) ← T-06 ─────────────────
 ## Tasks
 
 | ID | 名称 | 依赖 | 文件 |
-|----|------|------|------|
+| ---- | ------ | ------ | ------ |
 | T-01 | SQLite DB 初始化 | — | `src/hooks/observability/db.ts` |
 | T-02 | 异步写入队列 | — | `src/hooks/observability/write-queue.ts` |
 | T-03 | Agent 追踪器 | T-01, T-02 | `src/hooks/observability/agent-tracker.ts` |

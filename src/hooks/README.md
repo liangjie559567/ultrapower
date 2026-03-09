@@ -35,26 +35,42 @@ src/hooks/
 ## 重构进度
 
 ### Phase 1: 基础架构 ✅
-- [x] HookRegistry 接口
-- [x] 11个基础 processor 模块
-- [x] StateReader 工具
-- [x] 处理器注册系统
+
+* [x] HookRegistry 接口
+
+* [x] 11个基础 processor 模块
+
+* [x] StateReader 工具
+
+* [x] 处理器注册系统
 
 ### Phase 2: 复杂处理器迁移 🚧
+
 待迁移的复杂处理器：
-- [ ] ralph processor
-- [ ] autopilot processor
-- [ ] ultrawork processor
-- [ ] team processor
-- [ ] stop-continuation processor
-- [ ] pre-tool-use processor
-- [ ] post-tool-use processor
+
+* [ ] ralph processor
+
+* [ ] autopilot processor
+
+* [ ] ultrawork processor
+
+* [ ] team processor
+
+* [ ] stop-continuation processor
+
+* [ ] pre-tool-use processor
+
+* [ ] post-tool-use processor
 
 ### Phase 3: 完全替换 ⏳
-- [ ] 集成测试验证
-- [ ] 性能基准测试
-- [ ] 替换原 bridge.ts
-- [ ] 清理遗留代码
+
+* [ ] 集成测试验证
+
+* [ ] 性能基准测试
+
+* [ ] 替换原 bridge.ts
+
+* [ ] 清理遗留代码
 
 ## 使用方式
 

@@ -21,14 +21,17 @@
 ```
 
 **设计原则**：
-- 会话优先：有 `sessionId` 时仅读写会话路径，无传统回退（防止跨会话泄漏）
-- 路径安全：所有 `mode` 参数必须经 `assertValidMode()` 校验后才能拼接路径
-- 原子写入：使用 `atomicWriteJsonSync` 保证写入原子性
+
+* 会话优先：有 `sessionId` 时仅读写会话路径，无传统回退（防止跨会话泄漏）
+
+* 路径安全：所有 `mode` 参数必须经 `assertValidMode()` 校验后才能拼接路径
+
+* 原子写入：使用 `atomicWriteJsonSync` 保证写入原子性
 
 ### 1.2 支持的执行模式
 
 | 模式 | 状态文件 | 会话隔离 | 互斥组 | 特殊属性 |
-|------|---------|---------|--------|---------|
+| ------ | --------- | --------- | -------- | --------- |
 | `autopilot` | `autopilot-state.json` | ✓ | 互斥 | 5 阶段流水线 |
 | `ultrapilot` | `ultrapilot-state.json` | ✓ | 互斥 | 带 marker |
 | `swarm` | `swarm.db` (SQLite) | ✗ | 互斥 | 数据库存储 |
@@ -59,8 +62,10 @@
 ```
 
 **死状态处理**：
-- `TIMEOUT`：5 分钟无响应 → 强制 SHUTDOWN
-- `ZOMBIE`：错误处理超时 30 秒 → 强制清理（需人工介入）
+
+* `TIMEOUT`：5 分钟无响应 → 强制 SHUTDOWN
+
+* `ZOMBIE`：错误处理超时 30 秒 → 强制清理（需人工介入）
 
 ### 2.2 Team Pipeline 状态转换
 
@@ -73,11 +78,16 @@ team-plan → team-prd → team-exec → team-verify
 ```
 
 **阶段 Agent 路由**：
-- `team-plan`: `explore` (haiku) + `planner` (opus)
-- `team-prd`: `analyst` (opus)
-- `team-exec`: `executor` (sonnet) + 专家 agents
-- `team-verify`: `verifier` (sonnet) + 审查 agents
-- `team-fix`: `executor`/`build-fixer`/`debugger`
+
+* `team-plan`: `explore` (haiku) + `planner` (opus)
+
+* `team-prd`: `analyst` (opus)
+
+* `team-exec`: `executor` (sonnet) + 专家 agents
+
+* `team-verify`: `verifier` (sonnet) + 审查 agents
+
+* `team-fix`: `executor`/`build-fixer`/`debugger`
 
 **终态**：`complete` | `failed` | `cancelled`
 
@@ -88,9 +98,12 @@ expansion → planning → execution → qa → validation → complete/failed
 ```
 
 **关键转换**：
-- `execution → qa`: 清理 Ralph 状态 → 启动 UltraQA（互斥切换）
-- `qa → validation`: 清理 UltraQA 状态 → 生成并行验证 agents
-- 失败时支持回滚到前一阶段
+
+* `execution → qa`: 清理 Ralph 状态 → 启动 UltraQA（互斥切换）
+
+* `qa → validation`: 清理 UltraQA 状态 → 生成并行验证 agents
+
+* 失败时支持回滚到前一阶段
 
 ---
 
@@ -109,8 +122,10 @@ expansion → planning → execution → qa → validation → complete/failed
 ```
 
 **并发保护级别**：
-- 普通模式：中等（atomicWriteJsonSync）
-- subagent-tracking：最高（四层保护 + 重试机制）
+
+* 普通模式：中等（atomicWriteJsonSync）
+
+* subagent-tracking：最高（四层保护 + 重试机制）
 
 ### 3.2 会话隔离
 
@@ -131,7 +146,7 @@ return `.omc/state/${mode}-state.json`;
 **两种 Stale 阈值**（不可混淆）：
 
 | 类型 | 阈值 | 用途 | 触发后果 |
-|------|------|------|---------|
+| ------ | ------ | ------ | --------- |
 | Agent Stale | 5 分钟 | Agent 运行状态过期检测 | Agent 强制 SHUTDOWN |
 | Mode Stale Marker | 1 小时 | 模式状态文件 marker 清理 | Marker 被清理，允许重新激活 |
 
@@ -168,8 +183,9 @@ state_clear(mode, workingDirectory?, session_id?)
 
 ### 4.2 查询工具
 
-- `state_list_active`: 列出活跃模式（按会话或全局）
-- `state_get_status`: 获取模式详细状态（路径、活跃状态、会话列表）
+* `state_list_active`: 列出活跃模式（按会话或全局）
+
+* `state_get_status`: 获取模式详细状态（路径、活跃状态、会话列表）
 
 ---
 
@@ -279,7 +295,7 @@ transitionRalphToUltraQA(directory, sessionId) {
 ## 8. 关键差异点
 
 | 差异点 | 规范描述 | 实际实现 | 处理方式 |
-|--------|---------|---------|---------|
+| -------- | --------- | --------- | --------- |
 | D-03 | 合法模式数量 | 8 个（含 swarm） | 以实现为准 |
 | D-04 | 互斥模式范围 | 4 个互斥模式 | 以实现为准 |
 | D-09 | Stale 阈值含义 | 两个不同概念 | 必须区分使用 |
@@ -326,15 +342,17 @@ clearTeamPipelineState(directory); // 清理传统 + 所有会话
 ## 10. 性能特征
 
 | 操作 | 复杂度 | 并发安全 | 持久化保证 |
-|------|--------|---------|-----------|
+| ------ | -------- | --------- | ----------- |
 | 状态读取 | O(1) | 读无锁 | N/A |
 | 状态写入 | O(1) | 原子写入 | fsync 保证 |
 | 列出活跃模式 | O(n) sessions | 无锁 | N/A |
 | 清理状态 | O(n) sessions | 原子删除 | 立即生效 |
 
 **瓶颈**：
-- 大量会话时 `state_list_active` 需遍历所有会话目录
-- SQLite (swarm) 不支持会话隔离，全局共享
+
+* 大量会话时 `state_list_active` 需遍历所有会话目录
+
+* SQLite (swarm) 不支持会话隔离，全局共享
 
 ---
 
@@ -349,9 +367,13 @@ ultrapower 的状态管理采用**分层隔离 + 原子写入**架构：
 5. **安全边界**：路径遍历防护 + 会话 ID 校验
 
 **核心文件**：
-- `src/tools/state-tools.ts` - MCP 工具接口
-- `src/hooks/mode-registry/index.ts` - 模式注册与检测
-- `src/lib/atomic-write.ts` - 原子写入实现
-- `src/hooks/{mode}/state.ts` - 各模式状态管理
+
+* `src/tools/state-tools.ts` - MCP 工具接口
+
+* `src/hooks/mode-registry/index.ts` - 模式注册与检测
+
+* `src/lib/atomic-write.ts` - 原子写入实现
+
+* `src/hooks/{mode}/state.ts` - 各模式状态管理
 
 报告行数：297 行（< 300 行限制）

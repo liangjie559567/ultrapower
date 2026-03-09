@@ -25,24 +25,29 @@ hook bridge（`src/hooks/`）和 session-registry（`src/notifications/`）
 ### 2.1 受影响位置
 
 | 文件 | 行号 | 函数名 | 调用次数 |
-|------|------|--------|----------|
+| ------ | ------ | -------- | ---------- |
 | `src/hooks/subagent-tracker/index.ts` | 167-171 | `syncSleep(ms)` | 6 次（锁等待 + flush 指数退避） |
 | `src/notifications/session-registry.ts` | 99-101 | `sleepMs(ms)` | 4 次（锁等待循环） |
 
 ### 2.2 调用场景
 
 **`syncSleep`（subagent-tracker）：**
-- 行 266, 279, 294, 305：`acquireLock()` 内的自旋锁等待，间隔 `LOCK_RETRY_MS = 50ms`，超时 `LOCK_TIMEOUT_MS = 5000ms`
-- 行 462：`debouncedFlush()` 内的指数退避，初始间隔 `FLUSH_RETRY_BASE_MS = 50ms`
+
+* 行 266, 279, 294, 305：`acquireLock()` 内的自旋锁等待，间隔 `LOCK_RETRY_MS = 50ms`，超时 `LOCK_TIMEOUT_MS = 5000ms`
+
+* 行 462：`debouncedFlush()` 内的指数退避，初始间隔 `FLUSH_RETRY_BASE_MS = 50ms`
 
 **`sleepMs`（session-registry）：**
-- 行 212, 218, 230, 247：`acquireRegistryLock()` 内的自旋锁等待，间隔 `LOCK_RETRY_MS = 20ms`，超时 `LOCK_TIMEOUT_MS = 2000ms`
+
+* 行 212, 218, 230, 247：`acquireRegistryLock()` 内的自旋锁等待，间隔 `LOCK_RETRY_MS = 20ms`，超时 `LOCK_TIMEOUT_MS = 2000ms`
 
 ### 2.3 设计约束
 
-- `acquireLock()` 和 `acquireRegistryLock()` 目前是**同步函数**，返回值为 `boolean` 或 `RegistryLockHandle | null`。
-- 其所有调用方（`writeTrackingState`、`registerSession` 等）也是同步函数。
-- 直接改为 `async/await` 需要同步改造整条调用链，属于**中等范围重构**。
+* `acquireLock()` 和 `acquireRegistryLock()` 目前是**同步函数**，返回值为 `boolean` 或 `RegistryLockHandle | null`。
+
+* 其所有调用方（`writeTrackingState`、`registerSession` 等）也是同步函数。
+
+* 直接改为 `async/await` 需要同步改造整条调用链，属于**中等范围重构**。
 
 ---
 
@@ -70,8 +75,9 @@ function isMainThread(): boolean
 
 ### 3.3 副作用
 
-- **不写文件**、不发请求、不弹提示。
-- 改动仅影响内部等待行为，外部接口（返回值类型、导出名）不变。
+* **不写文件**、不发请求、不弹提示。
+
+* 改动仅影响内部等待行为，外部接口（返回值类型、导出名）不变。
 
 ---
 
@@ -126,7 +132,7 @@ function detectIsMainThread(): boolean {
 根据调用链是否已是异步，选择不同策略：
 
 | 调用链当前类型 | 推荐策略 | 备注 |
-|-------------|----------|------|
+| ------------- | ---------- | ------ |
 | 同步函数，ms 极小（≤50ms），循环次数有限 | **策略 A：同步忙等** | 简单，不改接口 |
 | 同步函数，ms 较大或循环次数不可控 | **策略 B：异步化** | 需改造调用链 |
 
@@ -205,8 +211,10 @@ Atomics.wait(view, 0, 0, ms);
 ### 6.1 单元测试（Jest）
 
 **测试文件位置：**
-- `src/hooks/subagent-tracker/__tests__/syncSleep.test.ts`
-- `src/notifications/__tests__/sleepMs.test.ts`
+
+* `src/hooks/subagent-tracker/__tests__/syncSleep.test.ts`
+
+* `src/notifications/__tests__/sleepMs.test.ts`
 
 #### 场景一：主线程环境下 syncSleep 不抛出
 
@@ -256,8 +264,9 @@ And:   状态文件写入成功
 
 ### 6.2 覆盖率要求
 
-- `syncSleep` / `sleepMs` 函数：行覆盖率 100%
-- `acquireLock` / `acquireRegistryLock` 分支：覆盖率 ≥ 90%
+* `syncSleep` / `sleepMs` 函数：行覆盖率 100%
+
+* `acquireLock` / `acquireRegistryLock` 分支：覆盖率 ≥ 90%
 
 ---
 
@@ -302,7 +311,7 @@ Feature: Atomics.wait 主线程兼容性修复
 ## 8. 影响范围（Scope Gate 参考）
 
 | 文件 | 变更类型 | 说明 |
-|------|----------|------|
+| ------ | ---------- | ------ |
 | `src/hooks/subagent-tracker/index.ts` | 修改 | `syncSleep` 函数体 + 调用链异步化 |
 | `src/notifications/session-registry.ts` | 修改 | `sleepMs` 函数体 + 调用链异步化 |
 | `src/hooks/subagent-tracker/__tests__/syncSleep.test.ts` | 新建 | 单元测试 |
@@ -316,8 +325,8 @@ Feature: Atomics.wait 主线程兼容性修复
 
 1. **异步化传染**：将锁函数改为 async 后，所有调用方均需加 `await`，
    需逐一排查确认无遗漏，否则返回 `Promise` 被忽略会导致竞态。
-2. **策略 A 忙等**：虽然 ms 极小，在高并发场景（大量 hook 并发触发）
+1. **策略 A 忙等**：虽然 ms 极小，在高并发场景（大量 hook 并发触发）
    下仍可能造成短暂 CPU 峰值，建议策略 B 为最终方案。
-3. **SharedArrayBuffer 声明**：`session-registry.ts` 中顶层
+1. **SharedArrayBuffer 声明**：`session-registry.ts` 中顶层
    `const SLEEP_ARRAY = new Int32Array(new SharedArrayBuffer(4))` 在
    主线程环境可保留（声明本身无害），仅需避免将其传入 `Atomics.wait()`。

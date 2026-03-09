@@ -13,13 +13,13 @@
    - 1.1 状态定义
    - 1.2 状态转换图
    - 1.3 死状态说明（TIMEOUT / ZOMBIE）
-2. [Team Pipeline 状态转换矩阵](#2-team-pipeline-状态转换矩阵)
+1. [Team Pipeline 状态转换矩阵](#2-team-pipeline-状态转换矩阵)
    - 2.1 阶段定义
    - 2.2 阶段转换规则
    - 2.3 终态处理
-3. [各模式状态文件路径](#3-各模式状态文件路径)
-4. [Stale 检测规则](#4-stale-检测规则)
-5. [互斥模式检测规则](#5-互斥模式检测规则)
+1. [各模式状态文件路径](#3-各模式状态文件路径)
+2. [Stale 检测规则](#4-stale-检测规则)
+3. [互斥模式检测规则](#5-互斥模式检测规则)
 
 ---
 
@@ -30,7 +30,7 @@
 来源：`src/hooks/subagent-tracker/index.ts`
 
 | 状态 | 描述 | 是否终态 |
-|------|------|----------|
+| ------ | ------ | ---------- |
 | `SPAWNED` | Agent 已创建，等待首次工具调用 | 否 |
 | `RUNNING` | Agent 正在执行工具调用 | 否 |
 | `WAITING` | Agent 等待用户输入 | 否 |
@@ -71,7 +71,7 @@ SHUTDOWN --> [*]
 **TIMEOUT（超时死状态）**：
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 触发阈值 | 5 分钟 | `STALE_THRESHOLD_MS = 5 * 60 * 1000` |
 | 触发条件 | WAITING 状态超过 5 分钟无响应 | `subagent-tracker/index.ts` |
 | 处理策略 | 标记为 stale，触发清理，强制转 SHUTDOWN | subagent-tracker |
@@ -80,7 +80,7 @@ SHUTDOWN --> [*]
 **ZOMBIE（僵尸死状态）**：
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 触发阈值 | 30 秒 | 规范要求（代码中未见明确常量） |
 | 触发条件 | ERROR 状态超过 30 秒未完成错误处理 | 规范要求 |
 | 处理策略 | 强制清理状态文件，记录到 last-tool-error.json | 规范要求 |
@@ -97,7 +97,7 @@ SHUTDOWN --> [*]
 来源：`docs/CLAUDE.md`（team_pipeline 章节）
 
 | 阶段 | 描述 | 主要 Agent |
-|------|------|-----------|
+| ------ | ------ | ----------- |
 | `team-plan` | 规划与分解 | `explore` (haiku) + `planner` (opus) |
 | `team-prd` | 验收标准与范围确认 | `analyst` (opus) |
 | `team-exec` | 任务执行 | `executor` (sonnet) + 专家 agents |
@@ -129,7 +129,7 @@ complete            team-fix
 **转换条件详表**：
 
 | 从 | 到 | 触发条件 |
-|----|-----|---------|
+| ---- | ----- | --------- |
 | `team-plan` | `team-prd` | 规划/分解完成，任务列表已生成 |
 | `team-prd` | `team-exec` | 验收标准和范围已明确，用户确认 |
 | `team-exec` | `team-verify` | 所有执行任务达到终态（complete/failed） |
@@ -189,7 +189,7 @@ state_write(mode="team", {
 来源：`src/hooks/mode-registry/index.ts`
 
 | 模式 | 状态文件路径 | 并发保护级别 |
-|------|------------|------------|
+| ------ | ------------ | ------------ |
 | `autopilot` | `.omc/state/autopilot-state.json` | 中（atomicWriteJsonSync） |
 | `ultrapilot` | `.omc/state/ultrapilot-state.json` | 中（atomicWriteJsonSync） |
 | `team` | `.omc/state/team-state.json` | 中（atomicWriteJsonSync） |
@@ -227,7 +227,7 @@ const stateFilePath = `.omc/state/${mode}-state.json`;
 ### 4.1 Agent Stale 阈值
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 常量名 | `STALE_THRESHOLD_MS` | `src/hooks/subagent-tracker/index.ts` |
 | 值 | `5 * 60 * 1000`（5 分钟） | 代码定义 |
 | 用途 | 检测 agent 运行状态是否过期 | subagent-tracker |
@@ -236,7 +236,7 @@ const stateFilePath = `.omc/state/${mode}-state.json`;
 ### 4.2 Mode Stale Marker 阈值
 
 | 参数 | 值 | 来源 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | 常量名 | `STALE_MARKER_THRESHOLD` | `src/hooks/mode-registry/index.ts` |
 | 值 | `60 * 60 * 1000`（1 小时） | 代码定义 |
 | 用途 | 检测模式状态文件的 stale marker | mode-registry |
@@ -245,7 +245,7 @@ const stateFilePath = `.omc/state/${mode}-state.json`;
 **对比总结**：
 
 | 维度 | Agent Stale | Mode Stale Marker |
-|------|------------|-------------------|
+| ------ | ------------ | ------------------- |
 | 阈值 | **5 分钟** | **1 小时** |
 | 检测对象 | agent 运行状态 | 模式状态文件 |
 | 触发后果 | agent 被强制终止 | stale marker 被清理 |
@@ -286,7 +286,7 @@ function checkExclusiveConflict(newMode: string): boolean {
 以下模式**不在**互斥列表中，可与其他模式组合使用：
 
 | 模式 | 可组合示例 |
-|------|-----------|
+| ------ | ----------- |
 | `ralph` | `team ralph`（ralph + team 组合） |
 | `ultrawork` | 可与 ralph 组合 |
 | `ultraqa` | 由 autopilot 激活，不独立互斥 |
@@ -310,7 +310,7 @@ state_write(mode="ralph", { linked_team:  "team-state.json"  });
 ## 差异点说明
 
 | 差异点 | 描述 | 当前状态 | 规范要求 |
-|--------|------|---------|---------|
+| -------- | ------ | --------- | --------- |
 | D-03 | 合法 mode 数量 | 8 个（含 swarm） | 以 8 个为准 |
 | D-04 | 互斥模式范围 | 4 个互斥模式（autopilot、ultrapilot、swarm、pipeline） | 以 4 个为准 |
 | D-09 | stale 阈值含义 | 两个不同概念：mode stale（1 小时）vs agent stale（5 分钟） | 必须区分，不得混淆 |

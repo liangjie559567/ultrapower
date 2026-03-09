@@ -9,7 +9,7 @@
 以下旧名称作为别名保留，仍可正常使用：
 
 | 旧名称 | 新名称 |
-|--------|--------|
+| -------- | -------- |
 | `tdd-guide` | `test-engineer` |
 | `researcher` | `document-specialist` |
 
@@ -25,24 +25,34 @@
 ### 新增工具（v5.0）
 
 | 工具类别 | 工具列表 |
-|----------|----------|
+| ---------- | ---------- |
 | LSP（12 个） | `lsp_hover`、`lsp_goto_definition`、`lsp_find_references`、`lsp_document_symbols`、`lsp_workspace_symbols`、`lsp_diagnostics`、`lsp_diagnostics_directory`、`lsp_prepare_rename`、`lsp_rename`、`lsp_code_actions`、`lsp_code_action_resolve`、`lsp_servers` |
 | AST | `ast_grep_search`、`ast_grep_replace` |
 | Python REPL | `python_repl` |
 
 ## 目录
 
-- [概述](#overview)
-- [架构](#architecture)
-- [Plugin Discovery](#plugin-discovery)
-- [MCP Server Discovery](#mcp-server-discovery)
-- [Plugin Manifest Format](#plugin-manifest-format)
-- [Tool Registration](#tool-registration)
-- [Permission System](#permission-system)
-- [MCP Bridge](#mcp-bridge)
-- [API Reference](#api-reference)
-- [示例](#examples)
-- [故障排查](#troubleshooting)
+* [概述](#overview)
+
+* [架构](#architecture)
+
+* [Plugin Discovery](#plugin-discovery)
+
+* [MCP Server Discovery](#mcp-server-discovery)
+
+* [Plugin Manifest Format](#plugin-manifest-format)
+
+* [Tool Registration](#tool-registration)
+
+* [Permission System](#permission-system)
+
+* [MCP Bridge](#mcp-bridge)
+
+* [API Reference](#api-reference)
+
+* [示例](#examples)
+
+* [故障排查](#troubleshooting)
 
 ## 概述
 
@@ -71,57 +81,83 @@ Plugins              MCP Configs          OMC Tools
 
 从以下位置扫描外部插件和 MCP 服务器：
 
-- `~/.claude/plugins/` - OMC/Claude Code plugins directory
-- `~/.claude/installed-plugins/` - Alternative plugins location
-- `~/.claude/settings.json` - Claude Code MCP server configs
-- `~/.claude/claude_desktop_config.json` - Claude Desktop MCP server configs
-- Plugin manifests (`plugin.json`) for embedded MCP servers
+* `~/.claude/plugins/` - OMC/Claude Code plugins directory
+
+* `~/.claude/installed-plugins/` - Alternative plugins location
+
+* `~/.claude/settings.json` - Claude Code MCP server configs
+
+* `~/.claude/claude_desktop_config.json` - Claude Desktop MCP server configs
+
+* Plugin manifests (`plugin.json`) for embedded MCP servers
 
 **发现内容：**
-- 插件 skill 和 agent（来自 SKILL.md 和 agent .md 文件）
-- MCP 服务器配置
-- 插件 manifest 中的工具定义
+
+* 插件 skill 和 agent（来自 SKILL.md 和 agent .md 文件）
+
+* MCP 服务器配置
+
+* 插件 manifest 中的工具定义
 
 ### Tool Registry (`registry.ts`)
 
 工具管理的中央枢纽：
 
-- 注册来自已发现插件和 MCP 服务器的工具
-- 使用基于优先级的解决方案处理工具名称冲突
-- 将命令路由到适当的处理器
-- 提供搜索和过滤能力
-- 发出注册和连接状态事件
+* 注册来自已发现插件和 MCP 服务器的工具
+
+* 使用基于优先级的解决方案处理工具名称冲突
+
+* 将命令路由到适当的处理器
+
+* 提供搜索和过滤能力
+
+* 发出注册和连接状态事件
 
 **主要特性：**
-- 工具使用命名空间（例如 `plugin-name:tool-name`）
-- 冲突解决的优先级系统（高优先级获胜）
-- 短名称查找（即使有命名空间也能找到 `tool-name`）
-- 用于监控注册表状态的事件监听器
+
+* 工具使用命名空间（例如 `plugin-name:tool-name`）
+
+* 冲突解决的优先级系统（高优先级获胜）
+
+* 短名称查找（即使有命名空间也能找到 `tool-name`）
+
+* 用于监控注册表状态的事件监听器
 
 ### Permission Adapter (`permission-adapter.ts`)
 
 将外部工具与 OMC 权限系统集成：
 
-- 维护只读工具的安全模式
-- 自动批准已知安全操作
-- 对危险操作（写入、执行）提示用户确认
-- 缓存权限决策
-- 确定工具执行的委派目标
+* 维护只读工具的安全模式
+
+* 自动批准已知安全操作
+
+* 对危险操作（写入、执行）提示用户确认
+
+* 缓存权限决策
+
+* 确定工具执行的委派目标
 
 **安全模式：**
-- 常见 MCP 工具的内置模式（filesystem 读取、context7 查询）
-- 来自 manifest 的插件贡献模式
-- 可在运行时注册自定义模式
+
+* 常见 MCP 工具的内置模式（filesystem 读取、context7 查询）
+
+* 来自 manifest 的插件贡献模式
+
+* 可在运行时注册自定义模式
 
 ### MCP Bridge (`mcp-bridge.ts`)
 
 管理 MCP 服务器连接：
 
-- 启动服务器进程
-- 发送 JSON-RPC 请求并处理响应
-- 从服务器发现工具和资源
-- 将工具调用路由到服务器
-- 处理连接生命周期（连接、断开、重连）
+* 启动服务器进程
+
+* 发送 JSON-RPC 请求并处理响应
+
+* 从服务器发现工具和资源
+
+* 将工具调用路由到服务器
+
+* 处理连接生命周期（连接、断开、重连）
 
 **协议：** 通过进程 stdio 的 JSON-RPC 2.0，使用换行符分隔消息
 
@@ -272,14 +308,14 @@ Skill documentation here...
 ### 完整 Schema
 
 | 字段 | 类型 | 必填 | 说明 |
-|-------|------|----------|-------------|
+| ------- | ------ | ---------- | ------------- |
 | `name` | string | 是 | 插件名称（字母数字、连字符、下划线） |
 | `version` | string | 是 | 语义化版本（例如 "1.0.0"） |
 | `description` | string | 否 | 人类可读的描述 |
 | `namespace` | string | 否 | 工具名称前缀（默认为插件名称） |
-| `skills` | string\|string[] | 否 | skills 目录路径 |
-| `agents` | string\|string[] | 否 | agents 目录路径 |
-| `commands` | string\|string[] | 否 | commands 目录路径 |
+| `skills` | string\ | string[] | 否 | skills 目录路径 |
+| `agents` | string\ | string[] | 否 | agents 目录路径 |
+| `commands` | string\ | string[] | 否 | commands 目录路径 |
 | `mcpServers` | object | 否 | MCP 服务器配置（名称 → McpServerEntry） |
 | `permissions` | PluginPermission[] | 否 | 插件工具所需权限 |
 | `tools` | PluginToolDefinition[] | 否 | 工具定义 |
@@ -287,7 +323,7 @@ Skill documentation here...
 ### McpServerEntry
 
 | 字段 | 类型 | 必填 | 说明 |
-|-------|------|----------|-------------|
+| ------- | ------ | ---------- | ------------- |
 | `command` | string | 是 | 运行服务器的命令（例如 "node"、"npx"） |
 | `args` | string[] | 否 | 命令参数 |
 | `env` | object | 否 | 传递给服务器的环境变量 |
@@ -297,16 +333,16 @@ Skill documentation here...
 ### PluginPermission
 
 | 字段 | 类型 | 说明 |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | `tool` | string | 需要权限的工具名称 |
-| `scope` | "read"\|"write"\|"execute"\|"all" | 权限范围 |
+| `scope` | "read"\ | "write"\ | "execute"\ | "all" | 权限范围 |
 | `patterns` | string[] | 允许路径/命令的正则表达式模式 |
 | `reason` | string | 需要此权限的原因 |
 
 ### PluginToolDefinition
 
 | 字段 | 类型 | 说明 |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | `name` | string | 工具名称（变为 `namespace:name`） |
 | `description` | string | 人类可读的描述 |
 | `handler` | string | 处理函数或命令的路径 |
@@ -332,9 +368,12 @@ Skill documentation here...
 {namespace}:{tool-name}
 
 示例：
-- my-plugin:search
-- filesystem:read_file
-- context7:query-docs
+
+* my-plugin:search
+
+* filesystem:read_file
+
+* context7:query-docs
 ```
 
 短名称同样有效：
@@ -374,9 +413,11 @@ const result = checkPermission('mcp__filesystem__read_file');
 
 内置安全模式涵盖：
 
-- **Context7** - 文档查询（只读）
-- **Filesystem** - 仅读取操作
-- **Exa** - 网络搜索（只读，外部）
+* **Context7** - 文档查询（只读）
+
+* **Filesystem** - 仅读取操作
+
+* **Exa** - 网络搜索（只读，外部）
 
 ### 权限检查流程
 
@@ -482,7 +523,7 @@ if (result.success) {
 
 ```javascript
 // 读取资源
-const result = await bridge.readResource('web', 'https://example.com');
+const result = await bridge.readResource('web', '<https://example.com>');
 
 if (result.success) {
   console.log(result.data);
@@ -713,7 +754,7 @@ const result = await invokeMcpTool('filesystem', 'read_file', {
 });
 
 // 读取资源
-const resourceResult = await readMcpResource('web', 'https://api.example.com');
+const resourceResult = await readMcpResource('web', '<https://api.example.com>');
 
 // 检查连接
 const status = bridge.getConnectionStatus();
@@ -814,7 +855,7 @@ async function setupPluginMcp() {
 
   if (pluginWithMcp) {
     console.log(`Plugin ${pluginWithMcp.name} has embedded MCP servers:`);
-    for (const serverName of Object.keys(pluginWithMcp.manifest.mcpServers || {})) {
+    for (const serverName of Object.keys(pluginWithMcp.manifest.mcpServers | | {})) {
       console.log(`  - ${serverName}`);
     }
 
@@ -882,7 +923,7 @@ function registerCustomPatterns() {
   // 为插件工具注册安全模式
   addSafePattern({
     tool: 'analytics:track',
-    pattern: /^(page_view|event|error)$/,
+    pattern: /^(page_view | event | error)$/,
     description: 'Only allows tracking specific event types',
     source: 'myapp'
   });
@@ -907,10 +948,14 @@ registerCustomPatterns();
 **问题：** `discoverPlugins()` 返回空数组。
 
 **检查清单：**
-- 插件位于 `~/.claude/plugins/` 或 `~/.claude/installed-plugins/`
-- 每个插件在根目录或 `.claude-plugin/` 子目录中有 `plugin.json`
-- 插件名称不与保留名称冲突（例如 'ultrapower'）
-- 文件权限允许读取该目录
+
+* 插件位于 `~/.claude/plugins/` 或 `~/.claude/installed-plugins/`
+
+* 每个插件在根目录或 `.claude-plugin/` 子目录中有 `plugin.json`
+
+* 插件名称不与保留名称冲突（例如 'ultrapower'）
+
+* 文件权限允许读取该目录
 
 **调试：**
 ```javascript
@@ -931,11 +976,16 @@ for (const path of paths) {
 **问题：** `bridge.connect()` 超时。
 
 **检查清单：**
-- 服务器命令正确（例如 `npx`、`node`）
-- 命令可执行且在 PATH 中
-- 参数有效
-- 服务器实现了 MCP 协议（JSON-RPC 2.0）
-- 检查 stderr 输出是否有错误
+
+* 服务器命令正确（例如 `npx`、`node`）
+
+* 命令可执行且在 PATH 中
+
+* 参数有效
+
+* 服务器实现了 MCP 协议（JSON-RPC 2.0）
+
+* 检查 stderr 输出是否有错误
 
 **调试：**
 ```javascript
@@ -957,10 +1007,14 @@ bridge.on('connect-error', ({ server, error }) => {
 **问题：** 已注册的工具未出现在 `getRegistry().getAllTools()` 中。
 
 **原因及解决方案：**
-- 插件未被发现 - 先检查插件发现
-- 工具未被提取 - 确保 skills 目录中存在 SKILL.md 文件
-- 命名空间冲突 - 两个插件使用相同命名空间
-- 工具注册失败 - 检查注册表事件是否有错误
+
+* 插件未被发现 - 先检查插件发现
+
+* 工具未被提取 - 确保 skills 目录中存在 SKILL.md 文件
+
+* 命名空间冲突 - 两个插件使用相同命名空间
+
+* 工具注册失败 - 检查注册表事件是否有错误
 
 **调试：**
 ```javascript
@@ -994,9 +1048,12 @@ registry.addEventListener(event => {
 **问题：** 即使用户批准后，需要权限的工具仍始终被拒绝。
 
 **解决方案：**
-- 清除权限缓存：`clearPermissionCache()`
-- 确保使用相同的工具名称/输入进行缓存决策
-- 检查工具是否匹配覆盖缓存的危险模式
+
+* 清除权限缓存：`clearPermissionCache()`
+
+* 确保使用相同的工具名称/输入进行缓存决策
+
+* 检查工具是否匹配覆盖缓存的危险模式
 
 **调试：**
 ```javascript
@@ -1024,10 +1081,14 @@ console.log('Reason:', result.reason);
 **问题：** 插件加载但 manifest 解析失败。
 
 **检查清单：**
-- `plugin.json` 是有效的 JSON（使用 `npm install -g jsonlint` 验证）
-- 必填字段存在：`name`、`version`
-- 路径或配置中无语法错误
-- 文件编码为 UTF-8
+
+* `plugin.json` 是有效的 JSON（使用 `npm install -g jsonlint` 验证）
+
+* 必填字段存在：`name`、`version`
+
+* 路径或配置中无语法错误
+
+* 文件编码为 UTF-8
 
 **调试：**
 ```javascript

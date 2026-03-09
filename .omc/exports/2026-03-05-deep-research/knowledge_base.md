@@ -14,7 +14,7 @@ cycle: 19
 ## 1. 索引表 (Knowledge Index)
 
 | ID | Title | Category | Confidence | Created | Status |
-|----|-------|----------|------------|---------|--------|
+| ---- | ------- | ---------- | ------------ | --------- | -------- |
 | k-039 | Skill Tracking Gap in extractSkillName (skill 追踪缺口) | debugging | 0.95 | 2026-02-27 | active |
 | k-040 | Empty toolName Records as Noise in usage_metrics (空工具名噪音) | tooling | 0.9 | 2026-02-27 | active |
 | k-041 | nexus toolCalls Hardcoded Empty Array (nexus 工具调用数据缺失) | architecture | 0.9 | 2026-02-27 | active |
@@ -98,7 +98,7 @@ cycle: 19
 ## 2. 分类统计 (Category Stats)
 
 | Category | Count | Description |
-|----------|-------|-------------|
+| ---------- | ------- | ------------- |
 | architecture | 21 | 架构相关知识 |
 | debugging | 6 | 调试技巧 |
 | pattern | 10 | 代码模式 |
@@ -108,92 +108,165 @@ cycle: 19
 | platform | 1 | 平台兼容性 |
 | testing | 1 | 测试相关知识 |
 
-
 ## 3. 标签云 (Tag Cloud)
 
 > 使用频率: (tag: count)
 
-- flutter: 10
-- dart: 5
-- memory: 2
-- automation: 2
-- config: 1
-- axiom: 1
-- gemini: 1
-- evolution: 1
-- modules: 1
-- github: 1
-- fallback: 1
-- context: 1
-- best-practice: 1
-- architecture: 1
-- orchestration: 1
-- anti-pattern: 1
-- widget: 1
-- lifecycle: 1
-- stacked: 1
-- state-management: 1
-- mvvm: 1
-- navigation: 1
-- routing: 1
-- performance: 1
-- optimization: 1
-- testing: 1
-- unit-test: 1
-- widget-test: 1
-- error-handling: 1
-- exception: 1
-- theme: 1
-- ui: 1
-- design-system: 1
-- responsive: 1
-- layout: 1
-- adaptive: 1
-- i18n: 1
-- localization: 1
-- l10n: 1
-- platform-channel: 1
-- native: 1
-- ios: 1
-- android: 1
-- null-safety: 1
-- type-system: 1
-- async: 1
-- future: 1
-- stream: 1
-- extension: 1
-- utility: 1
-- freezed: 1
-- immutable: 1
-- data-class: 1
-- collections: 1
-- list: 1
-- map: 1
-- git: 1
-- commit: 1
-- conventional-commits: 1
-- code-review: 1
-- quality: 1
-- checklist: 1
-- project-structure: 1
-- clean-architecture: 1
-- folder: 1
-- ci-cd: 1
-- github-actions: 1
-- documentation: 1
-- dartdoc: 1
-- readme: 1
+* flutter: 10
+
+* dart: 5
+
+* memory: 2
+
+* automation: 2
+
+* config: 1
+
+* axiom: 1
+
+* gemini: 1
+
+* evolution: 1
+
+* modules: 1
+
+* github: 1
+
+* fallback: 1
+
+* context: 1
+
+* best-practice: 1
+
+* architecture: 1
+
+* orchestration: 1
+
+* anti-pattern: 1
+
+* widget: 1
+
+* lifecycle: 1
+
+* stacked: 1
+
+* state-management: 1
+
+* mvvm: 1
+
+* navigation: 1
+
+* routing: 1
+
+* performance: 1
+
+* optimization: 1
+
+* testing: 1
+
+* unit-test: 1
+
+* widget-test: 1
+
+* error-handling: 1
+
+* exception: 1
+
+* theme: 1
+
+* ui: 1
+
+* design-system: 1
+
+* responsive: 1
+
+* layout: 1
+
+* adaptive: 1
+
+* i18n: 1
+
+* localization: 1
+
+* l10n: 1
+
+* platform-channel: 1
+
+* native: 1
+
+* ios: 1
+
+* android: 1
+
+* null-safety: 1
+
+* type-system: 1
+
+* async: 1
+
+* future: 1
+
+* stream: 1
+
+* extension: 1
+
+* utility: 1
+
+* freezed: 1
+
+* immutable: 1
+
+* data-class: 1
+
+* collections: 1
+
+* list: 1
+
+* map: 1
+
+* git: 1
+
+* commit: 1
+
+* conventional-commits: 1
+
+* code-review: 1
+
+* quality: 1
+
+* checklist: 1
+
+* project-structure: 1
+
+* clean-architecture: 1
+
+* folder: 1
+
+* ci-cd: 1
+
+* github-actions: 1
+
+* documentation: 1
+
+* dartdoc: 1
+
+* readme: 1
 
 ## 4. 知识质量管理
 
 ### 4.1 Confidence 分数说明
-- `0.9+`: 高置信度，经过多次验证
-- `0.7-0.9`: 中等置信度，单次成功经验
-- `0.5-0.7`: 低置信度，需要更多验证
-- `<0.5`: 待清理，可能已过时
+
+* `0.9+`: 高置信度，经过多次验证
+
+* `0.7-0.9`: 中等置信度，单次成功经验
+
+* `0.5-0.7`: 低置信度，需要更多验证
+
+* `<0.5`: 待清理，可能已过时
 
 ### 4.2 清理规则
-- Confidence < 0.5 且超过 30 天未使用 → 标记为 `deprecated`
+
+* Confidence < 0.5 且超过 30 天未使用 → 标记为 `deprecated`
 
 ---
 
@@ -210,10 +283,14 @@ cycle: 19
 v5.5.14 发布流程标准化模板，包含完整的 8 步检查清单，适用于所有后续版本发布。
 
 **适用场景**:
-- npm 包版本发布
-- GitHub Release 创建
-- 多文件版本同步
-- CI/CD 自动化发布
+
+* npm 包版本发布
+
+* GitHub Release 创建
+
+* 多文件版本同步
+
+* CI/CD 自动化发布
 
 **关键步骤**:
 1. **版本同步**（8 个文件必须同步）:
@@ -225,29 +302,32 @@ v5.5.14 发布流程标准化模板，包含完整的 8 步检查清单，适用
    - README.md（版本徽章）
    - src/installer/index.ts（VERSION 常量）
 
-2. **测试验证**: `npm run test:run` 全部通过
+1. **测试验证**: `npm run test:run` 全部通过
 
-3. **Git 提交**: `git commit -m "chore: bump version to X.Y.Z"`
+1. **Git 提交**: `git commit -m "chore: bump version to X.Y.Z"`
 
-4. **Tag 推送**: `git tag vX.Y.Z && git push origin main && git push origin vX.Y.Z`
+1. **Tag 推送**: `git tag vX.Y.Z && git push origin main && git push origin vX.Y.Z`
 
-5. **CI 监控三阶段**:
+1. **CI 监控三阶段**:
    - publish job（npm 发布）
    - github-release job（创建 Release）
    - marketplace-sync job（同步 marketplace.json）
 
-6. **验证**:
-   - npm: https://www.npmjs.com/package/@liangjie559567/ultrapower
-   - GitHub: https://github.com/liangjie559567/ultrapower/releases
+1. **验证**:
+   - npm: <<https://www.npmjs.com/package/@liangjie559567/ultrapower>>
+   - GitHub: <<https://github.com/liangjie559567/ultrapower/releases>>
 
-7. **dev→main 合并**: `git merge dev --no-ff`
+1. **dev→main 合并**: `git merge dev --no-ff`
 
-8. **清理**: 删除临时分支、检查未提交更改
+1. **清理**: 删除临时分支、检查未提交更改
 
 **注意事项**:
-- marketplace.json 版本不同步会导致用户安装旧版本
-- CI 自动接管 npm 发布，无需手动执行
-- 遇到未提交更改使用 git stash 三步法（见 k-073）
+
+* marketplace.json 版本不同步会导致用户安装旧版本
+
+* CI 自动接管 npm 发布，无需手动执行
+
+* 遇到未提交更改使用 git stash 三步法（见 k-073）
 
 **相关知识**: k-073, k-045, k-060, k-066, k-067
 
@@ -264,36 +344,51 @@ v5.5.14 发布流程标准化模板，包含完整的 8 步检查清单，适用
 处理未提交更改的标准三步模式，确保操作可逆且不丢失工作内容。
 
 **适用场景**:
-- 分支切换前有未提交更改
-- 合并前需要清理工作区
-- 临时保存工作状态
-- 需要在干净工作区执行操作
+
+* 分支切换前有未提交更改
+
+* 合并前需要清理工作区
+
+* 临时保存工作状态
+
+* 需要在干净工作区执行操作
 
 **标准流程**:
 ```bash
+
 # Step 1: 暂存更改（带描述信息）
+
 git stash push -m "描述性信息"
 
 # Step 2: 执行操作（切换分支/合并/变基等）
+
 git checkout main
 git merge dev --no-ff
 git push origin main
 
 # Step 3: 恢复更改
+
 git checkout dev
 git stash pop
 ```
 
 **优势**:
-- 保留更改内容，操作可逆
-- 支持描述信息，便于追溯
-- 适用于所有 git 操作场景
+
+* 保留更改内容，操作可逆
+
+* 支持描述信息，便于追溯
+
+* 适用于所有 git 操作场景
 
 **注意事项**:
-- `stash pop` 可能产生冲突，需手动解决
-- 使用 `git stash list` 查看所有 stash
-- 使用 `git stash apply` 保留 stash 副本
-- 避免长期依赖 stash，应及时提交
+
+* `stash pop` 可能产生冲突，需手动解决
+
+* 使用 `git stash list` 查看所有 stash
+
+* 使用 `git stash apply` 保留 stash 副本
+
+* 避免长期依赖 stash，应及时提交
 
 **实际案例**:
 v5.5.14 发布时，dev→main 合并前遇到 `.omc/notepad.md` 未提交更改，使用此模式成功完成合并并恢复更改。
@@ -343,13 +438,18 @@ Write 工具会覆盖整个文件，不适合 CHANGELOG 更新。使用 bash 命
 ```
 
 **适用场景**:
-- CHANGELOG.md 更新
-- 任何需要在文件开头插入内容的场景
+
+* CHANGELOG.md 更新
+
+* 任何需要在文件开头插入内容的场景
 
 **关键点**:
-- 使用临时文件避免数据丢失
-- 确保原子性操作（&& 连接符）
-- 适用于所有文本文件
+
+* 使用临时文件避免数据丢失
+
+* 确保原子性操作（&& 连接符）
+
+* 适用于所有文本文件
 
 **相关知识**: k-072, k-032
 
@@ -371,10 +471,14 @@ Write 工具会覆盖整个文件，不适合 CHANGELOG 更新。使用 bash 命
 ```
 
 **适用场景**:
-- git commit
-- git checkout
-- git merge
-- 所有修改索引的 git 操作
+
+* git commit
+
+* git checkout
+
+* git merge
+
+* 所有修改索引的 git 操作
 
 **错误信息**:
 ```
@@ -405,20 +509,30 @@ git 操作被中断（Ctrl+C、进程崩溃）导致锁文件残留。
 4. **报告生成阶段**: 1-2 agents（报告 + 改进建议）
 
 **关键技术**:
-- 使用 `TaskUpdate addBlockedBy` 管理依赖
-- 阶段性解锁（完成前置任务后批量解锁）
-- 实时进度跟踪（TaskList 监控）
+
+* 使用 `TaskUpdate addBlockedBy` 管理依赖
+
+* 阶段性解锁（完成前置任务后批量解锁）
+
+* 实时进度跟踪（TaskList 监控）
 
 **性能收益**:
-- 执行时间降低 80%（40min → 8min）
-- 分析深度提升
-- 质量提升 80%
+
+* 执行时间降低 80%（40min → 8min）
+
+* 分析深度提升
+
+* 质量提升 80%
 
 **适用场景**:
-- 多维度分析
-- 代码库审计
-- 架构评估
-- 项目深度研究
+
+* 多维度分析
+
+* 代码库审计
+
+* 架构评估
+
+* 项目深度研究
 
 **相关知识**: k-078, k-079
 
@@ -435,9 +549,12 @@ git 操作被中断（Ctrl+C、进程崩溃）导致锁文件残留。
 按任务复杂度分配模型（Haiku/Sonnet/Opus），实现成本优化与性能平衡。
 
 **路由策略**:
-- **Haiku**: 快速扫描、简单查找、轻量检查
-- **Sonnet**: 标准实现、中等分析、代码审查
-- **Opus**: 架构设计、复杂推理、战略规划
+
+* **Haiku**: 快速扫描、简单查找、轻量检查
+
+* **Sonnet**: 标准实现、中等分析、代码审查
+
+* **Opus**: 架构设计、复杂推理、战略规划
 
 **实施方法**:
 ```typescript
@@ -450,10 +567,14 @@ Task({
 
 **案例数据**:
 ultrapower 深度研究（10 agents）:
-- explorer: haiku
-- 5 个分析 agents: sonnet
-- architect + strategist: opus
-- 成本降低约 40%
+
+* explorer: haiku
+
+* 5 个分析 agents: sonnet
+
+* architect + strategist: opus
+
+* 成本降低约 40%
 
 **相关知识**: k-077, k-005
 
@@ -477,14 +598,20 @@ ultrapower 深度研究（10 agents）:
 5. 解锁下一阶段任务
 
 **最佳实践**:
-- TaskUpdate 后立即 SendMessage 通知 agent
-- 避免 agents 报告"等待任务完成"
-- 使用清晰的依赖链（避免循环依赖）
+
+* TaskUpdate 后立即 SendMessage 通知 agent
+
+* 避免 agents 报告"等待任务完成"
+
+* 使用清晰的依赖链（避免循环依赖）
 
 **优势**:
-- 避免资源浪费（agents 不会提前启动）
-- 确保执行顺序
-- 清晰的进度可视化
+
+* 避免资源浪费（agents 不会提前启动）
+
+* 确保执行顺序
+
+* 清晰的进度可视化
 
 **示例**:
 ```typescript

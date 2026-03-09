@@ -45,9 +45,12 @@ case "permission-request": {
 ```
 
 **关键特性**:
-- 验证失败时返回 `continue: false`（阻塞）
-- 审计日志记录所有 permission-request 调用
-- 支持 snake_case 和 camelCase 字段映射
+
+* 验证失败时返回 `continue: false`（阻塞）
+
+* 审计日志记录所有 permission-request 调用
+
+* 支持 snake_case 和 camelCase 字段映射
 
 ---
 
@@ -65,7 +68,7 @@ export function processPermissionRequest(input: PermissionRequestInput): HookOut
   }
 
   const command = input.tool_input.command;
-  if (!command || typeof command !== 'string') {
+  if (!command | | typeof command !== 'string') {
     return { continue: true };
   }
 
@@ -85,9 +88,12 @@ export function processPermissionRequest(input: PermissionRequestInput): HookOut
 ```
 
 **问题**:
-- 所有路径都返回 `continue: true`，无法拒绝
-- 非 Bash 工具直接通过，无检查
-- 不安全命令也通过（依赖 Claude Code 原生权限流程）
+
+* 所有路径都返回 `continue: true`，无法拒绝
+
+* 非 Bash 工具直接通过，无检查
+
+* 不安全命令也通过（依赖 Claude Code 原生权限流程）
 
 ---
 
@@ -98,25 +104,35 @@ export function processPermissionRequest(input: PermissionRequestInput): HookOut
 #### 1. Bash 命令（部分覆盖）
 
 **安全命令自动允许**:
-- `git status|diff|log|branch|show|fetch`
-- `npm|pnpm|yarn test|run (test|lint|build|check|typecheck)`
-- `tsc`, `eslint`, `prettier`
-- `cargo test|check|clippy|build`
-- `pytest`, `python -m pytest`
-- `ls`
+
+* `git status | diff | log | branch | show | fetch`
+
+* `npm | pnpm | yarn test | run (test | lint | build | check | typecheck)`
+
+* `tsc`, `eslint`, `prettier`
+
+* `cargo test | check | clippy | build`
+
+* `pytest`, `python -m pytest`
+
+* `ls`
 
 **安全 Heredoc 命令自动允许**:
-- `git commit` (with heredoc body)
-- `git tag` (with heredoc body)
+
+* `git commit` (with heredoc body)
+
+* `git tag` (with heredoc body)
 
 **其他 Bash 命令**:
-- 包含危险字符的命令被拒绝（`;&|`$()<>\n\r\t\0\\{}[\]*?~!#`）
-- 其他命令通过到 Claude Code 原生权限流程
+
+* 包含危险字符的命令被拒绝（`;& | `$()<>\n\r\t\0\\{}[\]*?~!#`）
+
+* 其他命令通过到 Claude Code 原生权限流程
 
 #### 2. 未覆盖的敏感操作
 
 | 工具 | 操作类型 | 当前行为 | 风险 |
-|------|--------|--------|------|
+| ------ | -------- | -------- | ------ |
 | Edit | 文件修改 | 直接通过 | 可修改任意文件 |
 | Write | 文件创建 | 直接通过 | 可创建任意文件 |
 | Bash | 文件删除 | 直接通过 | 可执行 `rm -rf` |
@@ -168,21 +184,21 @@ return { continue: true };  // ← 不阻塞
    - 无法拒绝任何操作
    - 依赖 Claude Code 原生权限流程，但无法验证用户决定
 
-2. **非 Bash 工具无检查**（行 163-164）
+1. **非 Bash 工具无检查**（行 163-164）
    - Edit、Write、Task 等工具直接通过
    - 无敏感操作检测
 
-3. **缺乏操作分类**
+1. **缺乏操作分类**
    - 无法区分读操作、写操作、删除操作
    - 无法根据操作类型应用不同的权限策略
 
 ### P1 级（中等）
 
-4. **审计日志不完整**（bridge.ts 行 1153-1159）
-   - 仅记录 `success|failure`，不记录用户决定
+1. **审计日志不完整**（bridge.ts 行 1153-1159）
+   - 仅记录 `success | failure`，不记录用户决定
    - 不记录被拒绝的操作详情
 
-5. **Heredoc 处理不完整**（行 91-109）
+1. **Heredoc 处理不完整**（行 91-109）
    - 仅允许 `git commit` 和 `git tag`
    - 其他 heredoc 命令被拒绝
 
@@ -229,21 +245,21 @@ if (!validateHookInput<PermissionRequestInput>(input, requiredKeysForHook("permi
    - 定义 `decision: 'allow' | 'deny' | 'ask'`
    - 在 `continue: false` 时返回拒绝原因
 
-2. 扩展敏感操作检测
+1. 扩展敏感操作检测
    - 覆盖 Edit、Write、Task 工具
    - 检测文件删除、网络请求、系统命令
 
-3. 完善审计日志
+1. 完善审计日志
    - 记录用户决定（allow/deny/ask）
    - 记录被拒绝的操作详情
 
 ### 后续优化（P1）
 
-4. 实现权限策略引擎
+1. 实现权限策略引擎
    - 支持基于操作类型的权限规则
    - 支持基于文件路径的权限规则
 
-5. 增强 Heredoc 处理
+1. 增强 Heredoc 处理
    - 支持更多安全的 heredoc 命令
    - 防止 heredoc 体被存储在 settings.local.json
 

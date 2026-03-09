@@ -97,7 +97,7 @@ run_cycle(events)
 #### 3. 安全边界
 
 | 组件 | 限制 |
-|------|------|
+| ------ | ------ |
 | SelfModifier | 只能修改 `skills/*.md` 和 `agents/*.md` |
 | SelfModifier | confidence < 70 的改进自动跳过 |
 | SelfModifier | 路径遍历检测（resolve + relative_to） |
@@ -107,7 +107,7 @@ run_cycle(events)
 ## 子系统一览（15 个）
 
 | 模块 | 类 | 功能 |
-|------|-----|------|
+| ------ | ----- | ------ |
 | `evolution_engine.py` | `EvolutionEngine` | 模式检测、知识收割 |
 | `self_evaluator.py` | `SelfEvaluator` | 多维健康评估（5 维度） |
 | `anomaly_detector.py` | `AnomalyDetector` | Z-score/IQR 异常检测 |

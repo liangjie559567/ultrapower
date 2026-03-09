@@ -12,6 +12,7 @@ description: "/ax-context — Axiom 上下文管理：读取/更新/保存记忆
 ## 命令
 
 ### /ax-context read
+
 读取当前上下文，恢复现场。
 
 ```
@@ -19,6 +20,7 @@ Task(subagent_type="ultrapower:axiom-context-manager", model="sonnet", prompt="r
 ```
 
 ### /ax-context update [task_id] [status]
+
 更新任务进度。
 
 ```
@@ -26,6 +28,7 @@ Task(subagent_type="ultrapower:axiom-context-manager", model="sonnet", prompt="u
 ```
 
 ### /ax-context save [decision]
+
 保存架构决策到长期记忆。
 
 ```
@@ -33,6 +36,7 @@ Task(subagent_type="ultrapower:axiom-context-manager", model="sonnet", prompt="s
 ```
 
 ### /ax-context state [new_state]
+
 更新状态机状态。
 
 ```
@@ -40,6 +44,7 @@ Task(subagent_type="ultrapower:axiom-context-manager", model="sonnet", prompt="u
 ```
 
 ### /ax-context checkpoint
+
 创建 Git 检查点。
 
 ```
@@ -47,6 +52,7 @@ Task(subagent_type="ultrapower:axiom-context-manager", model="sonnet", prompt="c
 ```
 
 ### /ax-context init
+
 初始化 Axiom 记忆系统（首次使用时）。
 
 按以下步骤执行：
@@ -56,7 +62,7 @@ Task(subagent_type="ultrapower:axiom-context-manager", model="sonnet", prompt="c
 Bash("mkdir -p .omc/axiom/evolution")
 ```
 
-2. 使用 `Write` 创建各文件（若不存在则创建，已存在则跳过）：
+1. 使用 `Write` 创建各文件（若不存在则创建，已存在则跳过）：
 
 ```
 Write(".omc/axiom/active_context.md", "# Active Context\n\n## Current Task\n\n## Status\nIDLE\n\n## Last Updated\n")
@@ -70,4 +76,4 @@ Write(".omc/axiom/evolution/learning_queue.md", "# Learning Queue\n\n## Pending\
 Write(".omc/axiom/evolution/workflow_metrics.md", "# Workflow Metrics\n\n## Sessions\n")
 ```
 
-3. 完成后输出：`✅ Axiom 记忆系统初始化完成。`
+1. 完成后输出：`✅ Axiom 记忆系统初始化完成。`

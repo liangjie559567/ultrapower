@@ -90,16 +90,24 @@ const result = await mcp__x__wait_for_job({
 Any ultrapower agent role works with MCP providers:
 
 **Codex-optimized**:
-- `architect` - System design
-- `planner` - Task breakdown
-- `critic` - Challenge assumptions
-- `code-reviewer` - Code quality
-- `security-reviewer` - Vulnerability scan
+
+* `architect` - System design
+
+* `planner` - Task breakdown
+
+* `critic` - Challenge assumptions
+
+* `code-reviewer` - Code quality
+
+* `security-reviewer` - Vulnerability scan
 
 **Gemini-optimized**:
-- `designer` - UI/UX
-- `writer` - Documentation
-- `vision` - Visual analysis
+
+* `designer` - UI/UX
+
+* `writer` - Documentation
+
+* `vision` - Visual analysis
 
 ### Role Selection
 
@@ -200,18 +208,26 @@ try {
 ### 1. Use MCP for Read-Only Analysis
 
 MCP tools cannot modify files. Use for:
-- Code review
-- Architecture analysis
-- Planning validation
-- Documentation generation
+
+* Code review
+
+* Architecture analysis
+
+* Planning validation
+
+* Documentation generation
 
 ### 2. Use Claude Agents for Implementation
 
 Agents have tool access. Use for:
-- Code changes
-- File operations
-- Test execution
-- Build verification
+
+* Code changes
+
+* File operations
+
+* Test execution
+
+* Build verification
 
 ### 3. Provide Sufficient Context
 
@@ -332,6 +348,8 @@ const reviews = await Promise.all([
 
 ## Next Steps
 
-- [Configuration](./configuration.md) - Environment setup
-- [Performance](./performance.md) - Optimization tips
-- [Server Guide](./server-guide.md) - Build custom servers
+* [Configuration](./configuration.md) - Environment setup
+
+* [Performance](./performance.md) - Optimization tips
+
+* [Server Guide](./server-guide.md) - Build custom servers

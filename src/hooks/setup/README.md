@@ -5,12 +5,16 @@ Handles OMC initialization and maintenance tasks.
 ## Triggers
 
 ### `init`
+
 Initializes OMC directory structure and environment on first run or explicit setup.
 
 **What it does:**
-- Creates required directories: `.omc/state/`, `.omc/logs/`, `.omc/notepads/`, `.omc/state/checkpoints/`, `.omc/plans/`
-- Validates existing config files (`.omc-config.json`)
-- Sets environment variables (`OMC_INITIALIZED=true`) if `CLAUDE_ENV_FILE` is available
+
+* Creates required directories: `.omc/state/`, `.omc/logs/`, `.omc/notepads/`, `.omc/state/checkpoints/`, `.omc/plans/`
+
+* Validates existing config files (`.omc-config.json`)
+
+* Sets environment variables (`OMC_INITIALIZED=true`) if `CLAUDE_ENV_FILE` is available
 
 **Example Input:**
 ```json
@@ -36,19 +40,28 @@ Initializes OMC directory structure and environment on first run or explicit set
 ```
 
 ### `maintenance`
+
 Performs periodic maintenance tasks to keep OMC state clean.
 
 **What it does:**
-- Prunes old state files (default: 7 days old)
-- Cleans up orphaned session state files (>24 hours old)
-- Runs VACUUM on swarm SQLite database (if exists and sqlite3 available)
+
+* Prunes old state files (default: 7 days old)
+
+* Cleans up orphaned session state files (>24 hours old)
+
+* Runs VACUUM on swarm SQLite database (if exists and sqlite3 available)
 
 **Protected Files (Never Pruned):**
-- `autopilot-state.json`
-- `ultrapilot-state.json`
-- `ralph-state.json`
-- `ultrawork-state.json`
-- `swarm-state.json`
+
+* `autopilot-state.json`
+
+* `ultrapilot-state.json`
+
+* `ralph-state.json`
+
+* `ultrawork-state.json`
+
+* `swarm-state.json`
 
 **Example Input:**
 ```json
@@ -78,6 +91,7 @@ Performs periodic maintenance tasks to keep OMC state clean.
 ### Directory Management
 
 #### `ensureDirectoryStructure(directory: string): string[]`
+
 Creates all required OMC directories.
 
 **Returns:** Array of created directory paths.
@@ -88,6 +102,7 @@ const created = ensureDirectoryStructure('/path/to/project');
 ```
 
 #### `validateConfigFiles(directory: string): string[]`
+
 Validates that config files exist and are readable.
 
 **Returns:** Array of validated config file paths.
@@ -100,6 +115,7 @@ const validated = validateConfigFiles('/path/to/project');
 ### Environment Variables
 
 #### `setEnvironmentVariables(): string[]`
+
 Sets environment variables for OMC initialization.
 
 **Returns:** Array of environment variable names set.
@@ -114,6 +130,7 @@ const envVars = setEnvironmentVariables();
 ### Maintenance
 
 #### `pruneOldStateFiles(directory: string, maxAgeDays?: number): number`
+
 Deletes state files older than specified days (default: 7).
 
 **Returns:** Number of files deleted.
@@ -126,6 +143,7 @@ const pruned = pruneOldStateFiles('/path/to/project', 7);
 ```
 
 #### `cleanupOrphanedState(directory: string): number`
+
 Removes orphaned session-specific state files (>24 hours old).
 
 **Returns:** Number of files cleaned.
@@ -138,6 +156,7 @@ const cleaned = cleanupOrphanedState('/path/to/project');
 ### Main Entry Points
 
 #### `processSetupInit(input: SetupInput): Promise<HookOutput>`
+
 Processes setup initialization.
 
 ```typescript
@@ -152,6 +171,7 @@ const result = await processSetupInit({
 ```
 
 #### `processSetupMaintenance(input: SetupInput): Promise<HookOutput>`
+
 Processes setup maintenance.
 
 ```typescript
@@ -166,6 +186,7 @@ const result = await processSetupMaintenance({
 ```
 
 #### `processSetup(input: SetupInput): Promise<HookOutput>`
+
 Generic entry point that routes to init or maintenance based on trigger.
 
 ```typescript
@@ -245,6 +266,7 @@ console.log(maintenanceResult.hookSpecificOutput.additionalContext);
 #!/bin/bash
 
 # Initialize OMC
+
 INPUT=$(cat <<EOF
 {
   "session_id": "session-123",
@@ -260,6 +282,7 @@ EOF
 echo "$INPUT" | node dist/hooks/setup/index.js
 
 # Run maintenance
+
 INPUT=$(cat <<EOF
 {
   "session_id": "session-123",
@@ -277,9 +300,11 @@ echo "$INPUT" | node dist/hooks/setup/index.js
 
 ## Constants
 
-- `REQUIRED_DIRECTORIES`: Array of directories to create during init
-- `CONFIG_FILES`: Array of config files to validate
-- `DEFAULT_STATE_MAX_AGE_DAYS`: Default max age for state files (7 days)
+* `REQUIRED_DIRECTORIES`: Array of directories to create during init
+
+* `CONFIG_FILES`: Array of config files to validate
+
+* `DEFAULT_STATE_MAX_AGE_DAYS`: Default max age for state files (7 days)
 
 ## Error Handling
 
@@ -287,14 +312,20 @@ All errors are caught and added to the `errors` array in `SetupResult`. The hook
 
 ## Dependencies
 
-- `fs`: File system operations
-- `path`: Path manipulation
-- `child_process`: For running `sqlite3` VACUUM command
+* `fs`: File system operations
+
+* `path`: Path manipulation
+
+* `child_process`: For running `sqlite3` VACUUM command
 
 ## Notes
 
-- Directory creation is idempotent (won't fail if directories already exist)
-- Protected state files are never pruned, even if old
-- Environment variable setting requires `CLAUDE_ENV_FILE` to be set
-- SQLite VACUUM requires `sqlite3` command to be available
-- All operations are safe and won't delete active/critical state
+* Directory creation is idempotent (won't fail if directories already exist)
+
+* Protected state files are never pruned, even if old
+
+* Environment variable setting requires `CLAUDE_ENV_FILE` to be set
+
+* SQLite VACUUM requires `sqlite3` command to be available
+
+* All operations are safe and won't delete active/critical state

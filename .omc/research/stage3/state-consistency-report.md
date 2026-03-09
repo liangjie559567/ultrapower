@@ -11,11 +11,16 @@
 **总体评估：** 🟡 中等风险 - 存在多个关键问题需要修复
 
 **关键发现：**
-- ✅ 核心状态管理器使用原子写入（atomic-write.js）
-- ❌ WAL 实现未使用原子写入，存在数据损坏风险
-- ❌ 部分 hooks 直接使用 writeFileSync，绕过原子保护
-- ⚠️ 文件锁实现存在递归调用风险
-- ⚠️ 缺少并发写入重试机制
+
+* ✅ 核心状态管理器使用原子写入（atomic-write.js）
+
+* ❌ WAL 实现未使用原子写入，存在数据损坏风险
+
+* ❌ 部分 hooks 直接使用 writeFileSync，绕过原子保护
+
+* ⚠️ 文件锁实现存在递归调用风险
+
+* ⚠️ 缺少并发写入重试机制
 
 ---
 
@@ -25,6 +30,7 @@
 **影响：** 数据损坏/丢失 - WAL 是恢复机制的基础，其损坏会导致状态无法恢复
 
 ### [EVIDENCE:S1]
+
 **文件：** `dist/features/state-manager/wal.js`
 **问题代码：**
 ```javascript
@@ -62,6 +68,7 @@ writeEntry(mode, data) {
 **影响：** 数据不一致 - 状态文件损坏导致工作流中断，用户需手动清理
 
 ### [EVIDENCE:S2]
+
 **文件 1：** `dist/hooks/autopilot/state.js`
 ```javascript
 // 行 96
@@ -110,6 +117,7 @@ export function writeAutopilotState(directory, state, sessionId) {
 **影响：** 死锁/栈溢出 - 在高并发场景下可能导致进程崩溃
 
 ### [EVIDENCE:S3]
+
 **文件：** `dist/lib/file-lock.js`
 ```javascript
 // 行 21-52: tryAcquire 函数
@@ -175,6 +183,7 @@ export async function acquireLock(lockPath, staleMs = 30000, maxRetries = 5) {
 **影响：** 写入失败 - 临时文件冲突导致状态更新丢失
 
 ### [EVIDENCE:S4]
+
 **文件：** `dist/lib/atomic-write.js`
 ```javascript
 // 行 50: 使用 'wx' 标志（O_CREAT | O_EXCL）
@@ -186,13 +195,16 @@ const fd = await fs.open(tempPath, "wx", 0o600);
 2. 但在极端高并发场景（如 ultrawork 并行写入），仍可能出现：
    - 文件系统延迟导致的假冲突
    - NFS/网络文件系统的缓存不一致
-3. 当前实现遇到冲突直接抛出异常，没有重试
-4. 调用方（如 state-manager）捕获异常后返回 `success: false`，但不重试
+1. 当前实现遇到冲突直接抛出异常，没有重试
+2. 调用方（如 state-manager）捕获异常后返回 `success: false`，但不重试
 
 **影响场景：**
-- Ultrawork 模式：多个 agent 并行写入不同状态文件
-- Team 模式：多个 worker 同时更新任务状态
-- Ralph 循环：高频迭代写入
+
+* Ultrawork 模式：多个 agent 并行写入不同状态文件
+
+* Team 模式：多个 worker 同时更新任务状态
+
+* Ralph 循环：高频迭代写入
 
 **修复建议：**
 ```javascript
@@ -226,6 +238,7 @@ export async function atomicWriteJson(filePath, data, maxRetries = 3) {
 **影响：** 读取陈旧数据 - 外部修改状态文件后，缓存未失效
 
 ### [EVIDENCE:S5]
+
 **文件：** `dist/features/state-manager/index.js`
 ```javascript
 // 行 216: writeState 时清除缓存
@@ -318,22 +331,27 @@ export function clearState(name, location) {
 ### 状态写入方式分布
 
 | 写入方式 | 文件数 | 风险等级 |
-|---------|--------|---------|
+| --------- | -------- | --------- |
 | atomicWriteJsonSync | 2 | ✅ 安全 |
 | atomicWriteSync | 1 | ✅ 安全 |
 | writeFileSync (直接) | 4 | ❌ 危险 |
 
 **详细列表：**
-- ✅ `dist/hooks/team-pipeline/state.js` - atomicWriteJsonSync
-- ✅ `dist/features/boulder-state/storage.js` - atomicWriteSync
-- ❌ `dist/hooks/autopilot/state.js` - writeFileSync
-- ❌ `dist/hooks/ultrapilot/state.js` - writeFileSync
-- ❌ `dist/features/state-manager/wal.js` - writeFileSync (2 处)
+
+* ✅ `dist/hooks/team-pipeline/state.js` - atomicWriteJsonSync
+
+* ✅ `dist/features/boulder-state/storage.js` - atomicWriteSync
+
+* ❌ `dist/hooks/autopilot/state.js` - writeFileSync
+
+* ❌ `dist/hooks/ultrapilot/state.js` - writeFileSync
+
+* ❌ `dist/features/state-manager/wal.js` - writeFileSync (2 处)
 
 ### 并发保护覆盖率
 
 | 模块 | 锁保护 | 原子写入 | 重试机制 |
-|------|--------|---------|---------|
+| ------ | -------- | --------- | --------- |
 | state-manager | ❌ | ✅ | ❌ |
 | boulder-state | ✅ | ✅ | ❌ |
 | autopilot | ❌ | ❌ | ❌ |
@@ -352,26 +370,26 @@ export function clearState(name, location) {
    - 工作量：1 小时
    - 文件：`dist/features/state-manager/wal.js`
 
-2. **Autopilot/Ultrapilot 原子写入** (FINDING:S2)
+1. **Autopilot/Ultrapilot 原子写入** (FINDING:S2)
    - 影响：工作流状态损坏
    - 工作量：2 小时
    - 文件：`dist/hooks/autopilot/state.js`, `dist/hooks/ultrapilot/state.js`
 
 ### P1 - 近期修复（稳定性改进）
 
-3. **文件锁重试限制** (FINDING:S3)
+1. **文件锁重试限制** (FINDING:S3)
    - 影响：死锁/栈溢出
    - 工作量：2 小时
    - 文件：`dist/lib/file-lock.js`
 
-4. **原子写入重试机制** (FINDING:S4)
+1. **原子写入重试机制** (FINDING:S4)
    - 影响：高并发写入失败
    - 工作量：3 小时
    - 文件：`dist/lib/atomic-write.js`
 
 ### P2 - 可选优化（边缘情况）
 
-5. **缓存失效完整性** (FINDING:S5)
+1. **缓存失效完整性** (FINDING:S5)
    - 影响：读取陈旧数据
    - 工作量：1 小时
    - 文件：`dist/features/state-manager/index.js`
@@ -416,7 +434,9 @@ describe('Concurrent state writes', () => {
 ### 集成测试
 
 ```bash
+
 # 压力测试：模拟 ultrawork 高并发场景
+
 for i in {1..100}; do
     node -e "
         const { writeState } = require('./dist/features/state-manager');
@@ -426,11 +446,12 @@ done
 wait
 
 # 验证所有状态文件完整性
+
 for i in {1..100}; do
     node -e "
         const { readState } = require('./dist/features/state-manager');
         const state = readState('stress-test-$i');
-        if (!state.exists || state.data.iteration !== $i) {
+        if (!state.exists | | state.data.iteration !== $i) {
             console.error('Corruption detected in stress-test-$i');
             process.exit(1);
         }
@@ -444,25 +465,35 @@ done
 
 ### 状态写入安全检查
 
-- [ ] 是否使用 `atomicWriteJsonSync` 或 `atomicWriteFileSync`？
-- [ ] 是否在写入前调用 `fsync()`？
-- [ ] 是否使用 temp-file + rename 模式？
-- [ ] 失败时是否清理临时文件？
-- [ ] 是否设置了安全的文件权限（0o600）？
+* [ ] 是否使用 `atomicWriteJsonSync` 或 `atomicWriteFileSync`？
+
+* [ ] 是否在写入前调用 `fsync()`？
+
+* [ ] 是否使用 temp-file + rename 模式？
+
+* [ ] 失败时是否清理临时文件？
+
+* [ ] 是否设置了安全的文件权限（0o600）？
 
 ### 并发访问检查
 
-- [ ] 多进程/多线程场景是否需要文件锁？
-- [ ] 文件锁是否有超时和陈旧锁清理？
-- [ ] 是否有重试机制和指数退避？
-- [ ] 是否避免了递归调用导致的栈溢出？
+* [ ] 多进程/多线程场景是否需要文件锁？
+
+* [ ] 文件锁是否有超时和陈旧锁清理？
+
+* [ ] 是否有重试机制和指数退避？
+
+* [ ] 是否避免了递归调用导致的栈溢出？
 
 ### 错误恢复检查
 
-- [ ] 读取失败时是否有降级策略（返回 null/默认值）？
-- [ ] 是否有 WAL 或备份机制？
-- [ ] 损坏文件是否能被检测和跳过？
-- [ ] 是否有审计日志记录异常？
+* [ ] 读取失败时是否有降级策略（返回 null/默认值）？
+
+* [ ] 是否有 WAL 或备份机制？
+
+* [ ] 损坏文件是否能被检测和跳过？
+
+* [ ] 是否有审计日志记录异常？
 
 ---
 

@@ -18,8 +18,9 @@
 
 ## 统一占位符
 
-- `WORKER_EXEC`: 当前 Provider 的执行命令模板
-- `WORKER_LABEL`: 当前 Provider 的展示名
+* `WORKER_EXEC`: 当前 Provider 的执行命令模板
+
+* `WORKER_LABEL`: 当前 Provider 的展示名
 
 ## 回退策略
 
@@ -29,12 +30,16 @@
 
 ## 约束
 
-- 不在 workflow 中硬编码具体 CLI 命令
-- workflow 仅引用 `WORKER_EXEC` 占位符
+* 不在 workflow 中硬编码具体 CLI 命令
+
+* workflow 仅引用 `WORKER_EXEC` 占位符
 
 ## ultrapower 适配说明
 
 在 ultrapower 中，Provider 路由通过 Task subagent_type 实现：
-- `codex` → `mcp__plugin_ultrapower_x__ask_codex`
-- `gemini` → `mcp__plugin_ultrapower_g__ask_gemini`
-- `claude_code` → `Task(subagent_type="ultrapower:executor")`
+
+* `codex` → `mcp__plugin_ultrapower_x__ask_codex`
+
+* `gemini` → `mcp__plugin_ultrapower_g__ask_gemini`
+
+* `claude_code` → `Task(subagent_type="ultrapower:executor")`

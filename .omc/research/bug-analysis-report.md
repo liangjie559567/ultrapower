@@ -8,17 +8,25 @@
 
 通过 6 个并行分析阶段对 ultrapower v5.5.30 进行全面 bug 分析，识别出 **39 个问题**：
 
-- **P0 (Critical):** 3 个 - 状态缓存竞态、SQLite 连接泄漏、bridge.ts 静默失败
-- **P1 (High):** 7 个 - SessionLock TOCTOU、MCP 子进程泄漏、Windows shell 注入、Python REPL 监听器泄漏、WAL 非原子性、MCP bridge 监听器累积
-- **P2 (Medium):** 29 个 - 类型安全 (652 any)、错误处理、资源管理改进
+* **P0 (Critical):** 3 个 - 状态缓存竞态、SQLite 连接泄漏、bridge.ts 静默失败
+
+* **P1 (High):** 7 个 - SessionLock TOCTOU、MCP 子进程泄漏、Windows shell 注入、Python REPL 监听器泄漏、WAL 非原子性、MCP bridge 监听器累积
+
+* **P2 (Medium):** 29 个 - 类型安全 (652 any)、错误处理、资源管理改进
 
 **影响模块：**
-- 状态管理 (state-tools.ts, bridge.ts): 最高风险 - 缓存竞态 + 静默失败
-- MCP 层 (codex/gemini servers, MCPClient.ts, mcp-bridge.ts): 资源泄漏 + 类型不确定性 + 监听器累积
-- Hook 系统 (bridge.ts): 静默失败 + 并发问题
-- 数据库层 (job-state-db.ts): SQLite 连接泄漏
-- Python REPL (bridge-manager.ts): stderr 监听器泄漏
-- 文件系统 (atomic-write.ts): WAL 写入非原子性
+
+* 状态管理 (state-tools.ts, bridge.ts): 最高风险 - 缓存竞态 + 静默失败
+
+* MCP 层 (codex/gemini servers, MCPClient.ts, mcp-bridge.ts): 资源泄漏 + 类型不确定性 + 监听器累积
+
+* Hook 系统 (bridge.ts): 静默失败 + 并发问题
+
+* 数据库层 (job-state-db.ts): SQLite 连接泄漏
+
+* Python REPL (bridge-manager.ts): stderr 监听器泄漏
+
+* 文件系统 (atomic-write.ts): WAL 写入非原子性
 
 ---
 
@@ -27,7 +35,7 @@
 ### 阶段分解
 
 | 阶段 | 焦点 | 层级 | 状态 |
-|------|------|------|------|
+| ------ | ------ | ------ | ------ |
 | Stage 1 | 错误日志和状态文件分析 | LOW | ✅ Complete |
 | Stage 2 | 测试失败模式分析 | MEDIUM | ✅ Complete |
 | Stage 3 | 并发问题和竞态条件 | HIGH | ✅ Complete |
@@ -37,9 +45,11 @@
 
 ### 执行策略
 
-- 6 个独立阶段并行执行（5 个分析阶段 + 1 个验证阶段）
-- 使用智能模型路由（haiku/sonnet/opus）
-- 交叉验证确保发现一致性
+* 6 个独立阶段并行执行（5 个分析阶段 + 1 个验证阶段）
+
+* 使用智能模型路由（haiku/sonnet/opus）
+
+* 交叉验证确保发现一致性
 
 ---
 
@@ -94,8 +104,10 @@ function pruneOldConnections() {
 ```
 
 **影响：**
-- 连接池泄漏，最终耗尽文件描述符
-- 长时间运行的 swarm 任务会触发 EMFILE 错误
+
+* 连接池泄漏，最终耗尽文件描述符
+
+* 长时间运行的 swarm 任务会触发 EMFILE 错误
 
 **修复建议：**
 ```typescript
@@ -135,9 +147,12 @@ import("../notifications/index.js").then(({ notify }) =>
 ```
 
 **影响：**
-- 通知失败时用户无感知
-- 调试困难，无法追踪失败原因
-- 违反"快速失败"原则
+
+* 通知失败时用户无感知
+
+* 调试困难，无法追踪失败原因
+
+* 违反"快速失败"原则
 
 **修复建议：**
 ```typescript
@@ -296,16 +311,22 @@ this.client.on('error', errorHandler);
 ### 关联模式
 
 **模式 1：资源泄漏链**
-- C2 + C5 + C7 + R2
-- 共同特征：清理逻辑在异常路径中缺失
+
+* C2 + C5 + C7 + R2
+
+* 共同特征：清理逻辑在异常路径中缺失
 
 **模式 2：并发问题**
-- C1 + C4 + R1
-- 共同特征：检查-使用时间窗口
+
+* C1 + C4 + R1
+
+* 共同特征：检查-使用时间窗口
 
 **模式 3：静默失败**
-- C3 + E1
-- 共同特征：`.catch(() => {})` 模式
+
+* C3 + E1
+
+* 共同特征：`.catch(() => {})` 模式
 
 ---
 
@@ -319,15 +340,15 @@ this.client.on('error', errorHandler);
 
 ### 第 2 阶段（P1 - 1 周内）
 
-4. 修复 SessionLock TOCTOU (C4) - 3 小时
-5. 修复 MCP 子进程泄漏 (C5) - 2 小时
-6. 修复 Python REPL 监听器泄漏 (C7) - 1 小时
-7. 修复 MCP Bridge 监听器累积 (R2) - 2 小时
+1. 修复 SessionLock TOCTOU (C4) - 3 小时
+2. 修复 MCP 子进程泄漏 (C5) - 2 小时
+3. 修复 Python REPL 监听器泄漏 (C7) - 1 小时
+4. 修复 MCP Bridge 监听器累积 (R2) - 2 小时
 
 ### 第 3 阶段（P2 - 1 个月内）
 
-8. 减少 any 类型使用 (T1) - 持续重构
-9. 统一错误处理 (E1) - 1 周
+1. 减少 any 类型使用 (T1) - 持续重构
+2. 统一错误处理 (E1) - 1 周
 
 ---
 
@@ -345,11 +366,10 @@ this.client.on('error', errorHandler);
 
 [PROMISE:RESEARCH_COMPLETE]
 
-
 ### 阶段分解
 
 | 阶段 | 焦点 | 层级 | 状态 |
-|------|------|------|------|
+| ------ | ------ | ------ | ------ |
 | Stage 1 | 错误日志和状态文件分析 | LOW | ✅ Complete |
 | Stage 2 | 测试失败模式分析 | MEDIUM | ✅ Complete |
 | Stage 3 | TypeScript 类型错误分析 | MEDIUM | ✅ Complete |
@@ -359,9 +379,11 @@ this.client.on('error', errorHandler);
 
 ### 执行策略
 
-- 5 个独立阶段并行执行
-- 使用智能模型路由（haiku/sonnet/opus）
-- 交叉验证确保发现一致性
+* 5 个独立阶段并行执行
+
+* 使用智能模型路由（haiku/sonnet/opus）
+
+* 交叉验证确保发现一致性
 
 ---
 
@@ -382,9 +404,12 @@ Retry: 3 次失败
 ```
 
 **影响：**
-- 配置文件写入失败
-- 阻塞 omc-config 初始化流程
-- 影响所有依赖配置的功能
+
+* 配置文件写入失败
+
+* 阻塞 omc-config 初始化流程
+
+* 影响所有依赖配置的功能
 
 **根因：** Unix 风格路径变量在 Windows Bash 环境下处理不当
 
@@ -463,9 +488,12 @@ atomicWriteJsonSync(statePath, stateWithMeta);  // 无锁保护
 ```
 
 **影响：**
-- 多个 agent 同时修改状态时，后写入的覆盖先写入的
-- 状态合并逻辑在并发场景下失效
-- 可能导致任务状态不一致
+
+* 多个 agent 同时修改状态时，后写入的覆盖先写入的
+
+* 状态合并逻辑在并发场景下失效
+
+* 可能导致任务状态不一致
 
 **修复建议：** 在 state_write 中集成文件锁机制
 
@@ -476,9 +504,12 @@ atomicWriteJsonSync(statePath, stateWithMeta);  // 无锁保护
 **问题：** `assertValidMode()` 仅验证 mode，其他路径参数未防护
 
 **未防护的输入：**
-- `sessionId` - 用于构建 `.omc/state/sessions/{sessionId}/`
-- `directory` / `workingDirectory` - 直接用于文件操作
-- `agent_id` - 可能用于路径拼接
+
+* `sessionId` - 用于构建 `.omc/state/sessions/{sessionId}/`
+
+* `directory` / `workingDirectory` - 直接用于文件操作
+
+* `agent_id` - 可能用于路径拼接
 
 **风险场景：**
 ```typescript
@@ -519,10 +550,14 @@ if (!result.success && !result.continue) {
 **问题：** 仅 4/12 个 hook 类型有必需字段校验
 
 **已验证的类型：**
-- `session-end`: 需要 sessionId, directory
-- `permission-request`: 需要 tool_name, tool_input
-- `setup`: 需要 directory
-- `subagent-stop`: 需要 success
+
+* `session-end`: 需要 sessionId, directory
+
+* `permission-request`: 需要 tool_name, tool_input
+
+* `setup`: 需要 directory
+
+* `subagent-stop`: 需要 success
 
 **未验证的类型：** 其他 8 个类型缺少必需字段检查
 
@@ -549,10 +584,14 @@ grep: C:UsersljyihDesktopultrapowersrchookspersistent-modeindex.ts: No such file
 **问题：** 项目中 any 出现 756 次，密度 0.86/文件
 
 **分布：**
-- 测试代码：60%+
-- MCP 工具定义：20%
-- Logger 可变参数：10%
-- 其他：10%
+
+* 测试代码：60%+
+
+* MCP 工具定义：20%
+
+* Logger 可变参数：10%
+
+* 其他：10%
 
 **风险：** 类型安全薄弱，运行时错误风险增加
 
@@ -581,9 +620,12 @@ grep: C:UsersljyihDesktopultrapowersrchookspersistent-modeindex.ts: No such file
 **问题：** 8 个测试在 Windows 上被跳过
 
 **跳过的测试：**
-- tmux 功能测试（5 个）- Windows 不支持 tmux
-- 符号链接测试（2 个）- 需要管理员权限
-- 包结构验证（1 个）
+
+* tmux 功能测试（5 个）- Windows 不支持 tmux
+
+* 符号链接测试（2 个）- 需要管理员权限
+
+* 包结构验证（1 个）
 
 **影响：** 功能在 Windows 上降级或不可用
 
@@ -595,7 +637,9 @@ grep: C:UsersljyihDesktopultrapowersrchookspersistent-modeindex.ts: No such file
 
 **证据：**
 ```python
+
 # nexus-daemon/bottleneck_analyzer.py:190
+
 for call in event.get("toolCalls", [])  # event 不是 dict
 ```
 
@@ -630,16 +674,22 @@ for call in event.get("toolCalls", [])  # event 不是 dict
 ### 关联模式
 
 **模式 1：Windows 路径处理问题链**
-- E1（双重 C:\c\）+ E2（反斜杠转义）+ T5（跳过测试）
-- 形成一致的平台兼容性问题链
+
+* E1（双重 C:\c\）+ E2（反斜杠转义）+ T5（跳过测试）
+
+* 形成一致的平台兼容性问题链
 
 **模式 2：路径遍历防护覆盖范围**
-- T1（50+ 测试）vs H5（仅覆盖 mode）
-- 测试覆盖了已实现的防护，但未测试未防护的路径
+
+* T1（50+ 测试）vs H5（仅覆盖 mode）
+
+* 测试覆盖了已实现的防护，但未测试未防护的路径
 
 **模式 3：并发问题的隐性证据**
-- S1-S4（竞态条件）在错误日志中未直接体现
-- E3（Python 类型错误）可能是并发写入导致的数据损坏
+
+* S1-S4（竞态条件）在错误日志中未直接体现
+
+* E3（Python 类型错误）可能是并发写入导致的数据损坏
 
 ---
 
@@ -648,46 +698,62 @@ for call in event.get("toolCalls", [])  # event 不是 dict
 ### 1. 防御性编程不一致
 
 **表现：**
-- TS2：any 类型密度 0.86/文件
-- H2：仅 4/12 hook 类型有输入校验
-- H1：全局错误处理默认静默失败
+
+* TS2：any 类型密度 0.86/文件
+
+* H2：仅 4/12 hook 类型有输入校验
+
+* H1：全局错误处理默认静默失败
 
 **根因：** 缺少统一的输入验证和错误处理框架
 
 **建议：**
-- 引入 Zod schema 验证所有外部输入
-- 建立错误处理策略矩阵（哪些错误必须中断）
-- 逐步减少 any 使用，提升类型覆盖率
+
+* 引入 Zod schema 验证所有外部输入
+
+* 建立错误处理策略矩阵（哪些错误必须中断）
+
+* 逐步减少 any 使用，提升类型覆盖率
 
 ---
 
 ### 2. 平台抽象层缺失
 
 **表现：**
-- E1/E2：Windows 路径处理硬编码
-- T5：通过跳过测试回避问题
+
+* E1/E2：Windows 路径处理硬编码
+
+* T5：通过跳过测试回避问题
 
 **根因：** 缺少跨平台路径处理抽象层
 
 **建议：**
-- 统一使用 Node.js `path` 和 `os` 模块
-- 避免直接使用 shell 变量（$HOME）
-- 为平台特定功能提供降级方案
+
+* 统一使用 Node.js `path` 和 `os` 模块
+
+* 避免直接使用 shell 变量（$HOME）
+
+* 为平台特定功能提供降级方案
 
 ---
 
 ### 3. 并发控制未实施
 
 **表现：**
-- S3：文件锁机制存在但未使用
-- S1/S2：多处竞态条件
+
+* S3：文件锁机制存在但未使用
+
+* S1/S2：多处竞态条件
 
 **根因：** 并发控制设计存在但未强制执行
 
 **建议：**
-- 在所有状态写入路径中强制使用文件锁
-- 添加并发测试用例验证锁机制
-- 考虑使用数据库替代文件系统状态存储
+
+* 在所有状态写入路径中强制使用文件锁
+
+* 添加并发测试用例验证锁机制
+
+* 考虑使用数据库替代文件系统状态存储
 
 ---
 
@@ -699,11 +765,11 @@ for call in event.get("toolCalls", [])  # event 不是 dict
    - 替换所有 shell 变量为 Node.js API
    - 预计工作量：2-3 天
 
-2. **为状态操作添加文件锁**
+1. **为状态操作添加文件锁**
    - 集成现有 file-lock.ts 到 state-tools.ts
    - 预计工作量：1-2 天
 
-3. **扩展路径遍历防护**
+1. **扩展路径遍历防护**
    - 为 sessionId、directory 等参数添加验证
    - 预计工作量：1 天
 
@@ -711,15 +777,15 @@ for call in event.get("toolCalls", [])  # event 不是 dict
 
 ### 第 2 阶段（P1 - 1-2 周内）
 
-4. **统一输入验证框架**
+1. **统一输入验证框架**
    - 为所有 hook 类型定义 Zod schema
    - 预计工作量：3-5 天
 
-5. **修复错误处理策略**
+1. **修复错误处理策略**
    - 为关键 hook 设置 continue=false
    - 预计工作量：1-2 天
 
-6. **减少 any 类型使用**
+1. **减少 any 类型使用**
    - 优先处理生产代码中的 any
    - 预计工作量：持续重构
 
@@ -727,11 +793,11 @@ for call in event.get("toolCalls", [])  # event 不是 dict
 
 ### 第 3 阶段（P2 - 1 个月内）
 
-7. **改进平台兼容性**
+1. **改进平台兼容性**
    - 为 Windows 提供 tmux 替代方案
    - 预计工作量：5-7 天
 
-8. **优化缓存策略**
+1. **优化缓存策略**
    - 缩短 TTL 或实现跨进程缓存失效
    - 预计工作量：2-3 天
 
@@ -752,11 +818,11 @@ for call in event.get("toolCalls", [])  # event 不是 dict
    - 审计所有接受路径参数的函数
    - 检查遍历防护覆盖范围
 
-2. **并发问题复现测试**
+1. **并发问题复现测试**
    - 编写多进程并发测试用例
    - 验证 S1/S2 的竞态条件
 
-3. **Python 错误根因分析**
+1. **Python 错误根因分析**
    - 复现 E3 错误
    - 确认是否与并发写入相关
 

@@ -10,12 +10,18 @@ description: 对代码运行全面安全审查
 ## 使用时机
 
 此 skill 在以下情况激活：
-- 用户请求"security review"、"security audit"
-- 编写处理用户输入的代码后
-- 添加新 API 端点后
-- 修改认证/授权逻辑后
-- 部署到生产环境前
-- 添加外部依赖后
+
+* 用户请求"security review"、"security audit"
+
+* 编写处理用户输入的代码后
+
+* 添加新 API 端点后
+
+* 修改认证/授权逻辑后
+
+* 部署到生产环境前
+
+* 添加外部依赖后
 
 ## 功能
 
@@ -33,27 +39,27 @@ description: 对代码运行全面安全审查
    - A09: 安全日志和监控失败
    - A10: 服务端请求伪造（SSRF）
 
-2. **密钥检测**
+1. **密钥检测**
    - 硬编码 API 密钥
    - 源代码中的密码
    - 仓库中的私钥
    - Token 和凭证
    - 含密钥的连接字符串
 
-3. **输入验证**
+1. **输入验证**
    - 所有用户输入已净化
    - SQL/NoSQL 注入防护
    - 命令注入防护
    - XSS 防护（输出转义）
    - 路径遍历防护
 
-4. **认证/授权**
+1. **认证/授权**
    - 正确的密码哈希（bcrypt、argon2）
    - Session 管理安全
    - 访问控制执行
    - JWT 实现安全
 
-5. **依赖安全**
+1. **依赖安全**
    - 运行 `npm audit` 检查已知漏洞
    - 检查过时依赖
    - 识别高严重性 CVE
@@ -78,11 +84,16 @@ Security Checklist:
 5. Dependency vulnerability scan (npm audit)
 
 Output: Security review report with:
-- Summary of findings by severity (CRITICAL, HIGH, MEDIUM, LOW)
-- Specific file:line locations
-- CVE references where applicable
-- Remediation guidance for each issue
-- Overall security posture assessment"
+
+* Summary of findings by severity (CRITICAL, HIGH, MEDIUM, LOW)
+
+* Specific file:line locations
+
+* CVE references where applicable
+
+* Remediation guidance for each issue
+
+* Overall security posture assessment"
 )
 ```
 
@@ -91,25 +102,36 @@ Output: Security review report with:
 security-reviewer agent 应咨询 Codex 进行交叉验证。
 
 ### 协议
+
 1. **先形成自己的安全分析** - 独立完成审查
 2. **咨询以验证** - 与 Codex 交叉检查发现
 3. **批判性评估** - 绝不盲目采纳外部发现
 4. **优雅降级** - 工具不可用时绝不阻塞
 
 ### 何时咨询
-- 认证/授权代码
-- 加密实现
-- 不可信数据的输入验证
-- 高风险漏洞模式
-- 生产部署代码
+
+* 认证/授权代码
+
+* 加密实现
+
+* 不可信数据的输入验证
+
+* 高风险漏洞模式
+
+* 生产部署代码
 
 ### 何时跳过
-- 低风险工具代码
-- 经过充分审计的模式
-- 时间紧迫的安全评估
-- 已有安全测试的代码
+
+* 低风险工具代码
+
+* 经过充分审计的模式
+
+* 时间紧迫的安全评估
+
+* 已有安全测试的代码
 
 ### 工具使用
+
 首次使用 MCP 工具前，调用 `ToolSearch("mcp")` 发现延迟加载的 MCP 工具。
 使用 `mcp__x__ask_codex`，`agent_role: "security-reviewer"`。
 如果 ToolSearch 未找到 MCP 工具，回退到 `security-reviewer` Claude agent。
@@ -133,7 +155,7 @@ CRITICAL (2)
    Remediation: Move to environment variables, rotate key immediately
    Reference: OWASP A02:2021 – Cryptographic Failures
 
-2. src/db/query.ts:45 - SQL Injection Vulnerability
+1. src/db/query.ts:45 - SQL Injection Vulnerability
    Finding: User input concatenated directly into SQL query
    Impact: Attacker can execute arbitrary SQL commands
    Remediation: Use parameterized queries or ORM
@@ -141,19 +163,19 @@ CRITICAL (2)
 
 HIGH (5)
 --------
-3. src/auth/password.ts:22 - Weak Password Hashing
+1. src/auth/password.ts:22 - Weak Password Hashing
    Finding: Passwords hashed with MD5 (cryptographically broken)
    Impact: Passwords can be reversed via rainbow tables
    Remediation: Use bcrypt or argon2 with appropriate work factor
    Reference: OWASP A02:2021 – Cryptographic Failures
 
-4. src/components/UserInput.tsx:67 - XSS Vulnerability
+1. src/components/UserInput.tsx:67 - XSS Vulnerability
    Finding: User input rendered with dangerouslySetInnerHTML
    Impact: Cross-site scripting attack vector
    Remediation: Sanitize HTML or use safe rendering
    Reference: OWASP A03:2021 – Injection (XSS)
 
-5. src/api/upload.ts:34 - Path Traversal Vulnerability
+1. src/api/upload.ts:34 - Path Traversal Vulnerability
    Finding: User-controlled filename used without validation
    Impact: Attacker can read/write arbitrary files
    Remediation: Validate and sanitize filenames, use allowlist
@@ -201,43 +223,70 @@ Recommendation: DO NOT DEPLOY until CRITICAL and HIGH issues resolved.
 security-reviewer agent 验证：
 
 ### 认证与授权
-- [ ] 密码使用强算法哈希（bcrypt/argon2）
-- [ ] Session token 加密随机
-- [ ] JWT token 正确签名和验证
-- [ ] 所有受保护资源强制执行访问控制
-- [ ] 无认证绕过漏洞
+
+* [ ] 密码使用强算法哈希（bcrypt/argon2）
+
+* [ ] Session token 加密随机
+
+* [ ] JWT token 正确签名和验证
+
+* [ ] 所有受保护资源强制执行访问控制
+
+* [ ] 无认证绕过漏洞
 
 ### 输入验证
-- [ ] 所有用户输入已验证和净化
-- [ ] SQL 查询使用参数化（无字符串拼接）
-- [ ] NoSQL 查询防止注入
-- [ ] 文件上传已验证（类型、大小、内容）
-- [ ] URL 已验证以防止 SSRF
+
+* [ ] 所有用户输入已验证和净化
+
+* [ ] SQL 查询使用参数化（无字符串拼接）
+
+* [ ] NoSQL 查询防止注入
+
+* [ ] 文件上传已验证（类型、大小、内容）
+
+* [ ] URL 已验证以防止 SSRF
 
 ### 输出编码
-- [ ] HTML 输出已转义以防止 XSS
-- [ ] JSON 响应正确编码
-- [ ] 错误消息中无用户数据
-- [ ] 已设置 Content-Security-Policy 头
+
+* [ ] HTML 输出已转义以防止 XSS
+
+* [ ] JSON 响应正确编码
+
+* [ ] 错误消息中无用户数据
+
+* [ ] 已设置 Content-Security-Policy 头
 
 ### 密钥管理
-- [ ] 无硬编码 API 密钥
-- [ ] 源代码中无密码
-- [ ] 仓库中无私钥
-- [ ] 密钥使用环境变量
-- [ ] 密钥未在日志或错误中暴露
+
+* [ ] 无硬编码 API 密钥
+
+* [ ] 源代码中无密码
+
+* [ ] 仓库中无私钥
+
+* [ ] 密钥使用环境变量
+
+* [ ] 密钥未在日志或错误中暴露
 
 ### 加密
-- [ ] 使用强算法（AES-256、RSA-2048+）
-- [ ] 正确的密钥管理
-- [ ] 随机数生成加密安全
-- [ ] 敏感数据强制使用 TLS/HTTPS
+
+* [ ] 使用强算法（AES-256、RSA-2048+）
+
+* [ ] 正确的密钥管理
+
+* [ ] 随机数生成加密安全
+
+* [ ] 敏感数据强制使用 TLS/HTTPS
 
 ### 依赖
-- [ ] 依赖中无已知漏洞
-- [ ] 依赖已更新
-- [ ] 无 CRITICAL 或 HIGH CVE
-- [ ] 依赖来源已验证
+
+* [ ] 依赖中无已知漏洞
+
+* [ ] 依赖已更新
+
+* [ ] 无 CRITICAL 或 HIGH CVE
+
+* [ ] 依赖来源已验证
 
 ## 严重性定义
 
@@ -276,9 +325,14 @@ security-reviewer agent 验证：
 
 ## 最佳实践
 
-- **尽早审查** - 安全设计，而非事后补救
-- **频繁审查** - 每次主要功能或 API 变更后
-- **自动化** - 在 CI/CD 流水线中运行安全扫描
-- **立即修复** - 不要积累安全债务
-- **学习** - 从发现中学习以防止未来问题
-- **验证修复** - 修复后重新运行安全审查
+* **尽早审查** - 安全设计，而非事后补救
+
+* **频繁审查** - 每次主要功能或 API 变更后
+
+* **自动化** - 在 CI/CD 流水线中运行安全扫描
+
+* **立即修复** - 不要积累安全债务
+
+* **学习** - 从发现中学习以防止未来问题
+
+* **验证修复** - 修复后重新运行安全审查

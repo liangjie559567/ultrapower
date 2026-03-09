@@ -52,6 +52,8 @@ try {
 
 ## 验收标准
 
-- [ ] npm 模式更新后，`installed_plugins.json.version` 与 `package.json.version` 一致
-- [ ] reconcile 失败时不影响 syncPluginRegistry 调用（try/catch 隔离）
-- [ ] TypeScript 编译无错误
+* [ ] npm 模式更新后，`installed_plugins.json.version` 与 `package.json.version` 一致
+
+* [ ] reconcile 失败时不影响 syncPluginRegistry 调用（try/catch 隔离）
+
+* [ ] TypeScript 编译无错误

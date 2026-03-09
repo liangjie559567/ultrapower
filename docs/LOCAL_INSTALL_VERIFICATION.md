@@ -9,9 +9,12 @@
 ## ✅ npm pack 验证
 
 ### 打包统计
-- 总文件数: **3521**
-- 包大小: ~10MB
-- Tarball: `liangjie559567-ultrapower-5.5.14.tgz`
+
+* 总文件数: **3521**
+
+* 包大小: ~10MB
+
+* Tarball: `liangjie559567-ultrapower-5.5.14.tgz`
 
 ### 关键文件包含确认
 
@@ -28,12 +31,14 @@
 ## ✅ Tarball 内容验证
 
 ### 解压验证
+
 ```bash
 tar -xzf liangjie559567-ultrapower-5.5.14.tgz
 cd package/
 ```
 
 ### plugin.json 格式
+
 ```json
 {
   "name": "ultrapower",
@@ -48,14 +53,17 @@ cd package/
 ✓ 格式符合 Claude Code 插件规范
 
 ### templates/hooks/ 完整性
-- 17 个 `.mjs` 文件
-- 包含所有 hook 实现
+
+* 17 个 `.mjs` 文件
+
+* 包含所有 hook 实现
 
 ---
 
 ## ✅ postinstall 执行验证
 
 ### 运行输出
+
 ```
 [OMC] Running post-install setup...
 [OMC] Wrote .claude-plugin/plugin.json in install dir
@@ -90,25 +98,33 @@ ls -la ~/.claude/hud/omc-hud.mjs
 ## ✅ 完整安装流程模拟
 
 ### 步骤 1: 打包
+
 ```bash
 cd ultrapower/
 npm pack
+
 # 生成: liangjie559567-ultrapower-5.5.14.tgz
+
 ```
 
 ### 步骤 2: 解压
+
 ```bash
 tar -xzf liangjie559567-ultrapower-5.5.14.tgz
 cd package/
 ```
 
 ### 步骤 3: postinstall
+
 ```bash
 node scripts/plugin-setup.mjs
+
 # 自动配置 HUD + settings.json
+
 ```
 
 ### 步骤 4: 验证
+
 ```bash
 cat .claude-plugin/plugin.json  # ✓ 格式正确
 ls templates/hooks/*.mjs        # ✓ 17 个文件
@@ -120,18 +136,23 @@ ls ~/.claude/hud/omc-hud.mjs    # ✓ 已创建
 ## 🎯 用户安装流程
 
 ### 方式一: npm 全局安装
+
 ```bash
 npm install -g @liangjie559567/ultrapower@5.5.14
+
 # postinstall 自动运行
+
 ```
 
 ### 方式二: 插件市场
+
 ```
-/plugin marketplace add https://github.com/liangjie559567/ultrapower
+/plugin marketplace add <https://github.com/liangjie559567/ultrapower>
 /plugin install omc@ultrapower
 ```
 
 ### 方式三: 本地 tarball
+
 ```bash
 npm install -g ./liangjie559567-ultrapower-5.5.14.tgz
 ```
@@ -140,15 +161,23 @@ npm install -g ./liangjie559567-ultrapower-5.5.14.tgz
 
 ## ✅ 验证检查清单
 
-- [x] npm pack 成功生成 tarball
-- [x] tarball 包含所有必需文件
-- [x] .claude-plugin/ 目录存在
-- [x] plugin.json 格式正确
-- [x] templates/hooks/ 完整
-- [x] postinstall 脚本正常执行
-- [x] HUD wrapper 已创建
-- [x] settings.json 已配置
-- [x] 无 hooks/agents 字段冲突
+* [x] npm pack 成功生成 tarball
+
+* [x] tarball 包含所有必需文件
+
+* [x] .claude-plugin/ 目录存在
+
+* [x] plugin.json 格式正确
+
+* [x] templates/hooks/ 完整
+
+* [x] postinstall 脚本正常执行
+
+* [x] HUD wrapper 已创建
+
+* [x] settings.json 已配置
+
+* [x] 无 hooks/agents 字段冲突
 
 ---
 

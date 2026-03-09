@@ -11,9 +11,12 @@
 ### 1.1 模块解耦优化
 
 **当前问题:**
-- Features ↔ Hooks 存在循环依赖风险
-- bridge.ts 承担过多职责（消毒 + 路由 + 执行）
-- 状态管理分散在多个模块
+
+* Features ↔ Hooks 存在循环依赖风险
+
+* bridge.ts 承担过多职责（消毒 + 路由 + 执行）
+
+* 状态管理分散在多个模块
 
 **优化方案:**
 
@@ -47,9 +50,12 @@ interface StateManager {
 ```
 
 **预期收益:**
-- 减少 60% 模块间耦合
-- 提升 40% 代码可测试性
-- 降低 50% 循环依赖风险
+
+* 减少 60% 模块间耦合
+
+* 提升 40% 代码可测试性
+
+* 降低 50% 循环依赖风险
 
 ### 1.2 插件化架构演进
 
@@ -82,9 +88,12 @@ class PluginLoader {
 4. Week 7-8: 文档 + 示例插件
 
 **预期收益:**
-- 支持社区贡献
-- 降低核心代码复杂度
-- 提升扩展灵活性
+
+* 支持社区贡献
+
+* 降低核心代码复杂度
+
+* 提升扩展灵活性
 
 ---
 
@@ -133,9 +142,12 @@ async function executeHookWithCache(type: string, input: any) {
 ```
 
 **预期收益:**
-- 并行化: 减少 40% 延迟 (750ms → 450ms)
-- 懒加载: 减少 20% 阻塞时间
-- 缓存: 减少 30% 重复计算
+
+* 并行化: 减少 40% 延迟 (750ms → 450ms)
+
+* 懒加载: 减少 20% 阻塞时间
+
+* 缓存: 减少 30% 重复计算
 
 ### 2.2 状态 I/O 优化 (P0)
 
@@ -179,9 +191,12 @@ await batchUpdateTaskStates(tasks.map(t => ({ id: t.id, state: t.state })));
 ```
 
 **预期收益:**
-- 写缓冲: 减少 60% I/O 次数
-- 批量操作: 减少 50% 系统调用
-- 总延迟: 300ms → 120ms
+
+* 写缓冲: 减少 60% I/O 次数
+
+* 批量操作: 减少 50% 系统调用
+
+* 总延迟: 300ms → 120ms
 
 ### 2.3 MCP 打包优化 (P1)
 
@@ -189,20 +204,28 @@ await batchUpdateTaskStates(tasks.map(t => ({ id: t.id, state: t.state })));
 
 **优化策略:**
 ```bash
+
 # 1. Tree-shaking
+
 esbuild --bundle --minify --tree-shaking=true
 
 # 2. 代码分割
+
 esbuild --bundle --splitting --format=esm
 
 # 3. 按需加载
+
 # 将 35 个工具拆分为独立模块，动态导入
+
 ```
 
 **预期收益:**
-- 初始加载: 788KB → 400KB (减少 49%)
-- 启动时间: 减少 30%
-- 内存占用: 减少 20MB
+
+* 初始加载: 788KB → 400KB (减少 49%)
+
+* 启动时间: 减少 30%
+
+* 内存占用: 减少 20MB
 
 ---
 
@@ -220,7 +243,7 @@ function assertValidMode(mode: string) {
 // 加固: 严格路径验证
 function assertValidMode(mode: string) {
   if (!VALID_MODES.includes(mode)) throw new Error('Invalid mode');
-  if (mode.includes('..') || mode.includes('/') || mode.includes('\\')) {
+  if (mode.includes('..') | | mode.includes('/') | | mode.includes('\\')) {
     throw new Error('Path traversal detected');
   }
   return mode;
@@ -258,7 +281,7 @@ const STRICT_WHITELIST = {
 };
 
 function sanitizeInput(hookType: string, input: any) {
-  const allowed = STRICT_WHITELIST[hookType] || [];
+  const allowed = STRICT_WHITELIST[hookType] | | [];
   return Object.fromEntries(
     Object.entries(input).filter(([key]) => allowed.includes(key))
   );
@@ -285,10 +308,13 @@ function processToolResponse(response: ToolResponse) { ... }
 
 **问题 2: 解决循环依赖**
 ```bash
+
 # 使用 madge 检测
+
 npx madge --circular --extensions ts src/
 
 # 重构策略: 提取共享接口到 core/
+
 src/core/
 ├── interfaces/
 │   ├── agent.ts
@@ -323,25 +349,32 @@ function handleError(error: unknown) {
 ### 3.3 P2 - 测试覆盖提升 (1 个月内)
 
 **目标覆盖率:**
-- Hooks 系统: 40% → 70%
-- MCP 服务器: 30% → 60%
-- 核心模块: 60% → 80%
+
+* Hooks 系统: 40% → 70%
+
+* MCP 服务器: 30% → 60%
+
+* 核心模块: 60% → 80%
 
 **实施计划:**
 ```bash
+
 # Week 1-2: Hooks 系统测试
+
 src/hooks/__tests__/
 ├── bridge.test.ts           # 输入消毒
 ├── execution-order.test.ts  # 执行顺序
 └── integration.test.ts      # 集成测试
 
 # Week 3-4: MCP 服务器测试
+
 src/mcp/__tests__/
 ├── tool-registration.test.ts
 ├── schema-validation.test.ts
 └── error-handling.test.ts
 
 # Week 5-6: E2E 测试
+
 tests/e2e/
 ├── autopilot.test.ts
 ├── ralph-loop.test.ts
@@ -355,11 +388,16 @@ tests/e2e/
 ### 4.1 输入验证强化
 
 **实施清单:**
-- [ ] 所有 MCP 工具输入使用 Zod schema 验证
-- [ ] Hook 输入白名单严格执行
-- [ ] 文件路径规范化 (path.normalize + 边界检查)
-- [ ] SQL 注入防护 (使用参数化查询)
-- [ ] 命令注入防护 (禁止 shell 拼接)
+
+* [ ] 所有 MCP 工具输入使用 Zod schema 验证
+
+* [ ] Hook 输入白名单严格执行
+
+* [ ] 文件路径规范化 (path.normalize + 边界检查)
+
+* [ ] SQL 注入防护 (使用参数化查询)
+
+* [ ] 命令注入防护 (禁止 shell 拼接)
 
 **代码示例:**
 ```typescript
@@ -389,7 +427,7 @@ const TOOL_PERMISSIONS = {
 
 // 权限检查中间件
 function checkPermission(toolName: string, role: string) {
-  const allowed = TOOL_PERMISSIONS[toolName] || ['admin'];
+  const allowed = TOOL_PERMISSIONS[toolName] | | ['admin'];
   if (!allowed.includes(role)) {
     throw new Error(`Permission denied: ${role} cannot use ${toolName}`);
   }
@@ -491,7 +529,7 @@ class MetricsCollector {
   }
 
   getStats(name: string) {
-    const values = this.metrics.get(name) || [];
+    const values = this.metrics.get(name) | | [];
     return {
       count: values.length,
       avg: values.reduce((a, b) => a + b, 0) / values.length,
@@ -518,7 +556,7 @@ metrics.record('hook_execution_time', Date.now() - start);
 **Q2 2026 (4-6 月):**
 
 | 优先级 | 项目 | 工作量 | 负责人 |
-|--------|------|--------|--------|
+| -------- | ------ | -------- | -------- |
 | P0 | 安全加固 (路径遍历/加密/注入) | 1 周 | Security Team |
 | P0 | Hook 并行化优化 | 1 周 | Performance Team |
 | P0 | 状态 I/O 优化 (写缓冲) | 1 周 | Core Team |
@@ -528,29 +566,42 @@ metrics.record('hook_execution_time', Date.now() - start);
 | P2 | 文档体系完善 | 2 周 | Doc Team |
 
 **里程碑:**
-- M1 (Week 4): 安全加固完成，通过安全审计
-- M2 (Week 8): 性能优化完成，延迟减少 40%
-- M3 (Week 12): 测试覆盖达标，代码质量提升
+
+* M1 (Week 4): 安全加固完成，通过安全审计
+
+* M2 (Week 8): 性能优化完成，延迟减少 40%
+
+* M3 (Week 12): 测试覆盖达标，代码质量提升
 
 ### 6.2 中期目标 (3-6 个月)
 
 **Q3 2026 (7-9 月):**
 
 **1. 插件化架构 (6 周)**
-- Week 1-2: 插件 API 设计
-- Week 3-4: 插件加载器实现
-- Week 5-6: 现有模块迁移
+
+* Week 1-2: 插件 API 设计
+
+* Week 3-4: 插件加载器实现
+
+* Week 5-6: 现有模块迁移
 
 **2. 分布式 Agent 支持 (8 周)**
-- Week 1-2: 远程调用协议设计
-- Week 3-4: 任务分配算法
-- Week 5-6: 负载均衡实现
-- Week 7-8: 容错机制
+
+* Week 1-2: 远程调用协议设计
+
+* Week 3-4: 任务分配算法
+
+* Week 5-6: 负载均衡实现
+
+* Week 7-8: 容错机制
 
 **3. 云端状态同步 (6 周)**
-- Week 1-2: 同步协议设计
-- Week 3-4: 冲突解决机制
-- Week 5-6: 离线优先实现
+
+* Week 1-2: 同步协议设计
+
+* Week 3-4: 冲突解决机制
+
+* Week 5-6: 离线优先实现
 
 ### 6.3 长期愿景 (6-12 个月)
 
@@ -559,29 +610,42 @@ metrics.record('hook_execution_time', Date.now() - start);
 **1. 可视化编排界面**
 ```
 功能清单:
-- Agent 流程图编辑器
-- 实时监控面板
-- 性能分析工具
-- 调试工具集成
+
+* Agent 流程图编辑器
+
+* 实时监控面板
+
+* 性能分析工具
+
+* 调试工具集成
 ```
 
 **2. Agent 市场生态**
 ```
 生态建设:
-- 社区贡献平台
-- Agent/Hook/Tool 市场
-- 最佳实践库
-- 认证体系
+
+* 社区贡献平台
+
+* Agent/Hook/Tool 市场
+
+* 最佳实践库
+
+* 认证体系
 ```
 
 **3. 企业级特性**
 ```
 企业功能:
-- 多租户支持
-- RBAC 权限控制
-- SSO 集成
-- 审计合规
-- SLA 保障
+
+* 多租户支持
+
+* RBAC 权限控制
+
+* SSO 集成
+
+* 审计合规
+
+* SLA 保障
 ```
 
 ---
@@ -626,7 +690,7 @@ metrics.record('hook_execution_time', Date.now() - start);
 ### 8.1 技术风险
 
 | 风险 | 概率 | 影响 | 缓解措施 |
-|------|------|------|---------|
+| ------ | ------ | ------ | --------- |
 | 插件化重构破坏兼容性 | 中 | 高 | 版本化 API + 迁移工具 |
 | 并行化引入竞态条件 | 中 | 中 | 充分测试 + 锁机制 |
 | 分布式增加复杂度 | 高 | 中 | 渐进式迁移 + 降级方案 |
@@ -635,7 +699,7 @@ metrics.record('hook_execution_time', Date.now() - start);
 ### 8.2 资源风险
 
 | 风险 | 概率 | 影响 | 缓解措施 |
-|------|------|------|---------|
+| ------ | ------ | ------ | --------- |
 | 人力不足 | 中 | 高 | 优先级调整 + 外部支持 |
 | 时间延期 | 中 | 中 | 缓冲时间 + 范围裁剪 |
 | 技术债务积累 | 高 | 中 | 定期重构 + 质量门禁 |
@@ -647,7 +711,7 @@ metrics.record('hook_execution_time', Date.now() - start);
 ### 9.1 性能指标
 
 | 指标 | 当前 | 目标 (3 个月) | 目标 (6 个月) |
-|------|------|--------------|--------------|
+| ------ | ------ | -------------- | -------------- |
 | Hook 延迟 | 750ms | 450ms | 300ms |
 | 状态 I/O | 300ms | 120ms | 80ms |
 | MCP 体积 | 788KB | 400KB | 300KB |
@@ -657,7 +721,7 @@ metrics.record('hook_execution_time', Date.now() - start);
 ### 9.2 质量指标
 
 | 指标 | 当前 | 目标 (3 个月) | 目标 (6 个月) |
-|------|------|--------------|--------------|
+| ------ | ------ | -------------- | -------------- |
 | 测试覆盖率 | 50% | 70% | 80% |
 | 安全漏洞 | 5 个 | 0 个 | 0 个 |
 | 代码复杂度 | 高 | 中 | 低 |
@@ -666,7 +730,7 @@ metrics.record('hook_execution_time', Date.now() - start);
 ### 9.3 生态指标
 
 | 指标 | 当前 | 目标 (6 个月) | 目标 (12 个月) |
-|------|------|--------------|---------------|
+| ------ | ------ | -------------- | --------------- |
 | 社区插件数 | 0 | 10 | 50 |
 | 活跃贡献者 | 5 | 20 | 50 |
 | GitHub Stars | 100 | 500 | 2000 |
@@ -686,22 +750,34 @@ metrics.record('hook_execution_time', Date.now() - start);
 ### 10.2 下一步行动
 
 **本周 (Week 1):**
-- [ ] 组建安全加固小组
-- [ ] 启动路径遍历防护修复
-- [ ] 设计状态文件加密方案
-- [ ] 开始 Hook 并行化 POC
+
+* [ ] 组建安全加固小组
+
+* [ ] 启动路径遍历防护修复
+
+* [ ] 设计状态文件加密方案
+
+* [ ] 开始 Hook 并行化 POC
 
 **本月 (Month 1):**
-- [ ] 完成所有 P0 安全修复
-- [ ] 部署 Hook 并行化到生产
-- [ ] 实现状态 I/O 写缓冲
-- [ ] 发布 v5.6.0 (安全与性能版本)
+
+* [ ] 完成所有 P0 安全修复
+
+* [ ] 部署 Hook 并行化到生产
+
+* [ ] 实现状态 I/O 写缓冲
+
+* [ ] 发布 v5.6.0 (安全与性能版本)
 
 **本季度 (Q2 2026):**
-- [ ] 测试覆盖率达到 70%
-- [ ] 消除所有 any 类型
-- [ ] 完成文档体系重构
-- [ ] 启动插件化架构设计
+
+* [ ] 测试覆盖率达到 70%
+
+* [ ] 消除所有 any 类型
+
+* [ ] 完成文档体系重构
+
+* [ ] 启动插件化架构设计
 
 ---
 

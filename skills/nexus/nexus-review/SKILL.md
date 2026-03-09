@@ -23,7 +23,7 @@ triggers:
    - 原因和证据摘要
    - diff 内容
 
-4. 询问用户对每个建议的操作：
+1. 询问用户对每个建议的操作：
    - `apply`：将改进 JSON 中的 `newContent` 字段内容写入 `targetFile` 路径。然后将该改进 JSON 文件中的 `status` 更新为 `applied`。
    - `skip`：跳过，更新 status 为 `rejected`
    - `auto`：在批量应用前，显示所有置信度 ≥80 的改进列表，并询问：'Apply all N improvements with confidence ≥80? (yes/no)'。用户确认后，对每个改进执行与 `apply` 相同的操作。

@@ -21,28 +21,28 @@
 graph TD
     Start[开始向导] --> Q1{Q1: 任务类型?}
 
-    Q1 -->|单个功能| Q2A{Q2: 任务复杂度?}
-    Q1 -->|多个功能| Q2B{Q2: 功能是否独立?}
-    Q1 -->|修复问题| Q2C{Q2: 问题范围?}
-    Q1 -->|不确定| Q2D{Q2: 需要规划吗?}
+    Q1 --> | 单个功能 | Q2A{Q2: 任务复杂度?}
+    Q1 --> | 多个功能 | Q2B{Q2: 功能是否独立?}
+    Q1 --> | 修复问题 | Q2C{Q2: 问题范围?}
+    Q1 --> | 不确定 | Q2D{Q2: 需要规划吗?}
 
-    Q2A -->|简单| Q3A{Q3: 需要持续执行?}
-    Q2A -->|复杂| Recommend_Autopilot[推荐: autopilot]
+    Q2A --> | 简单 | Q3A{Q3: 需要持续执行?}
+    Q2A --> | 复杂 | Recommend_Autopilot[推荐: autopilot]
 
-    Q2B -->|是| Recommend_Ultrawork[推荐: ultrawork]
-    Q2B -->|否| Recommend_Team[推荐: team]
+    Q2B --> | 是 | Recommend_Ultrawork[推荐: ultrawork]
+    Q2B --> | 否 | Recommend_Team[推荐: team]
 
-    Q2C -->|单个文件| Recommend_Executor[推荐: executor agent]
-    Q2C -->|多个文件| Q3C{Q3: 需要验证循环?}
+    Q2C --> | 单个文件 | Recommend_Executor[推荐: executor agent]
+    Q2C --> | 多个文件 | Q3C{Q3: 需要验证循环?}
 
-    Q2D -->|是| Recommend_Plan[推荐: plan]
-    Q2D -->|否| Recommend_Wizard_Again[重新回答 Q1]
+    Q2D --> | 是 | Recommend_Plan[推荐: plan]
+    Q2D --> | 否 | Recommend_Wizard_Again[重新回答 Q1]
 
-    Q3A -->|是| Recommend_Ralph[推荐: ralph]
-    Q3A -->|否| Recommend_Executor2[推荐: executor agent]
+    Q3A --> | 是 | Recommend_Ralph[推荐: ralph]
+    Q3A --> | 否 | Recommend_Executor2[推荐: executor agent]
 
-    Q3C -->|是| Recommend_Ralph2[推荐: ralph]
-    Q3C -->|否| Recommend_Ultrawork2[推荐: ultrawork]
+    Q3C --> | 是 | Recommend_Ralph2[推荐: ralph]
+    Q3C --> | 否 | Recommend_Ultrawork2[推荐: ultrawork]
 
     Recommend_Autopilot --> Confirm[确认并执行]
     Recommend_Ultrawork --> Confirm
@@ -54,9 +54,9 @@ graph TD
     Recommend_Ralph2 --> Confirm
     Recommend_Ultrawork2 --> Confirm
 
-    Confirm -->|确认| Execute[执行推荐模式]
-    Confirm -->|返回| Start
-    Confirm -->|手动选择| Manual[显示所有模式列表]
+    Confirm --> | 确认 | Execute[执行推荐模式]
+    Confirm --> | 返回 | Start
+    Confirm --> | 手动选择 | Manual[显示所有模式列表]
 
     Manual --> Execute
 ```
@@ -74,15 +74,15 @@ graph TD
    - 描述: 添加一个新功能或改进现有功能
    - 示例: "添加用户登录"、"优化搜索性能"
 
-2. **实现多个功能**
+1. **实现多个功能**
    - 描述: 同时开发多个独立或相关的功能
    - 示例: "构建完整的用户系统"、"重构整个模块"
 
-3. **修复问题**
+1. **修复问题**
    - 描述: 修复 bug、错误或测试失败
    - 示例: "修复登录失败"、"解决类型错误"
 
-4. **不确定，需要探索**
+1. **不确定，需要探索**
    - 描述: 还不清楚具体要做什么，需要先分析
    - 示例: "优化性能"、"改进架构"
 
@@ -135,7 +135,7 @@ graph TD
 ## 推荐逻辑映射表
 
 | Q1 答案 | Q2 答案 | Q3 答案 | 推荐模式 | 理由 |
-|---------|---------|---------|----------|------|
+| --------- | --------- | --------- | ---------- | ------ |
 | 单个功能 | 简单 | 否 | `executor` | 直接实现，无需编排 |
 | 单个功能 | 简单 | 是 | `ralph` | 持续执行直到验证通过 |
 | 单个功能 | 复杂 | - | `autopilot` | 自主规划和实现 |
@@ -176,16 +176,22 @@ graph TD
 ## 错误处理
 
 ### 场景 1: 用户输入无效
-- **处理**: 显示错误提示，重新显示当前问题
-- **提示**: "请输入 1-4 之间的数字"
+
+* **处理**: 显示错误提示，重新显示当前问题
+
+* **提示**: "请输入 1-4 之间的数字"
 
 ### 场景 2: 用户想退出
-- **处理**: 确认后退出向导
-- **提示**: "确定要退出向导吗？(y/n)"
+
+* **处理**: 确认后退出向导
+
+* **提示**: "确定要退出向导吗？(y/n)"
 
 ### 场景 3: 用户想返回上一步
-- **处理**: 返回上一个问题，保留之前的答案
-- **快捷键**: 输入 "b" 或 "back"
+
+* **处理**: 返回上一个问题，保留之前的答案
+
+* **快捷键**: 输入 "b" 或 "back"
 
 ---
 
@@ -200,9 +206,11 @@ graph TD
 
 ## 性能要求
 
-- 问题加载时间: < 100ms
-- 选项切换响应: < 50ms
-- 总完成时间: < 2 分钟（用户操作时间）
+* 问题加载时间: < 100ms
+
+* 选项切换响应: < 50ms
+
+* 总完成时间: < 2 分钟（用户操作时间）
 
 ---
 

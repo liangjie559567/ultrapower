@@ -9,9 +9,11 @@
 
 ## Task Context
 
-- **Task ID**: `{{task_id}}`
-- **Description**: `{{task_description}}`
-- **Dependency**: `{{dependencies}}`
+* **Task ID**: `{{task_id}}`
+
+* **Description**: `{{task_description}}`
+
+* **Dependency**: `{{dependencies}}`
 
 ## Input Artifacts（请首先阅读）
 
@@ -38,9 +40,11 @@
 
 三态输出（PM→Worker 协议）：
 
-- `QUESTION`: 需要澄清，附上具体问题
-- `BLOCKED`: 遇到阻塞，附上阻塞原因
-- `COMPLETE`: 全部测试通过，附上修改文件清单
+* `QUESTION`: 需要澄清，附上具体问题
+
+* `BLOCKED`: 遇到阻塞，附上阻塞原因
+
+* `COMPLETE`: 全部测试通过，附上修改文件清单
 
 ## ultrapower 使用方式
 

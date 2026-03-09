@@ -4,13 +4,19 @@
 
 ## 目录
 
-- [概述](#overview)
-- [受影响用户](#affected-users)
-- [已知问题](#known-issues)
-- [根本原因](#root-cause)
-- [解决方案](#workarounds)
-- [相关问题](#related-issues)
-- [状态](#status)
+* [概述](#overview)
+
+* [受影响用户](#affected-users)
+
+* [已知问题](#known-issues)
+
+* [根本原因](#root-cause)
+
+* [解决方案](#workarounds)
+
+* [相关问题](#related-issues)
+
+* [状态](#status)
 
 ## 概述
 
@@ -19,7 +25,7 @@ Claude Code CLI 使用 React Ink 进行终端 UI 渲染。由于终端 raw mode 
 ## 受影响用户
 
 | 语言 | 输入法 | 是否受影响 |
-|----------|--------------|----------|
+| ---------- | -------------- | ---------- |
 | 韩语 (한국어) | macOS 韩语 IME | ✅ 是 |
 | 韩语 (한국어) | Windows 韩语 IME | ✅ 是 |
 | 韩语 (한국어) | Gureumkim (구름) | ✅ 是 |
@@ -38,10 +44,14 @@ Claude Code CLI 使用 React Ink 进行终端 UI 渲染。由于终端 raw mode 
 **平台**：macOS、Linux
 
 **示例（韩语）**：
-- 输入 `ㅎ` → 无显示
-- 输入 `ㅎ` + `ㅏ` → 无显示
-- 输入 `ㅎ` + `ㅏ` + `ㄴ` → 无显示
-- 按 Enter → `한` 出现在输出中
+
+* 输入 `ㅎ` → 无显示
+
+* 输入 `ㅎ` + `ㅏ` → 无显示
+
+* 输入 `ㅎ` + `ㅏ` + `ㄴ` → 无显示
+
+* 按 Enter → `한` 出现在输出中
 
 ### 2. 组合字符位置错误
 
@@ -62,16 +72,22 @@ Claude Code CLI 使用 React Ink 进行终端 UI 渲染。由于终端 raw mode 
 ### 1. 终端 Raw Mode 限制
 
 当 Node.js 在 raw mode（`process.stdin.setRawMode(true)`）下运行时，它仅提供字节级 STDIN 访问，不支持：
-- 组合事件回调（`compositionstart`、`compositionupdate`、`compositionend`）
-- IME 预编辑缓冲区信息
-- 组合过程中的光标位置反馈
+
+* 组合事件回调（`compositionstart`、`compositionupdate`、`compositionend`）
+
+* IME 预编辑缓冲区信息
+
+* 组合过程中的光标位置反馈
 
 ### 2. React Ink 的 TextInput 组件
 
 React Ink 的 TextInput 逐个处理按键，不理解多阶段字符组合：
-- 无 `isComposing` 状态追踪
-- 无独立的组合缓冲区
-- 逐字符处理破坏了 CJK 算法组合
+
+* 无 `isComposing` 状态追踪
+
+* 无独立的组合缓冲区
+
+* 逐字符处理破坏了 CJK 算法组合
 
 ### 3. CJK 字符的复杂性
 
@@ -112,11 +128,15 @@ k + a → か
 在可能的情况下，使用英文编写提示词，但在文件内容或引用中包含 CJK 文字。
 
 ```
+
 # 不直接输入韩语：
+
 # "한국어로 인사말 작성해줘"
 
 # 使用英文提示词：
+
 # "Write a greeting message in Korean language"
+
 ```
 
 ### 方案 3：基于剪贴板的输入脚本
@@ -124,10 +144,13 @@ k + a → か
 创建一个从剪贴板读取并发送到 Claude Code 的脚本：
 
 ```bash
+
 # macOS
+
 pbpaste | claude --stdin
 
 # Linux（需要 xclip）
+
 xclip -selection clipboard -o | claude --stdin
 ```
 
@@ -138,27 +161,37 @@ xclip -selection clipboard -o | claude --stdin
 ## 相关问题
 
 ### ultrapower
-- [#344](https://github.com/liangjie559567/ultrapower/issues/344) - 韩语 IME 输入在输入框中不可见
+
+* [#344](https://github.com/liangjie559567/ultrapower/issues/344) - 韩语 IME 输入在输入框中不可见
 
 ### anthropics/claude-code
-- [#22732](https://github.com/anthropics/claude-code/issues/22732) - 韩语 IME：组合过程中字符完全不可见
-- [#18291](https://github.com/anthropics/claude-code/issues/18291) - 韩语 IME 组合：音节完成前字母不显示
-- [#16322](https://github.com/anthropics/claude-code/issues/16322) - [严重] 韩语 IME：组合字符显示在错误位置
-- [#15705](https://github.com/anthropics/claude-code/issues/15705) - 韩语输入字符在 iOS 移动 SSH 上消失
-- [#1547](https://github.com/anthropics/claude-code/issues/1547) - IME 输入导致性能问题
-- [#3045](https://github.com/anthropics/claude-code/issues/3045) - 调查：通过修补 React Ink 修复 IME 问题
+
+* [#22732](https://github.com/anthropics/claude-code/issues/22732) - 韩语 IME：组合过程中字符完全不可见
+
+* [#18291](https://github.com/anthropics/claude-code/issues/18291) - 韩语 IME 组合：音节完成前字母不显示
+
+* [#16322](https://github.com/anthropics/claude-code/issues/16322) - [严重] 韩语 IME：组合字符显示在错误位置
+
+* [#15705](https://github.com/anthropics/claude-code/issues/15705) - 韩语输入字符在 iOS 移动 SSH 上消失
+
+* [#1547](https://github.com/anthropics/claude-code/issues/1547) - IME 输入导致性能问题
+
+* [#3045](https://github.com/anthropics/claude-code/issues/3045) - 调查：通过修补 React Ink 修复 IME 问题
 
 ### 上游（React Ink）
-- React Ink 的 TextInput 不支持 IME 组合状态
-- 最小复现：https://github.com/takeru/react-ink-ime-bug
+
+* React Ink 的 TextInput 不支持 IME 组合状态
+
+* 最小复现：<https://github.com/takeru/react-ink-ime-bug>
 
 ### 其他项目中的类似问题
-- [Google Gemini CLI #3014](https://github.com/google-gemini/gemini-cli/issues/3014) - 同样的问题影响 Gemini CLI
+
+* [Google Gemini CLI #3014](https://github.com/google-gemini/gemini-cli/issues/3014) - 同样的问题影响 Gemini CLI
 
 ## 状态
 
 | 修复领域 | 状态 | 备注 |
-|----------|--------|-------|
+| ---------- | -------- | ------- |
 | 光标定位 | ✅ 部分修复 | 2025 年 8 月版本改善了组合窗口位置 |
 | 字符可见性 | ❌ 未修复 | 组合过程中字符仍不可见 |
 | 性能 | ⚠️ 持续改进 | 内存问题正在调查中 |
@@ -174,6 +207,8 @@ xclip -selection clipboard -o | claude --stdin
 
 ## 参考资料
 
-- [Terminal-friendly application with Node.js - User Inputs](https://blog.soulserv.net/terminal-friendly-application-with-node-js-part-iii-user-inputs/)
-- [React IME Composition Events Issue #8683](https://github.com/facebook/react/issues/8683)
-- [Node.js Readline Documentation](https://nodejs.org/api/readline.html)
+* [Terminal-friendly application with Node.js - User Inputs](https://blog.soulserv.net/terminal-friendly-application-with-node-js-part-iii-user-inputs/)
+
+* [React IME Composition Events Issue #8683](https://github.com/facebook/react/issues/8683)
+
+* [Node.js Readline Documentation](https://nodejs.org/api/readline.html)

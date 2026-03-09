@@ -2,15 +2,16 @@
 
 ## 前提条件
 
-- [OpenCode.ai](https://opencode.ai) 已安装
-- Git 已安装
+* [OpenCode.ai](https://opencode.ai) 已安装
+
+* Git 已安装
 
 ## 安装步骤
 
 ### 1. 克隆 ultrapower
 
 ```bash
-git clone https://github.com/liangjie559567/ultrapower.git ~/.config/opencode/ultrapower
+git clone <https://github.com/liangjie559567/ultrapower.git> ~/.config/opencode/ultrapower
 ```
 
 ### 2. 注册插件
@@ -108,12 +109,17 @@ git pull
 ### 工具映射
 
 当 skills 引用 Claude Code 工具时：
-- `TodoWrite` → `update_plan`
-- `Task` with subagents → `@mention` 语法
-- `Skill` tool → OpenCode 的原生 `skill` 工具
-- 文件操作 → 你的原生工具
+
+* `TodoWrite` → `update_plan`
+
+* `Task` with subagents → `@mention` 语法
+
+* `Skill` tool → OpenCode 的原生 `skill` 工具
+
+* 文件操作 → 你的原生工具
 
 ## 获取帮助
 
-- 报告问题：https://github.com/liangjie559567/ultrapower/issues
-- 完整文档：https://github.com/liangjie559567/ultrapower/blob/main/docs/README.opencode.md
+* 报告问题：<https://github.com/liangjie559567/ultrapower/issues>
+
+* 完整文档：<https://github.com/liangjie559567/ultrapower/blob/main/docs/README.opencode.md>

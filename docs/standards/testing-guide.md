@@ -67,8 +67,9 @@ const config = {
 
 ### Windows vs Linux
 
-- **路径分隔符**：使用 `path.join()` 而非手动拼接
-- **`process.cwd()` 行为**：
+* **路径分隔符**：使用 `path.join()` 而非手动拼接
+
+* **`process.cwd()` 行为**：
   - Linux CI: `/home/runner/work/repo/repo`
   - Windows CI: `D:/a/repo/repo`
   - 两者都可能在 home 目录外部
@@ -90,5 +91,6 @@ beforeEach(() => {
 
 ## 相关知识
 
-- [k-078: CI Test Environment Isolation Pattern](../../.omc/axiom/evolution/knowledge_base.md#k-078)
-- [k-079: Batch Fix Same-Pattern Issues](../../.omc/axiom/evolution/knowledge_base.md#k-079)
+* [k-078: CI Test Environment Isolation Pattern](../../.omc/axiom/evolution/knowledge_base.md#k-078)
+
+* [k-079: Batch Fix Same-Pattern Issues](../../.omc/axiom/evolution/knowledge_base.md#k-079)

@@ -9,9 +9,11 @@ references: [evolution-engine-v1]
 ---
 
 ## Summary
+
 自进化引擎通过六大模块闭环实现 Agent 的自我提升：能够感知（Metrics）、学习（Harvester）、沉淀（Knowledge）、识别（Pattern）、反思（Reflection）和执行（Orchestrator）。
 
 ## Details
+
 **核心模块**:
 1. **Knowledge Harvester**: 从对话/代码中提取结构化知识。
 2. **Workflow Optimizer**: 基于数据(`workflow_metrics`)优化流程。
@@ -21,4 +23,5 @@ references: [evolution-engine-v1]
 6. **Evolution Orchestrator**: 协调上述模块的运行。
 
 ## Related Knowledge
-- k-001: Global Configuration Pattern
+
+* k-001: Global Configuration Pattern

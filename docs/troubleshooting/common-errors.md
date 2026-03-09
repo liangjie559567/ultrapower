@@ -3,6 +3,7 @@
 ## TypeScript Errors
 
 ### TS2339: Property does not exist
+
 **Cause**: Accessing undefined property or type mismatch
 
 **Solution**:
@@ -11,6 +12,7 @@
 3. Add missing properties or fix type annotations
 
 ### Import Errors
+
 **Cause**: Missing .js extension or wrong path
 
 **Solution**:
@@ -21,6 +23,7 @@
 ## Runtime Errors
 
 ### ENOENT: File not found
+
 **Cause**: Missing file or incorrect path
 
 **Solution**:
@@ -29,6 +32,7 @@
 3. Ensure .omc/ directory structure exists
 
 ### Permission Denied
+
 **Cause**: Insufficient file system permissions
 
 **Solution**:

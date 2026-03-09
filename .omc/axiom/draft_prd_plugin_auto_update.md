@@ -15,7 +15,7 @@ author: axiom-product-designer
 ultrapower 支持两种安装模式：
 
 | 模式 | 安装命令 | 更新命令 |
-|------|---------|---------|
+| ------ | --------- | --------- |
 | npm 全局安装 | `npm install -g @liangjie559567/ultrapower` | `/update` → `performUpdate()` |
 | Claude Code 插件 | `/plugin install ultrapower` | `/plugin install ultrapower`（手动） |
 
@@ -25,9 +25,12 @@ ultrapower 支持两种安装模式：
 `performUpdate()` 检测到 `isRunningAsPlugin() === true` 时直接返回错误，提示用户手动操作。用户无法通过 `/update` 命令完成插件更新。
 
 **P2 — 注册表与版本元数据双轨漂移**
-- `saveVersionMetadata()` 写入 `~/.claude/plugins/cache/.../version.json`
-- `installed_plugins.json` 的 `installPath` 和 `version` 字段独立维护
-- 更新后两者可能不同步（k-046 根因）
+
+* `saveVersionMetadata()` 写入 `~/.claude/plugins/cache/.../version.json`
+
+* `installed_plugins.json` 的 `installPath` 和 `version` 字段独立维护
+
+* 更新后两者可能不同步（k-046 根因）
 
 **P3 — syncMarketplaceClone 不更新注册表**
 `syncMarketplaceClone()` 只做 `git fetch/pull`，不更新 `installed_plugins.json`，导致 hook 加载路径漂移。
@@ -37,8 +40,9 @@ ultrapower 支持两种安装模式：
 
 ### 1.3 目标用户
 
-- 通过 `/plugin install ultrapower` 安装的 Claude Code 用户
-- 希望保持 ultrapower 最新版本但不想手动操作的用户
+* 通过 `/plugin install ultrapower` 安装的 Claude Code 用户
+
+* 希望保持 ultrapower 最新版本但不想手动操作的用户
 
 ---
 
@@ -51,17 +55,23 @@ ultrapower 支持两种安装模式：
 **当前行为**：`performUpdate()` 在 plugin 模式下返回错误。
 
 **目标行为**（基于 Q-01 调查结论）：
-- Claude Code **没有** programmatic plugin 更新 API，无法通过代码触发 `/plugin install`
-- plugin 模式下 `/update` 的正确行为：
+
+* Claude Code **没有** programmatic plugin 更新 API，无法通过代码触发 `/plugin install`
+
+* plugin 模式下 `/update` 的正确行为：
   1. 调用 `syncMarketplaceClone()` 确保 marketplace clone 是最新的
   2. 调用 `syncPluginRegistry()` 更新注册表版本号
   3. 提示用户运行 `/plugin install ultrapower` 完成实际安装
-- 可选降级路径：用户传入 `--standalone` 时走 npm 全局更新（现有行为保留）
+
+* 可选降级路径：用户传入 `--standalone` 时走 npm 全局更新（现有行为保留）
 
 **验收标准**：
-- [ ] plugin 模式下 `/update` 不再返回错误
-- [ ] 更新后 `installed_plugins.json.version` 与 `package.json` 一致
-- [ ] 更新后 `installed_plugins.json.installPath` 指向正确路径
+
+* [ ] plugin 模式下 `/update` 不再返回错误
+
+* [ ] 更新后 `installed_plugins.json.version` 与 `package.json` 一致
+
+* [ ] 更新后 `installed_plugins.json.installPath` 指向正确路径
 
 #### FR-02: 注册表同步函数
 
@@ -78,17 +88,26 @@ interface SyncResult {
 ```
 
 **职责**（基于 Q-02 真实 schema 调查）：
-- 读取 `~/.claude/plugins/installed_plugins.json`
-- 真实 schema：key 格式为 `"pluginName@marketplaceName"`，ultrapower 的 key 是 `"ultrapower@ultrapower"`
-- 匹配逻辑：遍历 `plugins` 对象，找到 key 包含 `"ultrapower"` 的条目
-- 更新该条目的 `version` 和 `lastUpdated` 字段（**不修改** `installPath`，避免覆盖用户自定义路径）
-- 原子写入（使用现有 `atomicWriteJson`）
-- `isProjectScopedPlugin() === true` 时直接返回 `{ success: true, skipped: true }`（Q-03 结论）
+
+* 读取 `~/.claude/plugins/installed_plugins.json`
+
+* 真实 schema：key 格式为 `"pluginName@marketplaceName"`，ultrapower 的 key 是 `"ultrapower@ultrapower"`
+
+* 匹配逻辑：遍历 `plugins` 对象，找到 key 包含 `"ultrapower"` 的条目
+
+* 更新该条目的 `version` 和 `lastUpdated` 字段（**不修改** `installPath`，避免覆盖用户自定义路径）
+
+* 原子写入（使用现有 `atomicWriteJson`）
+
+* `isProjectScopedPlugin() === true` 时直接返回 `{ success: true, skipped: true }`（Q-03 结论）
 
 **调用时机**：
-- `performUpdate()` 成功后
-- `reconcileUpdateRuntime()` 成功后
-- `syncMarketplaceClone()` 成功后（可选，仅当版本变化时）
+
+* `performUpdate()` 成功后
+
+* `reconcileUpdateRuntime()` 成功后
+
+* `syncMarketplaceClone()` 成功后（可选，仅当版本变化时）
 
 #### FR-03: 更新通知增强
 
@@ -117,10 +136,13 @@ interface ConsistencyReport {
 
 ### 2.2 非功能需求
 
-- **原子性**：注册表更新必须使用 `atomicWriteJson`，防止写入中断导致文件损坏
-- **幂等性**：`syncPluginRegistry` 多次调用结果相同
-- **向后兼容**：`installed_plugins.json` 不存在时静默跳过（不报错）
-- **Windows 兼容**：路径处理使用 `path.join`，不硬编码分隔符
+* **原子性**：注册表更新必须使用 `atomicWriteJson`，防止写入中断导致文件损坏
+
+* **幂等性**：`syncPluginRegistry` 多次调用结果相同
+
+* **向后兼容**：`installed_plugins.json` 不存在时静默跳过（不报错）
+
+* **Windows 兼容**：路径处理使用 `path.join`，不硬编码分隔符
 
 ---
 
@@ -129,7 +151,7 @@ interface ConsistencyReport {
 ### 3.1 文件影响范围
 
 | 文件 | 变更类型 | 说明 |
-|------|---------|------|
+| ------ | --------- | ------ |
 | `src/features/auto-update.ts` | MODIFY | 添加 `syncPluginRegistry()`，修改 `performUpdate()` plugin 分支，增强 `formatUpdateNotification()` |
 | `src/features/auto-update.ts` | MODIFY | `syncMarketplaceClone()` 完成后调用 `syncPluginRegistry()` |
 | `src/installer/index.ts` | MODIFY | `reconcileUpdateRuntime()` 完成后调用 `syncPluginRegistry()` |
@@ -173,7 +195,7 @@ interface PluginRegistryEntry {
 ## 4. 任务分解（初稿）
 
 | ID | 任务 | 估时 | 依赖 |
-|----|------|------|------|
+| ---- | ------ | ------ | ------ |
 | T-01 | 创建 `src/lib/plugin-registry.ts`，实现 `syncPluginRegistry()` + `checkVersionConsistency()` | M | - |
 | T-02 | 为 `plugin-registry.ts` 编写单元测试（mock `installed_plugins.json`） | M | T-01 |
 | T-03 | 修改 `performUpdate()` plugin 分支，支持自动更新 + 调用 `syncPluginRegistry()` | M | T-01 |
@@ -190,7 +212,7 @@ interface PluginRegistryEntry {
 ## 5. 已解答问题
 
 | ID | 结论 |
-|----|------|
+| ---- | ------ |
 | Q-01 | Claude Code **无** programmatic plugin 更新 API。plugin 模式下只能 syncMarketplaceClone + 提示用户手动运行 `/plugin install ultrapower` |
 | Q-02 | 真实 schema 已确认：key 为 `"ultrapower@ultrapower"`，无 `packageName` 字段，匹配逻辑改为 key 包含 `"ultrapower"` |
 | Q-03 | project-scoped plugin 跳过注册表同步，`syncPluginRegistry()` 直接返回 `{ success: true, skipped: true }` |
@@ -199,6 +221,8 @@ interface PluginRegistryEntry {
 
 ## 6. 成功指标
 
-- 用户在 plugin 模式下执行 `/update` 后，版本自动更新，无需手动操作
-- `omc-doctor` 能检测并报告版本漂移
-- `installed_plugins.json` 在每次更新后保持与实际版本一致
+* 用户在 plugin 模式下执行 `/update` 后，版本自动更新，无需手动操作
+
+* `omc-doctor` 能检测并报告版本漂移
+
+* `installed_plugins.json` 在每次更新后保持与实际版本一致

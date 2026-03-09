@@ -42,13 +42,13 @@ MCP server 为 Claude Code agent 提供额外工具。本 skill 帮助你通过 
 **问题 1：** Exa API key
 ```
 Exa Web Search 需要 API key。
-请输入您的 Exa API key（在 https://dashboard.exa.ai 获取），或输入 'skip' 跳过
+请输入您的 Exa API key（在 <https://dashboard.exa.ai> 获取），或输入 'skip' 跳过
 ```
 
 **问题 2：** GitHub Token
 ```
 GitHub 集成需要 Personal Access Token。
-请输入您的 GitHub Token（在 https://github.com/settings/tokens 创建，推荐权限：repo, read:org），或输入 'skip' 跳过
+请输入您的 GitHub Token（在 <https://github.com/settings/tokens> 创建，推荐权限：repo, read:org），或输入 'skip' 跳过
 ```
 
 **问题 3：** Slack Bot Token
@@ -91,17 +91,22 @@ Slack 集成需要 Bot Token。
 ## 第三步：收集所需信息（单个安装）
 
 ### Context7：
+
 无需 API key，可立即使用。
 
 ### Exa Web Search：
+
 询问 API key：
 ```
 您有 Exa API key 吗？
-- 在 https://dashboard.exa.ai 获取
-- 输入您的 API key，或输入 'skip' 稍后配置
+
+* 在 <https://dashboard.exa.ai> 获取
+
+* 输入您的 API key，或输入 'skip' 稍后配置
 ```
 
 ### Filesystem：
+
 询问允许访问的目录：
 ```
 filesystem MCP 应该访问哪些目录？
@@ -110,24 +115,33 @@ filesystem MCP 应该访问哪些目录？
 ```
 
 ### GitHub：
+
 询问 token：
 ```
 您有 GitHub Personal Access Token 吗？
-- 在 https://github.com/settings/tokens 创建
-- 推荐权限：repo, read:org
-- 输入您的 token，或输入 'skip' 稍后配置
+
+* 在 <https://github.com/settings/tokens> 创建
+
+* 推荐权限：repo, read:org
+
+* 输入您的 token，或输入 'skip' 稍后配置
 ```
 
 ### Slack：
+
 询问 Bot Token：
 ```
 您有 Slack Bot Token 吗？
-- 在 https://api.slack.com/apps 创建 App
-- 需要权限：channels:read, chat:write, users:read
-- 输入您的 Bot Token（xoxb-...），或输入 'skip' 稍后配置
+
+* 在 <https://api.slack.com/apps> 创建 App
+
+* 需要权限：channels:read, chat:write, users:read
+
+* 输入您的 Bot Token（xoxb-...），或输入 'skip' 稍后配置
 ```
 
 ### Jira/Linear：
+
 询问使用哪个工具：
 ```
 您使用 Jira 还是 Linear？
@@ -137,29 +151,36 @@ filesystem MCP 应该访问哪些目录？
 
 对于 Jira，询问：
 ```
-Jira 实例 URL（如 https://yourcompany.atlassian.net）：
+Jira 实例 URL（如 <https://yourcompany.atlassian.net）：>
 Jira 邮箱：
-Jira API Token（在 https://id.atlassian.com/manage-profile/security/api-tokens 创建）：
+Jira API Token（在 <https://id.atlassian.com/manage-profile/security/api-tokens> 创建）：
 ```
 
 对于 Linear，询问：
 ```
-Linear API Key（在 https://linear.app/settings/api 创建）：
+Linear API Key（在 <https://linear.app/settings/api> 创建）：
 ```
 
 ### PostgreSQL：
+
 询问连接信息：
 ```
 PostgreSQL 连接信息：
-- 主机（默认 localhost）：
-- 端口（默认 5432）：
-- 数据库名：
-- 用户名：
-- 密码：
+
+* 主机（默认 localhost）：
+
+* 端口（默认 5432）：
+
+* 数据库名：
+
+* 用户名：
+
+* 密码：
 或直接输入连接字符串（postgresql://user:pass@host:port/db）
 ```
 
 ### Playwright：
+
 无需 API key，可立即使用。询问是否需要特定浏览器：
 ```
 Playwright 浏览器配置：
@@ -173,16 +194,19 @@ Playwright 浏览器配置：
 使用 `claude mcp add` 命令配置每个 MCP server。CLI 会自动处理 settings.json 的更新和合并。
 
 ### Context7 配置：
+
 ```bash
 claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```
 
 ### Exa Web Search 配置：
+
 ```bash
 claude mcp add -e EXA_API_KEY=<用户提供的key> exa -- npx -y exa-mcp-server
 ```
 
 ### Filesystem 配置：
+
 ```bash
 claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem <允许的目录>
 ```
@@ -196,17 +220,19 @@ claude mcp add -e GITHUB_PERSONAL_ACCESS_TOKEN=<用户提供的token> github -- 
 
 **选项 2：HTTP（远程）**
 ```bash
-claude mcp add --transport http github https://api.githubcopilot.com/mcp/
+claude mcp add --transport http github <https://api.githubcopilot.com/mcp/>
 ```
 
 > 注意：Docker 选项需要安装 Docker。HTTP 选项更简单但功能可能有所不同。
 
 ### Slack 配置：
+
 ```bash
 claude mcp add -e SLACK_BOT_TOKEN=<用户提供的token> slack -- npx -y @modelcontextprotocol/server-slack
 ```
 
 ### Jira 配置：
+
 ```bash
 claude mcp add \
   -e JIRA_URL=<用户提供的URL> \
@@ -216,16 +242,21 @@ claude mcp add \
 ```
 
 ### Linear 配置：
+
 ```bash
 claude mcp add -e LINEAR_API_KEY=<用户提供的key> linear -- npx -y @linear/mcp-server
 ```
 
 ### PostgreSQL 配置：
+
 ```bash
+
 # 使用连接字符串
+
 claude mcp add -e DATABASE_URL=<连接字符串> postgres -- npx -y @modelcontextprotocol/server-postgres
 
 # 或使用独立参数
+
 claude mcp add \
   -e POSTGRES_HOST=<主机> \
   -e POSTGRES_PORT=<端口> \
@@ -236,17 +267,20 @@ claude mcp add \
 ```
 
 ### Playwright 配置：
+
 ```bash
 claude mcp add playwright -- npx -y @playwright/mcp
 ```
 
 ### Sequential Thinking 配置：
+
 无需 API key，可立即使用。
 ```bash
 claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
 ```
 
 ### Software Planning Tool 配置：
+
 无需 API key，可立即使用。
 ```bash
 claude mcp add software-planning-tool -- npx -y @modelcontextprotocol/software-planning-tool
@@ -257,7 +291,9 @@ claude mcp add software-planning-tool -- npx -y @modelcontextprotocol/software-p
 配置完成后，验证 MCP server 是否正确设置：
 
 ```bash
+
 # 列出已配置的 MCP server
+
 claude mcp list
 ```
 
@@ -277,27 +313,44 @@ MCP Server 配置完成！
 3. 运行 `claude mcp list` 验证配置
 
 使用提示：
-- Context7：询问库文档（如"如何使用 React hooks？"）
-- Exa：用于网页搜索（如"搜索最新 TypeScript 特性"）
-- Filesystem：工作目录之外的扩展文件操作
-- GitHub：与 GitHub 仓库、issue 和 PR 交互
-- Slack：发送消息到频道（如"发送部署通知到 #deployments"）
-- Jira/Linear：查询和创建 issue（如"查看本周待处理的 bug"）
-- PostgreSQL：直接查询数据库（如"查询用户表中最近注册的 10 个用户"）
-- Playwright：浏览器自动化（如"截图并测试登录流程"）
-- Sequential Thinking：复杂问题逐步推理（如"分析这个架构决策的利弊"）
-- Software Planning Tool：任务规划与分解（如"将这个需求拆解为可执行的子任务"）
+
+* Context7：询问库文档（如"如何使用 React hooks？"）
+
+* Exa：用于网页搜索（如"搜索最新 TypeScript 特性"）
+
+* Filesystem：工作目录之外的扩展文件操作
+
+* GitHub：与 GitHub 仓库、issue 和 PR 交互
+
+* Slack：发送消息到频道（如"发送部署通知到 #deployments"）
+
+* Jira/Linear：查询和创建 issue（如"查看本周待处理的 bug"）
+
+* PostgreSQL：直接查询数据库（如"查询用户表中最近注册的 10 个用户"）
+
+* Playwright：浏览器自动化（如"截图并测试登录流程"）
+
+* Sequential Thinking：复杂问题逐步推理（如"分析这个架构决策的利弊"）
+
+* Software Planning Tool：任务规划与分解（如"将这个需求拆解为可执行的子任务"）
 
 故障排除：
-- 如果 MCP server 未出现，运行 `claude mcp list` 检查状态
-- 确保已安装 Node.js 18+ 以使用基于 npx 的 server
-- GitHub Docker 选项需要安装并运行 Docker
-- 运行 /ultrapower:omc-doctor 诊断问题
+
+* 如果 MCP server 未出现，运行 `claude mcp list` 检查状态
+
+* 确保已安装 Node.js 18+ 以使用基于 npx 的 server
+
+* GitHub Docker 选项需要安装并运行 Docker
+
+* 运行 /ultrapower:omc-doctor 诊断问题
 
 管理 MCP SERVER：
-- 添加更多 server：/ultrapower:mcp-setup 或 `claude mcp add ...`
-- 列出 server：`claude mcp list`
-- 删除 server：`claude mcp remove <server-name>`
+
+* 添加更多 server：/ultrapower:mcp-setup 或 `claude mcp add ...`
+
+* 列出 server：`claude mcp list`
+
+* 删除 server：`claude mcp remove <server-name>`
 ```
 
 ## 自定义 MCP Server
@@ -308,7 +361,7 @@ MCP Server 配置完成！
 1. Server 名称（标识符）
 2. 传输类型：`stdio`（默认）或 `http`
 3. stdio 方式：命令和参数（如 `npx my-mcp-server`）
-4. http 方式：URL（如 `https://example.com/mcp`）
+4. http 方式：URL（如 `<https://example.com/mcp`）>
 5. 环境变量（可选，key=value 格式）
 6. HTTP 请求头（可选，仅 http 传输）
 
@@ -316,40 +369,58 @@ MCP Server 配置完成！
 
 **stdio server：**
 ```bash
+
 # 不带环境变量
+
 claude mcp add <server-name> -- <command> [args...]
 
 # 带环境变量
+
 claude mcp add -e KEY1=value1 -e KEY2=value2 <server-name> -- <command> [args...]
 ```
 
 **HTTP server：**
 ```bash
+
 # 基本 HTTP server
+
 claude mcp add --transport http <server-name> <url>
 
 # 带请求头的 HTTP server
+
 claude mcp add --transport http --header "Authorization: Bearer <token>" <server-name> <url>
 ```
 
 ## 常见问题
 
 ### MCP Server 未加载
-- 确保已安装 Node.js 18+
-- 检查 npx 是否在 PATH 中
-- 运行 `claude mcp list` 验证 server 状态
-- 检查 server 日志中的错误
+
+* 确保已安装 Node.js 18+
+
+* 检查 npx 是否在 PATH 中
+
+* 运行 `claude mcp list` 验证 server 状态
+
+* 检查 server 日志中的错误
 
 ### API Key 问题
-- Exa：在 https://dashboard.exa.ai 验证 key
-- GitHub：确保 token 具有所需权限（repo, read:org）
-- 如需要，使用正确凭据重新运行 `claude mcp add`
+
+* Exa：在 <https://dashboard.exa.ai> 验证 key
+
+* GitHub：确保 token 具有所需权限（repo, read:org）
+
+* 如需要，使用正确凭据重新运行 `claude mcp add`
 
 ### Agent 仍在使用内置工具
-- 配置后重启 Claude Code
-- 配置 exa 后内置 websearch 将降低优先级
-- 运行 `claude mcp list` 确认 server 已激活
+
+* 配置后重启 Claude Code
+
+* 配置 exa 后内置 websearch 将降低优先级
+
+* 运行 `claude mcp list` 确认 server 已激活
 
 ### 删除或更新 Server
-- 删除：`claude mcp remove <server-name>`
-- 更新：先删除旧 server，再用新配置重新添加
+
+* 删除：`claude mcp remove <server-name>`
+
+* 更新：先删除旧 server，再用新配置重新添加

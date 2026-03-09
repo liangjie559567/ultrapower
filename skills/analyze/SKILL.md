@@ -8,18 +8,27 @@ Analyze 对架构、bug、性能问题和依赖关系进行深度调查。它将
 </Purpose>
 
 <Use_When>
-- 用户说 "analyze"、"investigate"、"debug"、"why does" 或 "what's causing"
-- 用户需要在修改前理解系统架构或行为
-- 用户需要对 bug 或性能问题进行根因分析
-- 用户需要对拟议变更进行依赖分析或影响评估
-- 复杂问题需要读取多个文件并跨文件推理
+
+* 用户说 "analyze"、"investigate"、"debug"、"why does" 或 "what's causing"
+
+* 用户需要在修改前理解系统架构或行为
+
+* 用户需要对 bug 或性能问题进行根因分析
+
+* 用户需要对拟议变更进行依赖分析或影响评估
+
+* 复杂问题需要读取多个文件并跨文件推理
 </Use_When>
 
 <Do_Not_Use_When>
-- 用户需要修改代码 —— 改用 executor agent 或 `ralph`
-- 用户需要包含验收标准的完整计划 —— 改用 `plan` skill
-- 用户需要快速文件查找或符号搜索 —— 改用 `explore` agent
-- 用户提出的简单事实性问题可从单个文件直接回答 —— 直接读取并回答
+
+* 用户需要修改代码 —— 改用 executor agent 或 `ralph`
+
+* 用户需要包含验收标准的完整计划 —— 改用 `plan` skill
+
+* 用户需要快速文件查找或符号搜索 —— 改用 `explore` agent
+
+* 用户提出的简单事实性问题可从单个文件直接回答 —— 直接读取并回答
 </Do_Not_Use_When>
 
 <Why_This_Exists>
@@ -27,10 +36,14 @@ Analyze 对架构、bug、性能问题和依赖关系进行深度调查。它将
 </Why_This_Exists>
 
 <Execution_Policy>
-- 优先使用 Codex MCP 进行分析（更快、成本更低）
-- Codex 不可用时回退到 architect Claude agent
-- 始终向分析工具提供 context files 以支撑推理
-- 返回结构化结论，而非原始观察
+
+* 优先使用 Codex MCP 进行分析（更快、成本更低）
+
+* Codex 不可用时回退到 architect Claude agent
+
+* 始终向分析工具提供 context files 以支撑推理
+
+* 返回结构化结论，而非原始观察
 </Execution_Policy>
 
 <Steps>
@@ -39,15 +52,20 @@ Analyze 对架构、bug、性能问题和依赖关系进行深度调查。它将
 3. **路由到分析器**：
    - 优先：`ask_codex` 配合 `agent_role: "architect"` 和相关 `context_files`
    - 回退：`Task(subagent_type="ultrapower:architect", model="opus", prompt="Analyze: ...")`
-4. **返回结构化结论**：提供带有证据、文件引用和可操作建议的分析
+1. **返回结构化结论**：提供带有证据、文件引用和可操作建议的分析
 </Steps>
 
 <Tool_Usage>
-- 首次使用 MCP 工具前，调用 `ToolSearch("mcp")` 发现延迟加载的 MCP 工具
-- 使用 `ask_codex` 配合 `agent_role: "architect"` 作为首选分析路由
-- 传入 `context_files` 包含所有相关源文件以支撑分析
-- 当 ToolSearch 未找到 MCP 工具或 Codex 不可用时，使用 `Task(subagent_type="ultrapower:architect", model="opus", ...)` 作为回退
-- 对于广泛分析，先使用 `explore` agent 识别相关文件，再路由到 architect
+
+* 首次使用 MCP 工具前，调用 `ToolSearch("mcp")` 发现延迟加载的 MCP 工具
+
+* 使用 `ask_codex` 配合 `agent_role: "architect"` 作为首选分析路由
+
+* 传入 `context_files` 包含所有相关源文件以支撑分析
+
+* 当 ToolSearch 未找到 MCP 工具或 Codex 不可用时，使用 `Task(subagent_type="ultrapower:architect", model="opus", ...)` 作为回退
+
+* 对于广泛分析，先使用 `explore` agent 识别相关文件，再路由到 architect
 </Tool_Usage>
 
 <Examples>
@@ -77,17 +95,25 @@ Analyze 对架构、bug、性能问题和依赖关系进行深度调查。它将
 </Examples>
 
 <Escalation_And_Stop_Conditions>
-- 若分析发现问题需要修改代码，报告结论并建议使用 `ralph` 或 executor 进行修复
-- 若分析范围过广（"analyze everything"），请用户缩小焦点
-- 若 Codex 不可用且 architect agent 也失败，报告已收集的上下文并建议手动调查路径
+
+* 若分析发现问题需要修改代码，报告结论并建议使用 `ralph` 或 executor 进行修复
+
+* 若分析范围过广（"analyze everything"），请用户缩小焦点
+
+* 若 Codex 不可用且 architect agent 也失败，报告已收集的上下文并建议手动调查路径
 </Escalation_And_Stop_Conditions>
 
 <Final_Checklist>
-- [ ] 分析针对具体问题或调查目标
-- [ ] 结论在适用时引用具体文件和行号
-- [ ] bug 调查中识别了根因（而非仅症状）
-- [ ] 提供了可操作的建议
-- [ ] 分析区分了已确认事实与假设
+
+* [ ] 分析针对具体问题或调查目标
+
+* [ ] 结论在适用时引用具体文件和行号
+
+* [ ] bug 调查中识别了根因（而非仅症状）
+
+* [ ] 提供了可操作的建议
+
+* [ ] 分析区分了已确认事实与假设
 </Final_Checklist>
 
 Task: {{ARGUMENTS}}

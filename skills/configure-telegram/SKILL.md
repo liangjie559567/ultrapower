@@ -56,7 +56,7 @@ CREATE A BOT (if you don't have one):
 
 GET YOUR CHAT ID:
 1. Start a chat with your new bot (send /start)
-2. Visit: https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates
+2. Visit: <https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates>
 3. Look for "chat":{"id":YOUR_CHAT_ID}
    - Personal chat IDs are positive numbers (e.g., 123456789)
    - Group chat IDs are negative numbers (e.g., -1001234567890)
@@ -71,8 +71,10 @@ GET YOUR CHAT ID:
 用户将在 "Other" 字段中输入 token。
 
 **验证** token：
-- 必须匹配模式：`digits:alphanumeric`（如 `123456789:ABCdefGHI...`）
-- 若无效，解释格式并再次询问
+
+* 必须匹配模式：`digits:alphanumeric`（如 `123456789:ABCdefGHI...`）
+
+* 若无效，解释格式并再次询问
 
 ## 步骤 4：收集 Chat ID
 
@@ -83,14 +85,18 @@ GET YOUR CHAT ID:
 用户将在 "Other" 字段中输入 chat ID。
 
 **验证** chat ID：
-- 必须是数字（个人为正数，群组为负数）
-- 若无效，提供帮助查找：
+
+* 必须是数字（个人为正数，群组为负数）
+
+* 若无效，提供帮助查找：
 
 ```bash
+
 # Help user find their chat ID
+
 BOT_TOKEN="USER_PROVIDED_TOKEN"
 echo "Fetching recent messages to find your chat ID..."
-curl -s "https://api.telegram.org/bot${BOT_TOKEN}/getUpdates" | jq '.result[-1].message.chat.id // .result[-1].message.from.id // "No messages found - send /start to your bot first"'
+curl -s "<https://api.telegram.org/bot${BOT_TOKEN}/getUpdates"> | jq '.result[-1].message.chat.id // .result[-1].message.from.id // "No messages found - send /start to your bot first"'
 ```
 
 ## 步骤 5：选择解析模式
@@ -132,6 +138,7 @@ else
 fi
 
 # BOT_TOKEN, CHAT_ID, PARSE_MODE are collected from user
+
 echo "$EXISTING" | jq \
   --arg token "$BOT_TOKEN" \
   --arg chatId "$CHAT_ID" \
@@ -151,7 +158,9 @@ echo "$EXISTING" | jq \
 对每个未选择的事件，禁用它：
 
 ```bash
+
 # Example: disable session-start if not selected
+
 echo "$(cat "$CONFIG_FILE")" | jq \
   '.notifications.events = (.notifications.events // {}) |
    .notifications.events["session-start"] = {enabled: false}' > "$CONFIG_FILE"
@@ -177,7 +186,7 @@ CHAT_ID="USER_PROVIDED_CHAT_ID"
 PARSE_MODE="Markdown"
 
 RESPONSE=$(curl -s -w "\n%{http_code}" \
-  "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+  "<https://api.telegram.org/bot${BOT_TOKEN}/sendMessage"> \
   -d "chat_id=${CHAT_ID}" \
   -d "parse_mode=${PARSE_MODE}" \
   -d "text=OMC test notification - Telegram is configured!")
@@ -189,14 +198,17 @@ if [ "$HTTP_CODE" = "200" ]; then
   echo "Test notification sent successfully!"
 else
   echo "Failed (HTTP $HTTP_CODE):"
-  echo "$BODY" | jq -r '.description // "Unknown error"' 2>/dev/null || echo "$BODY"
+  echo "$BODY" | jq -r '.description // "Unknown error"' 2>/dev/null | | echo "$BODY"
 fi
 ```
 
 报告成功或失败。常见问题：
-- **401 Unauthorized**：Bot token 无效
-- **400 Bad Request: chat not found**：Chat ID 错误，或用户未向 bot 发送 `/start`
-- **Network error**：检查与 api.telegram.org 的连接
+
+* **401 Unauthorized**：Bot token 无效
+
+* **400 Bad Request: chat not found**：Chat ID 错误，或用户未向 bot 发送 `/start`
+
+* **Network error**：检查与 api.telegram.org 的连接
 
 ## 步骤 9：确认
 

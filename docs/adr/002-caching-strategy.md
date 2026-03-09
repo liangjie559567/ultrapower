@@ -13,16 +13,22 @@
 ### 问题陈述
 
 WorkerStateAdapter 引入后，频繁的状态查询成为性能瓶颈：
-- Team 模式下每 5 秒检查一次所有 workers 的健康状态
-- MCP 模式下任务完成后需要查询最终状态
-- 无缓存时，100 个 workers 的健康检查需要 ~50ms
+
+* Team 模式下每 5 秒检查一次所有 workers 的健康状态
+
+* MCP 模式下任务完成后需要查询最终状态
+
+* 无缓存时，100 个 workers 的健康检查需要 ~50ms
 
 ### 约束条件
 
-- 缓存必须对业务逻辑透明（装饰器模式）
-- 缓存失效策略必须简单可靠
-- 不能引入额外的依赖
-- 缓存命中率需要 > 80%
+* 缓存必须对业务逻辑透明（装饰器模式）
+
+* 缓存失效策略必须简单可靠
+
+* 不能引入额外的依赖
+
+* 缓存命中率需要 > 80%
 
 ---
 
@@ -39,15 +45,20 @@ const cachedAdapter = new CachedWorkerAdapter(baseAdapter, 5000); // 5s TTL
 ```
 
 **缓存策略**:
-- **get()**: 缓存单个 worker 状态（5s TTL）
-- **list()**: 不缓存（过滤条件复杂）
-- **upsert()**: 更新时同步缓存
-- **delete()**: 删除时清除缓存
-- **cleanup()**: 清空整个缓存
+
+* **get()**: 缓存单个 worker 状态（5s TTL）
+
+* **list()**: 不缓存（过滤条件复杂）
+
+* **upsert()**: 更新时同步缓存
+
+* **delete()**: 删除时清除缓存
+
+* **cleanup()**: 清空整个缓存
 
 **性能目标**:
 | 操作 | 无缓存 | 有缓存 | 提升 |
-|------|--------|--------|------|
+| ------ | -------- | -------- | ------ |
 | 单个查询 | 20ms | <5ms | 4x |
 | 健康检查 | 50ms | <10ms | 5x |
 | 批量更新 | 200ms | <50ms | 4x |
@@ -76,24 +87,32 @@ const cachedAdapter = new CachedWorkerAdapter(baseAdapter, 5000); // 5s TTL
 ### 方案 A: 数据库级缓存（SQLite 查询缓存）
 
 **优点**:
-- 自动缓存，无需额外代码
-- 缓存一致性有保证
+
+* 自动缓存，无需额外代码
+
+* 缓存一致性有保证
 
 **缺点**:
-- 仅适用 SQLite，JSON 无法使用
-- 无法跨适配器共享缓存
+
+* 仅适用 SQLite，JSON 无法使用
+
+* 无法跨适配器共享缓存
 
 **为什么未采用**: 不够通用，无法覆盖 JSON 适配器
 
 ### 方案 B: 无缓存，优化查询
 
 **优点**:
-- 无缓存一致性问题
-- 实现简单
+
+* 无缓存一致性问题
+
+* 实现简单
 
 **缺点**:
-- 性能无法达到目标（4-5x）
-- Team 模式下频繁查询成为瓶颈
+
+* 性能无法达到目标（4-5x）
+
+* Team 模式下频繁查询成为瓶颈
 
 **为什么未采用**: 无法满足性能需求
 
@@ -101,12 +120,14 @@ const cachedAdapter = new CachedWorkerAdapter(baseAdapter, 5000); // 5s TTL
 
 ## 相关决策
 
-- ADR-001: WorkerStateAdapter 抽象层设计
-- ADR-003: 渐进式迁移方案
+* ADR-001: WorkerStateAdapter 抽象层设计
+
+* ADR-003: 渐进式迁移方案
 
 ---
 
 ## 参考资源
 
-- `src/workers/cached-adapter.ts` - 实现代码
-- `.omc/p1-5/worker-backend-design.md` §5.1 - 缓存设计
+* `src/workers/cached-adapter.ts` - 实现代码
+
+* `.omc/p1-5/worker-backend-design.md` §5.1 - 缓存设计

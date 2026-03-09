@@ -32,34 +32,48 @@ digraph when_to_use {
 ```
 
 **适用场景：**
-- 3 个以上测试文件因不同根因失败
-- 多个子系统独立损坏
-- 每个问题无需其他问题的上下文即可理解
-- 排查之间无共享状态
+
+* 3 个以上测试文件因不同根因失败
+
+* 多个子系统独立损坏
+
+* 每个问题无需其他问题的上下文即可理解
+
+* 排查之间无共享状态
 
 **不适用场景：**
-- 故障相互关联（修复一个可能修复其他）
-- 需要了解完整系统状态
-- Agent 之间会相互干扰
+
+* 故障相互关联（修复一个可能修复其他）
+
+* 需要了解完整系统状态
+
+* Agent 之间会相互干扰
 
 ## 模式
 
 ### 1. 识别独立域
 
 按损坏内容对故障分组：
-- 文件 A 测试：Tool approval 流程
-- 文件 B 测试：Batch completion 行为
-- 文件 C 测试：Abort 功能
+
+* 文件 A 测试：Tool approval 流程
+
+* 文件 B 测试：Batch completion 行为
+
+* 文件 C 测试：Abort 功能
 
 每个域是独立的——修复 tool approval 不影响 abort 测试。
 
 ### 2. 创建专注的 Agent 任务
 
 每个 agent 获得：
-- **具体范围：** 一个测试文件或子系统
-- **明确目标：** 使这些测试通过
-- **约束条件：** 不修改其他代码
-- **预期输出：** 发现和修复内容的摘要
+
+* **具体范围：** 一个测试文件或子系统
+
+* **明确目标：** 使这些测试通过
+
+* **约束条件：** 不修改其他代码
+
+* **预期输出：** 发现和修复内容的摘要
 
 ### 3. 并行分发
 
@@ -74,10 +88,14 @@ Task("Fix tool-approval-race-conditions.test.ts failures")
 ### 4. 审查并整合
 
 Agent 返回后：
-- 阅读每份摘要
-- 验证修复不冲突
-- 运行完整测试套件
-- 整合所有变更
+
+* 阅读每份摘要
+
+* 验证修复不冲突
+
+* 运行完整测试套件
+
+* 整合所有变更
 
 ## Agent 提示结构
 
@@ -133,9 +151,12 @@ Return: Summary of what you found and what you fixed.
 **场景：** 大规模重构后 3 个文件中出现 6 个测试失败
 
 **失败情况：**
-- agent-tool-abort.test.ts：3 个失败（时序问题）
-- batch-completion-behavior.test.ts：2 个失败（tool 未执行）
-- tool-approval-race-conditions.test.ts：1 个失败（执行次数 = 0）
+
+* agent-tool-abort.test.ts：3 个失败（时序问题）
+
+* batch-completion-behavior.test.ts：2 个失败（tool 未执行）
+
+* tool-approval-race-conditions.test.ts：1 个失败（执行次数 = 0）
 
 **决策：** 独立域 —— abort 逻辑与 batch completion 与竞态条件各自独立
 
@@ -147,9 +168,12 @@ Agent 3 → 修复 tool-approval-race-conditions.test.ts
 ```
 
 **结果：**
-- Agent 1：用基于事件的等待替换超时
-- Agent 2：修复事件结构 bug（threadId 位置错误）
-- Agent 3：添加等待异步 tool 执行完成
+
+* Agent 1：用基于事件的等待替换超时
+
+* Agent 2：修复事件结构 bug（threadId 位置错误）
+
+* Agent 3：添加等待异步 tool 执行完成
 
 **整合：** 所有修复独立，无冲突，完整套件通过
 
@@ -173,15 +197,23 @@ Agent 返回后：
 ## 实际影响
 
 来自调试会话（2025-10-03）：
-- 3 个文件中 6 个失败
-- 3 个 agent 并行分发
-- 所有排查并发完成
-- 所有修复成功整合
-- Agent 变更之间零冲突
+
+* 3 个文件中 6 个失败
+
+* 3 个 agent 并行分发
+
+* 所有排查并发完成
+
+* 所有修复成功整合
+
+* Agent 变更之间零冲突
 
 ## 路由触发
 
 所有并行 agent 结果汇聚后调用 `next-step-router`：
-- current_skill: "dispatching-parallel-agents"
-- stage: "all_results_returned"
-- output_summary: agent 数量、成功/失败数、汇总结果
+
+* current_skill: "dispatching-parallel-agents"
+
+* stage: "all_results_returned"
+
+* output_summary: agent 数量、成功/失败数、汇总结果

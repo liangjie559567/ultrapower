@@ -3,9 +3,12 @@
 ## Timeout Configuration
 
 Default timeouts by agent type:
-- Haiku: 2 minutes
-- Sonnet: 5 minutes
-- Opus: 10 minutes
+
+* Haiku: 2 minutes
+
+* Sonnet: 5 minutes
+
+* Opus: 10 minutes
 
 ## Common Causes
 
@@ -16,6 +19,7 @@ Default timeouts by agent type:
 ## Solutions
 
 ### Increase Timeout
+
 Edit `src/agents/timeout-config.ts`:
 ```typescript
 export const AGENT_TIMEOUTS = {
@@ -26,11 +30,15 @@ export const AGENT_TIMEOUTS = {
 ```
 
 ### Break Down Task
-- Split large tasks into smaller chunks
-- Use incremental approach
-- Limit file scope
+
+* Split large tasks into smaller chunks
+
+* Use incremental approach
+
+* Limit file scope
 
 ### Agent Stuck
+
 If agent appears hung:
 1. Use `/ultrapower:cancel`
 2. Clear `.omc/state/` files

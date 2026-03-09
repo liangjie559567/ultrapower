@@ -16,9 +16,12 @@
 ## 实现要点
 
 `silentAutoUpdate` 依赖以下可 mock 的函数：
-- `shouldCheckForUpdates`（来自同文件，需通过 `vi.spyOn` 或模块 mock）
-- `getSilentUpdateState` / `saveSilentUpdateState`（私有函数，通过 `readFileSync`/`writeFileSync` mock 间接控制）
-- `isSilentAutoUpdateEnabled`（来自同文件，依赖 `getOMCConfig()`）
+
+* `shouldCheckForUpdates`（来自同文件，需通过 `vi.spyOn` 或模块 mock）
+
+* `getSilentUpdateState` / `saveSilentUpdateState`（私有函数，通过 `readFileSync`/`writeFileSync` mock 间接控制）
+
+* `isSilentAutoUpdateEnabled`（来自同文件，依赖 `getOMCConfig()`）
 
 由于 `shouldCheckForUpdates` 和 `getSilentUpdateState` 是模块内部函数，
 需通过 mock `fs` 的 `readFileSync`/`writeFileSync` 来控制状态，
@@ -101,7 +104,7 @@ describe('silentAutoUpdate rate limiting', () => {
       json: async () => ({
         tag_name: 'v4.2.0', name: '4.2.0',
         published_at: '2026-02-27T00:00:00.000Z',
-        html_url: 'https://example.com', body: 'notes',
+        html_url: '<<https://example.com',>> body: 'notes',
         prerelease: false, draft: false,
       }),
     }));
@@ -121,14 +124,19 @@ describe('silentAutoUpdate rate limiting', () => {
 
 ## 注意事项
 
-- `shouldCheckForUpdates` 读取 `silent-update-state.json` 中的 `lastCheck` 字段
-- `getSilentUpdateState` 读取同一文件的 `consecutiveFailures` 和 `lastAttempt`
-- `isSilentAutoUpdateEnabled` 读取 `.omc-config.json` 的 `silentAutoUpdate` 字段
-- 需要在现有 mock 中确认 `writeFileSync` 已被 mock（`mockedWriteFileSync`）
-- `silentAutoUpdate` 在 `isSilentAutoUpdateEnabled()` 返回 false 时直接返回 null，
+* `shouldCheckForUpdates` 读取 `silent-update-state.json` 中的 `lastCheck` 字段
+
+* `getSilentUpdateState` 读取同一文件的 `consecutiveFailures` 和 `lastAttempt`
+
+* `isSilentAutoUpdateEnabled` 读取 `.omc-config.json` 的 `silentAutoUpdate` 字段
+
+* 需要在现有 mock 中确认 `writeFileSync` 已被 mock（`mockedWriteFileSync`）
+
+* `silentAutoUpdate` 在 `isSilentAutoUpdateEnabled()` 返回 false 时直接返回 null，
   需确保 mock 返回 `silentAutoUpdate: true` 才能进入速率限制分支
 
 ## 验收标准
 
-- 3 个新测试全部通过
-- `tsc --noEmit` 零错误
+* 3 个新测试全部通过
+
+* `tsc --noEmit` 零错误

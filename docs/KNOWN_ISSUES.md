@@ -5,6 +5,7 @@
 ## P0 - 立即修复（计划 v5.5.19）
 
 ### 1. State File Caching Missing
+
 **优先级**: P0 - 性能
 **影响**: 100+ sessions 时状态查询延迟 500ms
 **位置**: `src/tools/state-tools.ts:150-198`
@@ -13,6 +14,7 @@
 **目标版本**: v5.5.19
 
 ### 2. Hook Synchronous I/O Blocking
+
 **优先级**: P0 - 性能
 **影响**: Hook 执行延迟 5-15ms
 **位置**: `src/hooks/bridge.ts:112,174,601-654`
@@ -21,6 +23,7 @@
 **目标版本**: v5.5.19
 
 ### 3. Database Missing Composite Indexes
+
 **优先级**: P0 - 性能
 **影响**: 查询时间 80-90% 可优化
 **位置**: `src/mcp/job-state-db.ts:198-201`
@@ -31,6 +34,7 @@
 ## P1 - 短期修复（1个月内）
 
 ### 4. Code Duplication in Path Resolution
+
 **优先级**: P1 - 代码质量
 **影响**: 维护性和可读性
 **位置**: `src/tools/state-tools.ts`
@@ -39,6 +43,7 @@
 **目标版本**: v5.5.20
 
 ### 5. Oversized definitions.ts
+
 **优先级**: P1 - 代码质量
 **影响**: 文件可维护性
 **位置**: `src/agents/definitions.ts` (856 行)
@@ -47,6 +52,7 @@
 **目标版本**: v5.5.20
 
 ### 6. Incomplete API Contract Documentation
+
 **优先级**: P1 - API 设计
 **影响**: 开发者体验
 **位置**: `src/tools/index.ts`, `src/hooks/bridge-types.ts`
@@ -57,6 +63,7 @@
 ## P2 - 中期改进（3个月）
 
 ### 7. Git Command Performance
+
 **优先级**: P2 - 性能
 **影响**: 大型仓库操作
 **位置**: `src/tools/git-tools.ts`
@@ -65,6 +72,7 @@
 **目标版本**: v5.5.21+
 
 ### 8. String Concatenation in Hot Paths
+
 **优先级**: P2 - 性能
 **影响**: 高频操作延迟
 **位置**: 多个文件
@@ -73,6 +81,7 @@
 **目标版本**: v5.5.21+
 
 ### 9. JSON Repeated Parsing
+
 **优先级**: P2 - 性能
 **影响**: 内存和 CPU 使用
 **描述**: 同一 JSON 多次解析
@@ -80,6 +89,7 @@
 **目标版本**: v5.5.21+
 
 ### 10. Large File Streaming
+
 **优先级**: P2 - 性能
 **影响**: 大文件处理
 **描述**: 缺少流式处理
@@ -89,16 +99,23 @@
 ## 环境特定问题
 
 ### Windows 平台
-- 命令注入风险已在 v5.5.18 修复
-- 路径分隔符处理已验证
+
+* 命令注入风险已在 v5.5.18 修复
+
+* 路径分隔符处理已验证
 
 ### macOS/Linux
-- 无已知平台特定问题
+
+* 无已知平台特定问题
 
 ## 反馈和报告
 
 如发现新问题，请提交 issue 并包含：
-- 版本号
-- 复现步骤
-- 预期行为 vs 实际行为
-- 环境信息（OS、Node 版本等）
+
+* 版本号
+
+* 复现步骤
+
+* 预期行为 vs 实际行为
+
+* 环境信息（OS、Node 版本等）

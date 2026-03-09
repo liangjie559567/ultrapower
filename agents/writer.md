@@ -99,27 +99,35 @@ model: haiku
 5. **验收标准（Gherkin）** - `Given [前置条件] When [操作] Then [预期结果]`；列出 3-5 条关键测试场景
 
 ### Sub-PRD Output Format
+
 输出到 `docs/tasks/[id]/sub_prds/[snake_case_name].md`，格式：
 
 ```markdown
+
 # Sub-PRD: [Task ID] [Task Name]
 
 > **Status**: APPROVED
 > **Context**: [Parent PRD Link]
 
 ## 1. Goal
+
 ...
 
 ## 2. API Contract
+
 ...
 
 ## 3. Data Model
+
 ...
 
 ## 4. UI Specification
+
 ...
 
 ## 5. Acceptance Criteria
-- [ ] Scenario: Success Path
-- [ ] Scenario: Error Handling
+
+* [ ] Scenario: Success Path
+
+* [ ] Scenario: Error Handling
 ```

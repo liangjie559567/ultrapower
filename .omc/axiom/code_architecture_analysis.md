@@ -2,24 +2,31 @@
 
 ## 1. 项目规模统计
 
-- **TypeScript 文件总数**: 820 个
-- **测试文件数量**: 330 个（覆盖率约 40%）
-- **导出符号总数**: 2564 个（跨 455 个文件）
-- **核心模块数**: 12 个主要模块
+* **TypeScript 文件总数**: 820 个
+
+* **测试文件数量**: 330 个（覆盖率约 40%）
+
+* **导出符号总数**: 2564 个（跨 455 个文件）
+
+* **核心模块数**: 12 个主要模块
 
 ## 2. 核心架构模式
 
 ### 2.1 Agent 系统架构
 
 #### Agent 定义与注册机制
+
 **文件**: `src/agents/definitions.ts` (721 行)
 
 **设计模式**: **工厂模式 + 注册表模式**
 
 核心组件：
-- `getAgentDefinitions()`: 中央注册表，返回 49 个 agent 配置
-- `loadAgentPrompt()`: 动态加载 agent 提示词（从 `/agents/*.md`）
-- `parseDisallowedTools()`: 工具权限控制
+
+* `getAgentDefinitions()`: 中央注册表，返回 49 个 agent 配置
+
+* `loadAgentPrompt()`: 动态加载 agent 提示词（从 `/agents/*.md`）
+
+* `parseDisallowedTools()`: 工具权限控制
 
 **Agent 分层架构**:
 ```
@@ -79,8 +86,8 @@ AXIOM LANE (14 agents)
 2. **职责明确分离**: architect 负责代码分析，analyst 负责需求，planner 负责计划，critic 负责审查
 3. **向后兼容**: `researcher` → `dependency-expert`, `tdd-guide` → `test-engineer`
 
-
 #### Agent 超时保护机制
+
 **文件**: `src/agents/agent-wrapper.ts` (78 行)
 
 **设计模式**: **装饰器模式 + 重试策略**
@@ -101,15 +108,19 @@ async function callAgentWithTimeout(
 ```
 
 **核心机制**:
-- `AbortController` 实现超时控制
-- 自动重试机制（maxRetries 可配置）
-- 超时后降级策略
+
+* `AbortController` 实现超时控制
+
+* 自动重试机制（maxRetries 可配置）
+
+* 超时后降级策略
 
 ---
 
 ### 2.2 Hook 系统架构
 
 #### Hook Bridge 核心
+
 **文件**: `src/hooks/bridge.ts` (1227 行)
 
 **设计模式**: **责任链模式 + 事件驱动架构**
@@ -143,10 +154,12 @@ type HookType =
 ```
 
 **关键安全机制**:
-- `normalizeHookInput()`: 白名单过滤未知字段
-- `validateHookInput()`: 必需字段验证
-- `requiredKeysForHook()`: 集中化键需求定义
 
+* `normalizeHookInput()`: 白名单过滤未知字段
+
+* `validateHookInput()`: 必需字段验证
+
+* `requiredKeysForHook()`: 集中化键需求定义
 
 **Hook 处理器关键实现**:
 
@@ -156,18 +169,19 @@ type HookType =
    - pkill -f 自终止风险警告
    - 后台进程限制（防止 forkbomb）
    - AskUserQuestion 通知
-3. **post-tool-use**: 
+1. **post-tool-use**: 
    - 记忆标签处理
    - Agent 仪表板更新
    - 使用追踪（非阻塞）
-4. **persistent-mode**: 统一处理 ultrawork/ralph/todo-continuation
-5. **session-start**: 恢复持久化状态 + AGENTS.md 加载
+1. **persistent-mode**: 统一处理 ultrawork/ralph/todo-continuation
+2. **session-start**: 恢复持久化状态 + AGENTS.md 加载
 
 ---
 
 ### 2.3 核心算法实现
 
 #### 2.3.1 Agent 路由逻辑
+
 **文件**: `src/features/delegation-routing/resolver.ts`
 
 **算法**: 基于任务类型和复杂度的智能路由
@@ -184,8 +198,8 @@ type HookType =
 Agent 分配 (根据专业领域)
 ```
 
-
 #### 2.3.2 Hook 执行顺序算法
+
 **参考**: `docs/standards/hook-execution-order.md`
 
 **执行顺序**:
@@ -206,12 +220,15 @@ SessionEnd (会话结束清理)
 ```
 
 **关键特性**:
-- 懒加载: 热路径 hooks 预加载，冷路径按需加载
-- 缓存优化: `OMC_SKIP_HOOKS` 环境变量缓存
-- 错误隔离: 单个 hook 失败不影响其他 hooks
 
+* 懒加载: 热路径 hooks 预加载，冷路径按需加载
+
+* 缓存优化: `OMC_SKIP_HOOKS` 环境变量缓存
+
+* 错误隔离: 单个 hook 失败不影响其他 hooks
 
 #### 2.3.3 状态机转换算法
+
 **参考**: `docs/standards/state-machine.md`
 
 **Team Pipeline 状态转换矩阵**:
@@ -243,21 +260,29 @@ mcp/ (MCP 协议层)
 lib/ (基础工具层)
 ```
 
-
 ### 3.2 第三方依赖
 
 **核心依赖** (从 package.json):
-- `@anthropic-ai/sdk`: Claude API 客户端
-- `@modelcontextprotocol/sdk`: MCP 协议实现
-- `better-sqlite3`: SQLite 数据库
-- `zod`: 运行时类型验证
-- `chalk`: 终端颜色输出
-- `commander`: CLI 框架
+
+* `@anthropic-ai/sdk`: Claude API 客户端
+
+* `@modelcontextprotocol/sdk`: MCP 协议实现
+
+* `better-sqlite3`: SQLite 数据库
+
+* `zod`: 运行时类型验证
+
+* `chalk`: 终端颜色输出
+
+* `commander`: CLI 框架
 
 **开发依赖**:
-- `vitest`: 测试框架
-- `typescript`: 5.7.2
-- `@types/node`: Node.js 类型定义
+
+* `vitest`: 测试框架
+
+* `typescript`: 5.7.2
+
+* `@types/node`: Node.js 类型定义
 
 ---
 
@@ -266,57 +291,79 @@ lib/ (基础工具层)
 ### 4.1 创建型模式
 
 #### 工厂模式
+
 **位置**: `src/agents/definitions.ts`
-- `getAgentDefinitions()`: 创建 49 个 agent 配置对象
-- 支持运行时覆盖 (overrides 参数)
+
+* `getAgentDefinitions()`: 创建 49 个 agent 配置对象
+
+* 支持运行时覆盖 (overrides 参数)
 
 #### 单例模式
-**位置**: `src/hooks/bridge.ts`
-- `_cachedSkipHooks`: 缓存的跳过 hooks 列表
-- `resetSkipHooksCache()`: 测试用重置函数
 
+**位置**: `src/hooks/bridge.ts`
+
+* `_cachedSkipHooks`: 缓存的跳过 hooks 列表
+
+* `resetSkipHooksCache()`: 测试用重置函数
 
 ### 4.2 结构型模式
 
 #### 装饰器模式
+
 **位置**: `src/agents/agent-wrapper.ts`
-- `callAgentWithTimeout()`: 为 agent 调用添加超时保护
-- 透明地包装原始 agent 函数
+
+* `callAgentWithTimeout()`: 为 agent 调用添加超时保护
+
+* 透明地包装原始 agent 函数
 
 #### 适配器模式
+
 **位置**: `src/hooks/bridge-normalize.ts`
-- `normalizeHookInput()`: 将 snake_case 转换为 camelCase
-- 适配 Claude Code 和内部系统的接口差异
+
+* `normalizeHookInput()`: 将 snake_case 转换为 camelCase
+
+* 适配 Claude Code 和内部系统的接口差异
 
 #### 桥接模式
-**位置**: `src/mcp/` 目录
-- MCP 协议桥接到内部工具系统
-- `codex-server.ts`, `gemini-server.ts`: 外部 AI 提供商桥接
 
+**位置**: `src/mcp/` 目录
+
+* MCP 协议桥接到内部工具系统
+
+* `codex-server.ts`, `gemini-server.ts`: 外部 AI 提供商桥接
 
 ### 4.3 行为型模式
 
 #### 责任链模式
+
 **位置**: `src/hooks/bridge.ts`
-- `processHook()`: 根据 hookType 路由到不同处理器
-- 每个处理器返回 `{ continue: boolean }` 决定是否继续
+
+* `processHook()`: 根据 hookType 路由到不同处理器
+
+* 每个处理器返回 `{ continue: boolean }` 决定是否继续
 
 #### 策略模式
+
 **位置**: `src/features/model-routing/`
-- `router.ts`: 根据任务特征选择不同的模型策略
-- `haiku.ts`, `sonnet.ts`, `opus.ts`: 不同模型的提示词策略
+
+* `router.ts`: 根据任务特征选择不同的模型策略
+
+* `haiku.ts`, `sonnet.ts`, `opus.ts`: 不同模型的提示词策略
 
 #### 观察者模式
-**位置**: `src/hooks/subagent-tracker/`
-- `session-replay.ts`: 记录 agent 活动事件
-- `flow-tracer.ts`: 追踪 agent 执行流
 
+**位置**: `src/hooks/subagent-tracker/`
+
+* `session-replay.ts`: 记录 agent 活动事件
+
+* `flow-tracer.ts`: 追踪 agent 执行流
 
 ---
 
 ## 5. 测试覆盖率评估
 
 ### 5.1 测试配置
+
 **文件**: `vitest.config.ts`
 
 ```typescript
@@ -332,23 +379,32 @@ lib/ (基础工具层)
 ```
 
 ### 5.2 测试统计
-- **测试文件**: 330 个
-- **源文件**: 820 个
-- **测试覆盖率**: ~40% (330/820)
 
+* **测试文件**: 330 个
+
+* **源文件**: 820 个
+
+* **测试覆盖率**: ~40% (330/820)
 
 ### 5.3 测试覆盖重点模块
 
 **高覆盖率模块**:
-- `src/__tests__/hooks/` - Hook 系统测试
-- `src/__tests__/analytics/` - 分析系统测试
-- `src/__tests__/hud/` - HUD 显示测试
-- `src/__tests__/learner/` - 学习系统测试
+
+* `src/__tests__/hooks/` - Hook 系统测试
+
+* `src/__tests__/analytics/` - 分析系统测试
+
+* `src/__tests__/hud/` - HUD 显示测试
+
+* `src/__tests__/learner/` - 学习系统测试
 
 **测试策略**:
-- 单元测试: 核心算法和工具函数
-- 集成测试: Hook 执行流程
-- 边界测试: 错误处理和边界条件
+
+* 单元测试: 核心算法和工具函数
+
+* 集成测试: Hook 执行流程
+
+* 边界测试: 错误处理和边界条件
 
 ---
 
@@ -361,13 +417,12 @@ lib/ (基础工具层)
    - Agent 提示词动态加载
    - 减少启动时间
 
-2. **缓存策略**
+1. **缓存策略**
    - `_cachedSkipHooks`: 环境变量缓存
    - Agent 定义缓存
    - 减少重复计算
 
-
-3. **并发控制**
+1. **并发控制**
    - 后台任务限制（防止 forkbomb）
    - Agent 并行执行管理
    - 死锁检测机制
@@ -379,16 +434,15 @@ lib/ (基础工具层)
    - `validateHookInput()`: 必需字段检查
    - `assertValidMode()`: 路径遍历防护
 
-2. **权限控制**
+1. **权限控制**
    - `parseDisallowedTools()`: Agent 工具权限
    - Permission hooks: 工具使用前权限检查
    - Audit logging: 操作审计日志
 
-3. **错误隔离**
+1. **错误隔离**
    - Hook 失败不影响其他 hooks
    - Agent 超时自动降级
    - 优雅的错误恢复
-
 
 ### 6.3 可扩展性设计
 
@@ -397,7 +451,7 @@ lib/ (基础工具层)
    - Hook 可插拔
    - MCP 协议扩展
 
-2. **配置驱动**
+1. **配置驱动**
    - Agent 提示词外部化（.md 文件）
    - 超时配置可调
    - 环境变量控制
@@ -428,7 +482,6 @@ lib/ (基础工具层)
 **分析完成时间**: 2026-03-05
 **分析人员**: code-architect (AI Agent)
 
-
 ---
 
 ## 9. 静态代码分析
@@ -439,28 +492,40 @@ lib/ (基础工具层)
 **Prettier 配置**: 未发现 `.prettierrc` 文件
 
 **TypeScript 编译器配置** (`tsconfig.json`):
-- `strict: true` - 严格模式启用
-- `target: ES2022` - 现代 JavaScript 特性
-- `module: NodeNext` - Node.js ESM 支持
+
+* `strict: true` - 严格模式启用
+
+* `target: ES2022` - 现代 JavaScript 特性
+
+* `module: NodeNext` - Node.js ESM 支持
 
 **代码风格观察**:
-- 统一使用 2 空格缩进
-- 使用 `interface` 定义类型
-- 导出使用 `export` 而非 `export default`
-- 文件命名：kebab-case (如 `agent-wrapper.ts`)
 
+* 统一使用 2 空格缩进
+
+* 使用 `interface` 定义类型
+
+* 导出使用 `export` 而非 `export default`
+
+* 文件命名：kebab-case (如 `agent-wrapper.ts`)
 
 ### 9.2 代码质量指标
 
 **复杂度分析**:
-- `src/hooks/bridge.ts`: 1227 行 - 高复杂度文件
-- `src/agents/definitions.ts`: 721 行 - 中等复杂度
-- 平均文件大小: ~150 行
+
+* `src/hooks/bridge.ts`: 1227 行 - 高复杂度文件
+
+* `src/agents/definitions.ts`: 721 行 - 中等复杂度
+
+* 平均文件大小: ~150 行
 
 **命名规范**:
-- 函数: camelCase (`processHook`, `getAgentDefinitions`)
-- 类型: PascalCase (`HookInput`, `AgentConfig`)
-- 常量: UPPER_SNAKE_CASE (`RALPH_MESSAGE`, `TEAM_TERMINAL_VALUES`)
+
+* 函数: camelCase (`processHook`, `getAgentDefinitions`)
+
+* 类型: PascalCase (`HookInput`, `AgentConfig`)
+
+* 常量: UPPER_SNAKE_CASE (`RALPH_MESSAGE`, `TEAM_TERMINAL_VALUES`)
 
 ---
 
@@ -505,13 +570,13 @@ lib/ (基础工具层)
 └─────────────────────────────────────┘
 ```
 
-
 ### 10.2 循环依赖检测
 
 **无循环依赖**: 通过分析未发现循环依赖问题
 
 **依赖方向**: 自上而下单向依赖
-- CLI → Hooks → Features → MCP → Lib ✓
+
+* CLI → Hooks → Features → MCP → Lib ✓
 
 ### 10.3 关键依赖热点
 
@@ -525,12 +590,18 @@ lib/ (基础工具层)
 ## 11. 最终总结
 
 **代码架构评分** (满分 10 分):
-- 模块化设计: 9/10
-- 代码质量: 8/10
-- 测试覆盖: 7/10
-- 文档完整性: 7/10
-- 性能优化: 9/10
-- 安全性: 9/10
+
+* 模块化设计: 9/10
+
+* 代码质量: 8/10
+
+* 测试覆盖: 7/10
+
+* 文档完整性: 7/10
+
+* 性能优化: 9/10
+
+* 安全性: 9/10
 
 **综合评分: 8.2/10** - 优秀的企业级架构
 

@@ -72,25 +72,36 @@ async function executeWithRetry(task: Task, maxRetries = 3): Promise<Result> {
 ```
 
 **验证指标:**
-- 实现文件：3 个（timeout-config.ts、timeout-manager.ts、agent-wrapper.ts）
-- 测试覆盖率：100%（所有边界情况已覆盖）
-- 性能开销：<5ms（使用原生 AbortController）
-- 零依赖：仅使用 Node.js 原生 API
+
+* 实现文件：3 个（timeout-config.ts、timeout-manager.ts、agent-wrapper.ts）
+
+* 测试覆盖率：100%（所有边界情况已覆盖）
+
+* 性能开销：<5ms（使用原生 AbortController）
+
+* 零依赖：仅使用 Node.js 原生 API
 
 **适用场景:**
-- Agent 执行超时控制
-- API 调用超时保护
-- 数据库查询超时限制
-- 任何需要超时控制的异步操作
+
+* Agent 执行超时控制
+
+* API 调用超时保护
+
+* 数据库查询超时限制
+
+* 任何需要超时控制的异步操作
 
 **关键优势:**
-- 分层设计，职责清晰
-- 配置灵活，支持多级覆盖
-- 零依赖，性能优异
-- 易于测试和维护
+
+* 分层设计，职责清晰
+
+* 配置灵活，支持多级覆盖
+
+* 零依赖，性能优异
+
+* 易于测试和维护
 
 ---
-
 
 ### 模式 ALGO-CYCLE-001: DFS 循环检测标准实现
 
@@ -123,7 +134,7 @@ function detectCycle(graph: Map<string, string[]>): string[] | null {
     state.set(node, NodeState.Visiting);
     path.push(node);
 
-    for (const neighbor of graph.get(node) || []) {
+    for (const neighbor of graph.get(node) | | []) {
       if (dfs(neighbor)) return true;
     }
 
@@ -140,16 +151,24 @@ function detectCycle(graph: Map<string, string[]>): string[] | null {
 ```
 
 **验证指标:**
-- 时间复杂度：O(V+E)
-- 空间复杂度：O(V)
-- 性能：<10ms（1000 节点）
-- 测试覆盖率：100%
+
+* 时间复杂度：O(V+E)
+
+* 空间复杂度：O(V)
+
+* 性能：<10ms（1000 节点）
+
+* 测试覆盖率：100%
 
 **适用场景:**
-- 任务依赖图验证
-- 资源锁死锁检测
-- 状态机循环验证
-- 构建系统依赖检查
+
+* 任务依赖图验证
+
+* 资源锁死锁检测
+
+* 状态机循环验证
+
+* 构建系统依赖检查
 
 ---
 
@@ -172,9 +191,12 @@ import { TimeoutConfig } from './timeout-config.js';
 ```
 
 **验证指标:**
-- 修复前：TS2835 错误
-- 修复后：0 个类型错误
-- 适用范围：所有 `"type": "module"` 项目
+
+* 修复前：TS2835 错误
+
+* 修复后：0 个类型错误
+
+* 适用范围：所有 `"type": "module"` 项目
 
 ---
 
@@ -187,12 +209,12 @@ import { TimeoutConfig } from './timeout-config.js';
    - 应用次数：1
    - 成功率：100%
 
-2. **k-069: DFS Cycle Detection with Three-Color Marking** (HIGH 置信度 0.9)
+1. **k-069: DFS Cycle Detection with Three-Color Marking** (HIGH 置信度 0.9)
    - 关键词：dfs, cycle-detection, graph, deadlock
    - 应用次数：1
    - 成功率：100%
 
-3. **k-070: ESM Import Path Must Include .js Extension** (HIGH 置信度 0.95)
+1. **k-070: ESM Import Path Must Include .js Extension** (HIGH 置信度 0.95)
    - 关键词：esm, typescript, import, ts2835
    - 应用次数：1
    - 成功率：100%
@@ -202,15 +224,22 @@ import { TimeoutConfig } from './timeout-config.js';
 ## 工作流指标
 
 **本周期统计：**
-- 处理的学习队列条目：3 个
-- 提取的新模式：3 个
-- HIGH 置信度模式：3 个
-- 知识库条目增长：+3（从 70 到 73）
+
+* 处理的学习队列条目：3 个
+
+* 提取的新模式：3 个
+
+* HIGH 置信度模式：3 个
+
+* 知识库条目增长：+3（从 70 到 73）
 
 **累计指标：**
-- 总模式数：73 个
-- 平均置信度：HIGH (0.93)
-- 模式应用成功率：>95%
+
+* 总模式数：73 个
+
+* 平均置信度：HIGH (0.93)
+
+* 模式应用成功率：>95%
 
 ---
 

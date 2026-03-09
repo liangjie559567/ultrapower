@@ -12,9 +12,12 @@ blocks: [T-02, T-03, T-04, T-05, T-07]
 ## 目标
 
 创建独立模块 `src/lib/plugin-registry.ts`，实现三个函数：
-- `syncPluginRegistry(options)` — 同步注册表版本
-- `checkVersionConsistency()` — 检查三源版本一致性
-- `getInstalledPluginEntry()` — 读取注册表条目（内部辅助函数）
+
+* `syncPluginRegistry(options)` — 同步注册表版本
+
+* `checkVersionConsistency()` — 检查三源版本一致性
+
+* `getInstalledPluginEntry()` — 读取注册表条目（内部辅助函数）
 
 ## 约束
 
@@ -25,10 +28,14 @@ blocks: [T-02, T-03, T-04, T-05, T-07]
 ```
 
 允许 import：
-- `src/lib/atomic-write.ts`（`atomicWriteJsonSync`、`safeReadJson`）
-- `src/lib/version.ts`（`getRuntimePackageVersion`）
-- `src/lib/worktree-paths.ts`（路径工具）
-- Node.js 内置模块（`path`、`fs`、`os`）
+
+* `src/lib/atomic-write.ts`（`atomicWriteJsonSync`、`safeReadJson`）
+
+* `src/lib/version.ts`（`getRuntimePackageVersion`）
+
+* `src/lib/worktree-paths.ts`（路径工具）
+
+* Node.js 内置模块（`path`、`fs`、`os`）
 
 ## 接口定义
 
@@ -93,14 +100,14 @@ interface ConsistencyReport {
    注意：isProjectScopedPlugin 来自 installer/index.ts，不能直接 import
    → 改为：检查环境变量 CLAUDE_PLUGIN_SCOPE === 'project' 或读取 .claude-plugin/plugin.json 的 scope 字段
    → 或：接受 options.isProjectScoped?: boolean 参数，由调用方传入
-2. 调用 getInstalledPluginEntry()
-3. 文件不存在 → 返回 { success: true, skipped: true }
-4. 找不到 "ultrapower@ultrapower" 条目 → 返回 { success: false, errors: ['Entry not found'] }
-5. 记录 previousVersion = entry.version
-6. 更新 entry.version = options.newVersion
-7. 更新 entry.lastUpdated = new Date().toISOString()
-8. 使用 atomicWriteJsonSync 写回
-9. 返回 SyncResult
+1. 调用 getInstalledPluginEntry()
+2. 文件不存在 → 返回 { success: true, skipped: true }
+3. 找不到 "ultrapower@ultrapower" 条目 → 返回 { success: false, errors: ['Entry not found'] }
+4. 记录 previousVersion = entry.version
+5. 更新 entry.version = options.newVersion
+6. 更新 entry.lastUpdated = new Date().toISOString()
+7. 使用 atomicWriteJsonSync 写回
+8. 返回 SyncResult
 ```
 
 **关于 isProjectScopedPlugin 的处理**：
@@ -112,24 +119,30 @@ interface ConsistencyReport {
 1. 读取 packageJsonVersion：
    - 从 __dirname 向上找到 package.json，fs.readFileSync 读取
    - 或使用 getRuntimePackageVersion()（来自 src/lib/version.ts）
-2. 读取 versionMetadataVersion：
+1. 读取 versionMetadataVersion：
    - 路径：~/.claude/plugins/cache/ultrapower/ultrapower/{version}/version.json
    - 先读 registryVersion 确定 version 目录名，再读 version.json
    - 文件不存在 → null
-3. 读取 registryVersion：
+1. 读取 registryVersion：
    - 调用 getInstalledPluginEntry()
    - 返回 entry?.version ?? null
-4. 比较三源，生成 discrepancies 数组
-5. 如有漂移，生成 fixCommand（根据 isRunningAsPlugin 判断）
+1. 比较三源，生成 discrepancies 数组
+2. 如有漂移，生成 fixCommand（根据 isRunningAsPlugin 判断）
    - 同样不能 import，fixCommand 固定为两个选项的提示
 ```
 
 ## 验收标准
 
-- [ ] `syncPluginRegistry` 精确匹配 `"ultrapower@ultrapower"`，不匹配其他 key
-- [ ] `syncPluginRegistry` 不修改 `installPath` 字段
-- [ ] `syncPluginRegistry` 使用 `atomicWriteJsonSync`（同步）
-- [ ] `syncPluginRegistry` 文件不存在时返回 `{ success: true, skipped: true }`
-- [ ] `checkVersionConsistency` 每次从文件读取，不使用内存缓存
-- [ ] 文件顶部有循环依赖防护注释
-- [ ] TypeScript 编译无错误（`tsc --noEmit`）
+* [ ] `syncPluginRegistry` 精确匹配 `"ultrapower@ultrapower"`，不匹配其他 key
+
+* [ ] `syncPluginRegistry` 不修改 `installPath` 字段
+
+* [ ] `syncPluginRegistry` 使用 `atomicWriteJsonSync`（同步）
+
+* [ ] `syncPluginRegistry` 文件不存在时返回 `{ success: true, skipped: true }`
+
+* [ ] `checkVersionConsistency` 每次从文件读取，不使用内存缓存
+
+* [ ] 文件顶部有循环依赖防护注释
+
+* [ ] TypeScript 编译无错误（`tsc --noEmit`）

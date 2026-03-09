@@ -4,12 +4,13 @@
 # nexus-daemon/tests/
 
 ## Purpose
+
 Nexus 自进化系统测试目录。包含 375 个 Python 单元测试，覆盖 15 个子系统的功能验证、故障隔离、集成管线和持久化。
 
 ## Key Files
 
 | File | Description |
-|------|-------------|
+| ------ | ------------- |
 | `conftest.py` | pytest 测试配置和共享 fixtures |
 | `test_nexus_integrator.py` | 中央编排器测试（管线、故障隔离、持久化、子系统验证） |
 | `test_evolution_engine.py` | 进化引擎测试（模式检测、知识收割） |
@@ -32,15 +33,21 @@ Nexus 自进化系统测试目录。包含 375 个 Python 单元测试，覆盖 
 ## For AI Agents
 
 ### 修改此目录时
-- 运行测试：`cd nexus-daemon && python -m pytest tests/ -v`
-- 运行 CI 门禁：`cd nexus-daemon && python ci_gate.py`
-- 新模块必须有对应的 `test_<module>.py`
-- 故障隔离测试使用 `patch("builtins.__import__")` 模式
-- 参见 `nexus-daemon/` 了解被测模块实现
+
+* 运行测试：`cd nexus-daemon && python -m pytest tests/ -v`
+
+* 运行 CI 门禁：`cd nexus-daemon && python ci_gate.py`
+
+* 新模块必须有对应的 `test_<module>.py`
+
+* 故障隔离测试使用 `patch("builtins.__import__")` 模式
+
+* 参见 `nexus-daemon/` 了解被测模块实现
 
 ## Dependencies
 
 ### Internal
-- `nexus-daemon/` — 被测 Python 模块（15 个子系统）
+
+* `nexus-daemon/` — 被测 Python 模块（15 个子系统）
 
 <!-- MANUAL: -->

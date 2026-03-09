@@ -49,11 +49,14 @@ describe('failure paths', () => {
 
 ## 注意事项
 
-- `release-steps.mjs` 是 ESM `.mjs` 文件，每个 `import()` 前需加 `// @ts-ignore`（k-060）
-- Vitest 中动态 import 的模块缓存问题：需要在 `beforeEach` 中用 `vi.resetModules()` 清除缓存，确保 mock 生效
-- `runReleasePipeline` 内部调用 `process.exit(1)` 处理无效 `startFrom`，测试中不触发此路径
+* `release-steps.mjs` 是 ESM `.mjs` 文件，每个 `import()` 前需加 `// @ts-ignore`（k-060）
+
+* Vitest 中动态 import 的模块缓存问题：需要在 `beforeEach` 中用 `vi.resetModules()` 清除缓存，确保 mock 生效
+
+* `runReleasePipeline` 内部调用 `process.exit(1)` 处理无效 `startFrom`，测试中不触发此路径
 
 ## 验收标准
 
-- 3 个新测试全部通过
-- `tsc --noEmit` 零错误
+* 3 个新测试全部通过
+
+* `tsc --noEmit` 零错误

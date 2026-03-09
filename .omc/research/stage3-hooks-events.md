@@ -23,9 +23,12 @@ Claude Code (继续执行)
 ```
 
 **关键设计**：
-- Shell 脚本作为轻量入口点，TypeScript 处理复杂逻辑
-- 跨平台支持（Windows/macOS/Linux）通过 Node.js .mjs 脚本
-- 安全层在路由前过滤所有输入
+
+* Shell 脚本作为轻量入口点，TypeScript 处理复杂逻辑
+
+* 跨平台支持（Windows/macOS/Linux）通过 Node.js .mjs 脚本
+
+* 安全层在路由前过滤所有输入
 
 ---
 
@@ -34,7 +37,7 @@ Claude Code (继续执行)
 ### 2.1 分类表
 
 | 阶段 | HookType | 触发时机 | 敏感级别 |
-|------|----------|----------|----------|
+| ------ | ---------- | ---------- | ---------- |
 | **UserPromptSubmit** | `keyword-detector` | 用户提交 prompt | 普通 |
 | **Stop (P1)** | `ralph` | Stop 事件 + ralph 激活 | 普通 |
 | **Stop (P1.5)** | `persistent-mode` | Stop 事件 + ultrawork/autopilot | 普通 |
@@ -88,7 +91,7 @@ export async function processHook(
 ### 3.2 路由表
 
 | HookType | 路由目标 | 加载方式 |
-|----------|----------|----------|
+| ---------- | ---------- | ---------- |
 | `keyword-detector` | `processKeywordDetector()` | 热路径（同步） |
 | `pre-tool-use` | `processPreToolUse()` | 热路径（同步） |
 | `post-tool-use` | `processPostToolUse()` | 热路径（异步） |
@@ -103,8 +106,10 @@ export async function processHook(
 | `permission-request` | `handlePermissionRequest()` | 懒加载 |
 
 **性能优化**：
-- 热路径 hooks（keyword-detector, pre/post-tool-use）在模块顶部导入
-- 冷路径 hooks 使用动态 `import()` 懒加载
+
+* 热路径 hooks（keyword-detector, pre/post-tool-use）在模块顶部导入
+
+* 冷路径 hooks 使用动态 `import()` 懒加载
 
 ---
 
@@ -211,21 +216,21 @@ templates/hooks/
 ```
 1. Claude Code 触发事件
    ↓
-2. 执行 shell 命令（node *.mjs）
+1. 执行 shell 命令（node *.mjs）
    ↓
-3. Shell 脚本读取 stdin (JSON)
+1. Shell 脚本读取 stdin (JSON)
    ↓
-4. 调用 bridge.ts --hook=<type>
+1. 调用 bridge.ts --hook=<type>
    ↓
-5. normalizeHookInput() 安全过滤
+1. normalizeHookInput() 安全过滤
    ↓
-6. processHook() 路由到 handler
+1. processHook() 路由到 handler
    ↓
-7. Handler 返回 HookOutput
+1. Handler 返回 HookOutput
    ↓
-8. Shell 脚本写入 stdout (JSON)
+1. Shell 脚本写入 stdout (JSON)
    ↓
-9. Claude Code 读取输出并继续
+1. Claude Code 读取输出并继续
 ```
 
 ---
@@ -237,10 +242,14 @@ templates/hooks/
 **触发**：UserPromptSubmit
 **功能**：检测魔法关键词（ralph, ultrawork, autopilot 等）
 **行为**：
-- 移除代码块防止误触发
-- 支持单个 prompt 多关键词
-- 激活持久化状态（ralph/ultrawork）
-- 注入模式激活消息
+
+* 移除代码块防止误触发
+
+* 支持单个 prompt 多关键词
+
+* 激活持久化状态（ralph/ultrawork）
+
+* 注入模式激活消息
 
 ### 6.2 persistent-mode (Stop 统一入口)
 
@@ -258,40 +267,59 @@ return handleStopContinuation();                // P3
 
 **触发**：工具调用前
 **功能**：
-- 委派强制执行（orchestrator）
-- 后台任务限制（防止 forkbomb）
-- pkill -f 自杀警告
-- AskUserQuestion 通知
-- 文件所有权追踪
-- Agent dashboard 注入
+
+* 委派强制执行（orchestrator）
+
+* 后台任务限制（防止 forkbomb）
+
+* pkill -f 自杀警告
+
+* AskUserQuestion 通知
+
+* 文件所有权追踪
+
+* Agent dashboard 注入
 
 ### 6.4 post-tool-use
 
 **触发**：工具调用后
 **功能**：
-- Orchestrator 后处理（remember 标签）
-- Ralph 模式激活（via Skill tool）
-- Agent dashboard 更新
-- 使用追踪（非阻塞）
+
+* Orchestrator 后处理（remember 标签）
+
+* Ralph 模式激活（via Skill tool）
+
+* Agent dashboard 更新
+
+* 使用追踪（非阻塞）
 
 ### 6.5 session-start
 
 **触发**：会话启动
 **功能**：
-- 恢复持久化状态（ralph/ultrawork/autopilot/team）
-- 加载 AGENTS.md（deepinit 输出）
-- 检查未完成 todos
-- 启动通知监听器
-- 静默自动更新检查
+
+* 恢复持久化状态（ralph/ultrawork/autopilot/team）
+
+* 加载 AGENTS.md（deepinit 输出）
+
+* 检查未完成 todos
+
+* 启动通知监听器
+
+* 静默自动更新检查
 
 ### 6.6 session-end
 
 **触发**：会话结束
 **功能**：
-- 清理会话状态
-- 发送会话结束通知
-- 停止 reply listener
-- 审计日志记录
+
+* 清理会话状态
+
+* 发送会话结束通知
+
+* 停止 reply listener
+
+* 审计日志记录
 
 ---
 
@@ -300,17 +328,20 @@ return handleStopContinuation();                // P3
 ### 7.1 终止开关
 
 ```bash
+
 # 禁用所有 hooks
+
 DISABLE_OMC=1 claude
 
 # 跳过特定 hooks
+
 OMC_SKIP_HOOKS=ralph,autopilot claude
 ```
 
 ### 7.2 失败降级策略
 
 | Hook 类型 | 失败行为 | 规范要求 |
-|-----------|---------|----------|
+| ----------- | --------- | ---------- |
 | 普通 hooks (11 类) | 静默降级 `{ continue: true }` | 允许 |
 | 敏感 hooks (3 类) | 静默降级 `{ continue: true }` | 允许（v1） |
 | `permission-request` | **当前**：静默降级 | **规范**：必须阻塞 `{ continue: false }` |
@@ -381,7 +412,7 @@ if (isAlreadyCamelCase(rawObj) && !isSensitive) {
 ### 9.1 与 PRD 的差异
 
 | 差异点 | 描述 | 当前状态 |
-|--------|------|---------|
+| -------- | ------ | --------- |
 | D-01 | 敏感 hooks 数量 | 4 类（setup 拆分为 init + maintenance） |
 | D-02 | Stop 优先级链 | Ralph > Autopilot > Ultrawork（Todo-Continuation 已移除） |
 | D-04 | 互斥模式范围 | 4 个（autopilot/ultrapilot/swarm/pipeline） |
@@ -389,9 +420,11 @@ if (isAlreadyCamelCase(rawObj) && !isSensitive) {
 
 ### 9.2 待实现功能
 
-- Hook 超时处理（PreToolUse: 5s, PostToolUse: 5s）
-- permission-request 失败强制阻塞（v2）
-- Hook 执行时间监控
+* Hook 超时处理（PreToolUse: 5s, PostToolUse: 5s）
+
+* permission-request 失败强制阻塞（v2）
+
+* Hook 执行时间监控
 
 ---
 
@@ -399,9 +432,11 @@ if (isAlreadyCamelCase(rawObj) && !isSensitive) {
 
 ### 10.1 核心路由
 
-- `src/hooks/bridge.ts` (1227 行) - 主路由器
-- `src/hooks/bridge-types.ts` (66 行) - 类型定义
-- `src/hooks/bridge-normalize.ts` (347 行) - 输入消毒
+* `src/hooks/bridge.ts` (1227 行) - 主路由器
+
+* `src/hooks/bridge-types.ts` (66 行) - 类型定义
+
+* `src/hooks/bridge-normalize.ts` (347 行) - 输入消毒
 
 ### 10.2 Hook Handlers（36 个模块）
 
@@ -424,8 +459,9 @@ src/hooks/
 
 ### 10.3 配置与模板
 
-- `src/installer/hooks.ts` (430 行) - Hook 配置生成
-- `templates/hooks/*.mjs` (7 个脚本) - Shell 入口点
+* `src/installer/hooks.ts` (430 行) - Hook 配置生成
+
+* `templates/hooks/*.mjs` (7 个脚本) - Shell 入口点
 
 ---
 

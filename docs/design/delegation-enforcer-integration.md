@@ -42,7 +42,7 @@ orchestrator *should* delegate. `processPreToolUse` in delegation-enforcer handl
 ### 2.2 Relationship with processOrchestratorPreTool
 
 | Concern | Module | Action |
-|---------|--------|--------|
+| --------- | -------- | -------- |
 | Should orchestrator direct-edit? | omc-orchestrator | Block / warn |
 | Which model for Task/Agent? | delegation-enforcer | Inject model |
 
@@ -55,7 +55,7 @@ tool calls; omc-orchestrator activates for Edit/Write/Bash tool calls.
 
 **Trigger:** `pre-tool-use` only.
 
-**Tool filter:** `toolName === 'Task' || toolName === 'Agent'`
+**Tool filter:** `toolName === 'Task' | | toolName === 'Agent'`
 
 All other tools (Bash, Edit, Write, Read, Glob, etc.) pass through unchanged.
 
@@ -83,7 +83,7 @@ substitutes it for the original tool input when `continue: true`.
 ### 4.2 Injection Rules
 
 | Condition | Behavior |
-|-----------|----------|
+| ----------- | ---------- |
 | `model` already present | Preserve original; no injection |
 | `model` absent, agent type known | Inject from agent definition |
 | `model` absent, agent type unknown | Pass through unchanged (no throw) |
@@ -94,7 +94,7 @@ substitutes it for the original tool input when `continue: true`.
 Default models come from `getAgentDefinitions()`. Key mappings:
 
 | Agent | Default Model |
-|-------|--------------|
+| ------- | -------------- |
 | explore, explore-low | haiku |
 | executor, executor-medium | sonnet |
 | executor-high, deep-executor | opus |
@@ -127,10 +127,12 @@ When no injection occurs (model already set or non-agent tool):
 
 ## 5. Error Handling
 
-- Unknown agent types: log debug warning, return `modifiedInput: originalInput`
+* Unknown agent types: log debug warning, return `modifiedInput: originalInput`
   (no throw — robustness over strictness in hot path)
-- `getAgentDefinitions()` failure: catch, log error, pass through unchanged
-- Preserves `run_in_background`, `resume`, and all other input fields
+
+* `getAgentDefinitions()` failure: catch, log error, pass through unchanged
+
+* Preserves `run_in_background`, `resume`, and all other input fields
 
 ---
 
@@ -154,7 +156,7 @@ return, the delegation-enforcer is called:
 ```typescript
 // Enforce model parameter for Task/Agent calls
 const delegationResult = enforceDelegationModel(
-  input.toolName || '',
+  input.toolName | | '',
   input.toolInput,
 );
 

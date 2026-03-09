@@ -7,9 +7,11 @@
 
 ## 前置要求
 
-- Node.js >= 18
-- npm >= 9
-- Claude Code CLI
+* Node.js >= 18
+
+* npm >= 9
+
+* Claude Code CLI
 
 ---
 
@@ -34,9 +36,12 @@ omc install
 ```
 
 这将：
-- 创建 `.omc/` 目录
-- 生成 `CLAUDE.md` 配置文件
-- 安装必要的 hooks
+
+* 创建 `.omc/` 目录
+
+* 生成 `CLAUDE.md` 配置文件
+
+* 安装必要的 hooks
 
 ✅ **检查点**: 项目根目录应包含 `CLAUDE.md` 文件
 
@@ -45,7 +50,9 @@ omc install
 ### 3. 验证安装
 
 ```bash
+
 # 检查 ultrapower 状态
+
 omc doctor
 ```
 
@@ -61,14 +68,19 @@ omc doctor
 
 **解决**:
 ```bash
+
 # 查看 npm 全局路径
+
 npm config get prefix
 
 # 添加到 PATH（macOS/Linux）
+
 export PATH="$PATH:$(npm config get prefix)/bin"
 
 # 添加到 PATH（Windows）
+
 # 将 %APPDATA%\npm 添加到系统环境变量
+
 ```
 
 ---
@@ -79,10 +91,13 @@ export PATH="$PATH:$(npm config get prefix)/bin"
 
 **解决**:
 ```bash
+
 # 使用 sudo（不推荐）
+
 sudo npm install -g @liangjie559567/ultrapower
 
 # 或配置 npm 使用用户目录（推荐）
+
 npm config set prefix ~/.npm-global
 export PATH=~/.npm-global/bin:$PATH
 ```
@@ -92,8 +107,10 @@ export PATH=~/.npm-global/bin:$PATH
 ## 下一步
 
 ✅ 安装完成！继续：
-- [快速开始](./quickstart.md) - 15 分钟跑通第一个示例
-- [核心概念](./concepts.md) - 理解 ultrapower 工作原理
+
+* [快速开始](./quickstart.md) - 15 分钟跑通第一个示例
+
+* [核心概念](./concepts.md) - 理解 ultrapower 工作原理
 
 ---
 

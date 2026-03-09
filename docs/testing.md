@@ -24,7 +24,9 @@ tests/
 集成测试使用实际 skill 执行真实的 Claude Code 会话：
 
 ```bash
+
 # 运行 subagent-driven-development 集成测试
+
 cd tests/claude-code
 ./test-subagent-driven-development-integration.sh
 ```
@@ -33,9 +35,11 @@ cd tests/claude-code
 
 ### 前提条件
 
-- 必须从 **ultrapower 插件目录**运行（不能从临时目录运行）
-- Claude Code 必须已安装并可通过 `claude` 命令访问
-- 必须启用本地开发 marketplace：在 `~/.claude/settings.json` 中设置 `"omc@ultrapower-dev": true`
+* 必须从 **ultrapower 插件目录**运行（不能从临时目录运行）
+
+* Claude Code 必须已安装并可通过 `claude` 命令访问
+
+* 必须启用本地开发 marketplace：在 `~/.claude/settings.json` 中设置 `"omc@ultrapower-dev": true`
 
 ## 集成测试：subagent-driven-development
 
@@ -61,7 +65,7 @@ cd tests/claude-code
    - 实现文件已创建
    - 测试通过
    - Git 提交显示正确的工作流
-4. **Token 分析**：按 subagent 显示 token 使用明细
+1. **Token 分析**：按 subagent 显示 token 使用明细
 
 ### 测试输出
 
@@ -149,31 +153,39 @@ python3 tests/claude-code/analyze-token-usage.py ~/.claude/projects/<project-dir
 会话转录存储在 `~/.claude/projects/` 中，工作目录路径经过编码：
 
 ```bash
+
 # 示例：/Users/jesse/Documents/GitHub/ultrapower/ultrapower
+
 SESSION_DIR="$HOME/.claude/projects/-Users-jesse-Documents-GitHub-ultrapower-ultrapower"
 
 # 查找最近的会话
+
 ls -lt "$SESSION_DIR"/*.jsonl | head -5
 ```
 
 ### 显示内容
 
-- **主会话使用情况**：协调者（您或主 Claude 实例）的 token 使用情况
-- **每个 subagent 明细**：每次 Task 调用，包含：
+* **主会话使用情况**：协调者（您或主 Claude 实例）的 token 使用情况
+
+* **每个 subagent 明细**：每次 Task 调用，包含：
   - Agent ID
   - 描述（从提示词中提取）
   - 消息数量
   - 输入/输出 token
   - 缓存使用情况
   - 估算费用
-- **总计**：整体 token 使用情况和费用估算
+
+* **总计**：整体 token 使用情况和费用估算
 
 ### 理解输出
 
-- **高缓存读取**：良好——表示提示词缓存正在工作
-- **主会话高输入 token**：预期——协调者拥有完整上下文
-- **每个 subagent 费用相近**：预期——每个 subagent 获得相似的任务复杂度
-- **每个任务费用**：典型范围为每个 subagent $0.05-$0.15，取决于任务
+* **高缓存读取**：良好——表示提示词缓存正在工作
+
+* **主会话高输入 token**：预期——协调者拥有完整上下文
+
+* **每个 subagent 费用相近**：预期——每个 subagent 获得相似的任务复杂度
+
+* **每个任务费用**：典型范围为每个 subagent $0.05-$0.15，取决于任务
 
 ## 故障排除
 
@@ -225,13 +237,16 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/test-helpers.sh"
 
 # 创建测试项目
+
 TEST_PROJECT=$(create_test_project)
 trap "cleanup_test_project $TEST_PROJECT" EXIT
 
 # 设置测试文件...
+
 cd "$TEST_PROJECT"
 
 # 使用 skill 运行 Claude
+
 PROMPT="Your test prompt here"
 cd "$SCRIPT_DIR/../.." && timeout 1800 claude -p "$PROMPT" \
   --allowed-tools=all \
@@ -240,16 +255,19 @@ cd "$SCRIPT_DIR/../.." && timeout 1800 claude -p "$PROMPT" \
   2>&1 | tee output.txt
 
 # 查找并分析会话
+
 WORKING_DIR_ESCAPED=$(echo "$SCRIPT_DIR/../.." | sed 's/\\//-/g' | sed 's/^-//')
 SESSION_DIR="$HOME/.claude/projects/$WORKING_DIR_ESCAPED"
 SESSION_FILE=$(find "$SESSION_DIR" -name "*.jsonl" -type f -mmin -60 | sort -r | head -1)
 
 # 通过解析会话转录验证行为
+
 if grep -q '"name":"Skill".*"skill":"your-skill-name"' "$SESSION_FILE"; then
     echo "[PASS] Skill was invoked"
 fi
 
 # 显示 token 分析
+
 python3 "$SCRIPT_DIR/analyze-token-usage.py" "$SESSION_FILE"
 ```
 

@@ -21,7 +21,10 @@ tsc --noEmit && npm run build && npm test
 
 ## 验收标准
 
-- [ ] `tsc --noEmit` 零错误
-- [ ] `npm run build` 成功
-- [ ] `npm test` 全部通过，无新增失败
-- [ ] 新增测试（T-02）全部通过
+* [ ] `tsc --noEmit` 零错误
+
+* [ ] `npm run build` 成功
+
+* [ ] `npm test` 全部通过，无新增失败
+
+* [ ] 新增测试（T-02）全部通过

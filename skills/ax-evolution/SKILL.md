@@ -12,16 +12,19 @@ description: "/ax-evolution — Axiom 进化引擎触发：手动触发知识收
 ## 命令
 
 ### /ax-evolution evolve
+
 处理学习队列，更新知识库和模式库。
 
 等同于 `/ax-evolve`，调用 axiom-evolution-engine agent。
 
 ### /ax-evolution reflect
+
 触发反思引擎，生成会话反思报告。
 
 等同于 `/ax-reflect`，调用 analyst agent 进行反思分析。
 
 ### /ax-evolution knowledge [query]
+
 查询知识库。
 
 ```
@@ -30,6 +33,7 @@ description: "/ax-evolution — Axiom 进化引擎触发：手动触发知识收
 ```
 
 ### /ax-evolution patterns [query]
+
 查询模式库。
 
 ```
@@ -38,6 +42,7 @@ description: "/ax-evolution — Axiom 进化引擎触发：手动触发知识收
 ```
 
 ### /ax-evolution add [content]
+
 手动添加知识到学习队列。
 
 ```yaml
@@ -50,11 +55,17 @@ learning_queue.add:
 ```
 
 ### /ax-evolution stats
+
 显示进化引擎统计数据。
 
 输出：
-- 知识库条目数（按分类）
-- 模式库条目数（按状态）
-- 学习队列待处理数
-- 最近进化时间
-- 知识平均置信度
+
+* 知识库条目数（按分类）
+
+* 模式库条目数（按状态）
+
+* 学习队列待处理数
+
+* 最近进化时间
+
+* 知识平均置信度

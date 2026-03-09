@@ -47,6 +47,7 @@ parallel(explore, document-specialist) -> architect -> executor
 ## 内置流水线预设
 
 ### Review 流水线
+
 **用途：** 全面代码审查和实施
 
 ```
@@ -64,6 +65,7 @@ parallel(explore, document-specialist) -> architect -> executor
 ---
 
 ### Implement 流水线
+
 **用途：** 带测试的计划实施
 
 ```
@@ -80,6 +82,7 @@ parallel(explore, document-specialist) -> architect -> executor
 ---
 
 ### Debug 流水线
+
 **用途：** 系统化调试工作流
 
 ```
@@ -96,6 +99,7 @@ parallel(explore, document-specialist) -> architect -> executor
 ---
 
 ### Research 流水线
+
 **用途：** 外部研究 + 内部分析
 
 ```
@@ -112,6 +116,7 @@ parallel(explore, document-specialist) -> architect -> executor
 ---
 
 ### Refactor 流水线
+
 **用途：** 安全、经过验证的重构
 
 ```
@@ -129,6 +134,7 @@ parallel(explore, document-specialist) -> architect -> executor
 ---
 
 ### Security 流水线
+
 **用途：** 安全审计和修复
 
 ```
@@ -278,11 +284,15 @@ any-stage -> on-error -> pause-for-user-input
 
 流水线完成前，验证：
 
-- [ ] 所有阶段成功完成
-- [ ] 最终阶段的输出解决了原始任务
-- [ ] 所有阶段无未处理错误
-- [ ] 所有修改的文件通过 lsp_diagnostics
-- [ ] 测试通过（如适用）
+* [ ] 所有阶段成功完成
+
+* [ ] 最终阶段的输出解决了原始任务
+
+* [ ] 所有阶段无未处理错误
+
+* [ ] 所有修改的文件通过 lsp_diagnostics
+
+* [ ] 测试通过（如适用）
 
 ## 高级功能
 
@@ -311,30 +321,36 @@ repeat_until(tests_pass) {
 
 并行 agent 完成时：
 
-- **concat**：连接所有输出
-- **summarize**：使用 architect 汇总发现
-- **vote**：使用 critic 选择最佳输出
+* **concat**：连接所有输出
+
+* **summarize**：使用 architect 汇总发现
+
+* **vote**：使用 critic 选择最佳输出
 
 ## 使用示例
 
 ### 示例 1：功能实施
+
 ```
 /pipeline review "add rate limiting to API"
 ```
 → 触发：explore → architect → critic → executor
 
 ### 示例 2：Bug 修复
+
 ```
 /pipeline debug "login fails with OAuth"
 ```
 → 触发：explore → architect → build-fixer
 
 ### 示例 3：自定义链
+
 ```
 /pipeline explore:haiku -> architect:opus -> executor:sonnet -> tdd-guide:sonnet "refactor auth module"
 ```
 
 ### 示例 4：研究驱动的实施
+
 ```
 /pipeline research "implement GraphQL subscriptions"
 ```
@@ -354,9 +370,11 @@ repeat_until(tests_pass) {
 
 流水线可在其他 skill 中使用：
 
-- **Ralph**：循环流水线直到验证完成
-- **Ultrawork**：并行运行多个流水线
-- **Autopilot**：将流水线作为构建块
+* **Ralph**：循环流水线直到验证完成
+
+* **Ultrawork**：并行运行多个流水线
+
+* **Autopilot**：将流水线作为构建块
 
 ## 最佳实践
 
@@ -404,7 +422,9 @@ repeat_until(tests_pass) {
 当流水线完成（所有阶段完成或已取消）时：
 
 ```bash
+
 # 删除流水线状态文件
+
 rm -f .omc/state/pipeline-state.json
 ```
 
@@ -414,9 +434,11 @@ rm -f .omc/state/pipeline-state.json
 
 此 skill 在以下情况激活：
 
-- 用户输入 `/pipeline` 命令
-- 用户提到"agent chain"、"workflow"、"pipe agents"
-- 检测到模式："X then Y then Z"（包含 agent 名称）
+* 用户输入 `/pipeline` 命令
+
+* 用户提到"agent chain"、"workflow"、"pipe agents"
+
+* 检测到模式："X then Y then Z"（包含 agent 名称）
 
 **显式调用：**
 ```

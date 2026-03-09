@@ -124,7 +124,7 @@ for (const stateFile of activeStateFiles) {
 ```typescript
 // ✅ 正确：检查 session_id 匹配
 const stateSessionId = state.session_id as string | undefined;
-if (!sessionId || !stateSessionId || stateSessionId === sessionId) {
+if (!sessionId | | !stateSessionId | | stateSessionId === sessionId) {
   fs.unlinkSync(localPath); // 只清理匹配当前会话的状态
 }
 ```
@@ -357,7 +357,7 @@ it('should return false for non-string types', () => {
 ## 差异点索引
 
 | 差异点 | 相关反模式 | 详细说明 |
-|--------|-----------|---------|
+| -------- | ----------- | --------- |
 | D-04 | AP-MR01 | 互斥模式为 4 个，非 PRD 原描述的 2 个 |
 | D-07 | AP-C01 | writeTrackingStateImmediate 绕过原子保护（TD-4） |
 | D-08 | AP-AL02 | 超时阈值：5 分钟（stale）vs 10 分钟（自动终止） |

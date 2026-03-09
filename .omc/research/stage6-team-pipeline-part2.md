@@ -13,7 +13,7 @@ class DependencyGraph {
   }
 
   getDependencies(nodeId: string): string[] {
-    return Array.from(this.adjacencyList.get(nodeId) || []);
+    return Array.from(this.adjacencyList.get(nodeId) | | []);
   }
 }
 ```
@@ -59,9 +59,12 @@ class DeadlockDetector {
 ```
 
 **检测时机**：
-- 任务创建时构建依赖图
-- 任务分配前检测循环
-- 发现死锁时拒绝任务创建
+
+* 任务创建时构建依赖图
+
+* 任务分配前检测循环
+
+* 发现死锁时拒绝任务创建
 
 ---
 
@@ -88,7 +91,7 @@ function canResumeTeam(state: TeamPipelineState): boolean {
    - 重新激活状态：`active = true`, `completed_at = null`
    - 转换到 `team-plan` 或 `team-exec`
 
-2. **从中断恢复**：
+1. **从中断恢复**：
    - 读取 `phase_history` 确定最后阶段
    - 检查 `execution` 统计确定进度
    - 从最后未完成阶段继续
@@ -100,15 +103,18 @@ function canResumeTeam(state: TeamPipelineState): boolean {
 function getUnfinishedTasks(teamName: string): TaskFile[] {
   const tasks = readAllTasks(teamName);
   return tasks.filter(t =>
-    t.status === 'pending' || t.status === 'in_progress'
+    t.status === 'pending' | | t.status === 'in_progress'
   );
 }
 ```
 
 **恢复决策**：
-- `in_progress` 任务：检查 worker heartbeat，若 worker 已死则重新分配
-- `pending` 任务：直接分配给可用 worker
-- `completed` 任务：跳过
+
+* `in_progress` 任务：检查 worker heartbeat，若 worker 已死则重新分配
+
+* `pending` 任务：直接分配给可用 worker
+
+* `completed` 任务：跳过
 
 ---
 
@@ -126,9 +132,12 @@ if (consecutiveErrors >= maxConsecutiveErrors) {
 ```
 
 **隔离恢复**：
-- 人工检查 audit log 确定错误原因
-- 修复配置或代码问题
-- 删除 heartbeat 文件或重启 worker
+
+* 人工检查 audit log 确定错误原因
+
+* 修复配置或代码问题
+
+* 删除 heartbeat 文件或重启 worker
 
 ### 8.2 任务重试策略
 
@@ -162,9 +171,12 @@ if (updated.fix_loop.attempt > updated.fix_loop.max_attempts) {
 ```
 
 **失败记录**：
-- `phase_history` 追加 `failed` 条目
-- `fix_loop.last_failure_reason` 记录原因
-- `completed_at` 设置为当前时间
+
+* `phase_history` 追加 `failed` 条目
+
+* `fix_loop.last_failure_reason` 记录原因
+
+* `completed_at` 设置为当前时间
 
 ---
 
@@ -216,9 +228,12 @@ function requestTeamCancel(state: TeamPipelineState, preserveForResume = true) {
 ```
 
 **取消逻辑**：
-- 取消 team → 同时取消关联的 ralph
-- 取消 ralph → 同时取消关联的 team
-- 两者状态文件都标记为 `cancelled`
+
+* 取消 team → 同时取消关联的 ralph
+
+* 取消 ralph → 同时取消关联的 team
+
+* 两者状态文件都标记为 `cancelled`
 
 ---
 
@@ -227,43 +242,64 @@ function requestTeamCancel(state: TeamPipelineState, preserveForResume = true) {
 ### 10.1 为什么使用分阶段流水线？
 
 **优势**：
-- **职责分离**：每个阶段有明确的输入/输出
-- **可验证性**：每个阶段完成后可独立验证
-- **可恢复性**：从任意阶段恢复，无需重新开始
-- **可观测性**：`phase_history` 提供完整审计轨迹
+
+* **职责分离**：每个阶段有明确的输入/输出
+
+* **可验证性**：每个阶段完成后可独立验证
+
+* **可恢复性**：从任意阶段恢复，无需重新开始
+
+* **可观测性**：`phase_history` 提供完整审计轨迹
 
 **劣势**：
-- 增加状态管理复杂度
-- 阶段转换需要守卫检查
+
+* 增加状态管理复杂度
+
+* 阶段转换需要守卫检查
 
 ### 10.2 为什么混合后端？
 
 **Claude native 优势**：
-- 原生工具访问（文件操作、bash）
-- 低延迟通信
-- 无需额外进程管理
+
+* 原生工具访问（文件操作、bash）
+
+* 低延迟通信
+
+* 无需额外进程管理
 
 **MCP workers 优势**：
-- 支持外部 AI 提供商（Codex, Gemini）
-- 大上下文窗口（Gemini 1M tokens）
-- 专业能力（Codex 擅长架构审查）
+
+* 支持外部 AI 提供商（Codex, Gemini）
+
+* 大上下文窗口（Gemini 1M tokens）
+
+* 专业能力（Codex 擅长架构审查）
 
 **统一视图**：
-- `UnifiedTeamMember` 抽象后端差异
-- 消息路由自动选择通信方式
-- 能力标签系统统一任务分配
+
+* `UnifiedTeamMember` 抽象后端差异
+
+* 消息路由自动选择通信方式
+
+* 能力标签系统统一任务分配
 
 ### 10.3 为什么使用 JSONL 而非数据库？
 
 **优势**：
-- 零依赖，无需安装数据库
-- 文件系统原子操作保证一致性
-- 易于调试（直接查看文件内容）
-- 支持增量读取（offset cursor）
+
+* 零依赖，无需安装数据库
+
+* 文件系统原子操作保证一致性
+
+* 易于调试（直接查看文件内容）
+
+* 支持增量读取（offset cursor）
 
 **劣势**：
-- 并发写入需要文件锁
-- 大文件需要轮转（outbox rotation）
+
+* 并发写入需要文件锁
+
+* 大文件需要轮转（outbox rotation）
 
 ---
 
@@ -278,9 +314,12 @@ const decisions = routeTasks(teamName, workingDirectory, unassignedTasks, capabi
 ```
 
 **负载均衡**：
-- 优先分配给空闲 worker
-- 每个已分配任务减少适应度分数
-- 避免单个 worker 过载
+
+* 优先分配给空闲 worker
+
+* 每个已分配任务减少适应度分数
+
+* 避免单个 worker 过载
 
 ### 11.2 Heartbeat 优化
 
@@ -291,8 +330,10 @@ const heartbeats = listHeartbeats(workingDirectory, teamName);
 ```
 
 **缓存策略**：
-- Heartbeat 有效期内缓存结果
-- 仅在超时后重新读取
+
+* Heartbeat 有效期内缓存结果
+
+* 仅在超时后重新读取
 
 ### 11.3 JSONL 轮转
 
@@ -306,8 +347,10 @@ if (lineCount > outboxMaxLines) {
 ```
 
 **避免无限增长**：
-- 定期归档旧消息
-- 保留最近 N 条消息
+
+* 定期归档旧消息
+
+* 保留最近 N 条消息
 
 ---
 
@@ -323,17 +366,23 @@ if (lineCount > outboxMaxLines) {
 
 ### 12.2 适用场景
 
-- **多文件功能开发**：plan → prd → exec → verify
-- **复杂重构**：需要多个专业 agents 协作
-- **长时间任务**：支持中断恢复
-- **混合能力需求**：同时需要代码编辑和架构审查
+* **多文件功能开发**：plan → prd → exec → verify
+
+* **复杂重构**：需要多个专业 agents 协作
+
+* **长时间任务**：支持中断恢复
+
+* **混合能力需求**：同时需要代码编辑和架构审查
 
 ### 12.3 局限性
 
-- **状态管理复杂**：多个状态文件需要同步
-- **阶段转换开销**：每次转换需要守卫检查
-- **文件 I/O 密集**：JSONL 通信依赖文件系统
-- **调试困难**：分布式系统，需要聚合多个日志
+* **状态管理复杂**：多个状态文件需要同步
+
+* **阶段转换开销**：每次转换需要守卫检查
+
+* **文件 I/O 密集**：JSONL 通信依赖文件系统
+
+* **调试困难**：分布式系统，需要聚合多个日志
 
 ---
 

@@ -8,23 +8,28 @@ Complete reference manual for ultrapower. For quick start see [README.md](../REA
 
 ## Table of Contents
 
-- [Installation & Quick Start](#installation--quick-start)
-- [Configuration](#configuration)
-- [Execution Modes](#execution-modes)
-- [Agents (49 total)](#agents-49-total)
+* [Installation & Quick Start](#installation--quick-start)
+
+* [Configuration](#configuration)
+
+* [Execution Modes](#execution-modes)
+
+* [Agents (49 total)](#agents-49-total)
   - [Build/Analysis Lane (8)](#buildanalysis-lane-8)
   - [Review Lane (6)](#review-lane-6)
   - [Domain Specialists (16)](#domain-specialists-16)
   - [Product Lane (4)](#product-lane-4)
   - [Axiom Lane (14)](#axiom-lane-14)
   - [Coordination (1)](#coordination-1)
-- [Skills (71 total)](#skills-71-total)
+
+* [Skills (71 total)](#skills-71-total)
   - [Workflow Skills](#workflow-skills)
   - [Axiom Skills](#axiom-skills)
   - [Superpowers Skills](#superpowers-skills)
   - [Agent Shortcuts](#agent-shortcuts)
   - [Utility Skills](#utility-skills)
-- [Custom Tools (35 total)](#custom-tools-35-total)
+
+* [Custom Tools (35 total)](#custom-tools-35-total)
   - [LSP Tools (12)](#lsp-tools-12)
   - [AST Tools (2)](#ast-tools-2)
   - [Python REPL (1)](#python-repl-1)
@@ -33,14 +38,22 @@ Complete reference manual for ultrapower. For quick start see [README.md](../REA
   - [Project Memory Tools (4)](#project-memory-tools-4)
   - [Trace Tools (2)](#trace-tools-2)
   - [Skills Tools (3)](#skills-tools-3)
-- [Hooks System (35 hooks)](#hooks-system-35-hooks)
-- [MCP Integration](#mcp-integration)
-- [Security & Safety Rules](#security--safety-rules)
-- [Magic Keywords](#magic-keywords)
-- [Platform Support](#platform-support)
-- [Performance Monitoring](#performance-monitoring)
-- [Troubleshooting](#troubleshooting)
-- [Changelog](#changelog)
+
+* [Hooks System (35 hooks)](#hooks-system-35-hooks)
+
+* [MCP Integration](#mcp-integration)
+
+* [Security & Safety Rules](#security--safety-rules)
+
+* [Magic Keywords](#magic-keywords)
+
+* [Platform Support](#platform-support)
+
+* [Performance Monitoring](#performance-monitoring)
+
+* [Troubleshooting](#troubleshooting)
+
+* [Changelog](#changelog)
 
 ---
 
@@ -51,10 +64,13 @@ Complete reference manual for ultrapower. For quick start see [README.md](../REA
 ### Claude Code Plugin (Required)
 
 ```bash
+
 # Step 1: Add the plugin marketplace
-/plugin marketplace add https://github.com/liangjie559567/ultrapower
+
+/plugin marketplace add <https://github.com/liangjie559567/ultrapower>
 
 # Step 2: Install the plugin
+
 /plugin install omc@ultrapower
 ```
 
@@ -64,8 +80,9 @@ This method integrates directly into Claude Code's plugin system using Node.js h
 
 ### System Requirements
 
-- [Claude Code](https://docs.anthropic.com/claude-code) installed
-- One of:
+* [Claude Code](https://docs.anthropic.com/claude-code) installed
+
+* One of:
   - **Claude Max/Pro subscription** (recommended for personal use)
   - **Anthropic API key** (`ANTHROPIC_API_KEY` environment variable)
 
@@ -80,13 +97,17 @@ After installation, run the setup wizard:
 Then try your first execution mode:
 
 ```bash
+
 # Autonomous execution
+
 autopilot: build a REST API with authentication
 
 # Maximum parallel agents
+
 ultrawork: implement user authentication with OAuth
 
 # Persistent execution loop
+
 ralph: refactor the authentication module
 ```
 
@@ -102,10 +123,13 @@ Configure omc for the current project only:
 /ultrapower:omc-setup
 ```
 
-- Creates `./.claude/CLAUDE.md` in the current project
-- Configuration applies only to this project
-- Does not affect other projects or global settings
-- **Safe**: Preserves your global CLAUDE.md
+* Creates `./.claude/CLAUDE.md` in the current project
+
+* Configuration applies only to this project
+
+* Does not affect other projects or global settings
+
+* **Safe**: Preserves your global CLAUDE.md
 
 ### Global Configuration
 
@@ -115,9 +139,11 @@ Configure omc for all Claude Code sessions:
 /ultrapower:omc-setup
 ```
 
-- Creates `~/.claude/CLAUDE.md` globally
-- Configuration applies to all projects
-- **Warning**: Will completely overwrite existing `~/.claude/CLAUDE.md`
+* Creates `~/.claude/CLAUDE.md` globally
+
+* Configuration applies to all projects
+
+* **Warning**: Will completely overwrite existing `~/.claude/CLAUDE.md`
 
 ### Configuration Priority
 
@@ -130,7 +156,7 @@ When both configurations exist, **project-level overrides** global:
 ### Features Enabled by Configuration
 
 | Feature | Without Config | With omc Config |
-|---------|---------------|-----------------|
+| --------- | --------------- | ----------------- |
 | Agent delegation | Manual only | Auto-delegated by task type |
 | Keyword detection | Disabled | ultrawork, search, analyze |
 | Todo continuation | Basic | Forced completion |
@@ -139,10 +165,13 @@ When both configurations exist, **project-level overrides** global:
 
 ### When to Re-run Setup
 
-- **First time**: Run after installation (choose project or global)
-- **After updates**: Re-run to get the latest configuration
-- **Different machines**: Run on each machine using Claude Code
-- **New projects**: Run `/ultrapower:omc-setup --local` in each project that needs omc
+* **First time**: Run after installation (choose project or global)
+
+* **After updates**: Re-run to get the latest configuration
+
+* **Different machines**: Run on each machine using Claude Code
+
+* **New projects**: Run `/ultrapower:omc-setup --local` in each project that needs omc
 
 ### Permission Configuration
 
@@ -200,24 +229,31 @@ Your custom system prompt here...
 Use `omc config-stop-callback` to configure tags for Telegram/Discord stop callbacks:
 
 ```bash
+
 # Set/replace tags
+
 omc config-stop-callback telegram --enable --token <bot_token> --chat <chat_id> --tag-list "@alice,bob"
 omc config-stop-callback discord --enable --webhook <url> --tag-list "@here,123456789012345678,role:987654321098765432"
 
 # Incremental updates
+
 omc config-stop-callback telegram --add-tag charlie
 omc config-stop-callback discord --remove-tag @here
 omc config-stop-callback discord --clear-tags
 
 # Inspect current callback config
+
 omc config-stop-callback telegram --show
 omc config-stop-callback discord --show
 ```
 
 Tag behavior:
-- Telegram: `alice` is normalized to `@alice`
-- Discord: supports `@here`, `@everyone`, numeric user IDs (`<@id>`), and role tags (`role:<id>` -> `<@&id>`)
-- `file` type callbacks ignore tag options
+
+* Telegram: `alice` is normalized to `@alice`
+
+* Discord: supports `@here`, `@everyone`, numeric user IDs (`<@id>`), and role tags (`role:<id>` -> `<@&id>`)
+
+* `file` type callbacks ignore tag options
 
 ---
 
@@ -226,7 +262,7 @@ Tag behavior:
 ultrapower provides 6 execution modes for different workflow needs:
 
 | Mode | Trigger Keywords | Description |
-|------|-----------------|-------------|
+| ------ | ----------------- | ------------- |
 | `autopilot` | "autopilot", "build me", "I want a" | Fully autonomous execution from idea to working code |
 | `ultrawork` | "ulw", "ultrawork" | Maximum parallel agent execution |
 | `ralph` | "ralph", "don't stop", "must complete" | Self-referential loop until verified complete |
@@ -257,11 +293,16 @@ team-plan -> team-prd -> team-exec -> team-verify -> team-fix (loop)
 ```
 
 Phase agent routing:
-- `team-plan`: `explore` (haiku) + `planner` (opus), optional `analyst`/`architect`
-- `team-prd`: `analyst` (opus), optional `product-manager`/`critic`
-- `team-exec`: `executor` (sonnet) + domain specialists as needed
-- `team-verify`: `verifier` (sonnet) + reviewers as needed
-- `team-fix`: `executor`/`build-fixer`/`debugger` based on defect type
+
+* `team-plan`: `explore` (haiku) + `planner` (opus), optional `analyst`/`architect`
+
+* `team-prd`: `analyst` (opus), optional `product-manager`/`critic`
+
+* `team-exec`: `executor` (sonnet) + domain specialists as needed
+
+* `team-verify`: `verifier` (sonnet) + reviewers as needed
+
+* `team-fix`: `executor`/`build-fixer`/`debugger` based on defect type
 
 Terminal states: `complete`, `failed`, `cancelled`.
 
@@ -274,7 +315,7 @@ All agents are invoked via the `ultrapower:` prefix in Task calls.
 ### Agent Selection Guide
 
 | Task Type | Best Agent | Model |
-|-----------|-----------|-------|
+| ----------- | ----------- | ------- |
 | Fast code lookup | `explore` | haiku |
 | Feature implementation | `executor` | sonnet |
 | Complex refactor / autonomous tasks | `deep-executor` | opus |
@@ -306,7 +347,7 @@ All agents are invoked via the `ultrapower:` prefix in Task calls.
 ### Build/Analysis Lane (8)
 
 | Agent | Model | Description |
-|-------|-------|-------------|
+| ------- | ------- | ------------- |
 | `explore` | haiku | Codebase discovery, symbol/file mapping |
 | `analyst` | opus | Requirements clarification, acceptance criteria, hidden constraints |
 | `planner` | opus | Task ordering, execution plans, risk flagging |
@@ -321,7 +362,7 @@ All agents are invoked via the `ultrapower:` prefix in Task calls.
 ### Review Lane (6)
 
 | Agent | Model | Description |
-|-------|-------|-------------|
+| ------- | ------- | ------------- |
 | `style-reviewer` | haiku | Formatting, naming, idiomatic style, lint rules |
 | `quality-reviewer` | sonnet | Logic defects, maintainability, anti-patterns |
 | `api-reviewer` | sonnet | API contracts, versioning, backward compatibility |
@@ -334,7 +375,7 @@ All agents are invoked via the `ultrapower:` prefix in Task calls.
 ### Domain Specialists (16)
 
 | Agent | Model | Description |
-|-------|-------|-------------|
+| ------- | ------- | ------------- |
 | `dependency-expert` | sonnet | External SDK/API/package evaluation |
 | `test-engineer` | sonnet | Test strategy, coverage, flaky test hardening |
 | `quality-strategist` | sonnet | Quality strategy, release readiness, risk assessment |
@@ -353,15 +394,17 @@ All agents are invoked via the `ultrapower:` prefix in Task calls.
 | `api-designer` | sonnet | REST/GraphQL API design and contract definition |
 
 Deprecated aliases (backward compatible):
-- `researcher` -> `document-specialist`
-- `tdd-guide` -> `test-engineer`
+
+* `researcher` -> `document-specialist`
+
+* `tdd-guide` -> `test-engineer`
 
 ---
 
 ### Product Lane (4)
 
 | Agent | Model | Description |
-|-------|-------|-------------|
+| ------- | ------- | ------------- |
 | `product-manager` | sonnet | Problem framing, user personas/JTBD, PRD |
 | `ux-researcher` | sonnet | Heuristic audit, usability, accessibility |
 | `information-architect` | sonnet | Taxonomy, navigation, discoverability |
@@ -372,7 +415,7 @@ Deprecated aliases (backward compatible):
 ### Axiom Lane (14)
 
 | Agent | Model | Description |
-|-------|-------|-------------|
+| ------- | ------- | ------------- |
 | `axiom-requirement-analyst` | sonnet | Requirements tri-state gate (PASS/CLARIFY/REJECT) |
 | `axiom-product-designer` | sonnet | Draft PRD generation with Mermaid flowcharts |
 | `axiom-review-aggregator` | sonnet | 5-expert parallel review aggregation and conflict arbitration |
@@ -393,7 +436,7 @@ Deprecated aliases (backward compatible):
 ### Coordination (1)
 
 | Agent | Model | Description |
-|-------|-------|-------------|
+| ------- | ------- | ------------- |
 | `critic` | opus | Critical challenge of plans and designs |
 
 ---
@@ -407,7 +450,7 @@ All skills are invocable as slash commands with `/ultrapower:` prefix.
 Core orchestration and execution skills:
 
 | Skill | Command | Description |
-|-------|---------|-------------|
+| ------- | --------- | ------------- |
 | `autopilot` | `/ultrapower:autopilot` | Fully autonomous execution from idea to working code |
 | `ultrawork` | `/ultrapower:ultrawork` | Maximum parallel agent execution |
 | `ultrapilot` | `/ultrapower:ultrapilot` | Parallel autopilot, 3-5x speed improvement |
@@ -427,7 +470,7 @@ Core orchestration and execution skills:
 ### Axiom Skills
 
 | Skill | Command | Description |
-|-------|---------|-------------|
+| ------- | --------- | ------------- |
 | `ax-draft` | `/ultrapower:ax-draft` | Requirements clarification -> Draft PRD -> user confirm |
 | `ax-review` | `/ultrapower:ax-review` | 5-expert parallel review -> aggregation -> Rough PRD |
 | `ax-decompose` | `/ultrapower:ax-decompose` | Rough PRD -> system architecture -> atomic task DAG |
@@ -450,7 +493,7 @@ Core orchestration and execution skills:
 Structured guidance for advanced workflows:
 
 | Skill | Command | Description |
-|-------|---------|-------------|
+| ------- | --------- | ------------- |
 | `brainstorming` | `/ultrapower:brainstorming` | Structured exploration of requirements and design options |
 | `writing-plans` | `/ultrapower:writing-plans` | Decompose requirements into atomic task plans |
 | `subagent-driven-development` | `/ultrapower:subagent-driven-development` | Execute independent tasks in current session |
@@ -474,7 +517,7 @@ Structured guidance for advanced workflows:
 Lightweight wrappers for common agent invocations:
 
 | Skill | Command | Routes To | Triggers |
-|-------|---------|-----------|---------|
+| ------- | --------- | ----------- | --------- |
 | `analyze` | `/ultrapower:analyze` | `debugger` | "analyze", "debug", "investigate" |
 | `deepsearch` | `/ultrapower:deepsearch` | `explore` | "search", "find in codebase" |
 | `tdd` | `/ultrapower:tdd` | `test-engineer` | "tdd", "test first", "red green" |
@@ -491,7 +534,7 @@ Lightweight wrappers for common agent invocations:
 ### Utility Skills
 
 | Skill | Command | Description |
-|-------|---------|-------------|
+| ------- | --------- | ------------- |
 | `note` | `/ultrapower:note` | Save notes to compression-resistant notepad |
 | `cancel` | `/ultrapower:cancel` | Unified cancel of all active modes |
 | `omc-setup` | `/ultrapower:omc-setup` | One-time installation wizard |
@@ -520,7 +563,7 @@ Lightweight wrappers for common agent invocations:
 ultrapower exposes **35 custom tools** via the `mcp__plugin_ultrapower_t__` prefix.
 
 | Category | Count | Tool Prefix |
-|----------|-------|-------------|
+| ---------- | ------- | ------------- |
 | LSP (Language Server Protocol) | 12 | `lsp_*` |
 | AST (Structured code search) | 2 | `ast_grep_*` |
 | Python REPL | 1 | `python_repl` |
@@ -657,7 +700,7 @@ ultrapower includes 35 lifecycle hooks that enhance Claude Code behavior.
 ### Execution Mode Hooks
 
 | Hook | Description |
-|------|-------------|
+| ------ | ------------- |
 | `autopilot` | Fully autonomous execution from idea to working code |
 | `ultrawork` | Maximum parallel agent execution |
 | `ralph` | Persistent execution until verified complete |
@@ -669,7 +712,7 @@ ultrapower includes 35 lifecycle hooks that enhance Claude Code behavior.
 ### Core Hooks
 
 | Hook | Description |
-|------|-------------|
+| ------ | ------------- |
 | `rules-injector` | Dynamic rule injection with YAML frontmatter parsing |
 | `omc-orchestrator` | Enforces orchestrator behavior and delegation |
 | `auto-slash-command` | Auto-detects and executes slash commands |
@@ -681,7 +724,7 @@ ultrapower includes 35 lifecycle hooks that enhance Claude Code behavior.
 ### Context & Recovery Hooks
 
 | Hook | Description |
-|------|-------------|
+| ------ | ------------- |
 | `recovery` | Edit error, session, and context window recovery |
 | `preemptive-compaction` | Monitors context usage to prevent overflow |
 | `pre-compact` | Pre-compaction processing |
@@ -697,7 +740,7 @@ ultrapower includes 35 lifecycle hooks that enhance Claude Code behavior.
 ### Quality & Validation Hooks
 
 | Hook | Description |
-|------|-------------|
+| ------ | ------------- |
 | `comment-checker` | BDD detection and instruction filtering |
 | `thinking-block-validator` | Extended thinking validation |
 | `empty-message-sanitizer` | Empty message handling |
@@ -707,7 +750,7 @@ ultrapower includes 35 lifecycle hooks that enhance Claude Code behavior.
 ### Coordination & Environment Hooks
 
 | Hook | Description |
-|------|-------------|
+| ------ | ------------- |
 | `subagent-tracker` | Tracks spawned sub-agents |
 | `flow-tracer` | Agent flow trace recording (hook triggers, keyword detection, skill activations, mode changes) |
 | `non-interactive-env` | CI/non-interactive environment handling |
@@ -721,17 +764,21 @@ ultrapower includes 35 lifecycle hooks that enhance Claude Code behavior.
 ### Axiom Hooks (2)
 
 | Hook | Location | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `axiom-boot` | `src/hooks/axiom-boot/` | Inject Axiom memory context at session startup |
 | `axiom-guards` | `src/hooks/axiom-guards/` | Gate rule enforcement (Expert/User/CI Gate) |
 
 ### Hook Runtime Guarantees
 
-- Hook inputs use snake_case fields: `tool_name`, `tool_input`, `tool_response`, `session_id`, `cwd`, `hook_event_name`
-- Kill switches: `DISABLE_OMC` (disable all hooks), `OMC_SKIP_HOOKS` (skip specific hooks by comma-separated names)
-- Sensitive hook fields (permission-request, setup, session-end) are filtered through strict whitelist in bridge-normalize; unknown fields are discarded
-- Required key validation per hook event type (e.g., session-end requires `sessionId`, `directory`)
-- `SubagentStop` inference: Never read `input.success` directly; use `input.success !== false`
+* Hook inputs use snake_case fields: `tool_name`, `tool_input`, `tool_response`, `session_id`, `cwd`, `hook_event_name`
+
+* Kill switches: `DISABLE_OMC` (disable all hooks), `OMC_SKIP_HOOKS` (skip specific hooks by comma-separated names)
+
+* Sensitive hook fields (permission-request, setup, session-end) are filtered through strict whitelist in bridge-normalize; unknown fields are discarded
+
+* Required key validation per hook event type (e.g., session-end requires `sessionId`, `directory`)
+
+* `SubagentStop` inference: Never read `input.success` directly; use `input.success !== false`
 
 ---
 
@@ -740,7 +787,7 @@ ultrapower includes 35 lifecycle hooks that enhance Claude Code behavior.
 ### MCP Providers
 
 | Provider | Tool | Best For |
-|----------|------|---------|
+| ---------- | ------ | --------- |
 | Codex (OpenAI) | `mcp__x__ask_codex` | Architecture review, planning validation, code review, security review |
 | Gemini (Google) | `mcp__g__ask_gemini` | UI/UX design review, docs, large-context tasks (1M tokens) |
 
@@ -761,7 +808,7 @@ If ToolSearch returns no results, the MCP server is not configured — fall back
 ### Local MCP Tools (via `claude mcp add`)
 
 | Tool | Description |
-|------|-------------|
+| ------ | ------------- |
 | `sequential-thinking` | Structured step-by-step reasoning — breaks complex problems into ordered thought chains |
 | `software-planning-tool` | Task planning and decomposition — structured task analysis, dependency graphs, execution tracking |
 
@@ -772,7 +819,7 @@ ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin
 #### LSP Tools (12)
 
 | Tool | MCP Name | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `lsp_hover` | `mcp__plugin_ultrapower_t__lsp_hover` | Get type information and documentation at cursor position |
 | `lsp_goto_definition` | `mcp__plugin_ultrapower_t__lsp_goto_definition` | Find definition location of a symbol |
 | `lsp_find_references` | `mcp__plugin_ultrapower_t__lsp_find_references` | Find all references to a symbol across codebase |
@@ -789,20 +836,20 @@ ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin
 #### AST Tools (2)
 
 | Tool | MCP Name | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `ast_grep_search` | `mcp__plugin_ultrapower_t__ast_grep_search` | Search for code patterns using AST matching |
 | `ast_grep_replace` | `mcp__plugin_ultrapower_t__ast_grep_replace` | Replace code patterns using AST matching |
 
 #### Python REPL (1)
 
 | Tool | MCP Name | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `python_repl` | `mcp__plugin_ultrapower_t__python_repl` | Execute Python code in persistent REPL environment |
 
 #### Notepad Tools (6)
 
 | Tool | MCP Name | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `notepad_read` | `mcp__plugin_ultrapower_t__notepad_read` | Read notepad content (all/priority/working/manual sections) |
 | `notepad_write_priority` | `mcp__plugin_ultrapower_t__notepad_write_priority` | Write to Priority Context section (max 500 chars) |
 | `notepad_write_working` | `mcp__plugin_ultrapower_t__notepad_write_working` | Add entry to Working Memory section (auto-pruned after 7 days) |
@@ -813,7 +860,7 @@ ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin
 #### State Tools (5)
 
 | Tool | MCP Name | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `state_read` | `mcp__plugin_ultrapower_t__state_read` | Read state for a specific mode |
 | `state_write` | `mcp__plugin_ultrapower_t__state_write` | Write/update state for a specific mode |
 | `state_clear` | `mcp__plugin_ultrapower_t__state_clear` | Clear/delete state for a specific mode |
@@ -823,7 +870,7 @@ ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin
 #### Project Memory Tools (4)
 
 | Tool | MCP Name | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `project_memory_read` | `mcp__plugin_ultrapower_t__project_memory_read` | Read project memory (techStack/build/conventions/structure/notes/directives) |
 | `project_memory_write` | `mcp__plugin_ultrapower_t__project_memory_write` | Write/update project memory with merge support |
 | `project_memory_add_note` | `mcp__plugin_ultrapower_t__project_memory_add_note` | Add a custom note to project memory |
@@ -832,7 +879,7 @@ ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin
 #### Trace Tools (2)
 
 | Tool | MCP Name | Description |
-|------|----------|-------------|
+| ------ | ---------- | ------------- |
 | `trace_timeline` | `mcp__plugin_ultrapower_t__trace_timeline` | Show chronological agent flow trace timeline |
 | `trace_summary` | `mcp__plugin_ultrapower_t__trace_summary` | Show aggregate statistics for an agent flow trace session |
 
@@ -841,7 +888,7 @@ ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin
 MCP tools (`ask_codex`, `ask_gemini`) enforce strict path boundaries. Both `prompt_file` and `output_file` are resolved relative to `working_directory`.
 
 | Parameter | Requirement |
-|-----------|-------------|
+| ----------- | ------------- |
 | `prompt_file` | Must be within `working_directory` (after symlink resolution) |
 | `output_file` | Must be within `working_directory` (after symlink resolution) |
 | `working_directory` | Must be within the project worktree (unless bypassed) |
@@ -849,7 +896,7 @@ MCP tools (`ask_codex`, `ask_gemini`) enforce strict path boundaries. Both `prom
 ### Environment Variable Overrides
 
 | Variable | Values | Description |
-|----------|--------|-------------|
+| ---------- | -------- | ------------- |
 | `OMC_MCP_OUTPUT_PATH_POLICY` | `strict` (default), `redirect_output` | Controls output file path enforcement |
 | `OMC_MCP_OUTPUT_REDIRECT_DIR` | path (default: `.omc/outputs`) | Redirect directory when policy is `redirect_output` |
 | `OMC_MCP_ALLOW_EXTERNAL_PROMPT` | `0` (default), `1` | Allow prompt file outside working directory |
@@ -865,7 +912,7 @@ MCP tools (`ask_codex`, `ask_gemini`) enforce strict path boundaries. Both `prom
 ### MCP Error Codes
 
 | Error Code | Meaning |
-|-----------|---------|
+| ----------- | --------- |
 | `E_PATH_OUTSIDE_WORKDIR_PROMPT` | prompt_file is outside working_directory |
 | `E_PATH_OUTSIDE_WORKDIR_OUTPUT` | output_file is outside working_directory |
 | `E_PATH_RESOLUTION_FAILED` | Symlink or directory resolution failed |
@@ -913,11 +960,16 @@ The `delegation-enforcer` feature ensures the orchestrator delegates implementat
 ### Security Review Checklist
 
 When modifying security-sensitive code, verify:
-- [ ] `mode` parameters validated with `assertValidMode()` before path use
-- [ ] Hook field access uses whitelist pattern from bridge-normalize
-- [ ] Shell commands use `execFileSync` with argument arrays
-- [ ] No `eval()` or dynamic `require()` with untrusted input
-- [ ] State file paths constrained to `.omc/state/` directory
+
+* [ ] `mode` parameters validated with `assertValidMode()` before path use
+
+* [ ] Hook field access uses whitelist pattern from bridge-normalize
+
+* [ ] Shell commands use `execFileSync` with argument arrays
+
+* [ ] No `eval()` or dynamic `require()` with untrusted input
+
+* [ ] State file paths constrained to `.omc/state/` directory
 
 ---
 
@@ -926,7 +978,7 @@ When modifying security-sensitive code, verify:
 Include any of the following keywords anywhere in your prompt to activate enhanced modes:
 
 | Keyword | Effect |
-|---------|--------|
+| --------- | -------- |
 | `ultrawork`, `ulw` | Activate parallel agent orchestration |
 | `autopilot`, `auto-pilot`, `fullsend`, `full auto` | Fully autonomous execution |
 | `ultrapilot`, `ultra-pilot`, `parallel build`, `swarm build` | Parallel autopilot (3-5x speed) |
@@ -948,25 +1000,33 @@ Include any of the following keywords anywhere in your prompt to activate enhanc
 ### Examples
 
 ```bash
+
 # Maximum parallelism
+
 ultrawork implement user authentication with OAuth
 
 # Autonomous execution
+
 autopilot: build a todo app with React
 
 # Persistent execution
+
 ralph: refactor the authentication module
 
 # Planning session
+
 plan this feature
 
 # TDD workflow
+
 tdd: implement password validation
 
 # Three-model orchestration
+
 ccg: implement the payment module
 
 # Cancel active modes
+
 cancelomc
 ```
 
@@ -977,7 +1037,7 @@ cancelomc
 ### Operating Systems
 
 | Platform | Installation | Hook Type |
-|----------|-------------|-----------|
+| ---------- | ------------- | ----------- |
 | **Windows** | Claude Code Plugin | Node.js (.mjs) |
 | **macOS** | Claude Code Plugin | Node.js (.mjs) |
 | **Linux** | Claude Code Plugin | Node.js (.mjs) |
@@ -987,7 +1047,7 @@ cancelomc
 ### Available Tools
 
 | Tool | Status | Description |
-|------|--------|-------------|
+| ------ | -------- | ------------- |
 | **Read** | Available | Read files |
 | **Write** | Available | Create files |
 | **Edit** | Available | Modify files |
@@ -1010,7 +1070,7 @@ Full documentation: **[Performance Monitoring Guide](./PERFORMANCE-MONITORING.md
 ### Quick Overview
 
 | Feature | Description | Access |
-|---------|-------------|--------|
+| --------- | ------------- | -------- |
 | **Agent Observatory** | Real-time agent status, efficiency, bottlenecks | HUD / API |
 | **Token Analytics** | Cost tracking, usage reports, budget warnings | `omc stats`, `omc cost` |
 | **Session Replay** | Post-session event timeline analysis | `.omc/state/agent-replay-*.jsonl` |
@@ -1051,7 +1111,7 @@ Configure HUD elements in `~/.claude/settings.json`:
 ```
 
 | Element | Description | Default |
-|---------|-------------|---------|
+| --------- | ------------- | --------- |
 | `cwd` | Display current working directory | `false` |
 | `gitRepo` | Display git repository name | `false` |
 | `gitBranch` | Display current git branch | `false` |
@@ -1077,16 +1137,21 @@ Available presets: `minimal`, `focused`, `full`, `dense`, `analytics`, `opencode
 ```
 
 Checks:
-- Missing dependencies
-- Configuration errors
-- Hook installation status
-- Agent availability
-- Skill registration
+
+* Missing dependencies
+
+* Configuration errors
+
+* Hook installation status
+
+* Agent availability
+
+* Skill registration
 
 ### Common Issues
 
 | Issue | Resolution |
-|-------|-----------|
+| ------- | ----------- |
 | Command not found | Re-run `/ultrapower:omc-setup` |
 | Hooks not executing | Check hook permissions: `chmod +x ~/.claude/hooks/**/*.sh` |
 | Agents not delegating | Verify CLAUDE.md is loaded: check `./.claude/CLAUDE.md` or `~/.claude/CLAUDE.md` |
@@ -1097,7 +1162,7 @@ Checks:
 ### Uninstall
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/liangjie559567/ultrapower/main/scripts/uninstall.sh | bash
+curl -fsSL <https://raw.githubusercontent.com/liangjie559567/ultrapower/main/scripts/uninstall.sh> | bash
 ```
 
 Or manually:
@@ -1122,7 +1187,7 @@ IDLE -> PLANNING -> CONFIRMING -> EXECUTING -> AUTO_FIX -> BLOCKED -> ARCHIVING 
 ### Axiom Gate System
 
 | Gate | Trigger | Action |
-|------|---------|--------|
+| ------ | --------- | -------- |
 | Expert Gate | All new feature requirements | Must pass `/ax-draft` -> `/ax-review` flow |
 | User Gate | PRD draft finalization | Must display "PRD generated, confirm execution? (Yes/No)" |
 | CI Gate | Code modification completion | Must run `tsc --noEmit && npm run build && npm test` |
@@ -1149,20 +1214,26 @@ IDLE -> PLANNING -> CONFIRMING -> EXECUTING -> AUTO_FIX -> BLOCKED -> ARCHIVING 
 Worker agents receive atomic tasks from PM, and output one of three formats:
 
 ```
+
 ## QUESTION
+
 Question: [specific question]
 Reason: [why clarification is needed]
 ```
 
 ```
+
 ## COMPLETE
+
 Completed: [task description]
 Changes: [list of modified files]
 Verification: [CI command output]
 ```
 
 ```
+
 ## BLOCKED
+
 Reason: [blocking cause]
 Attempted: [methods tried]
 Needs: [what help is needed]
@@ -1173,7 +1244,7 @@ Needs: [what help is needed]
 ### Axiom Evolution Engine (Auto-Behavior)
 
 | Trigger Event | Auto-Action |
-|--------------|------------|
+| -------------- | ------------ |
 | Task completed | Add code changes to `learning_queue.md` |
 | Error fix successful | Add fix pattern to learning queue (P1) |
 | Workflow completed | Update `workflow_metrics.md` |
@@ -1183,7 +1254,7 @@ Needs: [what help is needed]
 ### Tool Adapter Files
 
 | File | Target Tool |
-|------|------------|
+| ------ | ------------ |
 | `.kiro/steering/axiom.md` | Kiro |
 | `.cursorrules` | Cursor |
 | `.gemini/GEMINI.md` | Gemini |
@@ -1193,8 +1264,10 @@ Needs: [what help is needed]
 | `.codex/CODEX.md` | Codex CLI |
 
 For detailed Axiom documentation see:
-- **[docs/EVOLUTION.md](./EVOLUTION.md)** — Axiom self-evolution system complete documentation
-- **[docs/NEXUS.md](./NEXUS.md)** — Nexus active evolution system complete documentation
+
+* **[docs/EVOLUTION.md](./EVOLUTION.md)** — Axiom self-evolution system complete documentation
+
+* **[docs/NEXUS.md](./NEXUS.md)** — Nexus active evolution system complete documentation
 
 ---
 
@@ -1204,12 +1277,17 @@ For version history and release notes see [CHANGELOG.md](../CHANGELOG.md).
 
 ### Key Version Milestones
 
-- **v5.5.5** — This release: comprehensive reference documentation rewrite
-- **v5.5.2** — delegation-enforcer: ensures orchestrator delegates implementation work
-- **v5.5.0** — Security hardening: `assertValidMode()`, `execFileSync`, `SENSITIVE_HOOKS`, bridge-normalize strict whitelist
-- **v5.4.x** — Axiom deep integration: 14 agents, 14 skills, 2 hooks
-- **v5.2.x** — Team pipeline with phased routing; ultrapilot/swarm as Team facades
-- **v5.0.x** — 35 custom tools via `mcp__plugin_ultrapower_t__` prefix
+* **v5.5.5** — This release: comprehensive reference documentation rewrite
+
+* **v5.5.2** — delegation-enforcer: ensures orchestrator delegates implementation work
+
+* **v5.5.0** — Security hardening: `assertValidMode()`, `execFileSync`, `SENSITIVE_HOOKS`, bridge-normalize strict whitelist
+
+* **v5.4.x** — Axiom deep integration: 14 agents, 14 skills, 2 hooks
+
+* **v5.2.x** — Team pipeline with phased routing; ultrapilot/swarm as Team facades
+
+* **v5.0.x** — 35 custom tools via `mcp__plugin_ultrapower_t__` prefix
 
 ---
 

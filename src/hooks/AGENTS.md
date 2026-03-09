@@ -9,7 +9,7 @@
 ## 关键文件
 
 | 文件 | 描述 |
-|------|------|
+| ------ | ------ |
 | `index.ts` | Hook 注册表和路由 |
 | `bridge.ts` | Hook 与外部系统的桥接 |
 | `bridge-types.ts` | Hook 类型定义 |
@@ -19,7 +19,7 @@
 ## Hook 类型（15 类）
 
 | Hook 类型 | 触发时机 | 用途 |
-|----------|---------|------|
+| ---------- | --------- | ------ |
 | session-start | 会话开始 | 初始化、加载上下文 |
 | session-end | 会话结束 | 清理、保存状态 |
 | tool-before | 工具执行前 | 验证、预处理 |
@@ -92,12 +92,12 @@ src/hooks/
    - 在 `index.ts` 中注册
    - 在 `bridge.ts` 中配置路由
 
-2. **修改 hook 行为**
+1. **修改 hook 行为**
    - 编辑对应的 hook 目录中的实现
    - 运行 `npm test` 验证
    - 检查 `bridge-normalize.ts` 中的输入验证
 
-3. **调试 hook 执行**
+1. **调试 hook 执行**
    - 查看 `bridge.ts` 中的路由逻辑
    - 检查 `bridge-normalize.ts` 中的消毒规则
    - 验证 hook 类型和触发条件
@@ -105,7 +105,7 @@ src/hooks/
 ### 修改检查清单
 
 | 修改位置 | 验证步骤 |
-|---------|---------|
+| --------- | --------- |
 | Hook 实现 | 运行 `npm test` |
 | Hook 注册 | 检查 `index.ts` |
 | Hook 路由 | 检查 `bridge.ts` |
@@ -113,6 +113,8 @@ src/hooks/
 
 ### 安全规则
 
-- 所有 hook 输入必须通过 `bridge-normalize.ts` 白名单过滤
-- 禁止直接使用 `input.success`，使用 `input.success !== false`
-- 路径参数必须通过 `assertValidMode()` 校验
+* 所有 hook 输入必须通过 `bridge-normalize.ts` 白名单过滤
+
+* 禁止直接使用 `input.success`，使用 `input.success !== false`
+
+* 路径参数必须通过 `assertValidMode()` 校验

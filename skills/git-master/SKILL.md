@@ -20,10 +20,15 @@ Task(subagent_type="ultrapower:git-master", model="sonnet", prompt="{{ARGUMENTS}
 ```
 
 ## 能力
-- 符合 conventional format 的原子提交
-- 交互式变基
-- 分支管理
-- 历史清理
-- 从仓库历史检测提交风格
+
+* 符合 conventional format 的原子提交
+
+* 交互式变基
+
+* 分支管理
+
+* 历史清理
+
+* 从仓库历史检测提交风格
 
 Task: {{ARGUMENTS}}

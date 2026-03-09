@@ -76,7 +76,7 @@ graph TD
 ## 2. 任务总览表
 
 | ID | 标题 | 优先级 | 工作量 | 依赖 | 涉及文件数 | 标记 |
-|----|------|--------|--------|------|-----------|------|
+| ---- | ------ | -------- | -------- | ------ | ----------- | ------ |
 | T-01a | Hook/Bridge 审计 | P-1 | ~4h | None | 3 (只读) | - |
 | T-01b | Mode/Agent/State 审计 | P-1 | ~4h | None | 4 (只读) | - |
 | T-02 | 规范体系入口 README.md | P0 | ~2h | T-01a | 1 | - |
@@ -100,23 +100,29 @@ graph TD
 
 ## 3. 任务详细描述（DAG 顺序）
 
-
 ### T-01a: Hook/Bridge 审计（P-1，前置）
 
 **目标**：审计 `src/hooks/bridge.ts` 和相关 hook 文件，提取完整 HookType 定义和执行规则。
 
 **输入文件（只读）**：
-- `src/hooks/bridge.ts`：提取全部 HookType 枚举（已知 15 类）
-- `src/hooks/guards/pre-tool.ts`、`post-tool.ts`：提取 hook 执行顺序
-- `src/hooks/persistent-mode/index.ts`：提取 Stop 阶段优先级规则
+
+* `src/hooks/bridge.ts`：提取全部 HookType 枚举（已知 15 类）
+
+* `src/hooks/guards/pre-tool.ts`、`post-tool.ts`：提取 hook 执行顺序
+
+* `src/hooks/persistent-mode/index.ts`：提取 Stop 阶段优先级规则
 
 **产出**：`docs/standards/audit-report.md`（T-01a 部分）
 
 **验收条件**：
-- 列出全部 15 个 HookType，与 bridge.ts 定义一一对应
-- 记录 Stop 阶段优先级链：Ralph > Ultrawork > Todo-Continuation
-- 记录 hook 失败降级策略（静默 vs 阻塞）
-- 记录 bridge-normalize.ts 当前白名单覆盖范围
+
+* 列出全部 15 个 HookType，与 bridge.ts 定义一一对应
+
+* 记录 Stop 阶段优先级链：Ralph > Ultrawork > Todo-Continuation
+
+* 记录 hook 失败降级策略（静默 vs 阻塞）
+
+* 记录 bridge-normalize.ts 当前白名单覆盖范围
 
 ---
 
@@ -125,18 +131,26 @@ graph TD
 **目标**：审计状态机、Agent 生命周期和并发保护机制，提取实现细节。
 
 **输入文件（只读）**：
-- `src/hooks/mode-registry/index.ts`：状态机转换规则、stale marker 阈值
-- `src/agents/definitions.ts`：AgentConfig 类型定义和生命周期约束
-- `src/hooks/subagent-tracker/index.ts`：并发保护机制
-- `src/lib/atomic-write.ts`：原子写入实现细节
+
+* `src/hooks/mode-registry/index.ts`：状态机转换规则、stale marker 阈值
+
+* `src/agents/definitions.ts`：AgentConfig 类型定义和生命周期约束
+
+* `src/hooks/subagent-tracker/index.ts`：并发保护机制
+
+* `src/lib/atomic-write.ts`：原子写入实现细节
 
 **产出**：`docs/standards/audit-report.md`（T-01b 部分，与 T-01a 合并）
 
 **验收条件**：
-- 记录 STALE_THRESHOLD_MS（5 分钟）、COST_LIMIT_USD（1.0）、DEADLOCK_CHECK_THRESHOLD（3）
-- 记录 SubagentStopInput.success 已废弃（@deprecated）
-- 记录 Windows rename 语义差异
-- 记录各状态文件并发保护级别不一致性
+
+* 记录 STALE_THRESHOLD_MS（5 分钟）、COST_LIMIT_USD（1.0）、DEADLOCK_CHECK_THRESHOLD（3）
+
+* 记录 SubagentStopInput.success 已废弃（@deprecated）
+
+* 记录 Windows rename 语义差异
+
+* 记录各状态文件并发保护级别不一致性
 
 ---
 
@@ -147,10 +161,14 @@ graph TD
 **产出文件**：`docs/standards/README.md`
 
 **内容要求**：
-- 规范体系概述（一段话）
-- 所有规范文档的索引表（文件名、优先级、说明）
-- 快速导航：新用户 → user-guide.md，贡献者 → contribution-guide.md，维护者 → runtime-protection.md
-- 版本声明：`ultrapower-version: 5.0.21`
+
+* 规范体系概述（一段话）
+
+* 所有规范文档的索引表（文件名、优先级、说明）
+
+* 快速导航：新用户 → user-guide.md，贡献者 → contribution-guide.md，维护者 → runtime-protection.md
+
+* 版本声明：`ultrapower-version: 5.0.21`
 
 **验收条件**：文件存在，索引覆盖全部 P0/P1/P2 规范文档，单一入口可从 README.md 和 CLAUDE.md 访问
 
@@ -163,10 +181,14 @@ graph TD
 **产出文件**：`docs/standards/runtime-protection.md`（与 T-03b 合并为同一文件）
 
 **内容要求**（基于 T-01a 审计结果）：
-- 全部 15 类 HookType 的必需字段白名单
-- bridge-normalize.ts 扩展要求（从 3 类扩展至 15 类）
-- 未知字段丢弃规则
-- permission-request 类型不可静默降级的强制要求
+
+* 全部 15 类 HookType 的必需字段白名单
+
+* bridge-normalize.ts 扩展要求（从 3 类扩展至 15 类）
+
+* 未知字段丢弃规则
+
+* permission-request 类型不可静默降级的强制要求
 
 **验收条件**：规范覆盖全部 15 个 HookType，每类有明确的必需字段和禁止字段列表
 
@@ -179,12 +201,18 @@ graph TD
 **产出文件**：`docs/standards/runtime-protection.md`（追加到 T-03a 产出）
 
 **内容要求**（基于 T-01b 审计结果）：
-- 原子写入强制要求（atomicWriteJsonSync / atomicWriteJson）
-- 各状态文件并发保护级别对照表（含不一致性说明）
-- Windows 平台 rename 语义差异说明
-- 路径安全：mode 参数白名单校验（7 个合法值）
-- 状态文件损坏恢复流程
-- agent-replay-*.jsonl 敏感数据处理（权限 600，7 天清理）
+
+* 原子写入强制要求（atomicWriteJsonSync / atomicWriteJson）
+
+* 各状态文件并发保护级别对照表（含不一致性说明）
+
+* Windows 平台 rename 语义差异说明
+
+* 路径安全：mode 参数白名单校验（7 个合法值）
+
+* 状态文件损坏恢复流程
+
+* agent-replay-*.jsonl 敏感数据处理（权限 600，7 天清理）
 
 **验收条件**：规范明确记录并发保护不一致性，Windows 差异有专门说明，路径安全规则可操作
 
@@ -197,9 +225,12 @@ graph TD
 **产出文件**：`docs/standards/hook-execution-order.md`（与 T-04b 合并）
 
 **内容要求**：
-- 全部 15 个 HookType 的完整分类表（阶段、触发时机、必需字段）
-- 每类 HookType 的路由规则
-- HookType 完整性验证方法（自动化脚本对比 bridge.ts）
+
+* 全部 15 个 HookType 的完整分类表（阶段、触发时机、必需字段）
+
+* 每类 HookType 的路由规则
+
+* HookType 完整性验证方法（自动化脚本对比 bridge.ts）
 
 **验收条件**：HookType 数量与 bridge.ts 定义一致（15 个），分类覆盖六个阶段
 
@@ -212,10 +243,14 @@ graph TD
 **产出文件**：`docs/standards/hook-execution-order.md`（追加到 T-04a 产出）
 
 **内容要求**：
-- Stop 阶段优先级链：Ralph(最高) > Ultrawork > Todo-Continuation(最低)
-- 高优先级 hook 处理后低优先级不得重复处理的互斥规则
-- hook 失败降级策略：大多数静默降级，permission-request 例外
-- hook 超时处理：PreToolUse 超时 5s 继续执行，PostToolUse 超时标记"待重试"
+
+* Stop 阶段优先级链：Ralph(最高) > Ultrawork > Todo-Continuation(最低)
+
+* 高优先级 hook 处理后低优先级不得重复处理的互斥规则
+
+* hook 失败降级策略：大多数静默降级，permission-request 例外
+
+* hook 超时处理：PreToolUse 超时 5s 继续执行，PostToolUse 超时标记"待重试"
 
 **验收条件**：Stop 阶段优先级规则可执行，超时处理有明确数值，降级策略有例外清单
 
@@ -228,11 +263,16 @@ graph TD
 **产出文件**：`docs/standards/state-machine.md`
 
 **内容要求**（基于 T-01b 审计结果）：
-- Agent 完整状态机（含 TIMEOUT、ZOMBIE 死状态）
-- Team Pipeline 状态转换矩阵
-- 各模式状态文件路径
-- stale marker 阈值：1 小时
-- 互斥模式检测规则（autopilot 与 ultrapilot 互斥）
+
+* Agent 完整状态机（含 TIMEOUT、ZOMBIE 死状态）
+
+* Team Pipeline 状态转换矩阵
+
+* 各模式状态文件路径
+
+* stale marker 阈值：1 小时
+
+* 互斥模式检测规则（autopilot 与 ultrapilot 互斥）
 
 **验收条件**：状态机覆盖所有已知边界情况，TIMEOUT（5 分钟）和 ZOMBIE（30 秒）有明确数值
 
@@ -245,11 +285,16 @@ graph TD
 **产出文件**：`docs/standards/agent-lifecycle.md`
 
 **内容要求**（基于 T-01b 审计结果）：
-- Agent 边界情况矩阵（超时/孤儿状态/成本超限/死锁检测）
-- SubagentStopInput.success 废弃说明及推断机制替代方案
-- 孤儿 agent 检测：session-end hook 触发强制 SHUTDOWN
-- 成本限制：COST_LIMIT_USD = 1.0
-- 死锁检测：DEADLOCK_CHECK_THRESHOLD = 3
+
+* Agent 边界情况矩阵（超时/孤儿状态/成本超限/死锁检测）
+
+* SubagentStopInput.success 废弃说明及推断机制替代方案
+
+* 孤儿 agent 检测：session-end hook 触发强制 SHUTDOWN
+
+* 成本限制：COST_LIMIT_USD = 1.0
+
+* 死锁检测：DEADLOCK_CHECK_THRESHOLD = 3
 
 **验收条件**：边界情况矩阵覆盖 4 种情况，每种有触发条件和处理策略
 
@@ -270,9 +315,12 @@ export function assertValidMode(mode: string): ValidMode
 ```
 
 **验收条件**：
-- 通过 `tsc --noEmit`
-- 单元测试覆盖 7 个合法值 + 非法值（路径遍历）
-- 所有状态文件路径构建调用此函数
+
+* 通过 `tsc --noEmit`
+
+* 单元测试覆盖 7 个合法值 + 非法值（路径遍历）
+
+* 所有状态文件路径构建调用此函数
 
 ---
 
@@ -283,11 +331,16 @@ export function assertValidMode(mode: string): ValidMode
 **产出文件**：`docs/standards/user-guide.md`（与 T-08b 合并）
 
 **内容要求**：
-- 3 层决策树（第一层：5 个用户意图分支）
-- 意图关键词 → skill 名称对照表
-- 每个 skill 附示例命令（至少 1 条）
-- autopilot vs ultrapilot 互斥说明
-- 歧义输入处理规则
+
+* 3 层决策树（第一层：5 个用户意图分支）
+
+* 意图关键词 → skill 名称对照表
+
+* 每个 skill 附示例命令（至少 1 条）
+
+* autopilot vs ultrapilot 互斥说明
+
+* 歧义输入处理规则
 
 **验收条件**：决策树覆盖 5 个意图分支，关键词对照表可直接使用
 
@@ -300,9 +353,12 @@ export function assertValidMode(mode: string): ValidMode
 **产出文件**：`docs/standards/user-guide.md`（追加到 T-08a 产出）
 
 **内容要求**：
-- 四个路由选项：直接处理 / skill / agent / MCP 工具
-- 各 agent 角色适用场景边界
-- 系统反馈标准化格式（进度/成功/错误/等待四种）
+
+* 四个路由选项：直接处理 / skill / agent / MCP 工具
+
+* 各 agent 角色适用场景边界
+
+* 系统反馈标准化格式（进度/成功/错误/等待四种）
 
 **验收条件**：四个路由选项有明确边界，系统反馈格式有可复用模板
 
@@ -339,15 +395,19 @@ export function assertValidMode(mode: string): ValidMode
 **产出文件**：`docs/standards/contribution-guide.md`
 
 **内容要求**：
-- 贡献者旅程（3 步流程）
-- 必须项检查清单（5 条，CI 自动验证）：
+
+* 贡献者旅程（3 步流程）
+
+* 必须项检查清单（5 条，CI 自动验证）：
   1. 触发词已在 CLAUDE.md 中注册
   2. 有至少 1 个测试用例
   3. 版本兼容性已声明
   4. 使用了对应标准模板
   5. Impact Scope 已在 manifest.md 中声明
-- CI 门禁说明
-- 规范版本化策略
+
+* CI 门禁说明
+
+* 规范版本化策略
 
 **验收条件**：必须项恰好 5 条，CI 门禁说明可操作
 
@@ -358,14 +418,20 @@ export function assertValidMode(mode: string): ValidMode
 **依赖**：T-10 完成
 
 **产出文件**：
-- `docs/standards/templates/skill-template.md`
-- `docs/standards/templates/agent-template.md`
-- `docs/standards/templates/hook-template.md`
+
+* `docs/standards/templates/skill-template.md`
+
+* `docs/standards/templates/agent-template.md`
+
+* `docs/standards/templates/hook-template.md`
 
 **内容要求**：
-- Skill 模板：触发词列表、约束条件、输出格式、测试用例（≥2）、版本兼容性声明
-- Agent 模板：角色定义、工具权限列表、输入契约、输出契约、错误处理策略
-- Hook 模板：HookType 声明、必需字段、可选字段、失败降级策略
+
+* Skill 模板：触发词列表、约束条件、输出格式、测试用例（≥2）、版本兼容性声明
+
+* Agent 模板：角色定义、工具权限列表、输入契约、输出契约、错误处理策略
+
+* Hook 模板：HookType 声明、必需字段、可选字段、失败降级策略
 
 **验收条件**：3 个模板文件存在，每个有完整占位符，可直接复制使用
 
@@ -418,7 +484,7 @@ export function assertValidMode(mode: string): ValidMode
 ## 4. 执行阶段映射
 
 | 阶段 | 任务 | 可并行 | 预计工时 |
-|------|------|--------|---------|
+| ------ | ------ | -------- | --------- |
 | 阶段 0（前置审计） | T-01a、T-01b | 是 | ~8h |
 | 阶段 1（P0 规范） | T-02、T-03a、T-03b、T-04a、T-04b、T-05、T-06、T-07、T-08a、T-08b | 部分并行 | ~24h |
 | 阶段 2（P1） | T-09、T-10 | T-09 可与 T-10 并行 | ~6h |
@@ -432,7 +498,7 @@ export function assertValidMode(mode: string): ValidMode
 ## 5. 验收标准追溯矩阵
 
 | AC 编号 | 验收项 | 覆盖任务 |
-|---------|--------|---------|
+| --------- | -------- | --------- |
 | AC-01 | P0 规范覆盖已知 BUG 场景 | T-03a、T-03b、T-04a、T-04b、T-05、T-06 |
 | AC-02 | 新用户首次选出正确 skill 的时间 | T-08a、T-08b |
 | AC-03 | 新增 skill 检查清单覆盖率 | T-10、T-14 |

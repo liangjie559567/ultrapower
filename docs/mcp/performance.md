@@ -5,7 +5,7 @@
 ### Tool Latency
 
 | Tool | Cold Start | Warm | Notes |
-|------|-----------|------|-------|
+| ------ | ----------- | ------ | ------- |
 | `lsp_hover` | 150ms | 20ms | LSP server cached |
 | `lsp_diagnostics` | 300ms | 50ms | File-level |
 | `lsp_diagnostics_directory` | 2s | 500ms | Directory scan |
@@ -17,15 +17,18 @@
 
 ### Throughput
 
-- **LSP tools**: 50 ops/sec (per language server)
-- **AST tools**: 20 ops/sec (CPU-bound)
-- **State tools**: 200 ops/sec (I/O-bound)
-- **AI providers**: 1-2 ops/min (rate limited)
+* **LSP tools**: 50 ops/sec (per language server)
+
+* **AST tools**: 20 ops/sec (CPU-bound)
+
+* **State tools**: 200 ops/sec (I/O-bound)
+
+* **AI providers**: 1-2 ops/min (rate limited)
 
 ### Memory Usage
 
 | Server | Idle | Active | Peak |
-|--------|------|--------|------|
+| -------- | ------ | -------- | ------ |
 | OMC Tools | 50MB | 100MB | 200MB |
 | Codex | 30MB | 50MB | 100MB |
 | Gemini | 30MB | 80MB | 150MB |
@@ -275,11 +278,15 @@ Set memory/CPU caps:
 
 ### Metrics to Track
 
-- Tool call latency (p50, p95, p99)
-- Error rate by tool
-- Memory usage over time
-- Active connections
-- Queue depth
+* Tool call latency (p50, p95, p99)
+
+* Error rate by tool
+
+* Memory usage over time
+
+* Active connections
+
+* Queue depth
 
 ### Alerting
 
@@ -295,6 +302,8 @@ if (avgLatency > 5000) {
 
 ## Next Steps
 
-- [Overview](./overview.md) - Architecture
-- [Server Guide](./server-guide.md) - Build servers
-- [Client Guide](./client-guide.md) - Use tools
+* [Overview](./overview.md) - Architecture
+
+* [Server Guide](./server-guide.md) - Build servers
+
+* [Client Guide](./client-guide.md) - Use tools

@@ -22,27 +22,27 @@
    package.json: 5.5.14
    ✓ 版本正确
 
-2. 验证构建...
+1. 验证构建...
    ✓ dist/ 存在
    ✓ dist/index.js 存在
 
-3. 验证 plugin.json...
+1. 验证 plugin.json...
    ✓ plugin.json 格式正确
 
-4. 验证组件数量...
+1. 验证组件数量...
    Agents: 50
    Skills: 71
    ✓ 组件数量正确
 
-5. 验证 hooks.json...
+1. 验证 hooks.json...
    Hook 事件类型: 14
    ✓ hooks.json 正确
 
-6. 验证 templates/hooks/...
+1. 验证 templates/hooks/...
    Hook 文件: 17
    ✓ templates/hooks/ 完整
 
-7. 验证 npm pack...
+1. 验证 npm pack...
    打包文件数: 3523
    ✓ npm pack 正确
 
@@ -55,44 +55,65 @@
 ## 验证覆盖范围
 
 ### 1. 版本一致性
-- ✅ package.json: 5.5.14
-- ✅ plugin.json: 5.5.14
-- ✅ marketplace.json: 5.5.14
+
+* ✅ package.json: 5.5.14
+
+* ✅ plugin.json: 5.5.14
+
+* ✅ marketplace.json: 5.5.14
 
 ### 2. 构建完整性
-- ✅ TypeScript 编译成功
-- ✅ dist/ 目录完整
-- ✅ bridge/ 服务器已打包
+
+* ✅ TypeScript 编译成功
+
+* ✅ dist/ 目录完整
+
+* ✅ bridge/ 服务器已打包
 
 ### 3. 插件结构
-- ✅ plugin.json 无 hooks/agents 字段
-- ✅ 50 个 agents
-- ✅ 71 个 skills
-- ✅ 14 个 hook 事件类型
-- ✅ 17 个 hook 实现文件
+
+* ✅ plugin.json 无 hooks/agents 字段
+
+* ✅ 50 个 agents
+
+* ✅ 71 个 skills
+
+* ✅ 14 个 hook 事件类型
+
+* ✅ 17 个 hook 实现文件
 
 ### 4. 打包验证
-- ✅ 3523 个文件
-- ✅ .claude-plugin/ 包含
-- ✅ templates/hooks/ 包含
-- ✅ hooks/hooks.json 包含
+
+* ✅ 3523 个文件
+
+* ✅ .claude-plugin/ 包含
+
+* ✅ templates/hooks/ 包含
+
+* ✅ hooks/hooks.json 包含
 
 ### 5. postinstall 验证
-- ✅ HUD wrapper 已创建
-- ✅ settings.json 已配置
-- ✅ plugin.json 已重建
-- ✅ npm-cache 版本已修复
+
+* ✅ HUD wrapper 已创建
+
+* ✅ settings.json 已配置
+
+* ✅ plugin.json 已重建
+
+* ✅ npm-cache 版本已修复
 
 ---
 
 ## 用户升级路径
 
 ### 推荐方式：插件市场
+
 ```
 /plugin update ultrapower
 ```
 
 ### 备选方式：npm 全局
+
 ```bash
 npm install -g @liangjie559567/ultrapower@latest
 ```

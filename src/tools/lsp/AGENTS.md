@@ -8,16 +8,21 @@
 ## 用途
 
 此目录实现了 LSP 客户端，使 agent 能够：
-- 连接到语言服务器（TypeScript、Python、Rust、Go 等）
-- 获取类型信息、文档和签名
-- 查找定义、引用和符号
-- 执行重构操作（重命名、代码操作）
-- 收集诊断（错误、警告）
+
+* 连接到语言服务器（TypeScript、Python、Rust、Go 等）
+
+* 获取类型信息、文档和签名
+
+* 查找定义、引用和符号
+
+* 执行重构操作（重命名、代码操作）
+
+* 收集诊断（错误、警告）
 
 ## 关键文件
 
 | 文件 | 描述 |
-|------|------|
+| ------ | ------ |
 | `index.ts` | 模块导出 - 重新导出客户端、服务器、工具函数 |
 | `client.ts` | `LspClient` 类 - 通过 stdio 的 JSON-RPC 2.0 通信 |
 | `servers.ts` | `LSP_SERVERS` 配置 - 10 个语言服务器定义 |
@@ -94,21 +99,26 @@ if (notification.method === 'textDocument/publishDiagnostics') {
 
 LSP 测试需要安装语言服务器：
 ```bash
+
 # 安装 TypeScript 服务器
+
 npm i -g typescript-language-server typescript
 
 # 运行测试
+
 npm test -- --grep "lsp"
 ```
 
 ## 依赖
 
 ### 内部
-- 无
+
+* 无
 
 ### 外部
+
 | 包 | 用途 |
-|----|------|
+| ---- | ------ |
 | `vscode-languageserver-protocol` | LSP 类型定义 |
 | `child_process` | 生成语言服务器进程 |
 | `fs`, `path` | 文件操作 |
@@ -116,7 +126,7 @@ npm test -- --grep "lsp"
 ## 支持的语言服务器
 
 | 语言 | 服务器 | 命令 | 扩展名 |
-|------|--------|------|--------|
+| ------ | -------- | ------ | -------- |
 | TypeScript/JS | typescript-language-server | `typescript-language-server` | .ts, .tsx, .js, .jsx |
 | Python | pylsp | `pylsp` | .py, .pyw |
 | Rust | rust-analyzer | `rust-analyzer` | .rs |

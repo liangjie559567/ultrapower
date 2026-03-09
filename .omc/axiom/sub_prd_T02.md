@@ -28,46 +28,46 @@ blocks: [T-08]
    - 验证 installPath 未被修改
    - 验证 atomicWriteJsonSync 被调用一次
 
-2. 文件不存在：返回 { success: true, skipped: true }
+1. 文件不存在：返回 { success: true, skipped: true }
    - 不调用 atomicWriteJsonSync
 
-3. key 不存在：返回 { success: false, errors: ['Entry not found'] }
+1. key 不存在：返回 { success: false, errors: ['Entry not found'] }
    - 不调用 atomicWriteJsonSync
 
-4. 幂等性：连续调用两次，第二次 previousVersion === newVersion
+1. 幂等性：连续调用两次，第二次 previousVersion === newVersion
    - 文件内容不变（version 相同时仍写入，lastUpdated 更新）
 
-5. skipIfProjectScoped=true：返回 { success: true, skipped: true }
+1. skipIfProjectScoped=true：返回 { success: true, skipped: true }
    - 不读取文件，不调用 atomicWriteJsonSync
 
-6. 不匹配 fork key：registry 中有 "ultrapower-fork@someuser"
+1. 不匹配 fork key：registry 中有 "ultrapower-fork@someuser"
    - 不更新该条目，返回 { success: false, errors: ['Entry not found'] }
 
-7. atomicWriteJsonSync 抛出异常：返回 { success: false, errors: [...] }
+1. atomicWriteJsonSync 抛出异常：返回 { success: false, errors: [...] }
 ```
 
 ### checkVersionConsistency
 
 ```
-8. 三源一致：返回 { consistent: true, discrepancies: [] }
+1. 三源一致：返回 { consistent: true, discrepancies: [] }
 
-9. registryVersion 落后：
+1. registryVersion 落后：
    - discrepancies 包含描述
    - fixCommand 非空
 
-10. versionMetadataVersion 为 null（文件不存在）：
+1. versionMetadataVersion 为 null（文件不存在）：
     - consistent: false
     - versionMetadataVersion: null
 
-11. isUpdating: true 时：
+1. isUpdating: true 时：
     - 跳过漂移检测，返回 { isUpdating: true }
 ```
 
 ### getInstalledPluginEntry（内部函数，通过 syncPluginRegistry 间接测试）
 
 ```
-12. 多条目数组：返回第 0 项
-13. 空数组：返回 null
+1. 多条目数组：返回第 0 项
+2. 空数组：返回 null
 ```
 
 ## Mock 策略
@@ -88,6 +88,8 @@ vi.mock('fs', async (importOriginal) => {
 
 ## 验收标准
 
-- [ ] 所有 13 个测试用例通过
-- [ ] 覆盖率：`plugin-registry.ts` 行覆盖率 ≥ 90%
-- [ ] `npm test` 无新增失败
+* [ ] 所有 13 个测试用例通过
+
+* [ ] 覆盖率：`plugin-registry.ts` 行覆盖率 ≥ 90%
+
+* [ ] `npm test` 无新增失败

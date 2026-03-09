@@ -27,8 +27,8 @@ const child = spawn('node', ['-e', daemonScript], { ... });
 ### 代码注入风险矩阵
 
 | 风险点 | 触发条件 | 影响 |
-|--------|---------|------|
-| 反引号注入 | `cfg` 中任何字段含反引号（ ` ）| 破坏模板字符串语法，导致语法错误或代码执行异常 |
+| -------- | --------- | ------ |
+| 反引号注入 | `cfg` 中任何字段含反引号（ ` ） | 破坏模板字符串语法，导致语法错误或代码执行异常 |
 | 换行符注入 | `cfg.stateFilePath` 含 `\n` | `-e` 参数被 shell 解析时可能截断脚本 |
 | 引号注入 | `cfg.logFilePath` 含单/双引号 | JSON.stringify 虽会转义引号，但与模板字符串边界组合可能产生歧义 |
 | Unicode 注入 | 路径含特殊 Unicode 字符 | 某些平台的 `spawn` 参数传递可能产生编码问题 |
@@ -49,7 +49,7 @@ const child = spawn('node', ['-e', daemonScript], { ... });
 ### 不可变约束
 
 | 约束 | 来源 | 原因 |
-|------|------|------|
+| ------ | ------ | ------ |
 | `stdio: 'ignore'` 必须保持 | fire-and-forget daemon 设计 | 父进程 `child.unref()` 后立即退出，stdin/stdout pipe 会阻止进程独立运行 |
 | 不使用环境变量直接传 config | 安全 + 兼容性 | Windows 环境块上限约 32KB；`/proc/*/environ` 暴露敏感数据 |
 | 不使用 stdin 方案 | `stdio: 'ignore'` 冲突 | `stdio: 'ignore'` 将 stdin 设为 `/dev/null`，子进程无法从 stdin 读取 |
@@ -59,8 +59,9 @@ const child = spawn('node', ['-e', daemonScript], { ... });
 
 T-1g 决定子进程是否继续使用 `-e` 内联脚本模式还是改用独立 `.js` 文件。本任务（T-1h）在 T-1g 基础上处理 config 传递问题：
 
-- **如果 T-1g 保留 `-e` 模式：** T-1h 修改 daemonScript，使其从临时文件读取 config 而非内联 JSON
-- **如果 T-1g 改用文件模式：** T-1h 同样在文件中添加从临时文件读取 config 的逻辑
+* **如果 T-1g 保留 `-e` 模式：** T-1h 修改 daemonScript，使其从临时文件读取 config 而非内联 JSON
+
+* **如果 T-1g 改用文件模式：** T-1h 同样在文件中添加从临时文件读取 config 的逻辑
 
 两种情况的临时文件方案设计一致，差异仅在于读取代码的载体。
 
@@ -86,7 +87,7 @@ T-1g 决定子进程是否继续使用 `-e` 内联脚本模式还是改用独立
 ### 临时文件规格
 
 | 属性 | 规格 |
-|------|------|
+| ------ | ------ |
 | 目录 | `os.tmpdir()`（跨平台，尊重 TMPDIR/TMP/TEMP 环境变量） |
 | 文件名 | `omc-daemon-cfg-{uuid}.json`（UUID 由 `crypto.randomUUID()` 生成） |
 | 权限 | `0o600`（仅所有者读写，与现有 `SECURE_FILE_MODE` 一致） |
@@ -163,9 +164,12 @@ const daemonScript = `
 ```
 
 **关键设计决策：**
-- `unlinkSync` 放在 `finally` 块确保即使 `JSON.parse` 失败也会清理文件
-- 子进程中的 `try/catch` 独立于父进程——父进程已 `unref()` 无法感知子进程的清理结果
-- 使用 `unlinkSync` 而非异步 `unlink`——子进程启动阶段同步代码更简单可靠
+
+* `unlinkSync` 放在 `finally` 块确保即使 `JSON.parse` 失败也会清理文件
+
+* 子进程中的 `try/catch` 独立于父进程——父进程已 `unref()` 无法感知子进程的清理结果
+
+* 使用 `unlinkSync` 而非异步 `unlink`——子进程启动阶段同步代码更简单可靠
 
 ### env 传递
 
@@ -182,9 +186,12 @@ const child = spawn('node', ['-e', daemonScript], {
 ```
 
 **为何环境变量传路径是安全的：**
-- 路径本身不含敏感数据（仅 UUID 文件名）
-- 路径长度远小于 Windows 32KB 限制
-- `/proc/*/environ` 暴露的是路径而非 config 内容（文件已被子进程删除）
+
+* 路径本身不含敏感数据（仅 UUID 文件名）
+
+* 路径长度远小于 Windows 32KB 限制
+
+* `/proc/*/environ` 暴露的是路径而非 config 内容（文件已被子进程删除）
 
 ---
 
@@ -200,7 +207,9 @@ const child = spawn('node', ['-e', daemonScript], {
 ### 验证脚本（手动 POC）
 
 ```bash
+
 # 在项目根目录执行
+
 node --input-type=module << 'EOF'
 import { randomUUID } from 'crypto';
 import { tmpdir } from 'os';
@@ -255,8 +264,10 @@ EOF
 ### 步骤 1：添加必要 import（第 15-18 行区域）
 
 在现有 import 中添加：
-- `import { tmpdir } from 'os';`（已有 `homedir`，同模块）
-- `import { randomUUID } from 'crypto';`
+
+* `import { tmpdir } from 'os';`（已有 `homedir`，同模块）
+
+* `import { randomUUID } from 'crypto';`
 
 ### 步骤 2：添加 `writeDaemonConfigFile` 函数
 
@@ -367,10 +378,14 @@ cd /path/to/ultrapower && npx tsc --noEmit
 **前提：** 标准 `DaemonConfig`（所有字段为默认值）
 **操作：** 调用 `startDaemon()`
 **预期：**
-- 临时文件被创建于 `os.tmpdir()`，命名为 `omc-daemon-cfg-{uuid}.json`
-- daemon 进程正常启动（PID 文件存在）
-- 临时文件在子进程启动后 <5 秒内消失
-- `isDaemonRunning()` 返回 `true`
+
+* 临时文件被创建于 `os.tmpdir()`，命名为 `omc-daemon-cfg-{uuid}.json`
+
+* daemon 进程正常启动（PID 文件存在）
+
+* 临时文件在子进程启动后 <5 秒内消失
+
+* `isDaemonRunning()` 返回 `true`
 
 **验证方式：**
 ```typescript
@@ -390,18 +405,24 @@ const cfg = {
 ```
 **操作：** 调用 `startDaemon(cfg)`
 **预期：**
-- daemon 正常启动（不崩溃）
-- `pollLoop` 接收到的 config 路径与输入完全一致（无转义损失）
-- 无 JavaScript 语法错误
+
+* daemon 正常启动（不崩溃）
+
+* `pollLoop` 接收到的 config 路径与输入完全一致（无转义损失）
+
+* 无 JavaScript 语法错误
 
 ### 场景 3：tmpdir 不可写时的错误处理
 
 **前提：** 模拟 `os.tmpdir()` 不可写（测试时可临时改变 `TMPDIR` 环境变量指向只读目录）
 **操作：** 调用 `startDaemon()`
 **预期：**
-- `startDaemon()` 返回 `{ success: false, message: 'Failed to start daemon', error: '...' }`
-- 无进程被创建
-- 无残留临时文件
+
+* `startDaemon()` 返回 `{ success: false, message: 'Failed to start daemon', error: '...' }`
+
+* 无进程被创建
+
+* 无残留临时文件
 
 ### 场景 4：子进程读取临时文件后立即删除（文件不残留）
 
@@ -412,42 +433,57 @@ const cfg = {
 3. 检查 `os.tmpdir()` 中是否存在 `omc-daemon-cfg-*.json`
 
 **预期：**
-- 2 秒后不存在任何 `omc-daemon-cfg-*.json` 文件
-- `ls $(node -e "require('os').tmpdir()")'/omc-daemon-cfg-*.json'` 返回空
+
+* 2 秒后不存在任何 `omc-daemon-cfg-*.json` 文件
+
+* `ls $(node -e "require('os').tmpdir()")'/omc-daemon-cfg-*.json'` 返回空
 
 ### 场景 5：`OMC_DAEMON_CONFIG_FILE` 未设置时子进程优雅退出
 
 **前提：** 直接运行 daemonScript 但不设置 `OMC_DAEMON_CONFIG_FILE`
 **操作：** `node -e "<daemonScript>"`（不带环境变量）
 **预期：**
-- 子进程打印 `[daemon] config read failed: ...`
-- 子进程以 exit code 1 退出
-- 不崩溃（无未捕获异常）
+
+* 子进程打印 `[daemon] config read failed: ...`
+
+* 子进程以 exit code 1 退出
+
+* 不崩溃（无未捕获异常）
 
 ### 场景 6：大型 config 对象（边界测试）
 
 **前提：** config 中某个字段值为 10000 字符的字符串
 **操作：** 调用 `startDaemon(cfg)` 并验证进程启动
 **预期：**
-- 临时文件正常写入（不受命令行参数长度限制）
-- daemon 正常启动
+
+* 临时文件正常写入（不受命令行参数长度限制）
+
+* daemon 正常启动
 
 ---
 
 ## 验收标准
 
-- [ ] **AC-1：无代码注入** `cfg` 不再以任何形式嵌入到 JavaScript 源代码字符串中（`daemonScript` 中不包含 `JSON.stringify(cfg)`）
-- [ ] **AC-2：临时文件规范** 临时文件：
+* [ ] **AC-1：无代码注入** `cfg` 不再以任何形式嵌入到 JavaScript 源代码字符串中（`daemonScript` 中不包含 `JSON.stringify(cfg)`）
+
+* [ ] **AC-2：临时文件规范** 临时文件：
   - 位于 `os.tmpdir()` 目录下
   - 命名格式为 `omc-daemon-cfg-{uuid}.json`（UUID 由 `crypto.randomUUID()` 生成）
   - 权限为 `0o600`（仅所有者读写）
-- [ ] **AC-3：路径通过 env 传递** 临时文件路径通过 `OMC_DAEMON_CONFIG_FILE` 环境变量传递给子进程（不通过命令行参数或代码字符串）
-- [ ] **AC-4：原子清理** 子进程在成功读取 config 后立即调用 `unlinkSync` 删除临时文件（`finally` 块保证即使解析失败也执行清理）
-- [ ] **AC-5：fire-and-forget 不受影响** `stdio: 'ignore'` 保持不变，`child.unref()` 在 `spawn` 后立即调用，父进程可正常退出
-- [ ] **AC-6：spawn 失败时清理** 若 `spawn` 抛出异常，catch 块中执行临时文件清理（无残留）
-- [ ] **AC-7：TypeScript 零错误** `npx tsc --noEmit` 在修改后返回零错误
-- [ ] **AC-8：特殊字符兼容** 含反引号、换行符、单/双引号的路径经临时文件传递后，`pollLoop` 接收到的值与原始值完全一致
-- [ ] **AC-9：POC 验证通过** 手动运行 POC 验证脚本，所有输出项均为 `true`
+
+* [ ] **AC-3：路径通过 env 传递** 临时文件路径通过 `OMC_DAEMON_CONFIG_FILE` 环境变量传递给子进程（不通过命令行参数或代码字符串）
+
+* [ ] **AC-4：原子清理** 子进程在成功读取 config 后立即调用 `unlinkSync` 删除临时文件（`finally` 块保证即使解析失败也执行清理）
+
+* [ ] **AC-5：fire-and-forget 不受影响** `stdio: 'ignore'` 保持不变，`child.unref()` 在 `spawn` 后立即调用，父进程可正常退出
+
+* [ ] **AC-6：spawn 失败时清理** 若 `spawn` 抛出异常，catch 块中执行临时文件清理（无残留）
+
+* [ ] **AC-7：TypeScript 零错误** `npx tsc --noEmit` 在修改后返回零错误
+
+* [ ] **AC-8：特殊字符兼容** 含反引号、换行符、单/双引号的路径经临时文件传递后，`pollLoop` 接收到的值与原始值完全一致
+
+* [ ] **AC-9：POC 验证通过** 手动运行 POC 验证脚本，所有输出项均为 `true`
 
 ---
 

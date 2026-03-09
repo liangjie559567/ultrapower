@@ -105,17 +105,21 @@ export function assertValidMode(mode: unknown): ValidMode
 `ralplan` 通过 Zod enum 校验（`STATE_TOOL_MODES` 中包含），但不在 `assertValidMode` 的 `VALID_MODES` 白名单中。
 
 **分析**：
-- Zod enum 在 MCP 框架层于 `handler` 被调用前执行，非法枚举值已被 MCP 框架拒绝
-- `assertValidMode()` 的目的是防止运行时路径拼接漏洞
-- `ralplan` 是经过枚举声明的合法值，不构成路径遍历风险
-- 因此：对 `ralplan` 使用 `assertValidMode()` 会导致合法请求被拒绝（功能回归）
+
+* Zod enum 在 MCP 框架层于 `handler` 被调用前执行，非法枚举值已被 MCP 框架拒绝
+
+* `assertValidMode()` 的目的是防止运行时路径拼接漏洞
+
+* `ralplan` 是经过枚举声明的合法值，不构成路径遍历风险
+
+* 因此：对 `ralplan` 使用 `assertValidMode()` 会导致合法请求被拒绝（功能回归）
 
 **解决方案**：使用 `validateMode()` 而非 `assertValidMode()`，对 `ralplan` 额外白名单：
 
 ```
 // 伪代码
 function isValidStatetoolMode(mode: string): boolean {
-  return validateMode(mode) || mode === 'ralplan'
+  return validateMode(mode) | | mode === 'ralplan'
 }
 
 // handler 入口
@@ -173,7 +177,7 @@ import { assertValidMode } from '../lib/validateMode.js';
 ### 4.3 代码修改位置（精确行号）
 
 | 修改类型 | 文件 | 位置 | 说明 |
-|--------|------|------|------|
+| -------- | ------ | ------ | ------ |
 | 新增 import | `src/tools/state-tools.ts` | 第 8-30 行 import 区块末尾 | 添加 `assertValidMode` 导入 |
 | 新增校验块 | `src/tools/state-tools.ts` | `stateReadTool.handler`，第 75-76 行之间 | try 块内第一行，解构赋值后 |
 | 新增校验块 | `src/tools/state-tools.ts` | `stateWriteTool.handler`，第 253-255 行之间 | try 块内第一行，解构赋值后 |
@@ -256,20 +260,27 @@ describe('路径遍历防护（P0 安全回归）', () => {
 ### 5.2 回归测试确认（现有测试全部通过要求）
 
 在测试套件执行后，以下现有测试组不得出现 FAIL：
-- `describe('state_read')` — 所有用例
-- `describe('state_write')` — 所有用例
-- `describe('state_clear')` — 所有用例
-- `describe('state_list_active')` — 所有用例
-- `describe('state_get_status')` — 所有用例
-- `describe('session_id parameter')` — 所有用例
-- `describe('session-scoped behavior')` — 所有用例
+
+* `describe('state_read')` — 所有用例
+
+* `describe('state_write')` — 所有用例
+
+* `describe('state_clear')` — 所有用例
+
+* `describe('state_list_active')` — 所有用例
+
+* `describe('state_get_status')` — 所有用例
+
+* `describe('session_id parameter')` — 所有用例
+
+* `describe('session-scoped behavior')` — 所有用例
 
 ---
 
 ## 6. 边界情况处理
 
 | 场景 | 期望行为 | 理由 |
-|------|--------|------|
+| ------ | -------- | ------ |
 | `mode = '../../etc/passwd'` | isError: true，错误文本含规范前缀 | 路径遍历典型载荷 |
 | `mode = ''`（空字符串） | isError: true | validateMode 返回 false |
 | `mode = null`（TypeScript 绕过） | isError: true | assertValidMode 处理非字符串 |
@@ -325,10 +336,13 @@ Feature: state-manager 外部接口层路径遍历防护
 
 以下内容不在本任务修改范围内：
 
-- `src/features/state-manager/index.ts` 中的 `getStatePath(name, location)` — 签名和实现均不变
-- `src/lib/validateMode.ts` — `VALID_MODES`、`validateMode`、`assertValidMode` 均不变
-- `src/tools/state-tools.ts` 中的 `getStatePath(mode, root)` 本地辅助函数（第 50-56 行）— 不变
-- `stateClearTool`、`stateListActiveTool`、`stateGetStatusTool` — 本次不修改（风险评估较低，mode 参数经 Zod 枚举校验后路径构造均经过 registry 查找间接保护）
+* `src/features/state-manager/index.ts` 中的 `getStatePath(name, location)` — 签名和实现均不变
+
+* `src/lib/validateMode.ts` — `VALID_MODES`、`validateMode`、`assertValidMode` 均不变
+
+* `src/tools/state-tools.ts` 中的 `getStatePath(mode, root)` 本地辅助函数（第 50-56 行）— 不变
+
+* `stateClearTool`、`stateListActiveTool`、`stateGetStatusTool` — 本次不修改（风险评估较低，mode 参数经 Zod 枚举校验后路径构造均经过 registry 查找间接保护）
 
 ---
 
@@ -336,12 +350,20 @@ Feature: state-manager 外部接口层路径遍历防护
 
 以下条件全部满足时，可标记任务为完成：
 
-- [ ] `src/tools/state-tools.ts` 顶部 import 中包含 `assertValidMode`
-- [ ] `stateReadTool.handler` 的 `try` 块内，`validateWorkingDirectory` 调用之前，存在 mode 校验逻辑
-- [ ] `stateWriteTool.handler` 的 `try` 块内，`validateWorkingDirectory` 调用之前，存在 mode 校验逻辑
-- [ ] 校验失败时返回格式为 `{ content: [{ text: '[ultrapower] 错误：无效的状态模式：...' }], isError: true }`
-- [ ] `src/tools/__tests__/state-tools.test.ts` 中新增至少 2 个路径遍历防护测试用例
-- [ ] 路径遍历防护测试全部通过（`../../etc/passwd`、空字符串等载荷）
-- [ ] `ralplan` 模式不被新增校验误拦（零回归）
-- [ ] 现有所有 state-tools 测试（共 15+ 个用例）全部通过
-- [ ] `getStatePath()` 函数签名和内部逻辑未被修改
+* [ ] `src/tools/state-tools.ts` 顶部 import 中包含 `assertValidMode`
+
+* [ ] `stateReadTool.handler` 的 `try` 块内，`validateWorkingDirectory` 调用之前，存在 mode 校验逻辑
+
+* [ ] `stateWriteTool.handler` 的 `try` 块内，`validateWorkingDirectory` 调用之前，存在 mode 校验逻辑
+
+* [ ] 校验失败时返回格式为 `{ content: [{ text: '[ultrapower] 错误：无效的状态模式：...' }], isError: true }`
+
+* [ ] `src/tools/__tests__/state-tools.test.ts` 中新增至少 2 个路径遍历防护测试用例
+
+* [ ] 路径遍历防护测试全部通过（`../../etc/passwd`、空字符串等载荷）
+
+* [ ] `ralplan` 模式不被新增校验误拦（零回归）
+
+* [ ] 现有所有 state-tools 测试（共 15+ 个用例）全部通过
+
+* [ ] `getStatePath()` 函数签名和内部逻辑未被修改

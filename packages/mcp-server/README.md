@@ -42,17 +42,23 @@ Create `.cursor/mcp.json` in your project:
 
 ## Available Tools (32)
 
-- **LSP Tools (12)**: Code navigation, diagnostics, refactoring
-- **AST Tools (2)**: Structural pattern matching and replacement
-- **Python REPL (1)**: Persistent data analysis environment
-- **Notepad Tools (6)**: Session memory management
-- **State Tools (5)**: Mode state management
-- **Project Memory Tools (4)**: Project-level persistent memory
-- **Trace Tools (2)**: Agent flow trace analysis
+* **LSP Tools (12)**: Code navigation, diagnostics, refactoring
+
+* **AST Tools (2)**: Structural pattern matching and replacement
+
+* **Python REPL (1)**: Persistent data analysis environment
+
+* **Notepad Tools (6)**: Session memory management
+
+* **State Tools (5)**: Mode state management
+
+* **Project Memory Tools (4)**: Project-level persistent memory
+
+* **Trace Tools (2)**: Agent flow trace analysis
 
 ## Documentation
 
-Full documentation: https://github.com/liangjie559567/ultrapower
+Full documentation: <https://github.com/liangjie559567/ultrapower>
 
 ## License
 

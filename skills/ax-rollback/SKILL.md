@@ -24,8 +24,10 @@ git tag -l "checkpoint-*" --sort=-version:refname | head -10
 
 询问用户：
 "检测到以下检查点：
-- [checkpoint-xxx] - [时间]
-- [checkpoint-yyy] - [时间]
+
+* [checkpoint-xxx] - [时间]
+
+* [checkpoint-yyy] - [时间]
 
 确认回滚到 [最近检查点]？这将撤销该检查点之后的所有变更。(Yes/No)"
 
@@ -34,10 +36,13 @@ git tag -l "checkpoint-*" --sort=-version:refname | head -10
 用户确认后：
 
 ```bash
+
 # 回滚代码
+
 git reset --hard [checkpoint-tag]
 
 # 更新状态
+
 ```
 
 调用 axiom-context-manager：
@@ -57,6 +62,8 @@ tsc --noEmit && npm run build
 
 ## 安全规则
 
-- 回滚前必须用户确认
-- 只能回滚到 `checkpoint-*` 标签，不能回滚到任意 commit
-- 回滚后自动触发 CI 验证
+* 回滚前必须用户确认
+
+* 只能回滚到 `checkpoint-*` 标签，不能回滚到任意 commit
+
+* 回滚后自动触发 CI 验证

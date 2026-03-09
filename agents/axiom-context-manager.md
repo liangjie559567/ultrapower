@@ -41,7 +41,7 @@ model: sonnet
     ### 6. record_error（记录错误）
     - 输入：error_type、root_cause、fix_solution、scope
     - 追加到 `project_decisions.md` 的 `## 5. Known Issues`
-    - 格式：`| 日期 | 错误类型 | 根因分析 | 修复方案 | 影响范围 |`
+    - 格式：` | 日期 | 错误类型 | 根因分析 | 修复方案 | 影响范围 | `
 
     ### 7. archive_task（归档任务）
     - 输入：task_id、summary、commit_hash

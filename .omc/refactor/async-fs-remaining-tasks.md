@@ -3,24 +3,42 @@
 **最终状态**: 30 个同步 fs 错误（CCG 测试文件 + 3 个安全关键文件的合理同步使用）
 
 ## 已完成（批次 1-9）
-- ✅ src/audit/logger.ts
-- ✅ src/analytics/transcript-parser.ts
-- ✅ src/hooks/comment-checker/index.ts
-- ✅ src/hooks/empty-message-sanitizer/index.ts
-- ✅ src/features/state-manager/index.ts（双 API + 豁免）
-- ✅ src/hooks/omc-orchestrator/audit.ts
-- ✅ src/hooks/permission-handler/index.ts
-- ✅ src/hooks/learner/auto-invoke.ts
-- ✅ src/hooks/learner/queue-archiver.ts
-- ✅ src/hooks/learner/reflection-cleanup.ts
-- ✅ src/hooks/learner/reflection-archiver.ts
-- ✅ src/hooks/preemptive-compaction/index.ts
-- ✅ src/hooks/recovery/context-window.ts
-- ✅ src/hooks/session-end/index.ts（含 P0/P1 修复）
-- ✅ src/lib/path-validator.ts
-- ✅ src/monitoring/metrics-collector.ts（含 P0 修复）
-- ✅ src/monitoring/dashboard.ts（含 P0 修复）
-- ✅ src/tools/python-repl/paths.ts
+
+* ✅ src/audit/logger.ts
+
+* ✅ src/analytics/transcript-parser.ts
+
+* ✅ src/hooks/comment-checker/index.ts
+
+* ✅ src/hooks/empty-message-sanitizer/index.ts
+
+* ✅ src/features/state-manager/index.ts（双 API + 豁免）
+
+* ✅ src/hooks/omc-orchestrator/audit.ts
+
+* ✅ src/hooks/permission-handler/index.ts
+
+* ✅ src/hooks/learner/auto-invoke.ts
+
+* ✅ src/hooks/learner/queue-archiver.ts
+
+* ✅ src/hooks/learner/reflection-cleanup.ts
+
+* ✅ src/hooks/learner/reflection-archiver.ts
+
+* ✅ src/hooks/preemptive-compaction/index.ts
+
+* ✅ src/hooks/recovery/context-window.ts
+
+* ✅ src/hooks/session-end/index.ts（含 P0/P1 修复）
+
+* ✅ src/lib/path-validator.ts
+
+* ✅ src/monitoring/metrics-collector.ts（含 P0 修复）
+
+* ✅ src/monitoring/dashboard.ts（含 P0 修复）
+
+* ✅ src/tools/python-repl/paths.ts
 
 ## 代码审查修复
 
@@ -34,20 +52,24 @@
 ## 剩余错误分析
 
 **30 个错误分布**：
-- CCG 测试文件：大部分
-- 安全关键文件（合理保留同步）：3 个
+
+* CCG 测试文件：大部分
+
+* 安全关键文件（合理保留同步）：3 个
   - src/lib/path-validator.ts line 82：路径遍历检测（TOCTOU 防护）
   - src/tools/python-repl/paths.ts line 55：XDG_RUNTIME_DIR 安全验证
   - src/tools/python-repl/bridge-manager.ts line 101, 104：模块加载路径解析
 
 **决策**:
-- 测试文件中的同步 fs 操作不影响运行时性能
-- 安全关键路径保持同步符合最佳实践（避免 TOCTOU 竞态条件）
+
+* 测试文件中的同步 fs 操作不影响运行时性能
+
+* 安全关键路径保持同步符合最佳实践（避免 TOCTOU 竞态条件）
 
 ## 批次完成总结
 
 | 批次 | 文件数 | 错误减少 | 提交 |
-|------|--------|----------|------|
+| ------ | -------- | ---------- | ------ |
 | 1-3 | 5 | 未统计 | 多次提交 |
 | 4-5 | 7 | 未统计 | 多次提交 |
 | 6 | 3 | 70→61 (-9) | f6941720 |

@@ -8,7 +8,7 @@
 ## 通用 Agent 模式（直接适用于 ultrapower）
 
 | ID | 文件 | 描述 |
-|----|------|------|
+| ---- | ------ | ------ |
 | k-001 | k-001-global-config-pattern.md | 全局配置模式 |
 | k-002 | k-002-evolution-architecture.md | 进化引擎架构 |
 | k-003 | k-003-github-automation-fallback.md | GitHub 自动化回退策略 |
@@ -18,7 +18,7 @@
 ## Flutter/Dart 相关（项目特定，保留供参考）
 
 | ID | 文件 | 描述 |
-|----|------|------|
+| ---- | ------ | ------ |
 | k-006 | k-006-flutter-widget-lifecycle.md | Flutter Widget 生命周期 |
 | k-007 | k-007-flutter-state-management-with-stacked.md | Flutter Stacked 状态管理 |
 | k-008 | k-008-flutter-navigation-best-practices.md | Flutter 导航最佳实践 |
@@ -38,7 +38,7 @@
 ## 通用开发规范（直接适用于 ultrapower）
 
 | ID | 文件 | 描述 |
-|----|------|------|
+| ---- | ------ | ------ |
 | k-021 | k-021-git-commit-conventions.md | Git 提交规范 |
 | k-022 | k-022-code-review-checklist.md | 代码审查清单 |
 | k-023 | k-023-project-structure-convention.md | 项目结构规范 |

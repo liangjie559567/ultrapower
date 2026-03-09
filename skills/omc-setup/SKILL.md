@@ -14,7 +14,9 @@ description: 设置和配置 ultrapower（你唯一需要学习的命令）
 **关键**：在做任何其他事情之前，检查设置是否已完成。这可以防止用户在每次更新后重新运行完整的设置向导。
 
 ```bash
+
 # 检查设置是否已完成
+
 CONFIG_FILE="$HOME/.claude/.omc-config.json"
 
 if [ -f "$CONFIG_FILE" ]; then
@@ -43,17 +45,24 @@ fi
 3. **取消** - 不做任何更改退出
 
 **如果用户选择"Update CLAUDE.md only"：**
-- 检测本地（.claude/CLAUDE.md）或全局（~/.claude/CLAUDE.md）配置是否存在
-- 如果本地存在，运行步骤 2A 中的下载/合并脚本
-- 如果只有全局存在，运行步骤 2B 中的下载/合并脚本
-- 跳过所有其他步骤
-- 报告成功并退出
+
+* 检测本地（.claude/CLAUDE.md）或全局（~/.claude/CLAUDE.md）配置是否存在
+
+* 如果本地存在，运行步骤 2A 中的下载/合并脚本
+
+* 如果只有全局存在，运行步骤 2B 中的下载/合并脚本
+
+* 跳过所有其他步骤
+
+* 报告成功并退出
 
 **如果用户选择"Run full setup again"：**
-- 继续步骤 0（恢复检测）
+
+* 继续步骤 0（恢复检测）
 
 **如果用户选择"Cancel"：**
-- 不做任何更改退出
+
+* 不做任何更改退出
 
 ### Force 标志覆盖
 
@@ -64,17 +73,21 @@ fi
 **重要**：此设置过程在每个步骤后保存进度。如果中断（Ctrl+C 或连接丢失），设置可以从中断处恢复。
 
 ### 状态文件位置
-- `.omc/state/setup-state.json` - 跟踪已完成的步骤
+
+* `.omc/state/setup-state.json` - 跟踪已完成的步骤
 
 ### 恢复检测（步骤 0）
 
 在开始任何步骤之前，检查现有状态：
 
 ```bash
+
 # 检查现有设置状态
+
 STATE_FILE=".omc/state/setup-state.json"
 
 # 跨平台 ISO 日期转 epoch
+
 iso_to_epoch() {
   local iso_date="$1"
   local epoch=""
@@ -108,8 +121,8 @@ if [ -f "$STATE_FILE" ]; then
     echo "Previous setup state is more than 24 hours old. Starting fresh."
     rm -f "$STATE_FILE"
   else
-    LAST_STEP=$(jq -r ".lastCompletedStep // 0" "$STATE_FILE" 2>/dev/null || echo "0")
-    TIMESTAMP=$(jq -r .timestamp "$STATE_FILE" 2>/dev/null || echo "unknown")
+    LAST_STEP=$(jq -r ".lastCompletedStep // 0" "$STATE_FILE" 2>/dev/null | | echo "0")
+    TIMESTAMP=$(jq -r .timestamp "$STATE_FILE" 2>/dev/null | | echo "unknown")
     echo "Found previous setup session (Step $LAST_STEP completed at $TIMESTAMP)"
   fi
 fi
@@ -134,8 +147,11 @@ echo "Previous state cleared. Starting fresh setup."
 完成每个主要步骤后保存进度：
 
 ```bash
+
 # 保存设置进度（每步后调用）
+
 # 用法：save_setup_progress STEP_NUMBER
+
 save_setup_progress() {
   mkdir -p .omc/state
   cat > ".omc/state/setup-state.json" << EOF
@@ -168,10 +184,14 @@ echo "Setup completed successfully. State cleared."
 ## 模式检测
 
 检查用户调用中的标志：
-- 如果有 `--local` 标志 → 跳过预设置检查，进入本地配置（步骤 2A）
-- 如果有 `--global` 标志 → 跳过预设置检查，进入全局配置（步骤 2B）
-- 如果有 `--force` 标志 → 跳过预设置检查，运行初始设置向导（步骤 1）
-- 如果无标志 → 先运行预设置检查，如需要再运行初始设置向导（步骤 1）
+
+* 如果有 `--local` 标志 → 跳过预设置检查，进入本地配置（步骤 2A）
+
+* 如果有 `--global` 标志 → 跳过预设置检查，进入全局配置（步骤 2B）
+
+* 如果有 `--force` 标志 → 跳过预设置检查，运行初始设置向导（步骤 1）
+
+* 如果无标志 → 先运行预设置检查，如需要再运行初始设置向导（步骤 1）
 
 ## 步骤 1：初始设置向导（默认行为）
 
@@ -192,20 +212,26 @@ echo "Setup completed successfully. State cleared."
 ### 创建本地 .claude 目录
 
 ```bash
+
 # 在当前项目创建 .claude 目录
+
 mkdir -p .claude && echo ".claude directory ready"
 ```
 
 ### 下载新鲜 CLAUDE.md
 
 ```bash
+
 # 定义目标路径
+
 TARGET_PATH=".claude/CLAUDE.md"
 
 # 下载前提取旧版本
-OLD_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "none")
+
+OLD_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | | echo "none")
 
 # 备份现有文件
+
 if [ -f "$TARGET_PATH" ]; then
   BACKUP_DATE=$(date +%Y-%m-%d_%H%M%S)
   BACKUP_PATH="${TARGET_PATH}.backup.${BACKUP_DATE}"
@@ -214,9 +240,10 @@ if [ -f "$TARGET_PATH" ]; then
 fi
 
 # 下载新鲜 OMC 内容到临时文件
+
 TEMP_OMC=$(mktemp /tmp/omc-claude-XXXXXX.md)
 trap 'rm -f "$TEMP_OMC"' EXIT
-curl -fsSL "https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md" -o "$TEMP_OMC"
+curl -fsSL "<https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md"> -o "$TEMP_OMC"
 
 if [ ! -s "$TEMP_OMC" ]; then
   echo "ERROR: Failed to download CLAUDE.md. Aborting."
@@ -225,6 +252,7 @@ if [ ! -s "$TEMP_OMC" ]; then
 fi
 
 # 从下载内容中剥离现有标记（幂等性）
+
 if grep -q '<!-- OMC:START -->' "$TEMP_OMC"; then
   # 提取标记之间的内容
   sed -n '/<!-- OMC:START -->/,/<!-- OMC:END -->/{//!p}' "$TEMP_OMC" > "${TEMP_OMC}.clean"
@@ -273,7 +301,8 @@ else
 fi
 
 # 提取新版本并报告
-NEW_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+
+NEW_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | | echo "unknown")
 if [ "$OLD_VERSION" = "none" ]; then
   echo "Installed CLAUDE.md: $NEW_VERSION"
 elif [ "$OLD_VERSION" = "$NEW_VERSION" ]; then
@@ -291,12 +320,12 @@ fi
 
 **备用方案**（如果 curl 失败）：
 告知用户手动从以下地址下载：
-https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md
+<https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md>
 
 ### 验证插件安装
 
 ```bash
-grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: claude /install-plugin ultrapower"
+grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" | | echo "Plugin NOT found - run: claude /install-plugin ultrapower"
 ```
 
 ### 确认本地配置成功
@@ -304,7 +333,9 @@ grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" || echo "
 完成本地配置后，保存进度并报告：
 
 ```bash
+
 # 保存进度 - 步骤 2 完成（本地配置）
+
 mkdir -p .omc/state
 cat > ".omc/state/setup-state.json" << EOF
 {
@@ -316,12 +347,18 @@ EOF
 ```
 
 **OMC 项目配置完成**
-- CLAUDE.md：已从 GitHub 更新最新配置到 ./.claude/CLAUDE.md
-- 备份：之前的 CLAUDE.md 已备份到 `.claude/CLAUDE.md.backup.YYYY-MM-DD`（如存在）
-- 范围：**项目** - 仅适用于此项目
-- Hooks：由插件提供（无需手动安装）
-- Agents：28+ 可用（基础 + 分层变体）
-- 模型路由：基于任务复杂度的 Haiku/Sonnet/Opus
+
+* CLAUDE.md：已从 GitHub 更新最新配置到 ./.claude/CLAUDE.md
+
+* 备份：之前的 CLAUDE.md 已备份到 `.claude/CLAUDE.md.backup.YYYY-MM-DD`（如存在）
+
+* 范围：**项目** - 仅适用于此项目
+
+* Hooks：由插件提供（无需手动安装）
+
+* Agents：28+ 可用（基础 + 分层变体）
+
+* 模型路由：基于任务复杂度的 Haiku/Sonnet/Opus
 
 **注意**：此配置是项目特定的，不会影响其他项目或全局设置。
 
@@ -347,7 +384,7 @@ HUD 在 Claude Code 状态栏中显示实时状态。**调用 hud skill** 进行
 HUD 设置完成后，保存进度：
 ```bash
 mkdir -p .omc/state
-CONFIG_TYPE=$(cat ".omc/state/setup-state.json" 2>/dev/null | grep -oE '"configType":\s*"[^"]+"' | cut -d'"' -f4 || echo "unknown")
+CONFIG_TYPE=$(cat ".omc/state/setup-state.json" 2>/dev/null | grep -oE '"configType":\s*"[^"]+"' | cut -d'"' -f4 | | echo "unknown")
 cat > ".omc/state/setup-state.json" << EOF
 {
   "lastCompletedStep": 3,
@@ -362,7 +399,7 @@ EOF
 清除旧的缓存插件版本以避免冲突：
 
 ```bash
-node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length<=1){console.log('Cache is clean');process.exit()}v.slice(0,-1).forEach(x=>{f.rmSync(p.join(b,x),{recursive:true,force:true})});console.log('Cleared',v.length-1,'stale cache version(s)')}catch{console.log('No cache directory found (normal for new installs)')}"
+node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=process.env.CLAUDE_CONFIG_DIR | |p.join(h,'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length<=1){console.log('Cache is clean');process.exit()}v.slice(0,-1).forEach(x=>{f.rmSync(p.join(b,x),{recursive:true,force:true})});console.log('Cleared',v.length-1,'stale cache version(s)')}catch{console.log('No cache directory found (normal for new installs)')}"
 ```
 
 ### 如果插件内容是旧版本（npm-cache 复用问题）
@@ -391,7 +428,7 @@ claude plugin install omc@ultrapower
 ```bash
 node -e "
 const p=require('path'),f=require('fs'),h=require('os').homedir();
-const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const d=process.env.CLAUDE_CONFIG_DIR | |p.join(h,'.claude');
 const pluginsJson=p.join(d,'plugins','installed_plugins.json');
 if(f.existsSync(pluginsJson)===false){console.log('installed_plugins.json not found');process.exit(0);}
 let data;
@@ -399,15 +436,15 @@ try{data=JSON.parse(f.readFileSync(pluginsJson,'utf-8'));}catch(e){console.log('
 const key=data.ultrapower?'ultrapower':'@liangjie559567/ultrapower';
 const entry=data[key];
 if(entry==null){console.log('ultrapower not in installed_plugins.json');process.exit(0);}
-const installPath=entry.installPath||'';
-const isNpmCache=installPath.includes('npm-cache')||installPath.includes('plugins/cache');
+const installPath=entry.installPath | |'';
+const isNpmCache=installPath.includes('npm-cache') | |installPath.includes('plugins/cache');
 if(isNpmCache===false){console.log('installPath OK (local dev):',installPath);process.exit(0);}
 const cacheBase=p.join(d,'plugins','cache','omc','ultrapower');
 let bestPath='';
 try{const vs=f.readdirSync(cacheBase).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(vs.length)bestPath=p.join(cacheBase,vs[vs.length-1]);}catch{}
 if(bestPath===''){console.log('No local cache path found, skipping');process.exit(0);}
-let newVersion=entry.version||'';
-try{newVersion=JSON.parse(f.readFileSync(p.join(bestPath,'package.json'),'utf-8')).version||newVersion;}catch{}
+let newVersion=entry.version | |'';
+try{newVersion=JSON.parse(f.readFileSync(p.join(bestPath,'package.json'),'utf-8')).version | |newVersion;}catch{}
 data[key].installPath=bestPath;data[key].version=newVersion;
 f.writeFileSync(pluginsJson,JSON.stringify(data,null,2));
 console.log('✅ installed_plugins.json synced — installPath:',bestPath,'version:',newVersion);
@@ -421,19 +458,22 @@ console.log('✅ installed_plugins.json synced — installPath:',bestPath,'versi
 如果有新版本可用，通知用户：
 
 ```bash
+
 # 检测已安装版本（跨平台）
+
 node -e "
 const p=require('path'),f=require('fs'),h=require('os').homedir();
-const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const d=process.env.CLAUDE_CONFIG_DIR | |p.join(h,'.claude');
 let v='';
 const b=p.join(d,'plugins','cache','omc','ultrapower');
 try{const vs=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(vs.length)v=vs[vs.length-1]}catch{}
-if(v==='')try{const j=JSON.parse(f.readFileSync('.omc-version.json','utf-8'));v=j.version||''}catch{}
+if(v==='')try{const j=JSON.parse(f.readFileSync('.omc-version.json','utf-8'));v=j.version | |''}catch{}
 if(v==='')for(const c of['.claude/CLAUDE.md',p.join(d,'CLAUDE.md')]){try{const m=f.readFileSync(c,'utf-8').match(/^# ultrapower.*?(v?\d+\.\d+\.\d+)/m);if(m){v=m[1].replace(/^v/,'');break}}catch{}}
-console.log('Installed:',v||'(not found)');
+console.log('Installed:',v | |'(not found)');
 "
 
 # 检查 npm 最新版本
+
 LATEST_VERSION=$(npm view @liangjie559567/ultrapower version 2>/dev/null)
 
 if [ -n "$INSTALLED_VERSION" ] && [ -n "$LATEST_VERSION" ]; then
@@ -493,6 +533,7 @@ SETTINGS_FILE="$HOME/.claude/settings.json"
 mkdir -p "$(dirname "$SETTINGS_FILE")"
 
 # 读取现有配置（如果存在）
+
 if [ -f "$SETTINGS_FILE" ]; then
   EXISTING=$(cat "$SETTINGS_FILE")
 else
@@ -500,6 +541,7 @@ else
 fi
 
 # 合并权限配置（不覆盖其他现有设置）
+
 echo "$EXISTING" | jq '. + {
   "permissions": {
     "allow": [
@@ -548,8 +590,10 @@ echo "$EXISTING" | jq '. + {permissionsMode: "default", permissionsConfiguredAt:
 CLI（`omc` 命令）**不再支持**通过 npm/bun 全局安装。
 
 所有功能通过插件系统提供：
-- 使用 `/ultrapower:omc-help` 获取指导
-- 使用 `/ultrapower:omc-doctor` 进行诊断
+
+* 使用 `/ultrapower:omc-help` 获取指导
+
+* 使用 `/ultrapower:omc-doctor` 进行诊断
 
 跳过此步骤——插件提供所有功能。
 
@@ -558,8 +602,8 @@ CLI（`omc` 命令）**不再支持**通过 npm/bun 全局安装。
 首先，检测可用的任务工具：
 
 ```bash
-BD_VERSION=""; if command -v bd &>/dev/null; then BD_VERSION=$(bd --version 2>/dev/null | head -1 || echo "installed"); fi
-BR_VERSION=""; if command -v br &>/dev/null; then BR_VERSION=$(br --version 2>/dev/null | head -1 || echo "installed"); fi
+BD_VERSION=""; if command -v bd &>/dev/null; then BD_VERSION=$(bd --version 2>/dev/null | head -1 | | echo "installed"); fi
+BR_VERSION=""; if command -v br &>/dev/null; then BR_VERSION=$(br --version 2>/dev/null | head -1 | | echo "installed"); fi
 [ -n "$BD_VERSION" ] && echo "Found beads (bd): $BD_VERSION"
 [ -n "$BR_VERSION" ] && echo "Found beads-rust (br): $BR_VERSION"
 [ -z "$BD_VERSION" ] && [ -z "$BR_VERSION" ] && echo "No external task tools found. Using built-in Tasks."
@@ -595,13 +639,17 @@ echo "Task tool set to: USER_CHOICE"
 ### 下载新鲜 CLAUDE.md
 
 ```bash
+
 # 定义目标路径
+
 TARGET_PATH="$HOME/.claude/CLAUDE.md"
 
 # 下载前提取旧版本
-OLD_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "none")
+
+OLD_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | | echo "none")
 
 # 备份现有文件
+
 if [ -f "$TARGET_PATH" ]; then
   BACKUP_DATE=$(date +%Y-%m-%d_%H%M%S)
   BACKUP_PATH="${TARGET_PATH}.backup.${BACKUP_DATE}"
@@ -610,9 +658,10 @@ if [ -f "$TARGET_PATH" ]; then
 fi
 
 # 下载新鲜 OMC 内容到临时文件
+
 TEMP_OMC=$(mktemp /tmp/omc-claude-XXXXXX.md)
 trap 'rm -f "$TEMP_OMC"' EXIT
-curl -fsSL "https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md" -o "$TEMP_OMC"
+curl -fsSL "<https://raw.githubusercontent.com/liangjie559567/ultrapower/main/docs/CLAUDE.md"> -o "$TEMP_OMC"
 
 if [ ! -s "$TEMP_OMC" ]; then
   echo "ERROR: Failed to download CLAUDE.md. Aborting."
@@ -621,6 +670,7 @@ if [ ! -s "$TEMP_OMC" ]; then
 fi
 
 # 从下载内容中剥离现有标记（幂等性）
+
 if grep -q '<!-- OMC:START -->' "$TEMP_OMC"; then
   sed -n '/<!-- OMC:START -->/,/<!-- OMC:END -->/{//!p}' "$TEMP_OMC" > "${TEMP_OMC}.clean"
   mv "${TEMP_OMC}.clean" "$TEMP_OMC"
@@ -663,7 +713,7 @@ else
   rm -f "$TEMP_OMC"
 fi
 
-NEW_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+NEW_VERSION=$(grep -m1 "^# ultrapower" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | | echo "unknown")
 if [ "$OLD_VERSION" = "none" ]; then
   echo "Installed CLAUDE.md: $NEW_VERSION"
 elif [ "$OLD_VERSION" = "$NEW_VERSION" ]; then
@@ -680,7 +730,9 @@ fi
 检查旧的手动 hooks 是否存在并删除以防止重复：
 
 ```bash
+
 # 删除旧版 bash hook 脚本（现由插件系统处理）
+
 rm -f ~/.claude/hooks/keyword-detector.sh
 rm -f ~/.claude/hooks/stop-continuation.sh
 rm -f ~/.claude/hooks/persistent-mode.sh
@@ -695,7 +747,7 @@ echo "Legacy hooks cleaned"
 ### 验证插件安装
 
 ```bash
-grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: claude /install-plugin ultrapower"
+grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" | | echo "Plugin NOT found - run: claude /install-plugin ultrapower"
 ```
 
 ### 确认全局配置成功
@@ -714,12 +766,18 @@ EOF
 ```
 
 **OMC 全局配置完成**
-- CLAUDE.md：已从 GitHub 更新最新配置到 ~/.claude/CLAUDE.md
-- 备份：之前的 CLAUDE.md 已备份到 `~/.claude/CLAUDE.md.backup.YYYY-MM-DD`（如存在）
-- 范围：**全局** - 适用于所有 Claude Code session
-- Hooks：由插件提供（无需手动安装）
-- Agents：28+ 可用（基础 + 分层变体）
-- 模型路由：基于任务复杂度的 Haiku/Sonnet/Opus
+
+* CLAUDE.md：已从 GitHub 更新最新配置到 ~/.claude/CLAUDE.md
+
+* 备份：之前的 CLAUDE.md 已备份到 `~/.claude/CLAUDE.md.backup.YYYY-MM-DD`（如存在）
+
+* 范围：**全局** - 适用于所有 Claude Code session
+
+* Hooks：由插件提供（无需手动安装）
+
+* Agents：28+ 可用（基础 + 分层变体）
+
+* 模型路由：基于任务复杂度的 Haiku/Sonnet/Opus
 
 **注意**：Hooks 现在由插件系统自动管理。无需手动安装 hooks。
 
@@ -745,7 +803,7 @@ HUD 在 Claude Code 状态栏中显示实时状态。**调用 hud skill** 进行
 HUD 设置完成后，保存进度：
 ```bash
 mkdir -p .omc/state
-CONFIG_TYPE=$(cat ".omc/state/setup-state.json" 2>/dev/null | grep -oE '"configType":\s*"[^"]+"' | cut -d'"' -f4 || echo "unknown")
+CONFIG_TYPE=$(cat ".omc/state/setup-state.json" 2>/dev/null | grep -oE '"configType":\s*"[^"]+"' | cut -d'"' -f4 | | echo "unknown")
 cat > ".omc/state/setup-state.json" << EOF
 {
   "lastCompletedStep": 3,
@@ -760,7 +818,7 @@ EOF
 清除旧的缓存插件版本以避免冲突：
 
 ```bash
-node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length<=1){console.log('Cache is clean');process.exit()}v.slice(0,-1).forEach(x=>{f.rmSync(p.join(b,x),{recursive:true,force:true})});console.log('Cleared',v.length-1,'stale cache version(s)')}catch{console.log('No cache directory found (normal for new installs)')}"
+node -e "const p=require('path'),f=require('fs'),h=require('os').homedir(),d=process.env.CLAUDE_CONFIG_DIR | |p.join(h,'.claude'),b=p.join(d,'plugins','cache','omc','ultrapower');try{const v=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(v.length<=1){console.log('Cache is clean');process.exit()}v.slice(0,-1).forEach(x=>{f.rmSync(p.join(b,x),{recursive:true,force:true})});console.log('Cleared',v.length-1,'stale cache version(s)')}catch{console.log('No cache directory found (normal for new installs)')}"
 ```
 
 ### 如果插件内容是旧版本（npm-cache 复用问题）
@@ -789,7 +847,7 @@ claude plugin install omc@ultrapower
 ```bash
 node -e "
 const p=require('path'),f=require('fs'),h=require('os').homedir();
-const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const d=process.env.CLAUDE_CONFIG_DIR | |p.join(h,'.claude');
 const pluginsJson=p.join(d,'plugins','installed_plugins.json');
 if(f.existsSync(pluginsJson)===false){console.log('installed_plugins.json not found');process.exit(0);}
 let data;
@@ -797,15 +855,15 @@ try{data=JSON.parse(f.readFileSync(pluginsJson,'utf-8'));}catch(e){console.log('
 const key=data.ultrapower?'ultrapower':'@liangjie559567/ultrapower';
 const entry=data[key];
 if(entry==null){console.log('ultrapower not in installed_plugins.json');process.exit(0);}
-const installPath=entry.installPath||'';
-const isNpmCache=installPath.includes('npm-cache')||installPath.includes('plugins/cache');
+const installPath=entry.installPath | |'';
+const isNpmCache=installPath.includes('npm-cache') | |installPath.includes('plugins/cache');
 if(isNpmCache===false){console.log('installPath OK (local dev):',installPath);process.exit(0);}
 const cacheBase=p.join(d,'plugins','cache','omc','ultrapower');
 let bestPath='';
 try{const vs=f.readdirSync(cacheBase).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(vs.length)bestPath=p.join(cacheBase,vs[vs.length-1]);}catch{}
 if(bestPath===''){console.log('No local cache path found, skipping');process.exit(0);}
-let newVersion=entry.version||'';
-try{newVersion=JSON.parse(f.readFileSync(p.join(bestPath,'package.json'),'utf-8')).version||newVersion;}catch{}
+let newVersion=entry.version | |'';
+try{newVersion=JSON.parse(f.readFileSync(p.join(bestPath,'package.json'),'utf-8')).version | |newVersion;}catch{}
 data[key].installPath=bestPath;data[key].version=newVersion;
 f.writeFileSync(pluginsJson,JSON.stringify(data,null,2));
 console.log('✅ installed_plugins.json synced — installPath:',bestPath,'version:',newVersion);
@@ -821,13 +879,13 @@ console.log('✅ installed_plugins.json synced — installPath:',bestPath,'versi
 ```bash
 node -e "
 const p=require('path'),f=require('fs'),h=require('os').homedir();
-const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const d=process.env.CLAUDE_CONFIG_DIR | |p.join(h,'.claude');
 let v='';
 const b=p.join(d,'plugins','cache','omc','ultrapower');
 try{const vs=f.readdirSync(b).filter(x=>/^\d/.test(x)).sort((a,c)=>a.localeCompare(c,void 0,{numeric:true}));if(vs.length)v=vs[vs.length-1]}catch{}
-if(v==='')try{const j=JSON.parse(f.readFileSync('.omc-version.json','utf-8'));v=j.version||''}catch{}
+if(v==='')try{const j=JSON.parse(f.readFileSync('.omc-version.json','utf-8'));v=j.version | |''}catch{}
 if(v==='')for(const c of['.claude/CLAUDE.md',p.join(d,'CLAUDE.md')]){try{const m=f.readFileSync(c,'utf-8').match(/^# ultrapower.*?(v?\d+\.\d+\.\d+)/m);if(m){v=m[1].replace(/^v/,'');break}}catch{}}
-console.log('Installed:',v||'(not found)');
+console.log('Installed:',v | |'(not found)');
 "
 
 LATEST_VERSION=$(npm view @liangjie559567/ultrapower version 2>/dev/null)
@@ -873,8 +931,10 @@ echo "Default execution mode set to: USER_CHOICE"
 CLI（`omc` 命令）**不再支持**通过 npm/bun 全局安装。
 
 所有功能通过插件系统提供：
-- 使用 `/ultrapower:omc-help` 获取指导
-- 使用 `/ultrapower:omc-doctor` 进行诊断
+
+* 使用 `/ultrapower:omc-help` 获取指导
+
+* 使用 `/ultrapower:omc-doctor` 进行诊断
 
 跳过此步骤——插件提供所有功能。
 
@@ -883,8 +943,8 @@ CLI（`omc` 命令）**不再支持**通过 npm/bun 全局安装。
 首先，检测可用的任务工具：
 
 ```bash
-BD_VERSION=""; if command -v bd &>/dev/null; then BD_VERSION=$(bd --version 2>/dev/null | head -1 || echo "installed"); fi
-BR_VERSION=""; if command -v br &>/dev/null; then BR_VERSION=$(br --version 2>/dev/null | head -1 || echo "installed"); fi
+BD_VERSION=""; if command -v bd &>/dev/null; then BD_VERSION=$(bd --version 2>/dev/null | head -1 | | echo "installed"); fi
+BR_VERSION=""; if command -v br &>/dev/null; then BR_VERSION=$(br --version 2>/dev/null | head -1 | | echo "installed"); fi
 [ -n "$BD_VERSION" ] && echo "Found beads (bd): $BD_VERSION"
 [ -n "$BR_VERSION" ] && echo "Found beads-rust (br): $BR_VERSION"
 [ -z "$BD_VERSION" ] && [ -z "$BR_VERSION" ] && echo "No external task tools found. Using built-in Tasks."
@@ -916,7 +976,7 @@ echo "Task tool set to: USER_CHOICE"
 ## 步骤 4：验证插件安装
 
 ```bash
-grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: claude /install-plugin ultrapower"
+grep -q "ultrapower" ~/.claude/settings.json && echo "Plugin verified" | | echo "Plugin NOT found - run: claude /install-plugin ultrapower"
 ```
 
 ## 步骤 5：提供 MCP 服务器配置
@@ -938,7 +998,7 @@ MCP 服务器通过额外工具（网络搜索、GitHub 等）扩展 Claude Code
 
 Agent teams 是 Claude Code 的实验性功能，允许你生成 N 个协调 agent 处理共享任务列表并进行 agent 间消息传递。**Teams 默认禁用**，需要通过 `settings.json` 启用。
 
-参考：https://code.claude.com/docs/en/agent-teams
+参考：<https://code.claude.com/docs/en/agent-teams>
 
 使用 AskUserQuestion 工具提示：
 
@@ -1017,7 +1077,9 @@ fi
 
 ```bash
 SETTINGS_FILE="$HOME/.claude/settings.json"
+
 # TEAMMATE_MODE 根据用户选择为 "in-process" 或 "tmux"
+
 jq --arg mode "TEAMMATE_MODE" '. + {teammateMode: $mode}' "$SETTINGS_FILE" > "${SETTINGS_FILE}.tmp" && mv "${SETTINGS_FILE}.tmp" "$SETTINGS_FILE"
 echo "Teammate display mode set to: TEAMMATE_MODE"
 ```
@@ -1092,7 +1154,7 @@ echo "Final settings.json:"; jq '.' "$SETTINGS_FILE"
 
 ```bash
 mkdir -p .omc/state
-CONFIG_TYPE=$(cat ".omc/state/setup-state.json" 2>/dev/null | grep -oE '"configType":\s*"[^"]+"' | cut -d'"' -f4 || echo "unknown")
+CONFIG_TYPE=$(cat ".omc/state/setup-state.json" 2>/dev/null | grep -oE '"configType":\s*"[^"]+"' | cut -d'"' -f4 | | echo "unknown")
 cat > ".omc/state/setup-state.json" << EOF
 {
   "lastCompletedStep": 5.5,
@@ -1106,7 +1168,7 @@ EOF
 
 检查用户是否有现有配置：
 ```bash
-ls ~/.claude/commands/ralph-loop.md 2>/dev/null || ls ~/.claude/commands/ultrawork.md 2>/dev/null
+ls ~/.claude/commands/ralph-loop.md 2>/dev/null | | ls ~/.claude/commands/ultrawork.md 2>/dev/null
 ```
 
 如果找到，这是从 2.x 的升级。
@@ -1121,16 +1183,20 @@ OMC 设置完成！
 你不需要学习任何命令。我现在具备了自动激活的智能行为。
 
 自动触发的行为：
-- 复杂任务 -> 自动并行化并委派给专业 agents
-- "plan this" -> 启动规划访谈
-- "don't stop until done" -> 持续执行直到验证完成
-- "stop" 或 "cancel" -> 智能停止当前操作
+
+* 复杂任务 -> 自动并行化并委派给专业 agents
+
+* "plan this" -> 启动规划访谈
+
+* "don't stop until done" -> 持续执行直到验证完成
+
+* "stop" 或 "cancel" -> 智能停止当前操作
 
 魔法关键词（可选的高级用户快捷方式）：
 在请求中自然地包含这些词即可：
 
 | 关键词 | 效果 | 示例 |
-|--------|------|------|
+| -------- | ------ | ------ |
 | ralph | 持久执行模式 | "ralph: fix the auth bug" |
 | ralplan | 迭代规划 | "ralplan this feature" |
 | ulw | 最大并行度 | "ulw refactor the API" |
@@ -1142,8 +1208,10 @@ OMC 设置完成！
 
 TEAMS（协调 agents）：
 生成共享任务列表和实时消息传递的协调 agents：
-- /ultrapower:team 3:executor "fix all TypeScript errors"
-- /ultrapower:team 5:build-fixer "fix build errors in src/"
+
+* /ultrapower:team 3:executor "fix all TypeScript errors"
+
+* /ultrapower:team 5:build-fixer "fix build errors in src/"
 Teams 使用 Claude Code 原生工具（TeamCreate/SendMessage/TaskCreate）。
 
 MCP 服务器：
@@ -1161,19 +1229,24 @@ HUD 状态栏：
 OMC 设置完成！（从 2.x 升级）
 
 好消息：你现有的命令仍然有效！
-- /ralph、/ultrawork、/plan 等全部正常运行
 
-3.0 新特性：
+* /ralph、/ultrawork、/plan 等全部正常运行
+
+1.0 新特性：
 你不再需要那些命令了。现在一切都是自动的：
-- 直接说 "don't stop until done" 代替 /ralph
-- 直接说 "fast" 或 "parallel" 代替 /ultrawork
-- 直接说 "plan this" 代替 /plan
-- 直接说 "stop" 代替 /cancel
+
+* 直接说 "don't stop until done" 代替 /ralph
+
+* 直接说 "fast" 或 "parallel" 代替 /ultrawork
+
+* 直接说 "plan this" 代替 /plan
+
+* 直接说 "stop" 代替 /cancel
 
 魔法关键词（高级用户快捷方式）：
 
 | 关键词 | 等同于旧版... | 示例 |
-|--------|--------------|------|
+| -------- | -------------- | ------ |
 | ralph | /ralph | "ralph: fix the bug" |
 | ralplan | /ralplan | "ralplan this feature" |
 | ulw | /ultrawork | "ulw refactor API" |
@@ -1183,8 +1256,10 @@ OMC 设置完成！（从 2.x 升级）
 
 TEAMS（新功能！）：
 生成共享任务列表和实时消息传递的协调 agents：
-- /ultrapower:team 3:executor "fix all TypeScript errors"
-- 使用 Claude Code 原生工具（TeamCreate/SendMessage/TaskCreate）
+
+* /ultrapower:team 3:executor "fix all TypeScript errors"
+
+* 使用 Claude Code 原生工具（TeamCreate/SendMessage/TaskCreate）
 
 HUD 状态栏：
 状态栏现在显示 OMC 状态。重启 Claude Code 即可看到。
@@ -1214,7 +1289,7 @@ gh auth status &>/dev/null
 如果用户选择"是的，加星！"：
 
 ```bash
-gh api -X PUT /user/starred/liangjie559567/ultrapower 2>/dev/null && echo "Thanks for starring!" || true
+gh api -X PUT /user/starred/liangjie559567/ultrapower 2>/dev/null && echo "Thanks for starring!" | | true
 ```
 
 **注意：** 如果 API 调用失败，静默失败——绝不阻塞设置完成。
@@ -1224,7 +1299,7 @@ gh api -X PUT /user/starred/liangjie559567/ultrapower 2>/dev/null && echo "Thank
 ```bash
 echo ""
 echo "如果你喜欢 ultrapower，欢迎为项目加星："
-echo "  https://github.com/liangjie559567/ultrapower"
+echo "  <https://github.com/liangjie559567/ultrapower">
 echo ""
 ```
 
@@ -1240,9 +1315,9 @@ mkdir -p "$(dirname "$CONFIG_FILE")"
 
 OMC_VERSION=""
 if [ -f ".claude/CLAUDE.md" ]; then
-  OMC_VERSION=$(grep -m1 "^# ultrapower" .claude/CLAUDE.md 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+  OMC_VERSION=$(grep -m1 "^# ultrapower" .claude/CLAUDE.md 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | | echo "unknown")
 elif [ -f "$HOME/.claude/CLAUDE.md" ]; then
-  OMC_VERSION=$(grep -m1 "^# ultrapower" "$HOME/.claude/CLAUDE.md" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+  OMC_VERSION=$(grep -m1 "^# ultrapower" "$HOME/.claude/CLAUDE.md" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | | echo "unknown")
 fi
 
 if [ -f "$CONFIG_FILE" ]; then EXISTING=$(cat "$CONFIG_FILE"); else EXISTING='{}'; fi
@@ -1260,9 +1335,12 @@ echo "Note: Future updates will only refresh CLAUDE.md, not the full setup wizar
 **自动**：只需运行 `/ultrapower:omc-setup` - 它会检测你已配置并提供快速"Update CLAUDE.md only"选项，跳过完整向导。
 
 **手动选项**：
-- `/ultrapower:omc-setup --local` 仅更新项目配置
-- `/ultrapower:omc-setup --global` 仅更新全局配置
-- `/ultrapower:omc-setup --force` 重新运行完整向导（重新配置偏好）
+
+* `/ultrapower:omc-setup --local` 仅更新项目配置
+
+* `/ultrapower:omc-setup --global` 仅更新全局配置
+
+* `/ultrapower:omc-setup --force` 重新运行完整向导（重新配置偏好）
 
 这确保你拥有最新功能和 agent 配置，而无需重复完整设置的 token 成本。
 
@@ -1314,5 +1392,5 @@ EXAMPLES:
   /ultrapower:omc-setup --global  # Update all projects
   /ultrapower:omc-setup --force   # Re-run full setup wizard
 
-For more info: https://github.com/liangjie559567/ultrapower
+For more info: <https://github.com/liangjie559567/ultrapower>
 ```

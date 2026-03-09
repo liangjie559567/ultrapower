@@ -5,7 +5,7 @@
 ### Server Configuration
 
 | Variable | Description | Default |
-|----------|-------------|---------|
+| ---------- | ------------- | --------- |
 | `OMC_LOG_LEVEL` | Logging verbosity | `info` |
 | `OMC_WORKDIR` | Working directory | `process.cwd()` |
 | `OMC_MCP_OUTPUT_PATH_POLICY` | Path validation | `strict` |
@@ -14,16 +14,19 @@
 ### Provider API Keys
 
 | Variable | Provider | Required |
-|----------|----------|----------|
+| ---------- | ---------- | ---------- |
 | `OPENAI_API_KEY` | Codex | Yes |
 | `GOOGLE_API_KEY` | Gemini | Yes |
 
 ### Logging Levels
 
-- `debug` - All operations, tool calls, responses
-- `info` - Server start, tool invocations
-- `warn` - Retries, fallbacks
-- `error` - Failures only
+* `debug` - All operations, tool calls, responses
+
+* `info` - Server start, tool invocations
+
+* `warn` - Retries, fallbacks
+
+* `error` - Failures only
 
 ## Configuration Files
 
@@ -222,7 +225,7 @@ Precedence: `workspace > user`
 
 ```typescript
 // Enforce workdir boundary
-const workdir = process.env.OMC_WORKDIR || process.cwd();
+const workdir = process.env.OMC_WORKDIR | | process.cwd();
 
 function validatePath(path: string): void {
   const absolute = resolve(workdir, path);
@@ -250,43 +253,56 @@ function sanitizeInput(input: any): any {
 ### Server Not Starting
 
 ```bash
+
 # Check Node.js version
+
 node --version  # Should be >= 20.0.0
 
 # Test server manually
+
 node bridge/mcp-server.cjs
 ```
 
 ### API Key Issues
 
 ```bash
+
 # Verify key is set
+
 echo $OPENAI_API_KEY
 
 # Test key
-curl https://api.openai.com/v1/models \
+
+curl <https://api.openai.com/v1/models> \
   -H "Authorization: Bearer $OPENAI_API_KEY"
 ```
 
 ### Path Errors
 
 ```bash
+
 # Use absolute paths
+
 "args": ["/Users/me/projects/ultrapower/bridge/mcp-server.cjs"]
 
 # Or relative to home
+
 "args": ["~/projects/ultrapower/bridge/mcp-server.cjs"]
 ```
 
 ### Permission Denied
 
 ```bash
+
 # Make executable
+
 chmod +x bridge/mcp-server.cjs
 ```
 
 ## Next Steps
 
-- [Performance](./performance.md) - Benchmarks and optimization
-- [Server Guide](./server-guide.md) - Build custom servers
-- [Client Guide](./client-guide.md) - Use tools in agents
+* [Performance](./performance.md) - Benchmarks and optimization
+
+* [Server Guide](./server-guide.md) - Build custom servers
+
+* [Client Guide](./client-guide.md) - Use tools in agents

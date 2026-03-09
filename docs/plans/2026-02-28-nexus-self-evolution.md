@@ -9,8 +9,10 @@
 **Tech Stack:** Python 3.11+, pytest, aiohttp, collections.Counter, dataclasses, math, json, pathlib
 
 **Review History:**
-- v1: 初始计划 (T1-T12)
-- v2: 经 Architect + Critic 两轮评审，融合 6 项强制修正
+
+* v1: 初始计划 (T1-T12)
+
+* v2: 经 Architect + Critic 两轮评审，融合 6 项强制修正
 
 ---
 
@@ -32,7 +34,7 @@
 ### P0 — 数据基础层（纯 Python，无 LLM 依赖）
 
 | ID | Name | Dependencies | Parallel Group | Estimated |
-|----|------|-------------|----------------|-----------|
+| ---- | ------ | ------------- | ---------------- | ----------- |
 | T1 | Multi-dim pattern detection (evolution_engine.py) | none | G1 | 2-3h |
 | T2 | 6-dim health evaluation (self_evaluator.py) | none | G1 | 3h |
 | T4 | Anomaly detection — Strategy pattern (anomaly_detector.py) | T2 | G2 | 2h |
@@ -42,7 +44,7 @@
 ### P1 — LLM + 语义能力
 
 | ID | Name | Dependencies | Parallel Group | Estimated |
-|----|------|-------------|----------------|-----------|
+| ---- | ------ | ------------- | ---------------- | ----------- |
 | T7 | LLM self-reflection Reflexion framework (consciousness_loop.py) | T6 | G5 | 3-4h |
 | T8 | Knowledge graph — chromadb + networkx (knowledge_graph.py) | T6 | G5 | 4-5h |
 | T17 | Cross-agent experience propagation (experience_sharing.py) | T8 | G5 | 2-3h |
@@ -50,7 +52,7 @@
 ### P2 — 安全沙箱 + 强化学习
 
 | ID | Name | Dependencies | Parallel Group | Estimated |
-|----|------|-------------|----------------|-----------|
+| ---- | ------ | ------------- | ---------------- | ----------- |
 | T9 | Sandbox + canary release (self_modifier.py) | T6 | G6 | 3-4h |
 | T15 | Code health scorer — radon MI + complexity (code_health_scorer.py) | T2 | G6 | 2h |
 | T14 | Bottleneck analyzer (bottleneck_analyzer.py) | T6 | G6 | 2h |
@@ -58,7 +60,7 @@
 ### P3 — 集成 + 可视化
 
 | ID | Name | Dependencies | Parallel Group | Estimated |
-|----|------|-------------|----------------|-----------|
+| ---- | ------ | ------------- | ---------------- | ----------- |
 | T10 | RL feedback loop (prompt_optimizer.py) | T7, T9 | G7 | 3-4h |
 | T11 | 4-layer memory model (memory_model.py) | T8 | G7 | 3-4h |
 | T12 | Final integration + CI Gate | T1-T11 | G8 | 1h |
@@ -71,8 +73,10 @@
 ### Task 1: Multi-dimensional Pattern Detection (evolution_engine.py)
 
 **Files:**
-- Modify: `nexus-daemon/evolution_engine.py`
-- Test: `nexus-daemon/tests/test_evolution_engine.py`
+
+* Modify: `nexus-daemon/evolution_engine.py`
+
+* Test: `nexus-daemon/tests/test_evolution_engine.py`
 
 **Context:** 当前 `detect_patterns()` 只检测 `mode_usage` 一个维度。扩展为 5 个维度：mode_usage、tool_sequence、agent_cooccurrence、error_pattern、skill_chain。
 
@@ -83,8 +87,10 @@
 ### Task 2: Six-Dimension Health Evaluation (self_evaluator.py)
 
 **Files:**
-- Modify: `nexus-daemon/self_evaluator.py`
-- Test: `nexus-daemon/tests/test_self_evaluator.py`
+
+* Modify: `nexus-daemon/self_evaluator.py`
+
+* Test: `nexus-daemon/tests/test_self_evaluator.py`
 
 **Context:** 当前 `SelfEvaluator` 只做 skill 触发计数和僵尸检测。扩展为 6 维健康评估。
 
@@ -106,8 +112,10 @@ class SelfEvaluator:
 ### Task 4: Anomaly Detection — Strategy Pattern (anomaly_detector.py)
 
 **Files:**
-- Create: `nexus-daemon/anomaly_detector.py`
-- Test: `nexus-daemon/tests/test_anomaly_detector.py`
+
+* Create: `nexus-daemon/anomaly_detector.py`
+
+* Test: `nexus-daemon/tests/test_anomaly_detector.py`
 
 **强制约束 — Strategy 模式接口:**
 ```python
@@ -127,8 +135,10 @@ P0 仅实现 ZScoreDetector。IQR 和 EWMA 留给后续迭代。
 ### Task 5: Recommendation Engine + Thompson Sampling (recommendation_engine.py)
 
 **Files:**
-- Create: `nexus-daemon/recommendation_engine.py`
-- Test: `nexus-daemon/tests/test_recommendation_engine.py`
+
+* Create: `nexus-daemon/recommendation_engine.py`
+
+* Test: `nexus-daemon/tests/test_recommendation_engine.py`
 
 **Context:** 基于使用模式推荐最优 agent/skill 组合。合并原 T5 和 T16，使用 Thompson Sampling (`θ ~ Beta(α_success, β_failure)`) 实现探索-利用平衡。
 
@@ -137,9 +147,12 @@ P0 仅实现 ZScoreDetector。IQR 和 EWMA 留给后续迭代。
 ### Task 6: Daemon Integration + God Class Refactor + Status Output
 
 **Files:**
-- Modify: `nexus-daemon/daemon.py`
-- Create: `nexus-daemon/module_registry.py`
-- Test: `nexus-daemon/tests/test_daemon.py`
+
+* Modify: `nexus-daemon/daemon.py`
+
+* Create: `nexus-daemon/module_registry.py`
+
+* Test: `nexus-daemon/tests/test_daemon.py`
 
 **强制约束:**
 1. **God Class 拆分**: NexusDaemon 拆为 GitSync、EventProcessor、ImprovementManager、HealthReporter + ModuleRegistry 协调

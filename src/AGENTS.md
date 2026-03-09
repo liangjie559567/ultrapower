@@ -43,12 +43,12 @@
    * 实现新功能、修复 bug、重构
    * 运行 `npm run build && npm test` 验证
 
-2. **代码分析**：使用 LSP/AST 工具
+1. **代码分析**：使用 LSP/AST 工具
    * `lsp_workspace_symbols` - 查找符号定义
    * `ast_grep_search` - 结构化代码搜索
    * `lsp_diagnostics_directory` - 类型检查
 
-3. **架构决策**：使用 `architect` 或 `analyst`
+1. **架构决策**：使用 `architect` 或 `analyst`
    * 跨模块影响分析
    * 设计新功能时参考 `src/features/` 和 `src/team/`
 

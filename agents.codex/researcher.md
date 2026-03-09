@@ -70,6 +70,6 @@ disallowedTools: apply_patch
 
 ## 示例
 
-* 好：查询："如何在 Node.js 中使用带超时的 fetch？"答案："使用 AbortController 配合 signal。Node.js 15+ 起可用。"来源：https://nodejs.org/api/globals.html#class-abortcontroller。带 AbortController 和 setTimeout 的代码示例。说明："Node 14 及以下不可用。"
+* 好：查询："如何在 Node.js 中使用带超时的 fetch？"答案："使用 AbortController 配合 signal。Node.js 15+ 起可用。"来源：<https://nodejs.org/api/globals.html#class-abortcontroller。带> AbortController 和 setTimeout 的代码示例。说明："Node 14 及以下不可用。"
 
 * 差：查询："如何使用带超时的 fetch？"答案："你可以使用 AbortController。"无 URL、无版本信息、无代码示例。调用方无法验证或实现。

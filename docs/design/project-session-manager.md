@@ -42,10 +42,14 @@ Project Session Manager（PSM）使用 git worktrees 和 tmux 会话与 Claude C
 ### 解决方案
 
 PSM 提供统一接口来：
-- 用单个命令创建隔离的 worktrees
-- 生成预配置的带 Claude Code 的 tmux 会话
-- 跟踪和管理所有活跃会话
-- 自动清理已完成的工作
+
+* 用单个命令创建隔离的 worktrees
+
+* 生成预配置的带 Claude Code 的 tmux 会话
+
+* 跟踪和管理所有活跃会话
+
+* 自动清理已完成的工作
 
 ---
 
@@ -54,13 +58,17 @@ PSM 提供统一接口来：
 ### 2.1 PR 审查
 
 ```bash
+
 # 审查 ultrapower 仓库的 PR #123
+
 /psm review omc#123
 
 # 审查任意 GitHub URL 的 PR
-/psm review https://github.com/anthropics/claude-code/pull/456
+
+/psm review <https://github.com/anthropics/claude-code/pull/456>
 
 # 带特定关注点的审查
+
 /psm review omc#123 --focus "security implications"
 ```
 
@@ -74,14 +82,18 @@ PSM 提供统一接口来：
 ### 2.2 问题修复
 
 ```bash
+
 # 修复问题 #42
+
 /psm fix omc#42
 
 # 使用分支名称覆盖修复
+
 /psm fix omc#42 --branch fix/auth-timeout
 
 # 从问题 URL 修复
-/psm fix https://github.com/anthropics/claude-code/issues/789
+
+/psm fix <https://github.com/anthropics/claude-code/issues/789>
 ```
 
 **发生了什么：**
@@ -94,13 +106,17 @@ PSM 提供统一接口来：
 ### 2.3 功能开发
 
 ```bash
+
 # 开始新功能
+
 /psm feature omc "add-webhook-support"
 
 # 从现有分支开始功能
+
 /psm feature omc --branch feature/webhooks
 
 # 使用特定基础的功能
+
 /psm feature omc "dark-mode" --base develop
 ```
 
@@ -113,13 +129,17 @@ PSM 提供统一接口来：
 ### 2.4 发布准备
 
 ```bash
+
 # 准备发布
+
 /psm release omc v3.5.0
 
 # 发布候选版本
+
 /psm release omc v3.5.0-rc1 --draft
 
 # 热修复发布
+
 /psm release omc v3.4.1 --hotfix --base v3.4.0
 ```
 
@@ -132,38 +152,50 @@ PSM 提供统一接口来：
 ### 2.5 会话管理
 
 ```bash
+
 # 列出所有会话
+
 /psm list
 
 # 列出特定项目的会话
+
 /psm list omc
 
 # 附加到现有会话
+
 /psm attach omc:pr-123
 
 # 分离当前会话（返回主界面）
+
 /psm detach
 
 # 终止特定会话
+
 /psm kill omc:pr-123
 
 # 终止项目的所有会话
+
 /psm kill omc --all
 
 # 清理已完成的会话
+
 /psm cleanup
 
 # 强制清理
+
 /psm cleanup --force --older-than 7d
 ```
 
 ### 2.6 快速上下文切换
 
 ```bash
+
 # 切换到另一个会话（分离当前，附加目标）
+
 /psm switch omc:feature-auth
 
 # 使用会话选择器切换（fzf）
+
 /psm switch
 ```
 
@@ -174,7 +206,7 @@ PSM 提供统一接口来：
 ### 3.1 主要命令
 
 | 命令 | 描述 | 别名 |
-|---------|-------------|---------|
+| --------- | ------------- | --------- |
 | `review <ref>` | 开始 PR 审查会话 | `pr`, `r` |
 | `fix <ref>` | 开始问题修复会话 | `issue`, `i` |
 | `feature <name>` | 开始功能开发 | `feat`, `f` |
@@ -190,7 +222,7 @@ PSM 提供统一接口来：
 ### 3.2 全局标志
 
 | 标志 | 描述 | 默认值 |
-|------|-------------|---------|
+| ------ | ------------- | --------- |
 | `--project`, `-p` | 项目标识符或路径 | 当前目录 |
 | `--no-claude` | 跳过 Claude Code 启动 | false |
 | `--no-tmux` | 使用当前终端 | false |
@@ -203,16 +235,21 @@ PSM 提供统一接口来：
 PSM 支持多种引用格式：
 
 ```bash
+
 # 短别名（需要 ~/.psm/projects.json 配置）
+
 omc#123
 
 # 完整 GitHub 引用
+
 anthropics/claude-code#123
 
 # GitHub URL
-https://github.com/anthropics/claude-code/pull/123
+
+<https://github.com/anthropics/claude-code/pull/123>
 
 # 本地路径
+
 /path/to/repo#123
 
 # 当前目录（隐式）
@@ -400,7 +437,7 @@ User Command
     "pr_number": 123,
     "pr_title": "Add webhook support",
     "pr_author": "contributor",
-    "pr_url": "https://github.com/anthropics/ultrapower/pull/123"
+    "pr_url": "<https://github.com/anthropics/ultrapower/pull/123">
   },
   "state": "active",
   "notes": []
@@ -416,7 +453,7 @@ User Command
 格式：`psm:<project>:<type>-<identifier>`
 
 | 类型 | 模式 | 示例 |
-|------|---------|---------|
+| ------ | --------- | --------- |
 | PR 审查 | `psm:<proj>:pr-<num>` | `psm:omc:pr-123` |
 | 问题修复 | `psm:<proj>:issue-<num>` | `psm:omc:issue-42` |
 | 功能 | `psm:<proj>:feat-<name>` | `psm:omc:feat-auth` |
@@ -428,7 +465,7 @@ User Command
 格式：`<type>-<identifier>`
 
 | 类型 | 模式 | 示例 |
-|------|---------|---------|
+| ------ | --------- | --------- |
 | PR 审查 | `pr-<num>` | `pr-123` |
 | 问题修复 | `issue-<num>` | `issue-42` |
 | 功能 | `feat-<name>` | `feat-auth` |
@@ -437,7 +474,7 @@ User Command
 ### 6.3 分支名称
 
 | 类型 | 模式 | 示例 |
-|------|---------|---------|
+| ------ | --------- | --------- |
 | PR 审查 | （使用 PR 分支） | `feature/add-hooks` |
 | 问题修复 | `fix/<issue>-<slug>` | `fix/42-auth-timeout` |
 | 功能 | `feature/<name>` | `feature/auth` |
@@ -657,7 +694,7 @@ steps:
 ### 9.1 清理级别
 
 | 级别 | 命令 | 清理内容 |
-|-------|---------|----------------|
+| ------- | --------- | ---------------- |
 | 安全 | `/psm cleanup` | 已合并 PR、已关闭问题、已归档 |
 | 适度 | `/psm cleanup --stale` | + 不活跃 > 14 天 |
 | 激进 | `/psm cleanup --force` | + 所有已分离会话 |
@@ -735,7 +772,7 @@ def cleanup(options):
 ### 10.1 OMC Skill 集成
 
 | OMC Skill | PSM 集成 |
-|-----------|-----------------|
+| ----------- | ----------------- |
 | `autopilot` | 可为隔离工作生成 PSM 会话 |
 | `ultrawork` | 跨 PSM 会话的并行 agents |
 | `ralph` | 每个 PSM 会话的持久性跟踪 |
@@ -764,7 +801,7 @@ interface ClawdbotPSMIntegration {
 ### 10.3 GitHub 集成
 
 | 功能 | 集成 |
-|---------|-------------|
+| --------- | ------------- |
 | PR 创建 | 从功能会话自动创建草稿 PR |
 | PR 状态 | 跟踪合并状态以便清理 |
 | 问题关联 | 自动将提交关联到问题 |
@@ -774,13 +811,17 @@ interface ClawdbotPSMIntegration {
 ### 10.4 编辑器集成
 
 ```bash
+
 # VSCode
+
 /psm review omc#123 --editor vscode
 
 # Cursor
+
 /psm review omc#123 --editor cursor
 
 # Neovim
+
 /psm review omc#123 --editor nvim
 ```
 
@@ -801,7 +842,7 @@ OMC HUD 状态栏中的 PSM 状态：
 ### 11.1 常见边缘情况
 
 | 场景 | 处理方式 |
-|----------|----------|
+| ---------- | ---------- |
 | Worktree 已存在 | 提供选项：附加、重建或中止 |
 | Tmux 会话名称冲突 | 追加时间戳后缀 |
 | PR 分支被强制推送 | 警告并提供重新获取选项 |
@@ -814,16 +855,21 @@ OMC HUD 状态栏中的 PSM 状态：
 ### 11.2 错误恢复
 
 ```bash
+
 # 从现有 worktrees 和 tmux 重建 sessions.json
+
 /psm repair
 
 # 修复孤立的 tmux 会话（无 worktree）
+
 /psm repair --orphaned-tmux
 
 # 修复孤立的 worktrees（无会话记录）
+
 /psm repair --orphaned-worktrees
 
 # 完整重建
+
 /psm repair --full
 ```
 
@@ -847,9 +893,11 @@ OMC HUD 状态栏中的 PSM 状态：
 
 ### 12.1 凭据处理
 
-- **GitHub Token**：使用现有 `gh` CLI 认证，PSM 从不存储
-- **SSH 密钥**：依赖系统 SSH agent
-- **Worktrees 中的密钥**：Worktrees 继承 .gitignore，密钥不会被复制
+* **GitHub Token**：使用现有 `gh` CLI 认证，PSM 从不存储
+
+* **SSH 密钥**：依赖系统 SSH agent
+
+* **Worktrees 中的密钥**：Worktrees 继承 .gitignore，密钥不会被复制
 
 ### 12.2 路径清理
 
@@ -868,9 +916,11 @@ def sanitize_session_name(name: str) -> str:
 
 ### 12.3 权限
 
-- Worktree 目录：`0755`（用户 rwx，其他 rx）
-- 会话元数据：`0600`（仅用户）
-- 配置文件：`0600`（仅用户）
+* Worktree 目录：`0755`（用户 rwx，其他 rx）
+
+* 会话元数据：`0600`（仅用户）
+
+* 配置文件：`0600`（仅用户）
 
 ---
 
@@ -879,7 +929,7 @@ def sanitize_session_name(name: str) -> str:
 ### 13.1 计划功能
 
 | 功能 | 优先级 | 描述 |
-|---------|----------|-------------|
+| --------- | ---------- | ------------- |
 | 会话模板 | 高 | 自定义工作流模板 |
 | 团队共享 | 中 | 共享会话配置 |
 | 会话录制 | 中 | 录制会话以供回放 |
@@ -910,10 +960,13 @@ interface PSMPlugin {
 
 ### 13.3 潜在集成
 
-- **Linear**：从 Linear 问题创建会话
-- **Jira**：从 Jira 工单创建会话
-- **Slack**：会话事件通知
-- **Discord**：团队会话协调
+* **Linear**：从 Linear 问题创建会话
+
+* **Jira**：从 Jira 工单创建会话
+
+* **Slack**：会话事件通知
+
+* **Discord**：团队会话协调
 
 ---
 
@@ -944,7 +997,7 @@ interface PSMPlugin {
 │ 引用格式                                                    │
 │   omc#123               项目别名 + 编号                    │
 │   org/repo#123          完整 GitHub 引用                   │
-│   https://...           GitHub URL                        │
+│   <https://...>           GitHub URL                        │
 └────────────────────────────────────────────────────────────┘
 ```
 

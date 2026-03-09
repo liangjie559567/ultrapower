@@ -29,12 +29,12 @@ npm run validate:versions
    npm run bump -- 5.5.26
    ```
 
-2. 验证版本同步：
+1. 验证版本同步：
    ```bash
    npm run validate:versions
    ```
 
-3. 提交并打标签：
+1. 提交并打标签：
    ```bash
    git add -A
    git commit -m "chore: bump version to 5.5.26"
@@ -43,7 +43,7 @@ npm run validate:versions
    git push origin v5.5.26
    ```
 
-4. GitHub Actions 自动执行：
+1. GitHub Actions 自动执行：
    - 构建和测试
    - 发布到 npm
    - 创建 GitHub Release
@@ -63,10 +63,13 @@ npm run release:local    # 执行
 如果 `validate:versions` 失败：
 
 ```bash
+
 # 查看差异
+
 git diff package.json .claude-plugin/plugin.json .claude-plugin/marketplace.json
 
 # 手动修复后重新验证
+
 npm run validate:versions
 ```
 
@@ -81,5 +84,6 @@ npm run validate:versions
 
 ## 相关知识
 
-- [k-077: Multi-File Version Sync in Release Pipeline](../../.omc/axiom/evolution/knowledge_base.md#k-077)
-- [k-074: Version Number Sync Checklist](../../.omc/axiom/evolution/knowledge_base.md#k-074)
+* [k-077: Multi-File Version Sync in Release Pipeline](../../.omc/axiom/evolution/knowledge_base.md#k-077)
+
+* [k-074: Version Number Sync Checklist](../../.omc/axiom/evolution/knowledge_base.md#k-074)
