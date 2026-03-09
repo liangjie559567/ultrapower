@@ -113,7 +113,7 @@ const DEFAULT_MAX_ITERATIONS = 10;
 /**
  * Get the state file path for Ralph Loop
  */
-function getStateFilePath(directory: string, sessionId?: string): string {
+function _getStateFilePath(directory: string, sessionId?: string): string {
   if (sessionId) {
     return resolveSessionStatePath('ralph', sessionId, directory);
   }
@@ -124,7 +124,7 @@ function getStateFilePath(directory: string, sessionId?: string): string {
 /**
  * Ensure the .omc directory exists
  */
-function ensureStateDir(directory: string, sessionId?: string): void {
+function _ensureStateDir(directory: string, sessionId?: string): void {
   if (sessionId) {
     ensureSessionStateDir(sessionId, directory);
     return;

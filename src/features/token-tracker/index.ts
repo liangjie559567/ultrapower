@@ -5,7 +5,7 @@ import { createInterface } from 'readline';
 
 const TOKEN_LOG_FILE = join(process.cwd(), '.omc', 'logs', 'tokens.jsonl');
 const SESSION_INDEX_FILE = join(process.cwd(), '.omc', 'logs', 'token-index.json');
-const AVG_LINE_SIZE = 200;
+const _AVG_LINE_SIZE = 200;
 
 interface TokenRecord {
   sessionId: string;

@@ -57,7 +57,7 @@ export function withTimeoutSync<T>(
   fn: () => T,
   options: TimeoutOptions
 ): T | undefined {
-  const { timeoutMs, label, onTimeout, fallback } = options;
+  const { timeoutMs: _timeoutMs, label, onTimeout: _onTimeout, fallback } = options;
   const startTime = Date.now();
 
   try {

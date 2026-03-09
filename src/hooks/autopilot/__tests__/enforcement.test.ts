@@ -24,7 +24,7 @@ describe('Autopilot Enforcement', () => {
     if (existsSync(TEST_DIR)) {
       try {
         rmSync(TEST_DIR, { recursive: true, force: true });
-      } catch (err) {
+      } catch (_err) {
         // Retry once after another delay
         await new Promise(resolve => setTimeout(resolve, 200));
         try {

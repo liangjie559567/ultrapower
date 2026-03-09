@@ -3,7 +3,7 @@ import { join } from "path";
 import { resolveToWorktreeRoot } from "../../lib/worktree-paths.js";
 import { safeJsonParse } from "../../lib/safe-json.js";
 
-export function readStateFile(mode: string, cwd: string): any {
+export function readStateFile(mode: string, cwd: string): unknown {
   const worktreeRoot = resolveToWorktreeRoot(cwd);
   const statePath = join(worktreeRoot, ".omc", "state", `${mode}-state.json`);
 

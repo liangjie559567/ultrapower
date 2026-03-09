@@ -2,7 +2,7 @@
  * Simple event bus for hook decoupling
  */
 
-type EventHandler = (data: any) => void | Promise<void>;
+type EventHandler = (data: unknown) => void | Promise<void>;
 
 class EventBus {
   private handlers = new Map<string, EventHandler[]>();
@@ -14,7 +14,7 @@ class EventBus {
     this.handlers.get(event)!.push(handler);
   }
 
-  async emit(event: string, data?: any): Promise<void> {
+  async emit(event: string, data?: unknown): Promise<void> {
     const handlers = this.handlers.get(event) || [];
     await Promise.all(handlers.map(h => h(data)));
   }

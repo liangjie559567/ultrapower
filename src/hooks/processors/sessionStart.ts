@@ -1,7 +1,7 @@
 import type { HookInput, HookOutput } from "../bridge-types.js";
 import { loadConfig } from "../../config/loader.js";
 
-export async function processSessionStart(input: HookInput): Promise<HookOutput> {
+export async function processSessionStart(_input: HookInput): Promise<HookOutput> {
   const config = await loadConfig();
   const mode = config.defaultExecutionMode || "sequential";
 
