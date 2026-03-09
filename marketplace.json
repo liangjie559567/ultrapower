@@ -2,7 +2,7 @@
   "name": "ultrapower",
   "displayName": "ultrapower",
   "description": "智能多 Agent 编排层，提供 50 个专业 agents、71 个 skills 和完整的 TypeScript hooks 系统",
-  "version": "5.6.10",
+  "version": "5.6.11",
   "repository": "https://github.com/liangjie559567/ultrapower",
   "author": "liangjie559567",
   "license": "MIT",
