@@ -31,7 +31,6 @@ import {
 import { ToolDefinition } from './types.js';
 import { assertValidMode } from '../lib/validateMode.js';
 import { safeJsonParse } from '../lib/safe-json.js';
-import { pruneMap } from '../lib/memory-utils.js';
 import { readStateWithCache, invalidateStateCache } from '../lib/state-cache.js';
 
 // ExecutionMode from mode-registry (8 modes - NO ralplan)

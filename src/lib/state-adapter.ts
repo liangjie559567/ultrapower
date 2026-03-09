@@ -181,11 +181,12 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
     }
 
     try {
-      const { readdirSync } = require('fs');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { readdirSync } = require('fs') as typeof import('fs');
       const entries = readdirSync(sessionsDir, { withFileTypes: true });
       return entries
-        .filter((entry: any) => entry.isDirectory())
-        .map((entry: any) => entry.name);
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name);
     } catch {
       return [];
     }

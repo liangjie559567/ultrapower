@@ -82,7 +82,7 @@ export async function withFileLock<T>(
   filePath: string,
   fn: () => T | Promise<T>,
   maxRetries: number = 20,
-  retryDelay: number = 100
+  _retryDelay: number = 100
 ): Promise<T> {
   const lockPath = `${filePath}.lock`;
   const lockFile = path.join(lockPath, 'lock.json');

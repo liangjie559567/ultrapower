@@ -7,7 +7,6 @@ let mockTransport: any;
 let mockProcess: any;
 let MockClient: any;
 let MockTransport: any;
-let mockSpawn: any;
 
 vi.mock('@modelcontextprotocol/sdk/client/index.js', () => ({
   Client: vi.fn().mockImplementation(function(this: any) {
@@ -29,11 +28,9 @@ describe('MCPClient', () => {
   beforeEach(async () => {
     const { Client } = await import('@modelcontextprotocol/sdk/client/index.js');
     const { StdioClientTransport } = await import('@modelcontextprotocol/sdk/client/stdio.js');
-    const { spawn } = await import('child_process');
 
     MockClient = Client;
     MockTransport = StdioClientTransport;
-    mockSpawn = spawn;
 
     mockClient = {
       connect: vi.fn().mockResolvedValue(undefined),

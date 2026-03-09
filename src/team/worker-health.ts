@@ -12,7 +12,6 @@ import { readHeartbeat, isWorkerAlive } from './heartbeat.js';
 import { isSessionAlive } from './tmux-session.js';
 import { readAuditLog } from './audit-log.js';
 import { createWorkerAdapter } from '../workers/factory.js';
-import type { WorkerState } from '../workers/types.js';
 
 export interface WorkerHealthReport {
   workerName: string;

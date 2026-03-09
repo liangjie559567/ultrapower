@@ -8,7 +8,7 @@
 import { statSync } from 'fs';
 
 interface CacheEntry {
-  data: any;
+  data: unknown;
   mtime: number;
   cachedAt: number;
 }
@@ -22,7 +22,7 @@ const stateCache = new Map<string, CacheEntry>();
  * @param ttl - Cache TTL in milliseconds (default: 5000ms)
  * @returns Shallow copy of cached data
  */
-export function readStateWithCache(path: string, data: any, ttl: number = 5000): any {
+export function readStateWithCache(path: string, data: unknown, ttl: number = 5000): unknown {
   try {
     const mtime = statSync(path).mtimeMs;
     const cached = stateCache.get(path);

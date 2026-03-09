@@ -15,7 +15,6 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { handleToolCall } from './tool-handler.js';
-import { getAllToolNames } from './tool-resolver.js';
 import { mcpServerTools } from '../tools/index.js';
 import { z } from 'zod';
 

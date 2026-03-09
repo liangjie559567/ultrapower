@@ -3,7 +3,7 @@
  * Provides unified process management across Windows, macOS, and Linux.
  */
 
-import { execSync, execFile } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import * as fsPromises from 'fs/promises';
 

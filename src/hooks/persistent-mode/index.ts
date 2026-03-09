@@ -16,16 +16,15 @@ import { getClaudeConfigDir } from '../../utils/paths.js';
 import { resolveToWorktreeRoot } from '../../lib/worktree-paths.js';
 import { StopContext, isUserAbort, isContextLimitStop } from '../todo-continuation/index.js';
 import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
-import { readLastToolError, clearToolErrorState, getToolErrorRetryGuidance, type ToolErrorState } from './tool-error.js';
-import { hookEventBus } from './event-bus.js';
+import { readLastToolError, getToolErrorRetryGuidance, type ToolErrorState } from './tool-error.js';
 
 // Lazy imports via event bus
-let ultraworkModule: any;
-let ralphModule: any;
-let todoModule: any;
-let autopilotModule: any;
-let autopilotEnforcementModule: any;
-let teamPipelineModule: any;
+let ultraworkModule: unknown;
+let ralphModule: unknown;
+let todoModule: unknown;
+let autopilotModule: unknown;
+let autopilotEnforcementModule: unknown;
+let teamPipelineModule: unknown;
 
 async function loadUltrawork() {
   if (!ultraworkModule) ultraworkModule = await import('../ultrawork/index.js');

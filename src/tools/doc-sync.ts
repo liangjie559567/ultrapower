@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
 
 const DocSyncSchema = z.object({
   sourceFile: z.string().describe('Source code file with comments'),

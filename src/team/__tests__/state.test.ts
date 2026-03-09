@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, rmSync, existsSync } from 'fs';
+import { mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
 import { writeHeartbeat, readHeartbeat, isWorkerAlive } from '../heartbeat.js';

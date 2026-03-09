@@ -30,7 +30,7 @@ describe('acquireLock', () => {
     await new Promise(resolve => setTimeout(resolve, 200));
     try {
       fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
-    } catch (err) {
+    } catch (_err) {
       // Ignore cleanup errors on Windows
     }
   });
@@ -87,7 +87,7 @@ describe('acquireLock', () => {
     try {
       await acquireLock(lockPath);
       expect.fail('应该抛出错误');
-    } catch (err) {
+    } catch (_err) {
       expect((err as Error).message).toContain(lockPath);
     } finally {
       await unlock();
@@ -220,7 +220,7 @@ describe('withFileLock', () => {
     await new Promise(resolve => setTimeout(resolve, 200));
     try {
       fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
-    } catch (err) {
+    } catch (_err) {
       // Ignore cleanup errors on Windows
     }
   });
@@ -372,8 +372,8 @@ describe('withFileLock', () => {
     const lockPath = `${testFile}.lock`;
     let writeAttempts = 0;
 
-    const originalWriteFile = fs.promises.writeFile;
-    const spy = vi.spyOn(fs.promises, 'writeFile').mockImplementationOnce(async (...args) => {
+    const _originalWriteFile = fs.promises.writeFile;
+    const spy = vi.spyOn(fs.promises, 'writeFile').mockImplementationOnce(async () => {
       writeAttempts++;
       // 模拟锁目录在写入前被删除
       fs.rmSync(lockPath, { recursive: true, force: true });

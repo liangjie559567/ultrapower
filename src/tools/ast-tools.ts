@@ -12,7 +12,6 @@ import { readFileSync, readdirSync, statSync, writeFileSync, createReadStream } 
 import { join, extname, resolve } from "path";
 import { createRequire } from "module";
 import { execSync } from "child_process";
-import { createInterface } from "readline";
 
 // Dynamic import for @ast-grep/napi
 // Graceful degradation: if the module is not available (e.g., in bundled/plugin context),

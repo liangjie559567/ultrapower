@@ -98,7 +98,7 @@ export async function decomposeTaskWithAI(
   codebaseContext: string,
   config: Required<UltrapilotConfig>
 ): Promise<string[]> {
-  const prompt = generateDecompositionPrompt(task, codebaseContext, {
+  const _prompt = generateDecompositionPrompt(task, codebaseContext, {
     maxSubtasks: config.maxWorkers,
     preferredModel: (config.workerModel as 'haiku' | 'sonnet' | 'opus') || 'sonnet'
   });
@@ -162,7 +162,7 @@ export async function decomposeTask(
   // Use AI-powered decomposition if enabled
   if (config.useAIDecomposition && config.codebaseContext) {
     try {
-      const prompt = generateDecompositionPrompt(task, config.codebaseContext, {
+      const _prompt = generateDecompositionPrompt(task, config.codebaseContext, {
         maxSubtasks: config.maxWorkers,
         preferredModel: (config.workerModel as 'haiku' | 'sonnet' | 'opus') || 'sonnet'
       });
