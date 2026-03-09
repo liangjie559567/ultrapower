@@ -131,5 +131,17 @@ export type { StateConfig, StateReadResult, StateWriteResult, StateClearResult, 
  * Clean up committed WAL entries
  */
 export declare function cleanupWAL(): void;
+/**
+ * Async version of readState
+ */
+export declare function readStateAsync<T = StateData>(name: string, location?: StateLocation, options?: {
+    checkLegacy?: boolean;
+}): Promise<StateReadResult<T>>;
+/**
+ * Async version of writeState
+ */
+export declare function writeStateAsync<T = StateData>(name: string, data: T, location?: StateLocation, options?: {
+    createDirs?: boolean;
+}): Promise<StateWriteResult>;
 export { StateLocation, DEFAULT_STATE_CONFIG, isStateLocation, } from "./types.js";
 //# sourceMappingURL=index.d.ts.map

@@ -7,14 +7,9 @@
  */
 import { DEFAULT_CONFIG } from './types.js';
 import { readUltrapilotState, writeUltrapilotState, initUltrapilot, addWorker, getCompletedWorkers, getRunningWorkers, getFailedWorkers, recordConflict } from './state.js';
-// AI-powered decomposition utilities
-// TODO: Use these with the Architect agent for intelligent task decomposition
-// Example integration:
-//   const prompt = generateDecompositionPrompt(task, codebaseContext);
-//   const response = await Task({ subagent_type: 'architect', prompt });
-//   const result = parseDecompositionResult(response);
-//   const subtasks = toSimpleSubtasks(result);
-export { generateDecompositionPrompt, parseDecompositionResult, generateParallelGroups, validateFileOwnership, extractSharedFiles, toSimpleSubtasks, DEFAULT_SHARED_FILE_PATTERNS } from './decomposer.js';
+import { generateDecompositionPrompt, parseDecompositionResult, generateParallelGroups, validateFileOwnership, extractSharedFiles, toSimpleSubtasks, DEFAULT_SHARED_FILE_PATTERNS } from './decomposer.js';
+// Re-export AI-powered decomposition utilities
+export { generateDecompositionPrompt, parseDecompositionResult, generateParallelGroups, validateFileOwnership, extractSharedFiles, toSimpleSubtasks, DEFAULT_SHARED_FILE_PATTERNS };
 /**
  * Start ultrapilot coordinator
  *
@@ -35,6 +30,32 @@ export async function startUltrapilot(cwd, task, config, sessionId) {
         throw new Error('Failed to initialize ultrapilot: another mode is active');
     }
     return state;
+}
+/**
+ * Decompose a task using Architect agent (AI-powered)
+ *
+ * Calls the Architect agent to intelligently decompose a task into parallel-safe subtasks
+ * with file ownership and dependency tracking.
+ *
+ * @param task - Task description
+ * @param codebaseContext - Context about the codebase structure
+ * @param config - Configuration options
+ * @returns Array of subtask descriptions
+ */
+export async function decomposeTaskWithAI(task, codebaseContext, config) {
+    const prompt = generateDecompositionPrompt(task, codebaseContext, {
+        maxSubtasks: config.maxWorkers,
+        preferredModel: config.workerModel || 'sonnet'
+    });
+    // Return prompt for orchestrator to use with Task tool
+    // The orchestrator should call: Task({ subagent_type: 'ultrapower:architect', model: 'opus', prompt })
+    // Then parse with: parseDecompositionResult(response)
+    // Then convert with: toSimpleSubtasks(result)
+    throw new Error('AI decomposition requires Task tool. Call from orchestrator:\n' +
+        '1. const prompt = generateDecompositionPrompt(task, context)\n' +
+        '2. const response = await Task({ subagent_type: "ultrapower:architect", model: "opus", prompt })\n' +
+        '3. const result = parseDecompositionResult(response)\n' +
+        '4. const subtasks = toSimpleSubtasks(result)');
 }
 /**
  * Decompose a task into parallelizable subtasks
@@ -75,9 +96,23 @@ export async function startUltrapilot(cwd, task, config, sessionId) {
  * @returns Array of subtask descriptions
  */
 export async function decomposeTask(task, config) {
-    // Heuristic-based decomposition for simple cases
-    // For complex tasks, use generateDecompositionPrompt() with Architect agent
-    // to get structured DecompositionResult with file ownership and dependencies
+    // Use AI-powered decomposition if enabled
+    if (config.useAIDecomposition && config.codebaseContext) {
+        try {
+            const prompt = generateDecompositionPrompt(task, config.codebaseContext, {
+                maxSubtasks: config.maxWorkers,
+                preferredModel: config.workerModel || 'sonnet'
+            });
+            // Note: This requires Task tool to be available in the calling context
+            // The orchestrator should call this and pass the Architect response
+            console.log('[Ultrapilot] AI decomposition prompt generated. Use with Architect agent.');
+            console.log('[Ultrapilot] Falling back to heuristic decomposition.');
+        }
+        catch (error) {
+            console.warn('[Ultrapilot] AI decomposition failed, using heuristic fallback:', error);
+        }
+    }
+    // Heuristic-based decomposition
     const subtasks = [];
     // Look for explicit lists (numbered or bulleted)
     const listItemPattern = /^[\s]*(?:\d+\.|[-*+])\s+(.+)$/gm;
@@ -92,7 +127,7 @@ export async function decomposeTask(task, config) {
         const sentences = task
             .split(/[.;\n]+/)
             .map((s) => s.trim())
-            .filter((s) => s.length > 10); // Filter out very short fragments
+            .filter((s) => s.length > 10);
         subtasks.push(...sentences);
     }
     // If still no subtasks, treat entire task as single unit

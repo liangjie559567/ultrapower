@@ -19,7 +19,10 @@ import * as readline from 'readline';
 export async function* parseTranscript(filePath, options = {}) {
     const { signal, onParseError } = options;
     // Check if file exists
-    if (!fs.existsSync(filePath)) {
+    try {
+        await fs.promises.access(filePath);
+    }
+    catch {
         throw new Error(`Transcript file not found: ${filePath}`);
     }
     const fileStream = fs.createReadStream(filePath, { encoding: 'utf8' });

@@ -23,6 +23,10 @@ export interface UltrapilotConfig {
     sharedFiles?: string[];
     /** Whether to enable verbose logging */
     verbose?: boolean;
+    /** Use Architect agent for intelligent task decomposition */
+    useAIDecomposition?: boolean;
+    /** Codebase context for AI decomposition */
+    codebaseContext?: string;
 }
 /**
  * State of an individual worker

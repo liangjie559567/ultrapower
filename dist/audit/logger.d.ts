@@ -11,6 +11,7 @@ declare class AuditLogger {
     private logPath;
     private secretKey;
     private maxSize;
+    private initPromise;
     constructor(logDir: string);
     private deriveSecretKey;
     private sign;

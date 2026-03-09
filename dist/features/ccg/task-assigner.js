@@ -1,0 +1,43 @@
+export function assignTask(files, changeType) {
+    if (files.length === 0) {
+        return { model: 'claude', reason: 'No files specified', confidence: 0.5 };
+    }
+    const uiFiles = files.filter(isUIFile);
+    const logicFiles = files.filter(isLogicFile);
+    const testFiles = files.filter(isTestFile);
+    // Pure UI changes → Gemini
+    if (uiFiles.length > 0 && logicFiles.length === 0 && testFiles.length === 0) {
+        return {
+            model: 'gemini',
+            reason: `UI-only changes (${uiFiles.length} files)`,
+            confidence: 0.9
+        };
+    }
+    // Pure logic/test changes → Codex
+    if (uiFiles.length === 0 && (logicFiles.length > 0 || testFiles.length > 0)) {
+        return {
+            model: 'codex',
+            reason: `Logic/test changes (${logicFiles.length + testFiles.length} files)`,
+            confidence: 0.9
+        };
+    }
+    // Mixed changes → Claude coordinates
+    if (uiFiles.length > 0 && logicFiles.length > 0) {
+        return {
+            model: 'claude',
+            reason: `Cross-layer changes (${uiFiles.length} UI + ${logicFiles.length} logic)`,
+            confidence: 0.85
+        };
+    }
+    return { model: 'claude', reason: 'Default coordinator', confidence: 0.7 };
+}
+function isUIFile(file) {
+    return /\.(tsx|jsx|vue|svelte)$/.test(file) || /\.css$/.test(file);
+}
+function isLogicFile(file) {
+    return /\.(ts|js)$/.test(file) && !isTestFile(file) && !/\.(tsx|jsx)$/.test(file);
+}
+function isTestFile(file) {
+    return /\.(test|spec)\.(ts|js|tsx|jsx)$/.test(file);
+}
+//# sourceMappingURL=task-assigner.js.map

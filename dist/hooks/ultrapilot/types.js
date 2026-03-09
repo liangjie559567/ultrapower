@@ -31,6 +31,8 @@ export const DEFAULT_CONFIG = {
         'requirements.txt',
         'setup.py'
     ],
-    verbose: false
+    verbose: false,
+    useAIDecomposition: false,
+    codebaseContext: ''
 };
 //# sourceMappingURL=types.js.map

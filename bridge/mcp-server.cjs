@@ -21806,10 +21806,13 @@ var AuditLogger = class {
   logPath;
   secretKey;
   maxSize = SIZE_LIMIT.AUDIT_LOG_MAX;
+  initPromise;
   constructor(logDir) {
     this.logPath = path7.join(logDir, "audit.log");
     this.secretKey = this.deriveSecretKey();
-    this.ensureLogDir(logDir);
+    this.initPromise = this.ensureLogDir(logDir).catch((err) => {
+      console.error("[AuditLogger] Failed to initialize log directory:", err);
+    });
   }
   deriveSecretKey() {
     const seed = process.env.OMC_AUDIT_SECRET;
@@ -21823,26 +21826,26 @@ var AuditLogger = class {
     const payload = JSON.stringify(entry);
     return (0, import_crypto2.createHmac)("sha256", this.secretKey).update(payload).digest("hex");
   }
-  log(entry) {
-    if (!this.secretKey) return Promise.resolve();
+  async log(entry) {
+    await this.initPromise;
+    if (!this.secretKey) return;
     const fullEntry = {
       ...entry,
       timestamp: (/* @__PURE__ */ new Date()).toISOString()
     };
     fullEntry.signature = this.sign(fullEntry);
-    this.appendLog(JSON.stringify(fullEntry) + "\n");
-    this.rotateIfNeeded();
-    return Promise.resolve();
+    await this.appendLog(JSON.stringify(fullEntry) + "\n");
+    await this.rotateIfNeeded();
   }
-  appendLog(line) {
-    fs6.appendFileSync(this.logPath, line, "utf8");
+  async appendLog(line) {
+    await fs6.promises.appendFile(this.logPath, line, "utf8");
   }
-  rotateIfNeeded() {
+  async rotateIfNeeded() {
     try {
-      const stats = fs6.statSync(this.logPath);
+      const stats = await fs6.promises.stat(this.logPath);
       if (stats.size >= this.maxSize) {
         const rotatedPath = `${this.logPath}.${Date.now()}`;
-        fs6.renameSync(this.logPath, rotatedPath);
+        await fs6.promises.rename(this.logPath, rotatedPath);
       }
     } catch (err) {
       if (err.code !== "ENOENT") throw err;
@@ -21876,9 +21879,11 @@ var AuditLogger = class {
       throw err;
     }
   }
-  ensureLogDir(dir) {
-    if (!fs6.existsSync(dir)) {
-      fs6.mkdirSync(dir, { recursive: true });
+  async ensureLogDir(dir) {
+    try {
+      await fs6.promises.access(dir);
+    } catch {
+      await fs6.promises.mkdir(dir, { recursive: true });
     }
   }
 };

@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"tail -30 C:\\\\Users\\\\ljyih\\\\.claude\\\\projects\\\\C--Users-ljyih-Desktop-ultrapower\\\\88e8e3bc-0fba-4483-b454-defa0889c5b2\\\\tool-results\\\\b4as0iuv1.txt\",\"description\":\"查看测试结果\"}",
-  "error": "Exit code 1\ntail: cannot open 'C:Usersljyih.claudeprojectsC--Users-ljyih-Desktop-ultrapower88e8e3bc-0fba-4483-b454-defa0889c5b2tool-resultsb4as0iuv1.txt' for reading: No such file or directory",
-  "timestamp": "2026-03-08T14:30:32.394Z",
+  "tool_input_preview": "{\"command\":\"npm test -- src/hooks/session-end/\",\"description\":\"Test session-end async fixes\"}",
+  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@5.6.2 test\n> vitest src/hooks/session-end/\n\n\n\u001b[1m\u001b[46m RUN \u001b[49m\u001b[22m \u001b[36mv4.0.18 \u001b[39m\u001b[90mC:/Users/ljyih/Desktop/ultrapower\u001b[39m\n\n\u001b[90mstdout\u001b[2m | src/hooks/session-end/__tests__/callbacks.test.ts\u001b[2m > \u001b[22m\u001b[2mtriggerStopCallbacks\u001b[2m > \u001b[22m\u001b[2mwrites file when file callback is enabled\n\u001b[22m\u001b[39m[stop-callback] Session summary written to /tmp/test-test-session-123.md\n\n\u001b[90mstdout\u001b[2m | src/hooks/session-end/__tests__/callbacks.test.ts\u001b[2m > \u001b[22m\u001b...",
+  "timestamp": "2026-03-09T02:37:54.592Z",
   "retry_count": 1
 }

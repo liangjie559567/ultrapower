@@ -6,7 +6,8 @@
  * while managing file ownership to avoid conflicts.
  */
 import type { UltrapilotConfig, UltrapilotState, WorkerState, IntegrationResult } from './types.js';
-export { generateDecompositionPrompt, parseDecompositionResult, generateParallelGroups, validateFileOwnership, extractSharedFiles, toSimpleSubtasks, DEFAULT_SHARED_FILE_PATTERNS } from './decomposer.js';
+import { generateDecompositionPrompt, parseDecompositionResult, generateParallelGroups, validateFileOwnership, extractSharedFiles, toSimpleSubtasks, DEFAULT_SHARED_FILE_PATTERNS } from './decomposer.js';
+export { generateDecompositionPrompt, parseDecompositionResult, generateParallelGroups, validateFileOwnership, extractSharedFiles, toSimpleSubtasks, DEFAULT_SHARED_FILE_PATTERNS };
 export type { DecomposedTask, DecompositionResult, DecompositionOptions, AgentType, ModelTier } from './decomposer.js';
 /**
  * Start ultrapilot coordinator
@@ -19,6 +20,18 @@ export type { DecomposedTask, DecompositionResult, DecompositionOptions, AgentTy
  * @returns Initialized ultrapilot state
  */
 export declare function startUltrapilot(cwd: string, task: string, config?: Partial<UltrapilotConfig>, sessionId?: string): Promise<UltrapilotState>;
+/**
+ * Decompose a task using Architect agent (AI-powered)
+ *
+ * Calls the Architect agent to intelligently decompose a task into parallel-safe subtasks
+ * with file ownership and dependency tracking.
+ *
+ * @param task - Task description
+ * @param codebaseContext - Context about the codebase structure
+ * @param config - Configuration options
+ * @returns Array of subtask descriptions
+ */
+export declare function decomposeTaskWithAI(task: string, codebaseContext: string, config: Required<UltrapilotConfig>): Promise<string[]>;
 /**
  * Decompose a task into parallelizable subtasks
  *

@@ -629,6 +629,153 @@ export function cleanupWAL() {
     const wal = getWAL();
     wal.cleanup();
 }
+// ============================================================================
+// Async API (New)
+// ============================================================================
+/**
+ * Async helper: check if path exists
+ */
+async function existsAsync(path) {
+    try {
+        await fs.promises.access(path);
+        return true;
+    }
+    catch {
+        return false;
+    }
+}
+/**
+ * Async helper: ensure directory exists
+ */
+async function ensureDirAsync(dir) {
+    try {
+        await fs.promises.access(dir);
+    }
+    catch {
+        await fs.promises.mkdir(dir, { recursive: true });
+    }
+}
+/**
+ * Async version of readState
+ */
+export async function readStateAsync(name, location = StateLocation.LOCAL, options) {
+    const checkLegacy = options?.checkLegacy ?? DEFAULT_STATE_CONFIG.checkLegacy;
+    const standardPath = getStatePath(name, location);
+    const legacyPaths = checkLegacy ? getLegacyPaths(name) : [];
+    // Try standard location first
+    if (await existsAsync(standardPath)) {
+        try {
+            const stat = await fs.promises.stat(standardPath);
+            const mtime = stat.mtimeMs;
+            const cached = stateCache.get(standardPath);
+            if (cached && cached.mtime === mtime && (Date.now() - cached.cachedAt) < STATE_CACHE_TTL_MS) {
+                await auditLogger.log({
+                    actor: 'system',
+                    action: 'state_access',
+                    resource: name,
+                    result: 'success',
+                    metadata: { operation: 'read', location, cached: true }
+                });
+                return {
+                    exists: true,
+                    data: structuredClone(cached.data),
+                    foundAt: standardPath,
+                    legacyLocations: [],
+                };
+            }
+        }
+        catch {
+            // stat failed, proceed to read
+        }
+        try {
+            const content = await fs.promises.readFile(standardPath, "utf-8");
+            const data = readEncryptedState(content);
+            await auditLogger.log({
+                actor: 'system',
+                action: 'state_access',
+                resource: name,
+                result: 'success',
+                metadata: { operation: 'read', location, cached: false }
+            });
+            try {
+                const stat = await fs.promises.stat(standardPath);
+                stateCache.set(standardPath, {
+                    data: structuredClone(data),
+                    mtime: stat.mtimeMs,
+                    cachedAt: Date.now(),
+                });
+            }
+            catch {
+                // Cache update failed, continue
+            }
+            return {
+                exists: true,
+                data,
+                foundAt: standardPath,
+                legacyLocations: [],
+            };
+        }
+        catch (err) {
+            console.error(`[state-manager] Failed to read ${standardPath}:`, err);
+        }
+    }
+    // Try legacy locations
+    for (const legacyPath of legacyPaths) {
+        if (await existsAsync(legacyPath)) {
+            try {
+                const content = await fs.promises.readFile(legacyPath, "utf-8");
+                const data = readEncryptedState(content);
+                return {
+                    exists: true,
+                    data,
+                    foundAt: legacyPath,
+                    legacyLocations: [legacyPath],
+                };
+            }
+            catch (err) {
+                console.error(`[state-manager] Failed to read legacy ${legacyPath}:`, err);
+            }
+        }
+    }
+    return {
+        exists: false,
+        data: undefined,
+        foundAt: undefined,
+        legacyLocations: [],
+    };
+}
+/**
+ * Async version of writeState
+ */
+export async function writeStateAsync(name, data, location = StateLocation.LOCAL, options) {
+    const createDirs = options?.createDirs ?? DEFAULT_STATE_CONFIG.createDirs;
+    const statePath = getStatePath(name, location);
+    stateCache.delete(statePath);
+    if (createDirs) {
+        await ensureDirAsync(path.dirname(statePath));
+    }
+    try {
+        const encrypted = encryptState(data);
+        if (encrypted) {
+            await fs.promises.writeFile(statePath, encrypted, 'utf-8');
+        }
+        else {
+            await fs.promises.writeFile(statePath, JSON.stringify(data, null, 2), 'utf-8');
+        }
+        await auditLogger.log({
+            actor: 'system',
+            action: 'state_modification',
+            resource: name,
+            result: 'success',
+            metadata: { operation: 'write', location }
+        });
+        return { success: true, path: statePath };
+    }
+    catch (err) {
+        console.error(`[state-manager] Failed to write ${statePath}:`, err);
+        return { success: false, path: statePath, error: String(err) };
+    }
+}
 // Re-export enum, constants, and functions from types
 export { StateLocation, DEFAULT_STATE_CONFIG, isStateLocation, } from "./types.js";
 //# sourceMappingURL=index.js.map
