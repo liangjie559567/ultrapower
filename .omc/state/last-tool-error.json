@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"node -e \\\"\\nconst p=require('path'),f=require('fs'),h=require('os').homedir();\\nconst d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');\\nconst b=p.join(d,'plugins','cache','ultrapower'...",
-  "error": "Exit code 1\n[eval]:15\r\n  if(\\!found) console.log('OK: no nested ultrapower/ dirs found');\r\n     ^\r\nExpected unicode escape\r\n\r\nSyntaxError: Invalid or unexpected token\r\n    at makeContextifyScript (node:internal/vm:194:14)\r\n    at compileScript (node:internal/process/execution:388:10)\r\n    at evalTypeScript (node:internal/process/execution:260:22)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.13.0",
-  "timestamp": "2026-03-09T13:20:15.021Z",
-  "retry_count": 2
+  "tool_input_preview": "{\"command\":\"npm run bump -- patch\",\"description\":\"升级 patch 版本号\"}",
+  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@5.6.8 bump\n> node scripts/bump-version.mjs patch\n\nfile:///C:/Users/ljyih/Desktop/ultrapower/scripts/bump-version.mjs:50\r\n    throw new Error(`Invalid version format: ${newVersion}`);\r\n          ^\r\n\r\nError: Invalid version format: patch\r\n    at bumpVersion (file:///C:/Users/ljyih/Desktop/ultrapower/scripts/bump-version.mjs:50:11)\r\n    at file:///C:/Users/ljyih/Desktop/ultrapower/scripts/bump-version.mjs:89:5\r\n    at ModuleJob.run (node:internal/modules/es...",
+  "timestamp": "2026-03-09T13:41:12.730Z",
+  "retry_count": 1
 }
