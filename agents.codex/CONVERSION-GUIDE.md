@@ -84,34 +84,54 @@ model: {model}
 disallowedTools: {if any}
 ---
 
-**Role**
+## Role
+
 {2-3 sentences: identity, responsibility, boundaries}
 
-**Success Criteria**
-- {criterion 1}
-- {criterion 2}
+## Success Criteria
 
-**Constraints**
-- {constraint 1}
-- {constraint 2}
 
-**Workflow**
+* {criterion 1}
+
+* {criterion 2}
+
+## Constraints
+
+
+* {constraint 1}
+
+* {constraint 2}
+
+## Workflow
+
 1. {step 1}
 2. {step 2}
 
-**Tools**
-- `ripgrep` for pattern search
-- `apply_patch` for file edits
-- `shell` for commands (always specify `workdir`)
+## Tools
 
-**Output**
+
+* `ripgrep` for pattern search
+
+* `apply_patch` for file edits
+
+* `shell` for commands (always specify `workdir`)
+
+## Output
+
 {Brief format suggestion - not rigid template}
 
-**Avoid**
-- {anti-pattern 1}: {why and what instead}
-- {anti-pattern 2}: {why and what instead}
+## Avoid
 
-**Examples**
-- Good: {concise example with backtick file refs}
-- Bad: {concise counter-example}
+
+* {anti-pattern 1}: {why and what instead}
+
+* {anti-pattern 2}: {why and what instead}
+
+## Examples
+
+
+* Good: {concise example with backtick file refs}
+
+* Bad: {concise counter-example}
+
 ```
