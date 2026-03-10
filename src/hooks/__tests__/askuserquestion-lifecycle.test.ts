@@ -10,10 +10,12 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
   processHook,
   resetSkipHooksCache,
-  dispatchAskUserQuestionNotification,
-  _notify,
   type HookInput,
 } from "../bridge.js";
+import {
+  dispatchAskUserQuestionNotification,
+  _notify,
+} from "../handlers/pre-tool-use.js";
 
 describe("AskUserQuestion notification lifecycle (issue #597)", () => {
   const originalEnv = process.env;

@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { getTokenTracker } from '../../analytics/token-tracker.js';
 import { colors, renderTable, formatCostWithColor, formatTokenCount } from '../utils/formatting.js';
 export async function agentsCommand(options) {
@@ -27,5 +28,12 @@ export async function agentsCommand(options) {
     ]);
     console.log(table);
     console.log('');
+}
+export function createAgentsCommand() {
+    return new Command('agents')
+        .description('Show agent usage breakdown')
+        .option('--json', 'Output as JSON')
+        .option('--limit <n>', 'Limit number of agents', '10')
+        .action(agentsCommand);
 }
 //# sourceMappingURL=agents.js.map

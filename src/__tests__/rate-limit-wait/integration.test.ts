@@ -35,7 +35,6 @@ describe('Rate Limit Wait Integration Tests', () => {
   const testDir = join(tmpdir(), 'omc-integration-test-' + Date.now());
 
   beforeEach(() => {
-    vi.clearAllMocks();
     mkdirSync(testDir, { recursive: true });
   });
 

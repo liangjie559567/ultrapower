@@ -30,11 +30,9 @@ describe('Task System Support', () => {
 
   beforeEach(() => {
     vi.mocked(os.homedir).mockReturnValue(mockHomedir);
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    vi.mocked(fs.existsSync).mockReturnValue(false);
+    vi.mocked(fs.readdirSync).mockReturnValue([] as any);
+    vi.mocked(fs.readFileSync).mockReturnValue('');
   });
 
   describe('getTaskDirectory', () => {

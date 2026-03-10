@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { BackfillEngine } from '../../analytics/backfill-engine.js';
 import { BackfillDedup } from '../../analytics/backfill-dedup.js';
 import { colors, formatCostWithColor, formatDuration } from '../utils/formatting.js';
@@ -140,5 +141,17 @@ export async function backfillCommand(options) {
             console.log('');
         }
     }
+}
+export function createBackfillCommand() {
+    return new Command('backfill')
+        .description('[DEPRECATED] Backfill now runs automatically. Use for manual re-sync only.')
+        .option('--project <name>', 'Filter by project name')
+        .option('--from <date>', 'Start date (YYYY-MM-DD)')
+        .option('--to <date>', 'End date (YYYY-MM-DD)')
+        .option('--dry-run', 'Preview without writing')
+        .option('--reset', 'Reset deduplication index')
+        .option('--verbose', 'Show detailed progress')
+        .option('--json', 'Output as JSON')
+        .action(backfillCommand);
 }
 //# sourceMappingURL=backfill.js.map

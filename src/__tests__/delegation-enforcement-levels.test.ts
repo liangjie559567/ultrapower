@@ -57,6 +57,7 @@ const mockReadFileSync = vi.mocked(readFileSync);
 describe('delegation-enforcement-levels', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.resetAllMocks();
     clearEnforcementCache();
     // Default: no config files exist
     mockExistsSync.mockReturnValue(false);

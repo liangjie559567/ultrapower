@@ -50,6 +50,7 @@ function makeConfig(overrides?: Partial<BridgeConfig>): BridgeConfig {
 }
 
 beforeEach(() => {
+  vi.clearAllMocks();
   TEST_BASE_DIR = mkdtempSync(join(tmpdir(), 'bridge-int-test-'));
   TASKS_DIR = join(TEST_BASE_DIR, 'tasks', TEST_TEAM);
   TEAMS_DIR = join(TEST_BASE_DIR, 'teams', TEST_TEAM);

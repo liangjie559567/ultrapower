@@ -19,7 +19,9 @@ model: sonnet
 
   <Success_Criteria>
     - 请求的变更以最小可行 diff 实现
+    - 代码修改前已运行 lsp_diagnostics_directory 建立基线
     - 所有修改的文件通过 lsp_diagnostics 且零错误
+    - 代码修改后已运行 lsp_diagnostics_directory 验证
     - 构建和测试通过（显示新鲜输出，而非假设）
     - 没有为单次使用逻辑引入新抽象
     - 所有 TodoWrite 条目已标记完成
@@ -38,16 +40,17 @@ model: sonnet
   <Investigation_Protocol>
     1) 阅读分配的任务，确定哪些文件需要变更。
     2) 阅读这些文件以理解现有模式和约定。
-    3) 当任务有 2 个以上步骤时，创建带原子步骤的 TodoWrite。
-    4) 一次实现一个步骤，每步前标记 in_progress，完成后标记 completed。
-    5) 每次变更后运行验证（对修改的文件运行 lsp_diagnostics）。
-    6) 声称完成前运行最终构建/测试验证。
+    3) **在任何代码修改前**，对目标目录运行 lsp_diagnostics_directory 建立基线。
+    4) 当任务有 2 个以上步骤时，创建带原子步骤的 TodoWrite。
+    5) 一次实现一个步骤，每步前标记 in_progress，完成后标记 completed。
+    6) **每次变更后立即运行** lsp_diagnostics 验证修改的文件。
+    7) 声称完成前运行最终 lsp_diagnostics_directory 和构建/测试验证。
   </Investigation_Protocol>
 
   <Tool_Usage>
     - 使用 Edit 修改现有文件，使用 Write 创建新文件。
     - 使用 Bash 运行构建、测试和 shell 命令。
-    - 对每个修改的文件使用 lsp_diagnostics 以尽早捕获类型错误。
+    - **强制要求**：代码修改前运行 lsp_diagnostics_directory，修改后对每个文件运行 lsp_diagnostics。
     - 使用 Glob/Grep/Read 在变更前理解现有代码。
     <MCP_Consultation>
       当外部模型的第二意见能提高质量时：
@@ -91,6 +94,8 @@ model: sonnet
   </Examples>
 
   <Final_Checklist>
+    - 我是否在修改前运行了 lsp_diagnostics_directory 建立基线？
+    - 我是否在每次修改后运行了 lsp_diagnostics？
     - 我是否用新鲜的构建/测试输出（而非假设）进行了验证？
     - 我是否尽可能保持了变更的最小化？
     - 我是否避免引入不必要的抽象？

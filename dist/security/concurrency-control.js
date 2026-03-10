@@ -1,0 +1,87 @@
+/**
+ * T-019: Concurrency Control Mechanism
+ * - Version checking
+ * - Conflict retry with exponential backoff
+ * - Deadlock detection
+ */
+const DEFAULT_CONFIG = {
+    maxRetries: 3,
+    baseDelayMs: 100,
+    deadlockTimeoutMs: 30000,
+};
+export class ConcurrencyControl {
+    locks = new Map();
+    config;
+    constructor(config = {}) {
+        this.config = { ...DEFAULT_CONFIG, ...config };
+    }
+    /**
+     * Version check: ensure state hasn't changed
+     */
+    checkVersion(current, expected) {
+        if (current !== expected) {
+            throw new Error(`Version conflict: expected ${expected}, got ${current}`);
+        }
+    }
+    /**
+     * Retry with exponential backoff on conflict
+     */
+    async retryOnConflict(operation, resourceId) {
+        let lastError;
+        for (let attempt = 0; attempt < this.config.maxRetries; attempt++) {
+            try {
+                return await operation();
+            }
+            catch (error) {
+                if (error instanceof Error && error.message.includes('Version conflict')) {
+                    lastError = error;
+                    const delay = this.config.baseDelayMs * Math.pow(2, attempt);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    continue;
+                }
+                throw error;
+            }
+        }
+        throw new Error(`Max retries (${this.config.maxRetries}) exceeded for ${resourceId}: ${lastError?.message}`);
+    }
+    /**
+     * Acquire lock with deadlock detection
+     */
+    async acquireLock(resourceId, holderId) {
+        const existing = this.locks.get(resourceId);
+        if (existing) {
+            const elapsed = Date.now() - existing.timestamp;
+            if (elapsed > this.config.deadlockTimeoutMs) {
+                // Deadlock detected, force release
+                this.locks.delete(resourceId);
+            }
+            else if (existing.holder !== holderId) {
+                throw new Error(`Resource ${resourceId} locked by ${existing.holder}`);
+            }
+        }
+        this.locks.set(resourceId, { holder: holderId, timestamp: Date.now() });
+    }
+    /**
+     * Release lock
+     */
+    releaseLock(resourceId, holderId) {
+        const existing = this.locks.get(resourceId);
+        if (existing && existing.holder === holderId) {
+            this.locks.delete(resourceId);
+        }
+    }
+    /**
+     * Check for deadlocks
+     */
+    detectDeadlocks() {
+        const deadlocked = [];
+        const now = Date.now();
+        for (const [resourceId, lock] of this.locks.entries()) {
+            if (now - lock.timestamp > this.config.deadlockTimeoutMs) {
+                deadlocked.push(resourceId);
+            }
+        }
+        return deadlocked;
+    }
+}
+//# sourceMappingURL=concurrency-control.js.map
