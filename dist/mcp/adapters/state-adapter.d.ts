@@ -105,11 +105,10 @@ export declare const stateTools: ({
     };
     handler: (args: {
         mode: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan";
-        error?: string | undefined;
-        active?: boolean | undefined;
         state?: Record<string, unknown> | undefined;
         workingDirectory?: string | undefined;
         session_id?: string | undefined;
+        active?: boolean | undefined;
         iteration?: number | undefined;
         max_iterations?: number | undefined;
         current_phase?: string | undefined;
@@ -117,6 +116,7 @@ export declare const stateTools: ({
         plan_path?: string | undefined;
         started_at?: string | undefined;
         completed_at?: string | undefined;
+        error?: string | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";
