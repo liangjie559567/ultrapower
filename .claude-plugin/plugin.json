@@ -1,7 +1,7 @@
 {
   "name": "ultrapower",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
-  "version": "6.0.0",
+  "version": "7.0.1",
   "author": {
     "name": "liangjie559567"
   },

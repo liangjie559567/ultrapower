@@ -2,13 +2,7 @@
 /**
  * Oh-My-Claude-Sisyphus CLI
  *
- * Command-line interface for the Sisyphus multi-agent system.
- *
- * Commands:
- * - run: Start an interactive session
- * - init: Initialize configuration in current directory
- * - config: Show or edit configuration
- * - setup: Sync all OMC components (hooks, agents, skills)
+ * Lazy-loaded command-line interface for the Sisyphus multi-agent system.
  */
 export {};
 //# sourceMappingURL=index.d.ts.map

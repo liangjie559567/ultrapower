@@ -29,7 +29,8 @@ beforeEach(() => {
   mkdirSync(join(WORK_DIR, '.omc', 'state'), { recursive: true });
 });
 
-afterEach(() => {
+afterEach(async () => {
+  await new Promise(resolve => setTimeout(resolve, 10));
   rmSync(TEST_BASE_DIR, { recursive: true, force: true });
   rmSync(WORK_DIR, { recursive: true, force: true });
 });

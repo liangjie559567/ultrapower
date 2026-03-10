@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { getQueryEngine } from '../../analytics/query-engine.js';
 import { getSessionManager } from '../../analytics/session-manager.js';
 import { exportCostReport, exportSessionHistory, exportUsagePatterns } from '../../analytics/export.js';
@@ -26,5 +27,14 @@ export async function exportCommand(type, format, outputPath, options) {
         console.error(colors.red(`✗ Export failed: ${error.message}\n`));
         process.exit(1);
     }
+}
+export function createExportCommand() {
+    return new Command('export')
+        .argument('<type>', 'Type: cost, sessions, patterns')
+        .argument('<format>', 'Format: json, csv')
+        .argument('<output>', 'Output file path')
+        .description('Export data (type: cost, sessions, patterns; format: json, csv)')
+        .option('--period <period>', 'Period for cost export: daily, weekly, monthly', 'monthly')
+        .action(exportCommand);
 }
 //# sourceMappingURL=export.js.map

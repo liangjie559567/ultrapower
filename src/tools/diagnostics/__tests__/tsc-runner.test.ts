@@ -8,11 +8,8 @@ vi.mock('child_process');
 
 describe('tsc-runner', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    vi.mocked(fs.existsSync).mockReturnValue(false);
+    vi.mocked(child_process.execSync).mockReturnValue(Buffer.from(''));
   });
 
   describe('runTscDiagnostics', () => {

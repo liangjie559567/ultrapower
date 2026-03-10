@@ -23,18 +23,14 @@ import {
 
 describe("Skill Bridge Module", () => {
   let testProjectRoot: string;
-  let originalCwd: string;
 
   beforeEach(() => {
     clearSkillMetadataCache();
-    originalCwd = process.cwd();
     testProjectRoot = join(tmpdir(), `omc-bridge-test-${Date.now()}`);
     mkdirSync(testProjectRoot, { recursive: true });
-    process.chdir(testProjectRoot);
   });
 
   afterEach(() => {
-    process.chdir(originalCwd);
     if (existsSync(testProjectRoot)) {
       rmSync(testProjectRoot, { recursive: true, force: true });
     }

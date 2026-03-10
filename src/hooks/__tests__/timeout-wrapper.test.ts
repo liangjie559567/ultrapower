@@ -7,6 +7,7 @@ describe('withTimeout', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 

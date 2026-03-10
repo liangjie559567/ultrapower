@@ -28,9 +28,9 @@ graph TB
 
 **核心理念**：Superpowers 的严格工作流纪律 + OMC 的并行执行能力
 
-## 快速开始（3 分钟上手）
+## 快速开始（15 分钟上手）
 
-**新用户？** 查看 [📖 3 分钟快速入门指南](docs/getting-started/QUICKSTART.md)
+**新用户？** 查看 [📖 15 分钟快速上手指南](docs/getting-started/quickstart.md) | [核心概念图解](docs/getting-started/concepts.md) | [快速参考卡片](docs/getting-started/quick-reference.md)
 
 ### 前置条件
 

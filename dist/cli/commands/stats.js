@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { getTokenTracker } from '../../analytics/token-tracker.js';
 import { getSessionManager } from '../../analytics/session-manager.js';
 import { colors, formatCostWithColor, formatTokenCount, formatDuration } from '../utils/formatting.js';
@@ -80,5 +81,12 @@ export async function statsCommand(options) {
         }
         console.log('');
     }
+}
+export function createStatsCommand() {
+    return new Command('stats')
+        .description('Show aggregate statistics (or specific session with --session)')
+        .option('--json', 'Output as JSON')
+        .option('--session <id>', 'Show specific session stats')
+        .action(statsCommand);
 }
 //# sourceMappingURL=stats.js.map

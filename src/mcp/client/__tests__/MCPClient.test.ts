@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MCPClient } from '../MCPClient.js';
 import { EventEmitter } from 'events';
 
@@ -26,6 +26,7 @@ vi.mock('child_process', () => ({
 
 describe('MCPClient', () => {
   beforeEach(async () => {
+    vi.useFakeTimers();
     const { Client } = await import('@modelcontextprotocol/sdk/client/index.js');
     const { StdioClientTransport } = await import('@modelcontextprotocol/sdk/client/stdio.js');
 
@@ -46,6 +47,10 @@ describe('MCPClient', () => {
     mockProcess.stdin = { write: vi.fn() };
     mockProcess.stdout = new EventEmitter();
     mockProcess.stderr = new EventEmitter();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   describe('constructor', () => {
@@ -107,7 +112,9 @@ describe('MCPClient', () => {
         .mockRejectedValueOnce(new Error('Connection failed'))
         .mockResolvedValueOnce(undefined);
 
-      await client.connect('uvx', ['test-server']);
+      const connectPromise = client.connect('uvx', ['test-server']);
+      await vi.advanceTimersByTimeAsync(7000);
+      await connectPromise;
 
       expect(mockClient.connect).toHaveBeenCalledTimes(3);
       expect(client.isAvailable()).toBe(true);
@@ -117,7 +124,10 @@ describe('MCPClient', () => {
       const client = new MCPClient();
       mockClient.connect.mockRejectedValue(new Error('Connection failed'));
 
-      await expect(client.connect('uvx', ['test-server']))
+      const connectPromise = client.connect('uvx', ['test-server']);
+      await vi.advanceTimersByTimeAsync(7000);
+
+      await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
 
       expect(mockClient.connect).toHaveBeenCalledTimes(3);
@@ -128,7 +138,10 @@ describe('MCPClient', () => {
       const client = new MCPClient();
       mockClient.connect.mockRejectedValue(new Error('Connection failed'));
 
-      await expect(client.connect('uvx', ['test-server']))
+      const connectPromise = client.connect('uvx', ['test-server']);
+      await vi.advanceTimersByTimeAsync(7000);
+
+      await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
 
       expect(client.isAvailable()).toBe(false);
@@ -151,7 +164,10 @@ describe('MCPClient', () => {
       const client = new MCPClient();
       mockClient.connect.mockRejectedValue(new Error('Failed'));
 
-      await expect(client.connect('uvx', ['test-server']))
+      const connectPromise = client.connect('uvx', ['test-server']);
+      await vi.advanceTimersByTimeAsync(7000);
+
+      await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
 
       expect(client.isAvailable()).toBe(false);
@@ -326,7 +342,10 @@ describe('MCPClient', () => {
       const client = new MCPClient();
       mockClient.connect.mockRejectedValue(new Error('Spawn failed'));
 
-      await expect(client.connect('invalid-command', []))
+      const connectPromise = client.connect('invalid-command', []);
+      await vi.advanceTimersByTimeAsync(7000);
+
+      await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
     });
 
@@ -334,7 +353,10 @@ describe('MCPClient', () => {
       const client = new MCPClient();
       mockClient.connect.mockRejectedValue(new Error('Transport creation failed'));
 
-      await expect(client.connect('uvx', ['test-server']))
+      const connectPromise = client.connect('uvx', ['test-server']);
+      await vi.advanceTimersByTimeAsync(7000);
+
+      await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
     });
   });

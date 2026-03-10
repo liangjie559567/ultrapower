@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { readHudConfig } from '../../hud/state.js';
 import { DEFAULT_HUD_CONFIG } from '../../hud/types.js';
 
@@ -11,7 +11,11 @@ vi.mock('node:fs', () => ({
 }));
 
 vi.mock('node:os', () => ({
-  homedir: () => '/Users/testuser',
+  homedir: vi.fn(() => '/Users/testuser'),
+}));
+
+vi.mock('../../utils/paths.js', () => ({
+  getClaudeConfigDir: vi.fn(() => '/Users/testuser/.claude'),
 }));
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -21,6 +25,12 @@ const mockReadFileSync = vi.mocked(readFileSync);
 describe('readHudConfig', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockExistsSync.mockReturnValue(false);
+    mockReadFileSync.mockReturnValue('{}');
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
   describe('priority order', () => {
