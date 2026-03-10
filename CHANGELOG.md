@@ -1,3 +1,58 @@
+# ultrapower v6.0.0
+
+## 6.0.0
+
+### BREAKING CHANGES
+
+**安全加固版本** - 修复 3 个关键安全问题（D-05、D-06、D-07）
+
+#### 1. permission-request Hook 强制阻塞（D-05）
+
+- **变更**: 失败时不再静默降级，强制返回 `{ continue: false }`
+- **影响**: `result = null/undefined/false` 现在会阻塞操作（之前：放行）
+- **迁移**: 无需操作（自动修复安全漏洞）
+
+#### 2. 全部 15 类 HookType 严格白名单（D-06）
+
+- **变更**: 扩展白名单验证到所有 15 类 HookType（之前：仅 4 类）
+- **影响**: 未知字段被丢弃并记录到安全审计日志
+- **迁移**: 检查 `.omc/logs/security-audit.jsonl` 中的 `field_filtered` 事件
+
+#### 3. 原子写入 + 重试机制（D-07）
+
+- **变更**: 所有状态文件使用 `atomicWriteJsonSyncWithRetry`（指数退避：100ms/200ms/400ms）
+- **影响**: 提升并发写入安全性，Windows 平台文件锁定自动重试
+- **迁移**: 内部自动升级，无需操作
+
+### Features
+
+- **安全审计日志**: 新增 `.omc/logs/security-audit.jsonl`，记录字段过滤和权限阻塞事件
+- **敏感字段脱敏**: 自动脱敏 token/apiKey/password/secret 等字段
+- **日志轮转**: 10MB 单文件限制，保留 7 个历史文件
+
+### Bug Fixes
+
+- fix(hooks): permission-request 失败时强制阻塞（SEC-H01）
+- fix(hooks): 扩展白名单验证到全部 15 类 HookType（SEC-H03）
+- fix(state): subagent-tracker 使用原子写入保护（SEC-S01）
+
+### Documentation
+
+- docs: 更新 runtime-protection.md 反映 v6.0.0 变更
+- docs: 新增 v6.0.0 迁移指南（docs/migration/v6.0.0.md）
+
+### Tests
+
+- test: 新增 permission-request 边界情况测试（6 个用例）
+- test: 新增 whitelist 验证测试（3 个 HookType）
+- test: 新增 atomic-write 并发测试
+
+**发布日期**: 2026-03-10
+
+**迁移指南**: [docs/migration/v6.0.0.md](docs/migration/v6.0.0.md)
+
+---
+
 # ultrapower v5.6.5
 
 ## 5.6.11

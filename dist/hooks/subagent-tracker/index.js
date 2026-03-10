@@ -8,7 +8,8 @@
  * - HUD integration for agent status display
  * - Automatic cleanup of orphaned agent state
  */
-import { existsSync, readFileSync, writeFileSync, mkdirSync, unlinkSync, statSync, } from "fs";
+import { atomicWriteJsonSyncWithRetry } from "../../lib/atomic-write.js";
+import { existsSync, readFileSync, mkdirSync, unlinkSync, statSync, writeFileSync, } from "fs";
 import { join, relative } from "path";
 import { recordAgentStart, recordAgentStop } from './session-replay.js';
 export const COST_LIMIT_USD = 1.0;
@@ -281,7 +282,7 @@ function writeTrackingStateImmediate(directory, state) {
     const statePath = getStateFilePath(directory);
     state.last_updated = new Date().toISOString();
     try {
-        writeFileSync(statePath, JSON.stringify(state, null, 2), "utf-8");
+        atomicWriteJsonSyncWithRetry(statePath, state);
     }
     catch (error) {
         console.error("[SubagentTracker] Error writing state:", error);

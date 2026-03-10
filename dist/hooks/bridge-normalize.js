@@ -71,6 +71,17 @@ const STRICT_WHITELIST = {
     'setup-init': ['sessionId', 'directory'],
     'setup-maintenance': ['sessionId', 'directory'],
     'session-end': ['sessionId', 'directory'],
+    'tool-call': ['toolName', 'toolInput', 'timestamp'],
+    'tool-response': ['toolName', 'toolOutput', 'success', 'error', 'duration'],
+    'agent-start': ['agent_type', 'agent_id', 'prompt'],
+    'agent-stop': ['agent_id', 'success', 'output', 'duration'],
+    'session-start': ['sessionId', 'directory', 'timestamp'],
+    'message-sent': ['message', 'role', 'timestamp'],
+    'state-change': ['mode', 'from_state', 'to_state', 'timestamp'],
+    'error-occurred': ['error', 'context', 'timestamp', 'severity'],
+    'file-read': ['file_path', 'success'],
+    'file-write': ['file_path', 'success', 'bytes_written'],
+    'custom-hook': ['hook_name', 'data'],
 };
 /** Required keys per HookType (camelCase, post-normalization) */
 const REQUIRED_KEYS = {
@@ -180,6 +191,7 @@ function mapFieldsToCamelCase(input, hookType) {
  * @param raw - Raw hook input (may be snake_case, camelCase, or mixed)
  * @param hookType - Optional hook type for sensitivity-aware filtering
  */
+import * as logger from '../lib/logger.js';
 export function normalizeHookInput(raw, hookType) {
     if (typeof raw !== 'object' || raw === null) {
         return {};
@@ -267,7 +279,8 @@ function filterSensitiveField(key, value, hookType) {
     if (whitelist.includes(key)) {
         return [key, value];
     }
-    console.warn(`[bridge-normalize] Dropped unknown field "${key}" for sensitive hook "${hookType}"`);
+    logger.security('field_filtered', { hookType, field: key });
+    console.warn(`[bridge-normalize] [SECURITY] Dropped unknown field "${key}" for hook "${hookType}"`);
     return null;
 }
 /**
@@ -280,18 +293,18 @@ function filterNonSensitiveField(key, value, hookType) {
     return [key, value];
 }
 /**
- * Filter passthrough fields based on hook sensitivity.
+ * Filter passthrough fields based on hook type whitelist.
  *
- * - Sensitive hooks: only allow STRICT_WHITELIST (drop everything else)
- * - Other hooks: pass through unknown fields with a debug warning
+ * - Hooks with defined whitelist: only allow STRICT_WHITELIST (drop everything else)
+ * - Hooks without whitelist: pass through unknown fields with a debug warning
  */
 function filterPassthrough(input, hookType) {
-    const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
+    const hasWhitelist = hookType != null && STRICT_WHITELIST[hookType] != null;
     const extra = {};
     for (const [key, value] of Object.entries(input)) {
         if (!shouldIncludeField(key, value))
             continue;
-        const result = isSensitive
+        const result = hasWhitelist
             ? filterSensitiveField(key, value, hookType)
             : filterNonSensitiveField(key, value, hookType);
         if (result) {

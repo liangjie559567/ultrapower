@@ -53,4 +53,14 @@ export declare function atomicWriteFileSync(filePath: string, content: string): 
  */
 export declare function atomicWriteJsonSync(filePath: string, data: unknown): void;
 export declare function safeReadJson<T>(filePath: string): Promise<T | null>;
+/**
+ * Write JSON data atomically with retry mechanism (synchronous version).
+ * Retries up to 3 times with exponential backoff on failure.
+ *
+ * @param filePath Target file path
+ * @param data Data to serialize as JSON
+ * @param maxRetries Maximum retry attempts (default: 3)
+ * @throws Error if all retry attempts fail
+ */
+export declare function atomicWriteJsonSyncWithRetry(filePath: string, data: unknown, maxRetries?: number): void;
 //# sourceMappingURL=atomic-write.d.ts.map
