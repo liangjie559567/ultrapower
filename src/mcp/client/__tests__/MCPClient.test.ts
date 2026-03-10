@@ -113,7 +113,7 @@ describe('MCPClient', () => {
         .mockResolvedValueOnce(undefined);
 
       const connectPromise = client.connect('uvx', ['test-server']);
-      await vi.advanceTimersByTimeAsync(7000);
+      await vi.advanceTimersByTimeAsync(10000);
       await connectPromise;
 
       expect(mockClient.connect).toHaveBeenCalledTimes(3);
@@ -125,7 +125,7 @@ describe('MCPClient', () => {
       mockClient.connect.mockRejectedValue(new Error('Connection failed'));
 
       const connectPromise = client.connect('uvx', ['test-server']);
-      await vi.advanceTimersByTimeAsync(7000);
+      await vi.advanceTimersByTimeAsync(10000);
 
       await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
@@ -139,7 +139,7 @@ describe('MCPClient', () => {
       mockClient.connect.mockRejectedValue(new Error('Connection failed'));
 
       const connectPromise = client.connect('uvx', ['test-server']);
-      await vi.advanceTimersByTimeAsync(7000);
+      await vi.advanceTimersByTimeAsync(10000);
 
       await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
@@ -165,7 +165,7 @@ describe('MCPClient', () => {
       mockClient.connect.mockRejectedValue(new Error('Failed'));
 
       const connectPromise = client.connect('uvx', ['test-server']);
-      await vi.advanceTimersByTimeAsync(7000);
+      await vi.advanceTimersByTimeAsync(10000);
 
       await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
@@ -343,7 +343,7 @@ describe('MCPClient', () => {
       mockClient.connect.mockRejectedValue(new Error('Spawn failed'));
 
       const connectPromise = client.connect('invalid-command', []);
-      await vi.advanceTimersByTimeAsync(7000);
+      await vi.advanceTimersByTimeAsync(10000);
 
       await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
@@ -354,7 +354,7 @@ describe('MCPClient', () => {
       mockClient.connect.mockRejectedValue(new Error('Transport creation failed'));
 
       const connectPromise = client.connect('uvx', ['test-server']);
-      await vi.advanceTimersByTimeAsync(7000);
+      await vi.advanceTimersByTimeAsync(10000);
 
       await expect(connectPromise)
         .rejects.toThrow('Failed to connect after 3 attempts');
