@@ -25,6 +25,8 @@ vi.mock('child_process', () => ({
 }));
 
 describe('MCPClient', () => {
+  let unhandledRejectionHandler: ((reason: any) => void) | undefined;
+
   beforeEach(async () => {
     vi.useFakeTimers();
     const { Client } = await import('@modelcontextprotocol/sdk/client/index.js');
@@ -47,10 +49,22 @@ describe('MCPClient', () => {
     mockProcess.stdin = { write: vi.fn() };
     mockProcess.stdout = new EventEmitter();
     mockProcess.stderr = new EventEmitter();
+
+    // Suppress unhandled rejection warnings from intentional test failures
+    unhandledRejectionHandler = (reason: any) => {
+      if (reason?.message?.includes('Failed to connect after 3 attempts')) {
+        return; // Expected error, suppress warning
+      }
+      throw reason; // Re-throw unexpected errors
+    };
+    process.on('unhandledRejection', unhandledRejectionHandler);
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    if (unhandledRejectionHandler) {
+      process.off('unhandledRejection', unhandledRejectionHandler);
+    }
   });
 
   describe('constructor', () => {
