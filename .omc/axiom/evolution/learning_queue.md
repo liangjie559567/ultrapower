@@ -2,6 +2,37 @@
 
 ## Pending
 
+### [P0] 版本发布自动化最佳实践
+**来源：** Session 2026-03-10 v7.0.1 发布
+**内容：** 使用 changesets + GitHub Actions 实现完全自动化发布流程
+**关键步骤：**
+1. changesets 自动管理版本号和 changelog
+2. CI 工作流验证代码质量（ESLint + 测试）
+3. Release 工作流自动发布到 npm 和创建 GitHub Release
+4. 避免手动推送 tag，让 CI 自动处理
+**应用场景：** 所有 npm 包发布流程
+**置信度：** 已验证（v7.0.1 成功发布）
+
+### [P1] Git Tag 冲突解决方案
+**来源：** Session 2026-03-10 v7.0.1 发布
+**内容：** 当 changesets 尝试推送已存在的 tag 时会失败
+**解决方案：** `git push origin :refs/tags/<tag>` 删除远程 tag，重新触发工作流
+**应用场景：** 发布流程 tag 冲突
+**置信度：** 已验证
+
+### [P1] 版本文件同步检查清单
+**来源：** Session 2026-03-10 v7.0.1 发布
+**内容：** 发布前必须同步所有版本文件
+**检查清单：**
+- package.json
+- marketplace.json
+- src/installer/index.ts (VERSION 常量)
+- docs/CLAUDE.md
+- CLAUDE.md
+- README.md
+**应用场景：** 每次版本发布前
+**置信度：** 已验证（marketplace.json 不同步导致工作流失败）
+
 ### [P1] MCP 超时配置模式
 **来源：** Session 2026-03-09 CCG Bug 修复
 **内容：** MCP 客户端超时需要小于 CLI 执行时间，建议配置 25s 超时

@@ -4,19 +4,20 @@
 
 ### PAT-001: 发布流程标准模式
 
-**出现次数**: 1
-**置信度**: 85%
+**出现次数**: 2
+**置信度**: 95%
 **模式描述**:
 ```
-1. 版本同步（package.json + 7个配置文件）
-2. 运行完整测试套件
-3. Git commit + tag
-4. npm publish
-5. GitHub Release
-6. CI 验证
+1. 版本同步（package.json + marketplace.json + VERSION 常量等）
+2. 运行完整测试套件（ESLint + 单元测试）
+3. Git commit + tag（由 CI 自动创建）
+4. npm publish（changesets 自动执行）
+5. GitHub Release（changesets 自动创建）
+6. CI 验证（所有工作流通过）
 ```
 **适用场景**: npm 包发布
-**反模式**: 跳过测试或版本同步
+**反模式**: 跳过测试、版本不同步、手动推送 tag
+**最新验证**: v7.0.1 发布成功（2026-03-10）
 
 ### PAT-002: Skill 集成检查清单
 
@@ -185,3 +186,36 @@ TODO 分为两类：
 **反模式**: 串行修复或手动协调
 **性能**: 3轮修复，每轮 3-5 workers
 
+
+### PAT-013: Git Tag 冲突处理模式
+
+**出现次数**: 1
+**置信度**: 90%
+**模式描述**:
+```
+当 CI 推送 tag 失败（tag already exists）：
+1. 删除远程 tag: git push origin :refs/tags/<tag>
+2. 重新触发 CI 工作流
+3. 让 CI 自动创建和推送 tag
+```
+**适用场景**: changesets 发布流程 tag 冲突
+**反模式**: 手动推送 tag（会与 CI 冲突）
+**关键**: 始终让 CI 管理 tag，避免手动干预
+
+### PAT-014: 版本文件同步检查模式
+
+**出现次数**: 1
+**置信度**: 95%
+**模式描述**:
+```
+发布前检查清单：
+- package.json
+- marketplace.json
+- src/installer/index.ts (VERSION 常量)
+- docs/CLAUDE.md
+- CLAUDE.md
+- README.md
+```
+**适用场景**: 每次版本发布前
+**反模式**: 仅更新 package.json
+**验证**: marketplace.json 不同步导致 v7.0.1 首次发布失败

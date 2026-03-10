@@ -2,6 +2,26 @@
 
 ## Patterns
 
+### 版本发布自动化流程
+**置信度：** 高（已验证，v7.0.1 成功）
+**应用：** 使用 changesets + GitHub Actions 实现 npm 包自动发布
+**关键点：**
+- CI 工作流验证代码质量（ESLint + 测试）
+- Release 工作流自动发布到 npm 和创建 GitHub Release
+- 避免手动推送 tag，让 changesets 自动处理
+**原因：** 自动化减少人为错误，确保发布流程一致性
+
+### Git Tag 冲突处理
+**置信度：** 高（已验证）
+**应用：** 使用 `git push origin :refs/tags/<tag>` 删除远程 tag
+**场景：** changesets 推送 tag 时遇到已存在的 tag
+**原因：** 手动推送的 tag 会与 CI 自动创建的 tag 冲突
+
+### 版本文件同步检查
+**置信度：** 高（已验证）
+**应用：** 发布前检查 package.json、marketplace.json、VERSION 常量等
+**原因：** 版本不同步会导致安装器读取错误版本
+
 ### MCP 超时配置
 **置信度：** 高（已验证）
 **应用：** 在 .mcp.json 中设置 OMC_CODEX_TIMEOUT=25000 和 OMC_GEMINI_TIMEOUT=25000
