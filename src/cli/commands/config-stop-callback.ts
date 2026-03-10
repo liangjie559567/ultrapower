@@ -28,7 +28,9 @@ export function createConfigStopCallbackCommand(): Command {
       let config: any = { silentAutoUpdate: false };
       try {
         config = JSON.parse(readFileSync(configPath, 'utf-8'));
-      } catch {}
+      } catch {
+        // Config file doesn't exist or is invalid, use default
+      }
 
       if (options.show) {
         if (options.profile) {

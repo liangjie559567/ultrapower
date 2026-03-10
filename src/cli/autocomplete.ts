@@ -32,7 +32,7 @@ export function getSkillNames(): string[] {
  */
 export function getCompletions(partial: string, type: 'agent' | 'skill' | 'all' = 'all'): string[] {
   const lower = partial.toLowerCase();
-  let candidates: string[] = [];
+  const candidates: string[] = [];
 
   if (type === 'agent' || type === 'all') {
     candidates.push(...getAgentNames());
