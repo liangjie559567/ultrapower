@@ -9,13 +9,15 @@
  * - Automatic cleanup of orphaned agent state
  */
 
+import { atomicWriteJsonSyncWithRetry } from "../../lib/atomic-write.js";
+
 import {
   existsSync,
   readFileSync,
-  writeFileSync,
   mkdirSync,
   unlinkSync,
   statSync,
+  writeFileSync,
 } from "fs";
 import { join, relative } from "path";
 import { recordAgentStart, recordAgentStop } from './session-replay.js';
@@ -422,7 +424,7 @@ function writeTrackingStateImmediate(
   state.last_updated = new Date().toISOString();
 
   try {
-    writeFileSync(statePath, JSON.stringify(state, null, 2), "utf-8");
+    atomicWriteJsonSyncWithRetry(statePath, state);
   } catch (error) {
     console.error("[SubagentTracker] Error writing state:", error);
   }

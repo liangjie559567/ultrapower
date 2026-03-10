@@ -257,3 +257,35 @@ export async function safeReadJson<T>(filePath: string): Promise<T | null> {
     throw err;
   }
 }
+
+/**
+ * Write JSON data atomically with retry mechanism (synchronous version).
+ * Retries up to 3 times with exponential backoff on failure.
+ *
+ * @param filePath Target file path
+ * @param data Data to serialize as JSON
+ * @param maxRetries Maximum retry attempts (default: 3)
+ * @throws Error if all retry attempts fail
+ */
+export function atomicWriteJsonSyncWithRetry(
+  filePath: string,
+  data: unknown,
+  maxRetries = 3,
+): void {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      atomicWriteJsonSync(filePath, data);
+      return;
+    } catch (error) {
+      if (attempt === maxRetries - 1) {
+        throw error;
+      }
+      // Exponential backoff: 100ms, 200ms, 400ms
+      const delayMs = 100 * Math.pow(2, attempt);
+      const start = Date.now();
+      while (Date.now() - start < delayMs) {
+        // Busy wait (sync sleep)
+      }
+    }
+  }
+}
