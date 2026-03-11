@@ -11,8 +11,6 @@
  */
 import { existsSync, unlinkSync, readFileSync, mkdirSync } from "fs";
 import { join } from "path";
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('ralph:loop');
 import { readPrd, getPrdStatus, formatNextStoryPrompt, formatPrdStatus, } from "./prd.js";
 import { getProgressContext, appendProgress, initProgress, addPattern, } from "./progress.js";
 import { readUltraworkState as readUltraworkStateFromModule, writeUltraworkState as writeUltraworkStateFromModule, } from "../ultrawork/index.js";
@@ -150,7 +148,7 @@ export function createRalphLoopHook(directory) {
     const startLoop = (sessionId, prompt, options) => {
         // Mutual exclusion check: cannot start Ralph Loop if UltraQA is active
         if (isUltraQAActive(directory, sessionId)) {
-            logger.error("Cannot start Ralph Loop while UltraQA is active. Cancel UltraQA first with /ultrapower:cancel.");
+            console.error("Cannot start Ralph Loop while UltraQA is active. Cancel UltraQA first with /ultrapower:cancel.");
             return false;
         }
         const enableUltrawork = !options?.disableUltrawork;

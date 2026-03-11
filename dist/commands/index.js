@@ -7,8 +7,6 @@
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../utils/paths.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('commands:index');
 /**
  * Get the commands directory path
  */
@@ -50,7 +48,7 @@ export function getCommand(name) {
         };
     }
     catch (error) {
-        logger.error(`Error reading command ${name}:`, error);
+        console.error(`Error reading command ${name}:`, error);
         return null;
     }
 }
@@ -75,7 +73,7 @@ export function getAllCommands() {
         return commands;
     }
     catch (error) {
-        logger.error('Error listing commands:', error);
+        console.error('Error listing commands:', error);
         return [];
     }
 }
@@ -125,7 +123,7 @@ export function expandCommand(name, args = '') {
  * const prompt = expandCommandPrompt('ultrawork', 'Refactor the auth module');
  *
  * for await (const msg of query({ prompt })) {
- *   logger.info(msg);
+ *   console.log(msg);
  * }
  * ```
  */

@@ -1,1 +1,1 @@
-{"version":3,"file":"version-info.d.ts","sourceRoot":"","sources":["../../../src/cli/utils/version-info.ts"],"names":[],"mappings":"AAGA,wBAAsB,cAAc,IAAI,OAAO,CAAC,IAAI,CAAC,CAEpD"}
+{"version":3,"file":"version-info.d.ts","sourceRoot":"","sources":["../../../src/cli/utils/version-info.ts"],"names":[],"mappings":"AAAA,wBAAsB,cAAc,IAAI,OAAO,CAAC,IAAI,CAAC,CAEpD"}

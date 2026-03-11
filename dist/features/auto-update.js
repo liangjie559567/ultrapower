@@ -16,8 +16,6 @@ import { install as installSisyphus, HOOKS_DIR, isProjectScopedPlugin, isRunning
 import { getConfigDir } from '../utils/config-dir.js';
 import { syncPluginRegistry } from '../lib/plugin-registry.js';
 import { getRuntimePackageVersion } from '../lib/version.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('features:auto-update');
 /** GitHub repository information */
 export const REPO_OWNER = 'liangjie559567';
 export const REPO_NAME = 'ultrapower';
@@ -190,7 +188,7 @@ export function getInstalledVersion() {
         return metadata;
     }
     catch (error) {
-        logger.error('Error reading version file:', error);
+        console.error('Error reading version file:', error);
         return null;
     }
 }
@@ -420,7 +418,7 @@ export async function performUpdate(options) {
             // Sync Claude Code marketplace clone so plugin cache picks up new version (#506)
             const marketplaceSync = syncMarketplaceClone(options?.verbose ?? false);
             if (!marketplaceSync.ok && options?.verbose) {
-                logger.warn(`[omc update] ${marketplaceSync.message}`);
+                console.warn(`[omc update] ${marketplaceSync.message}`);
             }
             // CRITICAL FIX: After npm updates the global package, the current process
             // still has OLD code loaded in memory. We must re-exec to run reconciliation
@@ -565,13 +563,13 @@ export function backgroundUpdateCheck(callback) {
         }
         else if (result.updateAvailable) {
             // Default behavior: print notification to console
-            logger.info('\n' + formatUpdateNotification(result));
+            console.log('\n' + formatUpdateNotification(result));
         }
     })
         .catch(error => {
         // Silently ignore errors in background checks
         if (process.env.OMC_DEBUG) {
-            logger.error('Background update check failed:', error);
+            console.error('Background update check failed:', error);
         }
     });
 }
@@ -579,30 +577,30 @@ export function backgroundUpdateCheck(callback) {
  * CLI helper: perform interactive update
  */
 export async function interactiveUpdate() {
-    logger.info('Checking for updates...');
+    console.log('Checking for updates...');
     try {
         const checkResult = await checkForUpdates();
         if (!checkResult.updateAvailable) {
-            logger.info(`✓ You are running the latest version (${checkResult.currentVersion})`);
+            console.log(`✓ You are running the latest version (${checkResult.currentVersion})`);
             return;
         }
-        logger.info(formatUpdateNotification(checkResult));
-        logger.info('Starting update...\n');
+        console.log(formatUpdateNotification(checkResult));
+        console.log('Starting update...\n');
         const result = await performUpdate({ verbose: true });
         if (result.success) {
-            logger.info(`\n✓ ${result.message}`);
-            logger.info('\nPlease restart your Claude Code session to use the new version.');
+            console.log(`\n✓ ${result.message}`);
+            console.log('\nPlease restart your Claude Code session to use the new version.');
         }
         else {
-            logger.error(`\n✗ ${result.message}`);
+            console.error(`\n✗ ${result.message}`);
             if (result.errors) {
-                result.errors.forEach(err => logger.error(`  - ${err}`));
+                result.errors.forEach(err => console.error(`  - ${err}`));
             }
             process.exit(1);
         }
     }
     catch (error) {
-        logger.error('Update check failed:', error instanceof Error ? error.message : error);
+        console.error('Update check failed:', error instanceof Error ? error.message : error);
         process.exit(1);
     }
 }

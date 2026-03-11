@@ -18,8 +18,6 @@ import { homedir, tmpdir } from 'os';
 import { randomUUID } from 'crypto';
 import { spawn } from 'child_process';
 import { checkRateLimitStatus, formatRateLimitStatus } from './rate-limit-monitor.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('rate-limit-wait:daemon');
 import { isTmuxAvailable, scanForBlockedPanes, sendResumeSequence, formatBlockedPanesSummary, } from './tmux-detector.js';
 // ESM compatibility: __filename is not available in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -247,7 +245,7 @@ export function isDaemonRunning(config) {
  */
 function log(message, config) {
     if (config.verbose) {
-        logger.info(`[${new Date().toISOString()}] ${message}`);
+        console.log(`[${new Date().toISOString()}] ${message}`);
     }
     try {
         ensureStateDir(config);
@@ -374,7 +372,7 @@ export function startDaemon(config) {
     }
     // Check for tmux
     if (!isTmuxAvailable()) {
-        logger.warn('[RateLimitDaemon] tmux not available - resume functionality will be limited');
+        console.warn('[RateLimitDaemon] tmux not available - resume functionality will be limited');
     }
     ensureStateDir(cfg);
     // Fork a new process for the daemon using dynamic import() for ESM compatibility.
@@ -390,14 +388,14 @@ export function startDaemon(config) {
     try {
       _config = JSON.parse(_rfs(_cfgPath, 'utf-8'));
     } catch(_e) {
-      logger.error('[daemon] config read failed:', _e.message);
+      console.error('[daemon] config read failed:', _e.message);
       process.exit(1);
     } finally {
       try { _uls(_cfgPath); } catch {}
     }
     import('${moduleUrl}').then(({ pollLoop }) => {
       return pollLoop(_config);
-    }).catch((err) => { logger.error(err); process.exit(1); });
+    }).catch((err) => { console.error(err); process.exit(1); });
   `;
     try {
         // Use node to run the daemon in background
@@ -449,14 +447,14 @@ export async function runDaemonForeground(config) {
     const cfg = getConfig(config);
     // Check if already running
     if (isDaemonRunning(cfg)) {
-        logger.error('Daemon is already running. Use "omc wait daemon stop" first.');
+        console.error('Daemon is already running. Use "omc wait daemon stop" first.');
         process.exit(1);
     }
     // Write PID file
     writePidFile(process.pid, cfg);
     // Handle shutdown
     const shutdown = () => {
-        logger.info('\nShutting down daemon...');
+        console.log('\nShutting down daemon...');
         removePidFile(cfg);
         const state = readDaemonState(cfg);
         if (state) {
@@ -467,8 +465,8 @@ export async function runDaemonForeground(config) {
     };
     process.on('SIGINT', shutdown);
     process.on('SIGTERM', shutdown);
-    logger.info('Rate Limit Wait daemon starting in foreground mode...');
-    logger.info('Press Ctrl+C to stop.\n');
+    console.log('Rate Limit Wait daemon starting in foreground mode...');
+    console.log('Press Ctrl+C to stop.\n');
     // Run poll loop
     await pollLoop(cfg);
 }

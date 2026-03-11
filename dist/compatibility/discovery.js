@@ -11,8 +11,6 @@ import { existsSync, readdirSync, readFileSync, realpathSync } from 'fs';
 import { join, basename, resolve, normalize } from 'path';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import Ajv from 'ajv';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('compatibility:discovery');
 /**
  * Security Error for discovery operations
  */
@@ -189,7 +187,7 @@ function parsePluginManifest(manifestPath) {
             const errors = validatePluginManifest.errors
                 ?.map((e) => `${e.instancePath}: ${e.message}`)
                 .join(', ');
-            logger.warn(`[Security] Invalid plugin manifest at ${manifestPath}: ${errors}`);
+            console.warn(`[Security] Invalid plugin manifest at ${manifestPath}: ${errors}`);
             return null;
         }
         return parsed;
@@ -209,7 +207,7 @@ function discoverPluginSkills(pluginPath, manifest) {
     if (typeof manifest.skills === 'string') {
         // SECURITY: Validate path stays within plugin directory
         if (!isPathWithinDirectory(pluginPath, manifest.skills)) {
-            logger.warn(`[Security] Path traversal detected in plugin ${manifest.name}: skills path "${manifest.skills}" escapes plugin directory`);
+            console.warn(`[Security] Path traversal detected in plugin ${manifest.name}: skills path "${manifest.skills}" escapes plugin directory`);
             return tools;
         }
         skillsPaths = [join(pluginPath, manifest.skills)];
@@ -219,7 +217,7 @@ function discoverPluginSkills(pluginPath, manifest) {
         for (const s of manifest.skills) {
             // SECURITY: Validate each path
             if (!isPathWithinDirectory(pluginPath, s)) {
-                logger.warn(`[Security] Path traversal detected in plugin ${manifest.name}: skills path "${s}" escapes plugin directory`);
+                console.warn(`[Security] Path traversal detected in plugin ${manifest.name}: skills path "${s}" escapes plugin directory`);
                 continue;
             }
             skillsPaths.push(join(pluginPath, s));
@@ -284,7 +282,7 @@ function discoverPluginAgents(pluginPath, manifest) {
     if (typeof manifest.agents === 'string') {
         // SECURITY: Validate path stays within plugin directory
         if (!isPathWithinDirectory(pluginPath, manifest.agents)) {
-            logger.warn(`[Security] Path traversal detected in plugin ${manifest.name}: agents path "${manifest.agents}" escapes plugin directory`);
+            console.warn(`[Security] Path traversal detected in plugin ${manifest.name}: agents path "${manifest.agents}" escapes plugin directory`);
             return tools;
         }
         agentsPaths = [join(pluginPath, manifest.agents)];
@@ -294,7 +292,7 @@ function discoverPluginAgents(pluginPath, manifest) {
         for (const a of manifest.agents) {
             // SECURITY: Validate each path
             if (!isPathWithinDirectory(pluginPath, a)) {
-                logger.warn(`[Security] Path traversal detected in plugin ${manifest.name}: agents path "${a}" escapes plugin directory`);
+                console.warn(`[Security] Path traversal detected in plugin ${manifest.name}: agents path "${a}" escapes plugin directory`);
                 continue;
             }
             agentsPaths.push(join(pluginPath, a));
@@ -448,7 +446,7 @@ function parseMcpDesktopConfig(configPath) {
                 const errors = validateMcpServerConfig.errors
                     ?.map((e) => `${e.instancePath}: ${e.message}`)
                     .join(', ');
-                logger.warn(`[Security] Invalid MCP server config for "${name}": ${errors}`);
+                console.warn(`[Security] Invalid MCP server config for "${name}": ${errors}`);
                 continue;
             }
             servers.push({
@@ -485,7 +483,7 @@ function parseMcpSettings(settingsPath) {
                 const errors = validateMcpServerConfig.errors
                     ?.map((e) => `${e.instancePath}: ${e.message}`)
                     .join(', ');
-                logger.warn(`[Security] Invalid MCP server config for "${name}": ${errors}`);
+                console.warn(`[Security] Invalid MCP server config for "${name}": ${errors}`);
                 continue;
             }
             servers.push({

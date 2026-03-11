@@ -7,8 +7,6 @@
  */
 import { readStdin, getContextPercent, getModelName } from "./stdin.js";
 import { parseTranscript } from "./transcript.js";
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('hud:index');
 import { readHudState, readHudConfig, getRunningTasks, writeHudState, initializeHUDState, } from "./state.js";
 import { readRalphStateForHud, readUltraworkStateForHud, readPrdStateForHud, readAutopilotStateForHud, } from "./omc-state.js";
 import { readAxiomStateForHud } from "./elements/axiom.js";
@@ -38,7 +36,7 @@ transcriptData) {
     try {
         // Debug: Log stdin.context_window data
         if (process.env.OMC_DEBUG) {
-            logger.error("[TokenRecording] stdin.context_window:", JSON.stringify(stdin.context_window));
+            console.error("[TokenRecording] stdin.context_window:", JSON.stringify(stdin.context_window));
         }
         // Get model name from stdin
         const modelName = getModelName(stdin);
@@ -46,12 +44,12 @@ transcriptData) {
         const runningAgents = transcriptData.agents?.filter((a) => a.status === "running") ?? [];
         const agentName = runningAgents.length > 0 ? runningAgents[0].name : undefined;
         if (process.env.OMC_DEBUG) {
-            logger.error("[TokenRecording] agentName determined:", agentName);
+            console.error("[TokenRecording] agentName determined:", agentName);
         }
         // Extract tokens (delta from previous)
         const extracted = extractTokens(stdin, previousSnapshot, modelName, agentName);
         if (process.env.OMC_DEBUG) {
-            logger.error("[TokenRecording] extracted tokens:", {
+            console.error("[TokenRecording] extracted tokens:", {
                 inputTokens: extracted.inputTokens,
                 outputTokens: extracted.outputTokens,
                 cacheCreationTokens: extracted.cacheCreationTokens,
@@ -63,7 +61,7 @@ transcriptData) {
         // Only record if there's actual token usage
         if (extracted.inputTokens > 0 || extracted.cacheCreationTokens > 0) {
             if (process.env.OMC_DEBUG) {
-                logger.error("[TokenRecording] Recording condition PASSED - recording usage");
+                console.error("[TokenRecording] Recording condition PASSED - recording usage");
             }
             // Get session ID
             const sessionId = extractSessionId(stdin.transcript_path);
@@ -78,12 +76,12 @@ transcriptData) {
                 cacheReadTokens: extracted.cacheReadTokens,
             });
             if (process.env.OMC_DEBUG) {
-                logger.error("[TokenRecording] Successfully recorded usage for agent:", extracted.agentName);
+                console.error("[TokenRecording] Successfully recorded usage for agent:", extracted.agentName);
             }
         }
         else {
             if (process.env.OMC_DEBUG) {
-                logger.error("[TokenRecording] Recording condition FAILED - no token delta detected");
+                console.error("[TokenRecording] Recording condition FAILED - no token delta detected");
             }
         }
         // Update snapshot for next render
@@ -92,7 +90,7 @@ transcriptData) {
     catch (error) {
         // Silent failure - don't break HUD rendering
         if (process.env.OMC_DEBUG) {
-            logger.error("[Analytics] Token recording failed:", error);
+            console.error("[Analytics] Token recording failed:", error);
         }
     }
 }
@@ -157,8 +155,8 @@ async function calculateSessionHealth(sessionStart, contextPercent, stdin, thres
     const cacheReadTokens = usage?.cache_read_input_tokens ?? 0;
     // Debug: log token data if OMC_DEBUG is set
     if (process.env.OMC_DEBUG) {
-        logger.error("[HUD DEBUG] current_usage:", JSON.stringify(usage));
-        logger.error("[HUD DEBUG] tokens:", {
+        console.error("[HUD DEBUG] current_usage:", JSON.stringify(usage));
+        console.error("[HUD DEBUG] tokens:", {
             inputTokens,
             cacheCreationTokens,
             cacheReadTokens,
@@ -245,7 +243,7 @@ async function main() {
         const stdin = await readStdin();
         if (!stdin) {
             // No stdin - suggest setup
-            logger.info("[OMC] run /omc-setup to install properly");
+            console.log("[OMC] run /omc-setup to install properly");
             return;
         }
         const cwd = stdin.cwd || process.cwd();
@@ -352,8 +350,8 @@ async function main() {
         };
         // Debug: log data if OMC_DEBUG is set
         if (process.env.OMC_DEBUG) {
-            logger.error("[HUD DEBUG] stdin.context_window:", JSON.stringify(stdin.context_window));
-            logger.error("[HUD DEBUG] sessionHealth:", JSON.stringify(context.sessionHealth));
+            console.error("[HUD DEBUG] stdin.context_window:", JSON.stringify(stdin.context_window));
+            console.error("[HUD DEBUG] sessionHealth:", JSON.stringify(context.sessionHealth));
         }
         // Context monitoring only — autoCompact and compact suggestions disabled.
         // Claude Code handles compaction automatically.
@@ -368,12 +366,12 @@ async function main() {
         if (useSafeMode) {
             output = sanitizeOutput(output);
             // In safe mode, use regular spaces (don't convert to non-breaking)
-            logger.info(output);
+            console.log(output);
         }
         else {
             // Replace spaces with non-breaking spaces for terminal alignment
             const formattedOutput = output.replace(/ /g, "\u00A0");
-            logger.info(formattedOutput);
+            console.log(formattedOutput);
         }
     }
     catch (error) {
@@ -383,13 +381,13 @@ async function main() {
                 error.message.includes("MODULE_NOT_FOUND") ||
                 error.message.includes("Cannot find module"));
         if (isInstallError) {
-            logger.info("[OMC] run /omc-setup to install properly");
+            console.log("[OMC] run /omc-setup to install properly");
         }
         else {
             // Output fallback message to stdout for status line visibility
-            logger.info("[OMC] HUD error - check stderr");
+            console.log("[OMC] HUD error - check stderr");
             // Log actual runtime errors to stderr for debugging
-            logger.error("[OMC HUD Error]", error instanceof Error ? error.message : error);
+            console.error("[OMC HUD Error]", error instanceof Error ? error.message : error);
         }
     }
 }

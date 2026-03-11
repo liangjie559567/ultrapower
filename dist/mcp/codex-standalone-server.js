@@ -6,8 +6,6 @@
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('mcp:codex-standalone-server');
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { CODEX_RECOMMENDED_ROLES, CODEX_DEFAULT_MODEL, handleAskCodex, } from './codex-core.js';
 import { handleWaitForJob, handleCheckJobStatus, handleKillJob, handleListJobs, getJobManagementToolSchemas, } from './job-management.js';
@@ -65,10 +63,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    logger.error('Codex MCP Server running on stdio');
+    console.error('Codex MCP Server running on stdio');
 }
 main().catch((error) => {
-    logger.error('Failed to start Codex server:', error);
+    console.error('Failed to start Codex server:', error);
     process.exit(1);
 });
 //# sourceMappingURL=codex-standalone-server.js.map

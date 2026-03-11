@@ -9,8 +9,6 @@ import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { loadAgentPrompt } from '../agents/utils.js';
 import { optimizePromptText } from '../features/prompt-optimizer/index.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('mcp:prompt-injection');
 /**
  * Get the package root directory.
  * Handles both ESM (import.meta.url) and CJS bundle (__dirname) contexts.
@@ -82,7 +80,7 @@ export function getValidAgentRoles() {
     }
     catch (err) {
         // Fail closed: elevated error logging so startup issues are visible
-        logger.error('[prompt-injection] CRITICAL: Could not scan agents/ directory for role discovery:', err);
+        console.error('[prompt-injection] CRITICAL: Could not scan agents/ directory for role discovery:', err);
         _cachedRoles = [];
     }
     return _cachedRoles;
@@ -110,7 +108,7 @@ export function resolveSystemPrompt(systemPrompt, agentRole, provider) {
         const prompt = loadAgentPrompt(role, provider);
         // loadAgentPrompt returns "Agent: {name}\n\nPrompt unavailable." on failure
         if (prompt.includes('Prompt unavailable')) {
-            logger.warn(`[prompt-injection] Agent role "${role}" prompt not found, skipping injection`);
+            console.warn(`[prompt-injection] Agent role "${role}" prompt not found, skipping injection`);
             return undefined;
         }
         return prompt;

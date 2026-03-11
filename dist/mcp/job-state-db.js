@@ -15,8 +15,6 @@
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync } from "fs";
 import { join, resolve } from "path";
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('mcp:job-state-db');
 // Schema version - bump when adding migrations
 const DB_SCHEMA_VERSION = 2;
 // Default max age for cleanup: 24 hours
@@ -39,11 +37,11 @@ function getDb(cwd) {
     }
     // Emit deprecation warning when multiple DBs are open and no cwd provided
     if (dbMap.size > 1) {
-        logger.warn('[job-state-db] DEPRECATED: getDb() called without explicit cwd while multiple DBs are open. Pass cwd explicitly.');
+        console.warn('[job-state-db] DEPRECATED: getDb() called without explicit cwd while multiple DBs are open. Pass cwd explicitly.');
     }
     // Backward compat: use last initialized cwd
     if (_lastCwd) {
-        logger.warn('[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.');
+        console.warn('[job-state-db] DEPRECATED: using _lastCwd fallback. Pass cwd explicitly.');
         return dbMap.get(_lastCwd) ?? null;
     }
     // Return any available instance (single-worktree case)
@@ -110,8 +108,8 @@ export async function initJobDb(cwd) {
                 const errorMessage = importError instanceof Error
                     ? importError.message
                     : String(importError);
-                logger.error("[job-state-db] Failed to load better-sqlite3:", errorMessage);
-                logger.error("[job-state-db] Install with: npm install better-sqlite3");
+                console.error("[job-state-db] Failed to load better-sqlite3:", errorMessage);
+                console.error("[job-state-db] Install with: npm install better-sqlite3");
                 return false;
             }
         }
@@ -133,7 +131,7 @@ export async function initJobDb(cwd) {
                     oldDb?.close();
                 }
                 catch (err) {
-                    logger.error(`[job-state-db] Failed to close connection: ${err}`);
+                    console.error(`[job-state-db] Failed to close connection: ${err}`);
                 }
                 finally {
                     dbMap.delete(oldestKey);
@@ -200,7 +198,7 @@ export async function initJobDb(cwd) {
         return true;
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to initialize database:", error);
+        console.error("[job-state-db] Failed to initialize database:", error);
         return false;
     }
 }
@@ -226,7 +224,7 @@ export function closeJobDb(cwd) {
     }
     else {
         if (dbMap.size > 0) {
-            logger.warn('[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.');
+            console.warn('[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.');
         }
         // Close all connections
         for (const [key, db] of dbMap.entries()) {
@@ -300,7 +298,7 @@ export function upsertJob(status, cwd) {
         return true;
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to upsert job:", error);
+        console.error("[job-state-db] Failed to upsert job:", error);
         return false;
     }
 }
@@ -323,7 +321,7 @@ export function getJob(provider, jobId, cwd) {
         return rowToJobStatus(row);
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to get job:", error);
+        console.error("[job-state-db] Failed to get job:", error);
         return null;
     }
 }
@@ -352,7 +350,7 @@ export function getJobsByStatus(provider, status, cwd) {
         return rows.map(rowToJobStatus);
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to get jobs by status:", error);
+        console.error("[job-state-db] Failed to get jobs by status:", error);
         return [];
     }
 }
@@ -380,7 +378,7 @@ export function getActiveJobs(provider, cwd) {
         return rows.map(rowToJobStatus);
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to get active jobs:", error);
+        console.error("[job-state-db] Failed to get active jobs:", error);
         return [];
     }
 }
@@ -411,7 +409,7 @@ export function getRecentJobs(provider, withinMs = 60 * 60 * 1000, cwd) {
         return rows.map(rowToJobStatus);
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to get recent jobs:", error);
+        console.error("[job-state-db] Failed to get recent jobs:", error);
         return [];
     }
 }
@@ -480,7 +478,7 @@ export function updateJobStatus(provider, jobId, updates, cwd) {
         return true;
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to update job status:", error);
+        console.error("[job-state-db] Failed to update job status:", error);
         return false;
     }
 }
@@ -501,7 +499,7 @@ export function deleteJob(provider, jobId, cwd) {
         return true;
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to delete job:", error);
+        console.error("[job-state-db] Failed to delete job:", error);
         return false;
     }
 }
@@ -550,7 +548,7 @@ export function migrateFromJsonFiles(promptsDir, cwd) {
         importAll();
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to migrate from JSON files:", error);
+        console.error("[job-state-db] Failed to migrate from JSON files:", error);
     }
     return result;
 }
@@ -577,7 +575,7 @@ export function cleanupOldJobs(maxAgeMs = DEFAULT_CLEANUP_MAX_AGE_MS, cwd) {
         return info.changes;
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to cleanup old jobs:", error);
+        console.error("[job-state-db] Failed to cleanup old jobs:", error);
         return 0;
     }
 }
@@ -609,7 +607,7 @@ export function getJobStats(cwd) {
         };
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to get job stats:", error);
+        console.error("[job-state-db] Failed to get job stats:", error);
         return null;
     }
 }
@@ -669,7 +667,7 @@ export function getJobSummaryForPreCompact(cwd) {
         return lines.join("\n");
     }
     catch (error) {
-        logger.error("[job-state-db] Failed to generate PreCompact summary:", error);
+        console.error("[job-state-db] Failed to generate PreCompact summary:", error);
         return "";
     }
 }

@@ -13,8 +13,6 @@ import { unregisterMcpWorker } from './team-registration.js';
 import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import { sanitizeName } from './tmux-session.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('team:bridge-entry');
 /**
  * Validate that a config path is under the user's home directory
  * and contains a trusted subpath (Claude config dir or ~/.omc/).
@@ -176,13 +174,13 @@ function main() {
         config = loadConfigFromFile(configPath);
     }
     catch (err) {
-        logger.error(`[bridge] ${err.message}`);
+        console.error(`[bridge] ${err.message}`);
         process.exit(1);
     }
     // Signal handlers for graceful cleanup on external termination
     for (const sig of ['SIGINT', 'SIGTERM']) {
         process.on(sig, () => {
-            logger.error(`[bridge] Received ${sig}, shutting down...`);
+            console.error(`[bridge] Received ${sig}, shutting down...`);
             try {
                 deleteHeartbeat(config.workingDirectory, config.teamName, config.workerName);
                 unregisterMcpWorker(config.teamName, config.workerName, config.workingDirectory);
@@ -193,7 +191,7 @@ function main() {
     }
     // Run bridge (never returns unless shutdown)
     runBridge(config).catch(err => {
-        logger.error(`[bridge] Fatal error: ${err.message}`);
+        console.error(`[bridge] Fatal error: ${err.message}`);
         process.exit(1);
     });
 }

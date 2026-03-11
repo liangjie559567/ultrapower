@@ -9,8 +9,6 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { homedir } from 'os';
 import { calculateCost } from './cost-estimator.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('analytics:session-catalog');
 export function isValidTokenUsage(record) {
     if (typeof record !== 'object' || record === null)
         return false;
@@ -138,7 +136,7 @@ export class SessionCatalog {
         }
         catch (error) {
             if (error instanceof Error && 'code' in error && error.code !== 'ENOENT') {
-                logger.warn('[session-catalog] Failed to read token log:', error.message);
+                console.warn('[session-catalog] Failed to read token log:', error.message);
             }
             return [];
         }

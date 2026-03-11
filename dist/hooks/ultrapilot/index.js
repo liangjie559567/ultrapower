@@ -6,8 +6,6 @@
  * while managing file ownership to avoid conflicts.
  */
 import { DEFAULT_CONFIG } from './types.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('ultrapilot:index');
 import { readUltrapilotState, writeUltrapilotState, initUltrapilot, addWorker, getCompletedWorkers, getRunningWorkers, getFailedWorkers, recordConflict } from './state.js';
 import { generateDecompositionPrompt, parseDecompositionResult, generateParallelGroups, validateFileOwnership, extractSharedFiles, toSimpleSubtasks, DEFAULT_SHARED_FILE_PATTERNS } from './decomposer.js';
 // Re-export AI-powered decomposition utilities
@@ -107,11 +105,11 @@ export async function decomposeTask(task, config) {
             });
             // Note: This requires Task tool to be available in the calling context
             // The orchestrator should call this and pass the Architect response
-            logger.info('[Ultrapilot] AI decomposition prompt generated. Use with Architect agent.');
-            logger.info('[Ultrapilot] Falling back to heuristic decomposition.');
+            console.log('[Ultrapilot] AI decomposition prompt generated. Use with Architect agent.');
+            console.log('[Ultrapilot] Falling back to heuristic decomposition.');
         }
         catch (error) {
-            logger.warn('[Ultrapilot] AI decomposition failed, using heuristic fallback:', error);
+            console.warn('[Ultrapilot] AI decomposition failed, using heuristic fallback:', error);
         }
     }
     // Heuristic-based decomposition

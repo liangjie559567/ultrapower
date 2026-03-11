@@ -9,8 +9,6 @@ import { relative, normalize } from 'path';
 import { findSkillFiles } from './finder.js';
 import { parseSkillFile } from './parser.js';
 import { DEBUG_ENABLED } from './constants.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('learner:loader');
 /**
  * Create SHA-256 hash of content.
  */
@@ -30,7 +28,7 @@ export function loadAllSkills(projectRoot) {
             const { metadata, content, valid, errors } = parseSkillFile(rawContent);
             if (!valid) {
                 if (DEBUG_ENABLED) {
-                    logger.warn(`Invalid skill file ${candidate.path}: ${errors.join(', ')}`);
+                    console.warn(`Invalid skill file ${candidate.path}: ${errors.join(', ')}`);
                 }
                 continue;
             }
@@ -53,7 +51,7 @@ export function loadAllSkills(projectRoot) {
         }
         catch (e) {
             if (DEBUG_ENABLED) {
-                logger.warn(`Error loading skill ${candidate.path}:`, e);
+                console.warn(`Error loading skill ${candidate.path}:`, e);
             }
         }
     }

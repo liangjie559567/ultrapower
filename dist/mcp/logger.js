@@ -9,7 +9,7 @@ const levels = {
 const currentLevel = process.env.MCP_LOG_LEVEL?.toLowerCase() || 'info';
 function log(level, ...args) {
     if (levels[level] >= levels[currentLevel]) {
-        baseLogger.error(`[${level.toUpperCase()}]`, ...args);
+        baseLogger[level](`[${level.toUpperCase()}]`, ...args);
     }
 }
 export const logger = {

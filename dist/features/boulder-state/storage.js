@@ -11,8 +11,6 @@ import { BOULDER_DIR, BOULDER_FILE, PLANNER_PLANS_DIR, PLAN_EXTENSION } from './
 import { atomicWriteSync } from '../../lib/atomic-write.js';
 import { acquireLock } from '../../lib/file-lock.js';
 import { assertValidSessionId } from '../../lib/validateMode.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('boulder-state:storage');
 /**
  * Get the full path to the boulder state file
  */
@@ -61,7 +59,7 @@ export async function appendSessionId(directory, sessionId) {
         assertValidSessionId(sessionId);
     }
     catch (err) {
-        logger.error('[boulder-state] Invalid sessionId:', err);
+        console.error('[boulder-state] Invalid sessionId:', err);
         return null;
     }
     const lockPath = join(directory, BOULDER_DIR, '.lock');

@@ -4,8 +4,6 @@
  * Resolves which provider/tool to use for a given agent role.
  */
 import { isDelegationEnabled, ROLE_CATEGORY_DEFAULTS } from './types.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('delegation-routing:resolver');
 /**
  * Resolve delegation decision based on configuration and context
  *
@@ -71,7 +69,7 @@ function resolveFromConfig(agentRole, route, _config) {
         gemini: 'ask_gemini',
     };
     if (validCombinations[provider] !== tool) {
-        logger.warn(`[delegation-routing] Provider/tool mismatch: ${provider} with ${tool}. Correcting to ${validCombinations[provider]}.`);
+        console.warn(`[delegation-routing] Provider/tool mismatch: ${provider} with ${tool}. Correcting to ${validCombinations[provider]}.`);
         tool = validCombinations[provider];
     }
     const agentOrModel = route.model || route.agentType || agentRole;

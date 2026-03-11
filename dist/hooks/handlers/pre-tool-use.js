@@ -6,8 +6,6 @@ import { addBackgroundTask, getRunningTaskCount } from "../../hud/background-tas
 import { loadConfig } from "../../config/loader.js";
 import { getAgentDashboard } from "../subagent-tracker/index.js";
 import { recordFileTouch } from "../subagent-tracker/session-replay.js";
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('handlers:pre-tool-use');
 const PKILL_F_FLAG_PATTERN = /\bpkill\b.*\s-f\b/;
 const PKILL_FULL_FLAG_PATTERN = /\bpkill\b.*--full\b/;
 export function dispatchAskUserQuestionNotification(sessionId, directory, toolInput) {
@@ -21,11 +19,11 @@ export function dispatchAskUserQuestionNotification(sessionId, directory, toolIn
         profileName: process.env.OMC_NOTIFY_PROFILE,
     }).catch((err) => {
         if (process.env.OMC_DEBUG) {
-            logger.error(`[bridge] ask-user-question notification failed: ${err.message}`);
+            console.error(`[bridge] ask-user-question notification failed: ${err.message}`);
         }
     })).catch((err) => {
         if (process.env.OMC_DEBUG) {
-            logger.error(`[bridge] notification import failed: ${err.message}`);
+            console.error(`[bridge] notification import failed: ${err.message}`);
         }
     });
 }

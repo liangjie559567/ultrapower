@@ -9,8 +9,6 @@
 import { existsSync, mkdirSync, statSync } from 'fs';
 import { join } from 'path';
 import { DEFAULT_CONFIG } from './types.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('autopilot:state');
 import { readRalphState, clearRalphState, clearLinkedUltraworkState } from '../ralph/index.js';
 import { startUltraQA, clearUltraQAState, readUltraQAState } from '../ultraqa/index.js';
 import { canStartMode } from '../mode-registry/index.js';
@@ -81,7 +79,7 @@ export async function initAutopilot(directory, idea, sessionId, config) {
     // Mutual exclusion check via mode-registry
     const canStart = canStartMode('autopilot', directory);
     if (!canStart.allowed) {
-        logger.error(canStart.message);
+        console.error(canStart.message);
         return null;
     }
     const mergedConfig = { ...DEFAULT_CONFIG, ...config };

@@ -1,7 +1,5 @@
 import * as fs from 'fs';
 import * as readline from 'readline';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('analytics:transcript-parser');
 /**
  * Streaming JSONL parser for transcript files.
  * Parses line-by-line without loading the entire file into memory.
@@ -14,7 +12,7 @@ const logger = createLogger('analytics:transcript-parser');
  * ```typescript
  * const controller = new AbortController();
  * for await (const entry of parseTranscript('transcript.jsonl', { signal: controller.signal })) {
- *   logger.info(entry);
+ *   console.log(entry);
  * }
  * ```
  */
@@ -62,7 +60,7 @@ export async function* parseTranscript(filePath, options = {}) {
                 }
                 else {
                     // Default: log warning and skip line
-                    logger.warn(`[transcript-parser] Skipping malformed line: ${parseError.message}`);
+                    console.warn(`[transcript-parser] Skipping malformed line: ${parseError.message}`);
                 }
             }
         }

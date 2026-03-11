@@ -1,8 +1,6 @@
 import { detectMicroservices } from './microservice-detector.js';
 import { executeReadStatusPhase } from './workflows/phase-read-status.js';
 import { executeModificationPlanPhase } from './workflows/phase-modification-plan.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('ccg:microservice-handler');
 export async function handleMicroserviceProject(workingDir) {
     const services = await detectMicroservices(workingDir);
     if (services.length === 0) {
@@ -22,6 +20,6 @@ async function generateDependencyGraph(services, workingDir) {
         service: s.name,
         depends_on: s.dependencies,
     }));
-    logger.info('Service dependency graph:', JSON.stringify(graph, null, 2));
+    console.log('Service dependency graph:', JSON.stringify(graph, null, 2));
 }
 //# sourceMappingURL=microservice-handler.js.map

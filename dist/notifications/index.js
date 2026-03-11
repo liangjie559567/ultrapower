@@ -18,8 +18,6 @@ import { formatNotification } from "./formatter.js";
 import { dispatchNotifications } from "./dispatcher.js";
 import { getCurrentTmuxSession } from "./tmux.js";
 import { basename } from "path";
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('notifications:index');
 /**
  * High-level notification function.
  *
@@ -94,7 +92,7 @@ export async function notify(event, data) {
     }
     catch (error) {
         // Never let notification failures propagate to hooks
-        logger.error("[notifications] Error:", error instanceof Error ? error.message : error);
+        console.error("[notifications] Error:", error instanceof Error ? error.message : error);
         return null;
     }
 }

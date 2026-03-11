@@ -1,6 +1,4 @@
 import { RetryClassifier } from './retry-classifier.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('reliability:retry-manager');
 export class RetryManager {
     maxRetries;
     baseDelay;
@@ -25,15 +23,15 @@ export class RetryManager {
         for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
             try {
                 const result = await fn();
-                logger.info(`[RetryManager] Success on attempt ${attempt + 1}`);
+                console.log(`[RetryManager] Success on attempt ${attempt + 1}`);
                 return { success: true, result, attempts: attempt + 1 };
             }
             catch (error) {
                 lastError = error instanceof Error ? error : new Error(String(error));
-                logger.info(`[RetryManager] Attempt ${attempt + 1} failed: ${lastError.message}`);
+                console.log(`[RetryManager] Attempt ${attempt + 1} failed: ${lastError.message}`);
                 if (attempt < this.maxRetries) {
                     const delay = this.baseDelay * Math.pow(2, attempt);
-                    logger.info(`[RetryManager] Retrying in ${delay}ms...`);
+                    console.log(`[RetryManager] Retrying in ${delay}ms...`);
                     await this.sleep(delay);
                 }
             }

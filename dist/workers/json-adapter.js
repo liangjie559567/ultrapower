@@ -3,8 +3,6 @@
  */
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('workers:json-adapter');
 export class JsonWorkerAdapter {
     cwd;
     stateDir;
@@ -20,7 +18,7 @@ export class JsonWorkerAdapter {
             return true;
         }
         catch (error) {
-            logger.error('[JsonWorkerAdapter] Init failed:', error);
+            console.error('[JsonWorkerAdapter] Init failed:', error);
             return false;
         }
     }
@@ -37,7 +35,7 @@ export class JsonWorkerAdapter {
             return true;
         }
         catch (error) {
-            logger.error('[JsonWorkerAdapter] Upsert failed:', error);
+            console.error('[JsonWorkerAdapter] Upsert failed:', error);
             return false;
         }
     }
@@ -50,7 +48,7 @@ export class JsonWorkerAdapter {
             return JSON.parse(content);
         }
         catch (error) {
-            logger.error('[JsonWorkerAdapter] Get failed:', error);
+            console.error('[JsonWorkerAdapter] Get failed:', error);
             return null;
         }
     }
@@ -76,7 +74,7 @@ export class JsonWorkerAdapter {
             return workers;
         }
         catch (error) {
-            logger.error('[JsonWorkerAdapter] List failed:', error);
+            console.error('[JsonWorkerAdapter] List failed:', error);
             return [];
         }
     }
@@ -89,7 +87,7 @@ export class JsonWorkerAdapter {
             return true;
         }
         catch (error) {
-            logger.error('[JsonWorkerAdapter] Delete failed:', error);
+            console.error('[JsonWorkerAdapter] Delete failed:', error);
             return false;
         }
     }
@@ -132,7 +130,7 @@ export class JsonWorkerAdapter {
             return count;
         }
         catch (error) {
-            logger.error('[JsonWorkerAdapter] Cleanup failed:', error);
+            console.error('[JsonWorkerAdapter] Cleanup failed:', error);
             return 0;
         }
     }

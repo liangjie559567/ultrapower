@@ -24,7 +24,7 @@ export interface ParseTranscriptOptions {
  * ```typescript
  * const controller = new AbortController();
  * for await (const entry of parseTranscript('transcript.jsonl', { signal: controller.signal })) {
- *   logger.info(entry);
+ *   console.log(entry);
  * }
  * ```
  */

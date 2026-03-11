@@ -9,8 +9,6 @@ import { join } from 'path';
 import { randomBytes } from 'crypto';
 import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { initJobDb, isJobDbInitialized, upsertJob, getJob, getActiveJobs as getActiveJobsFromDb, cleanupOldJobs as cleanupOldJobsInDb } from './job-state-db.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('mcp:prompt-persistence');
 // Lazy-init guard: fires initJobDb at most once per process.
 // initJobDb is async (dynamic import of better-sqlite3). If it hasn't resolved
 // yet, isJobDbInitialized() returns false and callers use JSON fallback.
@@ -144,7 +142,7 @@ export function persistPrompt(options) {
         return { filePath, id, slug };
     }
     catch (err) {
-        logger.warn(`[prompt-persistence] Failed to persist prompt: ${err.message}`);
+        console.warn(`[prompt-persistence] Failed to persist prompt: ${err.message}`);
         return undefined;
     }
 }
@@ -181,7 +179,7 @@ export function persistResponse(options) {
         return filePath;
     }
     catch (err) {
-        logger.warn(`[prompt-persistence] Failed to persist response: ${err.message}`);
+        console.warn(`[prompt-persistence] Failed to persist response: ${err.message}`);
         return undefined;
     }
 }
@@ -220,7 +218,7 @@ export function writeJobStatus(status, workingDirectory) {
         }
     }
     catch (err) {
-        logger.warn(`[prompt-persistence] Failed to write job status: ${err.message}`);
+        console.warn(`[prompt-persistence] Failed to write job status: ${err.message}`);
     }
 }
 /**

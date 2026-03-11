@@ -3,8 +3,6 @@
  */
 import { Command } from 'commander';
 import { runInteractiveTutorial, createDemoProject, isFirstRun } from '../tutorial/index.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('commands:tutorial');
 export async function tutorialCommand(args) {
     const subcommand = args[0];
     if (subcommand === 'demo') {
@@ -17,8 +15,8 @@ export async function tutorialCommand(args) {
 }
 export async function checkFirstRun() {
     if (isFirstRun()) {
-        logger.info('\n👋 检测到首次运行！');
-        logger.info('运行 "omc tutorial" 查看快速入门指南\n');
+        console.log('\n👋 检测到首次运行！');
+        console.log('运行 "omc tutorial" 查看快速入门指南\n');
     }
 }
 export function createTutorialCommand() {

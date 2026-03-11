@@ -2,8 +2,6 @@ import { Command } from 'commander';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('commands:config-stop-callback');
 export function createConfigStopCallbackCommand() {
     const cmd = new Command('config-stop-callback')
         .description('Configure stop hook callbacks')
@@ -33,10 +31,10 @@ export function createConfigStopCallbackCommand() {
         }
         if (options.show) {
             if (options.profile) {
-                logger.info(JSON.stringify(config.notificationProfiles?.[options.profile]?.[platform] || {}, null, 2));
+                console.log(JSON.stringify(config.notificationProfiles?.[options.profile]?.[platform] || {}, null, 2));
             }
             else {
-                logger.info(JSON.stringify(config.stopHookCallbacks?.[platform] || {}, null, 2));
+                console.log(JSON.stringify(config.stopHookCallbacks?.[platform] || {}, null, 2));
             }
             return;
         }
@@ -59,7 +57,7 @@ export function createConfigStopCallbackCommand() {
             if (options.channelId)
                 platformConfig.channelId = options.channelId;
             writeFileSync(configPath, JSON.stringify(config, null, 2));
-            logger.info(`Profile "${options.profile}" configured for ${platform}`);
+            console.log(`Profile "${options.profile}" configured for ${platform}`);
         }
         else {
             config.stopHookCallbacks = config.stopHookCallbacks || {};
@@ -91,7 +89,7 @@ export function createConfigStopCallbackCommand() {
                 }
             }
             writeFileSync(configPath, JSON.stringify(config, null, 2));
-            logger.info(`${platform} callback configured`);
+            console.log(`${platform} callback configured`);
         }
     });
     return cmd;

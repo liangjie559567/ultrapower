@@ -11,8 +11,6 @@ import { join, dirname } from 'path';
 import * as jsonc from 'jsonc-parser';
 import { getConfigDir } from '../utils/paths.js';
 import { SIZE_LIMIT } from '../lib/constants.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('config:loader');
 /**
  * Validate model name format (alphanumeric, hyphens, dots, max 100 chars)
  */
@@ -132,12 +130,12 @@ export function loadJsoncFile(path) {
             allowEmptyContent: true
         });
         if (errors.length > 0) {
-            logger.warn(`Warning: Parse errors in ${path}:`, errors);
+            console.warn(`Warning: Parse errors in ${path}:`, errors);
         }
         return result;
     }
     catch (error) {
-        logger.error(`Error loading config from ${path}:`, error);
+        console.error(`Error loading config from ${path}:`, error);
         return null;
     }
 }
@@ -198,7 +196,7 @@ export function loadEnvConfig() {
             };
         }
         else {
-            logger.warn(`[config] Invalid OMC_MAX_BACKGROUND_TASKS: ${process.env.OMC_MAX_BACKGROUND_TASKS}, using default`);
+            console.warn(`[config] Invalid OMC_MAX_BACKGROUND_TASKS: ${process.env.OMC_MAX_BACKGROUND_TASKS}, using default`);
         }
     }
     // Routing configuration from environment
@@ -237,7 +235,7 @@ export function loadEnvConfig() {
             externalModelsDefaults.codexModel = model;
         }
         else {
-            logger.warn(`[config] Invalid OMC_EXTERNAL_MODELS_DEFAULT_CODEX_MODEL: ${model}`);
+            console.warn(`[config] Invalid OMC_EXTERNAL_MODELS_DEFAULT_CODEX_MODEL: ${model}`);
         }
     }
     else if (process.env.OMC_CODEX_DEFAULT_MODEL) {
@@ -247,7 +245,7 @@ export function loadEnvConfig() {
             externalModelsDefaults.codexModel = model;
         }
         else {
-            logger.warn(`[config] Invalid OMC_CODEX_DEFAULT_MODEL: ${model}`);
+            console.warn(`[config] Invalid OMC_CODEX_DEFAULT_MODEL: ${model}`);
         }
     }
     if (process.env.OMC_EXTERNAL_MODELS_DEFAULT_GEMINI_MODEL) {
@@ -256,7 +254,7 @@ export function loadEnvConfig() {
             externalModelsDefaults.geminiModel = model;
         }
         else {
-            logger.warn(`[config] Invalid OMC_EXTERNAL_MODELS_DEFAULT_GEMINI_MODEL: ${model}`);
+            console.warn(`[config] Invalid OMC_EXTERNAL_MODELS_DEFAULT_GEMINI_MODEL: ${model}`);
         }
     }
     else if (process.env.OMC_GEMINI_DEFAULT_MODEL) {
@@ -266,7 +264,7 @@ export function loadEnvConfig() {
             externalModelsDefaults.geminiModel = model;
         }
         else {
-            logger.warn(`[config] Invalid OMC_GEMINI_DEFAULT_MODEL: ${model}`);
+            console.warn(`[config] Invalid OMC_GEMINI_DEFAULT_MODEL: ${model}`);
         }
     }
     const externalModelsFallback = {
@@ -367,7 +365,7 @@ export function loadContextFromFiles(files) {
             contexts.push(`## Context from ${file}\n\n${content}`);
         }
         catch (error) {
-            logger.warn(`Warning: Could not read context file ${file}:`, error);
+            console.warn(`Warning: Could not read context file ${file}:`, error);
         }
     }
     return contexts.join('\n\n---\n\n');

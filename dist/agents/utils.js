@@ -9,8 +9,6 @@
 import { readFileSync } from 'fs';
 import { join, dirname, resolve, relative, isAbsolute } from 'path';
 import { fileURLToPath } from 'url';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('agents:utils');
 /**
  * Get the package root directory (where agents/ folder lives).
  * Handles both ESM (import.meta.url) and CJS bundle (__dirname) contexts.
@@ -140,7 +138,7 @@ export function loadAgentPrompt(agentName, provider) {
         const message = error instanceof Error && error.message.includes('Invalid agent name')
             ? error.message
             : 'Agent prompt file not found';
-        logger.warn(`[loadAgentPrompt] ${message}`);
+        console.warn(`[loadAgentPrompt] ${message}`);
         return `Agent: ${agentName}\n\nPrompt unavailable.`;
     }
 }

@@ -20,8 +20,6 @@ import { assertValidMode } from "../../lib/validateMode.js";
 import { readEncryptedState, encryptState } from "./encryption.js";
 import { auditLogger } from "../../audit/logger.js";
 import { WriteAheadLog } from "./wal.js";
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('state-manager:index');
 import { StateLocation, DEFAULT_STATE_CONFIG, } from "./types.js";
 // Standard state directories
 const LOCAL_STATE_DIR = OmcPaths.STATE;
@@ -50,15 +48,15 @@ function recoverFromWAL() {
     const uncommitted = walInstance.recover();
     if (uncommitted.length === 0)
         return;
-    logger.info(`[WAL] Recovering ${uncommitted.length} uncommitted entries...`);
+    console.log(`[WAL] Recovering ${uncommitted.length} uncommitted entries...`);
     for (const entry of uncommitted) {
         try {
             writeState(entry.mode, entry.data, StateLocation.LOCAL);
             walInstance.commit(entry.id);
-            logger.info(`[WAL] Recovered: ${entry.mode}`);
+            console.log(`[WAL] Recovered: ${entry.mode}`);
         }
         catch (error) {
-            logger.error(`[WAL] Failed to recover ${entry.mode}:`, error);
+            console.error(`[WAL] Failed to recover ${entry.mode}:`, error);
         }
     }
     walInstance.cleanup();
@@ -180,7 +178,7 @@ export function readState(name, location = StateLocation.LOCAL, options) {
         }
         catch (error) {
             // Invalid JSON or read error - treat as not found
-            logger.warn(`Failed to read state from ${standardPath}:`, error);
+            console.warn(`Failed to read state from ${standardPath}:`, error);
         }
     }
     // Try legacy locations
@@ -202,7 +200,7 @@ export function readState(name, location = StateLocation.LOCAL, options) {
                     };
                 }
                 catch (error) {
-                    logger.warn(`Failed to read legacy state from ${resolvedPath}:`, error);
+                    console.warn(`Failed to read legacy state from ${resolvedPath}:`, error);
                 }
             }
         }
@@ -377,7 +375,7 @@ export function migrateState(name, location = StateLocation.LOCAL) {
     }
     catch (error) {
         // Migration succeeded but cleanup failed - not critical
-        logger.warn(`Failed to delete legacy state at ${readResult.foundAt}:`, error);
+        console.warn(`Failed to delete legacy state at ${readResult.foundAt}:`, error);
     }
     return {
         migrated: true,
@@ -430,7 +428,7 @@ export function listStates(options) {
             }
         }
         catch (error) {
-            logger.warn(`Failed to list states from ${dir}:`, error);
+            console.warn(`Failed to list states from ${dir}:`, error);
         }
     };
     // Check standard locations
@@ -565,7 +563,7 @@ export function cleanupStaleStates(directory, maxAgeMs = MAX_STATE_AGE_MS) {
                     continue;
                 const meta = data._meta ?? {};
                 if (isStateStale(meta, now, maxAgeMs)) {
-                    logger.warn(`[state-manager] cleanupStaleStates: marking "${file}" inactive (last updated ${meta.updatedAt ?? "unknown"})`);
+                    console.warn(`[state-manager] cleanupStaleStates: marking "${file}" inactive (last updated ${meta.updatedAt ?? "unknown"})`);
                     data.active = false;
                     // Invalidate cache for this path
                     stateCache.delete(filePath);
@@ -725,7 +723,7 @@ export async function readStateAsync(name, location = StateLocation.LOCAL, optio
             };
         }
         catch (err) {
-            logger.error(`[state-manager] Failed to read ${standardPath}:`, err);
+            console.error(`[state-manager] Failed to read ${standardPath}:`, err);
         }
     }
     // Try legacy locations
@@ -742,7 +740,7 @@ export async function readStateAsync(name, location = StateLocation.LOCAL, optio
                 };
             }
             catch (err) {
-                logger.error(`[state-manager] Failed to read legacy ${legacyPath}:`, err);
+                console.error(`[state-manager] Failed to read legacy ${legacyPath}:`, err);
             }
         }
     }
@@ -781,7 +779,7 @@ export async function writeStateAsync(name, data, location = StateLocation.LOCAL
         return { success: true, path: statePath };
     }
     catch (err) {
-        logger.error(`[state-manager] Failed to write ${statePath}:`, err);
+        console.error(`[state-manager] Failed to write ${statePath}:`, err);
         return { success: false, path: statePath, error: String(err) };
     }
 }
