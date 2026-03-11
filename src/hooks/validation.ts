@@ -17,6 +17,8 @@ export function requiredKeysForHook(hookType: string): string[] {
       return ["directory", "toolName"];
     case "autopilot":
       return ["directory"];
+    case "user-prompt-submit":
+      return ["prompt", "directory"];
     case "keyword-detector":
     case "stop-continuation":
       return [];

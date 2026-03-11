@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git stash pop\",\"description\":\"Restore stashed changes\"}",
-  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by merge:\n\t.omc/state/last-tool-error.json\n\t.tsbuildinfo\n\tbridge/mcp-server.cjs\n\tdist/agents/agent-wrapper.d.ts.map\n\tdist/agents/agent-wrapper.js\n\tdist/agents/agent-wrapper.js.map\n\tdist/agents/prompt-generator.d.ts\n\tdist/agents/prompt-generator.d.ts.map\n\tdist/agents/prompt-generator.js\n\tdist/agents/prompt-generator.js.map\n\tdist/agents/utils.d.ts.map\n\tdist/agents/utils.js\n\tdist/agents/utils.js.map\n\tdist/analytics/ba...",
-  "timestamp": "2026-03-11T06:27:03.163Z",
+  "tool_input_preview": "{\"command\":\"cd C:/Users/ljyih/Desktop/ultrapower && npm test -- src/hooks/workflow-gate/index.test.ts\",\"description\":\"Run workflow-gate tests with new cases\"}",
+  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@7.0.4 test\n> vitest src/hooks/workflow-gate/index.test.ts\n\n\n\u001b[1m\u001b[46m RUN \u001b[49m\u001b[22m \u001b[36mv4.0.18 \u001b[39m\u001b[90mC:/Users/ljyih/Desktop/ultrapower\u001b[39m\n\n \u001b[31m❯\u001b[39m src/hooks/workflow-gate/index.test.ts \u001b[2m(\u001b[22m\u001b[2m15 tests\u001b[22m\u001b[2m | \u001b[22m\u001b[31m2 failed\u001b[39m\u001b[2m)\u001b[22m\u001b[32m 23\u001b[2mms\u001b[22m\u001b[39m\n       \u001b[32m✓\u001b[39m detects English implementation keywords\u001b[32m 2\u001b[2mms\u001b[22m\u001b[39m\n       \u001b[32m✓\u001b[39m detects Chinese implementation keywords\u001b[32m 1\u001b[2mms\u001b[22m\u001b[39m\n   ...",
+  "timestamp": "2026-03-11T12:57:43.249Z",
   "retry_count": 1
 }
