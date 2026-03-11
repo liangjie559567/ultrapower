@@ -871,6 +871,7 @@ export {
   detectExecutionIntent,
   detectBrainstormingComplete,
   detectPlanComplete,
+  detectTestsComplete,
   detectPlanExecutionSkill,
   detectVagueRequest,
   suggestNextStep,

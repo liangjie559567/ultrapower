@@ -75,7 +75,6 @@ describe('workflow-gate', () => {
   });
 
   describe('detectPlanExecutionSkill', () => {
-    it('detects executing-plans skill', () => {
       expect(detectPlanExecutionSkill('use executing-plans')).toBe(true);
       expect(detectPlanExecutionSkill('/ultrapower:executing-plans')).toBe(true);
     });
@@ -125,7 +124,6 @@ describe('workflow-gate', () => {
       const state = initWorkflowState(TEST_DIR);
       state.brainstormingComplete = true;
       state.planWritten = true;
-      state.testsWritten = true;
       expect(suggestNextStep(state)).toBe('using-git-worktrees');
     });
 
@@ -133,7 +131,6 @@ describe('workflow-gate', () => {
       const state = initWorkflowState(TEST_DIR);
       state.brainstormingComplete = true;
       state.planWritten = true;
-      state.testsWritten = true;
       state.worktreeCreated = true;
       state.executionStarted = true;
       state.reviewRequested = true;
@@ -271,6 +268,7 @@ describe('workflow-gate', () => {
       const result = processWorkflowGate(input);
       expect(result.shouldBlock).toBe(true);
       expect(result.injectedSkill).toBe('test-driven-development');
+      expect(result.message).toContain('TDD');
     });
 
     it('allows execution after tests written', () => {

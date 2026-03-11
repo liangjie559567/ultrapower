@@ -20,6 +20,7 @@ export interface WorkflowState {
   brainstormingComplete: boolean;
   planWritten: boolean;
   worktreeCreated: boolean;
+  testsWritten: boolean;
   executionStarted: boolean;
   reviewRequested: boolean;
   verificationComplete: boolean;
@@ -88,6 +89,7 @@ export function initWorkflowState(workingDir: string): WorkflowState {
     brainstormingComplete: false,
     planWritten: false,
     worktreeCreated: false,
+    testsWritten: false,
     executionStarted: false,
     reviewRequested: false,
     verificationComplete: false,
@@ -143,6 +145,14 @@ export function detectPlanComplete(prompt: string): boolean {
 }
 
 /**
+ * Check if tests were just written
+ */
+export function detectTestsComplete(prompt: string): boolean {
+  return (prompt.includes('test') || prompt.includes('测试')) &&
+         (prompt.includes('complete') || prompt.includes('written') || prompt.includes('完成'));
+}
+
+/**
  * Detect if user is trying to use executing-plans or subagent-driven-development
  */
 export function detectPlanExecutionSkill(prompt: string): boolean {
@@ -192,11 +202,15 @@ export function suggestNextStep(state: WorkflowState): string | null {
     return 'writing-plans';
   }
 
+  if (!state.testsWritten && state.planWritten) {
+    return 'test-driven-development';
+  }
+
   if (!state.worktreeCreated && state.planWritten) {
     return 'using-git-worktrees';
   }
 
-  if (!state.executionStarted && state.planWritten) {
+  if (!state.executionStarted && state.testsWritten) {
     return 'subagent-driven-development';
   }
 
@@ -237,6 +251,13 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
     writeWorkflowState(workingDirectory, state);
   }
 
+  if (detectTestsComplete(prompt)) {
+    state.testsWritten = true;
+    state.lastStage = 'testing';
+    state.timestamp = Date.now();
+    writeWorkflowState(workingDirectory, state);
+  }
+
   // Gate 1: Implementation without brainstorming (highest priority)
   if (detectImplementationIntent(prompt) && !state.brainstormingComplete) {
     return {
@@ -254,6 +275,16 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
       shouldBlock: true,
       injectedSkill: 'writing-plans',
       message: '⚠️ Workflow Gate: 在执行之前必须先编写计划。自动注入 writing-plans skill。'
+    };
+  }
+
+  // Gate 2.5: Execution without tests (TDD enforcement)
+  if (detectExecutionIntent(prompt) && state.planWritten && !state.testsWritten) {
+    return {
+      success: true,
+      shouldBlock: true,
+      injectedSkill: 'test-driven-development',
+      message: '⚠️ Workflow Gate: TDD 要求在实现前先编写测试。自动注入 test-driven-development skill。'
     };
   }
 
