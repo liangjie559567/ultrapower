@@ -4,8 +4,6 @@
 import { SqliteWorkerAdapter } from './sqlite-adapter.js';
 import { JsonWorkerAdapter } from './json-adapter.js';
 import { CachedWorkerAdapter } from './cached-adapter.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('workers:factory');
 export async function createWorkerAdapter(type, cwd, options = {}) {
     try {
         let adapter;
@@ -14,7 +12,7 @@ export async function createWorkerAdapter(type, cwd, options = {}) {
                 adapter = new SqliteWorkerAdapter(cwd);
                 const success = await adapter.init();
                 if (success) {
-                    logger.info('[WorkerFactory] Using SQLite adapter');
+                    console.log('[WorkerFactory] Using SQLite adapter');
                     return wrapWithCache(adapter, options);
                 }
             }
@@ -24,7 +22,7 @@ export async function createWorkerAdapter(type, cwd, options = {}) {
             adapter = new JsonWorkerAdapter(cwd);
             const success = await adapter.init();
             if (success) {
-                logger.info('[WorkerFactory] Using JSON adapter (SQLite unavailable)');
+                console.log('[WorkerFactory] Using JSON adapter (SQLite unavailable)');
                 return wrapWithCache(adapter, options);
             }
         }
@@ -43,7 +41,7 @@ export async function createWorkerAdapter(type, cwd, options = {}) {
         return null;
     }
     catch (error) {
-        logger.error('[WorkerFactory] Failed to create adapter:', error);
+        console.error('[WorkerFactory] Failed to create adapter:', error);
         return null;
     }
 }

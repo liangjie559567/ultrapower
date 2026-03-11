@@ -9,8 +9,6 @@ import { ensureSkillsDir, getSkillsDir } from './finder.js';
 import { generateSkillFrontmatter } from './parser.js';
 import { validateExtractionRequest } from './validator.js';
 import { DEBUG_ENABLED } from './constants.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('learner:writer');
 /**
  * Generate a unique skill ID.
  */
@@ -96,7 +94,7 @@ ${request.solution}
     }
     catch (e) {
         if (DEBUG_ENABLED) {
-            logger.error('[learner] Error writing skill file:', e);
+            console.error('[learner] Error writing skill file:', e);
         }
         return {
             success: false,

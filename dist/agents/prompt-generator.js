@@ -4,8 +4,6 @@
  * Generates orchestrator prompts dynamically from agent metadata.
  * Adding a new agent to definitions.ts automatically includes it in the generated prompt.
  */
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('agents:prompt-generator');
 import { buildHeader, buildAgentRegistry, buildTriggerTable, buildToolSelectionSection, buildDelegationMatrix, buildOrchestrationPrinciples, buildWorkflow, buildCriticalRules, buildCompletionChecklist } from './prompt-sections/index.js';
 /**
  * Default generator options (all sections enabled)
@@ -42,7 +40,7 @@ const DEFAULT_OPTIONS = {
  * }));
  *
  * const prompt = generateOrchestratorPrompt(agents);
- * logger.info(prompt);
+ * console.log(prompt);
  * ```
  */
 export function generateOrchestratorPrompt(agents, options) {

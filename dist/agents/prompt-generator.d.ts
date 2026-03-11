@@ -49,7 +49,7 @@ export interface GeneratorOptions {
  * }));
  *
  * const prompt = generateOrchestratorPrompt(agents);
- * logger.info(prompt);
+ * console.log(prompt);
  * ```
  */
 export declare function generateOrchestratorPrompt(agents: AgentConfig[], options?: GeneratorOptions): string;

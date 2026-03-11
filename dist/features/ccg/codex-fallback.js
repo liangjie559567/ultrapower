@@ -3,8 +3,6 @@
  * T3.2: Implements fallback to Agent when Codex MCP is unavailable/timeout
  */
 import { withTimeout } from '../../mcp/timeout.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('ccg:codex-fallback');
 const CODEX_TIMEOUT_MS = 30000; // 30s
 /**
  * Execute with Codex MCP, fallback to Agent on failure/timeout
@@ -12,12 +10,12 @@ const CODEX_TIMEOUT_MS = 30000; // 30s
 export async function executeWithFallback(codexFn, fallbackFn, taskName) {
     try {
         const data = await withTimeout(codexFn, CODEX_TIMEOUT_MS);
-        logger.info(`[Fallback] ${taskName}: Codex succeeded`);
+        console.log(`[Fallback] ${taskName}: Codex succeeded`);
         return { success: true, data, fallbackUsed: false };
     }
     catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
-        logger.warn(`[Fallback] ${taskName}: Codex failed (${errorMsg}), using Agent fallback`);
+        console.warn(`[Fallback] ${taskName}: Codex failed (${errorMsg}), using Agent fallback`);
         try {
             const data = await fallbackFn();
             return { success: true, data, fallbackUsed: true };

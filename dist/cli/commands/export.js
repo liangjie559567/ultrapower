@@ -3,12 +3,10 @@ import { getQueryEngine } from '../../analytics/query-engine.js';
 import { getSessionManager } from '../../analytics/session-manager.js';
 import { exportCostReport, exportSessionHistory, exportUsagePatterns } from '../../analytics/export.js';
 import { colors } from '../utils/formatting.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('commands:export');
 export async function exportCommand(type, format, outputPath, options) {
     const engine = getQueryEngine();
     const manager = getSessionManager();
-    logger.info(colors.bold(`\n📤 Exporting ${type} data to ${format.toUpperCase()}...\n`));
+    console.log(colors.bold(`\n📤 Exporting ${type} data to ${format.toUpperCase()}...\n`));
     try {
         if (type === 'cost') {
             const period = options.period || 'monthly';
@@ -23,10 +21,10 @@ export async function exportCommand(type, format, outputPath, options) {
             const patterns = await engine.getUsagePatterns();
             await exportUsagePatterns(patterns, format, outputPath);
         }
-        logger.info(colors.green(`✓ Exported to ${outputPath}\n`));
+        console.log(colors.green(`✓ Exported to ${outputPath}\n`));
     }
     catch (error) {
-        logger.error(colors.red(`✗ Export failed: ${error.message}\n`));
+        console.error(colors.red(`✗ Export failed: ${error.message}\n`));
         process.exit(1);
     }
 }

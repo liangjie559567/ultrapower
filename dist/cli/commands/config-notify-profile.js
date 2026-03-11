@@ -2,8 +2,6 @@ import { Command } from 'commander';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('commands:config-notify-profile');
 export function createConfigNotifyProfileCommand() {
     const cmd = new Command('config-notify-profile')
         .description('Manage notification profiles')
@@ -25,32 +23,32 @@ export function createConfigNotifyProfileCommand() {
         if (options.list) {
             const profiles = config.notificationProfiles || {};
             if (Object.keys(profiles).length === 0) {
-                logger.info('No notification profiles configured');
+                console.log('No notification profiles configured');
             }
             else {
-                logger.info('Notification profiles:');
+                console.log('Notification profiles:');
                 for (const name of Object.keys(profiles)) {
-                    logger.info(`  - ${name}`);
+                    console.log(`  - ${name}`);
                 }
             }
             return;
         }
         if (!profile) {
-            logger.error('Profile name required');
+            console.error('Profile name required');
             process.exit(1);
         }
         if (options.show) {
-            logger.info(JSON.stringify(config.notificationProfiles?.[profile] || {}, null, 2));
+            console.log(JSON.stringify(config.notificationProfiles?.[profile] || {}, null, 2));
             return;
         }
         if (options.delete) {
             if (config.notificationProfiles?.[profile]) {
                 delete config.notificationProfiles[profile];
                 writeFileSync(configPath, JSON.stringify(config, null, 2));
-                logger.info(`Profile "${profile}" deleted`);
+                console.log(`Profile "${profile}" deleted`);
             }
             else {
-                logger.info(`Profile "${profile}" not found`);
+                console.log(`Profile "${profile}" not found`);
             }
             return;
         }

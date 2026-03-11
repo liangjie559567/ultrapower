@@ -7,8 +7,6 @@ import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
 import { isOmcHook } from '../../installer/index.js';
 import { colors } from '../utils/formatting.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('commands:doctor-conflicts');
 /**
  * Collect hook entries from a single settings.json file.
  */
@@ -286,7 +284,7 @@ export function formatReport(report, json) {
  */
 export async function doctorConflictsCommand(options) {
     const report = runConflictCheck();
-    logger.info(formatReport(report, options.json ?? false));
+    console.log(formatReport(report, options.json ?? false));
     return report.hasConflicts ? 1 : 0;
 }
 //# sourceMappingURL=doctor-conflicts.js.map

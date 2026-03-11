@@ -3,8 +3,6 @@
  */
 import { Spinner, ProgressBar } from './index.js';
 import { AgentStatusTracker } from '../../agents/status.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('progress:examples');
 // 示例 1: 简单 Spinner
 export function exampleSpinner() {
     const spinner = new Spinner();
@@ -46,7 +44,7 @@ export function exampleAgentStatus() {
         tracker.complete('agent-3');
         tracker.render();
         const summary = tracker.getSummary();
-        logger.info(`\nCompleted: ${summary.completed}/${summary.total}`);
+        console.log(`\nCompleted: ${summary.completed}/${summary.total}`);
     }, 2000);
 }
 //# sourceMappingURL=examples.js.map

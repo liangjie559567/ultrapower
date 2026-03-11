@@ -1,6 +1,4 @@
 import { resolveToWorktreeRoot } from "../../lib/worktree-paths.js";
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('handlers:persistent-mode');
 export async function processPersistentMode(input) {
     const sessionId = input.sessionId || "";
     const directory = resolveToWorktreeRoot(input.directory);
@@ -34,7 +32,7 @@ export async function processPersistentMode(input) {
                         }).catch(() => { });
                     });
                     if (process.env.OMC_DEBUG) {
-                        logger.error(`[bridge] session-idle notification failed: ${err.message}`);
+                        console.error(`[bridge] session-idle notification failed: ${err.message}`);
                     }
                 })).catch((err) => {
                     import("../../audit/logger.js").then(({ auditLogger }) => {
@@ -47,7 +45,7 @@ export async function processPersistentMode(input) {
                         }).catch(() => { });
                     });
                     if (process.env.OMC_DEBUG) {
-                        logger.error(`[bridge] notification import failed: ${err.message}`);
+                        console.error(`[bridge] notification import failed: ${err.message}`);
                     }
                 });
             }

@@ -7,8 +7,6 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { NOTEPAD_BASE_PATH } from '../boulder-state/constants.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('notepad-wisdom:index');
 // Constants
 const WISDOM_FILES = {
     learnings: 'learnings.md',
@@ -60,7 +58,7 @@ export function initPlanNotepad(planName, directory = process.cwd()) {
         return true;
     }
     catch (error) {
-        logger.error('Failed to initialize plan notepad:', error);
+        console.error('Failed to initialize plan notepad:', error);
         return false;
     }
 }
@@ -87,7 +85,7 @@ function readWisdomCategory(planName, category, directory) {
         return entries;
     }
     catch (error) {
-        logger.error(`Failed to read ${category}:`, error);
+        console.error(`Failed to read ${category}:`, error);
         return [];
     }
 }
@@ -120,7 +118,7 @@ function addWisdomEntry(planName, category, content, directory) {
         return true;
     }
     catch (error) {
-        logger.error(`Failed to add ${category} entry:`, error);
+        console.error(`Failed to add ${category} entry:`, error);
         return false;
     }
 }

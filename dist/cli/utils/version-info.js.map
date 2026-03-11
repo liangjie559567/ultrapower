@@ -1,1 +1,1 @@
-{"version":3,"file":"version-info.js","sourceRoot":"","sources":["../../../src/cli/utils/version-info.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,6BAA6B,CAAC;AAC3D,MAAM,MAAM,GAAG,YAAY,CAAC,oBAAoB,CAAC,CAAC;AAElD,MAAM,CAAC,KAAK,UAAU,cAAc;IAClC,MAAM,CAAC,IAAI,CAAC,0CAA0C,CAAC,CAAC;AAC1D,CAAC"}
+{"version":3,"file":"version-info.js","sourceRoot":"","sources":["../../../src/cli/utils/version-info.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,KAAK,UAAU,cAAc;IAClC,OAAO,CAAC,GAAG,CAAC,0CAA0C,CAAC,CAAC;AAC1D,CAAC"}

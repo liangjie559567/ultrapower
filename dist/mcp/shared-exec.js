@@ -7,8 +7,6 @@
 import { existsSync, mkdirSync, writeFileSync, realpathSync, unlinkSync } from 'fs';
 import { dirname, resolve, relative, isAbsolute, basename, join } from 'path';
 import { getMcpConfig } from './mcp-config.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('mcp:shared-exec');
 export const TRUNCATION_MARKER = '\n\n[OUTPUT TRUNCATED: exceeded 10MB limit]';
 /**
  * Error code for output path outside working directory
@@ -71,7 +69,7 @@ export function safeWriteOutputFile(outputFile, content, baseDirReal, logPrefix 
 Requested: ${outputFile}
 Working directory: ${baseDirReal}
 Suggested: use '${join(config.outputRedirectDir, basename(outputFile))}' or set OMC_MCP_OUTPUT_PATH_POLICY=redirect_output`;
-            logger.warn(`${logPrefix} ${errorMessage}`);
+            console.warn(`${logPrefix} ${errorMessage}`);
             return { success: false, errorToken, errorMessage };
         }
         // redirect_output policy: redirect to configured directory
@@ -80,7 +78,7 @@ Suggested: use '${join(config.outputRedirectDir, basename(outputFile))}' or set 
             : resolve(baseDirReal, config.outputRedirectDir);
         const safeOutputPath = join(redirectDir, basename(outputFile));
         const safeRelPath = relative(baseDirReal, safeOutputPath);
-        logger.warn(`${logPrefix} output_file '${outputFile}' resolves outside working directory, redirecting to '${safeRelPath}' per policy '${policy}'`);
+        console.warn(`${logPrefix} output_file '${outputFile}' resolves outside working directory, redirecting to '${safeRelPath}' per policy '${policy}'`);
         try {
             if (!existsSync(redirectDir)) {
                 mkdirSync(redirectDir, { recursive: true });
@@ -98,7 +96,7 @@ Suggested: use '${join(config.outputRedirectDir, basename(outputFile))}' or set 
                     catch { /* cleanup best-effort */ }
                     const errorToken = E_PATH_OUTSIDE_WORKDIR_OUTPUT;
                     const errorMessage = `${errorToken}: output file '${outputFile}' resolved to '${writtenReal}' outside working_directory '${baseDirReal}' via symlink.\nSuggested: remove the symlink and retry`;
-                    logger.warn(`${logPrefix} ${errorMessage}`);
+                    console.warn(`${logPrefix} ${errorMessage}`);
                     return { success: false, errorToken, errorMessage };
                 }
             }
@@ -108,7 +106,7 @@ Suggested: use '${join(config.outputRedirectDir, basename(outputFile))}' or set 
         catch (err) {
             const errorToken = 'E_WRITE_FAILED';
             const errorMessage = `${errorToken}: Failed to write redirected output file: ${err.message}`;
-            logger.warn(`${logPrefix} ${errorMessage}`);
+            console.warn(`${logPrefix} ${errorMessage}`);
             return { success: false, errorToken, errorMessage };
         }
     }
@@ -122,7 +120,7 @@ Suggested: use '${join(config.outputRedirectDir, basename(outputFile))}' or set 
 Requested: ${outputFile}
 Working directory: ${baseDirReal}
 Suggested: place the output file within the working directory or set working_directory to a common ancestor`;
-                logger.warn(`${logPrefix} ${errorMessage}`);
+                console.warn(`${logPrefix} ${errorMessage}`);
                 return { success: false, errorToken, errorMessage };
             }
             mkdirSync(outputDir, { recursive: true });
@@ -137,7 +135,7 @@ Suggested: place the output file within the working directory or set working_dir
 Requested: ${outputFile}
 Working directory: ${baseDirReal}
 Suggested: ensure the output directory exists and is accessible`;
-            logger.warn(`${logPrefix} ${errorMessage}`);
+            console.warn(`${logPrefix} ${errorMessage}`);
             return { success: false, errorToken, errorMessage };
         }
         if (outputDirReal) {
@@ -148,7 +146,7 @@ Suggested: ensure the output directory exists and is accessible`;
 Requested: ${outputFile}
 Working directory: ${baseDirReal}
 Suggested: place the output file within the working directory or set working_directory to a common ancestor`;
-                logger.warn(`${logPrefix} ${errorMessage}`);
+                console.warn(`${logPrefix} ${errorMessage}`);
                 return { success: false, errorToken, errorMessage };
             }
             const safePath = join(outputDirReal, basename(outputPath));
@@ -165,7 +163,7 @@ Suggested: place the output file within the working directory or set working_dir
                     catch { /* cleanup best-effort */ }
                     const errorToken = E_PATH_OUTSIDE_WORKDIR_OUTPUT;
                     const errorMessage = `${errorToken}: output file '${outputFile}' resolved to '${writtenReal}' outside working_directory '${baseDirReal}' via symlink.\nSuggested: remove the symlink and retry`;
-                    logger.warn(`${logPrefix} ${errorMessage}`);
+                    console.warn(`${logPrefix} ${errorMessage}`);
                     return { success: false, errorToken, errorMessage };
                 }
             }
@@ -177,7 +175,7 @@ Suggested: place the output file within the working directory or set working_dir
     catch (err) {
         const errorToken = 'E_WRITE_FAILED';
         const errorMessage = `${errorToken}: Failed to write output file '${outputFile}': ${err.message}`;
-        logger.warn(`${logPrefix} ${errorMessage}`);
+        console.warn(`${logPrefix} ${errorMessage}`);
         return { success: false, errorToken, errorMessage };
     }
 }

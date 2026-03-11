@@ -7,8 +7,6 @@
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import { getClaudeConfigDir } from "../utils/paths.js";
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('notifications:config');
 const CONFIG_FILE = join(getClaudeConfigDir(), ".omc-config.json");
 /**
  * Read raw config from .omc-config.json
@@ -261,7 +259,7 @@ export function getNotificationConfig(profileName) {
             return applyEnvMerge(profileConfig);
         }
         // Profile requested but not found — warn and fall through to default
-        logger.warn(`[notifications] Profile "${effectiveProfile}" not found, using default`);
+        console.warn(`[notifications] Profile "${effectiveProfile}" not found, using default`);
     }
     // Priority 1: Explicit notifications config in .omc-config.json
     if (raw) {
@@ -466,7 +464,7 @@ export function getReplyConfig() {
     const authorizedDiscordUserIds = parseDiscordUserIds(process.env.OMC_REPLY_DISCORD_USER_IDS, replyRaw?.authorizedDiscordUserIds);
     // SECURITY: If Discord bot is enabled but no authorized user IDs, log warning
     if (hasDiscordBot && authorizedDiscordUserIds.length === 0) {
-        logger.warn("[notifications] Discord reply listening disabled: authorizedDiscordUserIds is empty. " +
+        console.warn("[notifications] Discord reply listening disabled: authorizedDiscordUserIds is empty. " +
             "Set OMC_REPLY_DISCORD_USER_IDS or add to .omc-config.json notifications.reply.authorizedDiscordUserIds");
     }
     return {

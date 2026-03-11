@@ -7,8 +7,6 @@
 import { existsSync, readdirSync, realpathSync, mkdirSync } from 'fs';
 import { join, normalize, sep } from 'path';
 import { USER_SKILLS_DIR, PROJECT_SKILLS_SUBDIR, SKILL_EXTENSION, DEBUG_ENABLED, GLOBAL_SKILLS_DIR, MAX_RECURSION_DEPTH } from './constants.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('learner:finder');
 /**
  * Recursively find all skill files in a directory.
  */
@@ -31,7 +29,7 @@ function findSkillFilesRecursive(dir, results, depth = 0) {
     }
     catch (error) {
         if (DEBUG_ENABLED) {
-            logger.error('[learner] Error scanning directory:', error);
+            console.error('[learner] Error scanning directory:', error);
         }
     }
 }
@@ -76,7 +74,7 @@ export function findSkillFiles(projectRoot, options) {
             // Symlink boundary check
             if (!isWithinBoundary(realPath, projectSkillsDir)) {
                 if (DEBUG_ENABLED) {
-                    logger.warn('[learner] Symlink escape blocked:', filePath);
+                    console.warn('[learner] Symlink escape blocked:', filePath);
                 }
                 continue;
             }
@@ -102,7 +100,7 @@ export function findSkillFiles(projectRoot, options) {
                 // Symlink boundary check
                 if (!isWithinBoundary(realPath, userDir)) {
                     if (DEBUG_ENABLED) {
-                        logger.warn('[learner] Symlink escape blocked:', filePath);
+                        console.warn('[learner] Symlink escape blocked:', filePath);
                     }
                     continue;
                 }
@@ -146,7 +144,7 @@ export function ensureSkillsDir(scope, projectRoot) {
     }
     catch (error) {
         if (DEBUG_ENABLED) {
-            logger.error('[learner] Error creating skills directory:', error);
+            console.error('[learner] Error creating skills directory:', error);
         }
         return false;
     }

@@ -12,8 +12,6 @@ import { resolveSessionStatePath, ensureSessionStateDir } from '../../lib/worktr
 import { safeJsonParse } from '../../lib/safe-json.js';
 import { atomicWriteJsonSync } from '../../lib/atomic-write.js';
 import { withFileLock } from '../../lib/file-lock.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('ultrapilot:state');
 const STATE_FILE = 'ultrapilot-state.json';
 const OWNERSHIP_FILE = 'ultrapilot-ownership.json';
 /**
@@ -138,7 +136,7 @@ export async function initUltrapilot(directory, task, subtasks, sessionId, confi
     // Mutual exclusion check via mode-registry
     const canStart = canStartMode('ultrapilot', directory);
     if (!canStart.allowed) {
-        logger.error(canStart.message);
+        console.error(canStart.message);
         return null;
     }
     const mergedConfig = { ...DEFAULT_CONFIG, ...config };

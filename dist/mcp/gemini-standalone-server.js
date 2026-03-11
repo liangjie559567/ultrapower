@@ -6,8 +6,6 @@
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('mcp:gemini-standalone-server');
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { GEMINI_RECOMMENDED_ROLES, GEMINI_DEFAULT_MODEL, handleAskGemini, } from './gemini-core.js';
 import { GEMINI_MODEL_FALLBACKS } from '../features/model-routing/external-model-policy.js';
@@ -65,10 +63,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    logger.error('Gemini MCP Server running on stdio');
+    console.error('Gemini MCP Server running on stdio');
 }
 main().catch((error) => {
-    logger.error('Failed to start Gemini server:', error);
+    console.error('Failed to start Gemini server:', error);
     process.exit(1);
 });
 //# sourceMappingURL=gemini-standalone-server.js.map

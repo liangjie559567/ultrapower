@@ -9,8 +9,6 @@ import * as path from 'path';
 import { parseReflectionLog } from './reflection-parser.js';
 import { atomicWriteFileSync } from '../../lib/atomic-write.js';
 import { acquireLock } from '../../lib/file-lock.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('learner:reflection-archiver');
 const REFLECTION_LOG_FILE = '.omc/axiom/reflection_log.md';
 // 归档路径不可来自文件内容，硬编码确保路径安全
 const REFLECTION_ARCHIVE_FILE = '.omc/axiom/evolution/reflection_log_archive.md';
@@ -82,7 +80,7 @@ export async function archiveReflections(baseDir) {
             // 归档文件读取失败时忽略行数检查
         }
         // 步骤 10：输出日志
-        logger.info(`[归档] reflection_log: 已移动 ${archivedBlocks.length} 条反思至 reflection_log_archive.md`);
+        console.log(`[归档] reflection_log: 已移动 ${archivedBlocks.length} 条反思至 reflection_log_archive.md`);
         // 步骤 11：释放锁
         await unlock();
         // 步骤 12：返回结果

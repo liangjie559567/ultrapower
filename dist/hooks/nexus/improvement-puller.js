@@ -1,8 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { safeJsonParse } from '../../lib/safe-json.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('nexus:improvement-puller');
 export function getImprovementsDir(directory) {
     return join(directory, '.omc/nexus/improvements');
 }
@@ -32,7 +30,7 @@ export function loadPendingImprovements(directory) {
         catch (err) {
             if (!(err instanceof SyntaxError)) {
                 // Non-JSON parse error (e.g. file read failure) — log warning
-                logger.warn(`[improvement-puller] failed to read file ${file}:`, err);
+                console.warn(`[improvement-puller] failed to read file ${file}:`, err);
             }
             // SyntaxError = malformed JSON, silently skip
         }

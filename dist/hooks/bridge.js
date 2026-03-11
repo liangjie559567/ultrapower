@@ -8,8 +8,6 @@ import { loadHandler } from "./handlers/index.js";
 import { HOOK_ROUTES } from "./handlers/route-map.js";
 import { loadConfig } from "../config/loader.js";
 import { requiredKeysForHook, getSkipHooks, resetSkipHooksCache } from "./validation.js";
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('hooks:bridge');
 export { resetSkipHooksCache, requiredKeysForHook };
 /**
  * Main hook processor
@@ -41,7 +39,7 @@ export async function processHook(hookType, rawInput) {
         return { continue: true };
     }
     catch (error) {
-        logger.error(`[hook-bridge] Error in ${hookType}:`, error);
+        console.error(`[hook-bridge] Error in ${hookType}:`, error);
         const severity = HOOK_SEVERITY[hookType];
         // CRITICAL hooks must block on error (security default)
         if (severity === HookSeverity.CRITICAL) {
@@ -72,12 +70,12 @@ export async function main() {
     const args = process.argv.slice(2);
     const hookArg = args.find((a) => a.startsWith("--hook="));
     if (!hookArg) {
-        logger.error("Usage: node hook-bridge.mjs --hook=<type>");
+        console.error("Usage: node hook-bridge.mjs --hook=<type>");
         process.exit(1);
     }
     const hookType = hookArg.slice("--hook=".length).trim();
     if (!hookType) {
-        logger.error("Invalid hook argument format: missing hook type");
+        console.error("Invalid hook argument format: missing hook type");
         process.exit(1);
     }
     const chunks = [];
@@ -93,12 +91,12 @@ export async function main() {
         // Invalid JSON, use empty object
     }
     const output = await processHook(hookType, input);
-    logger.info(JSON.stringify(output));
+    console.log(JSON.stringify(output));
 }
 // Run if called directly
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     main().catch((err) => {
-        logger.error("[hook-bridge] Fatal error:", err);
+        console.error("[hook-bridge] Fatal error:", err);
         process.exit(1);
     });
 }

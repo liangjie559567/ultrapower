@@ -7,8 +7,6 @@ import { withTimeout } from "./timeout-wrapper.js";
 import { safeJsonParse } from "../lib/safe-json.js";
 import { registry } from "./registry/HookRegistry.js";
 import { registerAllProcessors } from "./registry/registerProcessors.js";
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('hooks:bridge-new');
 // Initialize processors
 registerAllProcessors();
 function getSkipHooks() {
@@ -39,7 +37,7 @@ export async function processHook(hookType, rawInput) {
         return { continue: true };
     }
     catch (error) {
-        logger.error(`[bridge] Error in ${hookType}:`, error);
+        console.error(`[bridge] Error in ${hookType}:`, error);
         return { continue: true };
     }
 }
@@ -47,12 +45,12 @@ export async function main() {
     const args = process.argv.slice(2);
     const hookArg = args.find((a) => a.startsWith("--hook="));
     if (!hookArg) {
-        logger.error("Usage: node hook-bridge.mjs --hook=<type>");
+        console.error("Usage: node hook-bridge.mjs --hook=<type>");
         process.exit(1);
     }
     const hookTypeRaw = hookArg.slice("--hook=".length).trim();
     if (!hookTypeRaw) {
-        logger.error("Invalid hook argument format: missing hook type");
+        console.error("Invalid hook argument format: missing hook type");
         process.exit(1);
     }
     const hookType = hookTypeRaw;
@@ -64,11 +62,11 @@ export async function main() {
     const result = safeJsonParse(inputStr);
     const input = result.success ? result.data : {};
     const output = await processHook(hookType, input);
-    logger.info(JSON.stringify(output));
+    console.log(JSON.stringify(output));
 }
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     main().catch((err) => {
-        logger.error("[hook-bridge] Fatal error:", err);
+        console.error("[hook-bridge] Fatal error:", err);
         process.exit(1);
     });
 }

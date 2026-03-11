@@ -12,8 +12,6 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { homedir } from 'os';
 import { execSync } from 'child_process';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('installer:index');
 import { getHookScripts, getHooksSettingsConfig, isWindows, MIN_NODE_VERSION } from './hooks.js';
 import { getRuntimePackageVersion } from '../lib/version.js';
 import { getConfigDir } from '../utils/config-dir.js';
@@ -238,7 +236,7 @@ function loadAgentDefinitions() {
     const agentsDir = join(getPackageDir(), 'agents');
     const definitions = {};
     if (!existsSync(agentsDir)) {
-        logger.error(`FATAL: agents directory not found: ${agentsDir}`);
+        console.error(`FATAL: agents directory not found: ${agentsDir}`);
         process.exit(1);
     }
     for (const file of readdirSync(agentsDir)) {
@@ -274,7 +272,7 @@ function loadCommandDefinitions() {
 function loadClaudeMdContent() {
     const claudeMdPath = join(getPackageDir(), 'docs', 'CLAUDE.md');
     if (!existsSync(claudeMdPath)) {
-        logger.error(`FATAL: CLAUDE.md not found: ${claudeMdPath}`);
+        console.error(`FATAL: CLAUDE.md not found: ${claudeMdPath}`);
         process.exit(1);
     }
     return readFileSync(claudeMdPath, 'utf-8');
@@ -341,7 +339,7 @@ export function install(options = {}) {
     };
     const log = (msg) => {
         if (options.verbose) {
-            logger.info(msg);
+            console.log(msg);
         }
     };
     // Check Node.js version (required for Node.js hooks)
@@ -643,13 +641,13 @@ export function install(options = {}) {
                     '    // Plugin exists but dist/ folder is missing - needs build',
                     '    const distDir = join(pluginCacheDir, "dist");',
                     '    if (!existsSync(distDir)) {',
-                    '      logger.info(`[OMC HUD] Plugin installed but not built. Run: cd "${pluginCacheDir}" && npm install && npm run build`);',
+                    '      console.log(`[OMC HUD] Plugin installed but not built. Run: cd "${pluginCacheDir}" && npm install && npm run build`);',
                     '    } else {',
-                    '      logger.info(`[OMC HUD] Plugin dist/ exists but HUD not found. Run: cd "${pluginCacheDir}" && npm run build`);',
+                    '      console.log(`[OMC HUD] Plugin dist/ exists but HUD not found. Run: cd "${pluginCacheDir}" && npm run build`);',
                     '    }',
                     '  } else {',
                     '    // No plugin installation found at all',
-                    '    logger.info("[OMC HUD] Plugin not installed. Run: /ultrapower:omc-setup");',
+                    '    console.log("[OMC HUD] Plugin not installed. Run: /ultrapower:omc-setup");',
                     '  }',
                     '}',
                     '',

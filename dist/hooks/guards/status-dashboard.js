@@ -5,8 +5,6 @@
  */
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('guards:status-dashboard');
 export class StatusDashboard {
     axiomDir;
     knowledgeDir;
@@ -94,7 +92,7 @@ export class StatusDashboard {
             `║  Last Commit  : ${s.lastCommit.slice(0, 20).padEnd(20)}║`,
             '╚══════════════════════════════════════╝',
         ];
-        logger.info(lines.join('\n'));
+        console.log(lines.join('\n'));
     }
     async readFile(filePath) {
         try {

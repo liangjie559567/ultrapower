@@ -1,5 +1,3 @@
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('hooks:validation');
 export function requiredKeysForHook(hookType) {
     switch (hookType) {
         case "session-end":
@@ -32,7 +30,7 @@ export function validateHookInput(input, requiredFields, hookType) {
     const obj = input;
     const missing = requiredFields.filter((field) => !(field in obj) || obj[field] === undefined);
     if (missing.length > 0) {
-        logger.error(`[hook-bridge] validateHookInput failed for "${hookType ?? "unknown"}": missing keys: ${missing.join(", ")}`);
+        console.error(`[hook-bridge] validateHookInput failed for "${hookType ?? "unknown"}": missing keys: ${missing.join(", ")}`);
         return false;
     }
     return true;

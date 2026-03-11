@@ -11,8 +11,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { tmpdir } from 'os';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('comment-checker:index');
 import { HOOK_MESSAGE_HEADER, LINE_COMMENT_PATTERNS, EXTENSION_TO_LANGUAGE, } from './constants.js';
 import { applyFilters } from './filters.js';
 const DEBUG = process.env.COMMENT_CHECKER_DEBUG === '1';
@@ -23,7 +21,7 @@ function debugLog(...args) {
             .map((a) => (typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)))
             .join(' ')}\n`;
         fs.promises.appendFile(DEBUG_FILE, msg).catch(err => {
-            logger.error('[comment-checker] Failed to write debug log:', err);
+            console.error('[comment-checker] Failed to write debug log:', err);
         });
     }
 }

@@ -11,8 +11,6 @@
 import { existsSync, readFileSync, writeFileSync, unlinkSync, mkdirSync, readdirSync, statSync, rmdirSync, rmSync } from 'fs';
 import { join, dirname } from 'path';
 import { listSessionIds, resolveSessionStatePath, getSessionStateDir } from '../../lib/worktree-paths.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('mode-registry:index');
 /**
  * Stale marker threshold (1 hour)
  * Markers older than this are auto-removed to prevent crashed sessions from blocking indefinitely.
@@ -192,7 +190,7 @@ function isSqliteModeActive(cwd, mode) {
                 const startTime = new Date(marker.startedAt).getTime();
                 const age = Date.now() - startTime;
                 if (age > STALE_MARKER_THRESHOLD) {
-                    logger.warn(`Stale ${mode} marker detected (${Math.round(age / 60000)} min old). Auto-removing.`);
+                    console.warn(`Stale ${mode} marker detected (${Math.round(age / 60000)} min old). Auto-removing.`);
                     unlinkSync(markerPath);
                     return false;
                 }
@@ -500,7 +498,7 @@ export function clearStaleSessionDirs(cwd, maxAgeMs = 24 * 60 * 60 * 1000) {
 export function createModeMarker(mode, cwd, metadata) {
     const markerPath = getMarkerFilePath(cwd, mode);
     if (!markerPath) {
-        logger.error(`Mode ${mode} does not use a marker file`);
+        console.error(`Mode ${mode} does not use a marker file`);
         return false;
     }
     try {
@@ -518,7 +516,7 @@ export function createModeMarker(mode, cwd, metadata) {
         return true;
     }
     catch (error) {
-        logger.error(`Failed to create marker file for ${mode}:`, error);
+        console.error(`Failed to create marker file for ${mode}:`, error);
         return false;
     }
 }
@@ -542,7 +540,7 @@ export function removeModeMarker(mode, cwd) {
         return true;
     }
     catch (error) {
-        logger.error(`Failed to remove marker file for ${mode}:`, error);
+        console.error(`Failed to remove marker file for ${mode}:`, error);
         return false;
     }
 }
@@ -584,7 +582,7 @@ export function forceRemoveMarker(mode, cwd) {
         return true;
     }
     catch (error) {
-        logger.error(`Failed to force remove marker file for ${mode}:`, error);
+        console.error(`Failed to force remove marker file for ${mode}:`, error);
         return false;
     }
 }

@@ -11,8 +11,6 @@ import { readFileSync, readdirSync, statSync, writeFileSync, createReadStream } 
 import { join, extname, resolve } from "path";
 import { createRequire } from "module";
 import { execSync } from "child_process";
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('tools:ast-tools');
 // Dynamic import for @ast-grep/napi
 // Graceful degradation: if the module is not available (e.g., in bundled/plugin context),
 // tools will return a helpful error message instead of crashing
@@ -37,12 +35,12 @@ async function tryInstallAstGrep() {
         return false;
     }
     try {
-        logger.info('Installing @ast-grep/napi...');
+        console.log('Installing @ast-grep/napi...');
         execSync('npm install -g @ast-grep/napi --silent', {
             stdio: 'inherit',
             timeout: 30000,
         });
-        logger.info('Installation complete');
+        console.log('Installation complete');
         return true;
     }
     catch (error) {
@@ -287,7 +285,7 @@ Use meta-variables in patterns:
 
 Examples:
 - "function $NAME($$$ARGS)" - find all function declarations
-- "logger.info($MSG)" - find all console.log calls
+- "console.log($MSG)" - find all console.log calls
 - "if ($COND) { $$$BODY }" - find all if statements
 - "$X === null" - find null equality checks
 - "import $$$IMPORTS from '$MODULE'" - find imports
@@ -373,7 +371,7 @@ Note: Patterns must be valid AST nodes for the language.`,
                     content: [
                         {
                             type: "text",
-                            text: `No matches found for pattern: ${pattern}\n\nSearched ${files.length} ${language} file(s) in ${path}\n\nTip: Ensure the pattern is a valid AST node. For example:\n- Use "function $NAME" not just "$NAME"\n- Use "logger.info($X)" not "console.log"`,
+                            text: `No matches found for pattern: ${pattern}\n\nSearched ${files.length} ${language} file(s) in ${path}\n\nTip: Ensure the pattern is a valid AST node. For example:\n- Use "function $NAME" not just "$NAME"\n- Use "console.log($X)" not "console.log"`,
                         },
                     ],
                 };
@@ -412,7 +410,7 @@ Use meta-variables in both pattern and replacement:
 - $$$ARGS captures multiple nodes
 
 Examples:
-- Pattern: "logger.info($MSG)" → Replacement: "logger.info($MSG)"
+- Pattern: "console.log($MSG)" → Replacement: "logger.info($MSG)"
 - Pattern: "var $NAME = $VALUE" → Replacement: "const $NAME = $VALUE"
 - Pattern: "$OBJ.forEach(($ITEM) => { $$$BODY })" → Replacement: "for (const $ITEM of $OBJ) { $$$BODY }"
 

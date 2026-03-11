@@ -9,8 +9,6 @@
  * - Text inputs are sanitized to prevent command injection
  */
 import { execSync, spawnSync } from 'child_process';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('rate-limit-wait:tmux-detector');
 /**
  * Validate tmux pane ID format to prevent command injection
  * Valid formats: %0, %1, %123, etc.
@@ -122,7 +120,7 @@ export function listTmuxPanes() {
         return panes;
     }
     catch (error) {
-        logger.error('[TmuxDetector] Error listing panes:', error);
+        console.error('[TmuxDetector] Error listing panes:', error);
         return [];
     }
 }
@@ -138,7 +136,7 @@ export function capturePaneContent(paneId, lines = 15) {
     }
     // Validate pane ID to prevent command injection
     if (!isValidPaneId(paneId)) {
-        logger.error(`[TmuxDetector] Invalid pane ID format: ${paneId}`);
+        console.error(`[TmuxDetector] Invalid pane ID format: ${paneId}`);
         return '';
     }
     // Validate lines is a reasonable positive integer
@@ -152,7 +150,7 @@ export function capturePaneContent(paneId, lines = 15) {
         return result;
     }
     catch (error) {
-        logger.error(`[TmuxDetector] Error capturing pane ${paneId}:`, error);
+        console.error(`[TmuxDetector] Error capturing pane ${paneId}:`, error);
         return '';
     }
 }
@@ -245,7 +243,7 @@ export function sendResumeSequence(paneId) {
     }
     // Validate pane ID to prevent command injection
     if (!isValidPaneId(paneId)) {
-        logger.error(`[TmuxDetector] Invalid pane ID format: ${paneId}`);
+        console.error(`[TmuxDetector] Invalid pane ID format: ${paneId}`);
         return false;
     }
     try {
@@ -258,7 +256,7 @@ export function sendResumeSequence(paneId) {
         return true;
     }
     catch (error) {
-        logger.error(`[TmuxDetector] Error sending resume to pane ${paneId}:`, error);
+        console.error(`[TmuxDetector] Error sending resume to pane ${paneId}:`, error);
         return false;
     }
 }
@@ -271,7 +269,7 @@ export function sendToPane(paneId, text, pressEnter = true) {
     }
     // Validate pane ID to prevent command injection
     if (!isValidPaneId(paneId)) {
-        logger.error(`[TmuxDetector] Invalid pane ID format: ${paneId}`);
+        console.error(`[TmuxDetector] Invalid pane ID format: ${paneId}`);
         return false;
     }
     try {
@@ -283,7 +281,7 @@ export function sendToPane(paneId, text, pressEnter = true) {
         return true;
     }
     catch (error) {
-        logger.error(`[TmuxDetector] Error sending to pane ${paneId}:`, error);
+        console.error(`[TmuxDetector] Error sending to pane ${paneId}:`, error);
         return false;
     }
 }

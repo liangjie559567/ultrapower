@@ -8,8 +8,6 @@
  * from agent definitions - every Task call must explicitly pass the model parameter.
  */
 import { getAgentDefinitions } from '../agents/definitions.js';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('features:delegation-enforcer');
 /**
  * Enforce model parameter for an agent delegation call
  *
@@ -127,7 +125,7 @@ export function processPreToolUse(toolName, toolInput) {
         const result = enforceModel(toolInput);
         // Log warning if debug mode is enabled and model was injected
         if (result.warning) {
-            logger.warn(result.warning);
+            console.warn(result.warning);
         }
         return {
             modifiedInput: result.modifiedInput,
@@ -143,7 +141,7 @@ export function processPreToolUse(toolName, toolInput) {
             let warning;
             if (process.env.OMC_DEBUG === 'true') {
                 warning = `[OMC] Auto-injecting model: ${tierModel} for ${agentType}`;
-                logger.warn(warning);
+                console.warn(warning);
             }
             return { modifiedInput, warning };
         }

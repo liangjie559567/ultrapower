@@ -8,8 +8,6 @@
  * - Delegation-aware routing to avoid conflicts
  */
 import safeRegex from 'safe-regex';
-import { createLogger } from '../lib/unified-logger.js';
-const logger = createLogger('compatibility:permission-adapter');
 import { getRegistry } from './registry.js';
 /**
  * Built-in safe patterns for known external tools
@@ -134,7 +132,7 @@ export function registerPluginSafePatterns(plugin) {
             for (const pattern of permission.patterns) {
                 // SECURITY: Validate regex pattern before creating RegExp
                 if (!isRegexSafe(pattern)) {
-                    logger.warn(`[Security] Skipping unsafe regex pattern from plugin ${plugin.name}: ${pattern}`);
+                    console.warn(`[Security] Skipping unsafe regex pattern from plugin ${plugin.name}: ${pattern}`);
                     continue;
                 }
                 safePatterns.push({

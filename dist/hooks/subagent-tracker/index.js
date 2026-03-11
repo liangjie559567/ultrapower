@@ -9,8 +9,6 @@
  * - Automatic cleanup of orphaned agent state
  */
 import { atomicWriteJsonSyncWithRetry } from "../../lib/atomic-write.js";
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('subagent-tracker:index');
 import { existsSync, readFileSync, mkdirSync, unlinkSync, statSync, writeFileSync, } from "fs";
 import { join, relative } from "path";
 import { recordAgentStart, recordAgentStop } from './session-replay.js';
@@ -256,7 +254,7 @@ export function readDiskState(directory) {
         return JSON.parse(content);
     }
     catch (error) {
-        logger.error("[SubagentTracker] Error reading disk state:", error);
+        console.error("[SubagentTracker] Error reading disk state:", error);
         return {
             agents: [],
             total_spawned: 0,
@@ -287,7 +285,7 @@ function writeTrackingStateImmediate(directory, state) {
         atomicWriteJsonSyncWithRetry(statePath, state);
     }
     catch (error) {
-        logger.error("[SubagentTracker] Error writing state:", error);
+        console.error("[SubagentTracker] Error writing state:", error);
     }
 }
 /**
@@ -348,7 +346,7 @@ export function writeTrackingState(directory, state) {
                 syncSleep(FLUSH_RETRY_BASE_MS * Math.pow(2, attempt));
             }
             if (!success) {
-                logger.error(`[SubagentTracker] Failed to flush after ${MAX_FLUSH_RETRIES} retries for ${directory}. Data retained in memory for next attempt.`);
+                console.error(`[SubagentTracker] Failed to flush after ${MAX_FLUSH_RETRIES} retries for ${directory}. Data retained in memory for next attempt.`);
                 // Put data back in pending so the next writeTrackingState call will retry
                 pendingWrites.set(directory, {
                     state: pending.state,
@@ -1052,7 +1050,7 @@ export function clearTrackingState(directory) {
             unlinkSync(statePath);
         }
         catch (error) {
-            logger.error("[SubagentTracker] Error clearing state:", error);
+            console.error("[SubagentTracker] Error clearing state:", error);
         }
     }
 }

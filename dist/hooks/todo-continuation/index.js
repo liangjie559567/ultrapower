@@ -19,15 +19,13 @@
 function debugLog(message, ...args) {
     const debug = process.env.OMC_DEBUG;
     if (debug === '1' || debug === 'todo-continuation' || debug === 'true') {
-        logger.error('[todo-continuation]', message, ...args);
+        console.error('[todo-continuation]', message, ...args);
     }
 }
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
 import { safeJsonParse } from '../../lib/safe-json.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('todo-continuation:index');
 /**
  * Validates that a session ID is safe to use in file paths.
  * Session IDs should be alphanumeric with optional hyphens and underscores.

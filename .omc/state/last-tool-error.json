@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git pull --rebase origin main\",\"description\":\"拉取并变基远程变更\"}",
-  "error": "Exit code 128\nerror: cannot pull with rebase: You have unstaged changes.\nerror: Please commit or stash them.",
-  "timestamp": "2026-03-11T04:16:13.743Z",
-  "retry_count": 2
+  "tool_input_preview": "{\"command\":\"git stash pop\",\"description\":\"Restore stashed changes\"}",
+  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by merge:\n\t.omc/state/last-tool-error.json\n\t.tsbuildinfo\n\tbridge/mcp-server.cjs\n\tdist/agents/agent-wrapper.d.ts.map\n\tdist/agents/agent-wrapper.js\n\tdist/agents/agent-wrapper.js.map\n\tdist/agents/prompt-generator.d.ts\n\tdist/agents/prompt-generator.d.ts.map\n\tdist/agents/prompt-generator.js\n\tdist/agents/prompt-generator.js.map\n\tdist/agents/utils.d.ts.map\n\tdist/agents/utils.js\n\tdist/agents/utils.js.map\n\tdist/analytics/ba...",
+  "timestamp": "2026-03-11T06:27:03.163Z",
+  "retry_count": 1
 }

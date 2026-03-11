@@ -59,7 +59,7 @@ export declare function expandCommand(name: string, args?: string): ExpandedComm
  * const prompt = expandCommandPrompt('ultrawork', 'Refactor the auth module');
  *
  * for await (const msg of query({ prompt })) {
- *   logger.info(msg);
+ *   console.log(msg);
  * }
  * ```
  */

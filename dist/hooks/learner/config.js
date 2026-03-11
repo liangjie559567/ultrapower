@@ -7,8 +7,6 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
 import { DEBUG_ENABLED } from './constants.js';
-import { createLogger } from '../../lib/unified-logger.js';
-const logger = createLogger('learner:config');
 const DEFAULT_CONFIG = {
     enabled: true,
     detection: {
@@ -42,7 +40,7 @@ export function loadConfig() {
     }
     catch (error) {
         if (DEBUG_ENABLED) {
-            logger.error('[learner] Error loading config:', error);
+            console.error('[learner] Error loading config:', error);
         }
         return DEFAULT_CONFIG;
     }
@@ -62,7 +60,7 @@ export function saveConfig(config) {
     }
     catch (error) {
         if (DEBUG_ENABLED) {
-            logger.error('[learner] Error saving config:', error);
+            console.error('[learner] Error saving config:', error);
         }
         return false;
     }
