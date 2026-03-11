@@ -30,7 +30,7 @@ describe('workflow-gate integration', () => {
 
   it('enforces complete Socratic workflow from vague request to production', () => {
     // Step 1: Vague request triggers brainstorming
-    let input: WorkflowGateInput = {
+    const input: WorkflowGateInput = {
       type: 'UserPromptSubmit',
       prompt: 'how to add user authentication',
       workingDirectory: TEST_DIR

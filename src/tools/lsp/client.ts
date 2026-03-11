@@ -310,7 +310,9 @@ export class LspClient {
       try {
         const message = JSON.parse(messageJson);
         this.handleMessage(message);
-      } catch {}
+      } catch {
+        // Ignore JSON parse errors
+      }
     }
   }
 

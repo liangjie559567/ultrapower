@@ -62,7 +62,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('should return failure when state exists but is not active', async () => {
-      let state = await initAutopilot(testDir, 'test idea');
+      const state = await initAutopilot(testDir, 'test idea');
       if (state) {
         state.active = false;
         const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
@@ -622,7 +622,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('should handle zero progress in summary', async () => {
-      let state = await initAutopilot(testDir, 'test idea');
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -641,7 +641,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('should handle cleanup message in preserved state format', async () => {
-      let state = await initAutopilot(testDir, 'test idea');
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -680,7 +680,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('should handle no completed steps', async () => {
-      let state = await initAutopilot(testDir, 'test idea');
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       state.phase = 'expansion';
       state.completed_steps = [];
@@ -769,7 +769,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('resumeAutopilot: refuses when max_iterations reached', async () => {
-      let state = await initAutopilot(testDir, 'test idea');
+      const state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       await cancelAutopilot(testDir);
 

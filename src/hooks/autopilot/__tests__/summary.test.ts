@@ -186,7 +186,7 @@ describe('AutopilotSummary', () => {
 
   describe('formatCompactSummary', () => {
     it('should return correct format for expansion phase', async () => {
-      let state = await initAutopilot(testDir, 'Test');
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -196,7 +196,7 @@ describe('AutopilotSummary', () => {
     });
 
     it('should return correct format for planning phase', async () => {
-      let state = await initAutopilot(testDir, 'Test');
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -338,7 +338,7 @@ describe('AutopilotSummary', () => {
     });
 
     it('should limit error to 3 lines', async () => {
-      let state = await initAutopilot(testDir, 'Test');
+      const state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }

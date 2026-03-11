@@ -75,7 +75,7 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should stop at max iterations', async () => {
-      let state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION, { maxIterations: 1 });
+      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION, { maxIterations: 1 });
       if (state) {
         state.iteration = 1;
         await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
@@ -131,7 +131,7 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should track iteration count', async () => {
-      let state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
+      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
       if (state) {
         state.iteration = 3;
         await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
