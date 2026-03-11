@@ -6,16 +6,20 @@
  * Lazy-loaded command-line interface for the Sisyphus multi-agent system.
  */
 
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('cli:index');
+
 // Fast path for --version (skip heavy imports)
 if (process.argv.includes('--version') || process.argv.includes('-V')) {
   const { getRuntimePackageVersion } = await import('../lib/version.js');
-  console.log(getRuntimePackageVersion());
+  logger.info(getRuntimePackageVersion());
   process.exit(0);
 }
 
 import { Command } from 'commander';
 import { getRuntimePackageVersion } from '../lib/version.js';
 import { commandRegistry } from './commands/registry.js';
+
 
 const version = getRuntimePackageVersion();
 const program = new Command();
