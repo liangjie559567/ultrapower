@@ -69,3 +69,11 @@
 ### CCG 工作流诊断策略
 **发现：** 使用 debugger agent 可以快速定位 MCP 和脚本问题
 **应用：** 老项目 Bug 修复流程
+
+### Windows 路径格式规范
+**置信度：** 高（已验证，立即生效）
+**应用：** Claude Code settings.json 中所有路径使用 Unix 格式（正斜杠）
+**错误示例：** `"command": "node C:\\Users\\...\\file.mjs"`
+**正确示例：** `"command": "node C:/Users/.../file.mjs"`
+**原因：** Windows 反斜杠在 JSON 中可能被错误解析，导致命令执行失败
+**场景：** statusLine、hooks 等所有命令配置

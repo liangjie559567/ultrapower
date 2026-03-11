@@ -273,3 +273,20 @@ git push origin --tags         # 推送标签（如需要）
 **反模式**: 使用 --force（会覆盖远程变更）
 **验证**: v7.0.2 发布成功应用
 
+### PAT-018: Windows 配置文件路径格式模式
+
+**出现次数**: 1
+**置信度**: 95%
+**模式描述**:
+```json
+// 错误：Windows 反斜杠格式
+"command": "node C:\\Users\\ljyih\\.claude\\hud\\omc-hud.mjs"
+
+// 正确：Unix 正斜杠格式
+"command": "node C:/Users/ljyih/.claude/hud/omc-hud.mjs"
+```
+**适用场景**: Claude Code settings.json 中所有命令路径（statusLine、hooks）
+**反模式**: 使用 Windows 反斜杠（会导致命令执行失败）
+**验证**: HUD 不显示问题修复后立即生效
+**关键**: Windows 平台也必须使用正斜杠
+
