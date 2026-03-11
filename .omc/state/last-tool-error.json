@@ -1,7 +1,7 @@
 {
-  "tool_name": "Read",
-  "tool_input_preview": "{\"file_path\":\"C:\\\\Users\\\\ljyih\\\\Desktop\\\\ultrapower\\\\src\\\\cli\\\\commands\\\\config-discord.ts\"}",
-  "error": "File does not exist. Note: your current working directory is C:\\Users\\ljyih\\Desktop\\ultrapower.",
-  "timestamp": "2026-03-10T17:06:16.138Z",
-  "retry_count": 1
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"git pull --rebase origin main\",\"description\":\"拉取并变基远程变更\"}",
+  "error": "Exit code 128\nerror: cannot pull with rebase: You have unstaged changes.\nerror: Please commit or stash them.",
+  "timestamp": "2026-03-11T04:16:13.743Z",
+  "retry_count": 2
 }
