@@ -15,6 +15,47 @@ import { getServerForFile, commandExists } from './servers.js';
 /** Maximum receive buffer size: 64 MB. Exceeding this disconnects the client. */
 const MAX_BUFFER_BYTES = 64 * 1024 * 1024;
 
+/** Language ID mapping from file extension to LSP language identifier */
+const LANGUAGE_MAP: Record<string, string> = {
+  'ts': 'typescript',
+  'tsx': 'typescriptreact',
+  'js': 'javascript',
+  'jsx': 'javascriptreact',
+  'mts': 'typescript',
+  'cts': 'typescript',
+  'mjs': 'javascript',
+  'cjs': 'javascript',
+  'py': 'python',
+  'rs': 'rust',
+  'go': 'go',
+  'c': 'c',
+  'h': 'c',
+  'cpp': 'cpp',
+  'cc': 'cpp',
+  'hpp': 'cpp',
+  'java': 'java',
+  'json': 'json',
+  'html': 'html',
+  'css': 'css',
+  'scss': 'scss',
+  'yaml': 'yaml',
+  'yml': 'yaml',
+  'php': 'php',
+  'phtml': 'php',
+  'rb': 'ruby',
+  'rake': 'ruby',
+  'gemspec': 'ruby',
+  'erb': 'ruby',
+  'lua': 'lua',
+  'kt': 'kotlin',
+  'kts': 'kotlin',
+  'ex': 'elixir',
+  'exs': 'elixir',
+  'heex': 'elixir',
+  'eex': 'elixir',
+  'cs': 'csharp'
+};
+
 /** Convert a file path to a valid file:// URI (cross-platform) */
 function fileUri(filePath: string): string {
   return pathToFileURL(resolve(filePath)).href;
@@ -428,46 +469,7 @@ export class LspClient {
    */
   private getLanguageId(filePath: string): string {
     const ext = filePath.split('.').pop()?.toLowerCase() || '';
-    const langMap: Record<string, string> = {
-      'ts': 'typescript',
-      'tsx': 'typescriptreact',
-      'js': 'javascript',
-      'jsx': 'javascriptreact',
-      'mts': 'typescript',
-      'cts': 'typescript',
-      'mjs': 'javascript',
-      'cjs': 'javascript',
-      'py': 'python',
-      'rs': 'rust',
-      'go': 'go',
-      'c': 'c',
-      'h': 'c',
-      'cpp': 'cpp',
-      'cc': 'cpp',
-      'hpp': 'cpp',
-      'java': 'java',
-      'json': 'json',
-      'html': 'html',
-      'css': 'css',
-      'scss': 'scss',
-      'yaml': 'yaml',
-      'yml': 'yaml',
-      'php': 'php',
-      'phtml': 'php',
-      'rb': 'ruby',
-      'rake': 'ruby',
-      'gemspec': 'ruby',
-      'erb': 'ruby',
-      'lua': 'lua',
-      'kt': 'kotlin',
-      'kts': 'kotlin',
-      'ex': 'elixir',
-      'exs': 'elixir',
-      'heex': 'elixir',
-      'eex': 'elixir',
-      'cs': 'csharp'
-    };
-    return langMap[ext] || ext;
+    return LANGUAGE_MAP[ext] || ext;
   }
 
   /**
