@@ -1,3 +1,6 @@
+import { createLogger } from '../lib/unified-logger.js';
+const baseLogger = createLogger('mcp:logger');
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 const levels: Record<LogLevel, number> = {
@@ -11,7 +14,7 @@ const currentLevel = (process.env.MCP_LOG_LEVEL?.toLowerCase() as LogLevel) || '
 
 function log(level: LogLevel, ...args: unknown[]) {
   if (levels[level] >= levels[currentLevel]) {
-    console.error(`[${level.toUpperCase()}]`, ...args);
+    baseLogger[level](`[${level.toUpperCase()}]`, ...args);
   }
 }
 

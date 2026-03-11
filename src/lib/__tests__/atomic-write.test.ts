@@ -78,6 +78,9 @@ describe('atomicWriteJson', () => {
 
     for (let i = 0; i < 5; i++) {
       await atomicWriteJson(filePath, { iteration: i });
+      if (process.platform === 'win32') {
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
       const content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
       expect(content.iteration).toBe(i);
     }

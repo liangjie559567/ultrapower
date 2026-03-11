@@ -21,6 +21,9 @@ import { codexMcpServer } from './mcp/codex-server.js';
 import { geminiMcpServer } from './mcp/gemini-server.js';
 import { createMagicKeywordProcessor, detectMagicKeywords } from './features/magic-keywords.js';
 import { continuationSystemPromptAddition } from './features/continuation-enforcement.js';
+import { createLogger } from './lib/unified-logger.js';
+const logger = createLogger('src:index');
+
 import {
   createBackgroundTaskManager,
   shouldRunInBackground as shouldRunInBackgroundFn,
@@ -256,7 +259,7 @@ export interface SisyphusSession {
  *   prompt: session.processPrompt("ultrawork refactor the authentication module"),
  *   ...session.queryOptions
  * })) {
- *   console.log(message);
+ *   logger.info(message);
  * }
  * ```
  */
