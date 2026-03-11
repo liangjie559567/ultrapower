@@ -166,9 +166,14 @@ export class LspClient {
     reject: (error: Error) => void;
     timeout: NodeJS.Timeout;
   }>();
-  private buffer = '';
+  private bufferChunks: string[] = [];
+  private bufferOffset = 0;
   private openDocuments = new Set<string>();
   private diagnostics = new Map<string, Diagnostic[]>();
+  private pendingDiagnostics = new Map<string, {
+    resolve: (diagnostics: Diagnostic[]) => void;
+    timeout: NodeJS.Timeout;
+  }>();
   private workspaceRoot: string;
   private serverConfig: LspServerConfig;
   private initialized = false;
@@ -264,28 +269,27 @@ export class LspClient {
    * Handle incoming data from the server
    */
   private handleData(data: string): void {
-    // Guard: disconnect if buffer grows beyond limit (prevents OOM from runaway servers)
-    if (this.buffer.length + data.length > MAX_BUFFER_BYTES) {
+    const totalLength = this.bufferChunks.reduce((sum, chunk) => sum + chunk.length, 0) - this.bufferOffset + data.length;
+
+    if (totalLength > MAX_BUFFER_BYTES) {
       console.error(
         `[ultrapower] 错误：LSP 缓冲区超过 ${MAX_BUFFER_BYTES} 字节（64MB）上限，正在断开连接`
       );
-      this.disconnect().catch(() => {
-        // Ignore errors during emergency disconnect
-      });
+      this.disconnect().catch(() => {});
       return;
     }
-    this.buffer += data;
+
+    this.bufferChunks.push(data);
 
     while (true) {
-      // Look for Content-Length header
-      const headerEnd = this.buffer.indexOf('\r\n\r\n');
+      const buffer = this.bufferChunks.join('').slice(this.bufferOffset);
+      const headerEnd = buffer.indexOf('\r\n\r\n');
       if (headerEnd === -1) break;
 
-      const header = this.buffer.slice(0, headerEnd);
+      const header = buffer.slice(0, headerEnd);
       const contentLengthMatch = header.match(/Content-Length: (\d+)/i);
       if (!contentLengthMatch) {
-        // Invalid header, try to recover
-        this.buffer = this.buffer.slice(headerEnd + 4);
+        this.bufferOffset += headerEnd + 4;
         continue;
       }
 
@@ -293,19 +297,20 @@ export class LspClient {
       const messageStart = headerEnd + 4;
       const messageEnd = messageStart + contentLength;
 
-      if (this.buffer.length < messageEnd) {
-        break; // Not enough data yet
-      }
+      if (buffer.length < messageEnd) break;
 
-      const messageJson = this.buffer.slice(messageStart, messageEnd);
-      this.buffer = this.buffer.slice(messageEnd);
+      const messageJson = buffer.slice(messageStart, messageEnd);
+      this.bufferOffset += messageEnd;
+
+      if (this.bufferOffset > 8192) {
+        this.bufferChunks = [buffer.slice(messageEnd)];
+        this.bufferOffset = 0;
+      }
 
       try {
         const message = JSON.parse(messageJson);
         this.handleMessage(message);
-      } catch {
-        // Invalid JSON, skip
-      }
+      } catch {}
     }
   }
 
@@ -339,6 +344,13 @@ export class LspClient {
     if (notification.method === 'textDocument/publishDiagnostics') {
       const params = notification.params as { uri: string; diagnostics: Diagnostic[] };
       this.diagnostics.set(params.uri, params.diagnostics);
+
+      const pending = this.pendingDiagnostics.get(params.uri);
+      if (pending) {
+        clearTimeout(pending.timeout);
+        this.pendingDiagnostics.delete(params.uri);
+        pending.resolve(params.diagnostics);
+      }
     }
     // Handle other notifications as needed
   }
@@ -449,8 +461,7 @@ export class LspClient {
 
     this.openDocuments.add(uri);
 
-    // Wait a bit for the server to process the document
-    await new Promise(resolve => setTimeout(resolve, 100));
+    return this.waitForDiagnostics(uri, 500);
   }
 
   /**
@@ -474,6 +485,26 @@ export class LspClient {
   private getLanguageId(filePath: string): string {
     const ext = filePath.split('.').pop()?.toLowerCase() || '';
     return LANGUAGE_MAP[ext] || ext;
+  }
+
+  /**
+   * Wait for diagnostics to be published for a URI
+   */
+  private waitForDiagnostics(uri: string, timeout: number): Promise<void> {
+    return new Promise((resolve) => {
+      const timeoutHandle = setTimeout(() => {
+        this.pendingDiagnostics.delete(uri);
+        resolve();
+      }, timeout);
+
+      this.pendingDiagnostics.set(uri, {
+        resolve: () => {
+          clearTimeout(timeoutHandle);
+          resolve();
+        },
+        timeout: timeoutHandle
+      });
+    });
   }
 
   /**
@@ -758,7 +789,9 @@ class LspClientManager {
           if (workspaceRootCache.size >= MAX_WORKSPACE_CACHE) {
             // Remove oldest (first entry)
             const firstKey = workspaceRootCache.keys().next().value;
-            workspaceRootCache.delete(firstKey);
+            if (firstKey !== undefined) {
+              workspaceRootCache.delete(firstKey);
+            }
           }
           workspaceRootCache.set(resolved, dir);
           return dir;

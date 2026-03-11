@@ -211,10 +211,10 @@ export function incrementRalphIteration(
     return null;
   }
 
-  state.iteration += 1;
+  const updatedState = { ...state, iteration: state.iteration + 1 };
 
-  if (writeRalphState(directory, state, sessionId)) {
-    return state;
+  if (writeRalphState(directory, updatedState, sessionId)) {
+    return updatedState;
   }
 
   return null;
@@ -378,8 +378,8 @@ export function setCurrentStory(directory: string, storyId: string): boolean {
     return false;
   }
 
-  state.current_story_id = storyId;
-  return writeRalphState(directory, state);
+  const mutableState = { ...state, current_story_id: storyId };
+  return writeRalphState(directory, mutableState);
 }
 
 /**
@@ -391,12 +391,11 @@ export function enablePrdMode(directory: string): boolean {
     return false;
   }
 
-  state.prd_mode = true;
+  const mutableState = { ...state, prd_mode: true };
 
-  // Initialize progress.txt if it doesn't exist
   initProgress(directory);
 
-  return writeRalphState(directory, state);
+  return writeRalphState(directory, mutableState);
 }
 
 /**

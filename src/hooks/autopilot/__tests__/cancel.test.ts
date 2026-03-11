@@ -601,14 +601,12 @@ describe('AutopilotCancel', () => {
       });
 
       const updatedState = readAutopilotState(testDir);
-      if (updatedState) {
-        updatedState.total_agents_spawned = 7;
-      }
+      const mutableState = updatedState ? { ...updatedState, total_agents_spawned: 7 } : null;
 
       const result: CancelResult = {
         success: true,
         message: 'Autopilot cancelled at phase: execution. Progress preserved for resume.',
-        preservedState: updatedState!
+        preservedState: mutableState!
       };
 
       const formatted = formatCancelMessage(result);
@@ -776,8 +774,7 @@ describe('AutopilotCancel', () => {
 
       // Set iteration to max
       const s = readAutopilotState(testDir)!;
-      s.iteration = s.max_iterations;
-      await writeAutopilotState(testDir, s);
+      await writeAutopilotState(testDir, { ...s, iteration: s.max_iterations });
 
       const result = await resumeAutopilot(testDir);
       expect(result.success).toBe(false);
