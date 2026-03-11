@@ -1153,11 +1153,14 @@ Checks:
 | Issue | Resolution |
 | ------- | ----------- |
 | Command not found | Re-run `/ultrapower:omc-setup` |
+| HUD not displaying (Windows) | Check path format in `~/.claude/settings.json` - use forward slashes (`C:/Users/...`) not backslashes (`C:\\Users\\...`). Run `/ultrapower:omc-setup` to auto-fix |
 | Hooks not executing | Check hook permissions: `chmod +x ~/.claude/hooks/**/*.sh` |
 | Agents not delegating | Verify CLAUDE.md is loaded: check `./.claude/CLAUDE.md` or `~/.claude/CLAUDE.md` |
 | LSP tools not working | Install language server: `npm install -g typescript-language-server` |
 | Token limit errors | Use `/ultrapower:` for token-efficient execution |
 | Path traversal error | Ensure mode parameter passes `assertValidMode()` validation |
+
+**Windows Users**: Claude Code requires forward slashes in all path configurations. If HUD or hooks don't work after installation, run `/ultrapower:omc-doctor` to check for path format issues.
 
 ### Uninstall
 

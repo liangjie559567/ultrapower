@@ -53,6 +53,8 @@ graph TB
 /ultrapower:omc-setup
 ```
 
+> **Windows 用户注意**：如果安装后 HUD 不显示，运行 `/ultrapower:omc-doctor` 检查路径格式。Claude Code 要求配置文件中使用正斜杠（`C:/Users/...`）而非反斜杠。
+
 ### 验证安装
 
 ```bash
