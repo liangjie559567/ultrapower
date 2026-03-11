@@ -1,5 +1,17 @@
 # ultrapower v7.0.1
 
+## 7.0.5
+
+### Patch Changes
+
+- b365f0f: Fix 5 critical bugs - readonly property mutations and type errors
+  - **Fix**: TypeScript error in client.ts:792 - added undefined check for Map.keys()
+  - **Fix**: Ralph verifier logic error - return updated state instead of old state
+  - **Fix**: LSP test assertions - use correct bufferChunks property
+  - **Fix**: Ralph loop readonly mutation - use object spread for state updates
+  - **Fix**: Autopilot state mutations - fix all readonly property assignments
+  - **Test Results**: All 431 test files passing, 6657 tests passing, build successful
+
 ## 7.0.4
 
 ### Patch Changes
