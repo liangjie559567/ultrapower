@@ -141,6 +141,7 @@
     "llm"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }
