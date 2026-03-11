@@ -872,6 +872,8 @@ export {
   detectBrainstormingComplete,
   detectPlanComplete,
   detectPlanExecutionSkill,
+  detectVagueRequest,
+  suggestNextStep,
   getWorkflowStatePath,
   type WorkflowState,
   type WorkflowGateInput,

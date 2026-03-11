@@ -153,6 +153,65 @@ export function detectPlanExecutionSkill(prompt: string): boolean {
 }
 
 /**
+ * Detect if user is asking a vague question that needs brainstorming
+ */
+export function detectVagueRequest(prompt: string): boolean {
+  const vaguePatterns = [
+    'how to', 'what should', 'help me', 'i want to', 'i need',
+    '如何', '怎么', '帮我', '我想', '我需要'
+  ];
+
+  // Check both original and lowercase for case-insensitive English matching
+  const lowerPrompt = prompt.toLowerCase();
+  const hasVaguePattern = vaguePatterns.some(pattern =>
+    lowerPrompt.includes(pattern.toLowerCase()) || prompt.includes(pattern)
+  );
+
+  // Ignore if brainstorming already mentioned
+  if (prompt.includes('brainstorm')) {
+    return false;
+  }
+
+  // Require minimum length (count characters, not bytes)
+  if ([...prompt].length < 8) {
+    return false;
+  }
+
+  return hasVaguePattern;
+}
+
+/**
+ * Suggest next step based on current workflow state
+ */
+export function suggestNextStep(state: WorkflowState): string | null {
+  if (!state.brainstormingComplete) {
+    return 'brainstorming';
+  }
+
+  if (!state.planWritten) {
+    return 'writing-plans';
+  }
+
+  if (!state.worktreeCreated && state.planWritten) {
+    return 'using-git-worktrees';
+  }
+
+  if (!state.executionStarted && state.planWritten) {
+    return 'subagent-driven-development';
+  }
+
+  if (!state.reviewRequested && state.executionStarted) {
+    return 'requesting-code-review';
+  }
+
+  if (!state.verificationComplete && state.reviewRequested) {
+    return 'verification-before-completion';
+  }
+
+  return null;
+}
+
+/**
  * Process workflow gate check
  */
 export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutput {
@@ -178,7 +237,7 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
     writeWorkflowState(workingDirectory, state);
   }
 
-  // Gate 1: Implementation without brainstorming
+  // Gate 1: Implementation without brainstorming (highest priority)
   if (detectImplementationIntent(prompt) && !state.brainstormingComplete) {
     return {
       success: true,
@@ -205,6 +264,17 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
       shouldBlock: true,
       injectedSkill: 'writing-plans',
       message: '⚠️ Workflow Gate: 使用 executing-plans 或 subagent-driven-development 前必须先编写计划。自动注入 writing-plans skill。'
+    };
+  }
+
+  // Auto-trigger: Suggest brainstorming for vague requests (lower priority)
+  // Only trigger if no implementation intent detected
+  if (detectVagueRequest(prompt) && !state.brainstormingComplete && !detectImplementationIntent(prompt)) {
+    return {
+      success: true,
+      shouldBlock: true,
+      injectedSkill: 'brainstorming',
+      message: '💡 自动触发: 检测到模糊需求，建议先进行头脑风暴以明确方向。'
     };
   }
 
