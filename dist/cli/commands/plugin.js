@@ -9,6 +9,8 @@ import { createSnapshot, restoreSnapshot, listSnapshots } from '../../lib/plugin
 import { isMarketplaceEnabled, countThirdPartyPlugins } from '../../lib/plugin-marketplace.js';
 import { join } from 'path';
 import { homedir } from 'os';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('commands:plugin');
 function pluginInstallPath(name) {
     return join(homedir(), '.claude', 'plugins', 'cache', name);
 }
@@ -22,12 +24,12 @@ export function pluginCommand() {
         const dir = pluginInstallPath(name);
         const report = analyzePlugin(dir);
         if (report.safe) {
-            console.log(chalk.green(`✓ ${name}: no security violations found`));
+            logger.info(chalk.green(`✓ ${name}: no security violations found`));
         }
         else {
-            console.log(chalk.red(`✗ ${name}: ${report.violations.length} violation(s) found`));
+            logger.info(chalk.red(`✗ ${name}: ${report.violations.length} violation(s) found`));
             for (const v of report.violations) {
-                console.log(chalk.yellow(`  ${v.file}:${v.line} [${v.label}] ${v.snippet}`));
+                logger.info(chalk.yellow(`  ${v.file}:${v.line} [${v.label}] ${v.snippet}`));
             }
             process.exitCode = 1;
         }
@@ -41,12 +43,12 @@ export function pluginCommand() {
         const tree = buildDepTree(dir, name);
         const report = detectConflicts(tree);
         if (report.clean) {
-            console.log(chalk.green(`✓ ${name}: no dependency conflicts`));
+            logger.info(chalk.green(`✓ ${name}: no dependency conflicts`));
         }
         else {
-            console.log(chalk.red(`✗ ${name}: ${report.conflicts.length} conflict(s)`));
+            logger.info(chalk.red(`✗ ${name}: ${report.conflicts.length} conflict(s)`));
             for (const c of report.conflicts) {
-                console.log(chalk.yellow(`  ${c.name}: ${c.versions.join(', ')}`));
+                logger.info(chalk.yellow(`  ${c.name}: ${c.versions.join(', ')}`));
             }
             process.exitCode = 1;
         }
@@ -58,7 +60,7 @@ export function pluginCommand() {
         .action((name, version) => {
         const installPath = pluginInstallPath(name);
         const meta = createSnapshot(name, version, installPath);
-        console.log(chalk.green(`✓ Snapshot created: ${meta.snapshotPath}`));
+        logger.info(chalk.green(`✓ Snapshot created: ${meta.snapshotPath}`));
     });
     // omc plugin rollback <name> <version>
     cmd
@@ -68,15 +70,15 @@ export function pluginCommand() {
         const installPath = pluginInstallPath(name);
         const ok = restoreSnapshot(name, version, installPath);
         if (ok) {
-            console.log(chalk.green(`✓ ${name} restored to v${version}`));
+            logger.info(chalk.green(`✓ ${name} restored to v${version}`));
         }
         else {
-            console.log(chalk.red(`✗ No snapshot found for ${name}@${version}`));
+            logger.info(chalk.red(`✗ No snapshot found for ${name}@${version}`));
             const available = listSnapshots(name);
             if (available.length > 0) {
-                console.log('Available snapshots:');
+                logger.info('Available snapshots:');
                 for (const s of available)
-                    console.log(`  ${s.version} (${s.snapshotAt})`);
+                    logger.info(`  ${s.version} (${s.snapshotAt})`);
             }
             process.exitCode = 1;
         }
@@ -89,10 +91,10 @@ export function pluginCommand() {
         const count = countThirdPartyPlugins();
         const enabled = isMarketplaceEnabled();
         if (enabled) {
-            console.log(chalk.green(`✓ Marketplace enabled (${count} third-party plugins installed)`));
+            logger.info(chalk.green(`✓ Marketplace enabled (${count} third-party plugins installed)`));
         }
         else {
-            console.log(chalk.yellow(`Marketplace not yet available (${count}/5 third-party plugins required)`));
+            logger.info(chalk.yellow(`Marketplace not yet available (${count}/5 third-party plugins required)`));
         }
     });
     return cmd;

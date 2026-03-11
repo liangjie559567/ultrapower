@@ -10,14 +10,16 @@
  *
  * // Explicit category
  * const config = resolveCategory('ultrabrain');
- * console.log(config.tier);  // 'HIGH'
- * console.log(config.temperature);  // 0.3
+ * logger.info(config.tier);  // 'HIGH'
+ * logger.info(config.temperature);  // 0.3
  *
  * // Auto-detect category from task
  * const detected = getCategoryForTask({ taskPrompt: "Design a beautiful dashboard" });
- * console.log(detected.category);  // 'visual-engineering'
+ * logger.info(detected.category);  // 'visual-engineering'
  * ```
  */
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('delegation-categories:index');
 /**
  * Category configuration definitions
  */

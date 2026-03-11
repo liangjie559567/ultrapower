@@ -1,5 +1,7 @@
 import { PRICING } from './types.js';
 import { lookupPricingWithFallback } from './tokscale-adapter.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('analytics:cost-estimator');
 /**
  * Synchronous cost calculation using hardcoded pricing.
  * Fast path for HUD and sync operations that need instant response.
@@ -92,7 +94,7 @@ function getPricingForModel(modelName) {
         return PRICING[normalized];
     }
     // Default to Sonnet if unknown
-    console.warn(`Unknown model: ${modelName}, defaulting to Sonnet pricing`);
+    logger.warn(`Unknown model: ${modelName}, defaulting to Sonnet pricing`);
     return PRICING['claude-sonnet-4.6'];
 }
 export function normalizeModelName(modelName) {

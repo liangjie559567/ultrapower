@@ -6,6 +6,8 @@
  * token counting and pricing lookup while maintaining compatibility in all environments.
  */
 import { PRICING } from './types.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('analytics:tokscale-adapter');
 /**
  * Fallback adapter when tokscale is not available
  */
@@ -54,7 +56,7 @@ export async function getTokscaleAdapter() {
                 const health = tokscale.healthCheck();
                 // String response means healthy, non-string or falsy means unhealthy
                 if (!health || (typeof health === 'object' && !health.nativeAvailable)) {
-                    console.warn('[tokscale-adapter] Native module not available, using fallback');
+                    logger.warn('[tokscale-adapter] Native module not available, using fallback');
                     cachedAdapter = FALLBACK_ADAPTER;
                     return cachedAdapter;
                 }
@@ -101,7 +103,7 @@ export async function getTokscaleAdapter() {
                     };
                 }
                 catch (error) {
-                    console.warn('[tokscale-adapter] getReport failed:', error instanceof Error ? error.message : String(error));
+                    logger.warn('[tokscale-adapter] getReport failed:', error instanceof Error ? error.message : String(error));
                     throw error;
                 }
             },
@@ -132,7 +134,7 @@ export async function getTokscaleAdapter() {
                     return null;
                 }
                 catch (error) {
-                    console.warn('[tokscale-adapter] lookupPricing failed for', modelName, ':', error instanceof Error ? error.message : String(error));
+                    logger.warn('[tokscale-adapter] lookupPricing failed for', modelName, ':', error instanceof Error ? error.message : String(error));
                     return null;
                 }
             }
@@ -144,7 +146,7 @@ export async function getTokscaleAdapter() {
         const message = error instanceof Error ? error.message : String(error);
         // Only log if it's not a simple "module not found" error
         if (!message.includes('Cannot find module') && !message.includes('MODULE_NOT_FOUND')) {
-            console.warn(`[tokscale-adapter] Failed to load: ${message}`);
+            logger.warn(`[tokscale-adapter] Failed to load: ${message}`);
         }
         cachedAdapter = FALLBACK_ADAPTER;
         return cachedAdapter;

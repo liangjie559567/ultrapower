@@ -5,6 +5,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { MEMORY_FILE, MEMORY_DIR, CACHE_EXPIRY_MS } from './constants.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('project-memory:storage');
 /**
  * Get the path to the project memory file
  */
@@ -46,7 +48,7 @@ export async function saveProjectMemory(projectRoot, memory) {
     }
     catch (error) {
         // Silently fail - we don't want to break the session
-        console.error('Failed to save project memory:', error);
+        logger.error('Failed to save project memory:', error);
     }
 }
 /**

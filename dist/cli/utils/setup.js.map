@@ -1,1 +1,1 @@
-{"version":3,"file":"setup.js","sourceRoot":"","sources":["../../../src/cli/utils/setup.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,KAAK,UAAU,YAAY;IAChC,OAAO,CAAC,GAAG,CAAC,wCAAwC,CAAC,CAAC;AACxD,CAAC"}
+{"version":3,"file":"setup.js","sourceRoot":"","sources":["../../../src/cli/utils/setup.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,6BAA6B,CAAC;AAC3D,MAAM,MAAM,GAAG,YAAY,CAAC,aAAa,CAAC,CAAC;AAE3C,MAAM,CAAC,KAAK,UAAU,YAAY;IAChC,MAAM,CAAC,IAAI,CAAC,wCAAwC,CAAC,CAAC;AACxD,CAAC"}

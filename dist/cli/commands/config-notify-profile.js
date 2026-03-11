@@ -2,6 +2,8 @@ import { Command } from 'commander';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('commands:config-notify-profile');
 export function createConfigNotifyProfileCommand() {
     const cmd = new Command('config-notify-profile')
         .description('Manage notification profiles')
@@ -17,36 +19,38 @@ export function createConfigNotifyProfileCommand() {
         try {
             config = JSON.parse(readFileSync(configPath, 'utf-8'));
         }
-        catch { }
+        catch {
+            // Config file doesn't exist or is invalid, use default
+        }
         if (options.list) {
             const profiles = config.notificationProfiles || {};
             if (Object.keys(profiles).length === 0) {
-                console.log('No notification profiles configured');
+                logger.info('No notification profiles configured');
             }
             else {
-                console.log('Notification profiles:');
+                logger.info('Notification profiles:');
                 for (const name of Object.keys(profiles)) {
-                    console.log(`  - ${name}`);
+                    logger.info(`  - ${name}`);
                 }
             }
             return;
         }
         if (!profile) {
-            console.error('Profile name required');
+            logger.error('Profile name required');
             process.exit(1);
         }
         if (options.show) {
-            console.log(JSON.stringify(config.notificationProfiles?.[profile] || {}, null, 2));
+            logger.info(JSON.stringify(config.notificationProfiles?.[profile] || {}, null, 2));
             return;
         }
         if (options.delete) {
             if (config.notificationProfiles?.[profile]) {
                 delete config.notificationProfiles[profile];
                 writeFileSync(configPath, JSON.stringify(config, null, 2));
-                console.log(`Profile "${profile}" deleted`);
+                logger.info(`Profile "${profile}" deleted`);
             }
             else {
-                console.log(`Profile "${profile}" not found`);
+                logger.info(`Profile "${profile}" not found`);
             }
             return;
         }

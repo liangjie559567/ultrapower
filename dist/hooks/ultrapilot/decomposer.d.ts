@@ -92,8 +92,8 @@ export declare function generateDecompositionPrompt(task: string, codebaseContex
  * @example
  * ```typescript
  * const result = parseDecompositionResult(architectResponse);
- * console.log(result.subtasks.length); // Number of parallel tasks
- * console.log(result.parallelGroups); // Execution order
+ * logger.info(result.subtasks.length); // Number of parallel tasks
+ * logger.info(result.parallelGroups); // Execution order
  * ```
  */
 export declare function parseDecompositionResult(response: string): DecompositionResult;

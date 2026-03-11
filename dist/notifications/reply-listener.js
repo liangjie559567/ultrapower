@@ -20,6 +20,8 @@ import { fileURLToPath } from 'url';
 import { homedir } from 'os';
 import { spawn } from 'child_process';
 import { request as httpsRequest } from 'https';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('notifications:reply-listener');
 import { capturePaneContent, analyzePaneContent, sendToPane, isTmuxAvailable, } from '../features/rate-limit-wait/tmux-detector.js';
 import { lookupByMessageId, removeMessagesByPane, pruneStale, } from './session-registry.js';
 import { parseMentionAllowedMentions } from './config.js';
@@ -693,7 +695,7 @@ export function startReplyListener(_config) {
     const daemonScript = `
     import('${modulePath}').then(({ pollLoop }) => {
       return pollLoop();
-    }).catch((err) => { console.error(err); process.exit(1); });
+    }).catch((err) => { logger.error(err); process.exit(1); });
   `;
     try {
         const child = spawn('node', ['-e', daemonScript], {

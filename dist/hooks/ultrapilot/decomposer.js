@@ -6,6 +6,8 @@
  * file ownership and dependency tracking.
  */
 import { safeJsonParse } from '../../lib/safe-json.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('ultrapilot:decomposer');
 /**
  * Default shared file patterns that should be handled by the orchestrator
  */
@@ -180,8 +182,8 @@ Return ONLY the JSON object, no markdown code fences or additional text.`;
  * @example
  * ```typescript
  * const result = parseDecompositionResult(architectResponse);
- * console.log(result.subtasks.length); // Number of parallel tasks
- * console.log(result.parallelGroups); // Execution order
+ * logger.info(result.subtasks.length); // Number of parallel tasks
+ * logger.info(result.parallelGroups); // Execution order
  * ```
  */
 export function parseDecompositionResult(response) {

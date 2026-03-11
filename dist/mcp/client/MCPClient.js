@@ -1,5 +1,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('client:MCPClient');
 export class MCPClient {
     client;
     transport = null;
@@ -22,7 +24,7 @@ export class MCPClient {
                 return;
             }
             catch (error) {
-                console.error(`Connection attempt ${attempt + 1}/${maxRetries} failed:`, error);
+                logger.error(`Connection attempt ${attempt + 1}/${maxRetries} failed:`, error);
                 if (attempt < maxRetries - 1) {
                     await new Promise(resolve => setTimeout(resolve, delays[attempt]));
                 }

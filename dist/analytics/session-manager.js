@@ -2,6 +2,8 @@ import { readState, writeState, clearState, StateLocation } from '../features/st
 import { getTokenTracker } from './token-tracker.js';
 import { getGitDiffStats } from '../hooks/omc-orchestrator/index.js';
 import * as path from 'path';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('analytics:session-manager');
 const SESSION_HISTORY_FILE = 'session-history';
 /**
  * Source file extensions to track for filesModified
@@ -270,7 +272,7 @@ export class SessionManager {
             const result = writeState(SESSION_HISTORY_FILE, localResult.data, StateLocation.GLOBAL);
             writeSuccess = result.success;
             if (writeSuccess) {
-                console.log('[session-manager] Migrated session history from local to global state');
+                logger.info('[session-manager] Migrated session history from local to global state');
             }
         }
         else {
@@ -287,7 +289,7 @@ export class SessionManager {
                 const result = writeState(SESSION_HISTORY_FILE, merged, StateLocation.GLOBAL);
                 writeSuccess = result.success;
                 if (writeSuccess) {
-                    console.log(`[session-manager] Merged ${newSessions.length} sessions from local to global state`);
+                    logger.info(`[session-manager] Merged ${newSessions.length} sessions from local to global state`);
                 }
             }
             else {
@@ -301,7 +303,7 @@ export class SessionManager {
                 clearState(SESSION_HISTORY_FILE, StateLocation.LOCAL);
             }
             catch (error) {
-                console.warn('[session-manager] Failed to clean up local session history after migration:', error instanceof Error ? error.message : String(error));
+                logger.warn('[session-manager] Failed to clean up local session history after migration:', error instanceof Error ? error.message : String(error));
             }
         }
         // Also migrate current-session if it exists locally

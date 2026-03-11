@@ -16,6 +16,8 @@ import { getClaudeConfigDir } from '../utils/paths.js';
 import { join, dirname } from 'path';
 import { execSync } from 'child_process';
 import https from 'https';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('hud:usage-api');
 // Cache configuration
 const CACHE_TTL_SUCCESS_MS = 30 * 1000; // 30 seconds for successful responses
 const CACHE_TTL_FAILURE_MS = 15 * 1000; // 15 seconds for failures
@@ -230,7 +232,7 @@ function refreshAccessToken(refreshToken) {
                     }
                 }
                 if (process.env.OMC_DEBUG) {
-                    console.error(`[usage-api] Token refresh failed: HTTP ${res.statusCode}`);
+                    logger.error(`[usage-api] Token refresh failed: HTTP ${res.statusCode}`);
                 }
                 resolve(null);
             });
@@ -388,7 +390,7 @@ function writeBackCredentials(creds) {
     catch {
         // Silent failure - credential write-back is best-effort
         if (process.env.OMC_DEBUG) {
-            console.error('[usage-api] Failed to write back refreshed credentials');
+            logger.error('[usage-api] Failed to write back refreshed credentials');
         }
     }
 }

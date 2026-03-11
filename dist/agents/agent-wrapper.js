@@ -4,6 +4,8 @@
  */
 import { timeoutManager } from './timeout-manager.js';
 import { getAgentTimeout } from './timeout-config.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('agents:agent-wrapper');
 /**
  * 带超时保护的 Agent 调用
  */
@@ -28,7 +30,7 @@ export async function callAgentWithTimeout(agentFn, options) {
                 // 超时
                 if (attempt < maxRetries) {
                     const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
-                    console.warn(`[agent-wrapper] Timeout on attempt ${attempt + 1}, retrying in ${delay}ms...`);
+                    logger.warn(`[agent-wrapper] Timeout on attempt ${attempt + 1}, retrying in ${delay}ms...`);
                     await new Promise(resolve => setTimeout(resolve, delay));
                     attempt++;
                     continue;

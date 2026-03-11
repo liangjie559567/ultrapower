@@ -32,8 +32,8 @@ export declare const stateTools: ({
     };
     handler: (args: {
         mode: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan";
-        workingDirectory?: string | undefined;
         session_id?: string | undefined;
+        workingDirectory?: string | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";
@@ -105,18 +105,18 @@ export declare const stateTools: ({
     };
     handler: (args: {
         mode: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan";
-        state?: Record<string, unknown> | undefined;
-        workingDirectory?: string | undefined;
+        error?: string | undefined;
         session_id?: string | undefined;
         active?: boolean | undefined;
+        workingDirectory?: string | undefined;
+        state?: Record<string, unknown> | undefined;
         iteration?: number | undefined;
+        completed_at?: string | undefined;
+        plan_path?: string | undefined;
         max_iterations?: number | undefined;
         current_phase?: string | undefined;
         task_description?: string | undefined;
-        plan_path?: string | undefined;
         started_at?: string | undefined;
-        completed_at?: string | undefined;
-        error?: string | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";
@@ -153,8 +153,8 @@ export declare const stateTools: ({
         required?: undefined;
     };
     handler: (args: {
-        workingDirectory?: string | undefined;
         session_id?: string | undefined;
+        workingDirectory?: string | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";
@@ -195,9 +195,9 @@ export declare const stateTools: ({
         required?: undefined;
     };
     handler: (args: {
-        mode?: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan" | undefined;
-        workingDirectory?: string | undefined;
         session_id?: string | undefined;
+        workingDirectory?: string | undefined;
+        mode?: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan" | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";

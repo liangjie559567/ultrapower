@@ -7,6 +7,8 @@ import { sessionsCommand } from './commands/sessions.js';
 import { agentsCommand } from './commands/agents.js';
 import { exportCommand } from './commands/export.js';
 import { cleanupCommand } from './commands/cleanup.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('cli:analytics');
 import { launchTokscaleTUI, isTokscaleCLIAvailable, getInstallInstructions } from './utils/tokscale-launcher.js';
 program
     .name('omc-analytics')
@@ -25,7 +27,7 @@ program
     .option('--json', 'Output as JSON')
     .action((period = 'monthly', options) => {
     if (!['daily', 'weekly', 'monthly'].includes(period)) {
-        console.error('Invalid period. Use: daily, weekly, or monthly');
+        logger.error('Invalid period. Use: daily, weekly, or monthly');
         process.exit(1);
     }
     costCommand(period, options);
@@ -55,11 +57,11 @@ program
     .option('--period <period>', 'Period for cost report (daily, weekly, monthly)', 'monthly')
     .action((type, format, output, options) => {
     if (!['cost', 'sessions', 'patterns'].includes(type)) {
-        console.error('Invalid type. Use: cost, sessions, or patterns');
+        logger.error('Invalid type. Use: cost, sessions, or patterns');
         process.exit(1);
     }
     if (!['json', 'csv'].includes(format)) {
-        console.error('Invalid format. Use: json or csv');
+        logger.error('Invalid format. Use: json or csv');
         process.exit(1);
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- commander string narrowing
@@ -83,8 +85,8 @@ program
     .action(async (options) => {
     const available = await isTokscaleCLIAvailable();
     if (!available) {
-        console.log(chalk.yellow('tokscale is not installed.'));
-        console.log(getInstallInstructions());
+        logger.info(chalk.yellow('tokscale is not installed.'));
+        logger.info(getInstallInstructions());
         process.exit(1);
     }
     const view = options.models ? 'models'
@@ -98,7 +100,7 @@ program
     }
     catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        console.error(chalk.red(`Failed to launch TUI: ${message}`));
+        logger.error(chalk.red(`Failed to launch TUI: ${message}`));
         process.exit(1);
     }
 });

@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { safeJsonParse } from '../../lib/safe-json.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('nexus:config');
 const DEBUG_ENABLED = process.env.OMC_DEBUG === '1';
 export const DEFAULT_NEXUS_CONFIG = {
     enabled: false,
@@ -25,7 +27,7 @@ export function loadNexusConfig(directory) {
     }
     catch (error) {
         if (DEBUG_ENABLED) {
-            console.error('[nexus] Error loading config:', error);
+            logger.error('[nexus] Error loading config:', error);
         }
         return { ...DEFAULT_NEXUS_CONFIG };
     }

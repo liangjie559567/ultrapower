@@ -10,6 +10,8 @@ import { join, dirname } from 'path';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import { sanitizeName } from './tmux-session.js';
 import { appendFileWithMode, writeFileWithMode, atomicWriteJson, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('team:inbox-outbox');
 /** Maximum bytes to read from inbox in a single call (10 MB) */
 const MAX_INBOX_READ_SIZE = 10 * 1024 * 1024;
 // --- Path helpers ---
@@ -149,7 +151,7 @@ export function readNewInboxMessages(teamName, workerName) {
     const readSize = stat.size - offset;
     const cappedSize = Math.min(readSize, MAX_INBOX_READ_SIZE);
     if (cappedSize < readSize) {
-        console.warn(`[inbox-outbox] Inbox for ${workerName} exceeds ${MAX_INBOX_READ_SIZE} bytes, reading truncated`);
+        logger.warn(`[inbox-outbox] Inbox for ${workerName} exceeds ${MAX_INBOX_READ_SIZE} bytes, reading truncated`);
     }
     const fd = openSync(inbox, 'r');
     const buffer = Buffer.alloc(cappedSize);

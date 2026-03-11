@@ -6,6 +6,8 @@ import { BackfillDedup } from './backfill-dedup.js';
 import { getTokenTracker } from './token-tracker.js';
 import { calculateCost } from './cost-estimator.js';
 import { extractTokenUsage, extractTaskSpawns } from './transcript-token-extractor.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('analytics:backfill-engine');
 /**
  * BackfillEngine orchestrates the offline transcript analysis pipeline.
  *
@@ -70,7 +72,7 @@ export class BackfillEngine extends EventEmitter {
             catch (error) {
                 result.errorsEncountered++;
                 if (options.verbose) {
-                    console.error(`Error processing ${transcript.filePath}:`, error);
+                    logger.error(`Error processing ${transcript.filePath}:`, error);
                 }
             }
             result.filesProcessed++;
@@ -105,7 +107,7 @@ export class BackfillEngine extends EventEmitter {
             onParseError: (line, error) => {
                 result.errorsEncountered++;
                 if (options.verbose) {
-                    console.warn(`Parse error in ${transcript.filePath}: ${error.message}`);
+                    logger.warn(`Parse error in ${transcript.filePath}: ${error.message}`);
                 }
             },
         })) {

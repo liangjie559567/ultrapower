@@ -5,6 +5,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { OmcPaths } from '../../lib/worktree-paths.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('omc-orchestrator:audit');
 const LOG_DIR = OmcPaths.LOGS;
 const LOG_FILE = 'delegation-audit.jsonl';
 /**
@@ -24,7 +26,7 @@ export function logAuditEntry(entry) {
             await fs.promises.appendFile(logPath, JSON.stringify(fullEntry) + '\n');
         }
         catch (_err) {
-            console.error('[delegation-audit] Failed to write log:', _err);
+            logger.error('[delegation-audit] Failed to write log:', _err);
         }
     })();
 }

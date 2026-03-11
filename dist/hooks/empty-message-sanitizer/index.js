@@ -19,6 +19,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { tmpdir } from 'os';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('empty-message-sanitizer:index');
 import { PLACEHOLDER_TEXT, TOOL_PART_TYPES, HOOK_NAME, DEBUG_PREFIX, } from './constants.js';
 const DEBUG = process.env.EMPTY_MESSAGE_SANITIZER_DEBUG === '1';
 const DEBUG_FILE = path.join(tmpdir(), 'empty-message-sanitizer-debug.log');
@@ -28,7 +30,7 @@ function debugLog(...args) {
             .map((a) => (typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)))
             .join(' ')}\n`;
         fs.promises.appendFile(DEBUG_FILE, msg).catch(err => {
-            console.error('[empty-message-sanitizer] Failed to write debug log:', err);
+            logger.error('[empty-message-sanitizer] Failed to write debug log:', err);
         });
     }
 }

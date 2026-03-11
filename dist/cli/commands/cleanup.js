@@ -3,8 +3,10 @@ import { getQueryEngine } from '../../analytics/query-engine.js';
 import { cleanupStaleBackgroundTasks } from '../../hud/background-cleanup.js';
 import { colors } from '../utils/formatting.js';
 import { cleanupStaleBridges } from '../../tools/python-repl/bridge-manager.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('commands:cleanup');
 export async function cleanupCommand(options) {
-    console.log(colors.bold('\n🧹 Running Cleanup...\n'));
+    logger.info(colors.bold('\n🧹 Running Cleanup...\n'));
     const retentionDays = options.retention || 30;
     // Clean old token logs
     const engine = getQueryEngine();
@@ -13,12 +15,12 @@ export async function cleanupCommand(options) {
     const removedTasks = await cleanupStaleBackgroundTasks();
     // Clean stale python bridge artifacts (bridge_meta.json/bridge.sock/session.lock)
     const pythonCleanup = await cleanupStaleBridges();
-    console.log(`Removed ${removedTokens} old token logs (older than ${retentionDays} days)`);
-    console.log(`Removed ${removedMetrics} old metric events`);
-    console.log(`Removed ${removedTasks} stale background tasks`);
-    console.log(`Removed ${pythonCleanup.filesRemoved} stale python_repl bridge file(s) ` +
+    logger.info(`Removed ${removedTokens} old token logs (older than ${retentionDays} days)`);
+    logger.info(`Removed ${removedMetrics} old metric events`);
+    logger.info(`Removed ${removedTasks} stale background tasks`);
+    logger.info(`Removed ${pythonCleanup.filesRemoved} stale python_repl bridge file(s) ` +
         `(${pythonCleanup.staleSessions} stale session(s), ${pythonCleanup.activeSessions} active session(s) skipped)`);
-    console.log(colors.green('\n✓ Cleanup complete\n'));
+    logger.info(colors.green('\n✓ Cleanup complete\n'));
 }
 export function createCleanupCommand() {
     return new Command('cleanup')

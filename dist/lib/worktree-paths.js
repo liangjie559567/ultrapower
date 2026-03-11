@@ -7,6 +7,8 @@
 import { existsSync, mkdirSync, realpathSync, readdirSync } from 'fs';
 import { resolve, normalize, relative, sep, join, isAbsolute } from 'path';
 import { getWorktreeRoot as getWorktreeRootOptimized, clearGitCache } from './git-utils.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('lib:worktree-paths');
 /** Standard .omc subdirectories */
 export const OmcPaths = {
     ROOT: '.omc',
@@ -352,7 +354,7 @@ export function resolveToWorktreeRoot(directory) {
         const root = getWorktreeRoot(resolved);
         if (root)
             return root;
-        console.error('[worktree] non-git directory provided, falling back to process root', {
+        logger.error('[worktree] non-git directory provided, falling back to process root', {
             directory: resolved,
         });
     }
@@ -396,7 +398,7 @@ export function validateWorkingDirectory(workingDirectory) {
             throw new Error(`workingDirectory '${workingDirectory}' does not exist or is not accessible.`);
         }
         if (providedRootReal !== trustedRootReal) {
-            console.error('[worktree] workingDirectory resolved to different git worktree root, using trusted root', {
+            logger.error('[worktree] workingDirectory resolved to different git worktree root, using trusted root', {
                 workingDirectory: resolved,
                 providedRoot: providedRootReal,
                 trustedRoot: trustedRootReal,

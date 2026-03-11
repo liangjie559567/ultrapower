@@ -142,9 +142,9 @@ export declare const memoryTools: ({
     };
     handler: (args: {
         directive: string;
-        priority?: "high" | "normal" | undefined;
-        context?: string | undefined;
         workingDirectory?: string | undefined;
+        context?: string | undefined;
+        priority?: "high" | "normal" | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";

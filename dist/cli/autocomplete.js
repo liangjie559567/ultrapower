@@ -28,7 +28,7 @@ export function getSkillNames() {
  */
 export function getCompletions(partial, type = 'all') {
     const lower = partial.toLowerCase();
-    let candidates = [];
+    const candidates = [];
     if (type === 'agent' || type === 'all') {
         candidates.push(...getAgentNames());
     }

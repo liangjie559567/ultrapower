@@ -3,6 +3,8 @@
  */
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('workers:sqlite-adapter');
 export class SqliteWorkerAdapter {
     db = null;
     cwd;
@@ -51,7 +53,7 @@ export class SqliteWorkerAdapter {
             return true;
         }
         catch (error) {
-            console.error('[SqliteWorkerAdapter] Init failed:', error);
+            logger.error('[SqliteWorkerAdapter] Init failed:', error);
             return false;
         }
     }
@@ -80,7 +82,7 @@ export class SqliteWorkerAdapter {
             return true;
         }
         catch (error) {
-            console.error('[SqliteWorkerAdapter] Upsert failed:', error);
+            logger.error('[SqliteWorkerAdapter] Upsert failed:', error);
             return false;
         }
     }
@@ -93,7 +95,7 @@ export class SqliteWorkerAdapter {
             return row ? this.rowToWorkerState(row) : null;
         }
         catch (error) {
-            console.error('[SqliteWorkerAdapter] Get failed:', error);
+            logger.error('[SqliteWorkerAdapter] Get failed:', error);
             return null;
         }
     }
@@ -134,7 +136,7 @@ export class SqliteWorkerAdapter {
             return rows.map(row => this.rowToWorkerState(row));
         }
         catch (error) {
-            console.error('[SqliteWorkerAdapter] List failed:', error);
+            logger.error('[SqliteWorkerAdapter] List failed:', error);
             return [];
         }
     }
@@ -147,7 +149,7 @@ export class SqliteWorkerAdapter {
             return result.changes > 0;
         }
         catch (error) {
-            console.error('[SqliteWorkerAdapter] Delete failed:', error);
+            logger.error('[SqliteWorkerAdapter] Delete failed:', error);
             return false;
         }
     }
@@ -181,7 +183,7 @@ export class SqliteWorkerAdapter {
             return transaction(workers);
         }
         catch (error) {
-            console.error('[SqliteWorkerAdapter] Batch upsert failed:', error);
+            logger.error('[SqliteWorkerAdapter] Batch upsert failed:', error);
             return 0;
         }
     }
@@ -199,7 +201,7 @@ export class SqliteWorkerAdapter {
             return result.changes;
         }
         catch (error) {
-            console.error('[SqliteWorkerAdapter] Cleanup failed:', error);
+            logger.error('[SqliteWorkerAdapter] Cleanup failed:', error);
             return 0;
         }
     }

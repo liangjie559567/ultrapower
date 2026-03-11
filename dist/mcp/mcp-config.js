@@ -1,14 +1,5 @@
-/**
- * MCP Configuration Module
- *
- * Environment variable configuration for MCP (Model Context Protocol) modules:
- * - OMC_MCP_OUTPUT_PATH_POLICY=strict|redirect_output (default: strict)
- * - OMC_MCP_OUTPUT_REDIRECT_DIR=.omc/outputs (default: .omc/outputs)
- * - OMC_MCP_ALLOW_EXTERNAL_PROMPT=0|1 (default: 0)
- *
- * This module provides policy resolution and path redirection logic
- * accessible from both codex-core.ts and gemini-core.ts.
- */
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('mcp:mcp-config');
 /**
  * Default MCP configuration values
  */
@@ -50,7 +41,7 @@ export function loadMcpConfig() {
     };
     // Log warning if external prompt access is enabled (security consideration)
     if (config.allowExternalPrompt) {
-        console.warn('[MCP Config] WARNING: OMC_MCP_ALLOW_EXTERNAL_PROMPT is enabled. External prompt files outside the working directory are allowed. This may pose a security risk.');
+        logger.warn('[MCP Config] WARNING: OMC_MCP_ALLOW_EXTERNAL_PROMPT is enabled. External prompt files outside the working directory are allowed. This may pose a security risk.');
     }
     return config;
 }

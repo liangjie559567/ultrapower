@@ -9,6 +9,8 @@
  */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('mcp:standalone-server');
 import { CallToolRequestSchema, ListToolsRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { handleToolCall } from './tool-handler.js';
 import { mcpServerTools } from '../tools/index.js';
@@ -120,10 +122,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error('OMC Tools MCP Server running on stdio');
+    logger.error('OMC Tools MCP Server running on stdio');
 }
 main().catch((error) => {
-    console.error('Failed to start server:', error);
+    logger.error('Failed to start server:', error);
     process.exit(1);
 });
 //# sourceMappingURL=standalone-server.js.map

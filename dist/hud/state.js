@@ -8,6 +8,8 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import { DEFAULT_HUD_CONFIG, PRESET_CONFIGS } from './types.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('hud:state');
 // ============================================================================
 // Path Helpers
 // ============================================================================
@@ -224,7 +226,7 @@ export async function initializeHUDState() {
     const removedStale = await cleanupStaleBackgroundTasks();
     const markedOrphaned = await markOrphanedTasksAsStale();
     if (removedStale > 0 || markedOrphaned > 0) {
-        console.error(`HUD cleanup: removed ${removedStale} stale tasks, marked ${markedOrphaned} orphaned tasks`);
+        logger.error(`HUD cleanup: removed ${removedStale} stale tasks, marked ${markedOrphaned} orphaned tasks`);
     }
 }
 // ============================================================================

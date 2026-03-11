@@ -4,6 +4,8 @@
  * Parse stdin JSON from Claude Code statusline interface.
  * Based on claude-hud reference implementation.
  */
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('hud:stdin');
 /**
  * Read and parse stdin JSON from Claude Code.
  * Returns null if stdin is not available or invalid.
@@ -12,7 +14,7 @@ export async function readStdin() {
     // Skip if running in TTY mode (interactive terminal)
     if (process.stdin.isTTY) {
         if (process.env.OMC_DEBUG) {
-            console.error('[HUD stdin] Skipped: TTY mode');
+            logger.error('[HUD stdin] Skipped: TTY mode');
         }
         return null;
     }
@@ -25,7 +27,7 @@ export async function readStdin() {
         const raw = chunks.join('');
         if (!raw.trim()) {
             if (process.env.OMC_DEBUG) {
-                console.error('[HUD stdin] Empty input');
+                logger.error('[HUD stdin] Empty input');
             }
             return null;
         }
@@ -33,7 +35,7 @@ export async function readStdin() {
     }
     catch (err) {
         if (process.env.OMC_DEBUG) {
-            console.error('[HUD stdin] Parse error:', err);
+            logger.error('[HUD stdin] Parse error:', err);
         }
         return null;
     }
