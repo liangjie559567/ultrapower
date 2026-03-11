@@ -12,6 +12,11 @@ import {
   detectBrainstormingComplete,
   detectPlanComplete,
   detectTestsComplete,
+  detectCodeReviewComplete,
+  detectSecurityReviewComplete,
+  detectPerformanceReviewComplete,
+  detectSecuritySensitive,
+  detectPerformanceSensitive,
   detectPlanExecutionSkill,
   detectVagueRequest,
   suggestNextStep,
@@ -74,6 +79,53 @@ describe('workflow-gate', () => {
     });
   });
 
+  describe('detectCodeReviewComplete', () => {
+    it('detects code review completion', () => {
+      expect(detectCodeReviewComplete('code review complete')).toBe(true);
+      expect(detectCodeReviewComplete('代码审查完成')).toBe(true);
+    });
+  });
+
+  describe('detectSecurityReviewComplete', () => {
+    it('detects security review completion', () => {
+      expect(detectSecurityReviewComplete('security review complete')).toBe(true);
+      expect(detectSecurityReviewComplete('安全审查完成')).toBe(true);
+    });
+  });
+
+  describe('detectPerformanceReviewComplete', () => {
+    it('detects performance review completion', () => {
+      expect(detectPerformanceReviewComplete('performance review complete')).toBe(true);
+      expect(detectPerformanceReviewComplete('性能审查完成')).toBe(true);
+    });
+  });
+
+  describe('detectSecuritySensitive', () => {
+    it('detects security-sensitive keywords', () => {
+      expect(detectSecuritySensitive('implement auth system')).toBe(true);
+      expect(detectSecuritySensitive('add password encryption')).toBe(true);
+      expect(detectSecuritySensitive('jwt token validation')).toBe(true);
+      expect(detectSecuritySensitive('添加认证功能')).toBe(true);
+    });
+
+    it('returns false for non-security prompts', () => {
+      expect(detectSecuritySensitive('add a button')).toBe(false);
+    });
+  });
+
+  describe('detectPerformanceSensitive', () => {
+    it('detects performance-sensitive keywords', () => {
+      expect(detectPerformanceSensitive('optimize database query')).toBe(true);
+      expect(detectPerformanceSensitive('add cache layer')).toBe(true);
+      expect(detectPerformanceSensitive('improve api performance')).toBe(true);
+      expect(detectPerformanceSensitive('优化性能')).toBe(true);
+    });
+
+    it('returns false for non-performance prompts', () => {
+      expect(detectPerformanceSensitive('add a feature')).toBe(false);
+    });
+  });
+
   describe('detectPlanExecutionSkill', () => {
     it('detects executing-plans skill', () => {
       expect(detectPlanExecutionSkill('use executing-plans')).toBe(true);
@@ -121,12 +173,22 @@ describe('workflow-gate', () => {
       expect(suggestNextStep(state)).toBe('writing-plans');
     });
 
-    it('suggests using-git-worktrees after planning', () => {
+    it('suggests subagent-driven-development after tests', () => {
       const state = initWorkflowState(TEST_DIR);
       state.brainstormingComplete = true;
       state.planWritten = true;
       state.testsWritten = true;
-      expect(suggestNextStep(state)).toBe('using-git-worktrees');
+      expect(suggestNextStep(state)).toBe('subagent-driven-development');
+    });
+
+    it('suggests code-review after requesting review', () => {
+      const state = initWorkflowState(TEST_DIR);
+      state.brainstormingComplete = true;
+      state.planWritten = true;
+      state.testsWritten = true;
+      state.executionStarted = true;
+      state.reviewRequested = true;
+      expect(suggestNextStep(state)).toBe('code-review');
     });
 
     it('returns null when workflow complete', () => {
@@ -137,6 +199,7 @@ describe('workflow-gate', () => {
       state.worktreeCreated = true;
       state.executionStarted = true;
       state.reviewRequested = true;
+      state.codeReviewComplete = true;
       state.verificationComplete = true;
       expect(suggestNextStep(state)).toBe(null);
     });
@@ -303,6 +366,63 @@ describe('workflow-gate', () => {
       expect(result.shouldBlock).toBe(true);
       expect(result.injectedSkill).toBe('brainstorming');
       expect(result.message).toContain('自动触发');
+    });
+
+    it('blocks verification without code review', () => {
+      const state = initWorkflowState(TEST_DIR);
+      state.brainstormingComplete = true;
+      state.planWritten = true;
+      state.testsWritten = true;
+      state.executionStarted = true;
+      writeWorkflowState(TEST_DIR, state);
+
+      const input: WorkflowGateInput = {
+        type: 'UserPromptSubmit',
+        prompt: 'run verification',
+        workingDirectory: TEST_DIR
+      };
+
+      const result = processWorkflowGate(input);
+      expect(result.shouldBlock).toBe(true);
+      expect(result.injectedSkill).toBe('code-review');
+    });
+
+    it('triggers security review for auth code', () => {
+      const state = initWorkflowState(TEST_DIR);
+      state.brainstormingComplete = true;
+      state.planWritten = true;
+      state.testsWritten = true;
+      state.executionStarted = true;
+      writeWorkflowState(TEST_DIR, state);
+
+      const input: WorkflowGateInput = {
+        type: 'UserPromptSubmit',
+        prompt: 'implement jwt authentication',
+        workingDirectory: TEST_DIR
+      };
+
+      const result = processWorkflowGate(input);
+      expect(result.shouldBlock).toBe(true);
+      expect(result.injectedSkill).toBe('security-review');
+    });
+
+    it('triggers performance review for optimization code', () => {
+      const state = initWorkflowState(TEST_DIR);
+      state.brainstormingComplete = true;
+      state.planWritten = true;
+      state.testsWritten = true;
+      state.executionStarted = true;
+      writeWorkflowState(TEST_DIR, state);
+
+      const input: WorkflowGateInput = {
+        type: 'UserPromptSubmit',
+        prompt: 'optimize database queries',
+        workingDirectory: TEST_DIR
+      };
+
+      const result = processWorkflowGate(input);
+      expect(result.shouldBlock).toBe(true);
+      expect(result.injectedSkill).toBe('performance-review');
     });
   });
 });

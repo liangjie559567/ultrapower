@@ -23,6 +23,9 @@ export interface WorkflowState {
   testsWritten: boolean;
   executionStarted: boolean;
   reviewRequested: boolean;
+  codeReviewComplete: boolean;
+  securityReviewComplete: boolean;
+  performanceReviewComplete: boolean;
   verificationComplete: boolean;
   lastStage: string;
   timestamp: number;
@@ -92,6 +95,9 @@ export function initWorkflowState(workingDir: string): WorkflowState {
     testsWritten: false,
     executionStarted: false,
     reviewRequested: false,
+    codeReviewComplete: false,
+    securityReviewComplete: false,
+    performanceReviewComplete: false,
     verificationComplete: false,
     lastStage: 'init',
     timestamp: Date.now()
@@ -153,6 +159,54 @@ export function detectTestsComplete(prompt: string): boolean {
 }
 
 /**
+ * Check if code review was completed
+ */
+export function detectCodeReviewComplete(prompt: string): boolean {
+  return (prompt.includes('code review') || prompt.includes('代码审查')) &&
+         (prompt.includes('complete') || prompt.includes('完成'));
+}
+
+/**
+ * Check if security review was completed
+ */
+export function detectSecurityReviewComplete(prompt: string): boolean {
+  return (prompt.includes('security review') || prompt.includes('安全审查')) &&
+         (prompt.includes('complete') || prompt.includes('完成'));
+}
+
+/**
+ * Check if performance review was completed
+ */
+export function detectPerformanceReviewComplete(prompt: string): boolean {
+  return (prompt.includes('performance review') || prompt.includes('性能审查')) &&
+         (prompt.includes('complete') || prompt.includes('完成'));
+}
+
+/**
+ * Detect if prompt contains security-sensitive keywords
+ */
+export function detectSecuritySensitive(prompt: string): boolean {
+  const securityKeywords = [
+    'auth', 'password', 'token', 'jwt', 'session', 'crypto', 'encrypt',
+    '认证', '密码', '加密', '令牌'
+  ];
+  const lowerPrompt = prompt.toLowerCase();
+  return securityKeywords.some(kw => lowerPrompt.includes(kw) || prompt.includes(kw));
+}
+
+/**
+ * Detect if prompt contains performance-sensitive keywords
+ */
+export function detectPerformanceSensitive(prompt: string): boolean {
+  const performanceKeywords = [
+    'performance', 'optimize', 'cache', 'query', 'database', 'api',
+    '性能', '优化', '缓存', '查询', '数据库'
+  ];
+  const lowerPrompt = prompt.toLowerCase();
+  return performanceKeywords.some(kw => lowerPrompt.includes(kw) || prompt.includes(kw));
+}
+
+/**
  * Detect if user is trying to use executing-plans or subagent-driven-development
  */
 export function detectPlanExecutionSkill(prompt: string): boolean {
@@ -206,10 +260,6 @@ export function suggestNextStep(state: WorkflowState): string | null {
     return 'test-driven-development';
   }
 
-  if (!state.worktreeCreated && state.planWritten) {
-    return 'using-git-worktrees';
-  }
-
   if (!state.executionStarted && state.testsWritten) {
     return 'subagent-driven-development';
   }
@@ -218,8 +268,16 @@ export function suggestNextStep(state: WorkflowState): string | null {
     return 'requesting-code-review';
   }
 
-  if (!state.verificationComplete && state.reviewRequested) {
+  if (!state.codeReviewComplete && state.reviewRequested) {
+    return 'code-review';
+  }
+
+  if (!state.verificationComplete && state.codeReviewComplete) {
     return 'verification-before-completion';
+  }
+
+  if (!state.worktreeCreated && state.planWritten) {
+    return 'using-git-worktrees';
   }
 
   return null;
@@ -254,6 +312,27 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
   if (detectTestsComplete(prompt)) {
     state.testsWritten = true;
     state.lastStage = 'testing';
+    state.timestamp = Date.now();
+    writeWorkflowState(workingDirectory, state);
+  }
+
+  if (detectCodeReviewComplete(prompt)) {
+    state.codeReviewComplete = true;
+    state.lastStage = 'code-review';
+    state.timestamp = Date.now();
+    writeWorkflowState(workingDirectory, state);
+  }
+
+  if (detectSecurityReviewComplete(prompt)) {
+    state.securityReviewComplete = true;
+    state.lastStage = 'security-review';
+    state.timestamp = Date.now();
+    writeWorkflowState(workingDirectory, state);
+  }
+
+  if (detectPerformanceReviewComplete(prompt)) {
+    state.performanceReviewComplete = true;
+    state.lastStage = 'performance-review';
     state.timestamp = Date.now();
     writeWorkflowState(workingDirectory, state);
   }
@@ -295,6 +374,36 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
       shouldBlock: true,
       injectedSkill: 'writing-plans',
       message: '⚠️ Workflow Gate: 使用 executing-plans 或 subagent-driven-development 前必须先编写计划。自动注入 writing-plans skill。'
+    };
+  }
+
+  // Gate 4: Verification without code review
+  if (prompt.includes('verification') && state.executionStarted && !state.codeReviewComplete) {
+    return {
+      success: true,
+      shouldBlock: true,
+      injectedSkill: 'code-review',
+      message: '⚠️ Workflow Gate: 验证前必须先完成代码审查。自动注入 code-review skill。'
+    };
+  }
+
+  // Gate 5: Security review for sensitive code
+  if (detectSecuritySensitive(prompt) && state.executionStarted && !state.securityReviewComplete) {
+    return {
+      success: true,
+      shouldBlock: true,
+      injectedSkill: 'security-review',
+      message: '⚠️ Workflow Gate: 检测到安全敏感代码，必须进行安全审查。自动注入 security-review skill。'
+    };
+  }
+
+  // Gate 6: Performance review for performance-sensitive code
+  if (detectPerformanceSensitive(prompt) && state.executionStarted && !state.performanceReviewComplete) {
+    return {
+      success: true,
+      shouldBlock: true,
+      injectedSkill: 'performance-review',
+      message: '⚠️ Workflow Gate: 检测到性能敏感代码，必须进行性能审查。自动注入 performance-review skill。'
     };
   }
 
