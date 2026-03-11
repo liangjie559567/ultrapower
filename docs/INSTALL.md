@@ -97,7 +97,7 @@ git --version
 ### 步骤 2：安装插件
 
 ```
-/plugin install omc@ultrapower
+/plugin install ultrapower
 ```
 
 **预期输出：**
@@ -189,7 +189,7 @@ npm run build
 ### 步骤 5：安装本地插件
 
 ```
-/plugin install omc@ultrapower
+/plugin install ultrapower
 ```
 
 ### 步骤 6：开发工作流
@@ -208,7 +208,7 @@ claude plugin marketplace update omc
 
 # 3. 更新已安装插件
 
-claude plugin update omc@ultrapower
+claude plugin update ultrapower
 
 # 4. 重启 Claude Code 会话
 
@@ -488,7 +488,7 @@ ultrapower 支持多种 AI 工具，安装后自动生成适配器文件：
 ### 更新插件
 
 ```
-/plugin update omc@ultrapower
+/plugin update ultrapower
 ```
 
 或指定版本：
@@ -497,7 +497,7 @@ ultrapower 支持多种 AI 工具，安装后自动生成适配器文件：
 
 # 在 Claude Code 中
 
-/plugin install omc@ultrapower@5.5.33
+/plugin install ultrapower@7.0.2
 ```
 
 ### 检查当前版本
@@ -603,7 +603,7 @@ where node  # Windows
 
 **解决**：升级到 v5.0.25+（已修复）：
 ```
-/plugin update omc@ultrapower
+/plugin update ultrapower
 ```
 
 ### 获取帮助
