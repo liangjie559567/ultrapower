@@ -14,6 +14,7 @@ describe('Incremental Processor', () => {
     execSync('git config user.email "test@test.com"', execOpts);
     execSync('git config user.name "Test"', execOpts);
     execSync('git config commit.gpgsign false', execOpts);
+    execSync('git config init.defaultBranch main', execOpts);
     writeFileSync(join(TEST_DIR, 'file1.txt'), 'initial');
     execSync('git add file1.txt', execOpts);
     execSync('git commit -m "initial"', execOpts);
