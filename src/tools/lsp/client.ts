@@ -56,6 +56,10 @@ const LANGUAGE_MAP: Record<string, string> = {
   'cs': 'csharp'
 };
 
+/** LRU cache for workspace roots (max 100 entries) */
+const workspaceRootCache = new Map<string, string>();
+const MAX_WORKSPACE_CACHE = 100;
+
 /** Convert a file path to a valid file:// URI (cross-platform) */
 function fileUri(filePath: string): string {
   return pathToFileURL(resolve(filePath)).href;
@@ -726,30 +730,46 @@ class LspClientManager {
   }
 
   /**
-   * Find the workspace root for a file
+   * Find the workspace root for a file (with LRU cache)
    */
   private findWorkspaceRoot(filePath: string): string {
-    let dir = dirname(resolve(filePath));
+    const resolved = resolve(filePath);
+
+    // Check cache
+    if (workspaceRootCache.has(resolved)) {
+      const cached = workspaceRootCache.get(resolved)!;
+      // Move to end (LRU)
+      workspaceRootCache.delete(resolved);
+      workspaceRootCache.set(resolved, cached);
+      return cached;
+    }
+
+    // Find root
+    let dir = dirname(resolved);
     const markers = ['package.json', 'tsconfig.json', 'pyproject.toml', 'Cargo.toml', 'go.mod', '.git'];
 
-    // Cross-platform root detection
     while (true) {
       const parsed = parse(dir);
-      // On Windows: C:\ has root === dir, On Unix: / has root === dir
-      if (parsed.root === dir) {
-        break;
-      }
+      if (parsed.root === dir) break;
 
       for (const marker of markers) {
-        const markerPath = join(dir, marker);
-        if (existsSync(markerPath)) {
+        if (existsSync(join(dir, marker))) {
+          // Cache result
+          if (workspaceRootCache.size >= MAX_WORKSPACE_CACHE) {
+            // Remove oldest (first entry)
+            const firstKey = workspaceRootCache.keys().next().value;
+            workspaceRootCache.delete(firstKey);
+          }
+          workspaceRootCache.set(resolved, dir);
           return dir;
         }
       }
       dir = dirname(dir);
     }
 
-    return dirname(resolve(filePath));
+    const fallback = dirname(resolved);
+    workspaceRootCache.set(resolved, fallback);
+    return fallback;
   }
 
   /**
