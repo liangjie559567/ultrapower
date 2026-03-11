@@ -73,12 +73,24 @@
 ### 高优先级
 1. ~~**工作流门禁**：未完成 brainstorming 不允许进入 writing-plans~~ ✅ 已完成（v7.1.0）
 2. ~~**强化自动触发**：在 hooks 中检测工作流阶段，自动注入对应 skill~~ ✅ 已完成（v7.1.0）
-3. **Skill 审计**：对照原项目补充缺失的核心 skills
+3. ~~**Skill 审计**：对照原项目补充缺失的核心 skills~~ ✅ 已完成（v7.1.0）
+   - 审计结果：所有 15 个 superpowers 核心 skills 已完整实现
+   - brainstorming、systematic-debugging、test-driven-development、writing-plans、writing-skills
+   - using-superpowers、using-git-worktrees、verification-before-completion
+   - requesting-code-review、receiving-code-review、dispatching-parallel-agents
+   - executing-plans、finishing-a-development-branch、subagent-driven-development、next-step-router
 
 ### 中优先级
-1. 添加 `.superpowers/` 目录支持（原项目的状态持久化）
-2. 实现 skill 依赖检查（某些 skills 依赖其他 skills 先执行）
+1. **添加 `.superpowers/` 目录支持**（原项目的状态持久化）
+   - 目标：兼容原 superpowers 项目的状态文件格式
+   - 位置：项目根目录 `.superpowers/state.json`
+   - 内容：工作流状态、已完成步骤、当前阶段
+   - 迁移策略：读取 `.superpowers/` 优先，回退到 `.omc/workflow-state.json`
+2. **实现 skill 依赖检查**（某些 skills 依赖其他 skills 先执行）
+   - 目标：在 skill frontmatter 中声明依赖关系
+   - 示例：`requires: [brainstorming, writing-plans]`
+   - 检查时机：skill 调用前验证依赖是否满足
 
 ## 下一步行动
 
-继续实现剩余的高优先级改进项。
+所有高优先级改进已完成。可继续实现中优先级改进项。
