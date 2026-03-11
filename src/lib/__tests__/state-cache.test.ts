@@ -41,7 +41,8 @@ describe('State Cache', () => {
 
     expect(read1).toEqual(state);
     expect(read2).toEqual(state);
-    expect(read1).not.toBe(read2); // 浅拷贝，不同引用
+    expect(read1).toBe(read2); // 冻结对象，相同引用
+    expect(Object.isFrozen(read1)).toBe(true);
   });
 
   it('应该在 mtime 变化时失效缓存', async () => {
@@ -96,7 +97,7 @@ describe('State Cache', () => {
     expect(read).toBe(null);
   });
 
-  it('应该返回浅拷贝防止意外修改', async () => {
+  it('应该返回冻结对象防止意外修改', async () => {
     const adapter = createStateAdapter<TestState>('ralph', TEST_DIR);
     const state: TestState = { active: true, iteration: 1 };
 
@@ -105,7 +106,10 @@ describe('State Cache', () => {
     const read1 = adapter.read();
     const read2 = adapter.read();
 
-    if (read1) read1.iteration = 999;
+    expect(Object.isFrozen(read1)).toBe(true);
+    expect(() => {
+      if (read1) (read1 as any).iteration = 999;
+    }).toThrow();
 
     expect(read2?.iteration).toBe(1); // 未被修改
   });
