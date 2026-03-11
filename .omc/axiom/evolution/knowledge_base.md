@@ -42,6 +42,28 @@
 **应用：** 使用 tests/setup.ts 统一清理 mock 和定时器
 **原因：** 避免测试间 mock 污染和状态泄漏
 
+### Claude Agent SDK Zod Schema 规范
+**置信度：** 高（已验证，修复 31 个类型错误）
+**应用：** MCP server 工具定义必须使用 Zod schemas
+**转换规则：**
+- JSON Schema `{ type: "string" }` → Zod `z.string()`
+- 可选参数添加 `.optional()`
+- 数组类型 `z.array(z.string())`
+- 枚举约束 `z.enum(['value1', 'value2'])`
+**原因：** SDK tool() 函数要求 ZodRawShape，不接受 JSON Schema 格式
+
+### 类型安全枚举参数
+**置信度：** 高（已验证）
+**应用：** 有限值集合参数使用 z.enum() 而非 z.string()
+**示例：** `signal: z.enum(['SIGTERM', 'SIGINT'])`
+**原因：** 提供编译时类型检查，防止无效值传入
+
+### 发布前工作目录清理
+**置信度：** 高（已验证）
+**应用：** npm version 前区分编译产物和临时文件
+**策略：** 提交 dist/、bridge/，恢复 .omc/、test-*
+**原因：** 避免 "Git working directory not clean" 错误
+
 ## Insights
 
 ### CCG 工作流诊断策略

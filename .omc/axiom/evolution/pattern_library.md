@@ -219,3 +219,57 @@ TODO 分为两类：
 **适用场景**: 每次版本发布前
 **反模式**: 仅更新 package.json
 **验证**: marketplace.json 不同步导致 v7.0.1 首次发布失败
+
+### PAT-015: MCP Tool Schema 转换模式
+
+**出现次数**: 2
+**置信度**: 95%
+**模式描述**:
+```typescript
+// Claude Agent SDK tool() 要求 Zod schemas
+tool("tool_name", "description", {
+  param1: z.string().describe("..."),
+  param2: z.boolean().optional().describe("..."),
+  param3: z.array(z.string()).optional().describe("..."),
+  param4: z.enum(['val1', 'val2']).optional().describe("..."),
+}, async (args) => { ... })
+```
+**转换规则**:
+- `{ type: "string" }` → `z.string()`
+- `{ type: "boolean" }` → `z.boolean().optional()`
+- `{ type: "array", items: { type: "string" } }` → `z.array(z.string())`
+- 枚举约束 → `z.enum(['value1', 'value2'])`
+**适用场景**: 所有 MCP server 工具定义
+**反模式**: 使用 JSON Schema 格式（会导致类型错误）
+**验证**: 修复 codex-server.ts 和 gemini-server.ts 共 31 个类型错误
+
+### PAT-016: 发布前工作目录清理模式
+
+**出现次数**: 1
+**置信度**: 90%
+**模式描述**:
+```bash
+# npm version 前清理工作目录
+git add dist/ bridge/ .tsbuildinfo  # 提交编译产物
+git restore .omc/ src/ test-*       # 恢复临时文件
+npm version patch                   # 版本升级
+```
+**适用场景**: npm version 遇到 "Git working directory not clean"
+**反模式**: git add -A（会提交不必要的临时文件）
+**关键**: 区分编译产物（需提交）和临时文件（需清理）
+
+### PAT-017: 发布流程 Git 冲突恢复模式
+
+**出现次数**: 1
+**置信度**: 90%
+**模式描述**:
+```bash
+# 推送被拒绝时的标准流程
+git pull --rebase origin main  # 拉取并变基
+git push origin main           # 推送代码
+git push origin --tags         # 推送标签（如需要）
+```
+**适用场景**: 发布时远程有新提交
+**反模式**: 使用 --force（会覆盖远程变更）
+**验证**: v7.0.2 发布成功应用
+
