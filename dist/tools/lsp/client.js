@@ -11,6 +11,49 @@ import { pathToFileURL } from 'url';
 import { getServerForFile, commandExists } from './servers.js';
 /** Maximum receive buffer size: 64 MB. Exceeding this disconnects the client. */
 const MAX_BUFFER_BYTES = 64 * 1024 * 1024;
+/** Language ID mapping from file extension to LSP language identifier */
+const LANGUAGE_MAP = {
+    'ts': 'typescript',
+    'tsx': 'typescriptreact',
+    'js': 'javascript',
+    'jsx': 'javascriptreact',
+    'mts': 'typescript',
+    'cts': 'typescript',
+    'mjs': 'javascript',
+    'cjs': 'javascript',
+    'py': 'python',
+    'rs': 'rust',
+    'go': 'go',
+    'c': 'c',
+    'h': 'c',
+    'cpp': 'cpp',
+    'cc': 'cpp',
+    'hpp': 'cpp',
+    'java': 'java',
+    'json': 'json',
+    'html': 'html',
+    'css': 'css',
+    'scss': 'scss',
+    'yaml': 'yaml',
+    'yml': 'yaml',
+    'php': 'php',
+    'phtml': 'php',
+    'rb': 'ruby',
+    'rake': 'ruby',
+    'gemspec': 'ruby',
+    'erb': 'ruby',
+    'lua': 'lua',
+    'kt': 'kotlin',
+    'kts': 'kotlin',
+    'ex': 'elixir',
+    'exs': 'elixir',
+    'heex': 'elixir',
+    'eex': 'elixir',
+    'cs': 'csharp'
+};
+/** LRU cache for workspace roots (max 100 entries) */
+const workspaceRootCache = new Map();
+const MAX_WORKSPACE_CACHE = 100;
 /** Convert a file path to a valid file:// URI (cross-platform) */
 function fileUri(filePath) {
     return pathToFileURL(resolve(filePath)).href;
@@ -22,9 +65,11 @@ export class LspClient {
     process = null;
     requestId = 0;
     pendingRequests = new Map();
-    buffer = '';
+    bufferChunks = [];
+    bufferOffset = 0;
     openDocuments = new Set();
     diagnostics = new Map();
+    pendingDiagnostics = new Map();
     workspaceRoot;
     serverConfig;
     initialized = false;
@@ -106,42 +151,40 @@ export class LspClient {
      * Handle incoming data from the server
      */
     handleData(data) {
-        // Guard: disconnect if buffer grows beyond limit (prevents OOM from runaway servers)
-        if (this.buffer.length + data.length > MAX_BUFFER_BYTES) {
+        const totalLength = this.bufferChunks.reduce((sum, chunk) => sum + chunk.length, 0) - this.bufferOffset + data.length;
+        if (totalLength > MAX_BUFFER_BYTES) {
             console.error(`[ultrapower] 错误：LSP 缓冲区超过 ${MAX_BUFFER_BYTES} 字节（64MB）上限，正在断开连接`);
-            this.disconnect().catch(() => {
-                // Ignore errors during emergency disconnect
-            });
+            this.disconnect().catch(() => { });
             return;
         }
-        this.buffer += data;
+        this.bufferChunks.push(data);
         while (true) {
-            // Look for Content-Length header
-            const headerEnd = this.buffer.indexOf('\r\n\r\n');
+            const buffer = this.bufferChunks.join('').slice(this.bufferOffset);
+            const headerEnd = buffer.indexOf('\r\n\r\n');
             if (headerEnd === -1)
                 break;
-            const header = this.buffer.slice(0, headerEnd);
+            const header = buffer.slice(0, headerEnd);
             const contentLengthMatch = header.match(/Content-Length: (\d+)/i);
             if (!contentLengthMatch) {
-                // Invalid header, try to recover
-                this.buffer = this.buffer.slice(headerEnd + 4);
+                this.bufferOffset += headerEnd + 4;
                 continue;
             }
             const contentLength = parseInt(contentLengthMatch[1], 10);
             const messageStart = headerEnd + 4;
             const messageEnd = messageStart + contentLength;
-            if (this.buffer.length < messageEnd) {
-                break; // Not enough data yet
+            if (buffer.length < messageEnd)
+                break;
+            const messageJson = buffer.slice(messageStart, messageEnd);
+            this.bufferOffset += messageEnd;
+            if (this.bufferOffset > 8192) {
+                this.bufferChunks = [buffer.slice(messageEnd)];
+                this.bufferOffset = 0;
             }
-            const messageJson = this.buffer.slice(messageStart, messageEnd);
-            this.buffer = this.buffer.slice(messageEnd);
             try {
                 const message = JSON.parse(messageJson);
                 this.handleMessage(message);
             }
-            catch {
-                // Invalid JSON, skip
-            }
+            catch { }
         }
     }
     /**
@@ -174,6 +217,12 @@ export class LspClient {
         if (notification.method === 'textDocument/publishDiagnostics') {
             const params = notification.params;
             this.diagnostics.set(params.uri, params.diagnostics);
+            const pending = this.pendingDiagnostics.get(params.uri);
+            if (pending) {
+                clearTimeout(pending.timeout);
+                this.pendingDiagnostics.delete(params.uri);
+                pending.resolve(params.diagnostics);
+            }
         }
         // Handle other notifications as needed
     }
@@ -268,8 +317,7 @@ export class LspClient {
             }
         });
         this.openDocuments.add(uri);
-        // Wait a bit for the server to process the document
-        await new Promise(resolve => setTimeout(resolve, 100));
+        return this.waitForDiagnostics(uri, 500);
     }
     /**
      * Close a document
@@ -288,46 +336,25 @@ export class LspClient {
      */
     getLanguageId(filePath) {
         const ext = filePath.split('.').pop()?.toLowerCase() || '';
-        const langMap = {
-            'ts': 'typescript',
-            'tsx': 'typescriptreact',
-            'js': 'javascript',
-            'jsx': 'javascriptreact',
-            'mts': 'typescript',
-            'cts': 'typescript',
-            'mjs': 'javascript',
-            'cjs': 'javascript',
-            'py': 'python',
-            'rs': 'rust',
-            'go': 'go',
-            'c': 'c',
-            'h': 'c',
-            'cpp': 'cpp',
-            'cc': 'cpp',
-            'hpp': 'cpp',
-            'java': 'java',
-            'json': 'json',
-            'html': 'html',
-            'css': 'css',
-            'scss': 'scss',
-            'yaml': 'yaml',
-            'yml': 'yaml',
-            'php': 'php',
-            'phtml': 'php',
-            'rb': 'ruby',
-            'rake': 'ruby',
-            'gemspec': 'ruby',
-            'erb': 'ruby',
-            'lua': 'lua',
-            'kt': 'kotlin',
-            'kts': 'kotlin',
-            'ex': 'elixir',
-            'exs': 'elixir',
-            'heex': 'elixir',
-            'eex': 'elixir',
-            'cs': 'csharp'
-        };
-        return langMap[ext] || ext;
+        return LANGUAGE_MAP[ext] || ext;
+    }
+    /**
+     * Wait for diagnostics to be published for a URI
+     */
+    waitForDiagnostics(uri, timeout) {
+        return new Promise((resolve) => {
+            const timeoutHandle = setTimeout(() => {
+                this.pendingDiagnostics.delete(uri);
+                resolve();
+            }, timeout);
+            this.pendingDiagnostics.set(uri, {
+                resolve: () => {
+                    clearTimeout(timeoutHandle);
+                    resolve();
+                },
+                timeout: timeoutHandle
+            });
+        });
     }
     /**
      * Convert file path to URI and ensure document is open
@@ -558,27 +585,44 @@ class LspClientManager {
         }
     }
     /**
-     * Find the workspace root for a file
+     * Find the workspace root for a file (with LRU cache)
      */
     findWorkspaceRoot(filePath) {
-        let dir = dirname(resolve(filePath));
+        const resolved = resolve(filePath);
+        // Check cache
+        if (workspaceRootCache.has(resolved)) {
+            const cached = workspaceRootCache.get(resolved);
+            // Move to end (LRU)
+            workspaceRootCache.delete(resolved);
+            workspaceRootCache.set(resolved, cached);
+            return cached;
+        }
+        // Find root
+        let dir = dirname(resolved);
         const markers = ['package.json', 'tsconfig.json', 'pyproject.toml', 'Cargo.toml', 'go.mod', '.git'];
-        // Cross-platform root detection
         while (true) {
             const parsed = parse(dir);
-            // On Windows: C:\ has root === dir, On Unix: / has root === dir
-            if (parsed.root === dir) {
+            if (parsed.root === dir)
                 break;
-            }
             for (const marker of markers) {
-                const markerPath = join(dir, marker);
-                if (existsSync(markerPath)) {
+                if (existsSync(join(dir, marker))) {
+                    // Cache result
+                    if (workspaceRootCache.size >= MAX_WORKSPACE_CACHE) {
+                        // Remove oldest (first entry)
+                        const firstKey = workspaceRootCache.keys().next().value;
+                        if (firstKey !== undefined) {
+                            workspaceRootCache.delete(firstKey);
+                        }
+                    }
+                    workspaceRootCache.set(resolved, dir);
                     return dir;
                 }
             }
             dir = dirname(dir);
         }
-        return dirname(resolve(filePath));
+        const fallback = dirname(resolved);
+        workspaceRootCache.set(resolved, fallback);
+        return fallback;
     }
     /**
      * Start periodic idle check

@@ -18084,6 +18084,47 @@ function getAllServers() {
 
 // src/tools/lsp/client.ts
 var MAX_BUFFER_BYTES = 64 * 1024 * 1024;
+var LANGUAGE_MAP = {
+  "ts": "typescript",
+  "tsx": "typescriptreact",
+  "js": "javascript",
+  "jsx": "javascriptreact",
+  "mts": "typescript",
+  "cts": "typescript",
+  "mjs": "javascript",
+  "cjs": "javascript",
+  "py": "python",
+  "rs": "rust",
+  "go": "go",
+  "c": "c",
+  "h": "c",
+  "cpp": "cpp",
+  "cc": "cpp",
+  "hpp": "cpp",
+  "java": "java",
+  "json": "json",
+  "html": "html",
+  "css": "css",
+  "scss": "scss",
+  "yaml": "yaml",
+  "yml": "yaml",
+  "php": "php",
+  "phtml": "php",
+  "rb": "ruby",
+  "rake": "ruby",
+  "gemspec": "ruby",
+  "erb": "ruby",
+  "lua": "lua",
+  "kt": "kotlin",
+  "kts": "kotlin",
+  "ex": "elixir",
+  "exs": "elixir",
+  "heex": "elixir",
+  "eex": "elixir",
+  "cs": "csharp"
+};
+var workspaceRootCache = /* @__PURE__ */ new Map();
+var MAX_WORKSPACE_CACHE = 100;
 function fileUri(filePath) {
   return (0, import_url.pathToFileURL)((0, import_path2.resolve)(filePath)).href;
 }
@@ -18091,9 +18132,11 @@ var LspClient = class {
   process = null;
   requestId = 0;
   pendingRequests = /* @__PURE__ */ new Map();
-  buffer = "";
+  bufferChunks = [];
+  bufferOffset = 0;
   openDocuments = /* @__PURE__ */ new Set();
   diagnostics = /* @__PURE__ */ new Map();
+  pendingDiagnostics = /* @__PURE__ */ new Map();
   workspaceRoot;
   serverConfig;
   initialized = false;
@@ -18169,7 +18212,8 @@ Install with: ${this.serverConfig.installHint}`
    * Handle incoming data from the server
    */
   handleData(data) {
-    if (this.buffer.length + data.length > MAX_BUFFER_BYTES) {
+    const totalLength = this.bufferChunks.reduce((sum, chunk) => sum + chunk.length, 0) - this.bufferOffset + data.length;
+    if (totalLength > MAX_BUFFER_BYTES) {
       console.error(
         `[ultrapower] \u9519\u8BEF\uFF1ALSP \u7F13\u51B2\u533A\u8D85\u8FC7 ${MAX_BUFFER_BYTES} \u5B57\u8282\uFF0864MB\uFF09\u4E0A\u9650\uFF0C\u6B63\u5728\u65AD\u5F00\u8FDE\u63A5`
       );
@@ -18177,24 +18221,27 @@ Install with: ${this.serverConfig.installHint}`
       });
       return;
     }
-    this.buffer += data;
+    this.bufferChunks.push(data);
     while (true) {
-      const headerEnd = this.buffer.indexOf("\r\n\r\n");
+      const buffer = this.bufferChunks.join("").slice(this.bufferOffset);
+      const headerEnd = buffer.indexOf("\r\n\r\n");
       if (headerEnd === -1) break;
-      const header = this.buffer.slice(0, headerEnd);
+      const header = buffer.slice(0, headerEnd);
       const contentLengthMatch = header.match(/Content-Length: (\d+)/i);
       if (!contentLengthMatch) {
-        this.buffer = this.buffer.slice(headerEnd + 4);
+        this.bufferOffset += headerEnd + 4;
         continue;
       }
       const contentLength = parseInt(contentLengthMatch[1], 10);
       const messageStart = headerEnd + 4;
       const messageEnd = messageStart + contentLength;
-      if (this.buffer.length < messageEnd) {
-        break;
+      if (buffer.length < messageEnd) break;
+      const messageJson = buffer.slice(messageStart, messageEnd);
+      this.bufferOffset += messageEnd;
+      if (this.bufferOffset > 8192) {
+        this.bufferChunks = [buffer.slice(messageEnd)];
+        this.bufferOffset = 0;
       }
-      const messageJson = this.buffer.slice(messageStart, messageEnd);
-      this.buffer = this.buffer.slice(messageEnd);
       try {
         const message = JSON.parse(messageJson);
         this.handleMessage(message);
@@ -18228,6 +18275,12 @@ Install with: ${this.serverConfig.installHint}`
     if (notification.method === "textDocument/publishDiagnostics") {
       const params = notification.params;
       this.diagnostics.set(params.uri, params.diagnostics);
+      const pending = this.pendingDiagnostics.get(params.uri);
+      if (pending) {
+        clearTimeout(pending.timeout);
+        this.pendingDiagnostics.delete(params.uri);
+        pending.resolve(params.diagnostics);
+      }
     }
   }
   /**
@@ -18323,7 +18376,7 @@ ${content}`;
       }
     });
     this.openDocuments.add(uri);
-    await new Promise((resolve6) => setTimeout(resolve6, 100));
+    return this.waitForDiagnostics(uri, 500);
   }
   /**
    * Close a document
@@ -18341,46 +18394,25 @@ ${content}`;
    */
   getLanguageId(filePath) {
     const ext = filePath.split(".").pop()?.toLowerCase() || "";
-    const langMap = {
-      "ts": "typescript",
-      "tsx": "typescriptreact",
-      "js": "javascript",
-      "jsx": "javascriptreact",
-      "mts": "typescript",
-      "cts": "typescript",
-      "mjs": "javascript",
-      "cjs": "javascript",
-      "py": "python",
-      "rs": "rust",
-      "go": "go",
-      "c": "c",
-      "h": "c",
-      "cpp": "cpp",
-      "cc": "cpp",
-      "hpp": "cpp",
-      "java": "java",
-      "json": "json",
-      "html": "html",
-      "css": "css",
-      "scss": "scss",
-      "yaml": "yaml",
-      "yml": "yaml",
-      "php": "php",
-      "phtml": "php",
-      "rb": "ruby",
-      "rake": "ruby",
-      "gemspec": "ruby",
-      "erb": "ruby",
-      "lua": "lua",
-      "kt": "kotlin",
-      "kts": "kotlin",
-      "ex": "elixir",
-      "exs": "elixir",
-      "heex": "elixir",
-      "eex": "elixir",
-      "cs": "csharp"
-    };
-    return langMap[ext] || ext;
+    return LANGUAGE_MAP[ext] || ext;
+  }
+  /**
+   * Wait for diagnostics to be published for a URI
+   */
+  waitForDiagnostics(uri, timeout) {
+    return new Promise((resolve6) => {
+      const timeoutHandle = setTimeout(() => {
+        this.pendingDiagnostics.delete(uri);
+        resolve6();
+      }, timeout);
+      this.pendingDiagnostics.set(uri, {
+        resolve: () => {
+          clearTimeout(timeoutHandle);
+          resolve6();
+        },
+        timeout: timeoutHandle
+      });
+    });
   }
   /**
    * Convert file path to URI and ensure document is open
@@ -18592,25 +18624,38 @@ var LspClientManager = class {
     }
   }
   /**
-   * Find the workspace root for a file
+   * Find the workspace root for a file (with LRU cache)
    */
   findWorkspaceRoot(filePath) {
-    let dir = (0, import_path2.dirname)((0, import_path2.resolve)(filePath));
+    const resolved = (0, import_path2.resolve)(filePath);
+    if (workspaceRootCache.has(resolved)) {
+      const cached2 = workspaceRootCache.get(resolved);
+      workspaceRootCache.delete(resolved);
+      workspaceRootCache.set(resolved, cached2);
+      return cached2;
+    }
+    let dir = (0, import_path2.dirname)(resolved);
     const markers = ["package.json", "tsconfig.json", "pyproject.toml", "Cargo.toml", "go.mod", ".git"];
     while (true) {
       const parsed = (0, import_path2.parse)(dir);
-      if (parsed.root === dir) {
-        break;
-      }
+      if (parsed.root === dir) break;
       for (const marker of markers) {
-        const markerPath = (0, import_path2.join)(dir, marker);
-        if ((0, import_fs.existsSync)(markerPath)) {
+        if ((0, import_fs.existsSync)((0, import_path2.join)(dir, marker))) {
+          if (workspaceRootCache.size >= MAX_WORKSPACE_CACHE) {
+            const firstKey = workspaceRootCache.keys().next().value;
+            if (firstKey !== void 0) {
+              workspaceRootCache.delete(firstKey);
+            }
+          }
+          workspaceRootCache.set(resolved, dir);
           return dir;
         }
       }
       dir = (0, import_path2.dirname)(dir);
     }
-    return (0, import_path2.dirname)((0, import_path2.resolve)(filePath));
+    const fallback = (0, import_path2.dirname)(resolved);
+    workspaceRootCache.set(resolved, fallback);
+    return fallback;
   }
   /**
    * Start periodic idle check
@@ -19225,7 +19270,6 @@ var lspDiagnosticsTool = {
     const { file, severity } = args;
     return withLspClient(file, "diagnostics", async (client) => {
       await client.openDocument(file);
-      await new Promise((resolve6) => setTimeout(resolve6, LSP_DIAGNOSTICS_WAIT_MS));
       let diagnostics = client.getDiagnostics(file);
       if (severity) {
         const severityMap = {
@@ -22102,17 +22146,22 @@ function assertValidMode(mode) {
 var import_fs8 = require("fs");
 var stateCache = /* @__PURE__ */ new Map();
 function readStateWithCache(path13, data, ttl = 5e3) {
+  const now = Date.now();
+  const cached2 = stateCache.get(path13);
+  if (cached2 && now - cached2.cachedAt < ttl) {
+    if (now - cached2.mtimeCheckedAt < 1e3) {
+      return Object.freeze(cached2.data);
+    }
+  }
   try {
     const mtime = (0, import_fs8.statSync)(path13).mtimeMs;
-    const cached2 = stateCache.get(path13);
-    if (cached2 && cached2.mtime === mtime && Date.now() - cached2.cachedAt < ttl) {
-      if (typeof cached2.data === "object" && cached2.data !== null) {
-        return { ...cached2.data };
-      }
-      return cached2.data;
+    if (cached2 && cached2.mtime === mtime) {
+      cached2.mtimeCheckedAt = now;
+      return Object.freeze(cached2.data);
     }
-    stateCache.set(path13, { data, mtime, cachedAt: Date.now() });
-    return data;
+    const frozenData = Object.freeze(data);
+    stateCache.set(path13, { data: frozenData, mtime, cachedAt: now, mtimeCheckedAt: now });
+    return frozenData;
   } catch {
     return data;
   }

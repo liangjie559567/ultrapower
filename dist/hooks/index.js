@@ -143,4 +143,7 @@ processAxiomBoot, buildAxiomBootContext, isAxiomEnabled, readActiveContext, pars
 export { 
 // Axiom Guards Hook (Gatekeeper System)
 processAxiomGuards, checkExpertGate, getExpertGateMessage, CI_COMMANDS, EXPERT_GATE_MESSAGE, USER_GATE_MESSAGE, CI_GATE_MESSAGE, } from './axiom-guards/index.js';
+export { 
+// Workflow Gate Hook (Superpowers Discipline Enforcement)
+processWorkflowGate, readWorkflowState, writeWorkflowState, initWorkflowState, clearWorkflowState, detectImplementationIntent, detectExecutionIntent, detectBrainstormingComplete, detectPlanComplete, detectTestsComplete, detectCodeReviewComplete, detectSecurityReviewComplete, detectPerformanceReviewComplete, detectSecuritySensitive, detectPerformanceSensitive, detectPlanExecutionSkill, detectVagueRequest, suggestNextStep, getWorkflowStatePath, } from './workflow-gate/index.js';
 //# sourceMappingURL=index.js.map

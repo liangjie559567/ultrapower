@@ -62,7 +62,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('should return failure when state exists but is not active', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (state) {
         state.active = false;
         const stateFile = join(testDir, '.omc', 'state', 'autopilot-state.json');
@@ -622,7 +622,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('should handle zero progress in summary', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -641,7 +641,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('should handle cleanup message in preserved state format', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -663,9 +663,10 @@ describe('AutopilotCancel', () => {
 
   describe('formatFailureSummary', () => {
     it('should show completed steps with checkmarks', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
-      state.phase = 'execution';
+      state = { ...state, phase: 'execution' };
+      await writeAutopilotState(testDir, state);
       state.completed_steps = ['expansion', 'planning'];
       state.failure_reason = 'Ralph state clear failed';
 
@@ -679,11 +680,10 @@ describe('AutopilotCancel', () => {
     });
 
     it('should handle no completed steps', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       state.phase = 'expansion';
       state.completed_steps = [];
-
       const output = formatFailureSummary(state);
 
       expect(output).toContain('✗ expansion');
@@ -691,10 +691,11 @@ describe('AutopilotCancel', () => {
     });
 
     it('should not show phases beyond failure point', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
-      state.phase = 'planning';
+      
       state.completed_steps = ['expansion'];
+      state = { ...state, phase: 'planning' };
 
       const output = formatFailureSummary(state);
 
@@ -768,7 +769,7 @@ describe('AutopilotCancel', () => {
     });
 
     it('resumeAutopilot: refuses when max_iterations reached', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       await cancelAutopilot(testDir);
 
@@ -782,10 +783,10 @@ describe('AutopilotCancel', () => {
     });
 
     it('formatFailureSummary: shows failure phase even when intermediate phases skipped', async () => {
-      const state = await initAutopilot(testDir, 'test idea');
+      let state = await initAutopilot(testDir, 'test idea');
       if (!state) throw new Error('Failed to init');
       // expansion done, planning skipped (e.g. skipQa scenario analog), failed at qa
-      state.phase = 'qa';
+      state = { ...state, phase: 'qa' };
       state.completed_steps = ['expansion'];
 
       const output = formatFailureSummary(state);

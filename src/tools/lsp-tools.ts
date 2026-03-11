@@ -217,10 +217,7 @@ export const lspDiagnosticsTool: ToolDefinition<{
   handler: async (args) => {
     const { file, severity } = args;
     return withLspClient(file, 'diagnostics', async (client) => {
-      // Open the document to trigger diagnostics
       await client!.openDocument(file);
-      // Wait a bit for diagnostics to be published
-      await new Promise(resolve => setTimeout(resolve, LSP_DIAGNOSTICS_WAIT_MS));
 
       let diagnostics = client!.getDiagnostics(file);
 

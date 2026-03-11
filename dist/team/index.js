@@ -23,4 +23,5 @@ export { generateTeamReport, saveTeamReport } from './summary-report.js';
 export { isPathAllowed, isCommandAllowed, formatPermissionInstructions, getDefaultPermissions, } from './permissions.js';
 export { DependencyGraph } from './dependency-graph.js';
 export { DeadlockDetector } from './deadlock-detector.js';
+export { getTeamWorkerPrompt, TEAM_WORKFLOW_PREAMBLE, } from './workflow-integration.js';
 //# sourceMappingURL=index.js.map

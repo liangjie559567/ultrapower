@@ -102,16 +102,18 @@ export function linkModes(
 
   if (!state1 || !state2) return false;
 
-  // Add bidirectional links
-  if (!state1.linkedModes) state1.linkedModes = [];
-  if (!state1.linkedModes.includes(mode2)) {
-    state1.linkedModes.push(mode2);
-  }
+  const linkedModes1 = state1.linkedModes || [];
+  const linkedModes2 = state2.linkedModes || [];
 
-  if (!state2.linkedModes) state2.linkedModes = [];
-  if (!state2.linkedModes.includes(mode1)) {
-    state2.linkedModes.push(mode1);
-  }
+  const mutableState1 = {
+    ...state1,
+    linkedModes: linkedModes1.includes(mode2) ? linkedModes1 : [...linkedModes1, mode2]
+  };
 
-  return adapter1.writeSync(state1, sessionId) && adapter2.writeSync(state2, sessionId);
+  const mutableState2 = {
+    ...state2,
+    linkedModes: linkedModes2.includes(mode1) ? linkedModes2 : [...linkedModes2, mode1]
+  };
+
+  return adapter1.writeSync(mutableState1, sessionId) && adapter2.writeSync(mutableState2, sessionId);
 }

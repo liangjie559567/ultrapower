@@ -135,9 +135,9 @@ export function incrementRalphIteration(directory, sessionId) {
     if (!state || !state.active) {
         return null;
     }
-    state.iteration += 1;
-    if (writeRalphState(directory, state, sessionId)) {
-        return state;
+    const updatedState = { ...state, iteration: state.iteration + 1 };
+    if (writeRalphState(directory, updatedState, sessionId)) {
+        return updatedState;
     }
     return null;
 }
@@ -262,8 +262,8 @@ export function setCurrentStory(directory, storyId) {
     if (!state) {
         return false;
     }
-    state.current_story_id = storyId;
-    return writeRalphState(directory, state);
+    const mutableState = { ...state, current_story_id: storyId };
+    return writeRalphState(directory, mutableState);
 }
 /**
  * Enable PRD mode in ralph state
@@ -273,10 +273,9 @@ export function enablePrdMode(directory) {
     if (!state) {
         return false;
     }
-    state.prd_mode = true;
-    // Initialize progress.txt if it doesn't exist
+    const mutableState = { ...state, prd_mode: true };
     initProgress(directory);
-    return writeRalphState(directory, state);
+    return writeRalphState(directory, mutableState);
 }
 /**
  * Record progress after completing a story

@@ -271,8 +271,8 @@ async function checkRalphLoop(sessionId, directory) {
         // Do not silently stop Ralph with unfinished work.
         // Extend the limit and continue enforcement so user-visible cancellation
         // remains the only explicit termination path.
-        state.max_iterations += 10;
-        ralph.writeRalphState(workingDir, state, sessionId);
+        const extendedState = { ...state, max_iterations: state.max_iterations + 10 };
+        ralph.writeRalphState(workingDir, extendedState, sessionId);
     }
     // Read tool error before generating message
     const toolError = readLastToolError(workingDir);

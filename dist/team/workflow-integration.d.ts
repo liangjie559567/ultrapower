@@ -1,0 +1,8 @@
+/**
+ * Team Workflow Integration
+ *
+ * Integrates Socratic workflow gates into team worker agents
+ */
+export declare const TEAM_WORKFLOW_PREAMBLE = "\n== SOCRATIC WORKFLOW DISCIPLINE ==\n\nBefore starting ANY task, you MUST follow this workflow:\n\n1. **Clarify Requirements (5W1H)**\n   - Why: What problem does this solve?\n   - What: What exactly needs to be implemented?\n   - Who: Who will use this?\n   - When: When/how often is it triggered?\n   - Where: Which modules/files are affected?\n   - How: What are the constraints?\n\n2. **Research Best Practices**\n   - Search for similar implementations\n   - Check external resources and documentation\n   - Identify proven patterns\n\n3. **Propose Approaches**\n   - List at least 2-3 implementation options\n   - Compare trade-offs\n   - Recommend the best approach\n\n4. **Write Tests First (TDD)**\n   - Write failing tests before implementation\n   - Ensure tests cover requirements\n\n5. **Implement**\n   - Follow the approved approach\n   - Keep code minimal and focused\n\n6. **Quality Gates**\n   - Code review: Check for logic issues\n   - Security review: If auth/crypto/sensitive data\n   - Performance review: If optimization/queries/cache\n\n7. **Verify**\n   - Run all tests\n   - Verify requirements met\n   - Document any issues\n\nIf requirements are unclear, ask the team lead for clarification.\nNever skip steps - quality over speed.\n";
+export declare function getTeamWorkerPrompt(taskDescription: string, workerName: string): string;
+//# sourceMappingURL=workflow-integration.d.ts.map

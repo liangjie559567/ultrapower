@@ -60,5 +60,20 @@ export const HOOK_ROUTES = {
         }).catch(() => { });
         return result;
     },
+    "user-prompt-submit": async (input) => {
+        if (!validateHookInput(input, requiredKeysForHook("user-prompt-submit"), "user-prompt-submit")) {
+            return { continue: true };
+        }
+        const { processWorkflowGate } = await import("../workflow-gate/index.js");
+        const result = await processWorkflowGate(input);
+        if (result.shouldBlock && result.injectedSkill) {
+            return {
+                continue: true,
+                message: result.message,
+                additionalContext: `\n\n<workflow-gate>\n${result.message}\n\n请先调用 /ultrapower:${result.injectedSkill} skill。\n</workflow-gate>`
+            };
+        }
+        return { continue: true };
+    },
 };
 //# sourceMappingURL=route-map.js.map
