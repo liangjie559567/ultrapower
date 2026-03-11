@@ -172,3 +172,8 @@ export type { WorkerPermissions } from './permissions.js';
 export { DependencyGraph } from './dependency-graph.js';
 export { DeadlockDetector } from './deadlock-detector.js';
 export type { DeadlockResult } from './deadlock-detector.js';
+
+export {
+  getTeamWorkerPrompt,
+  TEAM_WORKFLOW_PREAMBLE,
+} from './workflow-integration.js';
