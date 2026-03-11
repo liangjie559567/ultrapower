@@ -12,6 +12,8 @@ import {
   detectBrainstormingComplete,
   detectPlanComplete,
   detectPlanExecutionSkill,
+  detectVagueRequest,
+  suggestNextStep,
   type WorkflowGateInput
 } from './index.js';
 
@@ -68,6 +70,60 @@ describe('workflow-gate', () => {
     it('detects subagent-driven-development skill', () => {
       expect(detectPlanExecutionSkill('use subagent-driven-development')).toBe(true);
       expect(detectPlanExecutionSkill('/ultrapower:subagent-driven-development')).toBe(true);
+    });
+  });
+
+  describe('detectVagueRequest', () => {
+    it('detects vague English requests', () => {
+      expect(detectVagueRequest('how to implement authentication')).toBe(true);
+      expect(detectVagueRequest('what should I do to add a feature')).toBe(true);
+      expect(detectVagueRequest('help me build a REST API')).toBe(true);
+    });
+
+    it('detects vague Chinese requests', () => {
+      expect(detectVagueRequest('如何设计用户认证功能')).toBe(true);
+      expect(detectVagueRequest('怎么做一个新功能')).toBe(true);
+      expect(detectVagueRequest('帮我构建一个 API')).toBe(true);
+    });
+
+    it('ignores short queries', () => {
+      expect(detectVagueRequest('how to')).toBe(false);
+      expect(detectVagueRequest('help me')).toBe(false);
+    });
+
+    it('ignores if brainstorming already mentioned', () => {
+      expect(detectVagueRequest('how to implement auth, already did brainstorming')).toBe(false);
+    });
+  });
+
+  describe('suggestNextStep', () => {
+    it('suggests brainstorming when nothing done', () => {
+      const state = initWorkflowState(TEST_DIR);
+      expect(suggestNextStep(state)).toBe('brainstorming');
+    });
+
+    it('suggests writing-plans after brainstorming', () => {
+      const state = initWorkflowState(TEST_DIR);
+      state.brainstormingComplete = true;
+      expect(suggestNextStep(state)).toBe('writing-plans');
+    });
+
+    it('suggests using-git-worktrees after planning', () => {
+      const state = initWorkflowState(TEST_DIR);
+      state.brainstormingComplete = true;
+      state.planWritten = true;
+      expect(suggestNextStep(state)).toBe('using-git-worktrees');
+    });
+
+    it('returns null when workflow complete', () => {
+      const state = initWorkflowState(TEST_DIR);
+      state.brainstormingComplete = true;
+      state.planWritten = true;
+      state.worktreeCreated = true;
+      state.executionStarted = true;
+      state.reviewRequested = true;
+      state.verificationComplete = true;
+      expect(suggestNextStep(state)).toBe(null);
     });
   });
 
@@ -183,6 +239,21 @@ describe('workflow-gate', () => {
       const result = processWorkflowGate(input);
       expect(result.shouldBlock).toBe(true);
       expect(result.injectedSkill).toBe('writing-plans');
+    });
+
+    it('auto-triggers brainstorming for vague requests', () => {
+      initWorkflowState(TEST_DIR);
+
+      const input: WorkflowGateInput = {
+        type: 'UserPromptSubmit',
+        prompt: 'what should I do for user authentication',
+        workingDirectory: TEST_DIR
+      };
+
+      const result = processWorkflowGate(input);
+      expect(result.shouldBlock).toBe(true);
+      expect(result.injectedSkill).toBe('brainstorming');
+      expect(result.message).toContain('自动触发');
     });
   });
 });
