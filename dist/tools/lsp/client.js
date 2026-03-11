@@ -9,6 +9,8 @@ import { readFileSync, existsSync } from 'fs';
 import { resolve, dirname, parse, join } from 'path';
 import { pathToFileURL } from 'url';
 import { getServerForFile, commandExists } from './servers.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('lsp:client');
 /** Maximum receive buffer size: 64 MB. Exceeding this disconnects the client. */
 const MAX_BUFFER_BYTES = 64 * 1024 * 1024;
 /** Convert a file path to a valid file:// URI (cross-platform) */
@@ -56,7 +58,7 @@ export class LspClient {
             });
             this.process.stderr?.on('data', (data) => {
                 // Log stderr for debugging but don't fail
-                console.error(`LSP stderr: ${data.toString()}`);
+                logger.error(`LSP stderr: ${data.toString()}`);
             });
             this.process.on('error', (error) => {
                 reject(new Error(`Failed to start LSP server: ${error.message}`));
@@ -65,7 +67,7 @@ export class LspClient {
                 this.process = null;
                 this.initialized = false;
                 if (code !== 0) {
-                    console.error(`LSP server exited with code ${code}`);
+                    logger.error(`LSP server exited with code ${code}`);
                 }
             });
             // Send initialize request
@@ -108,7 +110,7 @@ export class LspClient {
     handleData(data) {
         // Guard: disconnect if buffer grows beyond limit (prevents OOM from runaway servers)
         if (this.buffer.length + data.length > MAX_BUFFER_BYTES) {
-            console.error(`[ultrapower] 错误：LSP 缓冲区超过 ${MAX_BUFFER_BYTES} 字节（64MB）上限，正在断开连接`);
+            logger.error(`[ultrapower] 错误：LSP 缓冲区超过 ${MAX_BUFFER_BYTES} 字节（64MB）上限，正在断开连接`);
             this.disconnect().catch(() => {
                 // Ignore errors during emergency disconnect
             });
@@ -635,7 +637,7 @@ class LspClientManager {
             const result = results[i];
             if (result.status === 'rejected') {
                 const key = entries[i][0];
-                console.warn(`LSP disconnectAll: failed to disconnect client "${key}": ${result.reason}`);
+                logger.warn(`LSP disconnectAll: failed to disconnect client "${key}": ${result.reason}`);
             }
         }
         // Always clear maps regardless of individual failures

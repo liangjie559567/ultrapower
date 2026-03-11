@@ -17,6 +17,8 @@ import { isSpawnedPid as isCodexSpawnedPid } from './codex-core.js';
 import { isSpawnedPid as isGeminiSpawnedPid } from './gemini-core.js';
 import { isJobDbInitialized, getJob, getActiveJobs as getActiveJobsFromDb, getJobsByStatus, updateJobStatus } from './job-state-db.js';
 import { createWorkerAdapter } from '../workers/factory.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('mcp:job-management');
 /** Signals allowed for kill_job. SIGKILL excluded - too dangerous for process groups. */
 const ALLOWED_SIGNALS = new Set(['SIGTERM', 'SIGINT']);
 /** Worker adapter instance (lazy initialized) */
@@ -37,7 +39,7 @@ async function getAdapter(cwd) {
             const cleanupDays = parseInt(process.env.WORKER_CLEANUP_DAYS || '7', 10);
             const maxAgeMs = cleanupDays * 24 * 60 * 60 * 1000;
             adapterInstance.cleanup(maxAgeMs).catch(err => {
-                console.error('[MCP] Worker cleanup failed:', err);
+                logger.error('[MCP] Worker cleanup failed:', err);
             });
         }
     }

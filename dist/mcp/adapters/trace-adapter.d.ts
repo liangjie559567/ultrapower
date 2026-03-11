@@ -24,9 +24,9 @@ export declare const traceTools: ({
         };
     };
     handler: (args: {
-        filter?: "tools" | "all" | "skills" | "agents" | "hooks" | "keywords" | "modes" | undefined;
-        workingDirectory?: string | undefined;
+        filter?: "all" | "tools" | "hooks" | "agents" | "keywords" | "skills" | "modes" | undefined;
         sessionId?: string | undefined;
+        workingDirectory?: string | undefined;
         last?: number | undefined;
     }) => Promise<{
         content: Array<{
@@ -54,8 +54,8 @@ export declare const traceTools: ({
         };
     };
     handler: (args: {
-        workingDirectory?: string | undefined;
         sessionId?: string | undefined;
+        workingDirectory?: string | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";

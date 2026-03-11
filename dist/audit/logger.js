@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { safeJsonParse } from '../lib/safe-json.js';
 import { SIZE_LIMIT } from '../lib/constants.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('audit:logger');
 class AuditLogger {
     logPath;
     secretKey;
@@ -12,7 +14,7 @@ class AuditLogger {
         this.logPath = path.join(logDir, 'audit.log');
         this.secretKey = this.deriveSecretKey();
         this.initPromise = this.ensureLogDir(logDir).catch(err => {
-            console.error('[AuditLogger] Failed to initialize log directory:', err);
+            logger.error('[AuditLogger] Failed to initialize log directory:', err);
         });
     }
     deriveSecretKey() {
@@ -65,7 +67,7 @@ class AuditLogger {
                 const result = safeJsonParse(line);
                 if (!result.success) {
                     invalid++;
-                    console.error(`[audit] Failed to parse entry: ${result.error}`);
+                    logger.error(`[audit] Failed to parse entry: ${result.error}`);
                     continue;
                 }
                 const entry = result.data;
@@ -76,7 +78,7 @@ class AuditLogger {
                 }
                 else {
                     invalid++;
-                    console.error(`[audit] Invalid signature at ${entry.timestamp}`);
+                    logger.error(`[audit] Invalid signature at ${entry.timestamp}`);
                 }
             }
             return { valid, invalid };

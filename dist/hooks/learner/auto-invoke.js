@@ -3,6 +3,8 @@ import path from 'path';
 import os from 'os';
 import { getClaudeConfigDir } from '../../utils/paths.js';
 import { atomicWriteJson } from '../../lib/atomic-write.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('learner:auto-invoke');
 const DEFAULT_CONFIG = {
     enabled: true,
     confidenceThreshold: 80,
@@ -32,7 +34,7 @@ export async function loadInvocationConfig() {
         };
     }
     catch (error) {
-        console.error('[auto-invoke] Failed to load config:', error);
+        logger.error('[auto-invoke] Failed to load config:', error);
         return { ...DEFAULT_CONFIG };
     }
 }
@@ -149,7 +151,7 @@ export function saveInvocationHistory(state) {
         invocations: state.invocations,
         stats: getInvocationStats(state),
     }).catch(error => {
-        console.error('[auto-invoke] Failed to save invocation history:', error);
+        logger.error('[auto-invoke] Failed to save invocation history:', error);
     });
 }
 /**
@@ -175,7 +177,7 @@ export async function loadInvocationHistory(sessionId) {
         };
     }
     catch (error) {
-        console.error('[auto-invoke] Failed to load invocation history:', error);
+        logger.error('[auto-invoke] Failed to load invocation history:', error);
         return null;
     }
 }
@@ -230,7 +232,7 @@ export async function getAggregatedStats() {
         };
     }
     catch (error) {
-        console.error('[auto-invoke] Failed to get aggregated stats:', error);
+        logger.error('[auto-invoke] Failed to get aggregated stats:', error);
         return {
             totalSessions: 0,
             totalInvocations: 0,

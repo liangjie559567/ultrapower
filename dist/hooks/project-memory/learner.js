@@ -6,6 +6,8 @@ import { loadProjectMemory, saveProjectMemory } from './storage.js';
 import { BUILD_COMMAND_PATTERNS, TEST_COMMAND_PATTERNS } from './constants.js';
 import { trackAccess } from './hot-path-tracker.js';
 import { detectDirectivesFromMessage, addDirective } from './directive-detector.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('project-memory:learner');
 // Type guards
 function isFileToolInput(input) {
     return 'file_path' in input || 'filePath' in input;
@@ -109,7 +111,7 @@ export async function learnFromToolOutput(toolName, toolInput, toolOutput, proje
     }
     catch (error) {
         // Silently fail
-        console.error('Error learning from tool output:', error);
+        logger.error('Error learning from tool output:', error);
     }
 }
 /**
@@ -211,7 +213,7 @@ export async function addCustomNote(projectRoot, category, content) {
         await saveProjectMemory(projectRoot, memory);
     }
     catch (error) {
-        console.error('Error adding custom note:', error);
+        logger.error('Error adding custom note:', error);
     }
 }
 //# sourceMappingURL=learner.js.map

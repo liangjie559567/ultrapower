@@ -1,9 +1,11 @@
 import { auditLogger } from './logger.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('audit:verify-cli');
 async function main() {
     const result = await auditLogger.verify();
-    console.log(`Audit log verification:`);
-    console.log(`  Valid entries: ${result.valid}`);
-    console.log(`  Invalid entries: ${result.invalid}`);
+    logger.info(`Audit log verification:`);
+    logger.info(`  Valid entries: ${result.valid}`);
+    logger.info(`  Invalid entries: ${result.invalid}`);
     process.exit(result.invalid > 0 ? 1 : 0);
 }
 main();

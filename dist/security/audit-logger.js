@@ -40,14 +40,18 @@ export class AuditLogger {
         return crypto.createHash('sha256').update(data).digest('hex');
     }
     load() {
+        // eslint-disable-next-line no-restricted-syntax
         if (fs.existsSync(this.logPath)) {
+            // eslint-disable-next-line no-restricted-syntax
             this.events = JSON.parse(fs.readFileSync(this.logPath, 'utf-8'));
         }
     }
     save() {
         const dir = path.dirname(this.logPath);
+        // eslint-disable-next-line no-restricted-syntax
         if (!fs.existsSync(dir))
             fs.mkdirSync(dir, { recursive: true });
+        // eslint-disable-next-line no-restricted-syntax
         fs.writeFileSync(this.logPath, JSON.stringify(this.events, null, 2));
     }
 }

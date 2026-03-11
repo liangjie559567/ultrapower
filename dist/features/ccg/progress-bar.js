@@ -1,3 +1,5 @@
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('ccg:progress-bar');
 export class ProgressBar {
     current = 0;
     total = 0;
@@ -15,7 +17,7 @@ export class ProgressBar {
     complete() {
         this.current = this.total;
         this.render();
-        console.log('');
+        logger.info('');
     }
     render() {
         const percent = Math.floor((this.current / this.total) * 100);

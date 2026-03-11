@@ -12,6 +12,8 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSy
 import { promises as fsPromises } from "fs";
 import { join } from "path";
 import { initJobDb, getActiveJobs, getRecentJobs, getJobStats, closeJobDb } from '../../mcp/job-state-db.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('pre-compact:index');
 // ============================================================================
 // Constants
 // ============================================================================
@@ -82,7 +84,7 @@ export async function exportWisdomToNotepad(directory) {
         }
     }
     catch (error) {
-        console.error("[PreCompact] Error reading wisdom files:", error);
+        logger.error("[PreCompact] Error reading wisdom files:", error);
     }
     const wisdom = wisdomParts.length > 0
         ? `## Plan Wisdom\n\n${wisdomParts.join("\n\n")}`
@@ -170,7 +172,7 @@ export async function saveModeSummary(directory) {
             if (error.code === "ENOENT") {
                 return null;
             }
-            console.error(`[PreCompact] Error reading ${config.file}:`, error);
+            logger.error(`[PreCompact] Error reading ${config.file}:`, error);
             return null;
         }
     });
@@ -246,7 +248,7 @@ async function getActiveJobsSummary(directory) {
         };
     }
     catch (error) {
-        console.error('[PreCompact] Error reading job state DB:', error);
+        logger.error('[PreCompact] Error reading job state DB:', error);
         return { activeJobs: [], recentJobs: [], stats: null };
     }
     finally {
@@ -392,7 +394,7 @@ async function doProcessPreCompact(input) {
         writeFileSync(checkpointFile, JSON.stringify(checkpoint, null, 2), "utf-8");
     }
     catch (error) {
-        console.error("[PreCompact] Error saving checkpoint:", error);
+        logger.error("[PreCompact] Error saving checkpoint:", error);
     }
     // Save wisdom separately if exported
     if (exported && wisdom) {
@@ -401,7 +403,7 @@ async function doProcessPreCompact(input) {
             writeFileSync(wisdomFile, wisdom, "utf-8");
         }
         catch (error) {
-            console.error("[PreCompact] Error saving wisdom:", error);
+            logger.error("[PreCompact] Error saving wisdom:", error);
         }
     }
     // Format summary for context injection

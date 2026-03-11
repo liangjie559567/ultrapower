@@ -1,1 +1,1 @@
-{"version":3,"file":"test-prompt.js","sourceRoot":"","sources":["../../../src/cli/utils/test-prompt.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,KAAK,UAAU,iBAAiB,CAAC,MAAc;IACpD,OAAO,CAAC,GAAG,CAAC,8CAA8C,CAAC,CAAC;AAC9D,CAAC"}
+{"version":3,"file":"test-prompt.js","sourceRoot":"","sources":["../../../src/cli/utils/test-prompt.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,6BAA6B,CAAC;AAC3D,MAAM,MAAM,GAAG,YAAY,CAAC,mBAAmB,CAAC,CAAC;AAEjD,MAAM,CAAC,KAAK,UAAU,iBAAiB,CAAC,MAAc;IACpD,MAAM,CAAC,IAAI,CAAC,8CAA8C,CAAC,CAAC;AAC9D,CAAC"}

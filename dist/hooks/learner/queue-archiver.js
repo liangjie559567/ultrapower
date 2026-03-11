@@ -8,6 +8,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { acquireLock } from '../../lib/file-lock.js';
 import { atomicWriteSync } from '../../lib/atomic-write.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('learner:queue-archiver');
 const DONE_KEEP_COUNT = 10;
 const ARCHIVE_WARN_LINES = 5000;
 export class QueueArchiver {
@@ -65,7 +67,7 @@ export class QueueArchiver {
                 atomicWriteSync(this.archiveFile, newArchiveText);
                 const lineCount = newArchiveText.split('\n').length;
                 if (lineCount > ARCHIVE_WARN_LINES) {
-                    console.warn(`[归档] warning: learning_queue_archive.md 已超过 ${ARCHIVE_WARN_LINES} 行（${lineCount} 行）`);
+                    logger.warn(`[归档] warning: learning_queue_archive.md 已超过 ${ARCHIVE_WARN_LINES} 行（${lineCount} 行）`);
                 }
             }
             // 原子写入主文件（头部 + non-done + 保留的 done）

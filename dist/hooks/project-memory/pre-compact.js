@@ -5,6 +5,8 @@
 import { findProjectRoot } from '../rules-injector/finder.js';
 import { loadProjectMemory } from './storage.js';
 import { formatContextSummary } from './formatter.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('project-memory:pre-compact');
 /**
  * Process PreCompact hook - inject project memory into system message
  * This ensures user directives and project context survive compaction
@@ -44,7 +46,7 @@ export async function processPreCompact(input) {
         };
     }
     catch (error) {
-        console.error('Error in project memory PreCompact handler:', error);
+        logger.error('Error in project memory PreCompact handler:', error);
         return { continue: true };
     }
 }

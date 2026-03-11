@@ -10,6 +10,8 @@
  * Sensitive hooks use strict allowlists; others pass through unknown fields.
  */
 import { z } from 'zod';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('hooks:bridge-normalize');
 // --- Zod schemas for hook input validation ---
 /** Base schema fields */
 const baseSchemaFields = {
@@ -159,7 +161,7 @@ function validateWithZod(input, isSensitive, hookType) {
         if (isSensitive) {
             throw new Error(`${errorMsg} (hook: ${hookType})`);
         }
-        console.error(errorMsg);
+        logger.error(errorMsg);
     }
     return (parsed.success ? parsed.data : input);
 }
@@ -191,7 +193,6 @@ function mapFieldsToCamelCase(input, hookType) {
  * @param raw - Raw hook input (may be snake_case, camelCase, or mixed)
  * @param hookType - Optional hook type for sensitivity-aware filtering
  */
-import * as logger from '../lib/logger.js';
 export function normalizeHookInput(raw, hookType) {
     if (typeof raw !== 'object' || raw === null) {
         return {};
@@ -251,7 +252,7 @@ function preFilterSensitiveInput(input, hookType) {
         }
     }
     if (droppedKeys.length > 0) {
-        console.warn(`[bridge-normalize] Dropped unknown fields for sensitive hook "${hookType}": ${droppedKeys.join(', ')}`);
+        logger.warn(`[bridge-normalize] Dropped unknown fields for sensitive hook "${hookType}": ${droppedKeys.join(', ')}`);
     }
     return filtered;
 }
@@ -280,7 +281,7 @@ function filterSensitiveField(key, value, hookType) {
         return [key, value];
     }
     logger.security('field_filtered', { hookType, field: key });
-    console.warn(`[bridge-normalize] [SECURITY] Dropped unknown field "${key}" for hook "${hookType}"`);
+    logger.warn(`[bridge-normalize] [SECURITY] Dropped unknown field "${key}" for hook "${hookType}"`);
     return null;
 }
 /**
@@ -288,7 +289,7 @@ function filterSensitiveField(key, value, hookType) {
  */
 function filterNonSensitiveField(key, value, hookType) {
     if (!KNOWN_FIELDS.has(key)) {
-        console.debug(`[bridge-normalize] Unknown field "${key}" passed through for hook "${hookType ?? 'unknown'}"`);
+        logger.debug(`Unknown field "${key}" passed through for hook "${hookType ?? 'unknown'}"`);
     }
     return [key, value];
 }

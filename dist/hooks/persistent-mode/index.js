@@ -16,7 +16,7 @@ import { resolveToWorktreeRoot } from '../../lib/worktree-paths.js';
 import { isUserAbort, isContextLimitStop } from '../todo-continuation/index.js';
 import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
 import { readLastToolError, getToolErrorRetryGuidance } from './tool-error.js';
-// Lazy imports via event bus
+// Lazy imports
 let ultraworkModule;
 let ralphModule;
 let todoModule;
@@ -50,7 +50,7 @@ async function loadAutopilotEnforcement() {
 }
 async function loadTeamPipeline() {
     if (!teamPipelineModule)
-        teamPipelineModule = await import('../team-pipeline/state.js');
+        teamPipelineModule = await import('../team-pipeline/index.js');
     return teamPipelineModule;
 }
 /** Maximum todo-continuation attempts before giving up (prevents infinite loops) */

@@ -1,4 +1,6 @@
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('utils:update');
 export async function updateCommand() {
-    console.log('Update command - implementation pending');
+    logger.info('Update command - implementation pending');
 }
 //# sourceMappingURL=update.js.map

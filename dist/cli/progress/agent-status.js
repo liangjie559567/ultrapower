@@ -1,6 +1,5 @@
-/**
- * Agent 状态指示器
- */
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('progress:agent-status');
 export class AgentStatusIndicator {
     agents = new Map();
     add(name, status = 'idle') {
@@ -21,11 +20,11 @@ export class AgentStatusIndicator {
             failed: '✗',
             timeout: '⏱'
         };
-        console.log('\nAgent Status:');
+        logger.info('\nAgent Status:');
         for (const agent of this.agents.values()) {
             const symbol = symbols[agent.status];
             const progress = agent.progress ? ` - ${agent.progress}` : '';
-            console.log(`  ${symbol} ${agent.name} [${agent.status}]${progress}`);
+            logger.info(`  ${symbol} ${agent.name} [${agent.status}]${progress}`);
         }
     }
     summary() {

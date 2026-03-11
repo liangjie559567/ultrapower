@@ -7,6 +7,8 @@ import { findProjectRoot } from '../rules-injector/finder.js';
 import { loadProjectMemory, saveProjectMemory, shouldRescan } from './storage.js';
 import { detectProjectEnvironment } from './detector.js';
 import { formatContextSummary } from './formatter.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('project-memory:index');
 /**
  * Session caches to prevent duplicate injection
  * Map<sessionId, Set<projectRoot>>
@@ -67,7 +69,7 @@ export async function registerProjectMemoryContext(sessionId, workingDirectory) 
     }
     catch (error) {
         // Silently fail - we don't want to break the session
-        console.error('Error registering project memory context:', error);
+        logger.error('Error registering project memory context:', error);
         return false;
     }
 }

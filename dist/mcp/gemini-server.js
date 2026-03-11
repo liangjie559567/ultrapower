@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- MCP tool() API requires `as any` for schema/args typing */
 /**
  * Gemini MCP Server - In-process MCP server for Google Gemini CLI integration
  *
@@ -23,35 +22,30 @@ const askGeminiTool = tool("ask_gemini", `Send a prompt to Google Gemini CLI for
     background: { type: "boolean", description: "Run in background (non-blocking). Returns immediately with job metadata and file paths. Check response file for completion. Not available with inline prompt." },
     working_directory: { type: "string", description: "Working directory for path resolution and CLI execution. Defaults to process.cwd()." },
 }, async (args) => {
-    const { prompt, prompt_file, output_file, agent_role, model, files, background, working_directory } = args;
-    return handleAskGemini({ prompt, prompt_file, output_file, agent_role, model, files, background, working_directory });
+    return handleAskGemini(args);
 });
 const waitForJobTool = tool("wait_for_job", "Block (poll) until a background job reaches a terminal state (completed, failed, or timeout). Uses exponential backoff. Returns the response preview on success.", {
     job_id: { type: "string", description: "The job ID returned when the background job was dispatched." },
     timeout_ms: { type: "number", description: "Maximum time to wait in milliseconds (default: 3600000, max: 3600000)." },
 }, async (args) => {
-    const { job_id, timeout_ms } = args;
-    return handleWaitForJob('gemini', job_id, timeout_ms);
+    return handleWaitForJob('gemini', args.job_id, args.timeout_ms);
 });
 const checkJobStatusTool = tool("check_job_status", "Non-blocking status check for a background job. Returns current status, metadata, and error information if available.", {
     job_id: { type: "string", description: "The job ID returned when the background job was dispatched." },
 }, async (args) => {
-    const { job_id } = args;
-    return handleCheckJobStatus('gemini', job_id);
+    return handleCheckJobStatus('gemini', args.job_id);
 });
 const killJobTool = tool("kill_job", "Send a signal to a running background job. Marks the job as failed. Only works on jobs in spawned or running state.", {
     job_id: { type: "string", description: "The job ID of the running job to kill." },
     signal: { type: "string", description: "The signal to send (default: SIGTERM)." },
 }, async (args) => {
-    const { job_id, signal } = args;
-    return handleKillJob('gemini', job_id, signal || undefined);
+    return handleKillJob('gemini', args.job_id, args.signal || undefined);
 });
 const listJobsTool = tool("list_jobs", "List background jobs for this provider. Filter by status and limit results. Results sorted newest first.", {
     status_filter: { type: "string", description: "Filter jobs by status (default: active)." },
     limit: { type: "number", description: "Maximum number of jobs to return (default: 50)." },
 }, async (args) => {
-    const { status_filter, limit } = args;
-    return handleListJobs('gemini', status_filter || undefined, limit);
+    return handleListJobs('gemini', args.status_filter, args.limit);
 });
 /**
  * In-process MCP server exposing Gemini CLI integration

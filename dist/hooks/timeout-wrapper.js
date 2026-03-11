@@ -1,7 +1,5 @@
-/**
- * Timeout wrapper for hook operations
- * Prevents hooks from blocking tool execution indefinitely
- */
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('hooks:timeout-wrapper');
 /**
  * Execute a promise with timeout
  * Returns undefined if timeout occurs, otherwise returns the result
@@ -23,7 +21,7 @@ export async function withTimeout(fn, options) {
         const isTimeout = error instanceof Error && error.message.includes('Timeout');
         if (isTimeout) {
             const elapsed = timeoutMs;
-            console.warn(`[hook-bridge] ${label} timeout after ${elapsed}ms`);
+            logger.warn(`[hook-bridge] ${label} timeout after ${elapsed}ms`);
             if (onTimeout) {
                 onTimeout(elapsed);
             }
@@ -43,7 +41,7 @@ export function withTimeoutSync(fn, options) {
     }
     catch (error) {
         const elapsed = Date.now() - startTime;
-        console.warn(`[hook-bridge] ${label} error after ${elapsed}ms:`, error);
+        logger.warn(`[hook-bridge] ${label} error after ${elapsed}ms:`, error);
         return fallback?.();
     }
 }

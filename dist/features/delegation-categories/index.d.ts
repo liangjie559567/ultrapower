@@ -10,12 +10,12 @@
  *
  * // Explicit category
  * const config = resolveCategory('ultrabrain');
- * console.log(config.tier);  // 'HIGH'
- * console.log(config.temperature);  // 0.3
+ * logger.info(config.tier);  // 'HIGH'
+ * logger.info(config.temperature);  // 0.3
  *
  * // Auto-detect category from task
  * const detected = getCategoryForTask({ taskPrompt: "Design a beautiful dashboard" });
- * console.log(detected.category);  // 'visual-engineering'
+ * logger.info(detected.category);  // 'visual-engineering'
  * ```
  */
 import type { DelegationCategory, CategoryConfig, ResolvedCategory, CategoryContext, ThinkingBudget } from './types.js';

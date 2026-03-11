@@ -5,6 +5,8 @@
  * Uses the OAuth API to check utilization percentages.
  */
 import { getUsage } from '../../hud/usage-api.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('rate-limit-wait:rate-limit-monitor');
 /** Threshold percentage for considering rate limited */
 const RATE_LIMIT_THRESHOLD = 100;
 /**
@@ -59,7 +61,7 @@ export async function checkRateLimitStatus() {
     }
     catch (error) {
         // Log error but don't throw - return null to indicate unavailable
-        console.error('[RateLimitMonitor] Error checking rate limit:', error);
+        logger.error('[RateLimitMonitor] Error checking rate limit:', error);
         return null;
     }
 }

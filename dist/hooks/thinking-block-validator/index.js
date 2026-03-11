@@ -1,20 +1,5 @@
-/**
- * Proactive Thinking Block Validator Hook
- *
- * Prevents "Expected thinking/redacted_thinking but found tool_use" errors
- * by validating and fixing message structure BEFORE sending to Anthropic API.
- *
- * This hook runs on the "experimental.chat.messages.transform" hook point,
- * which is called before messages are converted to ModelMessage format and
- * sent to the API.
- *
- * Key differences from session-recovery hook:
- * - PROACTIVE (prevents error) vs REACTIVE (fixes after error)
- * - Runs BEFORE API call vs AFTER API error
- * - User never sees the error vs User sees error then recovery
- *
- * Ported from oh-my-opencode's thinking-block-validator hook.
- */
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('thinking-block-validator:index');
 import { CONTENT_PART_TYPES, THINKING_PART_TYPES, DEFAULT_THINKING_CONTENT, SYNTHETIC_THINKING_ID_PREFIX, HOOK_NAME, } from "./constants.js";
 export * from "./types.js";
 export * from "./constants.js";
@@ -132,7 +117,7 @@ export function createThinkingBlockValidatorHook() {
                 }
             }
             if (fixedCount > 0 && process.env.DEBUG_THINKING_VALIDATOR) {
-                console.log(`[${HOOK_NAME}] Fixed ${fixedCount} message(s) by prepending thinking blocks`);
+                logger.info(`[${HOOK_NAME}] Fixed ${fixedCount} message(s) by prepending thinking blocks`);
             }
         },
     };

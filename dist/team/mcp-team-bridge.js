@@ -10,6 +10,8 @@ import { existsSync, openSync, readSync, closeSync } from 'fs';
 import { join } from 'path';
 import { writeFileWithMode, ensureDirWithMode } from './fs-utils.js';
 import { findNextTask, updateTask, writeTaskFailure, readTaskFailure, isTaskRetryExhausted } from './task-file-ops.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('team:mcp-team-bridge');
 import { readNewInboxMessages, appendOutbox, rotateOutboxIfNeeded, rotateInboxIfNeeded, checkShutdownSignal, deleteShutdownSignal, checkDrainSignal, deleteDrainSignal } from './inbox-outbox.js';
 import { unregisterMcpWorker } from './team-registration.js';
 import { GEMINI_YOLO } from '../mcp/gemini-core.js';
@@ -22,7 +24,7 @@ import { safeJsonParse } from '../lib/safe-json.js';
 /** Simple logger */
 function log(message) {
     const ts = new Date().toISOString();
-    console.log(`${ts} ${message}`);
+    logger.info(`${ts} ${message}`);
 }
 /** Emit audit event, never throws (logging must not crash the bridge) */
 function audit(config, eventType, taskId, details) {

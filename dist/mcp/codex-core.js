@@ -17,6 +17,8 @@ import { isExternalPromptAllowed } from './mcp-config.js';
 import { resolveSystemPrompt, buildPromptWithSystemContext, wrapUntrustedFileContent, wrapUntrustedCliResponse, isValidAgentRoleName, VALID_AGENT_ROLES, singleErrorBlock, inlineSuccessBlocks } from './prompt-injection.js';
 import { persistPrompt, persistResponse, getExpectedResponsePath, getPromptsDir, slugify, generatePromptId } from './prompt-persistence.js';
 import { writeJobStatus, getStatusFilePath, readJobStatus } from './prompt-persistence.js';
+import { createLogger } from '../lib/unified-logger.js';
+const logger = createLogger('mcp:codex-core');
 import { resolveExternalModel, buildFallbackChain, CODEX_MODEL_FALLBACKS, } from '../features/model-routing/external-model-policy.js';
 import { loadConfig } from '../config/loader.js';
 // Module-scoped PID registry - tracks PIDs spawned by this process
@@ -195,7 +197,7 @@ export function executeCodex(prompt, model, cwd, reasoningEffort) {
             args.push('-c', `model_reasoning_effort="${reasoningEffort}"`);
         }
         const codexCmd = getCliCommand('codex');
-        console.error(`[DEBUG] Spawning: ${codexCmd} with shell=${process.platform === 'win32'}`);
+        logger.error(`[DEBUG] Spawning: ${codexCmd} with shell=${process.platform === 'win32'}`);
         const child = spawn(codexCmd, args, {
             stdio: ['pipe', 'pipe', 'pipe'],
             ...(cwd ? { cwd } : {}),

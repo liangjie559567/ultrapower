@@ -2,6 +2,8 @@ import { Command } from 'commander';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { getClaudeConfigDir } from '../../utils/paths.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('commands:config-stop-callback');
 export function createConfigStopCallbackCommand() {
     const cmd = new Command('config-stop-callback')
         .description('Configure stop hook callbacks')
@@ -26,13 +28,15 @@ export function createConfigStopCallbackCommand() {
         try {
             config = JSON.parse(readFileSync(configPath, 'utf-8'));
         }
-        catch { }
+        catch {
+            // Config file doesn't exist or is invalid, use default
+        }
         if (options.show) {
             if (options.profile) {
-                console.log(JSON.stringify(config.notificationProfiles?.[options.profile]?.[platform] || {}, null, 2));
+                logger.info(JSON.stringify(config.notificationProfiles?.[options.profile]?.[platform] || {}, null, 2));
             }
             else {
-                console.log(JSON.stringify(config.stopHookCallbacks?.[platform] || {}, null, 2));
+                logger.info(JSON.stringify(config.stopHookCallbacks?.[platform] || {}, null, 2));
             }
             return;
         }
@@ -55,7 +59,7 @@ export function createConfigStopCallbackCommand() {
             if (options.channelId)
                 platformConfig.channelId = options.channelId;
             writeFileSync(configPath, JSON.stringify(config, null, 2));
-            console.log(`Profile "${options.profile}" configured for ${platform}`);
+            logger.info(`Profile "${options.profile}" configured for ${platform}`);
         }
         else {
             config.stopHookCallbacks = config.stopHookCallbacks || {};
@@ -87,7 +91,7 @@ export function createConfigStopCallbackCommand() {
                 }
             }
             writeFileSync(configPath, JSON.stringify(config, null, 2));
-            console.log(`${platform} callback configured`);
+            logger.info(`${platform} callback configured`);
         }
     });
     return cmd;

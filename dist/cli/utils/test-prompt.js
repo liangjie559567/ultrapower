@@ -1,4 +1,6 @@
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('utils:test-prompt');
 export async function testPromptCommand(prompt) {
-    console.log('Test prompt command - implementation pending');
+    logger.info('Test prompt command - implementation pending');
 }
 //# sourceMappingURL=test-prompt.js.map

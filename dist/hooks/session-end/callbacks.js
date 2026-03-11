@@ -7,6 +7,8 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 import { homedir } from 'os';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('session-end:callbacks');
 import { getOMCConfig, } from '../../features/auto-update.js';
 /**
  * Format session summary for notifications
@@ -92,10 +94,10 @@ async function writeToFile(config, content, sessionId) {
         mkdirSync(dir, { recursive: true });
         // Write file with restricted permissions (owner read/write only)
         writeFileSync(resolvedPath, content, { encoding: 'utf-8', mode: 0o600 });
-        console.log(`[stop-callback] Session summary written to ${resolvedPath}`);
+        logger.info(`[stop-callback] Session summary written to ${resolvedPath}`);
     }
     catch (error) {
-        console.error('[stop-callback] File write failed:', error);
+        logger.error('[stop-callback] File write failed:', error);
         // Don't throw - callback failures shouldn't block session end
     }
 }
@@ -104,12 +106,12 @@ async function writeToFile(config, content, sessionId) {
  */
 async function sendTelegram(config, message) {
     if (!config.botToken || !config.chatId) {
-        console.error('[stop-callback] Telegram: missing botToken or chatId');
+        logger.error('[stop-callback] Telegram: missing botToken or chatId');
         return;
     }
     // Validate bot token format (digits:alphanumeric)
     if (!/^[0-9]+:[A-Za-z0-9_-]+$/.test(config.botToken)) {
-        console.error('[stop-callback] Telegram: invalid bot token format');
+        logger.error('[stop-callback] Telegram: invalid bot token format');
         return;
     }
     try {
@@ -127,11 +129,11 @@ async function sendTelegram(config, message) {
         if (!response.ok) {
             throw new Error(`Telegram API error: ${response.status} - ${response.statusText}`);
         }
-        console.log('[stop-callback] Telegram notification sent');
+        logger.info('[stop-callback] Telegram notification sent');
     }
     catch (error) {
         // Don't log full error details which might contain the bot token
-        console.error('[stop-callback] Telegram send failed:', error instanceof Error ? error.message : 'Unknown error');
+        logger.error('[stop-callback] Telegram send failed:', error instanceof Error ? error.message : 'Unknown error');
         // Don't throw - callback failures shouldn't block session end
     }
 }
@@ -140,7 +142,7 @@ async function sendTelegram(config, message) {
  */
 async function sendDiscord(config, message) {
     if (!config.webhookUrl) {
-        console.error('[stop-callback] Discord: missing webhookUrl');
+        logger.error('[stop-callback] Discord: missing webhookUrl');
         return;
     }
     // Validate Discord webhook URL
@@ -148,16 +150,16 @@ async function sendDiscord(config, message) {
         const url = new URL(config.webhookUrl);
         const allowedHosts = ['discord.com', 'discordapp.com'];
         if (!allowedHosts.some(host => url.hostname === host || url.hostname.endsWith(`.${host}`))) {
-            console.error('[stop-callback] Discord: webhook URL must be from discord.com or discordapp.com');
+            logger.error('[stop-callback] Discord: webhook URL must be from discord.com or discordapp.com');
             return;
         }
         if (url.protocol !== 'https:') {
-            console.error('[stop-callback] Discord: webhook URL must use HTTPS');
+            logger.error('[stop-callback] Discord: webhook URL must use HTTPS');
             return;
         }
     }
     catch {
-        console.error('[stop-callback] Discord: invalid webhook URL');
+        logger.error('[stop-callback] Discord: invalid webhook URL');
         return;
     }
     try {
@@ -172,10 +174,10 @@ async function sendDiscord(config, message) {
         if (!response.ok) {
             throw new Error(`Discord webhook error: ${response.status} - ${response.statusText}`);
         }
-        console.log('[stop-callback] Discord notification sent');
+        logger.info('[stop-callback] Discord notification sent');
     }
     catch (error) {
-        console.error('[stop-callback] Discord send failed:', error instanceof Error ? error.message : 'Unknown error');
+        logger.error('[stop-callback] Discord send failed:', error instanceof Error ? error.message : 'Unknown error');
         // Don't throw - callback failures shouldn't block session end
     }
 }
@@ -223,7 +225,7 @@ export async function triggerStopCallbacks(metrics, _input) {
     }
     catch (error) {
         // Swallow any errors - callbacks should never block session end
-        console.error('[stop-callback] Callback execution error:', error);
+        logger.error('[stop-callback] Callback execution error:', error);
     }
 }
 //# sourceMappingURL=callbacks.js.map

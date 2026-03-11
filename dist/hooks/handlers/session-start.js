@@ -2,6 +2,8 @@ import { resolveToWorktreeRoot } from "../../lib/worktree-paths.js";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { join } from "path";
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('handlers:session-start');
 const fileCache = new Map();
 async function readFileCached(path) {
     const stat = await import("fs/promises").then(m => m.stat(path));
@@ -28,11 +30,11 @@ export async function processSessionStart(input) {
             profileName: process.env.OMC_NOTIFY_PROFILE,
         }).catch((err) => {
             if (process.env.OMC_DEBUG) {
-                console.error(`[bridge] session-start notification failed: ${err.message}`);
+                logger.error(`[bridge] session-start notification failed: ${err.message}`);
             }
         })).catch((err) => {
             if (process.env.OMC_DEBUG) {
-                console.error(`[bridge] notification import failed: ${err.message}`);
+                logger.error(`[bridge] notification import failed: ${err.message}`);
             }
         });
     }

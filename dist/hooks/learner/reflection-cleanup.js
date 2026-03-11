@@ -12,6 +12,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { atomicWriteFileSync } from '../../lib/atomic-write.js';
 import { parseReflectionLog } from './reflection-parser.js';
+import { createLogger } from '../../lib/unified-logger.js';
+const logger = createLogger('learner:reflection-cleanup');
 /**
  * 获取当前日期字符串，格式 YYYYMMDD
  */
@@ -56,7 +58,7 @@ export async function cleanupReflectionLog(baseDir) {
     }
     // 原子写回主文件
     atomicWriteFileSync(reflectionLog, newContent);
-    console.log(`[清理] 已移除 ${removed} 条空条目，保留 ${kept} 条有效反思`);
+    logger.info(`[清理] 已移除 ${removed} 条空条目，保留 ${kept} 条有效反思`);
     return { removed, kept, backupPath };
 }
 //# sourceMappingURL=reflection-cleanup.js.map
