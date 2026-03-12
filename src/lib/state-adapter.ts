@@ -11,12 +11,12 @@
  * - 类型安全的泛型支持
  */
 
-import { existsSync, readFileSync, unlinkSync, mkdirSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync, unlinkSync, mkdirSync } from 'fs';
+import { join, resolve } from 'path';
 import { assertValidMode, assertValidSessionId, type ValidMode } from './validateMode.js';
 import { resolveSessionStatePath, ensureSessionStateDir } from './worktree-paths.js';
 import { atomicWriteJsonSync } from './atomic-write.js';
-import { withFileLock } from './file-lock.js';
+import { withFileLock, withFileLockSync } from './file-lock.js';
 import { readStateWithCache, invalidateStateCache } from './state-cache.js';
 
 /**
@@ -48,7 +48,7 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
 
   constructor(mode: ValidMode, directory: string) {
     this.mode = assertValidMode(mode);
-    this.directory = directory;
+    this.directory = resolve(directory);
   }
 
   /**
@@ -100,7 +100,8 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
       }
 
       return readStateWithCache(stateFile, state) as T | null;
-    } catch {
+    } catch (err) {
+      console.debug('[state-adapter] Read failed:', err);
       return null;
     }
   }
@@ -117,7 +118,8 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
         try {
           atomicWriteJsonSync(stateFile, data);
           return true;
-        } catch (_err) {
+        } catch (err) {
+          console.debug('[state-adapter] Write attempt failed:', err);
           if (attempt === 3) return false;
         }
       }
@@ -134,13 +136,20 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
    * 写入状态（同步）
    */
   writeSync(data: T, sessionId?: string): boolean {
+    const stateFile = this.getPath(sessionId);
+
     try {
-      this.ensureDir(sessionId);
-      const stateFile = this.getPath(sessionId);
-      writeFileSync(stateFile, JSON.stringify(data, null, 2), { mode: 0o600 });
-      invalidateStateCache(stateFile);
-      return true;
-    } catch {
+      const result = withFileLockSync(stateFile, () => {
+        this.ensureDir(sessionId);
+        atomicWriteJsonSync(stateFile, data);
+        return true;
+      });
+      if (result) {
+        invalidateStateCache(stateFile);
+      }
+      return result;
+    } catch (err) {
+      console.debug('[state-adapter] Sync write failed:', err);
       return false;
     }
   }
