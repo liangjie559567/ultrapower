@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getRecommendation } from './recommendation-engine.js.js';
+import { getRecommendation } from '../recommendation-engine.js';
 
 describe('Recommendation Engine', () => {
   it('recommends security-reviewer for security context', () => {
