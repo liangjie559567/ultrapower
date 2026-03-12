@@ -23,14 +23,21 @@ description: "Spec Kit Constitution - 建立项目原则和核心价值观"
 
 ## 实现
 
-使用 Spec Kit 的 slash 命令：`/speckit.constitution`
+使用 ultrapower 原生实现（无需外部依赖）：
 
-或通过 CLI：
-```bash
-specify init . --ai claude
-# 然后在 AI 对话中使用 /speckit.constitution
+```typescript
+import { generateConstitution, formatConstitution } from '@/features/speckit-core';
+
+const constitution = await generateConstitution(process.cwd());
+const markdown = formatConstitution(constitution);
 ```
+
+自动分析项目：
+- TypeScript 配置
+- 测试框架
+- 包管理器
+- 代码语言
 
 ## 输出
 
-生成 `.speckit/constitution.md` 文件，包含项目原则定义。
+生成 `.specify/memory/constitution.md` 文件，包含项目原则定义。
