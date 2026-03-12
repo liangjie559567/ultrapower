@@ -13,14 +13,49 @@ export async function generateConstitution(projectPath) {
     };
 }
 async function analyzeProject(projectPath) {
-    const files = fs.readdirSync(projectPath);
+    const resolvedPath = path.resolve(projectPath);
+    if (!resolvedPath.startsWith(path.resolve(process.cwd()))) {
+        throw new Error('Path traversal detected');
+    }
+    const files = fs.readdirSync(resolvedPath);
+    const pkgJson = readPackageJson(resolvedPath);
     return {
         hasTypeScript: files.includes('tsconfig.json'),
         hasTests: files.some(f => f.includes('test') || f.includes('spec')),
         framework: detectFramework(files),
         packageManager: detectPackageManager(files),
-        languages: detectLanguages(projectPath)
+        languages: detectLanguages(resolvedPath),
+        dependencies: pkgJson ? Object.keys(pkgJson.dependencies || {}) : [],
+        hasLinter: files.includes('.eslintrc.js') || files.includes('.eslintrc.json') || !!pkgJson?.devDependencies?.eslint,
+        hasFormatter: files.includes('.prettierrc') || !!pkgJson?.devDependencies?.prettier,
+        projectStructure: detectStructure(resolvedPath)
     };
+}
+function readPackageJson(projectPath) {
+    try {
+        const pkgPath = path.join(projectPath, 'package.json');
+        const content = fs.readFileSync(pkgPath, 'utf-8');
+        return JSON.parse(content);
+    }
+    catch (err) {
+        if (err instanceof SyntaxError) {
+            console.warn(`Invalid JSON in package.json: ${err.message}`);
+        }
+        return null;
+    }
+}
+function detectStructure(projectPath) {
+    try {
+        const entries = fs.readdirSync(projectPath, { withFileTypes: true });
+        if (entries.some(e => e.isDirectory() && e.name === 'packages'))
+            return 'monorepo';
+        if (entries.some(e => e.isDirectory() && e.name === 'src'))
+            return 'src-based';
+        return 'flat';
+    }
+    catch {
+        return 'unknown';
+    }
 }
 function detectFramework(files) {
     if (files.includes('next.config.js'))
@@ -43,10 +78,14 @@ function detectLanguages(projectPath) {
     scanDirectory(projectPath, extensions);
     return Array.from(extensions);
 }
-function scanDirectory(dir, extensions, depth = 0) {
+function scanDirectory(dir, extensions, depth = 0, visited = new Set()) {
     if (depth > 2)
         return;
     try {
+        const realPath = fs.realpathSync(dir);
+        if (visited.has(realPath))
+            return;
+        visited.add(realPath);
         const entries = fs.readdirSync(dir, { withFileTypes: true });
         for (const entry of entries) {
             if (entry.name.startsWith('.') || entry.name === 'node_modules')
@@ -57,7 +96,7 @@ function scanDirectory(dir, extensions, depth = 0) {
                     extensions.add(ext);
             }
             else if (entry.isDirectory()) {
-                scanDirectory(path.join(dir, entry.name), extensions, depth + 1);
+                scanDirectory(path.join(dir, entry.name), extensions, depth + 1, visited);
             }
         }
     }
@@ -77,6 +116,27 @@ function inferPrinciples(analysis) {
             title: 'Test-Driven Development',
             description: 'Write tests before implementation',
             rationale: 'Existing test infrastructure - maintain high test coverage'
+        });
+    }
+    if (analysis.hasLinter || analysis.hasFormatter) {
+        principles.push({
+            title: 'Code Style Consistency',
+            description: `Follow ${analysis.hasLinter ? 'ESLint' : ''}${analysis.hasLinter && analysis.hasFormatter ? ' and ' : ''}${analysis.hasFormatter ? 'Prettier' : ''} rules`,
+            rationale: 'Project has established code style tools - maintain consistency'
+        });
+    }
+    if (analysis.projectStructure === 'monorepo') {
+        principles.push({
+            title: 'Monorepo Architecture',
+            description: 'Respect package boundaries and shared dependencies',
+            rationale: 'Project uses monorepo structure - maintain clear module separation'
+        });
+    }
+    if (analysis.framework) {
+        principles.push({
+            title: `${analysis.framework} Best Practices`,
+            description: `Follow ${analysis.framework} conventions and patterns`,
+            rationale: `Project uses ${analysis.framework} - align with framework idioms`
         });
     }
     principles.push({
