@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"gh release view v7.0.5\",\"description\":\"检查 GitHub Release\"}",
-  "error": "Exit code 1\nrelease not found",
-  "timestamp": "2026-03-11T15:29:40.770Z",
+  "tool_input_preview": "{\"command\":\"ls -la .speckit/ 2>&1\",\"description\":\"查看 speckit 目录\"}",
+  "error": "Exit code 2\nls: cannot access '.speckit/': No such file or directory",
+  "timestamp": "2026-03-12T03:47:49.828Z",
   "retry_count": 1
 }

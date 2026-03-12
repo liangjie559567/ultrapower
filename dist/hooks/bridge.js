@@ -8,6 +8,7 @@ import { loadHandler } from "./handlers/index.js";
 import { HOOK_ROUTES } from "./handlers/route-map.js";
 import { loadConfig } from "../config/loader.js";
 import { requiredKeysForHook, getSkipHooks, resetSkipHooksCache } from "./validation.js";
+import { clearStaleSessionDirs } from "./mode-registry/index.js";
 export { resetSkipHooksCache, requiredKeysForHook };
 /**
  * Main hook processor
@@ -40,6 +41,14 @@ export async function processHook(hookType, rawInput) {
     }
     catch (error) {
         console.error(`[hook-bridge] Error in ${hookType}:`, error);
+        // Clean up stale state on error
+        const cwd = input.directory || input.cwd || process.cwd();
+        try {
+            clearStaleSessionDirs(cwd, 60 * 60 * 1000); // 1 hour
+        }
+        catch (cleanupError) {
+            console.error('[hook-bridge] State cleanup failed:', cleanupError);
+        }
         const severity = HOOK_SEVERITY[hookType];
         // CRITICAL hooks must block on error (security default)
         if (severity === HookSeverity.CRITICAL) {
@@ -87,8 +96,8 @@ export async function main() {
     try {
         input = JSON.parse(inputStr);
     }
-    catch {
-        // Invalid JSON, use empty object
+    catch (err) {
+        console.error('[hook-bridge] Invalid JSON input:', err);
     }
     const output = await processHook(hookType, input);
     console.log(JSON.stringify(output));

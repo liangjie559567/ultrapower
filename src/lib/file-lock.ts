@@ -76,6 +76,86 @@ export async function acquireLock(
 }
 
 /**
+ * 在文件锁保护下执行同步操作
+ */
+export function withFileLockSync<T>(
+  filePath: string,
+  fn: () => T,
+  maxRetries: number = 20
+): T {
+  const lockPath = `${filePath}.lock`;
+  const lockFile = path.join(lockPath, 'lock.json');
+  const fileDir = path.dirname(filePath);
+  const lockPathParent = path.dirname(lockPath);
+
+  if (!fs.existsSync(fileDir)) {
+    fs.mkdirSync(fileDir, { recursive: true });
+  }
+  if (!fs.existsSync(lockPathParent)) {
+    fs.mkdirSync(lockPathParent, { recursive: true });
+  }
+
+  let lastError: Error | null = null;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      fs.mkdirSync(lockPath);
+      const meta: LockMeta = { pid: process.pid, timestamp: Date.now() };
+      fs.writeFileSync(lockFile, JSON.stringify(meta), 'utf8');
+      break;
+    } catch (err) {
+      const nodeErr = err as NodeJS.ErrnoException;
+      if (nodeErr.code === 'EEXIST') {
+        let meta: LockMeta | null = null;
+        try {
+          const raw = fs.readFileSync(lockFile, 'utf8');
+          meta = JSON.parse(raw) as LockMeta;
+        } catch {
+          // Treat as stale lock
+        }
+
+        const isStale = meta === null || Date.now() - meta.timestamp > 30000;
+        if (isStale) {
+          fs.rmSync(lockPath, { recursive: true, force: true });
+          continue;
+        }
+
+        if (attempt < maxRetries) {
+          const delay = Math.min(100 * Math.pow(2, attempt), 1000) + Math.random() * 50;
+          const start = Date.now();
+          while (Date.now() - start < delay) {
+            // Busy wait
+          }
+          continue;
+        }
+        lastError = new Error(`[file-lock] 锁已被占用: ${lockPath}`);
+      } else if (nodeErr.code === 'ENOENT') {
+        fs.rmSync(lockPath, { recursive: true, force: true });
+        continue;
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  if (lastError) {
+    throw lastError;
+  }
+
+  try {
+    return fn();
+  } finally {
+    try {
+      fs.rmSync(lockPath, { recursive: true, force: true });
+    } catch (err) {
+      const nodeErr = err as NodeJS.ErrnoException;
+      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
+        throw err;
+      }
+    }
+  }
+}
+
+/**
  * 在文件锁保护下执行异步操作
  */
 export async function withFileLock<T>(

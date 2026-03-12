@@ -198,8 +198,9 @@ export function normalizeHookInput(raw, hookType) {
     }
     const rawObj = raw;
     const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
-    // Fast path for already-camelCase non-sensitive input
-    if (isAlreadyCamelCase(rawObj) && !isSensitive) {
+    // Fast path for already-camelCase non-sensitive input only
+    // Sensitive hooks MUST go through full Zod validation + whitelist filtering
+    if (!isSensitive && isAlreadyCamelCase(rawObj)) {
         return normalizeFastPath(rawObj, hookType);
     }
     // Pre-filter sensitive hooks before validation
