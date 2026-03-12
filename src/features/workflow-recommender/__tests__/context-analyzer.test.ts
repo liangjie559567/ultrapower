@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { analyzeContext } from '../context-analyzer.js';
+import { analyzeContext } from './context-analyzer.js.js';
 
 describe('Context Analyzer', () => {
   it('extracts file count', () => {

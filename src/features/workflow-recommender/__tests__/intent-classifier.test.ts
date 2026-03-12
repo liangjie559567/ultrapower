@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { classifyIntent } from '../intent-classifier.js';
+import { classifyIntent } from './intent-classifier.js.js';
 
 describe('Intent Classifier', () => {
   it('classifies single feature intent', () => {
