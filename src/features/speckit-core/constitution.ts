@@ -35,26 +35,26 @@ async function analyzeProject(projectPath: string): Promise<ProjectAnalysis> {
     throw new Error('Path traversal detected');
   }
 
-  const files = fs.readdirSync(resolvedPath);
-  const pkgJson = readPackageJson(resolvedPath);
+  const files = await fs.promises.readdir(resolvedPath);
+  const pkgJson = await readPackageJson(resolvedPath);
 
   return {
     hasTypeScript: files.includes('tsconfig.json'),
     hasTests: files.some(f => f.includes('test') || f.includes('spec')),
     framework: detectFramework(files),
     packageManager: detectPackageManager(files),
-    languages: detectLanguages(resolvedPath),
+    languages: await detectLanguages(resolvedPath),
     dependencies: pkgJson ? Object.keys(pkgJson.dependencies || {}) : [],
     hasLinter: files.includes('.eslintrc.js') || files.includes('.eslintrc.json') || !!pkgJson?.devDependencies?.eslint,
     hasFormatter: files.includes('.prettierrc') || !!pkgJson?.devDependencies?.prettier,
-    projectStructure: detectStructure(resolvedPath)
+    projectStructure: await detectStructure(resolvedPath)
   };
 }
 
-function readPackageJson(projectPath: string): any {
+async function readPackageJson(projectPath: string): Promise<any> {
   try {
     const pkgPath = path.join(projectPath, 'package.json');
-    const content = fs.readFileSync(pkgPath, 'utf-8');
+    const content = await fs.promises.readFile(pkgPath, 'utf-8');
     return JSON.parse(content);
   } catch (err) {
     if (err instanceof SyntaxError) {
@@ -64,9 +64,9 @@ function readPackageJson(projectPath: string): any {
   }
 }
 
-function detectStructure(projectPath: string): string {
+async function detectStructure(projectPath: string): Promise<string> {
   try {
-    const entries = fs.readdirSync(projectPath, { withFileTypes: true });
+    const entries = await fs.promises.readdir(projectPath, { withFileTypes: true });
     if (entries.some(e => e.isDirectory() && e.name === 'packages')) return 'monorepo';
     if (entries.some(e => e.isDirectory() && e.name === 'src')) return 'src-based';
     return 'flat';
@@ -88,21 +88,21 @@ function detectPackageManager(files: string[]): string | undefined {
   return undefined;
 }
 
-function detectLanguages(projectPath: string): string[] {
+async function detectLanguages(projectPath: string): Promise<string[]> {
   const extensions = new Set<string>();
-  scanDirectory(projectPath, extensions);
+  await scanDirectory(projectPath, extensions);
   return Array.from(extensions);
 }
 
-function scanDirectory(dir: string, extensions: Set<string>, depth = 0, visited = new Set<string>()) {
+async function scanDirectory(dir: string, extensions: Set<string>, depth = 0, visited = new Set<string>()) {
   if (depth > 2) return;
 
   try {
-    const realPath = fs.realpathSync(dir);
+    const realPath = await fs.promises.realpath(dir);
     if (visited.has(realPath)) return;
     visited.add(realPath);
 
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    const entries = await fs.promises.readdir(dir, { withFileTypes: true });
     for (const entry of entries) {
       if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
 
@@ -110,10 +110,12 @@ function scanDirectory(dir: string, extensions: Set<string>, depth = 0, visited 
         const ext = path.extname(entry.name);
         if (ext) extensions.add(ext);
       } else if (entry.isDirectory()) {
-        scanDirectory(path.join(dir, entry.name), extensions, depth + 1, visited);
+        await scanDirectory(path.join(dir, entry.name), extensions, depth + 1, visited);
       }
     }
-  } catch {}
+  } catch (_error) {
+    // Skip inaccessible directories
+  }
 }
 
 function inferPrinciples(analysis: ProjectAnalysis): Principle[] {
