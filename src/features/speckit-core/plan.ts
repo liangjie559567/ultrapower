@@ -7,6 +7,13 @@ import * as path from 'path';
 import type { Specification, TechnicalPlan, Component, Risk } from './types.js';
 
 export async function generatePlan(spec: Specification, projectPath?: string): Promise<TechnicalPlan> {
+  if (!spec.feature || typeof spec.feature !== 'string') {
+    throw new Error('Invalid feature name');
+  }
+  if (spec.feature.includes('..') || spec.feature.includes('/') || spec.feature.includes('\\')) {
+    throw new Error('Invalid feature name: path traversal detected');
+  }
+
   const existingFiles = projectPath ? scanExistingFiles(projectPath, spec.feature) : [];
 
   return {
@@ -33,12 +40,19 @@ function scanExistingFiles(projectPath: string, feature: string): string[] {
 
   try {
     if (fs.existsSync(featurePath)) {
-      const files = fs.readdirSync(featurePath, { recursive: true });
-      files.forEach(f => {
-        if (typeof f === 'string' && (f.endsWith('.ts') || f.endsWith('.tsx'))) {
-          existing.push(path.join('src', 'features', feature, f));
+      const scanRecursive = (dir: string, base: string) => {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          const relativePath = path.join(base, entry.name);
+          if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
+            existing.push(relativePath);
+          } else if (entry.isDirectory()) {
+            scanRecursive(fullPath, relativePath);
+          }
         }
-      });
+      };
+      scanRecursive(featurePath, path.join('src', 'features', feature));
     }
   } catch {}
 

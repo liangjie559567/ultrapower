@@ -5,21 +5,20 @@
 import type { TechnicalPlan, Task, Specification } from './types.js';
 
 export async function generateTasks(plan: TechnicalPlan, spec?: Specification): Promise<Task[]> {
-  const tasks: Task[] = [];
   let taskId = 1;
 
   // 为每个组件生成实现任务
-  plan.components.forEach((component, idx) => {
+  const tasks: Task[] = plan.components.map((component) => {
     const isExisting = component.name.includes('Existing');
     const effort = estimateEffort(component, spec);
 
-    tasks.push({
+    return {
       id: `TASK-${String(taskId++).padStart(3, '0')}`,
       title: isExisting ? `Update ${component.name}` : `Implement ${component.name}`,
       description: `${component.purpose}\nFiles: ${component.files.join(', ')}`,
       dependencies: [],
       estimatedEffort: effort
-    });
+    };
   });
 
   // 测试任务依赖所有实现任务

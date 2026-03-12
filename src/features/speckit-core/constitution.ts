@@ -30,27 +30,36 @@ interface ProjectAnalysis {
 }
 
 async function analyzeProject(projectPath: string): Promise<ProjectAnalysis> {
-  const files = fs.readdirSync(projectPath);
-  const pkgJson = readPackageJson(projectPath);
+  const resolvedPath = path.resolve(projectPath);
+  if (!resolvedPath.startsWith(path.resolve(process.cwd()))) {
+    throw new Error('Path traversal detected');
+  }
+
+  const files = fs.readdirSync(resolvedPath);
+  const pkgJson = readPackageJson(resolvedPath);
 
   return {
     hasTypeScript: files.includes('tsconfig.json'),
     hasTests: files.some(f => f.includes('test') || f.includes('spec')),
     framework: detectFramework(files),
     packageManager: detectPackageManager(files),
-    languages: detectLanguages(projectPath),
+    languages: detectLanguages(resolvedPath),
     dependencies: pkgJson ? Object.keys(pkgJson.dependencies || {}) : [],
     hasLinter: files.includes('.eslintrc.js') || files.includes('.eslintrc.json') || !!pkgJson?.devDependencies?.eslint,
     hasFormatter: files.includes('.prettierrc') || !!pkgJson?.devDependencies?.prettier,
-    projectStructure: detectStructure(projectPath)
+    projectStructure: detectStructure(resolvedPath)
   };
 }
 
 function readPackageJson(projectPath: string): any {
   try {
     const pkgPath = path.join(projectPath, 'package.json');
-    return JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-  } catch {
+    const content = fs.readFileSync(pkgPath, 'utf-8');
+    return JSON.parse(content);
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      console.warn(`Invalid JSON in package.json: ${err.message}`);
+    }
     return null;
   }
 }
@@ -85,10 +94,14 @@ function detectLanguages(projectPath: string): string[] {
   return Array.from(extensions);
 }
 
-function scanDirectory(dir: string, extensions: Set<string>, depth = 0) {
+function scanDirectory(dir: string, extensions: Set<string>, depth = 0, visited = new Set<string>()) {
   if (depth > 2) return;
 
   try {
+    const realPath = fs.realpathSync(dir);
+    if (visited.has(realPath)) return;
+    visited.add(realPath);
+
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
@@ -97,7 +110,7 @@ function scanDirectory(dir: string, extensions: Set<string>, depth = 0) {
         const ext = path.extname(entry.name);
         if (ext) extensions.add(ext);
       } else if (entry.isDirectory()) {
-        scanDirectory(path.join(dir, entry.name), extensions, depth + 1);
+        scanDirectory(path.join(dir, entry.name), extensions, depth + 1, visited);
       }
     }
   } catch {}

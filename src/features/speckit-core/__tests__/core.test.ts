@@ -9,6 +9,10 @@ import { generatePlan, formatPlan } from '../plan.js';
 import { generateTasks, formatTasks } from '../tasks.js';
 
 describe('Spec Kit Core', () => {
+  it('should reject path traversal in constitution', async () => {
+    await expect(generateConstitution('../../../etc')).rejects.toThrow('Path traversal detected');
+  });
+
   it('should generate constitution with project analysis', async () => {
     const constitution = await generateConstitution(process.cwd());
     expect(constitution.projectName).toBe('ultrapower');
@@ -37,6 +41,12 @@ describe('Spec Kit Core', () => {
     const plan = await generatePlan(spec, process.cwd());
     expect(plan.components.length).toBeGreaterThan(0);
     expect(plan.risks.length).toBeGreaterThan(0);
+  });
+
+  it('should reject invalid feature names in plan', async () => {
+    const constitution = await generateConstitution(process.cwd());
+    const spec = await generateSpecification('../../../etc', constitution);
+    await expect(generatePlan(spec, process.cwd())).rejects.toThrow('path traversal detected');
   });
 
   it('should generate tasks with proper dependencies', async () => {
