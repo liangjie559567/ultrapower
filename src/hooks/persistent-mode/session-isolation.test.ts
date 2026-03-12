@@ -23,6 +23,9 @@ describe("Persistent Mode Session Isolation (Issue #311)", () => {
       const sessionId = "session-owner";
       activateUltrawork("Fix the bug", sessionId, tempDir);
 
+      // Wait for file system to flush (CI timing issue)
+      await new Promise(resolve => setTimeout(resolve, 50));
+
       const result = await checkPersistentModes(sessionId, tempDir);
       expect(result.shouldBlock).toBe(true);
       expect(result.mode).toBe("ultrawork");
@@ -32,6 +35,9 @@ describe("Persistent Mode Session Isolation (Issue #311)", () => {
       const ownerSession = "session-owner";
       const otherSession = "session-intruder";
       activateUltrawork("Fix the bug", ownerSession, tempDir);
+
+      // Wait for file system to flush (CI timing issue)
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       const result = await checkPersistentModes(otherSession, tempDir);
       expect(result.shouldBlock).toBe(false);
