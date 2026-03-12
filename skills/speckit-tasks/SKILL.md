@@ -14,6 +14,13 @@ description: "Spec Kit Tasks - 任务分解和优先级排序"
 
 ## 实现
 
-使用 slash 命令：`/speckit.tasks`
+使用 ultrapower 原生实现：
 
-生成 `.speckit/tasks.md` 任务清单。
+```typescript
+import { generateTasks, formatTasks } from '@/features/speckit-core';
+
+const tasks = await generateTasks(plan);
+const markdown = formatTasks(tasks);
+```
+
+生成 `.specify/tasks.md` 任务清单。

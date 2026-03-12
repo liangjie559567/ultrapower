@@ -14,6 +14,13 @@ description: "Spec Kit Plan - 生成技术实现计划"
 
 ## 实现
 
-使用 slash 命令：`/speckit.plan`
+使用 ultrapower 原生实现：
 
-生成 `.speckit/plan.md` 技术方案文件。
+```typescript
+import { generatePlan, formatPlan } from '@/features/speckit-core';
+
+const plan = await generatePlan(specification);
+const markdown = formatPlan(plan);
+```
+
+生成 `.specify/plan.md` 技术方案文件。
