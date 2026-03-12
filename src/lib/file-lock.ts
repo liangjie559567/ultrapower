@@ -83,11 +83,10 @@ export function withFileLockSync<T>(
   fn: () => T,
   maxRetries: number = 20
 ): T {
-  const resolvedPath = path.resolve(filePath);
-  const allowedDir = path.resolve(process.cwd());
-  if (!resolvedPath.startsWith(allowedDir)) {
+  if (filePath.includes('..')) {
     throw new Error('[file-lock] Path traversal attempt detected');
   }
+  const resolvedPath = path.resolve(filePath);
   const lockPath = `${resolvedPath}.lock`;
   const lockFile = path.join(lockPath, 'lock.json');
   const fileDir = path.dirname(resolvedPath);
@@ -169,11 +168,10 @@ export async function withFileLock<T>(
   maxRetries: number = 20,
   _retryDelay: number = 100
 ): Promise<T> {
-  const resolvedPath = path.resolve(filePath);
-  const allowedDir = path.resolve(process.cwd());
-  if (!resolvedPath.startsWith(allowedDir)) {
+  if (filePath.includes('..')) {
     throw new Error('[file-lock] Path traversal attempt detected');
   }
+  const resolvedPath = path.resolve(filePath);
   const lockPath = `${resolvedPath}.lock`;
   const lockFile = path.join(lockPath, 'lock.json');
 

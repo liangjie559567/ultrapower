@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"ls -la .speckit/ 2>&1\",\"description\":\"查看 speckit 目录\"}",
-  "error": "Exit code 2\nls: cannot access '.speckit/': No such file or directory",
-  "timestamp": "2026-03-12T03:47:49.828Z",
+  "tool_input_preview": "{\"command\":\"npm test 2>&1 > test-output.txt && tail -10 test-output.txt\",\"timeout\":90000,\"description\":\"Run full test suite and capture results\"}",
+  "error": "Exit code 1\n\u001b[90mstderr\u001b[2m | src/__tests__/job-state-db.test.ts\u001b[2m > \u001b[22m\u001b[2mjob-state-db\u001b[2m > \u001b[22m\u001b[2minitJobDb\u001b[2m > \u001b[22m\u001b[2mshould initialize the database successfully\n\u001b[22m\u001b[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.\n\n\u001b[90mstderr\u001b[2m | src/__tests__/job-state-db.test.ts\u001b[2m > \u001b[22m\u001b[2mjob-state-db\u001b[2m > \u001b[22m\u001b[2minitJobDb\u001b[2m > \u001b[22m\u001b[2mshould create the jobs.db file\n\u001b[22m\u001b[39m[job-state-db] DEPRECATED: closeJobDb() called w...",
+  "timestamp": "2026-03-12T04:16:32.633Z",
   "retry_count": 1
 }

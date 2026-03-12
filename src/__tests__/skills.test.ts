@@ -8,9 +8,9 @@ describe('Builtin Skills', () => {
   });
 
   describe('createBuiltinSkills()', () => {
-    it('should return correct number of skills (72)', () => {
+    it('should return correct number of skills (77)', () => {
       const skills = createBuiltinSkills();
-      expect(skills).toHaveLength(72);
+      expect(skills).toHaveLength(77);
     });
 
     it('should return an array of BuiltinSkill objects', () => {
@@ -132,6 +132,11 @@ describe('Builtin Skills', () => {
         'wizard',
         'writing-skills',
         'nexus',
+        'speckit-constitution',
+        'speckit-specify',
+        'speckit-plan',
+        'speckit-tasks',
+        'speckit-implement',
       ];
 
       const actualSkillNames = skills.map((s) => s.name);
@@ -176,7 +181,7 @@ describe('Builtin Skills', () => {
     it('should return all skill names', () => {
       const names = listBuiltinSkillNames();
 
-      expect(names).toHaveLength(72);
+      expect(names).toHaveLength(77);
       expect(names).toContain('autopilot');
       expect(names).toContain('cancel');
       expect(names).toContain('ccg');
