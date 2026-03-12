@@ -2,7 +2,7 @@
  * 进度显示使用示例
  */
 
-import { Spinner, ProgressBar, AgentStatusIndicator } from './index.js';
+import { Spinner, ProgressBar } from './index.js';
 import { AgentStatusTracker } from '../../agents/status.js';
 
 // 示例 1: 简单 Spinner

@@ -10,13 +10,17 @@ export function createConfigNotifyProfileCommand(): Command {
     .option('--list', 'List all profiles')
     .option('--show', 'Show profile configuration')
     .option('--delete', 'Delete profile')
-    .action(async (profile: string | undefined, options: any) => {
+    .action(async (profile: string | undefined, options: { list?: boolean; show?: boolean; delete?: boolean }) => {
       const configDir = getClaudeConfigDir();
       const configPath = join(configDir, '.omc-config.json');
 
       mkdirSync(configDir, { recursive: true });
 
-      let config: any = { silentAutoUpdate: false };
+      let config: {
+        silentAutoUpdate?: boolean;
+        notificationProfiles?: Record<string, unknown>;
+        [key: string]: unknown
+      } = { silentAutoUpdate: false };
       try {
         config = JSON.parse(readFileSync(configPath, 'utf-8'));
       } catch {

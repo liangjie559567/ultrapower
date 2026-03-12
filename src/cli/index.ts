@@ -65,7 +65,7 @@ for (const { name } of commandRegistry) {
       .description(`Loading ${name}...`)
       .allowUnknownOption()
       .allowExcessArguments();
-    stub.action(async (...args) => {
+    stub.action(async () => {
       const loader = commandRegistry.find(c => c.name === name);
       if (loader) {
         const { default: cmd } = await loader.loader();

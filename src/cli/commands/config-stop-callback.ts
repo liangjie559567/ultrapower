@@ -19,13 +19,18 @@ export function createConfigStopCallbackCommand(): Command {
     .option('--remove-tag <tag>', 'Remove a tag')
     .option('--clear-tags', 'Clear all tags')
     .option('--show', 'Show current configuration')
-    .action(async (platform: string, options: any) => {
+    .action(async (platform: string, options: { profile?: string; enable?: boolean; disable?: boolean; webhook?: string; token?: string; chat?: string; channelId?: string; tagList?: string; addTag?: string; removeTag?: string; clearTags?: boolean; show?: boolean }) => {
       const configDir = getClaudeConfigDir();
       const configPath = join(configDir, '.omc-config.json');
 
       mkdirSync(configDir, { recursive: true });
 
-      let config: any = { silentAutoUpdate: false };
+      let config: {
+        silentAutoUpdate?: boolean;
+        notificationProfiles?: Record<string, Record<string, unknown>>;
+        stopHookCallbacks?: Record<string, unknown>;
+        [key: string]: unknown
+      } = { silentAutoUpdate: false };
       try {
         config = JSON.parse(readFileSync(configPath, 'utf-8'));
       } catch {
@@ -46,7 +51,7 @@ export function createConfigStopCallbackCommand(): Command {
         config.notificationProfiles[options.profile] = config.notificationProfiles[options.profile] || { enabled: true };
         const profile = config.notificationProfiles[options.profile];
         profile[platform] = profile[platform] || {};
-        const platformConfig = profile[platform];
+        const platformConfig = profile[platform] as Record<string, unknown>;
 
         if (options.enable !== undefined) platformConfig.enabled = options.enable;
         if (options.disable !== undefined) platformConfig.enabled = !options.disable;
@@ -60,7 +65,7 @@ export function createConfigStopCallbackCommand(): Command {
       } else {
         config.stopHookCallbacks = config.stopHookCallbacks || {};
         config.stopHookCallbacks[platform] = config.stopHookCallbacks[platform] || {};
-        const platformConfig = config.stopHookCallbacks[platform];
+        const platformConfig = config.stopHookCallbacks[platform] as Record<string, unknown>;
 
         if (options.enable !== undefined) platformConfig.enabled = options.enable;
         if (options.disable !== undefined) platformConfig.enabled = !options.disable;
@@ -73,11 +78,11 @@ export function createConfigStopCallbackCommand(): Command {
             platformConfig.tagList = options.tagList.split(',').map((t: string) => t.trim());
           }
           if (options.addTag) {
-            platformConfig.tagList = platformConfig.tagList || [];
-            platformConfig.tagList.push(options.addTag);
+            platformConfig.tagList = (platformConfig.tagList as string[] || []);
+            (platformConfig.tagList as string[]).push(options.addTag);
           }
           if (options.removeTag) {
-            platformConfig.tagList = (platformConfig.tagList || []).filter((t: string) => t !== options.removeTag);
+            platformConfig.tagList = ((platformConfig.tagList as string[]) || []).filter((t: string) => t !== options.removeTag);
           }
           if (options.clearTags) {
             platformConfig.tagList = [];

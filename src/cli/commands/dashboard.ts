@@ -1,5 +1,4 @@
 import { Command } from 'commander';
-import chalk from 'chalk';
 
 export function createDashboardCommand(): Command {
   return new Command('dashboard')
