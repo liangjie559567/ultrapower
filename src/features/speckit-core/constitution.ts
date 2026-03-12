@@ -51,7 +51,13 @@ async function analyzeProject(projectPath: string): Promise<ProjectAnalysis> {
   };
 }
 
-async function readPackageJson(projectPath: string): Promise<any> {
+interface PackageJson {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  [key: string]: unknown;
+}
+
+async function readPackageJson(projectPath: string): Promise<PackageJson | null> {
   try {
     const pkgPath = path.join(projectPath, 'package.json');
     const content = await fs.promises.readFile(pkgPath, 'utf-8');

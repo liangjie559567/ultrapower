@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, copyFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { getConfigDir } from '../../utils/config-dir.js';
-import { atomicWriteJsonSync, atomicWriteFileSync } from '../../lib/atomic-write.js';
+import { atomicWriteJsonSync } from '../../lib/atomic-write.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const TUTORIAL_STATE_FILE = join(getConfigDir(), '.tutorial-state.json');

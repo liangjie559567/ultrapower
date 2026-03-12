@@ -4,7 +4,7 @@
  */
 
 import { shouldUseSpecKit } from './index.js';
-import { getNextSpecKitStep, SPECKIT_ROUTES } from './router.js';
+import { getNextSpecKitStep } from './router.js';
 
 export interface SpecKitRecommendation {
   useSpecKit: boolean;

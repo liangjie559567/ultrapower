@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest';
 import { generateConstitution, formatConstitution } from '../constitution.js';
-import { generateSpecification, formatSpecification } from '../specify.js';
-import { generatePlan, formatPlan } from '../plan.js';
-import { generateTasks, formatTasks } from '../tasks.js';
+import { generateSpecification } from '../specify.js';
+import { generatePlan } from '../plan.js';
+import { generateTasks } from '../tasks.js';
 
 describe('Spec Kit Core', () => {
   it('should reject path traversal in constitution', async () => {

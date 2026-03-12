@@ -307,6 +307,9 @@ describe('withFileLock', () => {
       })
     ]);
 
+    // Wait for Windows to release file handles
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     expect(results.length).toBe(6);
     // 验证每对数字都存在（不强制顺序，因为 Promise.all 不保证完成顺序）
     const pairs = [[1,2], [3,4], [5,6]];

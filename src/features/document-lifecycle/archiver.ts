@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs';
-import { join, basename } from 'path';
+import { join } from 'path';
 import { createGzip } from 'zlib';
 import { pipeline } from 'stream/promises';
 import { createReadStream, createWriteStream } from 'fs';

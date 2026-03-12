@@ -3,8 +3,6 @@
  * 将 Spec Kit 工作流集成到 next-step-router
  */
 
-import { shouldUseSpecKit, getSpecKitCommand } from './index.js';
-
 export interface SpecKitRoute {
   stage: string;
   nextCommand: string;

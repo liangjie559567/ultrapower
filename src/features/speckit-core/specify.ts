@@ -7,7 +7,7 @@ import type { Constitution, Specification, Requirement } from './types.js';
 export async function generateSpecification(
   feature: string,
   constitution: Constitution,
-  projectPath?: string
+  _projectPath?: string
 ): Promise<Specification> {
   const featureType = inferFeatureType(feature);
 

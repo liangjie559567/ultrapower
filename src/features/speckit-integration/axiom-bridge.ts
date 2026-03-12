@@ -3,7 +3,6 @@
  * 将 Spec Kit 工作流集成到 Axiom 需求分析流程
  */
 
-import { analyzeSpecKitFit } from './recommender.js';
 
 /**
  * 在 Axiom draft 阶段推荐 Spec Kit
