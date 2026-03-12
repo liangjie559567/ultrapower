@@ -16,8 +16,7 @@ import { getClaudeConfigDir } from '../../utils/paths.js';
 import { resolveToWorktreeRoot } from '../../lib/worktree-paths.js';
 import { StopContext, isUserAbort, isContextLimitStop } from '../todo-continuation/index.js';
 import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
-import { readLastToolError, clearToolErrorState, getToolErrorRetryGuidance, type ToolErrorState } from './tool-error.js';
-import { hookEventBus } from './event-bus.js';
+import { readLastToolError, getToolErrorRetryGuidance, type ToolErrorState } from './tool-error.js';
 
 // Lazy imports via event bus
 let ultraworkModule: any;
@@ -317,8 +316,8 @@ async function checkRalphLoop(
     // Do not silently stop Ralph with unfinished work.
     // Extend the limit and continue enforcement so user-visible cancellation
     // remains the only explicit termination path.
-    state.max_iterations += 10;
-    ralph.writeRalphState(workingDir, state, sessionId);
+    const extendedState = { ...state, max_iterations: state.max_iterations + 10 };
+    ralph.writeRalphState(workingDir, extendedState, sessionId);
   }
 
   // Read tool error before generating message

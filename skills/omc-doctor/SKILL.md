@@ -110,6 +110,51 @@ try {
   - 加剧因素：`PM1()` 检测目标非空则跳过复制，嵌套一旦产生安装器永远不会自动修复
   - 自动修复：5.0.20+ 的 `postinstall` 脚本会自动检测并修复任意深度嵌套
 
+### 第一步 quater：检查 Windows 路径格式问题
+
+检查 settings.json 中的 statusLine 和 hooks 路径是否使用了 Windows 反斜杠：
+
+```bash
+node -e "
+const p=require('path'),f=require('fs'),h=require('os').homedir();
+const d=process.env.CLAUDE_CONFIG_DIR||p.join(h,'.claude');
+const settingsPath=p.join(d,'settings.json');
+if(f.existsSync(settingsPath)){
+  const s=JSON.parse(f.readFileSync(settingsPath,'utf-8'));
+  let issues=[];
+  const bs=String.fromCharCode(92);
+  if(s.statusLine?.command?.includes(bs)){
+    issues.push('statusLine.command contains backslashes');
+  }
+  if(s.hooks){
+    for(const [event,configs] of Object.entries(s.hooks)){
+      for(const cfg of configs){
+        if(cfg.hooks){
+          for(const hk of cfg.hooks){
+            if(hk.command?.includes(bs)){
+              issues.push(event+' hook contains backslashes');
+            }
+          }
+        }
+      }
+    }
+  }
+  if(issues.length>0){
+    console.log('CRITICAL: Windows path format issues found:');
+    issues.forEach(i=>console.log('  - '+i));
+  }else{
+    console.log('OK: All paths use forward slashes');
+  }
+}else{
+  console.log('WARN: settings.json not found');
+}
+"
+```
+
+**诊断**：
+* 发现反斜杠：严重错误——导致 HUD 和 hooks 无法执行
+* 修复方法：运行 `/ultrapower:omc-setup` 自动修复
+
 ### 第二步：检查 settings.json 中的旧版 hook
 
 读取 `~/.claude/settings.json`（用户级）和 `./.claude/settings.json`（项目级），检查是否存在包含以下条目的 `"hooks"` 键：

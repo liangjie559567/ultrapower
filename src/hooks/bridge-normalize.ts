@@ -12,6 +12,7 @@
 
 import { z } from 'zod';
 import type { HookInput } from './bridge-types.js';
+import * as logger from '../lib/logger.js';
 
 // --- Zod schemas for hook input validation ---
 
@@ -116,6 +117,17 @@ const STRICT_WHITELIST: Record<string, string[]> = {
   'setup-init': ['sessionId', 'directory'],
   'setup-maintenance': ['sessionId', 'directory'],
   'session-end': ['sessionId', 'directory'],
+  'tool-call': ['toolName', 'toolInput', 'timestamp'],
+  'tool-response': ['toolName', 'toolOutput', 'success', 'error', 'duration'],
+  'agent-start': ['agent_type', 'agent_id', 'prompt'],
+  'agent-stop': ['agent_id', 'success', 'output', 'duration'],
+  'session-start': ['sessionId', 'directory', 'timestamp'],
+  'message-sent': ['message', 'role', 'timestamp'],
+  'state-change': ['mode', 'from_state', 'to_state', 'timestamp'],
+  'error-occurred': ['error', 'context', 'timestamp', 'severity'],
+  'file-read': ['file_path', 'success'],
+  'file-write': ['file_path', 'success', 'bytes_written'],
+  'custom-hook': ['hook_name', 'data'],
 };
 
 /** Required keys per HookType (camelCase, post-normalization) */
@@ -245,8 +257,9 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
   const rawObj = raw as Record<string, unknown>;
   const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
 
-  // Fast path for already-camelCase non-sensitive input
-  if (isAlreadyCamelCase(rawObj) && !isSensitive) {
+  // Fast path for already-camelCase non-sensitive input only
+  // Sensitive hooks MUST go through full Zod validation + whitelist filtering
+  if (!isSensitive && isAlreadyCamelCase(rawObj)) {
     return normalizeFastPath(rawObj, hookType);
   }
 
@@ -339,7 +352,8 @@ function filterSensitiveField(key: string, value: unknown, hookType: string): [s
   if (whitelist.includes(key)) {
     return [key, value];
   }
-  console.warn(`[bridge-normalize] Dropped unknown field "${key}" for sensitive hook "${hookType}"`);
+  logger.security('field_filtered', { hookType, field: key });
+  console.warn(`[bridge-normalize] [SECURITY] Dropped unknown field "${key}" for hook "${hookType}"`);
   return null;
 }
 
@@ -354,19 +368,19 @@ function filterNonSensitiveField(key: string, value: unknown, hookType?: string)
 }
 
 /**
- * Filter passthrough fields based on hook sensitivity.
+ * Filter passthrough fields based on hook type whitelist.
  *
- * - Sensitive hooks: only allow STRICT_WHITELIST (drop everything else)
- * - Other hooks: pass through unknown fields with a debug warning
+ * - Hooks with defined whitelist: only allow STRICT_WHITELIST (drop everything else)
+ * - Hooks without whitelist: pass through unknown fields with a debug warning
  */
 function filterPassthrough(input: Record<string, unknown>, hookType?: string): Record<string, unknown> {
-  const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
+  const hasWhitelist = hookType != null && STRICT_WHITELIST[hookType] != null;
   const extra: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(input)) {
     if (!shouldIncludeField(key, value)) continue;
 
-    const result = isSensitive
+    const result = hasWhitelist
       ? filterSensitiveField(key, value, hookType!)
       : filterNonSensitiveField(key, value, hookType);
 

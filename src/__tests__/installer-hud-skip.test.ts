@@ -22,6 +22,8 @@ describe('isHudEnabledInConfig', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedExistsSync.mockReset();
+    mockedReadFileSync.mockReset();
   });
 
   it('should return true when config file does not exist', () => {

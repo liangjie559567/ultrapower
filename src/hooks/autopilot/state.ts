@@ -184,24 +184,24 @@ export async function transitionPhase(
   const now = new Date().toISOString();
   const oldPhase = state.phase;
 
-  // Record duration for old phase (if we have a start time recorded)
+  const mutableState = { ...state, phase_durations: { ...state.phase_durations } };
+
   const phaseStartKey = `${oldPhase}_start_ms`;
-  if (state.phase_durations[phaseStartKey] !== undefined) {
-    const duration = Date.now() - state.phase_durations[phaseStartKey];
-    state.phase_durations[oldPhase] = duration;
+  if (mutableState.phase_durations[phaseStartKey] !== undefined) {
+    const duration = Date.now() - mutableState.phase_durations[phaseStartKey];
+    mutableState.phase_durations[oldPhase] = duration;
   }
 
-  // Transition to new phase and record start time
-  state.phase = newPhase;
-  state.phase_durations[`${newPhase}_start_ms`] = Date.now();
+  mutableState.phase = newPhase;
+  mutableState.phase_durations[`${newPhase}_start_ms`] = Date.now();
 
   if (newPhase === 'complete' || newPhase === 'failed') {
-    state.completed_at = now;
-    state.active = false;
+    mutableState.completed_at = now;
+    mutableState.active = false;
   }
 
-  await writeAutopilotState(directory, state, sessionId);
-  return state;
+  await writeAutopilotState(directory, mutableState, sessionId);
+  return mutableState;
 }
 
 /**
@@ -226,8 +226,8 @@ export async function updateExpansion(
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
-  state.expansion = { ...state.expansion, ...updates };
-  return await writeAutopilotState(directory, state, sessionId);
+  const mutableState = { ...state, expansion: { ...state.expansion, ...updates } };
+  return await writeAutopilotState(directory, mutableState, sessionId);
 }
 
 /**
@@ -241,8 +241,8 @@ export async function updatePlanning(
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
-  state.planning = { ...state.planning, ...updates };
-  return await writeAutopilotState(directory, state, sessionId);
+  const mutableState = { ...state, planning: { ...state.planning, ...updates } };
+  return await writeAutopilotState(directory, mutableState, sessionId);
 }
 
 /**
@@ -256,8 +256,8 @@ export async function updateExecution(
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
-  state.execution = { ...state.execution, ...updates };
-  return await writeAutopilotState(directory, state, sessionId);
+  const mutableState = { ...state, execution: { ...state.execution, ...updates } };
+  return await writeAutopilotState(directory, mutableState, sessionId);
 }
 
 /**
@@ -271,8 +271,8 @@ export async function updateQA(
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
-  state.qa = { ...state.qa, ...updates };
-  return await writeAutopilotState(directory, state, sessionId);
+  const mutableState = { ...state, qa: { ...state.qa, ...updates } };
+  return await writeAutopilotState(directory, mutableState, sessionId);
 }
 
 /**
@@ -286,8 +286,8 @@ export async function updateValidation(
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
-  state.validation = { ...state.validation, ...updates };
-  return await writeAutopilotState(directory, state, sessionId);
+  const mutableState = { ...state, validation: { ...state.validation, ...updates } };
+  return await writeAutopilotState(directory, mutableState, sessionId);
 }
 
 /**
@@ -580,13 +580,12 @@ export async function appendCompletedStep(
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
-  if (!state.completed_steps) {
-    state.completed_steps = [];
-  }
-  if (!state.completed_steps.includes(step)) {
-    state.completed_steps.push(step);
-  }
-  return await writeAutopilotState(directory, state, sessionId);
+  const completedSteps = state.completed_steps || [];
+  const mutableState = {
+    ...state,
+    completed_steps: completedSteps.includes(step) ? completedSteps : [...completedSteps, step]
+  };
+  return await writeAutopilotState(directory, mutableState, sessionId);
 }
 
 /**
@@ -600,6 +599,6 @@ export async function recordFailureReason(
   const state = readAutopilotState(directory, sessionId);
   if (!state) return false;
 
-  state.failure_reason = reason;
-  return await writeAutopilotState(directory, state, sessionId);
+  const mutableState = { ...state, failure_reason: reason };
+  return await writeAutopilotState(directory, mutableState, sessionId);
 }

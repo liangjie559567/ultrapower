@@ -69,6 +69,13 @@ const stateCache = new Map();
 export function clearStateCache() {
     stateCache.clear();
 }
+/**
+ * Reset WAL instance (for testing only).
+ * @internal
+ */
+export function resetWAL() {
+    walInstance = null;
+}
 // Legacy state locations (for backward compatibility)
 const LEGACY_LOCATIONS = {
     boulder: [".omc/boulder.json"],

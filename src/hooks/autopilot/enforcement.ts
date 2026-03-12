@@ -232,18 +232,18 @@ function generateContinuationPrompt(
   const errorGuidance = getToolErrorRetryGuidance(toolError);
 
   // Increment iteration
-  state.iteration += 1;
-  writeAutopilotState(directory, state, sessionId);
+  const updatedState = { ...state, iteration: state.iteration + 1 };
+  writeAutopilotState(directory, updatedState, sessionId);
 
-  const phasePrompt = getPhasePrompt(state.phase, {
-    idea: state.originalIdea,
-    specPath: state.expansion.spec_path || `${OmcPaths.AUTOPILOT}/spec.md`,
-    planPath: state.planning.plan_path || `${OmcPaths.PLANS}/autopilot-impl.md`
+  const phasePrompt = getPhasePrompt(updatedState.phase, {
+    idea: updatedState.originalIdea,
+    specPath: updatedState.expansion.spec_path || `${OmcPaths.AUTOPILOT}/spec.md`,
+    planPath: updatedState.planning.plan_path || `${OmcPaths.PLANS}/autopilot-impl.md`
   });
 
   const continuationPrompt = `<autopilot-continuation>
 ${errorGuidance ? errorGuidance + '\n' : ''}
-[AUTOPILOT - PHASE: ${state.phase.toUpperCase()} | ITERATION ${state.iteration}/${state.max_iterations}]
+[AUTOPILOT - PHASE: ${updatedState.phase.toUpperCase()} | ITERATION ${updatedState.iteration}/${updatedState.max_iterations}]
 
 Your previous response did not signal phase completion. Continue working on the current phase.
 
@@ -265,12 +265,12 @@ IMPORTANT: When the phase is complete, output the appropriate signal:
   return {
     shouldBlock: true,
     message: continuationPrompt,
-    phase: state.phase,
+    phase: updatedState.phase,
     metadata: {
-      iteration: state.iteration,
-      maxIterations: state.max_iterations,
-      tasksCompleted: state.execution.tasks_completed,
-      tasksTotal: state.execution.tasks_total,
+      iteration: updatedState.iteration,
+      maxIterations: updatedState.max_iterations,
+      tasksCompleted: updatedState.execution.tasks_completed,
+      tasksTotal: updatedState.execution.tasks_total,
       toolError: toolError || undefined
     }
   };

@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { getSessionManager } from '../../analytics/session-manager.js';
 import { getSessionCatalog } from '../../analytics/session-catalog.js';
 import { colors, renderTable, formatDuration, formatTokenCount, formatCostWithColor } from '../utils/formatting.js';
@@ -101,4 +102,12 @@ export async function sessionsCommand(options: { json?: boolean; limit?: number 
 
   console.log(table);
   console.log('');
+}
+
+export function createSessionsCommand(): Command {
+  return new Command('sessions')
+    .description('View session history')
+    .option('--json', 'Output as JSON')
+    .option('--limit <n>', 'Limit number of sessions', '10')
+    .action(sessionsCommand);
 }

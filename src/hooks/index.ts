@@ -860,3 +860,29 @@ export {
   type AxiomGuardsOutput,
 } from './axiom-guards/index.js';
 
+export {
+  // Workflow Gate Hook (Superpowers Discipline Enforcement)
+  processWorkflowGate,
+  readWorkflowState,
+  writeWorkflowState,
+  initWorkflowState,
+  clearWorkflowState,
+  detectImplementationIntent,
+  detectExecutionIntent,
+  detectBrainstormingComplete,
+  detectPlanComplete,
+  detectTestsComplete,
+  detectCodeReviewComplete,
+  detectSecurityReviewComplete,
+  detectPerformanceReviewComplete,
+  detectSecuritySensitive,
+  detectPerformanceSensitive,
+  detectPlanExecutionSkill,
+  detectVagueRequest,
+  suggestNextStep,
+  getWorkflowStatePath,
+  type WorkflowState,
+  type WorkflowGateInput,
+  type WorkflowGateOutput,
+} from './workflow-gate/index.js';
+

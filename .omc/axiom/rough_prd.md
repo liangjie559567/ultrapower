@@ -1,460 +1,604 @@
-# Rough PRD: Claude-Codex 双模型协作工作流 v1.0
+# Rough PRD: Hook 系统安全加固 v6.0.0
 
-**状态**: 专家评审通过（平均分 6.9/10）
-**创建时间**: 2026-03-08
-**评审轮次**: 5 专家并行评审
-
----
-
-## 1. 问题陈述
-
-### 1.1 当前痛点
-
-ultrapower 插件生成的代码存在严重质量问题：
-
-* ❌ **语法/类型错误**: 无法通过编译
-
-* ❌ **逻辑错误**: 功能不符合预期
-
-* ❌ **代码质量差**: 不符合最佳实践
-
-* ❌ **功能不完整**: 缺少错误处理、边界情况
-
-### 1.2 根本原因
-
-Agent 缺少完整的开发流程：
-1. 不分析现有代码实现
-2. 不搜索外部最佳实践
-3. 不保证功能完整性
-4. 不强制 CI 门禁验证
-
-### 1.3 影响范围
-
-* 自主执行模式（autopilot、ralph）
-
-* 特定 agent（executor、deep-executor、designer）
-
-* 复杂需求场景（多文件、架构变更）
-
-* Axiom 工作流（ax-implement）
-
-### 1.4 当前基线（待补充）
-
-* CI 门禁通过率: ___% （需测量）
-
-* 用户满意度: ___/5 （需调研）
-
-* 平均修复时间: ___ 分钟
+**版本:** Rough v1.0 (基于 Draft v1.0 + 5 专家评审)
+**创建时间:** 2026-03-10
+**目标版本:** ultrapower v6.0.0
+**优先级:** P0 (D-05), P1 (D-06, D-07)
+**状态:** 待用户确认
 
 ---
 
-## 2. 解决方案概述
+## Executive Summary
 
-### 2.1 核心理念
+ultrapower v5.6.11 存在 3 个已识别的安全和可靠性技术债务，违反 `runtime-protection.md` 规范。本 PRD 定义修复方案，将系统安全水平提升至 GitHub Actions / GitLab CI 同等级别。
 
-**Claude（架构师/评审）+ Codex（执行工程师）双模型协作**
+**核心修复:**
+- **D-05 (P0):** permission-request hook 失败时强制阻塞（修复权限绕过漏洞）
+- **D-06 (P1):** 全部 15 类 HookType 定义严格白名单（消除注入攻击面）
+- **D-07 (P1):** subagent-tracker 使用原子写入（防止状态文件损坏）
 
-* **Claude**: 需求分析、架构设计、代码评审、测试规划
-
-* **Codex**: 代码实现、文档生成、测试执行
-
-### 2.2 关键改进（基于专家评审）
-
-1. **强制上下文分析**: 先读现有代码再动手
-2. **外部最佳实践**: 搜索相关项目对比
-3. **功能完整性检查**: 错误处理、边界情况
-4. **CI 门禁强制**: 编译/测试/lint 必须通过
-5. **代码审查环节**: 生成后自动评审
-6. **循环限制**: 最大 5 轮评审，10 次测试
-7. **降级策略**: Codex 失败时回退到 Claude
-8. **安全加固**: 路径校验 + 输入消毒
+**评审结果:**
+- Critic: 6/10 → 要求修复安全逻辑和补充白名单
+- Product Director: 8/10 → 批准，要求补充监控
+- Domain Expert: 8/10 → 批准，要求补充审计日志
+- UX Director: 6/10 → 要求补充错误反馈机制
+- Tech Lead: 6.5/10 → 要求调整工作量估算
 
 ---
 
-## 3. 工作流设计
+## 1. Problem Statement (更新后的问题描述)
 
-### 3.1 统一入口: `/ccg`
+### 1.1 当前问题
 
-**自动路由逻辑**:
-```
-用户执行 /ccg
-  ↓
-检测项目状态
-  ├─ 无代码 → 新项目流程
-  └─ 有代码 → 老项目流程
-```
+| 技术债务 | 安全影响 | 用户影响 | 合规影响 |
+|---------|---------|---------|---------|
+| **D-05** | 权限绕过漏洞 | 操作静默失败 | 违反 OWASP ASVS V4.1.1 |
+| **D-06** | 注入攻击面 | 调试困难 | 违反 OWASP A03:2021 |
+| **D-07** | 状态文件损坏 | 系统不稳定 | 违反 CWE-362 |
 
-### 3.2 新项目开发流程
+### 1.2 根因分析
 
-#### Phase 1: 需求阶段 (Claude)
-
-```
-[Phase 1/4] Claude 正在分析需求... 📋
-输入: 用户需求描述
-步骤:
-1. 对话澄清需求 → 生成需求文档
-2. 搜索网络相关项目 → 对比分析
-3. 识别不足 → 功能完善
-4. 生成技术实现文档
-输出: requirements.md + tech-design.md
-```
-
-#### Phase 2: 开发阶段 (Codex)
-
-```
-[Phase 2/4] Codex 正在实现代码... 🔨
-输入: requirements.md + tech-design.md
-步骤:
-1. 分解开发周期
-2. 按周期逐步实现
-3. 生成功能流程文档
-输出: 可运行代码 + feature-flow.md
-```
-
-#### Phase 3: 评审优化循环 (Claude ↔ Codex)
-
-```
-[Phase 3/4] Claude 正在评审（第 X/5 轮）... 🔍
-循环限制: 最多 5 轮
-每轮:
-  Claude: 评估 feature-flow.md vs requirements.md → optimization-list.md
-  Codex: 按清单优化 → 更新 feature-flow.md
-退出条件:
-  - 无优化点
-  - 达到 5 轮上限 → 询问用户是否继续
-```
-
-#### Phase 4: 测试阶段 (Claude ↔ Codex)
-
-```
-[Phase 4/4] 测试验证中... ✅
-循环限制: 最多 10 次
-每轮:
-  Claude: 生成 test-checklist.md
-  Codex: 按清单排查 → 输出结果
-退出条件:
-  - 测试通过
-  - 达到 10 次上限 → BLOCKED 状态
-```
-
-### 3.3 老项目修改流程
-
-#### Phase 1: 理解阶段 (Codex)
-
-```
-[Phase 1/4] Codex 正在分析项目... 📖
-输入: 现有项目代码
-步骤:
-1. 按模块读取（避免 token 溢出）
-2. 生成功能流程文档
-3. 微服务: 每个服务单独生成 + 依赖图
-输出: feature-flow.md + dependency-graph.md
-```
-
-#### Phase 2-4: 同新项目流程
-
----
-
-## 4. 技术实现方案
-
-### 4.1 新增 Skill: `/ccg`
-
-```yaml
-触发: 用户启动项目开发
-功能:
-  - 自动检测项目类型（新/老）
-  - 路由到对应工作流
-  - 管理文档传递
-  - 协调评审循环
-  - 实时进度反馈
-```
-
-### 4.2 Agent 提示词增强
-
-#### executor/deep-executor 强制步骤
-
-```markdown
-1. 读取相关现有代码（使用 Read/Glob/Grep）
-2. 使用 external-context 搜索最佳实践
-3. 生成完整实现（含错误处理）
-4. 运行 CI 门禁: tsc --noEmit && npm run build && npm test
-5. 失败则自动修复（最多 3 次）
-6. 3 次失败 → BLOCKED 状态
-```
-
-#### 自动 code-reviewer 触发
-
-```markdown
-触发时机: 代码生成完成后
-检查项:
-  - 逻辑正确性
-  - 功能完整性
-  - 最佳实践
-  - CI 门禁通过
-```
-
-### 4.3 文档驱动机制
-
-#### 标准文档模板
-
-```
-.omc/ccg/
-├── requirements.md        # 需求文档
-├── tech-design.md         # 技术实现文档
-├── feature-flow.md        # 功能流程文档
-├── optimization-list.md   # 优化清单
-├── test-checklist.md      # 测试清单
-└── dependency-graph.md    # 依赖图（老项目）
-```
-
-#### 文档路径安全校验
-
+**D-05 根因:**
 ```typescript
-import { assertValidMode } from './src/lib/validateMode';
-
-const ALLOWED_DOC_TYPES = [
-  'requirements', 'tech-design', 'feature-flow',
-  'optimization-list', 'test-checklist', 'dependency-graph'
-];
-
-function getDocPath(type: string): string {
-  if (!ALLOWED_DOC_TYPES.includes(type)) {
-    throw new Error(`Invalid doc type: ${type}`);
-  }
-  return `.omc/ccg/${type}.md`;
+// 当前实现 - 错误的"乐观"逻辑
+function createHookOutput(result) {
+  return { continue: true }; // 始终返回 true
 }
 ```
 
-#### 用户输入消毒
+**攻击向量:**
+- 恶意 hook 返回 `{ success: false }` (无 error 字段) → 绕过阻塞
+- Hook 进程崩溃返回空输出 → 被当作成功处理
+
+**D-06 根因:** 仅 4 类敏感 hook 使用白名单，其他 11 类透传未知字段
+
+**D-07 根因:** 使用 `fs.writeFileSync` 而非原子写入，并发场景下可能损坏
+
+---
+
+## 2. Goals & Success Metrics
+
+### 2.1 Primary Goals
+
+1. **安全合规率: 100%**
+   - 所有 hook 类型符合 runtime-protection.md 规范
+   - 通过 OWASP ASVS 4.0 V4.1.1 / V7.1.1 检查
+
+2. **系统稳定性: 零状态文件损坏**
+   - 并发场景下无文件损坏
+   - 压力测试通过率 100%
+
+3. **用户体验: 清晰的错误反馈**
+   - 阻塞时提供中文错误消息和恢复指引
+   - 开发者模式下提供调试信息
+
+### 2.2 Success Metrics
+
+**测试指标:**
+- [ ] 所有现有测试通过 (回归风险 < 5%)
+- [ ] 新增测试覆盖率 > 90%
+- [ ] 安全测试覆盖 3 个修复点
+
+**性能指标:**
+- [ ] D-07 原子写入延迟 < 10ms (99th percentile)
+- [ ] 高频写入场景 (>100/s) 无性能退化
+
+**合规指标:**
+- [ ] 通过 OWASP ASVS 4.0 检查
+- [ ] 通过 CWE Top 25 扫描
+- [ ] 安全审计日志完整性 100%
+
+
+---
+
+## 3. Technical Specification (修复后的方案)
+
+### 3.1 D-05: permission-request 强制阻塞
+
+#### 3.1.1 修复后的实现
 
 ```typescript
-import { normalizeInput } from './bridge-normalize';
+// src/hooks/persistent-mode/index.ts
 
-const sanitizedInput = normalizeInput(userInput, {
-  allowedFields: ['description', 'features', 'constraints'],
-  maxLength: 10000
+interface BlockedHookOutput {
+  continue: false;
+  error: {
+    code: 'PERMISSION_DENIED' | 'HOOK_FAILED' | 'HOOK_TIMEOUT';
+    message: string;
+    userAction?: string;
+    technicalDetails?: any;
+  };
+}
+
+function createHookOutput(result: any, hookType?: HookType): HookOutput | BlockedHookOutput {
+  if (hookType === 'permission-request') {
+    // 【关键修复】失败优先逻辑：只有明确成功才放行
+    if (!result || result.success !== true) {
+      logger.security('permission-request blocked', {
+        hookType,
+        result,
+        timestamp: Date.now()
+      });
+
+      return {
+        continue: false,
+        error: {
+          code: result?.error ? 'HOOK_FAILED' : 'PERMISSION_DENIED',
+          message: '❌ 权限验证失败，操作已阻止',
+          userAction: '请检查文件权限或联系管理员',
+          technicalDetails: result?.error
+        }
+      };
+    }
+  }
+  return { continue: true };
+}
+```
+
+#### 3.1.2 边界情况处理
+
+| 场景 | 当前行为 | 修复后行为 |
+|------|---------|-----------|
+| `result = null` | ✅ 放行 (漏洞) | ❌ 阻塞 |
+| `result = undefined` | ✅ 放行 (漏洞) | ❌ 阻塞 |
+| `result = { success: false }` | ✅ 放行 (漏洞) | ❌ 阻塞 |
+| `result = { success: true }` | ✅ 放行 | ✅ 放行 |
+| Hook 进程崩溃 | ✅ 放行 (漏洞) | ❌ 阻塞 |
+
+---
+
+### 3.2 D-06: 全部 HookType 严格白名单
+
+#### 3.2.1 完整白名单映射表
+
+```typescript
+// src/hooks/bridge-normalize.ts
+
+const STRICT_WHITELIST: Record<HookType, string[]> = {
+  'permission-request': ['success', 'error', 'message'],
+  'setup': ['config', 'version'],
+  'session-end': ['sessionId', 'directory', 'duration'],
+  'subagent-stop': ['success', 'exitCode', 'output'],
+  'tool-call': ['tool_name', 'tool_input', 'timestamp'],
+  'tool-response': ['tool_name', 'tool_response', 'success', 'error', 'duration'],
+  'agent-start': ['agent_type', 'agent_id', 'prompt'],
+  'agent-stop': ['agent_id', 'success', 'output', 'duration'],
+  'session-start': ['sessionId', 'directory', 'timestamp'],
+  'message-sent': ['message', 'role', 'timestamp'],
+  'state-change': ['mode', 'from_state', 'to_state', 'timestamp'],
+  'error-occurred': ['error', 'context', 'timestamp', 'severity'],
+  'file-read': ['file_path', 'success'],
+  'file-write': ['file_path', 'success', 'bytes_written'],
+  'custom-hook': ['hook_name', 'data']
+};
+```
+
+#### 3.2.2 白名单验证逻辑
+
+```typescript
+function normalizeHookInput(input: any, hookType: HookType): any {
+  const whitelist = STRICT_WHITELIST[hookType];
+  if (!whitelist) return {};
+
+  const normalized: any = {};
+  const unknownFields: string[] = [];
+
+  for (const key of Object.keys(input)) {
+    if (whitelist.includes(key)) {
+      normalized[key] = input[key];
+    } else {
+      unknownFields.push(key);
+    }
+  }
+
+  if (unknownFields.length > 0) {
+    logger.security('unknown fields filtered', {
+      hookType,
+      fields: unknownFields,
+      timestamp: Date.now()
+    });
+  }
+
+  return normalized;
+}
+```
+
+---
+
+### 3.3 D-07: subagent-tracker 原子写入
+
+```typescript
+// src/hooks/subagent-tracker/index.ts
+
+import { atomicWriteJsonSync } from '../../lib/atomic-write.js';
+
+function updateSubagentState(agentId: string, state: any) {
+  const path = `.omc/state/subagent-tracker.json`;
+  atomicWriteJsonSync(path, state);
+}
+```
+
+
+---
+
+## 4. Implementation Plan (调整后的顺序)
+
+### 4.1 执行顺序
+
+**Phase 1: D-07** (最简单，独立性强)
+- 工作量: 50 行代码 + 100 行测试
+- 时间: 1 天
+
+**Phase 2: D-06** (为 D-05 奠定基础)
+- 工作量: 150 行代码 + 200 行测试
+- 时间: 2 天
+
+**Phase 3: D-05** (依赖 D-06)
+- 工作量: 100 行代码 + 150 行测试
+- 时间: 2 天
+
+**Phase 4: 安全审计日志**
+- 工作量: 80 行代码 + 50 行测试
+- 时间: 1 天
+
+**Phase 5: 文档和迁移指南**
+- 时间: 1 天
+
+**总计:** 380 行代码 + 500 行测试 = 880 行，7 天完成
+
+### 4.2 修改文件清单
+
+| 文件 | 修改类型 | 行数 | 阶段 |
+|------|---------|------|------|
+| `src/hooks/persistent-mode/index.ts` | 修改 | 100 | Phase 3 |
+| `src/hooks/bridge-normalize.ts` | 修改 | 150 | Phase 2 |
+| `src/hooks/subagent-tracker/index.ts` | 修改 | 50 | Phase 1 |
+| `src/lib/logger.ts` | 新增 | 80 | Phase 4 |
+| `docs/standards/runtime-protection.md` | 更新 | - | Phase 5 |
+
+
+---
+
+## 5. Testing Strategy
+
+### 5.1 单元测试
+
+**D-05 测试用例:**
+```typescript
+describe('D-05: permission-request blocking', () => {
+  test('blocks when result is null', () => {
+    const output = createHookOutput(null, 'permission-request');
+    expect(output.continue).toBe(false);
+  });
+
+  test('allows when success is true', () => {
+    const output = createHookOutput({ success: true }, 'permission-request');
+    expect(output.continue).toBe(true);
+  });
 });
 ```
 
-### 4.4 降级策略
-
-#### MCP 工具失败处理
-
-```yaml
-Codex API 不可用:
-  - 降级到 Claude 单模型执行
-  - 保留强化的提示词
-  - 性能下降但保证可用
-
-Gemini API 不可用:
-  - 跳过外部最佳实践搜索
-  - 继续执行其他步骤
-
-超时阈值:
-  - 单次 MCP 调用 > 30s 触发降级
+**D-06 测试用例:**
+```typescript
+describe('D-06: strict whitelist', () => {
+  test('filters unknown fields', () => {
+    const input = { tool_name: 'test', unknown: 'value' };
+    const normalized = normalizeHookInput(input, 'tool-call');
+    expect(normalized).toEqual({ tool_name: 'test' });
+  });
+});
 ```
 
-### 4.5 循环控制策略
-
-```yaml
-评审循环限制:
-  MAX_REVIEW_CYCLES: 5
-  行为:
-    - 超过 3 轮: 降低优化标准（只修复 P0）
-    - 超过 5 轮: 暂停并询问用户是否继续
-    - 支持 Ctrl+C 中断并保存状态
-
-测试循环限制:
-  MAX_TEST_CYCLES: 10
-  CYCLE_TIMEOUT: 10 分钟
-  行为:
-    - 超过 10 次: BLOCKED 状态
-    - 保存现场到 .omc/ccg/recovery/
-    - 生成诊断报告
+**D-07 测试用例:**
+```typescript
+describe('D-07: atomic write', () => {
+  test('concurrent writes do not corrupt file', async () => {
+    const promises = Array.from({ length: 10 }, (_, i) =>
+      updateSubagentState(`agent-${i}`, { id: i })
+    );
+    await Promise.all(promises);
+    // 验证文件完整性
+  });
+});
 ```
 
----
+### 5.2 安全测试
 
-## 5. 实施计划（MVP 优先）
+- 模糊测试验证白名单
+- 并发测试验证原子写入
+- 边界情况测试
 
-### 5.1 Phase 1: MVP（Week 1-2）⭐
+### 5.3 性能测试
 
-**目标**: 快速验证核心假设
+- D-07 原子写入延迟 < 10ms (p99)
+- 高频写入场景 (>100/s) 无性能退化
 
-* [ ] 增强 executor 提示词（强制上下文分析）
-
-* [ ] 实现 CI 门禁强制验证
-
-* [ ] 实现自动修复机制（最多 3 次）
-
-* [ ] 测试目标: CI 通过率提升到 80%
-
-### 5.2 Phase 2: 新项目流程（Week 3-6）
-
-* [ ] 创建 `/ccg` skill 框架
-
-* [ ] 实现文档模板系统
-
-* [ ] 实现 Phase 1-4 完整流程
-
-* [ ] 集成 external-context 搜索
-
-* [ ] 增加实时进度反馈
-
-### 5.3 Phase 3: 老项目流程（Week 7-10）
-
-* [ ] 实现按模块读取策略
-
-* [ ] 实现依赖图生成
-
-* [ ] 微服务支持
-
-* [ ] 用户验收测试
-
-### 5.4 Phase 4: 优化迭代（Week 11-12）
-
-* [ ] 性能优化
-
-* [ ] 降级策略完善
-
-* [ ] 文档版本控制
-
-* [ ] 并发冲突处理
 
 ---
 
-## 6. 验收标准
+## 6. Risk Mitigation
 
-### 6.1 MVP 阶段（Week 2）
-
-* ✅ CI 门禁通过率 > 80%
-
-* ✅ 语法/类型错误率 < 10%
-
-* ✅ 自动修复成功率 > 60%
-
-### 6.2 完整版（Week 12）
-
-* ✅ CI 门禁通过率 > 95%
-
-* ✅ 语法/类型错误率 < 5%
-
-* ✅ 逻辑错误率 < 10%
-
-* ✅ 代码审查通过率 > 90%
-
-* ✅ 用户满意度 > 4.5/5
-
-### 6.3 工作流效率
-
-* ✅ 新项目: 需求 → 可运行代码 < 2 小时
-
-* ✅ 老项目: 单模块修改 < 1 小时
-
-* ✅ 评审循环: 平均 < 3 轮收敛
+| 风险 | 影响 | 概率 | 缓解措施 |
+|------|------|------|---------|
+| D-05 破坏现有工作流 | 高 | 中 | 完整回归测试 + 迁移指南 |
+| D-06 白名单定义不完整 | 高 | 中 | 15 类 HookType 完整映射 |
+| D-07 性能下降 | 中 | 低 | 性能基准测试 |
+| 审计日志泄露敏感信息 | 中 | 低 | 日志脱敏 + 权限控制 |
 
 ---
 
-## 7. 风险与依赖
+## 7. Acceptance Criteria
 
-### 7.1 技术风险与缓解
+### 7.1 功能验收
 
-| 风险 | 概率 | 影响 | 缓解措施 |
-| ------ | ------ | ------ | --------- |
-| Codex API 不可用 | 高 | 高 | 降级到 Claude 单模型 |
-| 评审循环不收敛 | 中 | 高 | 限制最大 5 轮 + 用户中断 |
-| 大项目 token 溢出 | 中 | 中 | 按模块读取 |
-| 文档传递冲突 | 低 | 中 | 文件锁 + 版本控制 |
+- [ ] D-05: permission-request 失败时强制阻塞
+- [ ] D-05: 提供清晰的中文错误消息
+- [ ] D-06: 全部 15 类 HookType 定义严格白名单
+- [ ] D-06: 开发者模式下显示被过滤字段
+- [ ] D-07: subagent-tracker 使用原子写入
+- [ ] 安全审计日志记录所有阻塞和过滤事件
 
-### 7.2 依赖项
+### 7.2 测试验收
 
-* MCP 工具: `ask_codex`、`ask_gemini`（可选）
+- [ ] 所有现有测试通过 (回归风险 < 5%)
+- [ ] 新增测试覆盖率 > 90%
+- [ ] 安全测试覆盖 3 个修复点
+- [ ] 性能测试: D-07 延迟 < 10ms (p99)
+- [ ] 并发测试: 50 进程同时写入无损坏
 
-* 现有 skills: `external-context`、`code-reviewer`
+### 7.3 合规验收
 
-* CI 环境: `tsc`、`npm`、`test`
+- [ ] 通过 OWASP ASVS 4.0 V4.1.1 检查
+- [ ] 通过 OWASP ASVS 4.0 V7.1.1 检查
+- [ ] 通过 CWE-285 / CWE-20 / CWE-362 扫描
+- [ ] 安全审计日志完整性 100%
 
----
+### 7.4 文档验收
 
-## 8. 成功指标
+- [ ] 更新 `docs/standards/runtime-protection.md`
+- [ ] 更新 `docs/standards/hook-execution-order.md`
+- [ ] 创建迁移指南 `docs/migration/v6.0.0.md`
+- [ ] 更新 `CHANGELOG.md` (标注 BREAKING CHANGE)
 
-### 8.1 短期（1 个月 - MVP）
-
-* 用户报告 BUG 数量减少 30%
-
-* CI 门禁通过率提升到 80%
-
-### 8.2 中期（3 个月 - 完整版）
-
-* 代码质量问题减少 80%
-
-* 用户满意度 > 4.5/5
-
-* 平均修复时间 < 10 分钟
-
-### 8.3 长期（6 个月）
-
-* 成为 ultrapower 默认工作流
-
-* 社区贡献增加 2x
 
 ---
 
-## 9. 专家评审结论
+## 8. 附录
 
-### 9.1 评审结果
+### 8.1 专家评审摘要
 
-* **Domain Expert**: 7.5/10 - 符合软件工程最佳实践
+| 专家 | 评分 | 核心建议 | 状态 |
+|------|------|---------|------|
+| Critic | 6/10 | 修复 D-05 安全逻辑，补充白名单 | ✅ 已修复 |
+| Product Director | 8/10 | 补充监控和日志 | ✅ 已补充 |
+| Domain Expert | 8/10 | 补充安全审计日志 | ✅ 已补充 |
+| UX Director | 6/10 | 补充错误反馈机制 | ✅ 已补充 |
+| Tech Lead | 6.5/10 | 调整工作量估算 | ✅ 已调整 |
 
-* **The Critic**: 6.5/10 - 需修复 P0 安全问题
+### 8.2 OWASP 合规性映射
 
-* **Tech Lead**: 7.0/10 - 技术可行，需降级策略
+| OWASP 类别 | 相关修复 | 符合度 |
+|-----------|---------|--------|
+| A01:2021 Broken Access Control | D-05 | ✅ 完全符合 |
+| A03:2021 Injection | D-06 | ✅ 完全符合 |
+| A04:2021 Insecure Design | D-05/D-06 | ✅ 完全符合 |
+| A05:2021 Security Misconfiguration | D-06 + 审计日志 | ✅ 完全符合 |
+| A08:2021 Software and Data Integrity | D-07 | ✅ 完全符合 |
 
-* **Product Director**: 7.5/10 - 战略对齐，建议 MVP 优先
+### 8.3 行业对标
 
-* **UX Director**: 6.0/10 - 需简化入口和进度反馈
-
-**平均分**: 6.9/10 → **有条件通过**
-
-### 9.2 已采纳的关键建议
-
-1. ✅ 增加循环限制（MAX_REVIEW_CYCLES=5）
-2. ✅ 增加降级策略（Codex → Claude）
-3. ✅ 修复安全漏洞（路径校验 + 输入消毒）
-4. ✅ 简化入口（单一 /ccg 命令）
-5. ✅ 增加实时进度反馈
-6. ✅ 采用 MVP 优先策略（2 周快速验证）
+修复后的 ultrapower 达到 **GitHub Actions / GitLab CI 同等安全水平**。
 
 ---
 
-## 10. 附录
+## 9. 原子任务列表（任务队列）
 
-### 10.1 相关文档
+- [ ] Task-001: [P0] D-07 原子写入实现
+    - 验证: 并发测试 10+ 进程无文件损坏
 
-* `docs/standards/runtime-protection.md` - 安全规范
+- [ ] Task-002: [P0] D-06 白名单映射表定义
+    - 验证: 15 类 HookType 完整覆盖
 
-* `docs/standards/hook-execution-order.md` - Hook 执行顺序
+- [ ] Task-003: [P0] D-06 白名单验证逻辑实现
+    - 验证: 单元测试覆盖率 > 90%
 
-* `docs/standards/agent-lifecycle.md` - Agent 生命周期
+- [ ] Task-004: [P0] D-05 失败优先逻辑实现
+    - 验证: 边界情况测试全部通过
 
-* `skills/ccg/SKILL.md`（待创建）
+- [ ] Task-005: [P0] D-05 错误反馈机制实现
+    - 验证: 中文错误消息清晰可读
 
-### 10.2 评审文档
+- [ ] Task-006: [P1] 安全审计日志实现
+    - 验证: 日志完整性 100%
 
-* `.omc/axiom/review_domain.md` - Domain Expert 评审
+- [ ] Task-007: [P1] 集成测试
+    - 验证: 回归测试通过率 > 95%
 
-* `.omc/axiom/review_critic.md` - The Critic 评审
+- [ ] Task-008: [P1] 性能基准测试
+    - 验证: D-07 延迟 < 10ms (p99)
 
-* `.omc/axiom/review_tech.md` - Tech Lead 评审
+- [ ] Task-009: [P1] 文档更新
+    - 验证: 迁移指南完整
 
-* `.omc/axiom/review_product.md` - Product Director 评审
+- [ ] Task-010: [P1] 代码审查
+    - 验证: 所有 checklist 项通过
 
-* `.omc/axiom/review_ux.md` - UX Director 评审
+---
 
-* `.omc/axiom/review_summary.md` - 评审汇总
+**PRD 已生成，请确认是否开始执行？(Yes/No)**
+
+**下一步:** 用户确认后，调用 `axiom-system-architect` 进行任务拆解。
 
 ---
 
 **Rough PRD 版本**: v1.0
-**状态**: 专家评审通过，可进入实施阶段
-**下一步**: 用户确认后执行 `/ax-decompose` 进行任务拆解
+**状态**: 待用户确认
+**创建时间**: 2026-03-10T03:55:15Z
+
+---
+
+## 补充：P1 实现细节 (Critic 要求)
+
+### 1. 超时处理机制
+
+**超时阈值:** 30 秒
+
+**实现:**
+```typescript
+const HOOK_TIMEOUT_MS = 30000;
+
+async function executeHookWithTimeout(hookPath, input) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), HOOK_TIMEOUT_MS);
+  
+  try {
+    const result = await execFile(hookPath, { signal: controller.signal });
+    clearTimeout(timeout);
+    return result;
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      return { success: false, error: 'Hook timeout after 30s' };
+    }
+    throw error;
+  }
+}
+```
+
+**超时后清理:**
+1. 发送 SIGTERM (优雅终止)
+2. 等待 5 秒
+3. 发送 SIGKILL (强制终止)
+
+---
+
+### 2. 审计日志脱敏规则
+
+**敏感字段列表:**
+```typescript
+const SENSITIVE_FIELDS = [
+  'token', 'apiKey', 'password', 'secret', 
+  'accessToken', 'refreshToken', 'privateKey'
+];
+```
+
+**脱敏算法:**
+```typescript
+function sanitizeForAudit(data) {
+  const sanitized = { ...data };
+  for (const key of Object.keys(sanitized)) {
+    if (SENSITIVE_FIELDS.some(field => key.toLowerCase().includes(field))) {
+      sanitized[key] = '[REDACTED]';
+    }
+  }
+  return sanitized;
+}
+```
+
+**审计日志格式:**
+```json
+{
+  "timestamp": "2026-03-10T04:15:00Z",
+  "event": "hook_blocked",
+  "hookType": "permission-request",
+  "reason": "result.success !== true",
+  "input": { "tool": "bash", "token": "[REDACTED]" }
+}
+```
+
+---
+
+### 3. 原子写入失败回退策略
+
+**重试策略:**
+- 最多重试 3 次
+- 指数退避: 100ms → 200ms → 400ms
+
+**实现:**
+```typescript
+async function atomicWriteWithRetry(path, data, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      await atomicWriteJsonSync(path, data);
+      return;
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      await sleep(100 * Math.pow(2, i));
+    }
+  }
+}
+```
+
+**失败后回退:**
+- 不回退到内存缓存（避免状态不一致）
+- 抛出错误，由上层处理
+- 记录到审计日志
+
+---
+
+**补充完成时间:** 2026-03-10T04:15:00Z
+
+---
+
+## 补充：P2 实现细节 (Critic 建议)
+
+### 4. 审计日志存储配置
+
+**日志路径:**
+```typescript
+const AUDIT_LOG_PATH = '.omc/logs/security-audit.jsonl';
+```
+
+**日志轮转策略:**
+- 单文件最大: 10MB
+- 保留历史: 最近 7 天
+- 轮转格式: `security-audit.jsonl.1`, `security-audit.jsonl.2`
+
+**实现:**
+```typescript
+function rotateLogIfNeeded(logPath) {
+  const stats = fs.statSync(logPath);
+  if (stats.size > 10 * 1024 * 1024) {
+    // 轮转现有日志
+    for (let i = 6; i >= 1; i--) {
+      const oldPath = `${logPath}.${i}`;
+      const newPath = `${logPath}.${i + 1}`;
+      if (fs.existsSync(oldPath)) {
+        fs.renameSync(oldPath, newPath);
+      }
+    }
+    fs.renameSync(logPath, `${logPath}.1`);
+  }
+}
+```
+
+---
+
+### 5. 白名单维护流程
+
+**CI 门禁检查:**
+```typescript
+// scripts/validate-hook-whitelist.mjs
+import { HOOK_TYPES } from './src/shared/types.js';
+import { STRICT_WHITELIST } from './src/hooks/bridge-normalize.js';
+
+const missingTypes = HOOK_TYPES.filter(type => !STRICT_WHITELIST[type]);
+if (missingTypes.length > 0) {
+  console.error(`Missing whitelist for: ${missingTypes.join(', ')}`);
+  process.exit(1);
+}
+```
+
+**开发流程:**
+1. 新增 HookType 到 `src/shared/types.ts`
+2. 同步更新 `STRICT_WHITELIST` 到 `bridge-normalize.ts`
+3. 运行 `npm run validate:whitelist`
+4. CI 自动验证，缺失则失败
+
+**文档要求:**
+在 `docs/standards/hook-execution-order.md` 补充：
+> **白名单同步规则:** 新增 HookType 时必须同步更新 `STRICT_WHITELIST`，否则 CI 失败。
+
+---
+
+**补充完成时间:** 2026-03-10T04:18:00Z
+**状态:** 所有 P1/P2 问题已修复，PRD 完整

@@ -1,377 +1,144 @@
-# Draft PRD: Claude-Codex 双模型协作工作流
+# Draft PRD: Hook 系统安全加固 v6.0.0
 
-## 1. 问题陈述
-
-### 1.1 当前痛点
-
-ultrapower 插件生成的代码存在严重质量问题：
-
-* ❌ **语法/类型错误**: 无法通过编译
-
-* ❌ **逻辑错误**: 功能不符合预期
-
-* ❌ **代码质量差**: 不符合最佳实践
-
-* ❌ **功能不完整**: 缺少错误处理、边界情况
-
-### 1.2 根本原因
-
-Agent 缺少完整的开发流程：
-1. 不分析现有代码实现
-2. 不搜索外部最佳实践
-3. 不保证功能完整性
-4. 不强制 CI 门禁验证
-
-### 1.3 影响范围
-
-* 自主执行模式（autopilot、ralph）
-
-* 特定 agent（executor、deep-executor、designer）
-
-* 复杂需求场景（多文件、架构变更）
-
-* Axiom 工作流（ax-implement）
+**版本:** Draft v1.0
+**创建时间:** 2026-03-10
+**目标版本:** ultrapower v6.0.0
+**优先级:** P0 (D-05), P1 (D-06, D-07)
 
 ---
 
-## 2. 解决方案概述
+## 1. 背景与动机
 
-### 2.1 核心理念
+### 问题陈述
 
-**Claude（架构师/评审）+ Codex（执行工程师）双模型协作**
+ultrapower v5.6.11 存在 3 个已识别的技术债务：
 
-* **Claude**: 需求分析、架构设计、代码评审、测试规划
+1. **D-05 (P0):** permission-request hook 失败时静默降级
+2. **D-06 (P1):** 非敏感 hook 透传未知字段
+3. **D-07 (P1):** subagent-tracker 使用非原子写入
 
-* **Codex**: 代码实现、文档生成、测试执行
+### 影响范围
 
-### 2.2 关键改进
-
-1. **强制上下文分析**: 先读现有代码再动手
-2. **外部最佳实践**: 搜索相关项目对比
-3. **功能完整性检查**: 错误处理、边界情况
-4. **CI 门禁强制**: 编译/测试/lint 必须通过
-5. **代码审查环节**: 生成后自动评审
-6. **提示词优化**: 更清晰的指令
+- **安全性:** D-05/D-06 可能导致权限绕过
+- **可靠性:** D-07 可能导致状态文件损坏
+- **合规性:** 违反 runtime-protection.md 规范
 
 ---
 
-## 3. 工作流设计
+## 2. 核心目标
 
-### 3.1 新项目开发流程
+1. **D-05:** permission-request 失败时强制阻塞
+2. **D-06:** 全部 15 类 HookType 定义严格白名单
+3. **D-07:** subagent-tracker 使用原子写入
 
-#### Phase 1: 需求阶段 (Claude)
+### 成功指标
 
-```
-输入: 用户需求描述
-步骤:
-1. 对话澄清需求 → 生成需求文档
-2. 搜索网络相关项目 → 对比分析
-3. 识别不足 → 功能完善
-4. 生成技术实现文档
-输出: 需求文档 + 技术实现文档
-```
-
-#### Phase 2: 开发阶段 (Codex)
-
-```
-输入: 需求文档 + 技术实现文档
-步骤:
-1. 分解开发周期
-2. 生成周期开发文档
-3. 按周期逐步实现
-4. 生成完整功能流程文档
-输出: 可运行代码 + 功能流程文档
-```
-
-#### Phase 3: 评审优化循环 (Claude ↔ Codex)
-
-```
-循环直到无优化点:
-  Claude: 评估功能文档 vs 原始需求 → 优化清单
-  Codex: 按清单优化 → 更新功能文档
-```
-
-#### Phase 4: 测试阶段 (Claude ↔ Codex)
-
-```
-循环直到测试通过:
-  Claude: 生成测试清单 + 流程
-  Codex: 按清单排查 → 输出结果
-```
-
-### 3.2 老项目修改流程
-
-#### Phase 1: 理解阶段 (Codex)
-
-```
-输入: 现有项目代码
-步骤:
-1. 读取整个项目
-2. 生成功能流程文档
-3. 微服务: 每个服务单独生成
-输出: 功能流程文档
-```
-
-#### Phase 2: 规划阶段 (Claude)
-
-```
-输入: 功能流程文档 + 修改需求
-步骤:
-1. 分析影响范围
-2. 按功能模块分解
-3. 生成修改文档
-输出: 修改文档（按模块）
-```
-
-#### Phase 3: 执行阶段 (Codex)
-
-```
-输入: 修改文档
-步骤:
-1. 按功能模块逐个修改
-2. 每个模块完成后生成功能流程文档
-输出: 修改后代码 + 功能流程文档
-```
-
-#### Phase 4: 评审优化循环 (Claude ↔ Codex)
-
-```
-对每个功能模块:
-  循环直到测试通过:
-    Claude: 评估 → 优化清单
-    Codex: 优化 → 测试
-  完成后 → 下一个模块
-```
+- [ ] 所有现有测试通过
+- [ ] 新增测试覆盖 3 个修复点
+- [ ] tsc --noEmit 无错误
+- [ ] 手动验证阻塞行为
 
 ---
 
-## 4. 技术实现方案
+## 3. 技术方案
 
-### 4.1 新增 Skills
+### D-05: permission-request 强制阻塞
 
-#### `/ccg` - Claude-Codex-Gemini 协作
-
-```yaml
-触发: 用户启动新项目或老项目修改
-功能:
-  - 自动路由任务到 Claude/Codex
-  - 管理文档传递
-  - 协调评审循环
+**当前实现:**
+```typescript
+// src/hooks/persistent-mode/index.ts
+function createHookOutput(result) {
+  return { continue: true }; // 始终返回 true
+}
 ```
 
-#### `/ccg-new` - 新项目工作流
-
-```yaml
-阶段:
-  1. Claude 需求分析
-  2. Codex 开发实现
-  3. Claude-Codex 评审循环
-  4. Claude-Codex 测试循环
+**目标实现:**
+```typescript
+function createHookOutput(result, hookType?: HookType) {
+  if (hookType === 'permission-request' && result.error) {
+    return { continue: false }; // 失败时阻塞
+  }
+  return { continue: true };
+}
 ```
 
-#### `/ccg-modify` - 老项目修改工作流
-
-```yaml
-阶段:
-  1. Codex 项目理解
-  2. Claude 修改规划
-  3. Codex 按模块执行
-  4. Claude-Codex 模块评审循环
-```
-
-### 4.2 Agent 提示词增强
-
-#### executor/deep-executor 增强
-
-```markdown
-强制步骤:
-1. 读取相关现有代码
-2. 使用 external-context 搜索最佳实践
-3. 生成完整实现（含错误处理）
-4. 运行 CI 门禁验证
-5. 失败则自动修复（最多3次）
-```
-
-#### 新增 code-reviewer 自动触发
-
-```markdown
-触发时机: 代码生成完成后
-检查项:
-  - 逻辑正确性
-  - 功能完整性
-  - 最佳实践
-  - CI 门禁通过
-```
-
-### 4.3 文档驱动机制
-
-#### 标准文档模板
-
-```
-.omc/ccg/
-├── requirements.md        # 需求文档
-├── tech-design.md         # 技术实现文档
-├── dev-cycles/            # 开发周期文档
-│   ├── cycle-1.md
-│   └── cycle-2.md
-├── feature-flow.md        # 功能流程文档
-├── optimization-list.md   # 优化清单
-└── test-checklist.md      # 测试清单
-```
-
-#### 文档传递流程
-
-```
-Claude 生成 → 保存到 .omc/ccg/ → Codex 读取 → 执行 → 更新文档 → Claude 评审
-```
-
-### 4.4 CI 门禁强化
-
-#### 强制验证命令
-
-```bash
-tsc --noEmit && npm run build && npm test
-```
-
-#### 失败处理策略
-
-```
-尝试次数: 最多 3 次
-每次失败:
-  1. 分析错误日志
-  2. 自动修复
-  3. 重新验证
-3 次失败后:
-  输出 BLOCKED 状态
-  请求人工介入
-```
+**修改文件:**
+- `src/hooks/persistent-mode/index.ts`
 
 ---
 
-## 5. 实施计划
+### D-06: 全部 HookType 严格白名单
 
-### 5.1 Phase 1: 基础设施（Week 1-2）
+**当前实现:**
+- 仅 4 类敏感 hook 使用白名单
+- 其他 hook 透传未知字段
 
-* [ ] 创建 `/ccg` skill 框架
+**目标实现:**
+- 扩展 `STRICT_WHITELIST` 为全部 15 类 HookType
+- 所有 hook 丢弃未知字段
 
-* [ ] 实现文档模板系统
+**修改文件:**
+- `src/hooks/bridge-normalize.ts`
 
-* [ ] 增强 executor 提示词
+---
 
-### 5.2 Phase 2: 工作流实现（Week 3-4）
+### D-07: subagent-tracker 原子写入
 
-* [ ] 实现 `/ccg-new` 新项目流程
+**当前实现:**
+```typescript
+fs.writeFileSync(path, JSON.stringify(data));
+```
 
-* [ ] 实现 `/ccg-modify` 老项目流程
+**目标实现:**
+```typescript
+import { atomicWriteJsonSync } from '../../lib/atomic-write.js';
+atomicWriteJsonSync(path, data);
+```
 
-* [ ] 集成 external-context 搜索
+**修改文件:**
+- `src/hooks/subagent-tracker/index.ts`
 
-### 5.3 Phase 3: 质量保障（Week 5-6）
+---
 
-* [ ] 自动 code-reviewer 触发
+## 4. 实施计划
 
-* [ ] CI 门禁强化
+### 执行顺序
 
-* [ ] 自动修复机制
+1. **D-07** (最简单，独立性强)
+2. **D-06** (为 D-05 奠定基础)
+3. **D-05** (依赖 D-06 的白名单定义)
 
-### 5.4 Phase 4: 测试优化（Week 7-8）
+### 测试策略
 
-* [ ] 端到端测试
+**单元测试:**
+- D-05: 测试 permission-request 失败时返回 `continue: false`
+- D-06: 测试未知字段被丢弃
+- D-07: 测试原子写入的并发安全性
 
-* [ ] 用户验收测试
+**集成测试:**
+- 验证 3 个修复的交互效果
+- 确保现有工作流不受影响
 
-* [ ] 性能优化
+---
+
+## 5. 风险与缓解
+
+| 风险 | 影响 | 缓解措施 |
+|------|------|----------|
+| D-05 影响现有工作流 | 中 | 完整回归测试 |
+| D-06 导致 hook 失败 | 高 | 完整定义 15 类白名单 |
+| D-07 性能下降 | 低 | 可接受的权衡 |
 
 ---
 
 ## 6. 验收标准
 
-### 6.1 代码质量指标
-
-* ✅ CI 门禁通过率 > 95%
-
-* ✅ 语法/类型错误率 < 5%
-
-* ✅ 逻辑错误率 < 10%
-
-* ✅ 代码审查通过率 > 90%
-
-### 6.2 功能完整性
-
-* ✅ 错误处理覆盖率 100%
-
-* ✅ 边界情况处理完整
-
-* ✅ 符合最佳实践
-
-### 6.3 工作流效率
-
-* ✅ 新项目: 需求 → 可运行代码 < 2 小时
-
-* ✅ 老项目: 单模块修改 < 1 小时
-
-* ✅ 评审循环: 平均 < 3 轮收敛
+- [ ] 所有现有测试通过
+- [ ] 新增测试覆盖率 > 90%
+- [ ] 手动验证 permission-request 阻塞
+- [ ] 代码审查通过
+- [ ] 文档更新完成
 
 ---
 
-## 7. 风险与依赖
-
-### 7.1 技术风险
-
-* **Codex API 可用性**: 需要稳定的 Codex 访问
-
-* **文档同步**: 确保 Claude-Codex 文档传递准确
-
-### 7.2 依赖项
-
-* MCP 工具: `ask_codex`、`ask_gemini`
-
-* 现有 skills: `external-context`、`code-reviewer`
-
-* CI 环境: `tsc`、`npm`、`test`
-
----
-
-## 8. 成功指标
-
-### 8.1 短期（1 个月）
-
-* 用户报告 BUG 数量减少 50%
-
-* CI 门禁通过率提升到 90%
-
-### 8.2 中期（3 个月）
-
-* 代码质量问题减少 80%
-
-* 用户满意度 > 4.5/5
-
-### 8.3 长期（6 个月）
-
-* 成为 ultrapower 默认工作流
-
-* 社区贡献增加 2x
-
----
-
-## 9. 附录
-
-### 9.1 相关文档
-
-* `docs/standards/hook-execution-order.md`
-
-* `docs/standards/agent-lifecycle.md`
-
-* `skills/ccg/SKILL.md`（待创建）
-
-### 9.2 参考资料
-
-* Claude-Codex 协作最佳实践
-
-* 文档驱动开发方法论
-
----
-
-**Draft PRD 版本**: v0.1
-**创建时间**: 2026-03-08
-**状态**: 待用户评审
+**Draft PRD 完成，等待用户评审。**

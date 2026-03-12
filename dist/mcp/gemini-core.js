@@ -45,7 +45,7 @@ function parseEnvInt(envVal, fallback) {
 }
 // Default model can be overridden via environment variable
 export const GEMINI_DEFAULT_MODEL = process.env.OMC_GEMINI_DEFAULT_MODEL || 'gemini-3-pro-preview';
-export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseEnvInt(process.env.OMC_GEMINI_TIMEOUT, 3600000)), 3600000);
+export const GEMINI_TIMEOUT = Math.min(Math.max(5000, parseEnvInt(process.env.OMC_GEMINI_TIMEOUT, 300000)), 3600000);
 // OMC_GEMINI_YOLO controls whether --yolo is passed to the Gemini CLI.
 // --yolo is a NON-INTERACTIVE MODE flag that suppresses all confirmation
 // prompts from the Gemini CLI. It is NOT a security bypass flag.

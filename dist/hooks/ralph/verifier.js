@@ -108,22 +108,22 @@ export function recordArchitectFeedback(directory, approved, feedback, sessionId
     if (!state) {
         return null;
     }
-    state.verification_attempts += 1;
-    state.architect_approved = approved;
-    state.architect_feedback = feedback;
+    const mutableState = {
+        ...state,
+        verification_attempts: state.verification_attempts + 1,
+        architect_approved: approved,
+        architect_feedback: feedback
+    };
     if (approved) {
-        // Clear state on approval
         clearVerificationState(directory, sessionId);
-        return { ...state, pending: false };
+        return { ...mutableState, pending: false };
     }
-    // Check if max attempts reached
-    if (state.verification_attempts >= state.max_verification_attempts) {
+    if (mutableState.verification_attempts >= mutableState.max_verification_attempts) {
         clearVerificationState(directory, sessionId);
-        return { ...state, pending: false };
+        return { ...mutableState, pending: false };
     }
-    // Continue verification loop
-    writeVerificationState(directory, state, sessionId);
-    return state;
+    writeVerificationState(directory, mutableState, sessionId);
+    return mutableState;
 }
 /**
  * Generate architect verification prompt

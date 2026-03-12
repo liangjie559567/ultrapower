@@ -54,16 +54,66 @@ export function removeCodeBlocks(text) {
  * Strips XML tags, URLs, file paths, and code blocks.
  */
 export function sanitizeForKeywordDetection(text) {
-    // Remove XML tag blocks (opening + content + closing; tag names must match)
-    let result = text.replace(/<(\w[\w-]*)[\s>][\s\S]*?<\/\1>/g, '');
-    // Remove self-closing XML tags
-    result = result.replace(/<\w[\w-]*(?:\s[^>]*)?\s*\/>/g, '');
+    // Limit input length to prevent ReDoS (50KB max)
+    const MAX_LENGTH = 50000;
+    if (text.length > MAX_LENGTH) {
+        text = text.slice(0, MAX_LENGTH);
+    }
+    // Remove code blocks first (fenced and inline)
+    let result = removeCodeBlocks(text);
+    // Remove XML tags using iterative state machine (no backtracking)
+    result = removeXmlTags(result);
     // Remove URLs
     result = result.replace(/https?:\/\/\S+/g, '');
-    // Remove file paths — requires leading / or ./ or multi-segment dir/file.ext
-    result = result.replace(/(^|[\s"'`(])(?:\.?\/(?:[\w.-]+\/)*[\w.-]+|(?:[\w.-]+\/)+[\w.-]+\.\w+)/gm, '$1');
-    // Remove code blocks (fenced and inline)
-    result = removeCodeBlocks(result);
+    // Remove file paths with slashes
+    result = result.replace(/\/[\w./-]+/g, '');
+    result = result.replace(/\.\/[\w./-]+/g, '');
+    result = result.replace(/\b[\w-]+\/[\w./-]+/g, '');
+    return result;
+}
+/**
+ * Remove XML tags using iterative parsing (ReDoS-safe)
+ */
+function removeXmlTags(text) {
+    let result = '';
+    let i = 0;
+    while (i < text.length) {
+        if (text[i] === '<') {
+            const tagStart = i;
+            i++;
+            // Find tag name
+            let tagName = '';
+            while (i < text.length && /[\w-]/.test(text[i])) {
+                tagName += text[i];
+                i++;
+            }
+            if (!tagName) {
+                result += text[tagStart];
+                continue;
+            }
+            // Skip to end of opening tag
+            while (i < text.length && text[i] !== '>') {
+                i++;
+            }
+            if (i < text.length)
+                i++; // skip '>'
+            // Look for closing tag
+            const closeTag = `</${tagName}>`;
+            const closeIndex = text.indexOf(closeTag, i);
+            if (closeIndex !== -1) {
+                // Skip content and closing tag
+                i = closeIndex + closeTag.length;
+            }
+            else {
+                // No closing tag, just skip opening tag
+                result += ' ';
+            }
+        }
+        else {
+            result += text[i];
+            i++;
+        }
+    }
     return result;
 }
 /**
@@ -79,6 +129,8 @@ export function extractPromptText(parts) {
  * Detect keywords in text and return matches with type info
  */
 export function detectKeywordsWithType(text, _agentName) {
+    if (typeof text !== 'string')
+        return [];
     const detected = [];
     const cleanedText = sanitizeForKeywordDetection(text);
     // Check each keyword type

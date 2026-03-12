@@ -1,0 +1,1 @@
+{"version":3,"file":"unified-logger.d.ts","sourceRoot":"","sources":["../../src/lib/unified-logger.ts"],"names":[],"mappings":"AAkBA,wBAAgB,YAAY,CAAC,OAAO,EAAE,MAAM;qBAEvB,OAAO,EAAE;oBACV,OAAO,EAAE;oBACT,OAAO,EAAE;qBACR,OAAO,EAAE;wBACN,OAAO,EAAE;EAEhC;AAED,eAAO,MAAM,MAAM;qBARE,OAAO,EAAE;oBACV,OAAO,EAAE;oBACT,OAAO,EAAE;qBACR,OAAO,EAAE;wBACN,OAAO,EAAE;CAIe,CAAC"}

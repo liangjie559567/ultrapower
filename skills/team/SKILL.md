@@ -415,6 +415,18 @@ state_write(mode="team", current_phase="team-fix", state={
 
 生成队友时，在 prompt 中包含此 preamble 以建立工作协议。根据每个队友的具体任务分配进行调整。
 
+**重要：所有 worker 自动遵循 Socratic 工作流纪律**
+
+每个 worker 的 prompt 自动包含以下工作流门禁：
+
+1. **需求澄清（5W1H）** - 任务不清晰时向 lead 提问
+2. **最佳实践研究** - 搜索类似实现和模式
+3. **方案对比** - 列出 2-3 种方法并推荐
+4. **测试优先（TDD）** - 实现前编写测试
+5. **质量门禁** - 代码/安全/性能审查
+
+使用 `getTeamWorkerPrompt(taskDescription, workerName)` 生成包含 Socratic 纪律的完整 prompt。
+
 ```
 You are a TEAM WORKER in team "{team_name}". Your name is "{worker_name}".
 You report to the team lead ("team-lead").

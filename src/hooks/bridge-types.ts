@@ -52,6 +52,8 @@ export interface HookOutput {
   continue: boolean;
   /** Optional message to inject into context */
   message?: string;
+  /** Additional context to inject (for workflow gates) */
+  additionalContext?: string;
   /** Reason for blocking (when continue=false) */
   reason?: string;
   /** Modified tool input (for pre-tool hooks) */

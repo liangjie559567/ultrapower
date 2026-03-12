@@ -57,13 +57,96 @@ export async function acquireLock(lockPath, staleMs = 30000) {
     return unlock;
 }
 /**
+ * 在文件锁保护下执行同步操作
+ */
+export function withFileLockSync(filePath, fn, maxRetries = 20) {
+    if (filePath.includes('..')) {
+        throw new Error('[file-lock] Path traversal attempt detected');
+    }
+    const resolvedPath = path.resolve(filePath);
+    const lockPath = `${resolvedPath}.lock`;
+    const lockFile = path.join(lockPath, 'lock.json');
+    const fileDir = path.dirname(resolvedPath);
+    const lockPathParent = path.dirname(lockPath);
+    if (!fs.existsSync(fileDir)) {
+        fs.mkdirSync(fileDir, { recursive: true });
+    }
+    if (!fs.existsSync(lockPathParent)) {
+        fs.mkdirSync(lockPathParent, { recursive: true });
+    }
+    let lastError = null;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            fs.mkdirSync(lockPath);
+            const meta = { pid: process.pid, timestamp: Date.now() };
+            fs.writeFileSync(lockFile, JSON.stringify(meta), 'utf8');
+            break;
+        }
+        catch (err) {
+            const nodeErr = err;
+            if (nodeErr.code === 'EEXIST') {
+                let meta = null;
+                try {
+                    const raw = fs.readFileSync(lockFile, 'utf8');
+                    meta = JSON.parse(raw);
+                }
+                catch {
+                    // Treat as stale lock
+                }
+                const isStale = meta === null || Date.now() - meta.timestamp > 30000;
+                if (isStale) {
+                    fs.rmSync(lockPath, { recursive: true, force: true });
+                    continue;
+                }
+                if (attempt < maxRetries) {
+                    const delay = Math.min(100 * Math.pow(2, attempt), 1000) + Math.random() * 50;
+                    const start = Date.now();
+                    while (Date.now() - start < delay) {
+                        // Busy wait
+                    }
+                    continue;
+                }
+                lastError = new Error(`[file-lock] 锁已被占用: ${lockPath}`);
+            }
+            else if (nodeErr.code === 'ENOENT') {
+                fs.rmSync(lockPath, { recursive: true, force: true });
+                continue;
+            }
+            else {
+                throw err;
+            }
+        }
+    }
+    if (lastError) {
+        throw lastError;
+    }
+    try {
+        return fn();
+    }
+    finally {
+        try {
+            fs.rmSync(lockPath, { recursive: true, force: true });
+        }
+        catch (err) {
+            const nodeErr = err;
+            if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
+                throw err;
+            }
+        }
+    }
+}
+/**
  * 在文件锁保护下执行异步操作
  */
-export async function withFileLock(filePath, fn, maxRetries = 20, retryDelay = 100) {
-    const lockPath = `${filePath}.lock`;
+export async function withFileLock(filePath, fn, maxRetries = 20, _retryDelay = 100) {
+    if (filePath.includes('..')) {
+        throw new Error('[file-lock] Path traversal attempt detected');
+    }
+    const resolvedPath = path.resolve(filePath);
+    const lockPath = `${resolvedPath}.lock`;
     const lockFile = path.join(lockPath, 'lock.json');
     // Ensure parent directories exist for both file and lock
-    const fileDir = path.dirname(filePath);
+    const fileDir = path.dirname(resolvedPath);
     const lockPathParent = path.dirname(lockPath);
     if (!fs.existsSync(fileDir)) {
         fs.mkdirSync(fileDir, { recursive: true });

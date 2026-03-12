@@ -97,11 +97,14 @@ export async function incrementReinforcement(directory?: string, sessionId?: str
     return null;
   }
 
-  state.reinforcement_count += 1;
-  state.last_checked_at = new Date().toISOString();
+  const mutableState = {
+    ...state,
+    reinforcement_count: state.reinforcement_count + 1,
+    last_checked_at: new Date().toISOString()
+  };
 
-  if (await writeUltraworkState(state, directory, sessionId)) {
-    return state;
+  if (await writeUltraworkState(mutableState, directory, sessionId)) {
+    return mutableState;
   }
 
   return null;

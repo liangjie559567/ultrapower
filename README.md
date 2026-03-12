@@ -28,9 +28,9 @@ graph TB
 
 **核心理念**：Superpowers 的严格工作流纪律 + OMC 的并行执行能力
 
-## 快速开始（3 分钟上手）
+## 快速开始（15 分钟上手）
 
-**新用户？** 查看 [📖 3 分钟快速入门指南](docs/getting-started/QUICKSTART.md)
+**新用户？** 查看 [📖 15 分钟快速上手指南](docs/getting-started/quickstart.md) | [核心概念图解](docs/getting-started/concepts.md) | [快速参考卡片](docs/getting-started/quick-reference.md)
 
 ### 前置条件
 
@@ -52,6 +52,8 @@ graph TB
 # 2. 运行安装向导
 /ultrapower:omc-setup
 ```
+
+> **Windows 用户注意**：如果安装后 HUD 不显示，运行 `/ultrapower:omc-doctor` 检查路径格式。Claude Code 要求配置文件中使用正斜杠（`C:/Users/...`）而非反斜杠。
 
 ### 验证安装
 
@@ -78,6 +80,8 @@ autopilot "创建一个 hello world 函数"
 ---
 
 ## 基础工作流
+
+> **🛡️ 工作流门禁系统**：ultrapower 自动强制执行 superpowers 工作流纪律。尝试跳过必要步骤时，系统会自动注入对应 skill 并显示警告。
 
 1. **brainstorming** — 代码前必须先设计。通过对话细化需求，探索 2-3 种方案，呈现设计并获批准，保存设计文档。
 

@@ -54,6 +54,9 @@ function makeRegistry(version = '5.2.2', installPath = '/home/user/.claude/plugi
 describe('syncPluginRegistry', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedExistsSync.mockReturnValue(false);
+    mockedReadFileSync.mockReturnValue('');
+    mockedAtomicWriteJsonSync.mockReturnValue(undefined);
   });
 
   it('1. updates version and lastUpdated, preserves installPath', () => {
@@ -161,6 +164,8 @@ describe('syncPluginRegistry', () => {
 describe('checkVersionConsistency', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedExistsSync.mockReturnValue(false);
+    mockedReadFileSync.mockReturnValue('');
   });
 
   it('8. consistent: true when all three sources match', () => {
@@ -231,6 +236,9 @@ describe('checkVersionConsistency', () => {
 describe('getInstalledPluginEntry (via syncPluginRegistry)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedExistsSync.mockReturnValue(false);
+    mockedReadFileSync.mockReturnValue('');
+    mockedAtomicWriteJsonSync.mockReturnValue(undefined);
   });
 
   it('12. returns first entry when multiple entries exist', () => {

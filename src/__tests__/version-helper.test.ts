@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 vi.mock('fs', () => ({
   readFileSync: vi.fn(),
@@ -10,6 +10,10 @@ import { getRuntimePackageVersion } from '../lib/version.js';
 describe('getRuntimePackageVersion', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('returns version from package.json', () => {

@@ -104,7 +104,7 @@ gh pr create --base dev ...
 
 ## 全链路规范文档
 
-ultrapower v5.6.9 规范体系位于 `docs/standards/`，所有实现必须遵守：
+ultrapower v7.0.3 规范体系位于 `docs/standards/`，所有实现必须遵守：
 
 | 优先级 | 文档 | 核心内容 |
 | -------- | ------ | --------- |

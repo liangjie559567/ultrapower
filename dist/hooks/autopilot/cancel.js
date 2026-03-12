@@ -62,16 +62,15 @@ export async function cancelAutopilot(directory, sessionId) {
         }
         cleanedUp.push('ultraqa');
     }
-    // Mark autopilot as inactive but preserve state for resume
-    state.active = false;
-    await writeAutopilotState(directory, state, sessionId);
+    const mutableState = { ...state, active: false };
+    await writeAutopilotState(directory, mutableState, sessionId);
     const cleanupMsg = cleanedUp.length > 0
         ? ` Cleaned up: ${cleanedUp.join(', ')}.`
         : '';
     return {
         success: true,
-        message: `Autopilot cancelled at phase: ${state.phase}.${cleanupMsg} Progress preserved for resume.`,
-        preservedState: state
+        message: `Autopilot cancelled at phase: ${mutableState.phase}.${cleanupMsg} Progress preserved for resume.`,
+        preservedState: mutableState
     };
 }
 /**
@@ -188,15 +187,16 @@ export async function resumeAutopilot(directory, sessionId) {
             message: `Max iterations (${state.max_iterations}) reached, cannot resume`
         };
     }
-    // Re-activate
-    state.active = true;
-    state.iteration++;
-    // Record interruption metadata if applicable
-    if (wasInterrupted) {
-        state.was_interrupted = true;
-        state.resumed_at = new Date().toISOString();
-    }
-    if (!(await writeAutopilotState(directory, state, sessionId))) {
+    const mutableState = {
+        ...state,
+        active: true,
+        iteration: state.iteration + 1,
+        ...(wasInterrupted && {
+            was_interrupted: true,
+            resumed_at: new Date().toISOString()
+        })
+    };
+    if (!(await writeAutopilotState(directory, mutableState, sessionId))) {
         return {
             success: false,
             message: 'Failed to update autopilot state'
@@ -205,7 +205,7 @@ export async function resumeAutopilot(directory, sessionId) {
     return {
         success: true,
         message: `Resuming autopilot at phase: ${state.phase}`,
-        state
+        state: mutableState
     };
 }
 /**

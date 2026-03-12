@@ -394,3 +394,129 @@ gh release view v<version> --json tagName,publishedAt
 * stage: "release_complete"
 
 * output_summary: 发布版本号、发布渠道、是否有回滚计划
+
+## 故障排查指南
+
+### 问题 1: Git Tag 冲突
+
+**症状**: Release 工作流失败，错误信息 "tag already exists"
+
+**原因**: 手动推送的 tag 与 changesets 自动创建的 tag 冲突
+
+**解决方案**:
+```bash
+# 1. 删除远程 tag
+git push origin :refs/tags/v<version>
+
+# 2. 重新触发工作流（创建空提交）
+git commit --allow-empty -m "chore: trigger release workflow"
+git pull --rebase origin main
+git push origin main
+```
+
+**预防**: 避免手动推送 tag，让 CI 自动管理
+
+### 问题 2: 版本文件不同步
+
+**症状**: Release 工作流失败，validate:versions 检查失败
+
+**原因**: marketplace.json 或其他版本文件未更新
+
+**解决方案**:
+```bash
+# 1. 运行版本同步检查
+node scripts/check-version-sync.mjs
+
+# 2. 手动更新不同步的文件
+# - marketplace.json
+# - docs/CLAUDE.md
+# - CLAUDE.md
+
+# 3. 提交并推送
+git add -A
+git commit -m "chore: sync version files to <version>"
+git pull --rebase origin main
+git push origin main
+```
+
+**预防**: 发布前运行 `node scripts/check-version-sync.mjs`
+
+### 问题 3: ESLint 错误阻塞发布
+
+**症状**: CI 工作流失败，ESLint 报错
+
+**原因**: 代码中存在 lint 错误（no-empty, prefer-const 等）
+
+**解决方案**:
+```bash
+# 1. 运行 ESLint 检查
+npm run lint
+
+# 2. 修复错误
+# - 空 catch 块添加注释
+# - 未重新赋值的 let 改为 const
+
+# 3. 验证修复
+npm run lint
+
+# 4. 提交并推送
+git add -A
+git commit -m "fix(lint): resolve ESLint errors"
+git pull --rebase origin main
+git push origin main
+```
+
+**预防**: 提交前运行 `npm run lint`
+
+### 问题 4: 部分发布失败
+
+**症状**: npm 已发布但 GitHub Release 未创建（或反之）
+
+**原因**: CI 工作流部分步骤失败
+
+**解决方案**:
+```bash
+# 1. 验证当前状态
+npm view @liangjie559567/ultrapower version
+gh release view v<version>
+
+# 2. 补充缺失步骤
+# 如果 npm 未发布：
+npm publish --access public --no-provenance
+
+# 如果 GitHub Release 未创建：
+git push origin v<version>  # 确保 tag 存在
+gh release create v<version> --title "v<version>" --notes "<notes>"
+
+# 3. 验证最终状态
+npm view @liangjie559567/ultrapower version
+gh release view v<version>
+```
+
+### 问题 5: 远程推送冲突
+
+**症状**: git push 失败，"remote contains work"
+
+**原因**: 远程有新提交，本地落后
+
+**解决方案**:
+```bash
+git stash
+git pull --rebase origin main
+git stash pop
+git push origin main
+```
+
+**预防**: 推送前先拉取最新代码
+
+## 版本同步检查清单
+
+发布前必须检查：
+- [ ] package.json
+- [ ] marketplace.json
+- [ ] docs/CLAUDE.md
+- [ ] CLAUDE.md
+- [ ] 运行 `node scripts/check-version-sync.mjs`
+- [ ] 运行 `npm run lint`
+- [ ] 运行 `npm test`
+

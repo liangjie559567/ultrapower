@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { getQueryEngine } from '../../analytics/query-engine.js';
 import { cleanupStaleBackgroundTasks } from '../../hud/background-cleanup.js';
 import { colors } from '../utils/formatting.js';
@@ -26,4 +27,11 @@ export async function cleanupCommand(options: { retention?: number }): Promise<v
       `(${pythonCleanup.staleSessions} stale session(s), ${pythonCleanup.activeSessions} active session(s) skipped)`
   );
   console.log(colors.green('\n✓ Cleanup complete\n'));
+}
+
+export function createCleanupCommand(): Command {
+  return new Command('cleanup')
+    .description('Clean up old logs and orphaned background tasks')
+    .option('--retention <days>', 'Retention period in days', '30')
+    .action(cleanupCommand);
 }

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/features/speckit-core/index.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,OAAO,EAAE,oBAAoB,EAAE,kBAAkB,EAAE,MAAM,mBAAmB,CAAC;AAC7E,OAAO,EAAE,qBAAqB,EAAE,mBAAmB,EAAE,MAAM,cAAc,CAAC;AAC1E,OAAO,EAAE,YAAY,EAAE,UAAU,EAAE,MAAM,WAAW,CAAC;AACrD,OAAO,EAAE,aAAa,EAAE,WAAW,EAAE,MAAM,YAAY,CAAC;AACxD,cAAc,YAAY,CAAC"}

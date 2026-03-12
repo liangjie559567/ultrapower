@@ -1,10 +1,141 @@
+# ultrapower v7.0.1
+
+## 7.0.5
+
+### Patch Changes
+
+- b365f0f: Fix 5 critical bugs - readonly property mutations and type errors
+  - **Fix**: TypeScript error in client.ts:792 - added undefined check for Map.keys()
+  - **Fix**: Ralph verifier logic error - return updated state instead of old state
+  - **Fix**: LSP test assertions - use correct bufferChunks property
+  - **Fix**: Ralph loop readonly mutation - use object spread for state updates
+  - **Fix**: Autopilot state mutations - fix all readonly property assignments
+  - **Test Results**: All 431 test files passing, 6657 tests passing, build successful
+
+## 7.0.4
+
+### Patch Changes
+
+- 1329b34: Fix Windows HUD display issue and enhance diagnostics
+  - **Fix**: Windows path format causing HUD not to display (backslashes → forward slashes)
+  - **Enhancement**: Add path format check to omc-doctor
+  - **Knowledge**: New pattern PAT-018 for Windows config paths
+  - **Auto-fix**: omc-setup now detects and fixes corrupted paths automatically
+
+## 7.0.1
+
+### Fixed
+
+**测试稳定性修复** - 修复 89 个测试失败，达到 100% 通过率
+
+#### 1. 进程崩溃修复
+
+- **问题**: 原生模块（better-sqlite3, @ast-grep/napi）在 threads 池中导致 Segmentation fault
+- **修复**: 切换到 `pool: 'forks'` + `isolate: true`
+- **影响**: 消除所有进程崩溃，测试执行稳定
+
+#### 2. 全局测试清理机制
+
+- **问题**: Mock 污染导致测试间状态泄漏
+- **修复**: 创建 `tests/setup.ts` 统一清理 mock 和定时器
+- **影响**: 消除测试顺序依赖
+
+#### 3. Windows 文件锁清理
+
+- **问题**: Windows 平台文件句柄释放延迟导致 EPERM 错误
+- **修复**: 增加重试次数（10次）和延迟（500ms）
+- **影响**: 解决 Windows 平台清理失败
+
+### Performance
+
+- **测试执行时间**: 61s → 31s (49% 提升)
+- **测试通过率**: <96% → 100%
+- **测试文件通过**: 413/426 → 426/426
+
+### Fixed Files
+
+- `vitest.config.ts` - 进程隔离配置
+- `tests/setup.ts` - 全局清理机制（新建）
+- 14 个测试文件的 mock 清理优化
+
+---
+
+# ultrapower v6.0.0
+
+## 6.0.0
+
+### BREAKING CHANGES
+
+**安全加固版本** - 修复 3 个关键安全问题（D-05、D-06、D-07）
+
+#### 1. permission-request Hook 强制阻塞（D-05）
+
+- **变更**: 失败时不再静默降级，强制返回 `{ continue: false }`
+- **影响**: `result = null/undefined/false` 现在会阻塞操作（之前：放行）
+- **迁移**: 无需操作（自动修复安全漏洞）
+
+#### 2. 全部 15 类 HookType 严格白名单（D-06）
+
+- **变更**: 扩展白名单验证到所有 15 类 HookType（之前：仅 4 类）
+- **影响**: 未知字段被丢弃并记录到安全审计日志
+- **迁移**: 检查 `.omc/logs/security-audit.jsonl` 中的 `field_filtered` 事件
+
+#### 3. 原子写入 + 重试机制（D-07）
+
+- **变更**: 所有状态文件使用 `atomicWriteJsonSyncWithRetry`（指数退避：100ms/200ms/400ms）
+- **影响**: 提升并发写入安全性，Windows 平台文件锁定自动重试
+- **迁移**: 内部自动升级，无需操作
+
+### Features
+
+- **安全审计日志**: 新增 `.omc/logs/security-audit.jsonl`，记录字段过滤和权限阻塞事件
+- **敏感字段脱敏**: 自动脱敏 token/apiKey/password/secret 等字段
+- **日志轮转**: 10MB 单文件限制，保留 7 个历史文件
+
+### Bug Fixes
+
+- fix(hooks): permission-request 失败时强制阻塞（SEC-H01）
+- fix(hooks): 扩展白名单验证到全部 15 类 HookType（SEC-H03）
+- fix(state): subagent-tracker 使用原子写入保护（SEC-S01）
+
+### Documentation
+
+- docs: 更新 runtime-protection.md 反映 v6.0.0 变更
+- docs: 新增 v6.0.0 迁移指南（docs/migration/v6.0.0.md）
+
+### Tests
+
+- test: 新增 permission-request 边界情况测试（6 个用例）
+- test: 新增 whitelist 验证测试（3 个 HookType）
+- test: 新增 atomic-write 并发测试
+
+**发布日期**: 2026-03-10
+
+**迁移指南**: [docs/migration/v6.0.0.md](docs/migration/v6.0.0.md)
+
+---
+
 # ultrapower v5.6.5
+
+## 5.6.11
+
+### Patch Changes
+
+- fix: 解决所有 lint 警告并修复类型错误
+  - 移除未使用的导入和变量
+  - 修复动态导入模块的类型处理
+  - 修复测试文件中的变量引用错误
+  - 保留必要的 `any` 类型用于动态导入
+
+**发布日期**: 2026-03-09
+
+---
 
 ## 5.6.8
 
 ### Patch Changes
 
-* test: 修复 CI 测试稳定性问题
+- test: 修复 CI 测试稳定性问题
   - 更新 load-agent-prompt 测试适配新的 codex 格式
   - 放宽 file-lock 并发测试断言以提高 CI 稳定性
 
@@ -16,7 +147,7 @@
 
 ### Patch Changes
 
-* fix: 修复文档部署失败问题
+- fix: 修复文档部署失败问题
   - 添加 `.markdownlint.json` 配置文件禁用冲突规则
   - 更新 GitHub Actions 工作流引用配置文件
   - 文档成功部署到 GitHub Pages
@@ -29,15 +160,15 @@
 
 ### Patch Changes
 
-* 389a6d4: fix(ccg): address code review HIGH issues - async file I/O, monorepo detection, file type routing
+- 389a6d4: fix(ccg): address code review HIGH issues - async file I/O, monorepo detection, file type routing
 
-* fix(types): add type assertion for state.active in hasActiveState
+- fix(types): add type assertion for state.active in hasActiveState
 
 **发布日期**: 2026-03-09
 
 ## Bug Fixes
 
-* **MCP Codex 环境变量传递** - 修复同步执行模式缺少环境变量导致的 spawn ENOENT 错误
+- **MCP Codex 环境变量传递** - 修复同步执行模式缺少环境变量导致的 spawn ENOENT 错误
   - 在 `codex-core.ts` 同步 spawn 调用中添加 `env: getSpawnEnv()`
   - 确保 Windows 下 npm 全局包路径正确传递到子进程
   - 后台模式已正确使用环境变量，本次修复同步模式
@@ -50,7 +181,7 @@
 
 ## Bug Fixes
 
-* **Windows MCP CLI 兼容性** - 修复 Windows 下 Codex/Gemini CLI spawn 失败
+- **Windows MCP CLI 兼容性** - 修复 Windows 下 Codex/Gemini CLI spawn 失败
   - 确保 bridge 文件正确使用 `getCliCommand()` 添加 `.cmd` 扩展名
   - 所有 spawn 调用在 Windows 下使用 `shell: true`
   - 重新构建 bridge/codex-server.cjs 和 bridge/gemini-server.cjs
@@ -63,20 +194,20 @@
 
 ## Features
 
-* **Skill Frontmatter 验证** - 自动验证 skill 定义完整性
+- **Skill Frontmatter 验证** - 自动验证 skill 定义完整性
   - 新增 validate-skill-frontmatter.mjs 脚本
   - 集成到 prepublishOnly hook
   - 添加 npm run validate:skills 命令
 
 ## Bug Fixes
 
-* **CI 测试稳定性** - 修复性能测试在快速 CI 环境中的不稳定问题
+- **CI 测试稳定性** - 修复性能测试在快速 CI 环境中的不稳定问题
   - 将 toBeLessThan 改为 toBeLessThanOrEqual
   - 避免缓存命中时时间相等导致的失败
 
 ## Documentation
 
-* **发布流程文档** - 完善 release skill 文档
+- **发布流程文档** - 完善 release skill 文档
   - 添加 skill frontmatter 验证步骤
   - 文档化 npm provenance 环境限制
 
@@ -88,7 +219,7 @@
 
 ## Features
 
-* **CCG Workflow v1.0** - 完整的Claude-Codex-Gemini协作工作流
+- **CCG Workflow v1.0** - 完整的Claude-Codex-Gemini协作工作流
   - 新增 ccg-workflow skill，支持自动项目类型检测
   - 实现4个性能优化模块：
     - 文件缓存系统（LRU，5分钟TTL，命中率监控）
@@ -101,7 +232,7 @@
 
 ## Bug Fixes
 
-* **Skills测试修复** - 更新测试以支持72个skills
+- **Skills测试修复** - 更新测试以支持72个skills
   - 为 ccg-workflow skill 添加缺失的 frontmatter description
   - 更新测试期望值从71到72
   - 添加 ccg-workflow 到 expectedSkills 数组
@@ -109,14 +240,14 @@
 
 ## Performance
 
-* **缓存命中率监控** - 文件缓存新增统计功能
+- **缓存命中率监控** - 文件缓存新增统计功能
   - 跟踪 hits/misses/hitRate
   - 支持 getStats() 和 resetStats() API
   - 效率提升360%（相比无缓存方案）
 
 ## Documentation
 
-* **CCG Workflow验证指南** - 完整的测试和验证文档
+- **CCG Workflow验证指南** - 完整的测试和验证文档
   - 3个测试场景（新项目、老项目、混合）
   - 性能验证基准
   - 报告模板
@@ -129,25 +260,25 @@
 
 ### Patch Changes
 
-* Test changesets workflow integration
+- Test changesets workflow integration
 
 **发布日期**: 2026-03-08
 
 ## Bug Fixes
 
-* **HUD 不显示问题修复** - 恢复缺失的 statusline 配置
+- **HUD 不显示问题修复** - 恢复缺失的 statusline 配置
   - 根因：`.claude-plugin/plugin.json` 缺少 `statusline` 字段
   - 影响：用户安装插件后 HUD 无法显示
   - 修复：添加 `statusline.command` 和 `statusline.args` 配置
   - Commit: 58b28a9a
 
-* **插件配置同步** - 修复多个配置文件不一致问题
+- **插件配置同步** - 修复多个配置文件不一致问题
   - `.cursor-plugin/plugin.json` 包含错误的 superpowers 配置，已同步为 ultrapower
   - `marketplace.json` 版本不一致（source.version: 5.5.35 → 5.5.38）
   - 确保所有插件清单包含 statusline 配置
   - Commit: 149031aa
 
-* **版本同步脚本增强** - 防止未来配置丢失
+- **版本同步脚本增强** - 防止未来配置丢失
   - `bump-version.mjs` 新增 `.cursor-plugin/plugin.json` 同步
   - 现在同步 5 个文件：package.json, .claude-plugin/plugin.json, .cursor-plugin/plugin.json, marketplace.json (两个)
   - 版本验证包含 cursorPlugin 字段检查
@@ -161,23 +292,23 @@
 
 ## Documentation
 
-* **文档同步到 v5.5.33** - 全面更新文档以匹配实际实现
+- **文档同步到 v5.5.33** - 全面更新文档以匹配实际实现
   - 同步版本号：8 个文档文件从 v5.5.5 更新到 v5.5.33
   - 修正计数：agents (50→49), hooks (47→43)
   - 修复路径引用：移除 CLAUDE.md 中的 `./` 前缀
 
-* **文档自动化工具** - 创建 3 个脚本防止未来文档漂移
+- **文档自动化工具** - 创建 3 个脚本防止未来文档漂移
   - `scripts/sync-version.mjs`: 从 package.json 同步版本到文档
   - `scripts/validate-counts.mjs`: 验证 agents/skills/hooks/tools 计数
   - `scripts/check-links.mjs`: 检查 markdown 文件中的断链
   - 新增 6 个 npm 脚本：`sync:version`, `validate:counts`, `check:links`（含 `--dry-run` 和 `--fix` 模式）
 
-* **新用户指南** - 改善新用户入门体验
+- **新用户指南** - 改善新用户入门体验
   - `docs/QUICKSTART.md`: 5 分钟快速入门指南
   - `docs/AXIOM.md`: 统一的 Axiom 框架文档（14 agents, 14 skills, 完整工作流示例）
   - 更新 `docs/INSTALL.md`: 添加不支持安装方法的警告
 
-* **Agent 架构文档重写** - 澄清模型路由机制
+- **Agent 架构文档重写** - 澄清模型路由机制
   - 重写 `docs/shared/agent-tiers.md` 和 `docs/partials/agent-tiers.md`
   - 移除误导性的 `-low/-medium/-high` 后缀变体说明
   - 更新为反映实际的 `model` 参数架构（haiku/sonnet/opus）
@@ -191,16 +322,16 @@
 
 ## Bug Fixes
 
-* **文件锁竞态条件修复** - 消除 `withFileLock` 中的竞态窗口
+- **文件锁竞态条件修复** - 消除 `withFileLock` 中的竞态窗口
   - 将 `lock.json` 写入移到 `mkdir` 成功后立即执行
   - 修复并发测试失败：`[1,3,2,4]` → `[1,2,3,4]` 或 `[3,4,1,2]`
   - 添加 ENOENT 错误处理，防止 writeFile 时锁目录被删除
 
-* **Windows 兼容性修复** - 修复 Windows 平台锁清理错误
+- **Windows 兼容性修复** - 修复 Windows 平台锁清理错误
   - 在 finally 块中同时忽略 ENOENT 和 ENOTEMPTY 错误
   - 修复 3 进程并发测试在 Windows CI 上的失败
 
-* **性能测试稳定性** - 放宽 CI 环境性能阈值
+- **性能测试稳定性** - 放宽 CI 环境性能阈值
   - `batchUpsert` 阈值从 100ms 增加到 150ms
   - 适应 CI 环境的性能波动（Windows CI 实测 102.75ms）
 
@@ -212,7 +343,7 @@
 
 ## Bug Fixes
 
-* **测试异步调用修复** - 修复测试文件中的异步调用问题
+- **测试异步调用修复** - 修复测试文件中的异步调用问题
   - 修复 `ultrapilot/index.test.ts` 中 1 处缺失 await
   - 修复 `autopilot/transitions.test.ts` 中 17 处重复 `await await`
   - 修复 `autopilot/enforcement.test.ts` 中 Windows 文件锁问题（异步清理+重试）
@@ -227,7 +358,7 @@
 
 ## Bug Fixes
 
-* **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
+- **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
   - 修复 `mcpServerTools` 导出逻辑，自动过滤掉带 `ultrapower:` 前缀的工具
   - 解决 `/ultrapower:swarm` 报错：`mcp__plugin_ultrapower_t__ultrapower_parallel_opportunity_detector` 名称过长
   - 现在 MCP 服务器只暴露短名称版本（如 `parallel_detector`），避免重复前缀
@@ -240,7 +371,7 @@
 
 ## Bug Fixes
 
-* **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
+- **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
   - 修复 `mcpServerTools` 导出逻辑，自动过滤掉带 `ultrapower:` 前缀的工具
   - 解决 `/ultrapower:swarm` 报错：`mcp__plugin_ultrapower_t__ultrapower_parallel_opportunity_detector` 名称过长
   - 现在 MCP 服务器只暴露短名称版本（如 `parallel_detector`），避免重复前缀
@@ -253,7 +384,7 @@
 
 ## Bug Fixes
 
-* **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
+- **MCP 工具名称长度修复** - 修复 MCP 工具名称超过 Anthropic API 64 字符限制的问题
   - 移除 MCP 服务器中的 `ultrapower:` 前缀（导致重复前缀：`mcp__plugin_ultrapower_t__ultrapower_*`）
   - 缩短过长的工具名称：
     - `parallel_opportunity_detector` → `parallel_detector`
@@ -276,24 +407,24 @@
 
 ## Bug Fixes
 
-* **Release pipeline fixes** - 修复阻止版本正确分发的关键发布流程 bug
+- **Release pipeline fixes** - 修复阻止版本正确分发的关键发布流程 bug
   - 移除 package.json 中的循环依赖 (@liangjie559567/ultrapower)
   - 修复 marketplace.json 同步逻辑，直接推送到 main 分支
   - 修复 ast-tools.ts 中的 TypeScript 类型错误（Buffer 处理）
 
-* **CI test fixes** - 解决 CI 环境特定的测试失败
+- **CI test fixes** - 解决 CI 环境特定的测试失败
   - priority-chain.test.ts: 移除对可选 message 字段的断言
   - reply-listener.test.ts: 修正 vi.mock 声明顺序（必须在导入之前）
 
 ## Verification
 
-* ✅ 所有 360 个测试文件通过（6273 个测试）
+- ✅ 所有 360 个测试文件通过（6273 个测试）
 
-* ✅ CI 构建成功
+- ✅ CI 构建成功
 
-* ✅ v5.5.23 已发布到 npm 和 GitHub releases
+- ✅ v5.5.23 已发布到 npm 和 GitHub releases
 
-* ✅ marketplace.json 已同步到 main 分支
+- ✅ marketplace.json 已同步到 main 分支
 
 ---
 
@@ -303,43 +434,43 @@
 
 ## Security
 
-* **permission-request hook blocking mode** (eef86d0) - 实现权限请求 hook 的阻塞模式，防止未授权操作
+- **permission-request hook blocking mode** (eef86d0) - 实现权限请求 hook 的阻塞模式，防止未授权操作
 
-* **Environment variable validation** (a2f3f07) - 在 hook 执行中添加敏感环境变量验证
+- **Environment variable validation** (a2f3f07) - 在 hook 执行中添加敏感环境变量验证
 
-* **Safe JSON parsing** (5150246, efd5071) - 在关键路径（ultrapilot、nexus、audit）中用 `safeJsonParse()` 替代不安全的 `JSON.parse()`
+- **Safe JSON parsing** (5150246, efd5071) - 在关键路径（ultrapilot、nexus、audit）中用 `safeJsonParse()` 替代不安全的 `JSON.parse()`
 
-* **Windows command injection prevention** - 在 process-utils 中使用 `execFile` 替代 `execSync` 字符串拼接
+- **Windows command injection prevention** - 在 process-utils 中使用 `execFile` 替代 `execSync` 字符串拼接
 
 ## Performance
 
-* **Build time optimization** (59.6% improvement) - 并行构建系统将增量构建从 5.8s 降低到 2.4s
+- **Build time optimization** (59.6% improvement) - 并行构建系统将增量构建从 5.8s 降低到 2.4s
 
-* **Worker health check** (80% improvement) - 健康检查延迟从 ~50ms 降低到 <10ms
+- **Worker health check** (80% improvement) - 健康检查延迟从 ~50ms 降低到 <10ms
 
-* **Worker state query** (75% improvement) - 状态查询从 ~20ms 优化到 <5ms
+- **Worker state query** (75% improvement) - 状态查询从 ~20ms 优化到 <5ms
 
-* **Memory optimization** (30% reduction) - 实现内存优化器和内存工具库以提高资源效率
+- **Memory optimization** (30% reduction) - 实现内存优化器和内存工具库以提高资源效率
 
-* **LSP prewarming** (50% improvement) - 添加 LSP 客户端预热以减少首次调用延迟
+- **LSP prewarming** (50% improvement) - 添加 LSP 客户端预热以减少首次调用延迟
 
-* **Exponential backoff retry logic** (d29845a) - 改进 agent 重试机制的弹性
+- **Exponential backoff retry logic** (d29845a) - 改进 agent 重试机制的弹性
 
 ## Bug Fixes
 
-* **Inbox rotation boundary condition** (e028d74) - 修复收件箱轮转逻辑的边界情况
+- **Inbox rotation boundary condition** (e028d74) - 修复收件箱轮转逻辑的边界情况
 
-* **Code style improvements** (63bf173, f0f1b3a) - 移除未使用的参数并改进类型安全
+- **Code style improvements** (63bf173, f0f1b3a) - 移除未使用的参数并改进类型安全
 
-* **MCP bridge server updates** (150abe0) - 更新桥接服务器以确保兼容性
+- **MCP bridge server updates** (150abe0) - 更新桥接服务器以确保兼容性
 
-* **TimeoutManager memory leak** - `start()` 方法现在正确清理旧 timer
+- **TimeoutManager memory leak** - `start()` 方法现在正确清理旧 timer
 
-* **JSON.parse error handling** - 添加 `src/lib/safe-json.ts` 安全解析函数
+- **JSON.parse error handling** - 添加 `src/lib/safe-json.ts` 安全解析函数
 
 ## Improvements
 
-* **Test coverage enhancement** (444+ new tests) - 整体覆盖率从 54.55% 提升到 56-58%
+- **Test coverage enhancement** (444+ new tests) - 整体覆盖率从 54.55% 提升到 56-58%
   - hooks guards: +64.70% (32.35% → 97.05%)
   - MCP Client: +100% (0% → 100%)
   - bridge-entry: +64% (17.52% → 81.52%)
@@ -348,20 +479,20 @@
   - session-lock: +79% (3.31% → 82.31%)
   - Team Pipeline: +11.16% (83.77% → 94.93%)
 
-* **Architecture refactoring** - 统一 Worker 后端，实现 WorkerStateAdapter 抽象层
+- **Architecture refactoring** - 统一 Worker 后端，实现 WorkerStateAdapter 抽象层
   - 消除 400-500 行重复代码
   - 实现缓存层，性能提升 4-5 倍
   - 支持 MCP 和 Team 迁移
 
-* **Workflow automation** (2b0e08f, ccb20b7, 214cea9) - 将反思模块和工作流推荐器集成到 axiom-boot hook
+- **Workflow automation** (2b0e08f, ccb20b7, 214cea9) - 将反思模块和工作流推荐器集成到 axiom-boot hook
 
 ## Known Issues
 
-* **State file caching** - 重复读取状态文件时缺少缓存层（P1 - 性能优化）
+- **State file caching** - 重复读取状态文件时缺少缓存层（P1 - 性能优化）
 
-* **Hook synchronous I/O** - bridge 操作中的 `readFileSync()` 阻塞事件循环（P1 - 性能优化）
+- **Hook synchronous I/O** - bridge 操作中的 `readFileSync()` 阻塞事件循环（P1 - 性能优化）
 
-* **Database composite indexes** - 查询无法使用现有索引（P1 - 性能优化）
+- **Database composite indexes** - 查询无法使用现有索引（P1 - 性能优化）
 
 ## Migration Guide
 
@@ -369,25 +500,25 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 **推荐操作**：
 
-* 升级到 v5.5.18 以获得安全和性能改进
+- 升级到 v5.5.18 以获得安全和性能改进
 
-* 监控 Worker 健康检查指标（现在可在 <10ms 内获得）
+- 监控 Worker 健康检查指标（现在可在 <10ms 内获得）
 
-* 查看 hook 执行日志以了解 permission-request 阻塞行为
+- 查看 hook 执行日志以了解 permission-request 阻塞行为
 
 ## Statistics
 
-* **执行时间**: ~19 小时（比计划的 14-20 周快 96%）
+- **执行时间**: ~19 小时（比计划的 14-20 周快 96%）
 
-* **新增代码文件**: 15 个
+- **新增代码文件**: 15 个
 
-* **修改代码文件**: 12 个
+- **修改代码文件**: 12 个
 
-* **新增测试文件**: 20 个
+- **新增测试文件**: 20 个
 
-* **新增测试用例**: 472 个（100% 通过）
+- **新增测试用例**: 472 个（100% 通过）
 
-* **所有 6249 个测试通过，无回归**
+- **所有 6249 个测试通过，无回归**
 
 ---
 
@@ -395,15 +526,15 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 文档
 
-* **docs/troubleshooting/tool-name-length-error.md**: 新增工具名称过长错误的故障排查文档
+- **docs/troubleshooting/tool-name-length-error.md**: 新增工具名称过长错误的故障排查文档
   - 说明 v5.5.16 中的工具名称缩短修复
   - 提供用户升级指南
 
 ### 向后兼容
 
-* 所有工具名称已在 v5.5.16 中缩短，确保不超过 API 限制
+- 所有工具名称已在 v5.5.16 中缩短，确保不超过 API 限制
 
-* 用户需升级到 v5.5.16+ 以避免工具名称过长错误
+- 用户需升级到 v5.5.16+ 以避免工具名称过长错误
 
 ---
 
@@ -411,7 +542,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(mcp): 缩短工具名称以避免 API 长度限制** (提交 f9f2967)
+- **fix(mcp): 缩短工具名称以避免 API 长度限制** (提交 f9f2967)
   - `ultrapower_project_memory_read` → `mem_read`
   - `ultrapower_project_memory_write` → `mem_write`
   - `ultrapower_project_memory_add_note` → `mem_add_note`
@@ -424,7 +555,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **docs: 修复安装文档中的包名和命令错误**
+- **docs: 修复安装文档中的包名和命令错误**
   - 修复 npm 包名：`ultrapower` → `@liangjie559567/ultrapower`
   - 修复插件安装命令：`/plugin install ultrapower` → `/plugin install omc@ultrapower`
   - 修复插件更新命令：`/plugin update ultrapower` → `/plugin update omc@ultrapower`
@@ -436,7 +567,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **feat(mcp): MCP 全面采用计划完成（42 个原子任务）**
+- **feat(mcp): MCP 全面采用计划完成（42 个原子任务）**
   - 工具前缀迁移系统（`src/tools/tool-prefix-migration.ts`）：双注册 + 废弃警告
   - npm 包发布（`@liangjie559567/ultrapower-mcp-server@5.5.15`）
   - 自动迁移脚本（`scripts/migrate-tool-names.js`）
@@ -445,7 +576,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 文档
 
-* **docs/mcp/**: 新增 6 个 MCP 文档文件
+- **docs/mcp/**: 新增 6 个 MCP 文档文件
   - `README.md`：MCP 总览
   - `overview.md`：架构概览
   - `server-guide.md`：服务器使用指南
@@ -453,30 +584,30 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - `configuration.md`：配置系统说明
   - `performance.md`：性能基准测试
 
-* **docs/guides/tool-name-migration.md**：工具名称迁移指南（含完整映射表）
+- **docs/guides/tool-name-migration.md**：工具名称迁移指南（含完整映射表）
 
-* **docs/compatibility-matrix.md**：社区 MCP 服务器兼容性矩阵
+- **docs/compatibility-matrix.md**：社区 MCP 服务器兼容性矩阵
 
 ### 向后兼容
 
-* **工具前缀三种格式支持**：
+- **工具前缀三种格式支持**：
   - 新格式：`ultrapower:lsp_hover`（推荐）
   - 兼容格式：`lsp_hover`
   - 废弃格式：`mcp__plugin_ultrapower_t__lsp_hover`（6 个月后移除，触发废弃警告）
 
-* **双注册系统**：所有 35 个工具同时注册三种前缀，确保平滑迁移
+- **双注册系统**：所有 35 个工具同时注册三种前缀，确保平滑迁移
 
 ### 验证
 
-* 构建状态：✅ PASS
+- 构建状态：✅ PASS
 
-* 测试结果：✅ 5851 个测试全部通过
+- 测试结果：✅ 5851 个测试全部通过
 
-* npm 包发布：✅ v5.5.15 已发布到 npm registry
+- npm 包发布：✅ v5.5.15 已发布到 npm registry
 
-* 工具数量：✅ 35 个工具全部可用
+- 工具数量：✅ 35 个工具全部可用
 
-* 向后兼容：✅ 三种前缀格式都支持
+- 向后兼容：✅ 三种前缀格式都支持
 
 ---
 
@@ -484,11 +615,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(ci): 修复 Windows 兼容性测试失败**
+- **fix(ci): 修复 Windows 兼容性测试失败**
   - 解决路径分隔符和换行符差异导致的测试失败
   - 完整测试套件通过（5783 passed, 10 skipped）
 
-* **fix(plugin): 修复插件安装和升级流程的 6 个已知问题**
+- **fix(plugin): 修复插件安装和升级流程的 6 个已知问题**
   - npm-cache 版本锁定：`fixNpmCacheVersion()` 强制精确版本号，防止 "Update now" 跳过下载
   - plugin.json 缺失：`fixMissingPluginJson()` 重建元数据文件（npm 剥离隐藏目录）
   - Windows 嵌套目录：`fixNestedCacheDir()` 扁平化无限嵌套结构
@@ -498,13 +629,13 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 安全
 
-* **security(state): 加强路径遍历防护**
+- **security(state): 加强路径遍历防护**
   - `assertValidMode()` 添加字符串截断保护，防止超长输入绕过验证
   - 所有状态文件操作强制通过 `assertValidMode()` 校验
 
 ### 验证
 
-* **验证完整升级流程**
+- **验证完整升级流程**
   - 构建验证：3524 文件打包，所有关键组件完整
   - 插件市场验证：50 agents, 71 skills, 14 hook 事件类型
   - 本地环境验证：tarball 解压、postinstall 执行、HUD 配置
@@ -517,25 +648,25 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(workflow-recommender): 添加中文语言支持到意图分类器**
+- **fix(workflow-recommender): 添加中文语言支持到意图分类器**
   - 移除 `\b` 单词边界符（不支持中文字符）
   - 为所有 7 种意图类型添加中文关键词：修复/错误/问题/故障、重构/优化/改进、审查/检查/评审、规划/设计/架构、探索/分析/调查、添加/实现/创建/构建/功能
   - 保持基于优先级的匹配算法（bug-fix:10 > refactor:9 > review:8 > plan:7 > explore:6 > feature-multiple:5 > feature-single:1）
   - 验证：中文和英文查询均正确分类，完整测试套件通过（5783 passed, 10 skipped）
 
-* **fix(hud): 解决 types.ts 和 autopilot.ts 的循环依赖**
+- **fix(hud): 解决 types.ts 和 autopilot.ts 的循环依赖**
 
 ### 测试
 
-* **test(python-repl): 修复 bridge-manager 超时测试失败**
+- **test(python-repl): 修复 bridge-manager 超时测试失败**
 
 ### CI/CD
 
-* **ci: 集成状态清理协议到 CI teardown 流程**
+- **ci: 集成状态清理协议到 CI teardown 流程**
 
 ### Axiom
 
-* **feat(axiom): 完成 Cycle 17 进化 - 添加 k-071 Vitest mock 完整性模式**
+- **feat(axiom): 完成 Cycle 17 进化 - 添加 k-071 Vitest mock 完整性模式**
 
 ---
 
@@ -543,13 +674,13 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 文档
 
-* Comprehensive documentation update: REFERENCE.md (49 agents/71 skills/35 tools/35 hooks), ARCHITECTURE.md (611 lines), FEATURES.md (1238 lines)
+- Comprehensive documentation update: REFERENCE.md (49 agents/71 skills/35 tools/35 hooks), ARCHITECTURE.md (611 lines), FEATURES.md (1238 lines)
 
-* docs/standards/ 10 files bumped to v5.5.6
+- docs/standards/ 10 files bumped to v5.5.6
 
-* Merge docs/shared/ into docs/partials/ (remove 6 duplicate files)
+- Merge docs/shared/ into docs/partials/ (remove 6 duplicate files)
 
-* Sync OMC:VERSION in docs/CLAUDE.md and version reference in CLAUDE.md
+- Sync OMC:VERSION in docs/CLAUDE.md and version reference in CLAUDE.md
 
 ---
 
@@ -557,92 +688,92 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(python-repl): `handleReset` 和 `handleInterrupt` 中调用 `resetExecutionCounter`**
+- **fix(python-repl): `handleReset` 和 `handleInterrupt` 中调用 `resetExecutionCounter`**
   - 重置/中断操作后同步执行计数器，避免状态不一致
   - 涵盖 success 和 fallback 两条路径
 
-* **fix(python-repl): `safeReadJson()` 添加 `.catch(() => null)` 保护**
+- **fix(python-repl): `safeReadJson()` 添加 `.catch(() => null)` 保护**
   - `ensureBridge`、`killBridgeWithEscalation`、`cleanupBridgeSessions`、`cleanupStaleBridges` 中防止文件缺失引发 unhandled rejection
 
-* **fix(subagent-tracker): `recordFileOwnership` 使用 `relative()` 规范化路径**
+- **fix(subagent-tracker): `recordFileOwnership` 使用 `relative()` 规范化路径**
   - 替换字符串 replace 方案，正确处理跨平台路径分隔符
 
 ### 文档
 
-* 更新 3 个 skill 内容（requesting-code-review、subagent-driven-development、testing-skills-with-subagents）
+- 更新 3 个 skill 内容（requesting-code-review、subagent-driven-development、testing-skills-with-subagents）
 
-* 标记 `manifest_test_coverage.md` T-01~T-04 为完成状态（13 个测试随 v5.5.4 发布）
+- 标记 `manifest_test_coverage.md` T-01~T-04 为完成状态（13 个测试随 v5.5.4 发布）
 
 ---
 
-## [5.5.4] - 2026-03-02
+## [5.6.11] - 2026-03-02
 
 ### Code Quality
 
-* Expand `generatePromptId` entropy from 4 to 8 bytes
+- Expand `generatePromptId` entropy from 4 to 8 bytes
 
-* Add 4MB prompt size limit to `executeGemini`
+- Add 4MB prompt size limit to `executeGemini`
 
-* Unify catch blocks to return `isError: true` consistently
+- Unify catch blocks to return `isError: true` consistently
 
-* Dynamic `ALLOWED_BOUNDARIES` calculation in skills-tools
+- Dynamic `ALLOWED_BOUNDARIES` calculation in skills-tools
 
 ## [5.5.3] - 2026-03-02
 
 ### Documentation & Namespace
 
-* Replace all `superpowers:` prefix residuals with `ultrapower:`
+- Replace all `superpowers:` prefix residuals with `ultrapower:`
 
-* Add deprecation notice for legacy namespace with migration hints
+- Add deprecation notice for legacy namespace with migration hints
 
-* Sync AGENTS.md version and agent count with package.json
+- Sync AGENTS.md version and agent count with package.json
 
-* Add `$` anchor to bump-version.mjs regex; fix ax-status/ax-export paths
+- Add `$` anchor to bump-version.mjs regex; fix ax-status/ax-export paths
 
-* Add GitHub Actions windows-latest CI matrix
+- Add GitHub Actions windows-latest CI matrix
 
 ## [5.5.2] - 2026-03-02
 
 ### Feature
 
-* Add delegation-enforcer: auto-inject model for Task/Agent calls
+- Add delegation-enforcer: auto-inject model for Task/Agent calls
   (explore→haiku, executor→sonnet when model unspecified)
 
 ## [5.5.1] - 2026-03-02
 
 ### Fix (Windows & Features)
 
-* Fix `which`/`where` platform branch in auto-update
+- Fix `which`/`where` platform branch in auto-update
 
-* Fix path handling: use `path.relative()` + `path.resolve()` normalization
+- Fix path handling: use `path.relative()` + `path.resolve()` normalization
 
-* Fix `wait_for_job` max wait timeout (60s cap)
+- Fix `wait_for_job` max wait timeout (60s cap)
 
-* Fix `handleKillJob` order: kill process before writing status
+- Fix `handleKillJob` order: kill process before writing status
 
 ## [5.5.0] - 2026-03-02
 
 ### Security
 
-* Add `assertValidMode()` path traversal guard at state_read/state_write entry
+- Add `assertValidMode()` path traversal guard at state_read/state_write entry
 
-* Replace `execSync` with `execFileSync` in LSP servers (shell injection fix)
+- Replace `execSync` with `execFileSync` in LSP servers (shell injection fix)
 
-* Disable fast path for SENSITIVE_HOOKS in bridge-normalize
+- Disable fast path for SENSITIVE_HOOKS in bridge-normalize
 
-* Fix `Atomics.wait()` main-thread crash: fall back to setTimeout
+- Fix `Atomics.wait()` main-thread crash: fall back to setTimeout
 
-* Fix Windows ESM import: use `pathToFileURL()` for daemon module loading
+- Fix Windows ESM import: use `pathToFileURL()` for daemon module loading
 
-* Replace config JSON.stringify injection with tmp-file + env-var pattern
+- Replace config JSON.stringify injection with tmp-file + env-var pattern
 
-* Add 64MB buffer cap + `clearTimeout` on disconnect in LSP client
+- Add 64MB buffer cap + `clearTimeout` on disconnect in LSP client
 
 # ultrapower v5.3.1
 
 ### 修复
 
-* **fix(plugin): 对齐插件清单与官方 Claude Code 插件规范**
+- **fix(plugin): 对齐插件清单与官方 Claude Code 插件规范**
   - `plugin.json` author 字段与 `package.json` 保持一致（"Yeachan Heo"）
   - 移除非标准 `ConfigChange` hook，新增官方 `SubagentStart` 和 `Notification` hook
   - `TeammateIdle` 补充缺失的 `matcher` 字段，保持 14 个 hook 事件格式一致
@@ -654,11 +785,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **feat(hooks): 新增 SubagentStop hook** — 子 agent 完成时触发，防止无限循环
+- **feat(hooks): 新增 SubagentStop hook** — 子 agent 完成时触发，防止无限循环
 
-* **feat(hooks): 新增 PreCompact hook** — 上下文压缩前保存 Axiom 状态
+- **feat(hooks): 新增 PreCompact hook** — 上下文压缩前保存 Axiom 状态
 
-* **feat(hooks): 新增 TeammateIdle hook** — 团队成员空闲时触发，默认允许
+- **feat(hooks): 新增 TeammateIdle hook** — 团队成员空闲时触发，默认允许
 
 ---
 
@@ -666,7 +797,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(plugin): 修复 `fixNestedCacheDir()` Pattern B 中 `versions` 未定义的 bug**
+- **fix(plugin): 修复 `fixNestedCacheDir()` Pattern B 中 `versions` 未定义的 bug**
   - 根因：Pattern B 分支直接使用 `versions` 变量但未在该作用域内定义，导致 `ReferenceError` 被 catch 吞掉，Pattern B 逻辑从未执行
   - 修复：在 Pattern B 开头添加 `const versions = readdirSync(pluginCacheBase)`
 
@@ -676,7 +807,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(plugin): 完整迁移 marketplace 注册表**（补充 v5.2.11）
+- **fix(plugin): 完整迁移 marketplace 注册表**（补充 v5.2.11）
   - v5.2.11 仅迁移了目录名和 `marketplace.json`，遗漏了 `known_marketplaces.json`（key `ultrapower` → `omc`）和 `installed_plugins.json`（key `ultrapower@ultrapower` → `ultrapower@omc`）
   - 这两个文件是 Claude Code 查找 marketplace 和已安装插件的核心索引，未迁移导致 `/plugin install omc@ultrapower` 仍然失败
   - 现在 `migrateMarketplaceName()` 同步修正全部三个文件
@@ -687,7 +818,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(plugin): 自动迁移本地 marketplace 目录名 `ultrapower` → `omc`**
+- **fix(plugin): 自动迁移本地 marketplace 目录名 `ultrapower` → `omc`**
   - 根因：v5.2.10 将 marketplace name 改为 `omc`，但已通过 GitHub URL 添加 marketplace 的用户本地目录仍为 `marketplaces/ultrapower/`，导致 `/plugin install omc@ultrapower` 报错 "Plugin 'omc' not found"
   - 修复：`plugin-setup.mjs` 新增 `migrateMarketplaceName()`，postinstall 时自动将 `marketplaces/ultrapower/` 重命名为 `marketplaces/omc/`，并同步修正目录内 `marketplace.json` 的 `name` 字段
 
@@ -697,7 +828,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **fix(plugin): marketplace name 改为 `omc`，根治缓存路径无限嵌套**
+- **fix(plugin): marketplace name 改为 `omc`，根治缓存路径无限嵌套**
   - 根因：marketplace name = plugin name = `ultrapower`，导致缓存路径 `plugins/cache/ultrapower/ultrapower/` 被 `fixNestedCacheDir()` 误判为嵌套并循环删除
   - 新缓存路径：`plugins/cache/omc/ultrapower/VERSION/`，marketplace ≠ plugin name，彻底消除嵌套触发条件
   - 同步更新 `plugin-setup.mjs` 所有硬编码路径及相关文档
@@ -708,11 +839,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 测试
 
-* **自动发布工作流测试**：新增 `release-steps.test.ts`，覆盖 `validateBuild`、`publishNpm`、`createGithubRelease`、`syncMarketplace`、`runReleasePipeline` 的 dry-run 路径及失败路径（9 个测试）
+- **自动发布工作流测试**：新增 `release-steps.test.ts`，覆盖 `validateBuild`、`publishNpm`、`createGithubRelease`、`syncMarketplace`、`runReleasePipeline` 的 dry-run 路径及失败路径（9 个测试）
 
-* **自动更新插件工作流测试**：扩展 `auto-update.test.ts`，新增 `performUpdate` 插件模式、`syncMarketplaceClone` 4 分支、`silentAutoUpdate` 速率限制与退避逻辑（13 个测试）
+- **自动更新插件工作流测试**：扩展 `auto-update.test.ts`，新增 `performUpdate` 插件模式、`syncMarketplaceClone` 4 分支、`silentAutoUpdate` 速率限制与退避逻辑（13 个测试）
 
-* 全套测试：4698 passed, 0 failed
+- 全套测试：4698 passed, 0 failed
 
 ---
 
@@ -720,7 +851,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **plugins/cache 无限嵌套修复**：`fixNestedCacheDir()` 新增 Pattern A 检测，直接删除 `cache/ultrapower/ultrapower/`（无版本层的平铺嵌套），修复 Windows 上 Claude Code 每次重启产生 15+ 层嵌套导致无法启动的问题
+- **plugins/cache 无限嵌套修复**：`fixNestedCacheDir()` 新增 Pattern A 检测，直接删除 `cache/ultrapower/ultrapower/`（无版本层的平铺嵌套），修复 Windows 上 Claude Code 每次重启产生 15+ 层嵌套导致无法启动的问题
 
 ---
 
@@ -728,15 +859,15 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **extractSkillName 大小写修复**：`toolName.toLowerCase()` 统一规范化，修复 Claude Code 发送 `"Skill"`（大写）无法匹配 `'skill'`（小写）导致 skills 追踪始终为空的问题（k-044）
+- **extractSkillName 大小写修复**：`toolName.toLowerCase()` 统一规范化，修复 Claude Code 发送 `"Skill"`（大写）无法匹配 `'skill'`（小写）导致 skills 追踪始终为空的问题（k-044）
 
 ### 进化引擎
 
-* **ax-evolve Cycle 3**：处理 LQ-001~LQ-013 全量，知识库扩展至 45 条，新增 P-004 大小写反模式
+- **ax-evolve Cycle 3**：处理 LQ-001~LQ-013 全量，知识库扩展至 45 条，新增 P-004 大小写反模式
 
 ### 测试
 
-* 4589 passed, 0 failed
+- 4589 passed, 0 failed
 
 ---
 
@@ -744,7 +875,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新功能
 
-* **nexus Phase 2 主动学习系统**：完整的自我改进基础设施，包含 14 个原子任务
+- **nexus Phase 2 主动学习系统**：完整的自我改进基础设施，包含 14 个原子任务
   - `nexus-daemon`：Python 守护进程，监控 `.omc/axiom/evolution/learning_queue.md` 并自动触发进化
   - `data-collector` hook：会话结束时收集工具使用数据、错误模式和成功率
   - `consciousness-sync` hook：同步 Axiom 记忆系统（active_context、project_decisions、user_preferences）
@@ -752,21 +883,21 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - `nexus-ts-plugin`：TypeScript 插件层，提供 `NexusClient` API 供 TS 代码调用 Python 守护进程
   - `skills/nexus/SKILL.md`：nexus skill 入口，支持 `/ultrapower:nexus` 命令
 
-* **进化引擎 Cycle 2**：处理 LQ-008/009/010，知识库扩展至 38 条，新增 WF-006/007 工作流指标
+- **进化引擎 Cycle 2**：处理 LQ-008/009/010，知识库扩展至 38 条，新增 WF-006/007 工作流指标
 
-* **贡献规范扩展**（`docs/standards/contribution-guide.md`）：
+- **贡献规范扩展**（`docs/standards/contribution-guide.md`）：
   - 新增 §6.1 动态版本读取模式（`getRuntimePackageVersion()` 最佳实践）
   - 新增 §6.2 特性分支生命周期（PR merge → 删除分支 → dev→main → main→dev）
 
 ### 修复
 
-* **vitest 配置**：排除 `tests/brainstorm-server/**` 独立 Node.js assert 脚本，防止测试框架误识别
+- **vitest 配置**：排除 `tests/brainstorm-server/**` 独立 Node.js assert 脚本，防止测试框架误识别
 
-* **skill 计数**：`src/__tests__/skills.test.ts` 期望数量 70→71，`expectedSkills` 数组新增 `nexus`
+- **skill 计数**：`src/__tests__/skills.test.ts` 期望数量 70→71，`expectedSkills` 数组新增 `nexus`
 
 ### 测试
 
-* 205 passed, 0 failed（+nexus 相关测试）
+- 205 passed, 0 failed（+nexus 相关测试）
 
 ---
 
@@ -774,7 +905,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新功能
 
-* **nexus Phase 1 被动学习 MVP**：6 个核心任务完成
+- **nexus Phase 1 被动学习 MVP**：6 个核心任务完成
   - `NexusConfig` 类型系统和配置加载器（`src/features/nexus/`）
   - `data-collector` hook 基础框架
   - `consciousness-sync` hook 基础框架
@@ -782,11 +913,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - Python 守护进程基础框架（`src/features/nexus/daemon/`）
   - `improvement-puller` hook 基础框架
 
-* **Axiom 进化引擎 Cycle 1**：处理 LQ-001~LQ-007，知识库建立 35 条基础条目
+- **Axiom 进化引擎 Cycle 1**：处理 LQ-001~LQ-007，知识库建立 35 条基础条目
 
 ### 测试
 
-* 205 passed, 0 failed（2 轮代码/安全审查通过）
+- 205 passed, 0 failed（2 轮代码/安全审查通过）
 
 ---
 
@@ -794,7 +925,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **ax-context init 无限循环**：`skills/ax-context/SKILL.md` 的 init 命令缺少执行指令，导致 Opus 4.6 反复重试（`PreToolUse:Skill hook error` 循环 20+ 次）
+- **ax-context init 无限循环**：`skills/ax-context/SKILL.md` 的 init 命令缺少执行指令，导致 Opus 4.6 反复重试（`PreToolUse:Skill hook error` 循环 20+ 次）
   - 新增编号步骤：`Bash("mkdir -p .omc/axiom/evolution")` + 9 个 `Write(...)` 调用（含初始内容模板）
   - 新增回归测试 `src/skills/__tests__/ax-context-init.test.ts`（2 个测试），验证 init 节包含可执行指令
 
@@ -804,12 +935,12 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **Plugin Cache 缺少 templates/**：`plugin-setup.mjs` 新增 `copyTemplatesToCache()` 函数，在 postinstall 时将 `templates/hooks/` 复制到插件缓存，修复 `stop-continuation.mjs MODULE_NOT_FOUND` 错误
+- **Plugin Cache 缺少 templates/**：`plugin-setup.mjs` 新增 `copyTemplatesToCache()` 函数，在 postinstall 时将 `templates/hooks/` 复制到插件缓存，修复 `stop-continuation.mjs MODULE_NOT_FOUND` 错误
   - 使用 `withFileTypes + isDirectory()` 守卫，跳过非目录条目
   - 复制失败时清理空目录，允许下次安装重试
   - 为 `dirname(__dirname)` 假设添加文档注释
 
-* **测试覆盖**：新增 `src/__tests__/hooks-json-paths.test.ts`（4 个测试），验证 `hooks/hooks.json` 路径正确性
+- **测试覆盖**：新增 `src/__tests__/hooks-json-paths.test.ts`（4 个测试），验证 `hooks/hooks.json` 路径正确性
 
 ---
 
@@ -817,9 +948,9 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **安全加固（C-01）**：`assertValidMode()` 错误消息截断超长输入（>50 字符），防止 DoS 攻击和信息泄露
+- **安全加固（C-01）**：`assertValidMode()` 错误消息截断超长输入（>50 字符），防止 DoS 攻击和信息泄露
 
-* **安全测试（H-02）**：`validateMode.test.ts` 新增 6 个安全边界测试用例
+- **安全测试（H-02）**：`validateMode.test.ts` 新增 6 个安全边界测试用例
   - 空白字符串（空格/制表符/换行）
   - null 字节注入（`autopilot\x00`、`autopilot\x00../../etc`）
   - 原型污染向量（`__proto__`、`constructor`、`prototype`）
@@ -827,11 +958,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - 错误消息截断验证（长度 < 500，含 `truncated` 标记）
   - 非字符串输入不暴露原始内容（防止对象属性泄露）
 
-* **文档修复（M-02）**：`audit-report.md` 补充 D-10 差异点（死锁检测常量已定义但未实现），差异点总数更新为 10 个
+- **文档修复（M-02）**：`audit-report.md` 补充 D-10 差异点（死锁检测常量已定义但未实现），差异点总数更新为 10 个
 
-* **版本同步（L-01）**：`docs/standards/` 下版本引用从 v5.0.21 更新至 v5.0.22
+- **版本同步（L-01）**：`docs/standards/` 下版本引用从 v5.0.21 更新至 v5.0.22
 
-* **示例修复（L-02）**：`anti-patterns.md` 中 `validateMode()` 无参调用修正为 `validateMode(undefined)`
+- **示例修复（L-02）**：`anti-patterns.md` 中 `validateMode()` 无参调用修正为 `validateMode(undefined)`
 
 ---
 
@@ -839,7 +970,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **全链路规范体系**：新增 `docs/standards/` 目录，包含 8 个规范文档和 3 个模板
+- **全链路规范体系**：新增 `docs/standards/` 目录，包含 8 个规范文档和 3 个模板
   - `README.md`：规范体系索引，P0/P1 优先级分层
   - `audit-report.md`：Axiom 专家评审报告（10 个差异点 D-01~D-10，4 个技术债务 TD-1~TD-4）
   - `runtime-protection.md`：运行时保护规范（路径遍历防护、输入验证）
@@ -851,16 +982,16 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - `contribution-guide.md`：贡献指南
   - `templates/`：skill/agent/hook 三个模板
 
-* **安全防护实现**：`src/lib/validateMode.ts` 新增 `assertValidMode()` 路径遍历防护
+- **安全防护实现**：`src/lib/validateMode.ts` 新增 `assertValidMode()` 路径遍历防护
   - `validateMode()`：返回 boolean
   - `assertValidMode()`：抛出异常，阻止路径遍历
   - 65 个测试用例，覆盖非字符串类型（null/undefined/number/array）
 
-* **Axiom 进化记录**：首次完整走通 ax-draft → ax-review → ax-decompose → ax-implement → ax-reflect → ax-evolve 全链路，知识库新增 k-029/030/031，模式库新增 P-002/003
+- **Axiom 进化记录**：首次完整走通 ax-draft → ax-review → ax-decompose → ax-implement → ax-reflect → ax-evolve 全链路，知识库新增 k-029/030/031，模式库新增 P-002/003
 
 ### 修复
 
-* **CLAUDE.md 规范引用**：在项目 CLAUDE.md 中添加 Axiom 门禁规则和工作流路由表引用
+- **CLAUDE.md 规范引用**：在项目 CLAUDE.md 中添加 Axiom 门禁规则和工作流路由表引用
 
 ---
 
@@ -868,7 +999,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **缓存嵌套根因修复**：将 `package.json` 的 `files` 字段从 `.claude-plugin`（整个目录）改为 `.claude-plugin/plugin.json`（仅 plugin.json），防止 `marketplace.json` 被发布到 npm 包中。Claude Code 读到 npm 包里的 `marketplace.json`（含 `source: npm`）后会触发循环安装，造成路径无限嵌套（`5.0.13/ultrapower/5.0.13/ultrapower/...`）。v5.0.13 修复了 plugin.json 缺失问题，但未排除 marketplace.json，本版本彻底修复。
+- **缓存嵌套根因修复**：将 `package.json` 的 `files` 字段从 `.claude-plugin`（整个目录）改为 `.claude-plugin/plugin.json`（仅 plugin.json），防止 `marketplace.json` 被发布到 npm 包中。Claude Code 读到 npm 包里的 `marketplace.json`（含 `source: npm`）后会触发循环安装，造成路径无限嵌套（`5.0.13/ultrapower/5.0.13/ultrapower/...`）。v5.0.13 修复了 plugin.json 缺失问题，但未排除 marketplace.json，本版本彻底修复。
 
 ---
 
@@ -876,9 +1007,9 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **plugin 发布修复**：将 `.claude-plugin` 目录加入 `package.json` 的 `files` 字段，确保 npm 发布时包含 `plugin.json`，修复插件安装后 `ultrapower:` 前缀 skills 无法调用的问题
+- **plugin 发布修复**：将 `.claude-plugin` 目录加入 `package.json` 的 `files` 字段，确保 npm 发布时包含 `plugin.json`，修复插件安装后 `ultrapower:` 前缀 skills 无法调用的问题
 
-* **缓存嵌套修复**：因 `plugin.json` 缺失导致 Claude Code 反复重新安装造成的路径无限嵌套问题（`5.0.12/ultrapower/5.0.12/ultrapower/...`）一并修复
+- **缓存嵌套修复**：因 `plugin.json` 缺失导致 Claude Code 反复重新安装造成的路径无限嵌套问题（`5.0.12/ultrapower/5.0.12/ultrapower/...`）一并修复
 
 ---
 
@@ -886,9 +1017,9 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **版本同步修复**：确保 `.claude-plugin/marketplace.json` 和 `plugin.json` 与 npm 版本保持一致
+- **版本同步修复**：确保 `.claude-plugin/marketplace.json` 和 `plugin.json` 与 npm 版本保持一致
 
-* **gitignore 修复**：恢复 `dist/` 到 `.gitignore`，防止构建产物被意外提交
+- **gitignore 修复**：恢复 `dist/` 到 `.gitignore`，防止构建产物被意外提交
 
 ---
 
@@ -896,7 +1027,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **npm 发布修复**：移除 `.claude-plugin` 目录从 npm files 列表，防止无限缓存循环
+- **npm 发布修复**：移除 `.claude-plugin` 目录从 npm files 列表，防止无限缓存循环
 
 ---
 
@@ -904,15 +1035,15 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 文档与工具
 
-* **工具数量修正**：将所有文档中的工具数量从 15 更新为 35（8 类：LSP×12、AST×2、Python REPL×1、Notepad×6、State×5、Project Memory×4、Trace×2、Skills×3）
+- **工具数量修正**：将所有文档中的工具数量从 15 更新为 35（8 类：LSP×12、AST×2、Python REPL×1、Notepad×6、State×5、Project Memory×4、Trace×2、Skills×3）
 
-* **Agents 数量修正**：确认并统一 49 个 agents 的完整列表（含 14 个 Axiom agents）
+- **Agents 数量修正**：确认并统一 49 个 agents 的完整列表（含 14 个 Axiom agents）
 
-* **Hooks 数量修正**：将文档中的 hooks 数量从 37 更正为 35
+- **Hooks 数量修正**：将文档中的 hooks 数量从 37 更正为 35
 
-* **Skills 数量确认**：70 个 skills 完整列表已验证
+- **Skills 数量确认**：70 个 skills 完整列表已验证
 
-* **AGENTS.md 全面更新**：根据真实代码实现更新所有文档，确保数量一致性
+- **AGENTS.md 全面更新**：根据真实代码实现更新所有文档，确保数量一致性
 
 ---
 
@@ -920,7 +1051,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 代码质量
 
-* **ESLint 0 warnings**：完成全量 lint 清理，实现零警告目标
+- **ESLint 0 warnings**：完成全量 lint 清理，实现零警告目标
   - 修复 `no-explicit-any`：生产代码中所有 `any` 类型替换为精确类型（`unknown`、具体接口、类型断言）
   - 修复 `no-unused-vars`：移除 88 个文件中的未使用 import 和变量，或加 `_` 前缀标记
   - 修复 `no-require-imports`：将 `require()` 调用转换为 ES `import` 语句
@@ -931,7 +1062,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **HUD 标签英文化**：将 HUD 元素标签从中文恢复为英文，确保测试断言通过
+- **HUD 标签英文化**：将 HUD 元素标签从中文恢复为英文，确保测试断言通过
   - `render.ts`：截断提示 `行` → `lines`，更新通知 `有更新` → `omc update`
   - `types.ts`：`DEFAULT_HUD_CONFIG` 默认值修正——`maxOutputLines: 6` → `4`，`gitBranch: true` → `false`，`model: true` → `false`
   - `agents.ts`：`renderAgentsByFormat` multiline 分支改为调用 `renderAgents()` 解决测试冲突
@@ -940,20 +1071,20 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - `thinking.ts`：`思考中` → `thinking`
   - `skills.ts`：`技能:` → `skill:`
 
-* **HUD autoCompact 无限循环**：修复 context-warning 在上下文降至阈值以下后仍持续触发 compact 的 bug，现在在上下文恢复正常后清除触发标记文件
+- **HUD autoCompact 无限循环**：修复 context-warning 在上下文降至阈值以下后仍持续触发 compact 的 bug，现在在上下文恢复正常后清除触发标记文件
 
-* **skills/hud/SKILL.md**：修复 MINGW64 兼容性——`if(!found)` → `if(found===false)`，避免 Git Bash 将 `!` 转义为 `\!` 导致语法错误
+- **skills/hud/SKILL.md**：修复 MINGW64 兼容性——`if(!found)` → `if(found===false)`，避免 Git Bash 将 `!` 转义为 `\!` 导致语法错误
 
 ### 新增
 
-* **5 个新专业 Agent**：
+- **5 个新专业 Agent**：
   - `database-expert`：数据库 schema 设计、查询优化、索引策略和迁移方案
   - `devops-engineer`：CI/CD 流水线、Docker/Kubernetes 容器化、基础设施即代码
   - `i18n-specialist`：国际化架构、本地化工作流、多语言文本管理
   - `accessibility-auditor`：WCAG 2.1/2.2 合规审查、键盘导航、屏幕阅读器兼容
   - `api-designer`：REST/GraphQL API 设计、OpenAPI 规范、版本策略
 
-* **MCP 集成扩展**（`skills/mcp-setup`）：
+- **MCP 集成扩展**（`skills/mcp-setup`）：
   - Slack：Bot Token 配置，支持频道消息发送
   - Jira/Linear：项目管理和 issue 追踪集成
   - PostgreSQL：直接数据库查询支持
@@ -961,31 +1092,31 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - Sequential Thinking：结构化逐步推理，复杂问题分解
   - Software Planning Tool：任务规划与分解，依赖图和执行追踪
 
-* **Codex Prompts**：为 5 个新 agent 添加 `agents.codex/` 适配提示词
+- **Codex Prompts**：为 5 个新 agent 添加 `agents.codex/` 适配提示词
 
-* **HUD Axiom 状态元素**（`src/hud/elements/axiom.ts`）：新增 HUD 元素，实时读取并渲染 `.omc/axiom/` 目录中的 Axiom 系统状态
+- **HUD Axiom 状态元素**（`src/hud/elements/axiom.ts`）：新增 HUD 元素，实时读取并渲染 `.omc/axiom/` 目录中的 Axiom 系统状态
   - 显示：当前状态（IDLE/EXECUTING/BLOCKED/PLANNING 等）、当前目标、任务进度（进行中/待办）、学习队列条数及优先级、知识库条数、工作流成功率
   - 解析 `active_context.md`、`evolution/learning_queue.md`、`evolution/knowledge_base.md`、`evolution/workflow_metrics.md`
   - 未初始化 Axiom 时自动隐藏（返回 null）
 
-* **HUD 智能建议元素**（`src/hud/elements/suggestions.ts`）：基于当前系统状态生成上下文感知的下一步操作建议
+- **HUD 智能建议元素**（`src/hud/elements/suggestions.ts`）：基于当前系统状态生成上下文感知的下一步操作建议
   - 上下文建议：≥90% 高优先级 `/compact`，≥阈值 中优先级 `/compact`
   - Axiom 建议：BLOCKED → `/ax-analyze-error`，IDLE+学习队列 → `/ax-evolve`，EXECUTING+无 Agent → `/ax-status`，IDLE+待办任务 → `/ax-implement`，任务完成 → `/ax-reflect`
   - 会话健康建议：会话超 120 分钟或费用超 $4 → `/ax-suspend`
   - 按优先级排序，最多显示 2 条
 
-* **omc-setup 权限配置步骤**（步骤 3.75）：在 omc-setup 流程中新增权限配置步骤
+- **omc-setup 权限配置步骤**（步骤 3.75）：在 omc-setup 流程中新增权限配置步骤
   - 自动将常用工具权限写入 `~/.claude/settings.json` 的 `permissions.allow` 数组
   - 包含：Bash、Read、Write、Edit、Glob、Grep、Task、WebFetch、WebSearch 等核心工具
   - 避免每次工具调用时弹出权限确认对话框
 
 ### 文档
 
-* 更新 `AGENTS.md`：agents 44 → 49，Domain Specialists 11 → 16
+- 更新 `AGENTS.md`：agents 44 → 49，Domain Specialists 11 → 16
 
-* 更新 `docs/CLAUDE.md`：agent_catalog 新增 5 个专家，mcp_routing 新增本地 MCP 工具说明
+- 更新 `docs/CLAUDE.md`：agent_catalog 新增 5 个专家，mcp_routing 新增本地 MCP 工具说明
 
-* 更新 `src/mcp/servers.ts`：新增 `createSequentialThinkingServer()` 和 `createSoftwarePlanningToolServer()` 工厂函数
+- 更新 `src/mcp/servers.ts`：新增 `createSequentialThinkingServer()` 和 `createSoftwarePlanningToolServer()` 工厂函数
 
 ---
 
@@ -993,17 +1124,17 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 文档
 
-* 修正 docs/TIERED_AGENTS_V2.md：补充缺失的 Axiom Lane（8 个）和 Axiom Specialists（6 个）章节，agent 总计 44 个
+- 修正 docs/TIERED_AGENTS_V2.md：补充缺失的 Axiom Lane（8 个）和 Axiom Specialists（6 个）章节，agent 总计 44 个
 
-* 验证并同步所有文档计数：44 agents / 70 skills / 37 hooks / 15 tools
+- 验证并同步所有文档计数：44 agents / 70 skills / 37 hooks / 15 tools
 
-* 更新 AGENTS.md、README.md、docs/REFERENCE.md 确保数字一致
+- 更新 AGENTS.md、README.md、docs/REFERENCE.md 确保数字一致
 
 ### 构建
 
-* 重新构建所有 bridge 服务（mcp-server.cjs、codex-server.cjs、gemini-server.cjs、team-bridge.cjs）
+- 重新构建所有 bridge 服务（mcp-server.cjs、codex-server.cjs、gemini-server.cjs、team-bridge.cjs）
 
-* 更新 .claude-plugin/marketplace.json 版本引用至 v5.0.4
+- 更新 .claude-plugin/marketplace.json 版本引用至 v5.0.4
 
 ---
 
@@ -1011,39 +1142,39 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **Axiom 深度融合**：将 Axiom 智能体编排框架完整集成到 ultrapower，提供需求→开发→进化全流程工作流
+- **Axiom 深度融合**：将 Axiom 智能体编排框架完整集成到 ultrapower，提供需求→开发→进化全流程工作流
   - **14 个 Axiom agents**：axiom-requirement-analyst、axiom-product-designer、axiom-review-aggregator、axiom-prd-crafter、axiom-system-architect、axiom-evolution-engine、axiom-context-manager、axiom-worker，以及 6 个专家评审角色（axiom-ux-director、axiom-product-director、axiom-domain-expert、axiom-tech-lead、axiom-critic、axiom-sub-prd-writer）
   - **14 个 Axiom skills**：ax-draft、ax-review、ax-decompose、ax-implement、ax-analyze-error、ax-reflect、ax-evolve、ax-status、ax-rollback、ax-suspend、ax-context、ax-evolution、ax-knowledge、ax-export
   - **14 个斜杠命令**：对应所有 ax-_ skills 的 `/ultrapower:ax-_` 命令
   - **14 个 Codex prompts**：为所有 Axiom agents 提供 OpenAI Codex 适配提示词
 
-* **Axiom 记忆系统**：`.omc/axiom/` 目录，含 active_context、project_decisions、user_preferences、state_machine、reflection_log 及 evolution/ 子目录（knowledge_base、pattern_library、learning_queue、workflow_metrics）
+- **Axiom 记忆系统**：`.omc/axiom/` 目录，含 active_context、project_decisions、user_preferences、state_machine、reflection_log 及 evolution/ 子目录（knowledge_base、pattern_library、learning_queue、workflow_metrics）
 
-* **Axiom 进化引擎**：知识收割、模式检测、置信度系统、学习队列（P0-P3 优先级）
+- **Axiom 进化引擎**：知识收割、模式检测、置信度系统、学习队列（P0-P3 优先级）
 
-* **Axiom Context Manager**：7 种记忆操作（读/写/状态/检查点）的 TypeScript 实现
+- **Axiom Context Manager**：7 种记忆操作（读/写/状态/检查点）的 TypeScript 实现
 
-* **Axiom Guards**：双层门禁系统（Git hooks shell 脚本 + Claude Code hooks TypeScript），含 Expert Gate、User Gate、CI Gate
+- **Axiom Guards**：双层门禁系统（Git hooks shell 脚本 + Claude Code hooks TypeScript），含 Expert Gate、User Gate、CI Gate
 
-* **Axiom Boot Hook**：会话启动时自动注入记忆上下文
+- **Axiom Boot Hook**：会话启动时自动注入记忆上下文
 
-* **Scope Gate 规则**：防止超出任务范围的代码修改
+- **Scope Gate 规则**：防止超出任务范围的代码修改
 
-* **多平台适配器**：`.kiro/steering/axiom.md`（Kiro）、`.cursorrules`（Cursor）、`.gemini/GEMINI.md`（Gemini）、`.gemini/GEMINI-CLI.md`（Gemini CLI）、`.opencode/OPENCODE.md`（OpenCode CLI）、`.github/copilot-instructions.md`（GitHub Copilot）、`.codex/AGENTS.md`（Codex CLI）
+- **多平台适配器**：`.kiro/steering/axiom.md`（Kiro）、`.cursorrules`（Cursor）、`.gemini/GEMINI.md`（Gemini）、`.gemini/GEMINI-CLI.md`（Gemini CLI）、`.opencode/OPENCODE.md`（OpenCode CLI）、`.github/copilot-instructions.md`（GitHub Copilot）、`.codex/AGENTS.md`（Codex CLI）
 
-* **axiom-config.ts**：AxiomConfig 接口与默认配置
+- **axiom-config.ts**：AxiomConfig 接口与默认配置
 
 ### 修复
 
-* **ax-review**：使用专用专家角色 agents（axiom-ux-director 等）替代通用 critic agent，确保评审专业性
+- **ax-review**：使用专用专家角色 agents（axiom-ux-director 等）替代通用 critic agent，确保评审专业性
 
 ### 文档
 
-* 更新 AGENTS.md：agents 38→44，skills 67→69，hooks 35→38，新增 Axiom Lane（14 个）和 Axiom Skill 系统表
+- 更新 AGENTS.md：agents 38→44，skills 67→69，hooks 35→38，新增 Axiom Lane（14 个）和 Axiom Skill 系统表
 
-* 更新 README.md：修正 Axiom Agents 和 Axiom Skills 小节，计数同步至 44/69
+- 更新 README.md：修正 Axiom Agents 和 Axiom Skills 小节，计数同步至 44/69
 
-* 更新 docs/REFERENCE.md：补充 6 个 Axiom 专家 agents，补充 ax-knowledge/ax-export 条目
+- 更新 docs/REFERENCE.md：补充 6 个 Axiom 专家 agents，补充 ax-knowledge/ax-export 条目
 
 ---
 
@@ -1051,7 +1182,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **hooks.json**：修复 `StopContinuation` 为 `Stop`，解决插件安装验证失败导致所有 skills 无法加载的问题
+- **hooks.json**：修复 `StopContinuation` 为 `Stop`，解决插件安装验证失败导致所有 skills 无法加载的问题
 
 ---
 
@@ -1059,19 +1190,19 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **next-step-router skill**：在关键节点分析产出，用 AskUserQuestion 推荐最优下一步 agent/skill，并完整传递上下文（通过 notepad 持久化）
+- **next-step-router skill**：在关键节点分析产出，用 AskUserQuestion 推荐最优下一步 agent/skill，并完整传递上下文（通过 notepad 持久化）
 
-* **superpowers × ultrapower 深度集成**：为 18 个 superpowers skills 添加路由触发点，覆盖完整开发生命周期（阶段 0-8）
+- **superpowers × ultrapower 深度集成**：为 18 个 superpowers skills 添加路由触发点，覆盖完整开发生命周期（阶段 0-8）
 
-* **新功能路由规则**：using-superpowers skill 新增自动检测新功能/bug修复/重构的路由逻辑
+- **新功能路由规则**：using-superpowers skill 新增自动检测新功能/bug修复/重构的路由逻辑
 
-* **brainstorming HARD-GATE**：强制前置 explore 探索门控，确保设计前充分理解代码库
+- **brainstorming HARD-GATE**：强制前置 explore 探索门控，确保设计前充分理解代码库
 
 ### 文档
 
-* 更新 README.md、docs/CLAUDE.md、docs/OMC-CLAUDE.md、docs/REFERENCE.md 添加 next-step-router 条目
+- 更新 README.md、docs/CLAUDE.md、docs/OMC-CLAUDE.md、docs/REFERENCE.md 添加 next-step-router 条目
 
-* 新增 docs/ARCHITECTURE.md "Superpowers × ultrapower 集成" 章节
+- 新增 docs/ARCHITECTURE.md "Superpowers × ultrapower 集成" 章节
 
 ---
 
@@ -1079,11 +1210,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **ultrapower 集成**：集成了 superpowers skill 系统，内置 54 个 skills、31 个专业智能体和 34 个 hooks。项目从 ultrapower 品牌重命名，npm 包名为 `ultrapower`。新增功能包括：superpowers skill 系统（brainstorming、systematic-debugging、test-driven-development、writing-plans、executing-plans、dispatching-parallel-agents、verification-before-completion、requesting-code-review、receiving-code-review、finishing-a-development-branch、using-git-worktrees、using-superpowers、subagent-driven-development、writer-memory、writing-skills）、project-session-manager (psm) skill（支持 GitHub/GitLab/Bitbucket/Jira/Gitea/Azure DevOps）、Team 模式作为默认多 Agent 编排器（分阶段 pipeline：team-plan->team-prd->team-exec->team-verify->team-fix）、MCP 后台任务管理（SQLite 持久化）、LSP 工具集成（12 个工具）、AST 工具（ast_grep_search/replace）、Python REPL 工具、速率限制等待守护进程、自动更新系统、分析/成本追踪系统。
+- **ultrapower 集成**：集成了 superpowers skill 系统，内置 54 个 skills、31 个专业智能体和 34 个 hooks。项目从 ultrapower 品牌重命名，npm 包名为 `ultrapower`。新增功能包括：superpowers skill 系统（brainstorming、systematic-debugging、test-driven-development、writing-plans、executing-plans、dispatching-parallel-agents、verification-before-completion、requesting-code-review、receiving-code-review、finishing-a-development-branch、using-git-worktrees、using-superpowers、subagent-driven-development、writer-memory、writing-skills）、project-session-manager (psm) skill（支持 GitHub/GitLab/Bitbucket/Jira/Gitea/Azure DevOps）、Team 模式作为默认多 Agent 编排器（分阶段 pipeline：team-plan->team-prd->team-exec->team-verify->team-fix）、MCP 后台任务管理（SQLite 持久化）、LSP 工具集成（12 个工具）、AST 工具（ast_grep_search/replace）、Python REPL 工具、速率限制等待守护进程、自动更新系统、分析/成本追踪系统。
 
-* **test-engineer agent**：从 `tdd-guide` 重命名，更加清晰。
+- **test-engineer agent**：从 `tdd-guide` 重命名，更加清晰。
 
-* **document-specialist agent**：从 `researcher` 重命名，更加清晰。
+- **document-specialist agent**：从 `researcher` 重命名，更加清晰。
 
 ---
 
@@ -1091,23 +1222,23 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **CCG skill**（#744）：新增 `claude-developer-platform` skill（`ccg`），用于构建调用 Claude API 或 Anthropic SDK 的程序。
+- **CCG skill**（#744）：新增 `claude-developer-platform` skill（`ccg`），用于构建调用 Claude API 或 Anthropic SDK 的程序。
 
 ### 移除
 
-* **Ecomode 执行模式**（#737）：从 `KeywordType`、`ExecutionMode`、`MODE_CONFIGS` 及所有 hook 脚本中移除了 `ecomode`。`persistent-mode` stop hook 不再包含优先级 8 的 ecomode 延续块。关键词检测器不再将 `eco`、`ecomode`、`eco-mode`、`efficient`、`save-tokens` 或 `budget` 识别为执行模式触发词。
+- **Ecomode 执行模式**（#737）：从 `KeywordType`、`ExecutionMode`、`MODE_CONFIGS` 及所有 hook 脚本中移除了 `ecomode`。`persistent-mode` stop hook 不再包含优先级 8 的 ecomode 延续块。关键词检测器不再将 `eco`、`ecomode`、`eco-mode`、`efficient`、`save-tokens` 或 `budget` 识别为执行模式触发词。
 
 ### 修复
 
-* **Windows HUD 不显示**（#742）：通过修正 `NODE_PATH` 分隔符处理，修复了 Windows 上的 HUD 渲染问题。
+- **Windows HUD 不显示**（#742）：通过修正 `NODE_PATH` 分隔符处理，修复了 Windows 上的 HUD 渲染问题。
 
-* **WSL2 滚动修复**：修复了 WSL2 环境中的滚动行为。
+- **WSL2 滚动修复**：修复了 WSL2 环境中的滚动行为。
 
-* **tmux 会话名称解析**（#736、#740、#741）：使用 `TMUX_PANE` 环境变量正确解析通知中的 tmux 会话名称。
+- **tmux 会话名称解析**（#736、#740、#741）：使用 `TMUX_PANE` 环境变量正确解析通知中的 tmux 会话名称。
 
 ### 文档
 
-* **oh-my-codex 交叉引用**（#744）：为 Codex 用户添加了交叉引用文档。
+- **oh-my-codex 交叉引用**（#744）：为 Codex 用户添加了交叉引用文档。
 
 ---
 
@@ -1121,17 +1252,17 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **普通停止时会话空闲通知从未触发**（#593）：`persistent-mode.cjs` Stop hook 仅在持久模式（ralph、ultrawork 等）活跃时发送通知。当 Claude 在没有运行任何模式的情况下正常停止时，不会发出 `session-idle` 事件。外部集成（Telegram、Discord）现在可以收到空闲通知，让用户知道会话正在等待输入。
+- **普通停止时会话空闲通知从未触发**（#593）：`persistent-mode.cjs` Stop hook 仅在持久模式（ralph、ultrawork 等）活跃时发送通知。当 Claude 在没有运行任何模式的情况下正常停止时，不会发出 `session-idle` 事件。外部集成（Telegram、Discord）现在可以收到空闲通知，让用户知道会话正在等待输入。
 
 ### 变更
 
-* **Skills 清理**：移除了已弃用的 `commands/` 存根，并添加了缺失的 `SKILL.md` 文件（#588）。
+- **Skills 清理**：移除了已弃用的 `commands/` 存根，并添加了缺失的 `SKILL.md` 文件（#588）。
 
-* **HUD 安装可选**：安装程序现在遵循 `hudEnabled` 配置，禁用时跳过 HUD 设置（#567）。
+- **HUD 安装可选**：安装程序现在遵循 `hudEnabled` 配置，禁用时跳过 HUD 设置（#567）。
 
-* **Team 状态 hooks**：在 tmux 会话就绪转换时发出状态 hooks（#572）。
+- **Team 状态 hooks**：在 tmux 会话就绪转换时发出状态 hooks（#572）。
 
-* **Explore agent 上下文**：为 explore agent 添加了上下文感知文件读取（#583）。
+- **Explore agent 上下文**：为 explore agent 添加了上下文感知文件读取（#583）。
 
 ---
 
@@ -1145,29 +1276,29 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 修复
 
-* **Worktree 状态写入子目录**（#576）：`.omc/state/` 被创建在智能体 CWD 子目录中，而非 git worktree 根目录。新增 `resolveToWorktreeRoot()` 确保所有状态路径解析到仓库根目录，已在所有 8 个 hook 处理程序中统一应用。
+- **Worktree 状态写入子目录**（#576）：`.omc/state/` 被创建在智能体 CWD 子目录中，而非 git worktree 根目录。新增 `resolveToWorktreeRoot()` 确保所有状态路径解析到仓库根目录，已在所有 8 个 hook 处理程序中统一应用。
 
-* **会话时长报告过长**（#573）：`getSessionStartTime()` 现在按 `session_id` 过滤状态文件，跳过前一会话遗留的过期文件。时间戳解析为 epoch 以进行安全比较。
+- **会话时长报告过长**（#573）：`getSessionStartTime()` 现在按 `session_id` 过滤状态文件，跳过前一会话遗留的过期文件。时间戳解析为 epoch 以进行安全比较。
 
-* **Codex 429 速率限制崩溃**（#570）：为速率限制错误添加了带抖动的指数退避。可通过 `OMC_CODEX_RATE_LIMIT_RETRY_COUNT`（默认 3）、`OMC_CODEX_RATE_LIMIT_INITIAL_DELAY`（5 秒）、`OMC_CODEX_RATE_LIMIT_MAX_DELAY`（60 秒）进行配置。适用于前台和后台 Codex 执行。
+- **Codex 429 速率限制崩溃**（#570）：为速率限制错误添加了带抖动的指数退避。可通过 `OMC_CODEX_RATE_LIMIT_RETRY_COUNT`（默认 3）、`OMC_CODEX_RATE_LIMIT_INITIAL_DELAY`（5 秒）、`OMC_CODEX_RATE_LIMIT_MAX_DELAY`（60 秒）进行配置。适用于前台和后台 Codex 执行。
 
-* **守护进程因 ESM require() 崩溃**（#564）：在守护进程启动脚本中将 `require()` 替换为动态 `import()`。将 `appendFileSync`/`renameSync` 移至顶层 ESM 导入。
+- **守护进程因 ESM require() 崩溃**（#564）：在守护进程启动脚本中将 `require()` 替换为动态 `import()`。将 `appendFileSync`/`renameSync` 移至顶层 ESM 导入。
 
-* **LSP 在 Windows 上启动失败**（#569）：在 `process.platform === 'win32'` 时添加 `shell: true`，使 npm 安装的 `.cmd` 二进制文件能正确执行。
+- **LSP 在 Windows 上启动失败**（#569）：在 `process.platform === 'win32'` 时添加 `shell: true`，使 npm 安装的 `.cmd` 二进制文件能正确执行。
 
-* **Post-tool verifier 误报**（#579）：扩大了失败检测模式，防止 PostToolUse hooks 中出现漏报。
+- **Post-tool verifier 误报**（#579）：扩大了失败检测模式，防止 PostToolUse hooks 中出现漏报。
 
-* **Team bridge 就绪检测**（#572）：Worker 现在在首次成功轮询周期后发出 `ready` outbox 消息，实现可靠的启动检测。启动时写入初始心跳，并进行受保护的 I/O。
+- **Team bridge 就绪检测**（#572）：Worker 现在在首次成功轮询周期后发出 `ready` outbox 消息，实现可靠的启动检测。启动时写入初始心跳，并进行受保护的 I/O。
 
 ### 变更
 
-* **关键词检测器双重发射**：`ultrapilot` 和 `swarm` 关键词现在同时发射其原始类型和 `team`，允许 skill 层区分直接 team 调用和旧版别名。
+- **关键词检测器双重发射**：`ultrapilot` 和 `swarm` 关键词现在同时发射其原始类型和 `team`，允许 skill 层区分直接 team 调用和旧版别名。
 
-* **关键词净化器改进**：文件路径剥离更加精确（需要前导 `/`、`./` 或多段路径）。XML 标签匹配现在需要匹配标签名称，防止过度剥离。
+- **关键词净化器改进**：文件路径剥离更加精确（需要前导 `/`、`./` 或多段路径）。XML 标签匹配现在需要匹配标签名称，防止过度剥离。
 
-* **Skills 数量**：从 32 增加到 34（新增 `configure-discord`、`configure-telegram`）。
+- **Skills 数量**：从 32 增加到 34（新增 `configure-discord`、`configure-telegram`）。
 
-* **README 清理**：移除了越南语和葡萄牙语翻译。
+- **README 清理**：移除了越南语和葡萄牙语翻译。
 
 ---
 
@@ -1177,25 +1308,25 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* stop-callback 配置中的 `tagList` 支持（适用于 Telegram 和 Discord）。
+- stop-callback 配置中的 `tagList` 支持（适用于 Telegram 和 Discord）。
 
-* 通知标记规范化：
+- 通知标记规范化：
   - Telegram：将用户名规范化为 `@username`
   - Discord：支持 `@here`、`@everyone`、数字用户 ID（`<@id>`）和角色标记（`role:<id>` -> `<@&id>`）
 
-* 扩展 `omc config-stop-callback` 选项：
+- 扩展 `omc config-stop-callback` 选项：
   - `--tag-list <csv>`
   - `--add-tag <tag>`
   - `--remove-tag <tag>`
   - `--clear-tags`
 
-* 新增标记列表配置变更的 CLI 测试覆盖。
+- 新增标记列表配置变更的 CLI 测试覆盖。
 
 ### 更新
 
-* 会话结束回调通知现在为 Telegram/Discord 的摘要添加已配置标记前缀。
+- 会话结束回调通知现在为 Telegram/Discord 的摘要添加已配置标记前缀。
 
-* 所有 README 语言版本和 `docs/REFERENCE.md` 中的文档已更新，包含通知标记配置示例。
+- 所有 README 语言版本和 `docs/REFERENCE.md` 中的文档已更新，包含通知标记配置示例。
 
 ---
 
@@ -1209,33 +1340,33 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 关键修复
 
-* **CJS 包中 MCP 智能体角色失效**（#545）：esbuild 在打包为 CJS 格式时将 `import.meta` 替换为 `{}`，导致 `VALID_AGENT_ROLES` 为空。所有传递给 `ask_codex` 和 `ask_gemini` 的 `agent_role` 值都被拒绝，提示"Unknown agent_role"。修复了所有 4 个 `getPackageDir()` 函数，在 `import.meta.url` 不可用时回退到 `__dirname`（CJS 原生）。
+- **CJS 包中 MCP 智能体角色失效**（#545）：esbuild 在打包为 CJS 格式时将 `import.meta` 替换为 `{}`，导致 `VALID_AGENT_ROLES` 为空。所有传递给 `ask_codex` 和 `ask_gemini` 的 `agent_role` 值都被拒绝，提示"Unknown agent_role"。修复了所有 4 个 `getPackageDir()` 函数，在 `import.meta.url` 不可用时回退到 `__dirname`（CJS 原生）。
 
 ### 新增
 
-* **CLI setup 命令**（#498）：新增 `omc setup` 命令，提供同步 OMC hooks、agents 和 skills 的官方 CLI 入口点。支持 `--force`、`--quiet` 和 `--skip-hooks` 标志。
+- **CLI setup 命令**（#498）：新增 `omc setup` 命令，提供同步 OMC hooks、agents 和 skills 的官方 CLI 入口点。支持 `--force`、`--quiet` 和 `--skip-hooks` 标志。
 
-* **可配置预算阈值**（#531）：HUD 预算警告和严重阈值现在可通过 `HudThresholds` 配置，而非硬编码为 $2/$5。默认值保持现有行为。
+- **可配置预算阈值**（#531）：HUD 预算警告和严重阈值现在可通过 `HudThresholds` 配置，而非硬编码为 $2/$5。默认值保持现有行为。
 
-* **模型版本详细程度**（#500）：`formatModelName()` 现在支持 `'short'`、`'versioned'` 和 `'full'` 格式级别。从 HUD 显示中移除了冗余的 `model:` 前缀。
+- **模型版本详细程度**（#500）：`formatModelName()` 现在支持 `'short'`、`'versioned'` 和 `'full'` 格式级别。从 HUD 显示中移除了冗余的 `model:` 前缀。
 
-* **未解决问题标准化**（#514）：planner 和 analyst 智能体现在将未解决的问题指向 `.omc/plans/open-questions.md`，并使用共享的 `formatOpenQuestions()` 工具函数。
+- **未解决问题标准化**（#514）：planner 和 analyst 智能体现在将未解决的问题指向 `.omc/plans/open-questions.md`，并使用共享的 `formatOpenQuestions()` 工具函数。
 
 ### 修复
 
-* **上下文栏缺少后缀**（#532）：栏模式现在在阈值边界显示 `COMPRESS?` 和 `CRITICAL` 文本提示，与非栏模式行为一致。
+- **上下文栏缺少后缀**（#532）：栏模式现在在阈值边界显示 `COMPRESS?` 和 `CRITICAL` 文本提示，与非栏模式行为一致。
 
-* **Opus 速率限制未解析**（#529）：HUD 现在从使用 API 响应中读取 `seven_day_opus`，支持 Opus 的每模型每周速率限制显示。
+- **Opus 速率限制未解析**（#529）：HUD 现在从使用 API 响应中读取 `seven_day_opus`，支持 Opus 的每模型每周速率限制显示。
 
-* **长会话中会话时长重置**（#528）：会话开始时间现在持久化在 HUD 状态中（按会话 ID 范围），防止尾块解析重置显示的时长。
+- **长会话中会话时长重置**（#528）：会话开始时间现在持久化在 HUD 状态中（按会话 ID 范围），防止尾块解析重置显示的时长。
 
-* **启动 hook 中版本错误**（#516）：会话启动 hook 现在读取 OMC 自身的 `package.json` 版本，而非用户项目的版本，防止错误的更新通知和版本漂移。
+- **启动 hook 中版本错误**（#516）：会话启动 hook 现在读取 OMC 自身的 `package.json` 版本，而非用户项目的版本，防止错误的更新通知和版本漂移。
 
-* **智能体类型代码冲突**（#530）：使用 2 字符代码消除了 HUD 智能体代码歧义：`Qr`/`Qs`（quality-reviewer/strategist）、`Pm`（product-manager）、`Ia`（information-architect）。
+- **智能体类型代码冲突**（#530）：使用 2 字符代码消除了 HUD 智能体代码歧义：`Qr`/`Qs`（quality-reviewer/strategist）、`Pm`（product-manager）、`Ia`（information-architect）。
 
-* **Ralph 循环忽略 Team 取消**（#533）：当 Team pipeline 达到 `cancelled` 阶段时（除 `complete`/`failed` 外），ralph 现在能干净退出。移除了过早消耗最大迭代预算的双重迭代递增。
+- **Ralph 循环忽略 Team 取消**（#533）：当 Team pipeline 达到 `cancelled` 阶段时（除 `complete`/`failed` 外），ralph 现在能干净退出。移除了过早消耗最大迭代预算的双重迭代递增。
 
-* **Hooks 在 Windows 上失败**（#524）：所有 14 个 hook 脚本和 5 个模板现在使用 `pathToFileURL()` 进行动态导入，而非原始文件路径，修复了 Windows 上的 ESM 导入失败。为空 hook 响应添加了 `suppressOutput: true`，以缓解 Claude Code "hook error" 显示 bug。
+- **Hooks 在 Windows 上失败**（#524）：所有 14 个 hook 脚本和 5 个模板现在使用 `pathToFileURL()` 进行动态导入，而非原始文件路径，修复了 Windows 上的 ESM 导入失败。为空 hook 响应添加了 `suppressOutput: true`，以缓解 Claude Code "hook error" 显示 bug。
 
 ---
 
@@ -1245,9 +1376,9 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 变更
 
-* **Team skill**：移除了 team 成员的硬编码 `model: "sonnet"` 默认值。队友现在继承用户的会话模型，而非强制使用 Sonnet。由于每个队友都是能够生成自己子智能体的完整 Claude Code 会话，会话模型充当编排层。
+- **Team skill**：移除了 team 成员的硬编码 `model: "sonnet"` 默认值。队友现在继承用户的会话模型，而非强制使用 Sonnet。由于每个队友都是能够生成自己子智能体的完整 Claude Code 会话，会话模型充当编排层。
 
-* **Team 配置**：从 `.omc-config.json` team 配置选项中移除了 `defaultModel`。
+- **Team 配置**：从 `.omc-config.json` team 配置选项中移除了 `defaultModel`。
 
 ---
 
@@ -1259,17 +1390,17 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 ### 新增
 
-* **智能体团队设置**：`omc-setup` 向导现在包含步骤 5.5，用于配置 Claude Code 的实验性智能体团队（`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`），包括 `teammateMode` 选择和团队默认值。（#484）
+- **智能体团队设置**：`omc-setup` 向导现在包含步骤 5.5，用于配置 Claude Code 的实验性智能体团队（`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`），包括 `teammateMode` 选择和团队默认值。（#484）
 
 ### 变更
 
-* **灵活 MCP 路由**：移除了 `ask_codex` 和 `ask_gemini` MCP 工具对 `agent_role` 的每提供商枚举限制。两者现在接受任何有效的智能体角色（约 30 种类型）；提供商特定的优势作为建议记录，而非强制限制。（#485）
+- **灵活 MCP 路由**：移除了 `ask_codex` 和 `ask_gemini` MCP 工具对 `agent_role` 的每提供商枚举限制。两者现在接受任何有效的智能体角色（约 30 种类型）；提供商特定的优势作为建议记录，而非强制限制。（#485）
 
 ### 修复
 
-* **会话状态隔离**：消除了多个 Claude Code 会话在同一目录运行时的跨会话状态污染。当 `session_id` 已知时，旧版共享状态不可见——不回退到共享路径。为所有 8 种模式添加了 `isSessionMatch()` 辅助函数，实现一致的会话匹配。（#486）
+- **会话状态隔离**：消除了多个 Claude Code 会话在同一目录运行时的跨会话状态污染。当 `session_id` 已知时，旧版共享状态不可见——不回退到共享路径。为所有 8 种模式添加了 `isSessionMatch()` 辅助函数，实现一致的会话匹配。（#486）
 
-* **状态写入警告**：在 MCP `state_write` 中添加了 `session_id` 缺失时的警告，防止意外的共享状态写入。（#486）
+- **状态写入警告**：在 MCP `state_write` 中添加了 `session_id` 缺失时的警告，防止意外的共享状态写入。（#486）
 
 ---
 
@@ -1285,11 +1416,11 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 **迁移指南：**
 
-* **需要操作：** 用户必须更新其脚本、配置和自定义命令。
+- **需要操作：** 用户必须更新其脚本、配置和自定义命令。
 
-* **如何更新：** 不再通过层级选择智能体（如 `planner-high`），而是使用单一统一智能体（如 `planner`），并通过 Claude Code 设置或模型参数指定所需的模型大小/能力。
+- **如何更新：** 不再通过层级选择智能体（如 `planner-high`），而是使用单一统一智能体（如 `planner`），并通过 Claude Code 设置或模型参数指定所需的模型大小/能力。
 
-* **示例：** `Task(subagent_type="ultrapower:architect-high", ...)` 应改为 `Task(subagent_type="ultrapower:architect", model="opus", ...)`。
+- **示例：** `Task(subagent_type="ultrapower:architect-high", ...)` 应改为 `Task(subagent_type="ultrapower:architect", model="opus", ...)`。
 
 ---
 
@@ -1297,9 +1428,9 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 智能体生态系统已完全重构。我们将之前的 34 个分层智能体整合为 **28 个统一专业智能体**。新结构强调基于角色的专业化，而非令人困惑的层级系统，模型能力现在通过参数路由处理。此变更简化了智能体选择，提高了每个智能体用途的清晰度。（#480、#481）
 
-* **统一智能体名单**：弃用 `-low`、`-medium` 和 `-high` 智能体变体，改用单一统一名单。
+- **统一智能体名单**：弃用 `-low`、`-medium` 和 `-high` 智能体变体，改用单一统一名单。
 
-* **新专业智能体**：引入了一套新智能体，覆盖更多专业任务：
+- **新专业智能体**：引入了一套新智能体，覆盖更多专业任务：
   - `debugger`：用于根因分析和 bug 修复。
   - `verifier`：用于验证逻辑和结果。
   - `style-reviewer`：用于执行编码风格和规范。
@@ -1314,7 +1445,7 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
   - `information-architect`：用于组织和构建信息。
   - `product-analyst`：用于分析产品需求和行为。
 
-* **系统集成**：为所有 28 个智能体完成了 HUD 代码、系统提示和简称，确保完全集成到 OMC 生态系统中。（f5746a8）
+- **系统集成**：为所有 28 个智能体完成了 HUD 代码、系统提示和简称，确保完全集成到 OMC 生态系统中。（f5746a8）
 
 ---
 
@@ -1322,15 +1453,15 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 引入 **MCP Team Workers Bridge Daemon**，多智能体协作的重大飞跃。该系统支持健壮、弹性且可观测的分布式工作流。
 
-* **Team Bridge Daemon**：新的后台服务（`mcp-team-workers`）在多个智能体"worker"之间编排任务。（e16e2ad）
+- **Team Bridge Daemon**：新的后台服务（`mcp-team-workers`）在多个智能体"worker"之间编排任务。（e16e2ad）
 
-* **增强弹性**：实现了混合编排、使用 `git worktrees` 进行隔离任务执行，以及改进的可观测性，使 team 操作更加健壮。（0318f01）
+- **增强弹性**：实现了混合编排、使用 `git worktrees` 进行隔离任务执行，以及改进的可观测性，使 team 操作更加健壮。（0318f01）
 
-* **原子任务认领**：将之前的 `sleep+jitter` 机制替换为原子 `O_EXCL` 锁文件。这防止了竞争条件，确保任务一次只被一个 worker 认领。（c46c345、7d34646）
+- **原子任务认领**：将之前的 `sleep+jitter` 机制替换为原子 `O_EXCL` 锁文件。这防止了竞争条件，确保任务一次只被一个 worker 认领。（c46c345、7d34646）
 
-* **安全加固**：针对一系列漏洞加固了 team bridge，包括文件描述符（FD）泄漏、路径遍历攻击，以及改进的关闭程序。（#462、#465）
+- **安全加固**：针对一系列漏洞加固了 team bridge，包括文件描述符（FD）泄漏、路径遍历攻击，以及改进的关闭程序。（#462、#465）
 
-* **权限执行**：为 MCP workers 添加了执行后权限执行层，确保智能体在其指定的安全边界内运行。（fce3375、6a7ec27）
+- **权限执行**：为 MCP workers 添加了执行后权限执行层，确保智能体在其指定的安全边界内运行。（fce3375、6a7ec27）
 
 ---
 
@@ -1338,9 +1469,9 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 根据 Anthropic 最新的提示最佳实践，核心系统提示（`docs/CLAUDE.md`）已完全重写，显著提升了性能、可靠性和工具使用准确性。
 
-* **最佳实践**：新提示利用 XML 行为标签（`<operating_principles>`、`<delegation_rules>`、`<agent_catalog>` 等），使用平静直接的语言，并为所有可用工具和 skills 提供全面的结构化参考。（42aad26）
+- **最佳实践**：新提示利用 XML 行为标签（`<operating_principles>`、`<delegation_rules>`、`<agent_catalog>` 等），使用平静直接的语言，并为所有可用工具和 skills 提供全面的结构化参考。（42aad26）
 
-* **生产就绪**：根据生产就绪审查的反馈进行了改进，确保提示健壮有效。（d7317cb）
+- **生产就绪**：根据生产就绪审查的反馈进行了改进，确保提示健壮有效。（d7317cb）
 
 ---
 
@@ -1348,16 +1479,16 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 为降低复杂性并改善用户体验，多个 skills 和命令已合并和正式化。（#471）
 
-* **合并的 Skills**：
+- **合并的 Skills**：
   - `local-skills-setup` 已合并到核心 `skill` 命令中。
   - `learn-about-omc` 现在是 `help` 命令的一部分。
   - `ralplan` 和 `review` 已整合到 `plan` 命令中。（dae0cf9、dd63c4a）
 
-* **命令别名**：添加了 `ralplan` 和 `review` 作为 `plan` 的别名，以保持用户肌肉记忆的向后兼容性。（217a029）
+- **命令别名**：添加了 `ralplan` 和 `review` 作为 `plan` 的别名，以保持用户肌肉记忆的向后兼容性。（217a029）
 
-* **正式化结构**：明确了"commands"（面向用户的入口点）和"skills"（内部智能体能力）之间的区别。`analyze`、`git-master` 和 `frontend-ui-ux` 现在是其各自底层 skills 的薄路由层。（#470）
+- **正式化结构**：明确了"commands"（面向用户的入口点）和"skills"（内部智能体能力）之间的区别。`analyze`、`git-master` 和 `frontend-ui-ux` 现在是其各自底层 skills 的薄路由层。（#470）
 
-* **清理**：移除了死亡 skills、孤立引用，并更新了文档以反映新的精简结构。（#478）
+- **清理**：移除了死亡 skills、孤立引用，并更新了文档以反映新的精简结构。（#478）
 
 ---
 
@@ -1365,22 +1496,22 @@ v5.5.18 无破坏性变更，所有 API 保持向后兼容。
 
 本版本包含大量修复，以提高稳定性、防止错误并增强系统整体可靠性。
 
-* **状态管理**：
+- **状态管理**：
   - 对会话状态文件进行命名空间化，防止不同会话之间的上下文"渗漏"。（#456）
   - 消除了模式检测 hooks 中的跨会话状态泄漏，实现更好的隔离。（297fe42、92432cf）
 
-* **并发与竞争条件**：
+- **并发与竞争条件**：
   - 为压缩过程添加了防抖机制，防止并发执行时出现错误。（#453）
 
-* **工具与 Hook 稳定性**：
+- **工具与 Hook 稳定性**：
   - 在所有 hook 脚本中实现了超时保护的 `stdin`，防止挂起。（#459）
 
-* **API/模型交互**：
+- **API/模型交互**：
   - 添加了处理 Codex 和 Gemini 的 `429 Too Many Requests` 速率限制错误的回退机制，提高了高负载下的弹性。（#469）
 
-* **工作流门控**：
+- **工作流门控**：
   - 在 `ralplan` 中将 `AskUserQuestion` 工具替换为原生 Plan Mode 审批门控，实现更流畅可靠的人机协作工作流。（#448、#463）
 
-* **测试**：
+- **测试**：
   - 解决了合并冲突，并在测试中对齐了 skill/agent 清单以匹配整合变更。（e4d64a3、539fb1a）
   - 通过使用 `utimesSync` 正确模拟文件年龄，修复了过期锁文件清理的测试。（24455c3）

@@ -18,6 +18,11 @@ import { StateLocation, StateConfig, StateReadResult, StateWriteResult, StateCle
  */
 export declare function clearStateCache(): void;
 /**
+ * Reset WAL instance (for testing only).
+ * @internal
+ */
+export declare function resetWAL(): void;
+/**
  * Get the standard path for a state file
  */
 export declare function getStatePath(name: string, location: StateLocation): string;

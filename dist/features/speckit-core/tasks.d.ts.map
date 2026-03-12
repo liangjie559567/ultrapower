@@ -1,0 +1,1 @@
+{"version":3,"file":"tasks.d.ts","sourceRoot":"","sources":["../../../src/features/speckit-core/tasks.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,OAAO,KAAK,EAAE,aAAa,EAAE,IAAI,EAAE,aAAa,EAAE,MAAM,YAAY,CAAC;AAErE,wBAAsB,aAAa,CAAC,IAAI,EAAE,aAAa,EAAE,IAAI,CAAC,EAAE,aAAa,GAAG,OAAO,CAAC,IAAI,EAAE,CAAC,CAqC9F;AAgCD,wBAAgB,WAAW,CAAC,KAAK,EAAE,IAAI,EAAE,GAAG,MAAM,CAYjD"}

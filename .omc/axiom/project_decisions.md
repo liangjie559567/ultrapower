@@ -2,12 +2,6 @@
 
 ## Architecture Decisions
 
-None recorded yet
+## Library Choices
 
-## Technical Constraints
-
-None recorded yet
-
-## Design Patterns
-
-None recorded yet
+## Rules

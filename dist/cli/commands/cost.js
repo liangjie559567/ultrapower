@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { getQueryEngine } from '../../analytics/query-engine.js';
 import { colors, renderTable, formatCostWithColor } from '../utils/formatting.js';
 export async function costCommand(period, options) {
@@ -49,5 +50,12 @@ export async function costCommand(period, options) {
         console.log(dayTable);
         console.log('');
     }
+}
+export function createCostCommand() {
+    return new Command('cost')
+        .argument('[period]', 'Period: daily, weekly, monthly', 'monthly')
+        .description('Generate cost report (period: daily, weekly, monthly)')
+        .option('--json', 'Output as JSON')
+        .action(costCommand);
 }
 //# sourceMappingURL=cost.js.map

@@ -2995,7 +2995,7 @@ var require_compile = __commonJS({
       const schOrFunc = root.refs[ref];
       if (schOrFunc)
         return schOrFunc;
-      let _sch = resolve6.call(this, root, ref);
+      let _sch = resolve7.call(this, root, ref);
       if (_sch === void 0) {
         const schema = (_a = root.localRefs) === null || _a === void 0 ? void 0 : _a[ref];
         const { schemaId } = this.opts;
@@ -3022,7 +3022,7 @@ var require_compile = __commonJS({
     function sameSchemaEnv(s1, s2) {
       return s1.schema === s2.schema && s1.root === s2.root && s1.baseId === s2.baseId;
     }
-    function resolve6(root, ref) {
+    function resolve7(root, ref) {
       let sch;
       while (typeof (sch = this.refs[ref]) == "string")
         ref = sch;
@@ -3597,7 +3597,7 @@ var require_fast_uri = __commonJS({
       }
       return uri;
     }
-    function resolve6(baseURI, relativeURI, options) {
+    function resolve7(baseURI, relativeURI, options) {
       const schemelessOptions = options ? Object.assign({ scheme: "null" }, options) : { scheme: "null" };
       const resolved = resolveComponent(parse5(baseURI, schemelessOptions), parse5(relativeURI, schemelessOptions), schemelessOptions, true);
       schemelessOptions.skipEscape = true;
@@ -3824,7 +3824,7 @@ var require_fast_uri = __commonJS({
     var fastUri = {
       SCHEMES,
       normalize: normalize6,
-      resolve: resolve6,
+      resolve: resolve7,
       resolveComponent,
       equal,
       serialize,
@@ -16675,7 +16675,7 @@ var Protocol = class {
           return;
         }
         const pollInterval = task2.pollInterval ?? this._options?.defaultTaskPollInterval ?? 1e3;
-        await new Promise((resolve6) => setTimeout(resolve6, pollInterval));
+        await new Promise((resolve7) => setTimeout(resolve7, pollInterval));
         options?.signal?.throwIfAborted();
       }
     } catch (error2) {
@@ -16692,7 +16692,7 @@ var Protocol = class {
    */
   request(request, resultSchema, options) {
     const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options ?? {};
-    return new Promise((resolve6, reject) => {
+    return new Promise((resolve7, reject) => {
       const earlyReject = (error2) => {
         reject(error2);
       };
@@ -16770,7 +16770,7 @@ var Protocol = class {
           if (!parseResult.success) {
             reject(parseResult.error);
           } else {
-            resolve6(parseResult.data);
+            resolve7(parseResult.data);
           }
         } catch (error2) {
           reject(error2);
@@ -17031,12 +17031,12 @@ var Protocol = class {
       }
     } catch {
     }
-    return new Promise((resolve6, reject) => {
+    return new Promise((resolve7, reject) => {
       if (signal.aborted) {
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
         return;
       }
-      const timeoutId = setTimeout(resolve6, interval);
+      const timeoutId = setTimeout(resolve7, interval);
       signal.addEventListener("abort", () => {
         clearTimeout(timeoutId);
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
@@ -17218,6 +17218,147 @@ var ExperimentalServerTasks = class {
    */
   requestStream(request, resultSchema, options) {
     return this._server.requestStream(request, resultSchema, options);
+  }
+  /**
+   * Sends a sampling request and returns an AsyncGenerator that yields response messages.
+   * The generator is guaranteed to end with either a 'result' or 'error' message.
+   *
+   * For task-augmented requests, yields 'taskCreated' and 'taskStatus' messages
+   * before the final result.
+   *
+   * @example
+   * ```typescript
+   * const stream = server.experimental.tasks.createMessageStream({
+   *     messages: [{ role: 'user', content: { type: 'text', text: 'Hello' } }],
+   *     maxTokens: 100
+   * }, {
+   *     onprogress: (progress) => {
+   *         // Handle streaming tokens via progress notifications
+   *         console.log('Progress:', progress.message);
+   *     }
+   * });
+   *
+   * for await (const message of stream) {
+   *     switch (message.type) {
+   *         case 'taskCreated':
+   *             console.log('Task created:', message.task.taskId);
+   *             break;
+   *         case 'taskStatus':
+   *             console.log('Task status:', message.task.status);
+   *             break;
+   *         case 'result':
+   *             console.log('Final result:', message.result);
+   *             break;
+   *         case 'error':
+   *             console.error('Error:', message.error);
+   *             break;
+   *     }
+   * }
+   * ```
+   *
+   * @param params - The sampling request parameters
+   * @param options - Optional request options (timeout, signal, task creation params, onprogress, etc.)
+   * @returns AsyncGenerator that yields ResponseMessage objects
+   *
+   * @experimental
+   */
+  createMessageStream(params, options) {
+    const clientCapabilities = this._server.getClientCapabilities();
+    if ((params.tools || params.toolChoice) && !clientCapabilities?.sampling?.tools) {
+      throw new Error("Client does not support sampling tools capability.");
+    }
+    if (params.messages.length > 0) {
+      const lastMessage = params.messages[params.messages.length - 1];
+      const lastContent = Array.isArray(lastMessage.content) ? lastMessage.content : [lastMessage.content];
+      const hasToolResults = lastContent.some((c) => c.type === "tool_result");
+      const previousMessage = params.messages.length > 1 ? params.messages[params.messages.length - 2] : void 0;
+      const previousContent = previousMessage ? Array.isArray(previousMessage.content) ? previousMessage.content : [previousMessage.content] : [];
+      const hasPreviousToolUse = previousContent.some((c) => c.type === "tool_use");
+      if (hasToolResults) {
+        if (lastContent.some((c) => c.type !== "tool_result")) {
+          throw new Error("The last message must contain only tool_result content if any is present");
+        }
+        if (!hasPreviousToolUse) {
+          throw new Error("tool_result blocks are not matching any tool_use from the previous message");
+        }
+      }
+      if (hasPreviousToolUse) {
+        const toolUseIds = new Set(previousContent.filter((c) => c.type === "tool_use").map((c) => c.id));
+        const toolResultIds = new Set(lastContent.filter((c) => c.type === "tool_result").map((c) => c.toolUseId));
+        if (toolUseIds.size !== toolResultIds.size || ![...toolUseIds].every((id) => toolResultIds.has(id))) {
+          throw new Error("ids of tool_result blocks and tool_use blocks from previous message do not match");
+        }
+      }
+    }
+    return this.requestStream({
+      method: "sampling/createMessage",
+      params
+    }, CreateMessageResultSchema, options);
+  }
+  /**
+   * Sends an elicitation request and returns an AsyncGenerator that yields response messages.
+   * The generator is guaranteed to end with either a 'result' or 'error' message.
+   *
+   * For task-augmented requests (especially URL-based elicitation), yields 'taskCreated'
+   * and 'taskStatus' messages before the final result.
+   *
+   * @example
+   * ```typescript
+   * const stream = server.experimental.tasks.elicitInputStream({
+   *     mode: 'url',
+   *     message: 'Please authenticate',
+   *     elicitationId: 'auth-123',
+   *     url: 'https://example.com/auth'
+   * }, {
+   *     task: { ttl: 300000 } // Task-augmented for long-running auth flow
+   * });
+   *
+   * for await (const message of stream) {
+   *     switch (message.type) {
+   *         case 'taskCreated':
+   *             console.log('Task created:', message.task.taskId);
+   *             break;
+   *         case 'taskStatus':
+   *             console.log('Task status:', message.task.status);
+   *             break;
+   *         case 'result':
+   *             console.log('User action:', message.result.action);
+   *             break;
+   *         case 'error':
+   *             console.error('Error:', message.error);
+   *             break;
+   *     }
+   * }
+   * ```
+   *
+   * @param params - The elicitation request parameters
+   * @param options - Optional request options (timeout, signal, task creation params, etc.)
+   * @returns AsyncGenerator that yields ResponseMessage objects
+   *
+   * @experimental
+   */
+  elicitInputStream(params, options) {
+    const clientCapabilities = this._server.getClientCapabilities();
+    const mode = params.mode ?? "form";
+    switch (mode) {
+      case "url": {
+        if (!clientCapabilities?.elicitation?.url) {
+          throw new Error("Client does not support url elicitation.");
+        }
+        break;
+      }
+      case "form": {
+        if (!clientCapabilities?.elicitation?.form) {
+          throw new Error("Client does not support form elicitation.");
+        }
+        break;
+      }
+    }
+    const normalizedParams = mode === "form" && params.mode === void 0 ? { ...params, mode: "form" } : params;
+    return this.requestStream({
+      method: "elicitation/create",
+      params: normalizedParams
+    }, ElicitResultSchema, options);
   }
   /**
    * Gets the current status of a task.
@@ -17765,12 +17906,12 @@ var StdioServerTransport = class {
     this.onclose?.();
   }
   send(message) {
-    return new Promise((resolve6) => {
+    return new Promise((resolve7) => {
       const json = serializeMessage(message);
       if (this._stdout.write(json)) {
-        resolve6();
+        resolve7();
       } else {
-        this._stdout.once("drain", resolve6);
+        this._stdout.once("drain", resolve7);
       }
     });
   }
@@ -17943,6 +18084,47 @@ function getAllServers() {
 
 // src/tools/lsp/client.ts
 var MAX_BUFFER_BYTES = 64 * 1024 * 1024;
+var LANGUAGE_MAP = {
+  "ts": "typescript",
+  "tsx": "typescriptreact",
+  "js": "javascript",
+  "jsx": "javascriptreact",
+  "mts": "typescript",
+  "cts": "typescript",
+  "mjs": "javascript",
+  "cjs": "javascript",
+  "py": "python",
+  "rs": "rust",
+  "go": "go",
+  "c": "c",
+  "h": "c",
+  "cpp": "cpp",
+  "cc": "cpp",
+  "hpp": "cpp",
+  "java": "java",
+  "json": "json",
+  "html": "html",
+  "css": "css",
+  "scss": "scss",
+  "yaml": "yaml",
+  "yml": "yaml",
+  "php": "php",
+  "phtml": "php",
+  "rb": "ruby",
+  "rake": "ruby",
+  "gemspec": "ruby",
+  "erb": "ruby",
+  "lua": "lua",
+  "kt": "kotlin",
+  "kts": "kotlin",
+  "ex": "elixir",
+  "exs": "elixir",
+  "heex": "elixir",
+  "eex": "elixir",
+  "cs": "csharp"
+};
+var workspaceRootCache = /* @__PURE__ */ new Map();
+var MAX_WORKSPACE_CACHE = 100;
 function fileUri(filePath) {
   return (0, import_url.pathToFileURL)((0, import_path2.resolve)(filePath)).href;
 }
@@ -17950,9 +18132,11 @@ var LspClient = class {
   process = null;
   requestId = 0;
   pendingRequests = /* @__PURE__ */ new Map();
-  buffer = "";
+  bufferChunks = [];
+  bufferOffset = 0;
   openDocuments = /* @__PURE__ */ new Set();
   diagnostics = /* @__PURE__ */ new Map();
+  pendingDiagnostics = /* @__PURE__ */ new Map();
   workspaceRoot;
   serverConfig;
   initialized = false;
@@ -17973,7 +18157,7 @@ var LspClient = class {
 Install with: ${this.serverConfig.installHint}`
       );
     }
-    return new Promise((resolve6, reject) => {
+    return new Promise((resolve7, reject) => {
       this.process = (0, import_child_process2.spawn)(this.serverConfig.command, this.serverConfig.args, {
         cwd: this.workspaceRoot,
         stdio: ["pipe", "pipe", "pipe"],
@@ -17999,7 +18183,7 @@ Install with: ${this.serverConfig.installHint}`
       });
       this.initialize().then(() => {
         this.initialized = true;
-        resolve6();
+        resolve7();
       }).catch(reject);
     });
   }
@@ -18028,7 +18212,8 @@ Install with: ${this.serverConfig.installHint}`
    * Handle incoming data from the server
    */
   handleData(data) {
-    if (this.buffer.length + data.length > MAX_BUFFER_BYTES) {
+    const totalLength = this.bufferChunks.reduce((sum, chunk) => sum + chunk.length, 0) - this.bufferOffset + data.length;
+    if (totalLength > MAX_BUFFER_BYTES) {
       console.error(
         `[ultrapower] \u9519\u8BEF\uFF1ALSP \u7F13\u51B2\u533A\u8D85\u8FC7 ${MAX_BUFFER_BYTES} \u5B57\u8282\uFF0864MB\uFF09\u4E0A\u9650\uFF0C\u6B63\u5728\u65AD\u5F00\u8FDE\u63A5`
       );
@@ -18036,24 +18221,27 @@ Install with: ${this.serverConfig.installHint}`
       });
       return;
     }
-    this.buffer += data;
+    this.bufferChunks.push(data);
     while (true) {
-      const headerEnd = this.buffer.indexOf("\r\n\r\n");
+      const buffer = this.bufferChunks.join("").slice(this.bufferOffset);
+      const headerEnd = buffer.indexOf("\r\n\r\n");
       if (headerEnd === -1) break;
-      const header = this.buffer.slice(0, headerEnd);
+      const header = buffer.slice(0, headerEnd);
       const contentLengthMatch = header.match(/Content-Length: (\d+)/i);
       if (!contentLengthMatch) {
-        this.buffer = this.buffer.slice(headerEnd + 4);
+        this.bufferOffset += headerEnd + 4;
         continue;
       }
       const contentLength = parseInt(contentLengthMatch[1], 10);
       const messageStart = headerEnd + 4;
       const messageEnd = messageStart + contentLength;
-      if (this.buffer.length < messageEnd) {
-        break;
+      if (buffer.length < messageEnd) break;
+      const messageJson = buffer.slice(messageStart, messageEnd);
+      this.bufferOffset += messageEnd;
+      if (this.bufferOffset > 8192) {
+        this.bufferChunks = [buffer.slice(messageEnd)];
+        this.bufferOffset = 0;
       }
-      const messageJson = this.buffer.slice(messageStart, messageEnd);
-      this.buffer = this.buffer.slice(messageEnd);
       try {
         const message = JSON.parse(messageJson);
         this.handleMessage(message);
@@ -18087,6 +18275,12 @@ Install with: ${this.serverConfig.installHint}`
     if (notification.method === "textDocument/publishDiagnostics") {
       const params = notification.params;
       this.diagnostics.set(params.uri, params.diagnostics);
+      const pending = this.pendingDiagnostics.get(params.uri);
+      if (pending) {
+        clearTimeout(pending.timeout);
+        this.pendingDiagnostics.delete(params.uri);
+        pending.resolve(params.diagnostics);
+      }
     }
   }
   /**
@@ -18107,13 +18301,13 @@ Install with: ${this.serverConfig.installHint}`
     const message = `Content-Length: ${Buffer.byteLength(content)}\r
 \r
 ${content}`;
-    return new Promise((resolve6, reject) => {
+    return new Promise((resolve7, reject) => {
       const timeoutHandle = setTimeout(() => {
         this.pendingRequests.delete(id);
         reject(new Error(`LSP request '${method}' timed out after ${timeout}ms`));
       }, timeout);
       this.pendingRequests.set(id, {
-        resolve: resolve6,
+        resolve: resolve7,
         reject,
         timeout: timeoutHandle
       });
@@ -18182,7 +18376,7 @@ ${content}`;
       }
     });
     this.openDocuments.add(uri);
-    await new Promise((resolve6) => setTimeout(resolve6, 100));
+    return this.waitForDiagnostics(uri, 500);
   }
   /**
    * Close a document
@@ -18200,46 +18394,25 @@ ${content}`;
    */
   getLanguageId(filePath) {
     const ext = filePath.split(".").pop()?.toLowerCase() || "";
-    const langMap = {
-      "ts": "typescript",
-      "tsx": "typescriptreact",
-      "js": "javascript",
-      "jsx": "javascriptreact",
-      "mts": "typescript",
-      "cts": "typescript",
-      "mjs": "javascript",
-      "cjs": "javascript",
-      "py": "python",
-      "rs": "rust",
-      "go": "go",
-      "c": "c",
-      "h": "c",
-      "cpp": "cpp",
-      "cc": "cpp",
-      "hpp": "cpp",
-      "java": "java",
-      "json": "json",
-      "html": "html",
-      "css": "css",
-      "scss": "scss",
-      "yaml": "yaml",
-      "yml": "yaml",
-      "php": "php",
-      "phtml": "php",
-      "rb": "ruby",
-      "rake": "ruby",
-      "gemspec": "ruby",
-      "erb": "ruby",
-      "lua": "lua",
-      "kt": "kotlin",
-      "kts": "kotlin",
-      "ex": "elixir",
-      "exs": "elixir",
-      "heex": "elixir",
-      "eex": "elixir",
-      "cs": "csharp"
-    };
-    return langMap[ext] || ext;
+    return LANGUAGE_MAP[ext] || ext;
+  }
+  /**
+   * Wait for diagnostics to be published for a URI
+   */
+  waitForDiagnostics(uri, timeout) {
+    return new Promise((resolve7) => {
+      const timeoutHandle = setTimeout(() => {
+        this.pendingDiagnostics.delete(uri);
+        resolve7();
+      }, timeout);
+      this.pendingDiagnostics.set(uri, {
+        resolve: () => {
+          clearTimeout(timeoutHandle);
+          resolve7();
+        },
+        timeout: timeoutHandle
+      });
+    });
   }
   /**
    * Convert file path to URI and ensure document is open
@@ -18451,25 +18624,38 @@ var LspClientManager = class {
     }
   }
   /**
-   * Find the workspace root for a file
+   * Find the workspace root for a file (with LRU cache)
    */
   findWorkspaceRoot(filePath) {
-    let dir = (0, import_path2.dirname)((0, import_path2.resolve)(filePath));
+    const resolved = (0, import_path2.resolve)(filePath);
+    if (workspaceRootCache.has(resolved)) {
+      const cached2 = workspaceRootCache.get(resolved);
+      workspaceRootCache.delete(resolved);
+      workspaceRootCache.set(resolved, cached2);
+      return cached2;
+    }
+    let dir = (0, import_path2.dirname)(resolved);
     const markers = ["package.json", "tsconfig.json", "pyproject.toml", "Cargo.toml", "go.mod", ".git"];
     while (true) {
       const parsed = (0, import_path2.parse)(dir);
-      if (parsed.root === dir) {
-        break;
-      }
+      if (parsed.root === dir) break;
       for (const marker of markers) {
-        const markerPath = (0, import_path2.join)(dir, marker);
-        if ((0, import_fs.existsSync)(markerPath)) {
+        if ((0, import_fs.existsSync)((0, import_path2.join)(dir, marker))) {
+          if (workspaceRootCache.size >= MAX_WORKSPACE_CACHE) {
+            const firstKey = workspaceRootCache.keys().next().value;
+            if (firstKey !== void 0) {
+              workspaceRootCache.delete(firstKey);
+            }
+          }
+          workspaceRootCache.set(resolved, dir);
           return dir;
         }
       }
       dir = (0, import_path2.dirname)(dir);
     }
-    return (0, import_path2.dirname)((0, import_path2.resolve)(filePath));
+    const fallback = (0, import_path2.dirname)(resolved);
+    workspaceRootCache.set(resolved, fallback);
+    return fallback;
   }
   /**
    * Start periodic idle check
@@ -18834,7 +19020,7 @@ async function runLspAggregatedDiagnostics(directory, extensions = [".ts", ".tsx
     try {
       await lspClientManager.runWithClientLease(file, async (client) => {
         await client.openDocument(file);
-        await new Promise((resolve6) => setTimeout(resolve6, LSP_DIAGNOSTICS_WAIT_MS));
+        await new Promise((resolve7) => setTimeout(resolve7, LSP_DIAGNOSTICS_WAIT_MS));
         const diagnostics = client.getDiagnostics(file);
         for (const diagnostic of diagnostics) {
           allDiagnostics.push({
@@ -19084,7 +19270,6 @@ var lspDiagnosticsTool = {
     const { file, severity } = args;
     return withLspClient(file, "diagnostics", async (client) => {
       await client.openDocument(file);
-      await new Promise((resolve6) => setTimeout(resolve6, LSP_DIAGNOSTICS_WAIT_MS));
       let diagnostics = client.getDiagnostics(file);
       if (severity) {
         const severityMap = {
@@ -19389,20 +19574,20 @@ function toLangEnum(sg, language) {
     javascript: sg.Lang.JavaScript,
     typescript: sg.Lang.TypeScript,
     tsx: sg.Lang.Tsx,
-    python: sg.Lang.Python,
-    ruby: sg.Lang.Ruby,
-    go: sg.Lang.Go,
-    rust: sg.Lang.Rust,
-    java: sg.Lang.Java,
-    kotlin: sg.Lang.Kotlin,
-    swift: sg.Lang.Swift,
-    c: sg.Lang.C,
-    cpp: sg.Lang.Cpp,
-    csharp: sg.Lang.CSharp,
     html: sg.Lang.Html,
     css: sg.Lang.Css,
-    json: sg.Lang.Json,
-    yaml: sg.Lang.Yaml
+    python: "Python",
+    ruby: "Ruby",
+    go: "Go",
+    rust: "Rust",
+    java: "Java",
+    kotlin: "Kotlin",
+    swift: "Swift",
+    c: "C",
+    cpp: "Cpp",
+    csharp: "CSharp",
+    json: "Json",
+    yaml: "Yaml"
   };
   const lang = langMap[language];
   if (!lang) {
@@ -19467,7 +19652,7 @@ async function readFileStream(filePath, onProgress) {
   if (fileSize < LARGE_FILE_THRESHOLD) {
     return (0, import_fs5.readFileSync)(filePath, "utf-8");
   }
-  return new Promise((resolve6, reject) => {
+  return new Promise((resolve7, reject) => {
     const chunks = [];
     let bytesRead = 0;
     const stream = (0, import_fs5.createReadStream)(filePath, { encoding: "utf-8" });
@@ -19477,7 +19662,7 @@ async function readFileStream(filePath, onProgress) {
       bytesRead += Buffer.byteLength(str, "utf-8");
       onProgress?.(bytesRead, fileSize);
     });
-    stream.on("end", () => resolve6(chunks.join("")));
+    stream.on("end", () => resolve7(chunks.join("")));
     stream.on("error", reject);
   });
 }
@@ -20426,7 +20611,7 @@ var SessionLock = class {
   }
 };
 function sleep(ms) {
-  return new Promise((resolve6) => setTimeout(resolve6, ms));
+  return new Promise((resolve7) => setTimeout(resolve7, ms));
 }
 
 // src/tools/python-repl/socket-client.ts
@@ -20456,7 +20641,7 @@ var JsonRpcError = class extends Error {
   }
 };
 async function sendSocketRequest(socketPath, method, params, timeout = 6e4) {
-  return new Promise((resolve6, reject) => {
+  return new Promise((resolve7, reject) => {
     const id = (0, import_crypto.randomUUID)();
     const request = {
       jsonrpc: "2.0",
@@ -20520,7 +20705,7 @@ async function sendSocketRequest(socketPath, method, params, timeout = 6e4) {
             ));
             return;
           }
-          resolve6(response.result);
+          resolve7(response.result);
         } catch (e) {
           reject(new Error(
             `Failed to parse JSON-RPC response: ${e.message}`
@@ -20842,7 +21027,7 @@ async function deleteBridgeMeta(sessionId) {
   }
 }
 function sleep2(ms) {
-  return new Promise((resolve6) => setTimeout(resolve6, ms));
+  return new Promise((resolve7) => setTimeout(resolve7, ms));
 }
 
 // src/tools/python-repl/tool.ts
@@ -21961,14 +22146,22 @@ function assertValidMode(mode) {
 var import_fs8 = require("fs");
 var stateCache = /* @__PURE__ */ new Map();
 function readStateWithCache(path13, data, ttl = 5e3) {
+  const now = Date.now();
+  const cached2 = stateCache.get(path13);
+  if (cached2 && now - cached2.cachedAt < ttl) {
+    if (now - cached2.mtimeCheckedAt < 1e3) {
+      return Object.freeze(cached2.data);
+    }
+  }
   try {
     const mtime = (0, import_fs8.statSync)(path13).mtimeMs;
-    const cached2 = stateCache.get(path13);
-    if (cached2 && cached2.mtime === mtime && Date.now() - cached2.cachedAt < ttl) {
-      return { ...cached2.data };
+    if (cached2 && cached2.mtime === mtime) {
+      cached2.mtimeCheckedAt = now;
+      return Object.freeze(cached2.data);
     }
-    stateCache.set(path13, { data, mtime, cachedAt: Date.now() });
-    return data;
+    const frozenData = Object.freeze(data);
+    stateCache.set(path13, { data: frozenData, mtime, cachedAt: now, mtimeCheckedAt: now });
+    return frozenData;
   } catch {
     return data;
   }

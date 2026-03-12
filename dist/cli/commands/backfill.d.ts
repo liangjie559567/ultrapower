@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 interface BackfillCommandOptions {
     project?: string;
     from?: string;
@@ -11,5 +12,6 @@ interface BackfillCommandOptions {
  * omc backfill command handler
  */
 export declare function backfillCommand(options: BackfillCommandOptions): Promise<void>;
+export declare function createBackfillCommand(): Command;
 export {};
 //# sourceMappingURL=backfill.d.ts.map

@@ -212,11 +212,11 @@ describe('AutopilotSummary', () => {
     });
 
     it('should return correct format for execution phase', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      state.phase = 'execution';
+      state = { ...state, phase: 'execution' };
       await updateExecution(testDir, {
         files_created: ['a.ts', 'b.ts'],
         files_modified: ['c.ts']
@@ -230,11 +230,11 @@ describe('AutopilotSummary', () => {
     });
 
     it('should return correct format for qa phase', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      state.phase = 'qa';
+      state = { ...state, phase: 'qa' };
 
       const compact = formatCompactSummary(state);
 
@@ -242,11 +242,11 @@ describe('AutopilotSummary', () => {
     });
 
     it('should return correct format for validation phase', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      state.phase = 'validation';
+      state = { ...state, phase: 'validation' };
 
       const compact = formatCompactSummary(state);
 
@@ -254,7 +254,7 @@ describe('AutopilotSummary', () => {
     });
 
     it('should show checkmark for complete phase', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
@@ -264,7 +264,7 @@ describe('AutopilotSummary', () => {
       });
       await transitionPhase(testDir, 'complete');
 
-      state.phase = 'complete';
+      state = { ...state, phase: 'complete' };
       state.total_agents_spawned = 10;
       state.execution.files_created = ['a.ts'];
       state.execution.files_modified = ['b.ts'];
@@ -275,11 +275,11 @@ describe('AutopilotSummary', () => {
     });
 
     it('should show X for failed phase', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      state.phase = 'failed';
+      state = { ...state, phase: 'failed' };
 
       const compact = formatCompactSummary(state);
 
@@ -289,11 +289,11 @@ describe('AutopilotSummary', () => {
 
   describe('formatFailureSummary', () => {
     it('should include phase and no error', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      state.phase = 'execution';
+      state = { ...state, phase: 'execution' };
 
       const formatted = formatFailureSummary(state);
 
@@ -305,11 +305,11 @@ describe('AutopilotSummary', () => {
     });
 
     it('should include error message', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      state.phase = 'qa';
+      state = { ...state, phase: 'qa' };
 
       const formatted = formatFailureSummary(state, 'Build failed with exit code 1');
 
@@ -320,11 +320,11 @@ describe('AutopilotSummary', () => {
     });
 
     it('should handle long error messages by wrapping', async () => {
-      const state = await initAutopilot(testDir, 'Test');
+      let state = await initAutopilot(testDir, 'Test');
       if (!state) {
         throw new Error('Failed to initialize autopilot');
       }
-      state.phase = 'validation';
+      state = { ...state, phase: 'validation' };
 
       const longError = 'This is a very long error message that exceeds the box width and should be wrapped across multiple lines to fit properly';
 

@@ -86,9 +86,11 @@ export declare class LspClient {
     private process;
     private requestId;
     private pendingRequests;
-    private buffer;
+    private bufferChunks;
+    private bufferOffset;
     private openDocuments;
     private diagnostics;
+    private pendingDiagnostics;
     private workspaceRoot;
     private serverConfig;
     private initialized;
@@ -137,6 +139,10 @@ export declare class LspClient {
      * Get the language ID for a file
      */
     private getLanguageId;
+    /**
+     * Wait for diagnostics to be published for a URI
+     */
+    private waitForDiagnostics;
     /**
      * Convert file path to URI and ensure document is open
      */
@@ -213,7 +219,7 @@ declare class LspClientManager {
      */
     runWithClientLease<T>(filePath: string, fn: (client: LspClient) => Promise<T>): Promise<T>;
     /**
-     * Find the workspace root for a file
+     * Find the workspace root for a file (with LRU cache)
      */
     private findWorkspaceRoot;
     /**

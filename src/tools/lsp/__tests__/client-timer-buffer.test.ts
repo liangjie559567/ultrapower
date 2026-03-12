@@ -190,13 +190,14 @@ describe('LspClient – T-1i: timer leak + buffer cap', () => {
 
       const MAX = 64 * 1024 * 1024;
 
-      // Pre-fill buffer to just below the limit
-      (client as unknown as { buffer: string }).buffer = 'x'.repeat(MAX - 5);
+      // Pre-fill bufferChunks to just below the limit
+      (client as unknown as { bufferChunks: string[]; bufferOffset: number }).bufferChunks = ['x'.repeat(MAX - 5)];
+      (client as unknown as { bufferChunks: string[]; bufferOffset: number }).bufferOffset = 0;
 
       // Push 10 more bytes – total exceeds 64MB
       client['handleData']('y'.repeat(10));
 
-      expect(errorSpy).toHaveBeenCalledWith(expect.stringMatching(/64|buffer exceeded|超过/i));
+      expect(errorSpy).toHaveBeenCalledWith(expect.stringMatching(/64|buffer|超过/i));
       expect(disconnectSpy).toHaveBeenCalledOnce();
 
       errorSpy.mockRestore();
@@ -210,12 +211,14 @@ describe('LspClient – T-1i: timer leak + buffer cap', () => {
 
       const MAX = 64 * 1024 * 1024;
       const initialFill = 'x'.repeat(MAX - 5);
-      (client as unknown as { buffer: string }).buffer = initialFill;
+      (client as unknown as { bufferChunks: string[]; bufferOffset: number }).bufferChunks = [initialFill];
+      (client as unknown as { bufferChunks: string[]; bufferOffset: number }).bufferOffset = 0;
 
       client['handleData']('y'.repeat(10));
 
       // Buffer should remain at the pre-filled size, not grown
-      expect((client as unknown as { buffer: string }).buffer.length).toBe(MAX - 5);
+      const totalLength = (client as unknown as { bufferChunks: string[]; bufferOffset: number }).bufferChunks.reduce((sum, chunk) => sum + chunk.length, 0) - (client as unknown as { bufferOffset: number }).bufferOffset;
+      expect(totalLength).toBe(MAX - 5);
     });
   });
 
@@ -256,7 +259,8 @@ describe('LspClient – T-1i: timer leak + buffer cap', () => {
       client['handleData'](smallData);
 
       // Buffer should contain the small data
-      expect((client as unknown as { buffer: string }).buffer).toContain(smallData);
+      const bufferContent = (client as unknown as { bufferChunks: string[] }).bufferChunks.join('');
+      expect(bufferContent).toContain(smallData);
     });
   });
 

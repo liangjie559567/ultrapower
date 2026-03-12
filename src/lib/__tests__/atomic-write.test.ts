@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import {
@@ -78,6 +78,9 @@ describe('atomicWriteJson', () => {
 
     for (let i = 0; i < 5; i++) {
       await atomicWriteJson(filePath, { iteration: i });
+      if (process.platform === 'win32') {
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
       const content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
       expect(content.iteration).toBe(i);
     }

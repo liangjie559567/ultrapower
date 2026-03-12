@@ -1,0 +1,134 @@
+/**
+ * Plan Generator - 规范转技术方案
+ */
+import * as fs from 'fs';
+import * as path from 'path';
+export async function generatePlan(spec, projectPath) {
+    if (!spec.feature || typeof spec.feature !== 'string') {
+        throw new Error('Invalid feature name');
+    }
+    if (spec.feature.includes('..') || spec.feature.includes('/') || spec.feature.includes('\\')) {
+        throw new Error('Invalid feature name: path traversal detected');
+    }
+    const existingFiles = projectPath ? scanExistingFiles(projectPath, spec.feature) : [];
+    return {
+        approach: generateApproach(spec),
+        components: identifyComponents(spec, existingFiles),
+        dependencies: extractDependencies(spec),
+        risks: identifyRisks(spec)
+    };
+}
+function generateApproach(spec) {
+    const hasHighPriorityReqs = spec.requirements.some(r => r.priority === 'high');
+    const approach = `Implement ${spec.feature} using modular architecture`;
+    if (hasHighPriorityReqs) {
+        return `${approach}. Focus on high-priority requirements first, then iterate on medium/low priority items.`;
+    }
+    return approach;
+}
+function scanExistingFiles(projectPath, feature) {
+    const existing = [];
+    const featurePath = path.join(projectPath, 'src', 'features', feature);
+    try {
+        if (fs.existsSync(featurePath)) {
+            const scanRecursive = (dir, base) => {
+                const entries = fs.readdirSync(dir, { withFileTypes: true });
+                for (const entry of entries) {
+                    const fullPath = path.join(dir, entry.name);
+                    const relativePath = path.join(base, entry.name);
+                    if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
+                        existing.push(relativePath);
+                    }
+                    else if (entry.isDirectory()) {
+                        scanRecursive(fullPath, relativePath);
+                    }
+                }
+            };
+            scanRecursive(featurePath, path.join('src', 'features', feature));
+        }
+    }
+    catch { }
+    return existing;
+}
+function identifyComponents(spec, existingFiles) {
+    const components = [];
+    const featureName = spec.feature.toLowerCase().replace(/\s+/g, '-');
+    if (existingFiles.length > 0) {
+        components.push({
+            name: 'Existing Code Updates',
+            purpose: `Modify existing ${spec.feature} implementation`,
+            files: existingFiles
+        });
+    }
+    else {
+        components.push({
+            name: 'Core Module',
+            purpose: `Main ${spec.feature} implementation`,
+            files: [`src/features/${featureName}/index.ts`]
+        });
+    }
+    const hasTypeReqs = spec.requirements.some(r => r.description.toLowerCase().includes('type'));
+    if (hasTypeReqs) {
+        components.push({
+            name: 'Type Definitions',
+            purpose: 'TypeScript interfaces and types',
+            files: [`src/features/${featureName}/types.ts`]
+        });
+    }
+    components.push({
+        name: 'Tests',
+        purpose: 'Unit and integration tests',
+        files: [`src/features/${featureName}/__tests__/index.test.ts`]
+    });
+    return components;
+}
+function extractDependencies(spec) {
+    const deps = [];
+    const reqText = spec.requirements.map(r => r.description.toLowerCase()).join(' ');
+    if (reqText.includes('api') || reqText.includes('http'))
+        deps.push('axios or fetch');
+    if (reqText.includes('validation'))
+        deps.push('zod or yup');
+    if (reqText.includes('state'))
+        deps.push('zustand or redux');
+    return deps;
+}
+function identifyRisks(spec) {
+    const risks = [];
+    const highPriorityCount = spec.requirements.filter(r => r.priority === 'high').length;
+    if (highPriorityCount > 3) {
+        risks.push({
+            description: 'High complexity with multiple critical requirements',
+            mitigation: 'Break into smaller phases, implement incrementally'
+        });
+    }
+    const hasSecurityReqs = spec.requirements.some(r => r.description.toLowerCase().includes('auth') ||
+        r.description.toLowerCase().includes('security'));
+    if (hasSecurityReqs) {
+        risks.push({
+            description: 'Security-sensitive implementation',
+            mitigation: 'Follow security best practices, conduct security review'
+        });
+    }
+    if (risks.length === 0) {
+        risks.push({
+            description: 'Implementation complexity',
+            mitigation: 'Break into smaller tasks, test incrementally'
+        });
+    }
+    return risks;
+}
+export function formatPlan(plan) {
+    let output = `# Technical Plan\n\n## Approach\n${plan.approach}\n\n`;
+    output += `## Components\n`;
+    plan.components.forEach(c => {
+        output += `### ${c.name}\n${c.purpose}\n`;
+        output += `Files:\n${c.files.map(f => `- ${f}`).join('\n')}\n\n`;
+    });
+    output += `## Risks\n`;
+    plan.risks.forEach(r => {
+        output += `- **${r.description}**: ${r.mitigation}\n`;
+    });
+    return output;
+}
+//# sourceMappingURL=plan.js.map

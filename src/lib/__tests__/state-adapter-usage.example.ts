@@ -25,7 +25,7 @@ console.log(state); // { active: true, iteration: 1 }
 
 // 会话隔离
 await adapter.write({ active: true, iteration: 2 }, 'session-123');
-const sessionState = adapter.read('session-123');
+const _sessionState = adapter.read('session-123');
 
 // 列出所有会话
 const sessions = adapter.list();

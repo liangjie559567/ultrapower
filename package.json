@@ -1,6 +1,6 @@
 {
   "name": "@liangjie559567/ultrapower",
-  "version": "5.6.9",
+  "version": "7.0.5",
   "description": "Disciplined multi-agent orchestration: workflow enforcement + parallel execution",
   "type": "module",
   "main": "dist/index.js",
@@ -48,6 +48,7 @@
     "dev": "tsc --watch",
     "start": "node dist/index.js",
     "test": "vitest",
+    "test:quick": "vitest run --config vitest.config.quick.ts --reporter=dot",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
@@ -81,6 +82,9 @@
     "@anthropic-ai/claude-agent-sdk": "^0.1.0",
     "@ast-grep/napi": "^0.41.0",
     "@modelcontextprotocol/sdk": "1.27.1",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-trace-base": "^2.6.0",
+    "@opentelemetry/sdk-trace-node": "^2.6.0",
     "@tokscale/core": "^1.0.25",
     "@types/better-sqlite3": "^7.6.13",
     "ajv": "^8.17.1",
@@ -137,6 +141,7 @@
     "llm"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   }
 }

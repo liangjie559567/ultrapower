@@ -70,6 +70,7 @@ const DEFAULT_CONFIG = {
 describe("notify() -> session-registry integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
     // Reset forwarding mocks to defaults
     mockGetCurrentTmuxPaneId.mockReturnValue("%42");
     mockGetCurrentTmuxSession.mockReturnValue("main");
@@ -394,6 +395,15 @@ describe("notify() -> session-registry integration", () => {
 });
 
 describe("dispatchNotifications messageId propagation", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.unstubAllGlobals();
+    mockGetCurrentTmuxPaneId.mockReturnValue("%42");
+    mockGetCurrentTmuxSession.mockReturnValue("main");
+    mockGetNotificationConfig.mockReturnValue(DEFAULT_CONFIG);
+    mockIsEventEnabled.mockReturnValue(true);
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
   });

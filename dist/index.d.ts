@@ -99,7 +99,7 @@ export interface SisyphusSession {
  *   prompt: session.processPrompt("ultrawork refactor the authentication module"),
  *   ...session.queryOptions
  * })) {
- *   console.log(message);
+ *   logger.info(message);
  * }
  * ```
  */

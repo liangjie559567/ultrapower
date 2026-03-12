@@ -87,9 +87,9 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should return complete when phase is complete', async () => {
-      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
+      let state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
       if (state) {
-        state.phase = 'complete';
+        state = { ...state, phase: 'complete' };
         // Keep active=true so checkAutopilot processes it
         await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
       }
@@ -101,9 +101,9 @@ describe('Autopilot Enforcement', () => {
     });
 
     it('should return failed when phase is failed', async () => {
-      const state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
+      let state = await initAutopilot(TEST_DIR, 'test', TEST_SESSION);
       if (state) {
-        state.phase = 'failed';
+        state = { ...state, phase: 'failed' };
         // Keep active=true so checkAutopilot processes it
         await writeAutopilotState(TEST_DIR, state, TEST_SESSION);
       }

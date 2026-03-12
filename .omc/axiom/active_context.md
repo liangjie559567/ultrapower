@@ -1,20 +1,11 @@
-# Axiom Active Context
+# Active Context
 
-## Current State
+## Current Task
 
-**Status**: IDLE
-**Last Updated**: 2026-03-08T10:19:05.905Z
+## Status
+IDLE
 
-## Active Task
+## Last Updated
 
-None
 
-## Recent Changes
-
-* System initialized
-
-## Next Steps
-
-Awaiting user instruction
-
-<!-- PreCompact: context compacted (auto) at 2026-03-08T13:35:40.042Z -->
+<!-- PreCompact: context compacted (auto) at 2026-03-11T17:33:48.938Z -->
