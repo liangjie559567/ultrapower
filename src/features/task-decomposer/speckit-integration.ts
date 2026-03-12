@@ -3,8 +3,6 @@
  * 将 Spec Kit 的任务分解能力集成到 task-decomposer
  */
 
-import type { DecompositionResult } from './types.js';
-
 /**
  * 使用 Spec Kit 增强任务分解
  */

@@ -12,6 +12,7 @@
 
 import { z } from 'zod';
 import type { HookInput } from './bridge-types.js';
+import * as logger from '../lib/logger.js';
 
 // --- Zod schemas for hook input validation ---
 
@@ -248,9 +249,6 @@ function mapFieldsToCamelCase(input: RawHookInput, hookType?: string): HookInput
  * @param raw - Raw hook input (may be snake_case, camelCase, or mixed)
  * @param hookType - Optional hook type for sensitivity-aware filtering
  */
-
-import * as logger from '../lib/logger.js';
-
 export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
   if (typeof raw !== 'object' || raw === null) {
     return {};

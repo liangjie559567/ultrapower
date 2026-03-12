@@ -28,6 +28,6 @@ describe('Spec Kit Integration', () => {
   it('should analyze spec kit fit', () => {
     const result = analyzeSpecKitFit('create constitution', {});
     expect(result.useSpecKit).toBe(true);
-    expect(result.confidence).toBeGreaterThan(0);
+    expect(result.confidence).toBe(85);
   });
 });

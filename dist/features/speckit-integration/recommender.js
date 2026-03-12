@@ -4,6 +4,8 @@
  */
 import { shouldUseSpecKit } from './index.js';
 import { getNextSpecKitStep } from './router.js';
+/** Confidence score for Spec Kit recommendation based on keyword match strength */
+const SPECKIT_CONFIDENCE_SCORE = 85;
 /**
  * 分析是否推荐使用 Spec Kit 工作流
  */
@@ -23,7 +25,7 @@ export function analyzeSpecKitFit(userInput, context) {
         useSpecKit: true,
         currentStage,
         nextStep: nextRoute?.nextCommand,
-        confidence: 85
+        confidence: SPECKIT_CONFIDENCE_SCORE
     };
 }
 //# sourceMappingURL=recommender.js.map

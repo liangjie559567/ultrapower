@@ -25,5 +25,9 @@ export function shouldUseSpecKit(intent: string): boolean {
  * 获取 Spec Kit 命令路径
  */
 export function getSpecKitCommand(workflow: keyof SpecKitWorkflow): string {
+  const validWorkflows: (keyof SpecKitWorkflow)[] = ['constitution', 'specify', 'plan', 'tasks', 'implement'];
+  if (!validWorkflows.includes(workflow)) {
+    throw new Error(`Invalid workflow: ${workflow}`);
+  }
   return `.claude/commands/speckit.${workflow}.md`;
 }

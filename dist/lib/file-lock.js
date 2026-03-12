@@ -60,9 +60,14 @@ export async function acquireLock(lockPath, staleMs = 30000) {
  * 在文件锁保护下执行同步操作
  */
 export function withFileLockSync(filePath, fn, maxRetries = 20) {
-    const lockPath = `${filePath}.lock`;
+    const resolvedPath = path.resolve(filePath);
+    const allowedDir = path.resolve(process.cwd());
+    if (!resolvedPath.startsWith(allowedDir)) {
+        throw new Error('[file-lock] Path traversal attempt detected');
+    }
+    const lockPath = `${resolvedPath}.lock`;
     const lockFile = path.join(lockPath, 'lock.json');
-    const fileDir = path.dirname(filePath);
+    const fileDir = path.dirname(resolvedPath);
     const lockPathParent = path.dirname(lockPath);
     if (!fs.existsSync(fileDir)) {
         fs.mkdirSync(fileDir, { recursive: true });
@@ -135,10 +140,15 @@ export function withFileLockSync(filePath, fn, maxRetries = 20) {
  * 在文件锁保护下执行异步操作
  */
 export async function withFileLock(filePath, fn, maxRetries = 20, _retryDelay = 100) {
-    const lockPath = `${filePath}.lock`;
+    const resolvedPath = path.resolve(filePath);
+    const allowedDir = path.resolve(process.cwd());
+    if (!resolvedPath.startsWith(allowedDir)) {
+        throw new Error('[file-lock] Path traversal attempt detected');
+    }
+    const lockPath = `${resolvedPath}.lock`;
     const lockFile = path.join(lockPath, 'lock.json');
     // Ensure parent directories exist for both file and lock
-    const fileDir = path.dirname(filePath);
+    const fileDir = path.dirname(resolvedPath);
     const lockPathParent = path.dirname(lockPath);
     if (!fs.existsSync(fileDir)) {
         fs.mkdirSync(fileDir, { recursive: true });

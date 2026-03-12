@@ -83,9 +83,14 @@ export function withFileLockSync<T>(
   fn: () => T,
   maxRetries: number = 20
 ): T {
-  const lockPath = `${filePath}.lock`;
+  const resolvedPath = path.resolve(filePath);
+  const allowedDir = path.resolve(process.cwd());
+  if (!resolvedPath.startsWith(allowedDir)) {
+    throw new Error('[file-lock] Path traversal attempt detected');
+  }
+  const lockPath = `${resolvedPath}.lock`;
   const lockFile = path.join(lockPath, 'lock.json');
-  const fileDir = path.dirname(filePath);
+  const fileDir = path.dirname(resolvedPath);
   const lockPathParent = path.dirname(lockPath);
 
   if (!fs.existsSync(fileDir)) {
@@ -164,11 +169,16 @@ export async function withFileLock<T>(
   maxRetries: number = 20,
   _retryDelay: number = 100
 ): Promise<T> {
-  const lockPath = `${filePath}.lock`;
+  const resolvedPath = path.resolve(filePath);
+  const allowedDir = path.resolve(process.cwd());
+  if (!resolvedPath.startsWith(allowedDir)) {
+    throw new Error('[file-lock] Path traversal attempt detected');
+  }
+  const lockPath = `${resolvedPath}.lock`;
   const lockFile = path.join(lockPath, 'lock.json');
 
   // Ensure parent directories exist for both file and lock
-  const fileDir = path.dirname(filePath);
+  const fileDir = path.dirname(resolvedPath);
   const lockPathParent = path.dirname(lockPath);
 
   if (!fs.existsSync(fileDir)) {

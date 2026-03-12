@@ -15,6 +15,10 @@ export function shouldUseSpecKit(intent) {
  * 获取 Spec Kit 命令路径
  */
 export function getSpecKitCommand(workflow) {
+    const validWorkflows = ['constitution', 'specify', 'plan', 'tasks', 'implement'];
+    if (!validWorkflows.includes(workflow)) {
+        throw new Error(`Invalid workflow: ${workflow}`);
+    }
     return `.claude/commands/speckit.${workflow}.md`;
 }
 //# sourceMappingURL=index.js.map

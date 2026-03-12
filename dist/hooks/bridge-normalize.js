@@ -10,6 +10,7 @@
  * Sensitive hooks use strict allowlists; others pass through unknown fields.
  */
 import { z } from 'zod';
+import * as logger from '../lib/logger.js';
 // --- Zod schemas for hook input validation ---
 /** Base schema fields */
 const baseSchemaFields = {
@@ -191,7 +192,6 @@ function mapFieldsToCamelCase(input, hookType) {
  * @param raw - Raw hook input (may be snake_case, camelCase, or mixed)
  * @param hookType - Optional hook type for sensitivity-aware filtering
  */
-import * as logger from '../lib/logger.js';
 export function normalizeHookInput(raw, hookType) {
     if (typeof raw !== 'object' || raw === null) {
         return {};
