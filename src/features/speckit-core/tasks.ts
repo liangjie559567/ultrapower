@@ -2,31 +2,76 @@
  * Task Decomposer - 方案分解为可执行任务
  */
 
-import type { TechnicalPlan, Task } from './types.js';
+import type { TechnicalPlan, Task, Specification } from './types.js';
 
-export async function generateTasks(plan: TechnicalPlan): Promise<Task[]> {
+export async function generateTasks(plan: TechnicalPlan, spec?: Specification): Promise<Task[]> {
   const tasks: Task[] = [];
   let taskId = 1;
 
-  plan.components.forEach(component => {
+  // 为每个组件生成实现任务
+  plan.components.forEach((component, idx) => {
+    const isExisting = component.name.includes('Existing');
+    const effort = estimateEffort(component, spec);
+
     tasks.push({
       id: `TASK-${String(taskId++).padStart(3, '0')}`,
-      title: `Implement ${component.name}`,
-      description: component.purpose,
+      title: isExisting ? `Update ${component.name}` : `Implement ${component.name}`,
+      description: `${component.purpose}\nFiles: ${component.files.join(', ')}`,
       dependencies: [],
-      estimatedEffort: '2h'
+      estimatedEffort: effort
     });
   });
 
-  tasks.push({
-    id: `TASK-${String(taskId++).padStart(3, '0')}`,
-    title: 'Write tests',
-    description: 'Add unit and integration tests',
-    dependencies: [tasks[0].id],
-    estimatedEffort: '1h'
-  });
+  // 测试任务依赖所有实现任务
+  const implTaskIds = tasks.filter(t => !t.title.includes('Test')).map(t => t.id);
+  const testTask = tasks.find(t => t.title.includes('Test'));
+  if (testTask && implTaskIds.length > 0) {
+    testTask.dependencies = implTaskIds;
+  }
 
-  return tasks;
+  // 如果有依赖需要安装
+  if (plan.dependencies.length > 0) {
+    tasks.unshift({
+      id: `TASK-${String(taskId++).padStart(3, '0')}`,
+      title: 'Install dependencies',
+      description: `Add required packages: ${plan.dependencies.join(', ')}`,
+      dependencies: [],
+      estimatedEffort: '15m'
+    });
+  }
+
+  // 按优先级排序
+  return sortByPriority(tasks, spec);
+}
+
+function estimateEffort(component: { name: string; files: string[] }, spec?: Specification): string {
+  const fileCount = component.files.length;
+  const isTest = component.name.toLowerCase().includes('test');
+
+  if (isTest) return fileCount > 2 ? '2h' : '1h';
+
+  const highPriorityCount = spec?.requirements.filter(r => r.priority === 'high').length || 0;
+  if (highPriorityCount > 3) return fileCount > 2 ? '4h' : '3h';
+
+  return fileCount > 2 ? '3h' : '2h';
+}
+
+function sortByPriority(tasks: Task[], spec?: Specification): Task[] {
+  if (!spec) return tasks;
+
+  const priorityMap: Record<string, number> = { high: 3, medium: 2, low: 1 };
+  const hasHighPriority = spec.requirements.some(r => r.priority === 'high');
+
+  if (!hasHighPriority) return tasks;
+
+  // 保持依赖顺序，但优先处理核心实现
+  return tasks.sort((a, b) => {
+    if (a.dependencies.includes(b.id)) return 1;
+    if (b.dependencies.includes(a.id)) return -1;
+    if (a.title.includes('Core') || a.title.includes('Main')) return -1;
+    if (b.title.includes('Core') || b.title.includes('Main')) return 1;
+    return 0;
+  });
 }
 
 export function formatTasks(tasks: Task[]): string {

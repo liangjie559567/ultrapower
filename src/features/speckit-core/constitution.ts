@@ -23,18 +23,47 @@ interface ProjectAnalysis {
   framework?: string;
   packageManager?: string;
   languages: string[];
+  dependencies: string[];
+  hasLinter: boolean;
+  hasFormatter: boolean;
+  projectStructure: string;
 }
 
 async function analyzeProject(projectPath: string): Promise<ProjectAnalysis> {
   const files = fs.readdirSync(projectPath);
+  const pkgJson = readPackageJson(projectPath);
 
   return {
     hasTypeScript: files.includes('tsconfig.json'),
     hasTests: files.some(f => f.includes('test') || f.includes('spec')),
     framework: detectFramework(files),
     packageManager: detectPackageManager(files),
-    languages: detectLanguages(projectPath)
+    languages: detectLanguages(projectPath),
+    dependencies: pkgJson ? Object.keys(pkgJson.dependencies || {}) : [],
+    hasLinter: files.includes('.eslintrc.js') || files.includes('.eslintrc.json') || !!pkgJson?.devDependencies?.eslint,
+    hasFormatter: files.includes('.prettierrc') || !!pkgJson?.devDependencies?.prettier,
+    projectStructure: detectStructure(projectPath)
   };
+}
+
+function readPackageJson(projectPath: string): any {
+  try {
+    const pkgPath = path.join(projectPath, 'package.json');
+    return JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+function detectStructure(projectPath: string): string {
+  try {
+    const entries = fs.readdirSync(projectPath, { withFileTypes: true });
+    if (entries.some(e => e.isDirectory() && e.name === 'packages')) return 'monorepo';
+    if (entries.some(e => e.isDirectory() && e.name === 'src')) return 'src-based';
+    return 'flat';
+  } catch {
+    return 'unknown';
+  }
 }
 
 function detectFramework(files: string[]): string | undefined {
@@ -90,6 +119,30 @@ function inferPrinciples(analysis: ProjectAnalysis): Principle[] {
       title: 'Test-Driven Development',
       description: 'Write tests before implementation',
       rationale: 'Existing test infrastructure - maintain high test coverage'
+    });
+  }
+
+  if (analysis.hasLinter || analysis.hasFormatter) {
+    principles.push({
+      title: 'Code Style Consistency',
+      description: `Follow ${analysis.hasLinter ? 'ESLint' : ''}${analysis.hasLinter && analysis.hasFormatter ? ' and ' : ''}${analysis.hasFormatter ? 'Prettier' : ''} rules`,
+      rationale: 'Project has established code style tools - maintain consistency'
+    });
+  }
+
+  if (analysis.projectStructure === 'monorepo') {
+    principles.push({
+      title: 'Monorepo Architecture',
+      description: 'Respect package boundaries and shared dependencies',
+      rationale: 'Project uses monorepo structure - maintain clear module separation'
+    });
+  }
+
+  if (analysis.framework) {
+    principles.push({
+      title: `${analysis.framework} Best Practices`,
+      description: `Follow ${analysis.framework} conventions and patterns`,
+      rationale: `Project uses ${analysis.framework} - align with framework idioms`
     });
   }
 
