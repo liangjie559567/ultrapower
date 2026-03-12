@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"npm test 2>&1 > test-output.txt && tail -10 test-output.txt\",\"timeout\":90000,\"description\":\"Run full test suite and capture results\"}",
-  "error": "Exit code 1\n\u001b[90mstderr\u001b[2m | src/__tests__/job-state-db.test.ts\u001b[2m > \u001b[22m\u001b[2mjob-state-db\u001b[2m > \u001b[22m\u001b[2minitJobDb\u001b[2m > \u001b[22m\u001b[2mshould initialize the database successfully\n\u001b[22m\u001b[39m[job-state-db] DEPRECATED: closeJobDb() called without cwd. Use closeAllJobDbs() for explicit intent.\n\n\u001b[90mstderr\u001b[2m | src/__tests__/job-state-db.test.ts\u001b[2m > \u001b[22m\u001b[2mjob-state-db\u001b[2m > \u001b[22m\u001b[2minitJobDb\u001b[2m > \u001b[22m\u001b[2mshould create the jobs.db file\n\u001b[22m\u001b[39m[job-state-db] DEPRECATED: closeJobDb() called w...",
-  "timestamp": "2026-03-12T04:16:32.633Z",
-  "retry_count": 1
+  "tool_input_preview": "{\"command\":\"npm run build && npm publish\",\"description\":\"构建并发布到 npm\"}",
+  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@7.1.0 build\n> tsc && node scripts/parallel-build.mjs && npm run compose-docs\n\nBuilt dist/hooks/skill-bridge.cjs\nEmbedding 50 agent roles + prompts into bridge/codex-server.cjs\nEmbedding 50 agent roles + prompts into bridge/gemini-server.cjs\nEmbedding 51 Codex agent prompts\nBuilt bridge/team-bridge.cjs\nBuilt bridge/mcp-server.cjs\nBuilt bridge/gemini-server.cjs\nBuilt bridge/codex-server.cjs\n\n> @liangjie559567/ultrapower@7.1.0 compose-docs\n> node scripts/co...",
+  "timestamp": "2026-03-12T05:24:50.229Z",
+  "retry_count": 2
 }
