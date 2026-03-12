@@ -153,7 +153,7 @@ export function withFileLockSync<T>(
     } catch (err) {
       const nodeErr = err as NodeJS.ErrnoException;
       if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
-        throw new Error(`Failed to remove lock: ${nodeErr.message}`);
+        console.warn(`Failed to remove lock: ${nodeErr.message}`);
       }
     }
   }
