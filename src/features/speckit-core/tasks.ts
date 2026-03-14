@@ -58,7 +58,6 @@ function estimateEffort(component: { name: string; files: string[] }, spec?: Spe
 function sortByPriority(tasks: Task[], spec?: Specification): Task[] {
   if (!spec) return tasks;
 
-  const priorityMap: Record<string, number> = { high: 3, medium: 2, low: 1 };
   const hasHighPriority = spec.requirements.some(r => r.priority === 'high');
 
   if (!hasHighPriority) return tasks;

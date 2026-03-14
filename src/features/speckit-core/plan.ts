@@ -14,7 +14,7 @@ export async function generatePlan(spec: Specification, projectPath?: string): P
     throw new Error('Invalid feature name: path traversal detected');
   }
 
-  const existingFiles = projectPath ? scanExistingFiles(projectPath, spec.feature) : [];
+  const existingFiles = projectPath ? await scanExistingFiles(projectPath, spec.feature) : [];
 
   return {
     approach: generateApproach(spec),
@@ -34,27 +34,28 @@ function generateApproach(spec: Specification): string {
   return approach;
 }
 
-function scanExistingFiles(projectPath: string, feature: string): string[] {
+async function scanExistingFiles(projectPath: string, feature: string): Promise<string[]> {
   const existing: string[] = [];
   const featurePath = path.join(projectPath, 'src', 'features', feature);
 
   try {
-    if (fs.existsSync(featurePath)) {
-      const scanRecursive = (dir: string, base: string) => {
-        const entries = fs.readdirSync(dir, { withFileTypes: true });
-        for (const entry of entries) {
-          const fullPath = path.join(dir, entry.name);
-          const relativePath = path.join(base, entry.name);
-          if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
-            existing.push(relativePath);
-          } else if (entry.isDirectory()) {
-            scanRecursive(fullPath, relativePath);
-          }
+    await fs.promises.access(featurePath);
+    const scanRecursive = async (dir: string, base: string) => {
+      const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        const relativePath = path.join(base, entry.name);
+        if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
+          existing.push(relativePath);
+        } else if (entry.isDirectory()) {
+          await scanRecursive(fullPath, relativePath);
         }
-      };
-      scanRecursive(featurePath, path.join('src', 'features', feature));
-    }
-  } catch {}
+      }
+    };
+    await scanRecursive(featurePath, path.join('src', 'features', feature));
+  } catch (_error) {
+    // Feature directory doesn't exist yet
+  }
 
   return existing;
 }

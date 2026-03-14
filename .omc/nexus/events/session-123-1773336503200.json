@@ -1,0 +1,28 @@
+{
+  "sessionId": "session-123",
+  "timestamp": "2026-03-12T17:28:23.198Z",
+  "directory": "C:/Users/ljyih/Desktop/ultrapower",
+  "toolCalls": [
+    {
+      "toolName": "AskUserQuestion",
+      "timestamp": 1773336463480
+    },
+    {
+      "toolName": "Write",
+      "timestamp": 1773336454541
+    },
+    {
+      "toolName": "Read",
+      "timestamp": 1773336450855
+    },
+    {
+      "toolName": "Bash",
+      "timestamp": 1773336450141
+    }
+  ],
+  "agentsSpawned": 0,
+  "agentsCompleted": 0,
+  "modesUsed": [],
+  "skillsInjected": [],
+  "patternsSeen": []
+}

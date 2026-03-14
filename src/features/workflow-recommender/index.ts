@@ -1,12 +1,8 @@
-/**
- * Workflow Recommender - 智能工作流推荐引擎
- */
-
 export { classifyIntent } from './intent-classifier.js';
 export { analyzeContext } from './context-analyzer.js';
 export { getRecommendation } from './recommendation-engine.js';
-export { getWorkflowRecommendation } from './recommender.js';
-export { getNextStepRecommendation } from './router-integration.js';
-export type { Intent, ContextSignal, Recommendation } from './types.js';
-export type { WorkflowRecommendation } from './recommender.js';
-export type { RouterContext } from './router-integration.js';
+export { autoSelectWorkflow, shouldAutoSelect } from './auto-selector.js';
+export { executeWorkflow, formatRecommendation } from './executor.js';
+export { ContextEnhancer } from './context-enhancer.js';
+export { GitAnalyzer } from './git-analyzer.js';
+export type * from './types.js';

@@ -78,7 +78,7 @@ export function createConfigStopCallbackCommand() {
                     platformConfig.tagList = options.tagList.split(',').map((t) => t.trim());
                 }
                 if (options.addTag) {
-                    platformConfig.tagList = platformConfig.tagList || [];
+                    platformConfig.tagList = (platformConfig.tagList || []);
                     platformConfig.tagList.push(options.addTag);
                 }
                 if (options.removeTag) {

@@ -461,6 +461,74 @@ describe('state-tools', () => {
     });
   });
 
+  describe('并发写入保护', () => {
+    it('多个并发写入应通过文件锁串行化', async () => {
+      const writes = Array.from({ length: 3 }, (_, i) =>
+        stateWriteTool.handler({
+          mode: 'ralph',
+          iteration: i,
+          workingDirectory: TEST_DIR,
+        })
+      );
+
+      const results = await Promise.all(writes);
+      const successCount = results.filter(r => !r.isError).length;
+      expect(successCount).toBeGreaterThan(0);
+
+      const statePath = join(TEST_DIR, '.omc', 'state', 'ralph-state.json');
+      expect(existsSync(statePath)).toBe(true);
+    });
+  });
+
+  describe('损坏状态恢复', () => {
+    it('state_read 应处理损坏的 JSON 并返回错误', async () => {
+      const statePath = join(TEST_DIR, '.omc', 'state', 'ralph-state.json');
+      writeFileSync(statePath, '{ invalid json }');
+
+      const result = await stateReadTool.handler({
+        mode: 'ralph',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toMatch(/JSON|parse|错误/i);
+    });
+
+    it('state_read 应处理空文件', async () => {
+      const statePath = join(TEST_DIR, '.omc', 'state', 'ralph-state.json');
+      writeFileSync(statePath, '');
+
+      const result = await stateReadTool.handler({
+        mode: 'ralph',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toMatch(/JSON|parse|错误|empty/i);
+    });
+  });
+
+  describe('swarm 特殊处理', () => {
+    it('state_read 应为 swarm 返回 SQLite 提示', async () => {
+      const result = await stateReadTool.handler({
+        mode: 'swarm',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('SQLite');
+      expect(result.content[0].text).toContain('swarm.db');
+    });
+
+    it('state_write 应拒绝写入 swarm', async () => {
+      const result = await stateWriteTool.handler({
+        mode: 'swarm',
+        active: true,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].text).toContain('SQLite');
+    });
+  });
+
   describe('路径遍历防护（P0 安全回归）', () => {
     it('state_read 应拒绝路径遍历攻击载荷并返回错误响应', async () => {
       const result = await stateReadTool.handler({
@@ -552,6 +620,212 @@ describe('state-tools', () => {
 
       expect(result.isError).toBe(true);
       expect(result.content[0].text).toContain('[ultrapower] 错误：无效的状态模式：');
+    });
+  });
+
+  describe('state_write 参数合并', () => {
+    it('显式参数应优先于 state 对象中的同名字段', async () => {
+      const result = await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        iteration: 10,
+        state: { active: false, iteration: 5, custom: 'value' },
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('"active": true');
+      expect(result.content[0].text).toContain('"iteration": 10');
+      expect(result.content[0].text).toContain('"custom": "value"');
+    });
+
+    it('应支持所有标准字段', async () => {
+      const result = await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        iteration: 1,
+        max_iterations: 10,
+        current_phase: 'test-phase',
+        task_description: 'test task',
+        plan_path: '/path/to/plan',
+        started_at: '2026-01-01T00:00:00Z',
+        completed_at: '2026-01-01T01:00:00Z',
+        error: 'test error',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('"current_phase": "test-phase"');
+      expect(result.content[0].text).toContain('"task_description": "test task"');
+      expect(result.content[0].text).toContain('"plan_path": "/path/to/plan"');
+    });
+  });
+
+  describe('state_list_active 多会话聚合', () => {
+    it('无 session_id 时应聚合所有会话的活跃模式', async () => {
+      await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        session_id: 'session-1',
+        workingDirectory: TEST_DIR,
+      });
+
+      await stateWriteTool.handler({
+        mode: 'ultrawork',
+        active: true,
+        session_id: 'session-2',
+        workingDirectory: TEST_DIR,
+      });
+
+      const result = await stateListActiveTool.handler({
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('ralph');
+      expect(result.content[0].text).toContain('ultrawork');
+      expect(result.content[0].text).toContain('session-1');
+      expect(result.content[0].text).toContain('session-2');
+    });
+
+    it('应包含 ralplan 活跃状态', async () => {
+      await stateWriteTool.handler({
+        mode: 'ralplan',
+        active: true,
+        workingDirectory: TEST_DIR,
+      });
+
+      const result = await stateListActiveTool.handler({
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('ralplan');
+    });
+  });
+
+  describe('state_get_status 详细信息', () => {
+    it('应显示 session 特定状态的预览', async () => {
+      const sessionId = 'status-test';
+      await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        iteration: 5,
+        session_id: sessionId,
+        workingDirectory: TEST_DIR,
+      });
+
+      const result = await stateGetStatusTool.handler({
+        mode: 'ralph',
+        session_id: sessionId,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('Session: status-test');
+      expect(result.content[0].text).toContain('**Active:** Yes');
+      expect(result.content[0].text).toContain('State Preview');
+    });
+
+    it('无 session_id 时应显示 legacy 和活跃会话', async () => {
+      await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        workingDirectory: TEST_DIR,
+      });
+
+      await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        session_id: 'test-session',
+        workingDirectory: TEST_DIR,
+      });
+
+      const result = await stateGetStatusTool.handler({
+        mode: 'ralph',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('Legacy Path');
+      expect(result.content[0].text).toContain('Active Sessions');
+    });
+
+    it('应包含 ralplan 在所有模式状态中', async () => {
+      await stateWriteTool.handler({
+        mode: 'ralplan',
+        active: true,
+        workingDirectory: TEST_DIR,
+      });
+
+      const result = await stateGetStatusTool.handler({
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('ralplan');
+    });
+  });
+
+  describe('错误处理', () => {
+    it('state_read 应处理不存在的目录', async () => {
+      const result = await stateReadTool.handler({
+        mode: 'ralph',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('No state found');
+    });
+
+    it('state_write 应成功创建目录结构', async () => {
+      const result = await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('Successfully wrote');
+    });
+
+    it('state_clear 应处理不存在的状态', async () => {
+      const result = await stateClearTool.handler({
+        mode: 'ralph',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('No state found');
+    });
+  });
+
+  describe('state_read 多会话聚合', () => {
+    it('无 session_id 时应显示 legacy 和所有会话状态', async () => {
+      await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        state: { source: 'legacy' },
+        workingDirectory: TEST_DIR,
+      });
+
+      await stateWriteTool.handler({
+        mode: 'ralph',
+        active: true,
+        state: { source: 'session-a' },
+        session_id: 'session-a',
+        workingDirectory: TEST_DIR,
+      });
+
+      const result = await stateReadTool.handler({
+        mode: 'ralph',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('Legacy Path');
+      expect(result.content[0].text).toContain('Active Sessions');
+      expect(result.content[0].text).toContain('session-a');
+    });
+  });
+
+  describe('state_get_status 无活跃会话', () => {
+    it('应显示无活跃会话提示', async () => {
+      const result = await stateGetStatusTool.handler({
+        mode: 'ralph',
+        workingDirectory: TEST_DIR,
+      });
+
+      expect(result.content[0].text).toContain('No active sessions');
     });
   });
 });

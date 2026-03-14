@@ -1,3 +1,3 @@
-export async function testPromptCommand(prompt: string): Promise<void> {
+export async function testPromptCommand(_prompt: string): Promise<void> {
   console.log('Test prompt command - implementation pending');
 }

@@ -130,7 +130,7 @@ export function withFileLockSync(filePath, fn, maxRetries = 20) {
         catch (err) {
             const nodeErr = err;
             if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
-                throw err;
+                console.warn(`Failed to remove lock: ${nodeErr.message}`);
             }
         }
     }

@@ -1,0 +1,41 @@
+name: Coverage
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build
+      - name: Unit tests with coverage
+        run: npm test -- --coverage --reporter=verbose
+      - name: E2E CLI tests with coverage
+        run: npx c8 --reporter=lcov --reporter=text --report-dir=coverage-e2e node scripts/e2e-bridge-cli.mjs
+      - name: Merge coverage reports
+        run: |
+          npx c8 report \
+            --temp-directory=coverage \
+            --temp-directory=coverage-e2e \
+            --reporter=lcov \
+            --reporter=text-summary
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(grep -oP 'Lines\s+:\s+\K[\d.]+' coverage/lcov.info | head -1)
+          echo "Coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 75" | bc -l) )); then
+            echo "Coverage $COVERAGE% is below 75% threshold"
+            exit 1
+          fi
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info

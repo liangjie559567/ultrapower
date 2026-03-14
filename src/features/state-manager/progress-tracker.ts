@@ -70,7 +70,16 @@ export async function getProgress(directory: string): Promise<UnifiedProgress> {
   };
 }
 
-function calculateProgress(state: any): number {
+interface StateWithProgress {
+  tasksCompleted?: number;
+  tasksTotal?: number;
+  progress?: number;
+  iteration?: number;
+  max_iterations?: number;
+  [key: string]: unknown;
+}
+
+function calculateProgress(state: StateWithProgress): number {
   if (state.tasksCompleted && state.tasksTotal) {
     return Math.round((state.tasksCompleted / state.tasksTotal) * 100);
   }

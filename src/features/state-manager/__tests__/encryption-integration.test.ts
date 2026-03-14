@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
-import { readState, writeState, StateLocation, resetWAL, clearStateCache } from '../index.js';
+import { readState, writeState, StateLocation, resetWAL } from '../index.js';
 
 describe('Encryption Integration', () => {
   const testDir = path.join(process.cwd(), '.test-encryption-integration');
@@ -65,7 +65,7 @@ describe('Encryption Integration', () => {
 
       // Check what files actually exist
       const stateDir = path.join(process.cwd(), '.omc', 'state');
-      const files = fs.readdirSync(stateDir, { recursive: true });
+      fs.readdirSync(stateDir, { recursive: true });
 
       const statePath = result.path;
 

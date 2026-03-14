@@ -1,5 +1,9 @@
-import { describe, it, expect, afterEach } from 'vitest';
-import { toForwardSlash, toShellPath, getDataDir, getConfigDir } from '../paths.js';
+import { describe, it, expect, afterEach, beforeEach } from 'vitest';
+import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
+import { join } from 'path';
+import { toForwardSlash, toShellPath, getDataDir, getConfigDir, safeUnlinkSync, safeRmSync } from '../paths.js';
+
+const TEST_DIR = join(process.cwd(), '.test-utils-paths');
 
 describe('cross-platform path utilities', () => {
   describe('toForwardSlash', () => {
@@ -102,6 +106,64 @@ describe('cross-platform path utilities', () => {
       delete process.env.XDG_CONFIG_HOME;
       const result = getConfigDir();
       expect(result).toContain('.config');
+    });
+  });
+
+  describe('safeUnlinkSync', () => {
+    beforeEach(() => {
+      if (existsSync(TEST_DIR)) rmSync(TEST_DIR, { recursive: true, force: true });
+      mkdirSync(TEST_DIR, { recursive: true });
+    });
+
+    afterEach(() => {
+      if (existsSync(TEST_DIR)) rmSync(TEST_DIR, { recursive: true, force: true });
+    });
+
+    it('should delete existing file and return true', () => {
+      const filePath = join(TEST_DIR, 'test.txt');
+      writeFileSync(filePath, 'content');
+      expect(safeUnlinkSync(filePath)).toBe(true);
+      expect(existsSync(filePath)).toBe(false);
+    });
+
+    it('should return false for non-existent file', () => {
+      const filePath = join(TEST_DIR, 'nonexistent.txt');
+      expect(safeUnlinkSync(filePath)).toBe(false);
+    });
+
+    it('should handle permission errors gracefully', () => {
+      expect(safeUnlinkSync('/root/protected.txt')).toBe(false);
+    });
+  });
+
+  describe('safeRmSync', () => {
+    beforeEach(() => {
+      if (existsSync(TEST_DIR)) rmSync(TEST_DIR, { recursive: true, force: true });
+      mkdirSync(TEST_DIR, { recursive: true });
+    });
+
+    afterEach(() => {
+      if (existsSync(TEST_DIR)) rmSync(TEST_DIR, { recursive: true, force: true });
+    });
+
+    it('should delete existing directory and return true', () => {
+      const dirPath = join(TEST_DIR, 'subdir');
+      mkdirSync(dirPath);
+      expect(safeRmSync(dirPath)).toBe(true);
+      expect(existsSync(dirPath)).toBe(false);
+    });
+
+    it('should return false for non-existent directory', () => {
+      const dirPath = join(TEST_DIR, 'nonexistent');
+      expect(safeRmSync(dirPath)).toBe(false);
+    });
+
+    it('should handle nested directories', () => {
+      const dirPath = join(TEST_DIR, 'nested', 'deep', 'dir');
+      mkdirSync(dirPath, { recursive: true });
+      const topDir = join(TEST_DIR, 'nested');
+      expect(safeRmSync(topDir)).toBe(true);
+      expect(existsSync(topDir)).toBe(false);
     });
   });
 });
