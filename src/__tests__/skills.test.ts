@@ -80,7 +80,6 @@ describe('Builtin Skills', () => {
         'build-fix',
         'cancel',
         'ccg',
-        'circuit-breaker',
         'ccg-workflow',
         'code-review',
         'configure-discord',

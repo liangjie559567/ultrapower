@@ -24,10 +24,10 @@ afterEach(() => {
 
 describe('Team Messaging', () => {
   describe('routeMessage', () => {
-    it('routes to MCP worker inbox', () => {
+    it('routes to MCP worker inbox', async () => {
       registerMcpWorker(TEST_TEAM, 'w1', 'codex', 'gpt-5.3-codex', 'tmux-1', TEST_WD, TEST_WD);
 
-      const result = routeMessage(TEST_TEAM, 'w1', 'test message', TEST_WD);
+      const result = await routeMessage(TEST_TEAM, 'w1', 'test message', TEST_WD);
 
       expect(result.method).toBe('inbox');
       const inboxPath = join(TEAMS_DIR, 'inbox', 'w1.jsonl');
@@ -35,18 +35,18 @@ describe('Team Messaging', () => {
       expect(content).toContain('test message');
     });
 
-    it('returns native for unknown recipient', () => {
-      const result = routeMessage(TEST_TEAM, 'unknown', 'msg', TEST_WD);
+    it('returns native for unknown recipient', async () => {
+      const result = await routeMessage(TEST_TEAM, 'unknown', 'msg', TEST_WD);
       expect(result.method).toBe('native');
     });
   });
 
   describe('broadcastToTeam', () => {
-    it('broadcasts to all MCP workers', () => {
+    it('broadcasts to all MCP workers', async () => {
       registerMcpWorker(TEST_TEAM, 'w1', 'codex', 'gpt-5.3-codex', 'tmux-1', TEST_WD, TEST_WD);
       registerMcpWorker(TEST_TEAM, 'w2', 'gemini', 'gemini-3-pro', 'tmux-2', TEST_WD, TEST_WD);
 
-      const result = broadcastToTeam(TEST_TEAM, 'broadcast msg', TEST_WD);
+      const result = await broadcastToTeam(TEST_TEAM, 'broadcast msg', TEST_WD);
 
       expect(result.inboxRecipients).toHaveLength(2);
       expect(result.inboxRecipients).toContain('w1');

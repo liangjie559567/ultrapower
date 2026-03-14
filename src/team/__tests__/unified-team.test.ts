@@ -31,16 +31,16 @@ describe('unified-team', () => {
   }
 
   describe('getTeamMembers', () => {
-    it('returns empty array when no members exist', () => {
-      const members = getTeamMembers(teamName, testDir);
+    it('returns empty array when no members exist', async () => {
+      const members = await getTeamMembers(teamName, testDir);
       expect(members).toEqual([]);
     });
 
-    it('includes MCP workers from shadow registry', () => {
+    it('includes MCP workers from shadow registry', async () => {
       registerWorker('codex-1', 'mcp-codex');
       registerWorker('gemini-1', 'mcp-gemini');
 
-      const members = getTeamMembers(teamName, testDir);
+      const members = await getTeamMembers(teamName, testDir);
       expect(members).toHaveLength(2);
 
       const codex = members.find(m => m.name === 'codex-1');
@@ -54,7 +54,7 @@ describe('unified-team', () => {
       expect(gemini!.capabilities).toContain('ui-design');
     });
 
-    it('reflects heartbeat status', () => {
+    it('reflects heartbeat status', async () => {
       registerWorker('worker1');
       writeHeartbeat(testDir, {
         workerName: 'worker1',
@@ -67,12 +67,12 @@ describe('unified-team', () => {
         currentTaskId: 'task-42',
       });
 
-      const members = getTeamMembers(teamName, testDir);
+      const members = await getTeamMembers(teamName, testDir);
       expect(members[0].status).toBe('active');
       expect(members[0].currentTaskId).toBe('task-42');
     });
 
-    it('marks dead workers with stale heartbeat', () => {
+    it('marks dead workers with stale heartbeat', async () => {
       registerWorker('worker1');
       writeHeartbeat(testDir, {
         workerName: 'worker1',
@@ -84,14 +84,14 @@ describe('unified-team', () => {
         consecutiveErrors: 0,
       });
 
-      const members = getTeamMembers(teamName, testDir);
+      const members = await getTeamMembers(teamName, testDir);
       expect(members[0].status).toBe('dead');
     });
 
-    it('handles team with only MCP workers', () => {
+    it('handles team with only MCP workers', async () => {
       registerWorker('codex-1');
 
-      const members = getTeamMembers(teamName, testDir);
+      const members = await getTeamMembers(teamName, testDir);
       expect(members).toHaveLength(1);
       expect(members[0].backend).toBe('mcp-codex');
     });

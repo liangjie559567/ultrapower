@@ -45,23 +45,23 @@ describe('task-router', () => {
   }
 
   describe('routeTasks', () => {
-    it('returns empty array for no tasks', () => {
-      const decisions = routeTasks(teamName, testDir, []);
+    it('returns empty array for no tasks', async () => {
+      const decisions = await routeTasks(teamName, testDir, []);
       expect(decisions).toEqual([]);
     });
 
-    it('returns empty array when no workers available', () => {
+    it('returns empty array when no workers available', async () => {
       const tasks = [makeTask('t1', 'Review code')];
-      const decisions = routeTasks(teamName, testDir, tasks);
+      const decisions = await routeTasks(teamName, testDir, tasks);
       expect(decisions).toEqual([]);
     });
 
-    it('routes to codex worker for code review capabilities', () => {
+    it('routes to codex worker for code review capabilities', async () => {
       registerWorker('codex-1', 'codex');
       registerWorker('gemini-1', 'gemini');
 
       const tasks = [makeTask('t1', 'Review code')];
-      const decisions = routeTasks(teamName, testDir, tasks, {
+      const decisions = await routeTasks(teamName, testDir, tasks, {
         t1: ['code-review', 'security-review'],
       });
 
@@ -70,12 +70,12 @@ describe('task-router', () => {
       expect(decisions[0].backend).toBe('mcp-codex');
     });
 
-    it('routes to gemini worker for UI tasks', () => {
+    it('routes to gemini worker for UI tasks', async () => {
       registerWorker('codex-1', 'codex');
       registerWorker('gemini-1', 'gemini');
 
       const tasks = [makeTask('t1', 'Design UI')];
-      const decisions = routeTasks(teamName, testDir, tasks, {
+      const decisions = await routeTasks(teamName, testDir, tasks, {
         t1: ['ui-design', 'documentation'],
       });
 
@@ -84,12 +84,12 @@ describe('task-router', () => {
       expect(decisions[0].backend).toBe('mcp-gemini');
     });
 
-    it('excludes quarantined workers', () => {
+    it('excludes quarantined workers', async () => {
       registerWorker('codex-1', 'codex', 'quarantined');
       registerWorker('codex-2', 'codex');
 
       const tasks = [makeTask('t1', 'Review code')];
-      const decisions = routeTasks(teamName, testDir, tasks, {
+      const decisions = await routeTasks(teamName, testDir, tasks, {
         t1: ['code-review'],
       });
 
@@ -97,7 +97,7 @@ describe('task-router', () => {
       expect(decisions[0].assignedTo).toBe('codex-2');
     });
 
-    it('balances load across workers', () => {
+    it('balances load across workers', async () => {
       registerWorker('codex-1', 'codex');
       registerWorker('codex-2', 'codex');
 
@@ -105,7 +105,7 @@ describe('task-router', () => {
         makeTask('t1', 'Review code 1'),
         makeTask('t2', 'Review code 2'),
       ];
-      const decisions = routeTasks(teamName, testDir, tasks, {
+      const decisions = await routeTasks(teamName, testDir, tasks, {
         t1: ['code-review'],
         t2: ['code-review'],
       });
@@ -116,22 +116,22 @@ describe('task-router', () => {
       expect(assignees.size).toBe(2);
     });
 
-    it('uses general capability as fallback', () => {
+    it('uses general capability as fallback', async () => {
       registerWorker('codex-1', 'codex');
 
       const tasks = [makeTask('t1', 'Do something')];
       // No specific capabilities = defaults to ['general']
-      const decisions = routeTasks(teamName, testDir, tasks);
+      const decisions = await routeTasks(teamName, testDir, tasks);
 
       // Codex doesn't have 'general' capability, so no match
       expect(decisions).toHaveLength(0);
     });
 
-    it('includes routing reason and confidence', () => {
+    it('includes routing reason and confidence', async () => {
       registerWorker('codex-1', 'codex');
 
       const tasks = [makeTask('t1', 'Review')];
-      const decisions = routeTasks(teamName, testDir, tasks, {
+      const decisions = await routeTasks(teamName, testDir, tasks, {
         t1: ['code-review'],
       });
 

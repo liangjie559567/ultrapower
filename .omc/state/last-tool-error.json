@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"gh run watch 23084911442 --exit-status\",\"description\":\"等待CI运行完成\"}",
-  "error": "Exit code 1\nRefreshing run status every 3 seconds. Press Ctrl+C to quit.\n\n* dev CI liangjie559567/ultrapower#36 · 23084911442\nTriggered via push about 1 minute ago\n\nJOBS\n* Test (ID 67060133998)\n  ✓ Set up job\n  ✓ Run actions/checkout@v4\n  ✓ Run actions/setup-node@v4\n  ✓ Run npm ci\n  ✓ Run npm run build\n  * Run npm test\n  * Run npm run lint\n  * Post Run actions/setup-node@v4\n  * Post Run actions/checkout@v4\nRefreshing run status every 3 seconds. Press Ctrl+C to quit.\n\n* dev CI liangjie559567/ultr...",
-  "timestamp": "2026-03-14T09:10:54.801Z",
+  "tool_input_preview": "{\"command\":\"npm test -- src/lib/__tests__/circuit-breaker.test.ts 2>&1\",\"description\":\"Check circuit-breaker test import error\"}",
+  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@7.3.0 test\n> vitest src/lib/__tests__/circuit-breaker.test.ts\n\n\n\u001b[1m\u001b[46m RUN \u001b[49m\u001b[22m \u001b[36mv4.0.18 \u001b[39m\u001b[90mC:/Users/ljyih/Desktop/ultrapower\u001b[39m\n\n \u001b[31m❯\u001b[39m src/lib/__tests__/circuit-breaker.test.ts \u001b[2m(\u001b[22m\u001b[2m0 test\u001b[22m\u001b[2m)\u001b[22m\n\n\u001b[31m⎯⎯⎯⎯⎯⎯\u001b[39m\u001b[1m\u001b[41m Failed Suites 1 \u001b[49m\u001b[22m\u001b[31m⎯⎯⎯⎯⎯⎯⎯\u001b[39m\n\n\u001b[41m\u001b[1m FAIL \u001b[22m\u001b[49m src/lib/__tests__/circuit-breaker.test.ts\u001b[2m [ src/lib/__tests__/circuit-breaker.test.ts ]\u001b[22m\n\u001b[31m\u001b[1mError\u001b[22m:...",
+  "timestamp": "2026-03-14T14:17:19.890Z",
   "retry_count": 1
 }
