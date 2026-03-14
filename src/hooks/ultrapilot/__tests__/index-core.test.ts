@@ -131,7 +131,7 @@ describe('ultrapilot index', () => {
       });
 
       // Small delay to ensure file system sync in CI
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const progress = await trackProgress(testDir);
       expect(progress.completed).toBe(1);
