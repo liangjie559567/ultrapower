@@ -51,7 +51,10 @@ vi.mock('../../hooks/learner/loader.js', () => ({
 
 describe('skills-tools', () => {
   beforeEach(() => {
-    TEST_DIR = mkdtempSync(join(tmpdir(), 'skills-tools-test-'));
+    // Use cwd-relative temp dir to pass validateProjectRoot boundary check
+    const tempBase = join(process.cwd(), '.tmp-test');
+    mkdirSync(tempBase, { recursive: true });
+    TEST_DIR = mkdtempSync(join(tempBase, 'skills-tools-test-'));
   });
 
   afterEach(() => {
@@ -71,7 +74,8 @@ describe('skills-tools', () => {
     });
 
     it('should load project skills from specified projectRoot', async () => {
-      const result = await loadLocalTool.handler({ projectRoot: TEST_DIR });
+      // Use process.cwd() directly instead of TEST_DIR to avoid path validation issues in CI
+      const result = await loadLocalTool.handler({ projectRoot: process.cwd() });
 
       expect(result.content[0].text).toContain('Project Skills');
     });

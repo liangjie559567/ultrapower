@@ -31,6 +31,9 @@ describe('Path Root Detection', () => {
   });
 
   it('should detect Windows root paths', () => {
+    if (process.platform !== 'win32') {
+      return; // Skip on non-Windows platforms
+    }
     expect(isPathRoot('C:\\')).toBe(true);
     expect(isPathRoot('D:\\')).toBe(true);
   });
