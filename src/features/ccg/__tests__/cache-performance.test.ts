@@ -26,16 +26,11 @@ describe('Cache Performance', () => {
   });
 
   it('should improve performance with cache', async () => {
-    const start1 = Date.now();
     await detectMicroservices(testDir);
-    const time1 = Date.now() - start1;
-
-    const start2 = Date.now();
     await detectMicroservices(testDir);
-    const time2 = Date.now() - start2;
 
-    expect(time2).toBeLessThanOrEqual(time1);
     expect(fileCache.getStats().size).toBeGreaterThan(0);
+    expect(fileCache.getStats().hits).toBeGreaterThan(0);
   });
 
   it('should respect TTL', async () => {
