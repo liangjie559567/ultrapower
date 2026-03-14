@@ -1,5 +1,21 @@
 # ultrapower v7.0.1
 
+## 7.1.1
+
+### Patch Changes
+
+- test: P0/P1/P2 batch test coverage improvements (485 new tests)
+  - P0: Workers/Resume-session/Worker-health modules (93 tests)
+  - P1: 7 modules including State-tools/Skills-tools/Tmux-session (111 tests)
+  - P2: HUD/Installer/Ultrapilot/Interop/Platform/Registry/Monitoring (281 tests)
+  - Total: 7141 tests passing, 0 flaky tests
+  - Coverage improvements: 14 modules from 0-42% to 72-100%
+
+- fix: Use fake timers to prevent flaky tests in metrics-collector
+  - Replace setTimeout with vi.useFakeTimers() for stable CI runs
+
+- fix: workers/factory.ts - json mode init failure now returns null correctly
+
 ## 7.1.0
 
 ### Minor Changes
