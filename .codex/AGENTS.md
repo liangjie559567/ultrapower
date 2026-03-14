@@ -1,3 +1,6 @@
+<!-- Parent: ../AGENTS.md -->
+<!-- Generated: 2026-03-14 | Updated: 2026-03-14 -->
+
 # Axiom — Codex 适配器 (CLI Worker)
 
 # Provider: Codex (OpenAI via CLI)
