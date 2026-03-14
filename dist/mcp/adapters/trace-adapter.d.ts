@@ -24,7 +24,7 @@ export declare const traceTools: ({
         };
     };
     handler: (args: {
-        filter?: "all" | "tools" | "hooks" | "agents" | "keywords" | "skills" | "modes" | undefined;
+        filter?: "agents" | "hooks" | "tools" | "skills" | "all" | "keywords" | "modes" | undefined;
         sessionId?: string | undefined;
         workingDirectory?: string | undefined;
         last?: number | undefined;

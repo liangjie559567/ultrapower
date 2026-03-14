@@ -1,1 +1,1 @@
-{"version":3,"file":"update.js","sourceRoot":"","sources":["../../../src/cli/utils/update.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,KAAK,UAAU,aAAa;IACjC,OAAO,CAAC,GAAG,CAAC,yCAAyC,CAAC,CAAC;AACzD,CAAC"}
+{"version":3,"file":"update.js","sourceRoot":"","sources":["../../../src/cli/utils/update.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,sBAAsB,CAAC;AAEtD,MAAM,CAAC,KAAK,UAAU,aAAa;IACjC,MAAM,MAAM,GAAG,MAAM,cAAc,EAAE,CAAC;IACtC,OAAO,CAAC,GAAG,CAAC,OAAO,MAAM,CAAC,OAAO,EAAE,CAAC,CAAC;AACvC,CAAC"}

@@ -1,5 +1,17 @@
 # ultrapower v7.0.1
 
+## 7.4.0
+
+### Minor Changes
+
+- feat(upgrade): Complete upgrade workflow with automatic cache clearing
+  - Add `omc update` command for seamless upgrades
+  - Auto-detect installation method (npm global/local/marketplace)
+  - Clear all caches (plugins, npm-cache, tsbuildinfo)
+  - Update metadata files (.omc-version.json, installed_plugins.json)
+  - Refresh hooks after upgrade
+  - Add upgrade documentation (docs/UPGRADE.md)
+
 ## 7.1.1
 
 ### Patch Changes
