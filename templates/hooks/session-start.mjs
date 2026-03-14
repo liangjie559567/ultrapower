@@ -221,11 +221,11 @@ async function main() {
 ultrapower v${updateInfo.latestVersion} is available (current: v${updateInfo.currentVersion}).
 
 ACTION: Use AskUserQuestion to ask the user if they want to upgrade now. Offer these options:
-- "Upgrade now" (Recommended): Run \`npm install -g @liangjie559567/ultrapower@latest\` via Bash, then run \`omc setup\` to reconcile hooks and CLAUDE.md
+- "Upgrade now" (Recommended): Run \`npm install -g @liangjie559567/ultrapower@latest\` via Bash, then run \`omc setup\` to reconcile hooks and CLAUDE.md. After upgrade completes, inform user to restart Claude Code session to load the new plugin version.
 - "Skip this time": Continue the session without upgrading
 - "Don't ask again": Tell the user to set "autoUpgradePrompt": false in ~/.claude/.omc-config.json to disable future prompts
 
-Keep the prompt brief. If the user accepts, execute the upgrade commands and report the result.
+Keep the prompt brief. If the user accepts, execute the upgrade commands, report the result, and remind user to restart Claude Code session.
 
 </session-restore>
 
