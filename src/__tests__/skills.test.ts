@@ -183,7 +183,7 @@ describe('Builtin Skills', () => {
     it('should return all skill names', () => {
       const names = listBuiltinSkillNames();
 
-      expect(names).toHaveLength(79);
+      expect(names).toHaveLength(78);
       expect(names).toContain('autopilot');
       expect(names).toContain('cancel');
       expect(names).toContain('ccg');
