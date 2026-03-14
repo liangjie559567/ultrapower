@@ -65,15 +65,15 @@ updated 1 package in 3.2s
 **步骤 3: 刷新 hooks 和配置**
 
 ```bash
-omc install --force --skip-claude-check --refresh-hooks
+omc setup
 ```
 
 **预期输出**:
 ```
-[OMC] Refreshing hooks...
+[OMC] Syncing hooks...
 [OMC] Updated 47 hooks
 [OMC] Reconciled CLAUDE.md
-✓ Installation complete
+✓ Setup complete
 ```
 
 **步骤 4: 重启 Claude Code**
@@ -152,7 +152,7 @@ rm -rf ~/.claude/plugins/marketplaces/omc
 # 方式 A: npm 全局安装
 
 npm install -g @liangjie559567/ultrapower@latest
-omc install --force
+omc setup
 
 # 方式 B: 插件市场安装
 
@@ -339,7 +339,7 @@ npm install -g @liangjie559567/ultrapower@5.5.13
 
 # 刷新配置
 
-omc install --force --refresh-hooks
+omc setup
 ```
 
 ### 场景 2: 配置损坏
@@ -386,7 +386,7 @@ rm -rf .omc/
 # 重新安装
 
 npm install -g @liangjie559567/ultrapower@latest
-omc install --force
+omc setup
 ```
 
 ---
