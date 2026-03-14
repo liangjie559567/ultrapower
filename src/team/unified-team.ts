@@ -1,12 +1,3 @@
-// src/team/unified-team.ts
-
-/**
- * Unified team member view across Claude native and MCP workers.
- *
- * Merges Claude Code's native team config with MCP shadow registry
- * to provide a single coherent view of all team members.
- */
-
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { getClaudeConfigDir } from '../utils/paths.js';
@@ -18,14 +9,14 @@ import { UnifiedContextManager } from '../features/unified-context/index.js';
 
 export type { UnifiedTeamMember };
 
-let globalContextManager: UnifiedContextManager | null = null;
+const contextManagers = new Map<string, UnifiedContextManager>();
 
-export function setContextManager(manager: UnifiedContextManager): void {
-  globalContextManager = manager;
+export function setContextManager(teamName: string, manager: UnifiedContextManager): void {
+  contextManagers.set(teamName, manager);
 }
 
-export function getContextManager(): UnifiedContextManager | null {
-  return globalContextManager;
+export function getContextManager(teamName: string): UnifiedContextManager | null {
+  return contextManagers.get(teamName) || null;
 }
 
 /**
@@ -38,12 +29,15 @@ export async function getTeamMembers(
   const members: UnifiedTeamMember[] = [];
 
   // Sync agent contexts to MCP Memory if context manager is available
-  if (globalContextManager) {
+  const contextManager = contextManagers.get(teamName);
+  if (contextManager) {
     try {
-      const sharedContext = await globalContextManager.getSharedContext();
-      for (const [agentId, context] of Object.entries(sharedContext)) {
-        await globalContextManager.setAgentContext(agentId, context);
-      }
+      const sharedContext = await contextManager.getSharedContext();
+      await Promise.all(
+        Object.entries(sharedContext).map(([agentId, context]) =>
+          contextManager.setAgentContext(agentId, context)
+        )
+      );
     } catch { /* graceful degradation */ }
   }
 
