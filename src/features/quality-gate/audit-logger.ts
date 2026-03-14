@@ -1,12 +1,12 @@
-import * as fs from 'fs';
+import { promises as fs } from 'fs';
 import * as path from 'path';
 
-export function logSkip(reason: string, cwd: string): void {
+export async function logSkip(reason: string, cwd: string): Promise<void> {
   const logDir = path.join(cwd, 'omc.js', 'logs');
-  fs.mkdirSync(logDir, { recursive: true });
+  await fs.mkdir(logDir, { recursive: true });
 
   const logPath = path.join(logDir, 'quality-gate-skipped.log');
   const entry = `${new Date().toISOString()} - SKIPPED: ${reason}\n`;
 
-  fs.appendFileSync(logPath, entry, 'utf8');
+  await fs.appendFile(logPath, entry, 'utf8');
 }
