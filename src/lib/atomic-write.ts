@@ -199,7 +199,9 @@ export function atomicWriteFileSync(filePath: string, content: string): void {
         if (error.code === 'EPERM' && attempt < 2) {
           const delayMs = 50 * (attempt + 1);
           const start = Date.now();
-          while (Date.now() - start < delayMs) {}
+          while (Date.now() - start < delayMs) {
+            // Busy wait for Windows file lock retry
+          }
         } else {
           throw err;
         }
