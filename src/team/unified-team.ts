@@ -14,17 +14,38 @@ import type { WorkerBackend, UnifiedTeamMember } from './types.js';
 import { listMcpWorkers } from './team-registration.js';
 import { readHeartbeat, isWorkerAlive } from './heartbeat.js';
 import { getDefaultCapabilities } from './capabilities.js';
+import { UnifiedContextManager } from '../features/unified-context/index.js';
 
 export type { UnifiedTeamMember };
+
+let globalContextManager: UnifiedContextManager | null = null;
+
+export function setContextManager(manager: UnifiedContextManager): void {
+  globalContextManager = manager;
+}
+
+export function getContextManager(): UnifiedContextManager | null {
+  return globalContextManager;
+}
 
 /**
  * Get all team members from both Claude native teams and MCP workers.
  */
-export function getTeamMembers(
+export async function getTeamMembers(
   teamName: string,
   workingDirectory: string
-): UnifiedTeamMember[] {
+): Promise<UnifiedTeamMember[]> {
   const members: UnifiedTeamMember[] = [];
+
+  // Sync agent contexts to MCP Memory if context manager is available
+  if (globalContextManager) {
+    try {
+      const sharedContext = await globalContextManager.getSharedContext();
+      for (const [agentId, context] of Object.entries(sharedContext)) {
+        await globalContextManager.setAgentContext(agentId, context);
+      }
+    } catch { /* graceful degradation */ }
+  }
 
   // 1. Read Claude native members from config.json
   try {

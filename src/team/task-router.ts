@@ -31,15 +31,15 @@ export interface TaskRoutingDecision {
  * @param requiredCapabilities - Optional map of taskId -> required capabilities
  * @returns Array of routing decisions
  */
-export function routeTasks(
+export async function routeTasks(
   teamName: string,
   workingDirectory: string,
   unassignedTasks: TaskFile[],
   requiredCapabilities?: Record<string, WorkerCapability[]>
-): TaskRoutingDecision[] {
+): Promise<TaskRoutingDecision[]> {
   if (unassignedTasks.length === 0) return [];
 
-  const allMembers = getTeamMembers(teamName, workingDirectory);
+  const allMembers = await getTeamMembers(teamName, workingDirectory);
 
   // Filter to available workers (not dead, not quarantined)
   const available = allMembers.filter(

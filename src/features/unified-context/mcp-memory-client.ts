@@ -44,8 +44,9 @@ export class MCPMemoryClient {
       arguments: { query: key }
     });
 
-    if (result.structuredContent?.entities?.[0]?.observations?.[0]) {
-      return JSON.parse(result.structuredContent.entities[0].observations[0]);
+    const structured = result.structuredContent as { entities?: Array<{ observations?: string[] }> } | undefined;
+    if (structured?.entities?.[0]?.observations?.[0]) {
+      return JSON.parse(structured.entities[0].observations[0]);
     }
     return null;
   }
