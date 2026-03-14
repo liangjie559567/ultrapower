@@ -17,6 +17,9 @@ export class MCPRegistryClient {
     if (query?.official !== undefined) params.set('official', String(query.official));
 
     const response = await fetch(`${REGISTRY_API}/servers?${params}`);
+    if (!response.ok) {
+      throw new Error(`Registry API error: ${response.status} ${response.statusText}`);
+    }
     const data = await response.json() as { servers: MCPServerDescriptor[] };
 
     this.cache.set(cacheKey, data.servers);
