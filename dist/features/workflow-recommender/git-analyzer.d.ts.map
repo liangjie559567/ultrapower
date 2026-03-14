@@ -1,0 +1,1 @@
+{"version":3,"file":"git-analyzer.d.ts","sourceRoot":"","sources":["../../../src/features/workflow-recommender/git-analyzer.ts"],"names":[],"mappings":"AAEA,qBAAa,WAAW;IACtB,MAAM,CAAC,gBAAgB,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,EAAE;IAS9C,MAAM,CAAC,gBAAgB,CAAC,GAAG,EAAE,MAAM,EAAE,KAAK,SAAI,GAAG,MAAM,EAAE;CAQ1D"}

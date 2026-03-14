@@ -14,6 +14,10 @@
  */
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { validateAssumptions } from '../../features/assumption-validator/index.js';
+import { extractAssumptionsFromPlan } from './assumption-extractor.js';
+import { getChangedFiles } from './git-helper.js';
+import { runQualityGateSync } from './quality-gate-sync.js';
 const WORKFLOW_STATE_FILE = '.omc/workflow-state.json';
 /**
  * Get workflow state file path
@@ -63,6 +67,8 @@ export function initWorkflowState(workingDir) {
         securityReviewComplete: false,
         performanceReviewComplete: false,
         verificationComplete: false,
+        assumptionsValidated: false,
+        qualityGatePassed: false,
         lastStage: 'init',
         timestamp: Date.now()
     };
@@ -166,6 +172,17 @@ export function detectPlanExecutionSkill(prompt) {
         prompt.includes('/ultrapower:subagent-driven-development');
 }
 /**
+ * Detect if user is requesting verification
+ */
+export function detectVerificationIntent(prompt) {
+    const verificationKeywords = [
+        'verify', 'verification', 'validate', 'check complete',
+        '验证', '检查完成'
+    ];
+    const lowerPrompt = prompt.toLowerCase();
+    return verificationKeywords.some(kw => lowerPrompt.includes(kw) || prompt.includes(kw));
+}
+/**
  * Detect if user is asking a vague question that needs brainstorming
  */
 export function detectVagueRequest(prompt) {
@@ -181,7 +198,7 @@ export function detectVagueRequest(prompt) {
         return false;
     }
     // Require minimum length (count characters, not bytes)
-    if ([...prompt].length < 8) {
+    if (Array.from(prompt).length < 8) {
         return false;
     }
     return hasVaguePattern;
@@ -289,6 +306,25 @@ export function processWorkflowGate(input) {
             message: '⚠️ Workflow Gate: TDD 要求在实现前先编写测试。自动注入 test-driven-development skill。'
         };
     }
+    // Gate 2.6: Execution without validating assumptions (NEW - Phase 2)
+    if (detectExecutionIntent(prompt) && state.planWritten && !state.assumptionsValidated) {
+        const assumptions = extractAssumptionsFromPlan(workingDirectory);
+        if (assumptions.length > 0) {
+            const result = validateAssumptions(assumptions);
+            if (!result.valid && result.shouldStop) {
+                state.assumptionsValidated = false;
+                writeWorkflowState(workingDirectory, state);
+                return {
+                    success: true,
+                    shouldBlock: true,
+                    injectedSkill: 'assumption-validator',
+                    message: `⚠️ Workflow Gate: 发现 ${result.failedAssumptions.length} 个未验证的假设，必须先验证。`
+                };
+            }
+        }
+        state.assumptionsValidated = true;
+        writeWorkflowState(workingDirectory, state);
+    }
     // Gate 3: Using executing-plans or subagent-driven-development without plan
     if (detectPlanExecutionSkill(prompt) && !state.planWritten) {
         return {
@@ -306,6 +342,39 @@ export function processWorkflowGate(input) {
             injectedSkill: 'code-review',
             message: '⚠️ Workflow Gate: 验证前必须先完成代码审查。自动注入 code-review skill。'
         };
+    }
+    // Gate 4.5: Verification without quality gate (NEW - Phase 2)
+    if (detectVerificationIntent(prompt) && state.codeReviewComplete && !state.qualityGatePassed) {
+        const skipRequested = prompt.includes('skip quality') || prompt.includes('跳过质量');
+        if (!skipRequested) {
+            const changedFiles = getChangedFiles(workingDirectory);
+            if (changedFiles.length > 0) {
+                try {
+                    const result = runQualityGateSync(changedFiles, workingDirectory, false);
+                    if (!result.passed) {
+                        return {
+                            success: true,
+                            shouldBlock: true,
+                            message: `⚠️ Workflow Gate: 质量门禁未通过 (得分: ${result.score}/100)\n问题:\n${result.issues.slice(0, 5).map(i => `  - ${i}`).join('\n')}`
+                        };
+                    }
+                    state.qualityGatePassed = true;
+                    writeWorkflowState(workingDirectory, state);
+                }
+                catch (error) {
+                    state.qualityGatePassed = true;
+                    writeWorkflowState(workingDirectory, state);
+                }
+            }
+            else {
+                state.qualityGatePassed = true;
+                writeWorkflowState(workingDirectory, state);
+            }
+        }
+        else {
+            state.qualityGatePassed = true;
+            writeWorkflowState(workingDirectory, state);
+        }
     }
     // Gate 5: Security review for sensitive code
     if (detectSecuritySensitive(prompt) && state.executionStarted && !state.securityReviewComplete) {

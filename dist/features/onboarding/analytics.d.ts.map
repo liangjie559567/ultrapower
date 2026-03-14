@@ -1,0 +1,1 @@
+{"version":3,"file":"analytics.d.ts","sourceRoot":"","sources":["../../../src/features/onboarding/analytics.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,cAAc,EAAE,MAAM,YAAY,CAAC;AAIjD,qBAAa,kBAAkB;WAChB,KAAK,CAAC,IAAI,EAAE,cAAc,CAAC,MAAM,CAAC,EAAE,IAAI,CAAC,EAAE,OAAO,CAAC,cAAc,CAAC,GAAG,OAAO,CAAC,IAAI,CAAC;CAkBhG"}

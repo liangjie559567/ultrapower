@@ -22,9 +22,11 @@ jobs:
         run: npx c8 --reporter=lcov --reporter=text --report-dir=coverage-e2e node scripts/e2e-bridge-cli.mjs
       - name: Merge coverage reports
         run: |
+          mkdir -p coverage-merged
+          cp -r coverage/.tmp/* coverage-merged/ 2>/dev/null || true
+          cp -r coverage-e2e/.tmp/* coverage-merged/ 2>/dev/null || true
           npx c8 report \
-            --temp-directory=coverage \
-            --temp-directory=coverage-e2e \
+            --temp-directory=coverage-merged \
             --reporter=lcov \
             --reporter=text-summary
       - name: Check coverage threshold

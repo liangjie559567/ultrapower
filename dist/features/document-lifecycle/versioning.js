@@ -5,7 +5,7 @@ export async function parseVersion(filename, filePath) {
     const match = filename.match(VERSION_PATTERN);
     if (!match)
         return null;
-    const [, name, major, minor, patch = '0'] = match;
+    const [, _name, major, minor, patch = '0'] = match;
     let createdAt = new Date().toISOString();
     if (filePath) {
         try {

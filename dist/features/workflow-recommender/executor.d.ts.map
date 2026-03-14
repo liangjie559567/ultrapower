@@ -1,0 +1,1 @@
+{"version":3,"file":"executor.d.ts","sourceRoot":"","sources":["../../../src/features/workflow-recommender/executor.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,cAAc,EAAE,MAAM,YAAY,CAAC;AAEjD,wBAAsB,eAAe,CAAC,QAAQ,EAAE,MAAM,EAAE,MAAM,EAAE,MAAM,GAAG,OAAO,CAAC,IAAI,CAAC,CAGrF;AAED,wBAAgB,oBAAoB,CAAC,GAAG,EAAE,cAAc,GAAG,MAAM,CAIhE"}

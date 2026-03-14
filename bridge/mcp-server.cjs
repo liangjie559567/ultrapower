@@ -20198,7 +20198,23 @@ function atomicWriteFileSync(filePath, content) {
     fsSync.fsyncSync(fd);
     fsSync.closeSync(fd);
     fd = null;
-    fsSync.renameSync(tempPath, filePath);
+    let renamed = false;
+    for (let attempt = 0; attempt < 3 && !renamed; attempt++) {
+      try {
+        fsSync.renameSync(tempPath, filePath);
+        renamed = true;
+      } catch (err) {
+        const error2 = err;
+        if (error2.code === "EPERM" && attempt < 2) {
+          const delayMs = 50 * (attempt + 1);
+          const start = Date.now();
+          while (Date.now() - start < delayMs) {
+          }
+        } else {
+          throw err;
+        }
+      }
+    }
     success = true;
     try {
       const dirFd = fsSync.openSync(dir, "r");

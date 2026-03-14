@@ -1,0 +1,1 @@
+{"version":3,"file":"installer.d.ts","sourceRoot":"","sources":["../../../src/features/mcp-autodiscovery/installer.ts"],"names":[],"mappings":"AAOA,UAAU,WAAW;IACnB,IAAI,EAAE,KAAK,GAAG,KAAK,GAAG,QAAQ,CAAC;IAC/B,IAAI,EAAE,MAAM,CAAC;CACd;AAED,qBAAa,YAAY;IACvB,gBAAgB,CAAC,WAAW,EAAE,MAAM,GAAG,OAAO;IAI9C,iBAAiB,CAAC,GAAG,EAAE,WAAW,GAAG,MAAM;CAS5C"}

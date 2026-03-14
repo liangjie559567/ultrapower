@@ -30,13 +30,13 @@ export interface BroadcastResult {
  * - Claude native: returns instruction to use SendMessage tool
  * - MCP worker: appends to worker's inbox JSONL
  */
-export function routeMessage(
+export async function routeMessage(
   teamName: string,
   recipientName: string,
   content: string,
   workingDirectory: string
-): RouteResult {
-  const members = getTeamMembers(teamName, workingDirectory);
+): Promise<RouteResult> {
+  const members = await getTeamMembers(teamName, workingDirectory);
   const member = members.find(m => m.name === recipientName);
 
   if (!member) {
@@ -79,12 +79,12 @@ export function routeMessage(
  * - Claude native: returns list for SendMessage broadcast
  * - MCP workers: appends to each worker's inbox
  */
-export function broadcastToTeam(
+export async function broadcastToTeam(
   teamName: string,
   content: string,
   workingDirectory: string
-): BroadcastResult {
-  const members = getTeamMembers(teamName, workingDirectory);
+): Promise<BroadcastResult> {
+  const members = await getTeamMembers(teamName, workingDirectory);
   const nativeRecipients: string[] = [];
   const inboxRecipients: string[] = [];
 

@@ -131,11 +131,14 @@ describe('getRuntimeDir', () => {
 
   it('should handle darwin platform', () => {
     const originalPlatform = process.platform;
+    const originalXdg = process.env.XDG_RUNTIME_DIR;
+    delete process.env.XDG_RUNTIME_DIR;
     Object.defineProperty(process, 'platform', { value: 'darwin', configurable: true });
     const result = getRuntimeDir();
     expect(result).toContain('omc');
     expect(result).toContain('Library');
     Object.defineProperty(process, 'platform', { value: originalPlatform, configurable: true });
+    if (originalXdg) process.env.XDG_RUNTIME_DIR = originalXdg;
   });
 });
 

@@ -1,2 +1,2 @@
-export declare function testPromptCommand(prompt: string): Promise<void>;
+export declare function testPromptCommand(_prompt: string): Promise<void>;
 //# sourceMappingURL=test-prompt.d.ts.map

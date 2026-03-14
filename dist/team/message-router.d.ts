@@ -11,11 +11,11 @@ export interface BroadcastResult {
  * - Claude native: returns instruction to use SendMessage tool
  * - MCP worker: appends to worker's inbox JSONL
  */
-export declare function routeMessage(teamName: string, recipientName: string, content: string, workingDirectory: string): RouteResult;
+export declare function routeMessage(teamName: string, recipientName: string, content: string, workingDirectory: string): Promise<RouteResult>;
 /**
  * Broadcast to all team members.
  * - Claude native: returns list for SendMessage broadcast
  * - MCP workers: appends to each worker's inbox
  */
-export declare function broadcastToTeam(teamName: string, content: string, workingDirectory: string): BroadcastResult;
+export declare function broadcastToTeam(teamName: string, content: string, workingDirectory: string): Promise<BroadcastResult>;
 //# sourceMappingURL=message-router.d.ts.map

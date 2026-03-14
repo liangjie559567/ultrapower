@@ -1,0 +1,68 @@
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+export class MCPMemoryClient {
+    client = null;
+    transport = null;
+    async connect() {
+        this.transport = new StdioClientTransport({
+            command: 'npx',
+            args: ['-y', '@modelcontextprotocol/server-memory']
+        });
+        this.client = new Client({
+            name: 'ultrapower-memory-client',
+            version: '1.0.0'
+        }, {
+            capabilities: {}
+        });
+        await this.client.connect(this.transport);
+    }
+    async storeContext(key, value) {
+        if (!this.client)
+            throw new Error('Not connected');
+        await this.client.callTool({
+            name: 'create_entities',
+            arguments: {
+                entities: [{
+                        name: key,
+                        entityType: 'context',
+                        observations: [JSON.stringify(value)]
+                    }]
+            }
+        });
+    }
+    async getContext(key) {
+        if (!this.client)
+            throw new Error('Not connected');
+        const result = await this.client.callTool({
+            name: 'search_nodes',
+            arguments: { query: key }
+        });
+        const structured = result.structuredContent;
+        if (structured?.entities?.[0]?.observations?.[0]) {
+            return JSON.parse(structured.entities[0].observations[0]);
+        }
+        return null;
+    }
+    async createEntity(entity) {
+        if (!this.client)
+            throw new Error('Not connected');
+        await this.client.callTool({
+            name: 'create_entities',
+            arguments: {
+                entities: [{
+                        name: entity.name,
+                        entityType: entity.type,
+                        observations: entity.observations
+                    }]
+            }
+        });
+        return entity.name;
+    }
+    async disconnect() {
+        if (this.client) {
+            await this.client.close();
+            this.client = null;
+        }
+    }
+}
+//# sourceMappingURL=mcp-memory-client.js.map

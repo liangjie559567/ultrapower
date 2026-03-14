@@ -12,7 +12,7 @@ export async function runQualityGate(
   skipRequested?: boolean
 ): Promise<QualityCheckResult> {
   if (skipRequested) {
-    logSkip('User manually skipped quality gate', cwd);
+    await logSkip('User manually skipped quality gate', cwd);
     return { passed: true, issues: [], score: 100 };
   }
 

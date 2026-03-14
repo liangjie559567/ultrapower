@@ -1,10 +1,11 @@
-<!-- Generated: 2026-01-28 | Updated: 2026-03-05 -->
+<!-- Parent: ../AGENTS.md -->
+<!-- Generated: 2026-03-14 | Updated: 2026-03-14 -->
 
-# src/ - TypeScript 源代码结构
+# src/ - TypeScript 源代码核心库
 
 **用途：** ultrapower 核心库的 TypeScript 实现。包含智能体、技能、工具、钩子和执行引擎。
 
-**版本：** 5.5.14
+**版本：** 7.2.0
 
 ## 关键文件
 

@@ -94,6 +94,8 @@ describe('ultrapilot index', () => {
   describe('trackProgress', () => {
     it('跟踪 worker 进度', async () => {
       await initUltrapilot(testDir, 'task', ['t1', 't2', 't3']);
+
+      // Add workers sequentially and wait for each write
       await addWorker(testDir, {
         id: 'w1',
         index: 0,
@@ -104,6 +106,7 @@ describe('ultrapilot index', () => {
         filesCreated: [],
         filesModified: []
       });
+
       await addWorker(testDir, {
         id: 'w2',
         index: 1,
@@ -114,6 +117,7 @@ describe('ultrapilot index', () => {
         filesCreated: [],
         filesModified: []
       });
+
       await addWorker(testDir, {
         id: 'w3',
         index: 2,
@@ -125,6 +129,9 @@ describe('ultrapilot index', () => {
         filesModified: [],
         error: 'err'
       });
+
+      // Small delay to ensure file system sync in CI
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       const progress = await trackProgress(testDir);
       expect(progress.completed).toBe(1);

@@ -221,7 +221,7 @@ async function main() {
 ultrapower v${updateInfo.latestVersion} is available (current: v${updateInfo.currentVersion}).
 
 ACTION: Use AskUserQuestion to ask the user if they want to upgrade now. Offer these options:
-- "Upgrade now" (Recommended): Run \`npm install -g @liangjie559567/ultrapower@latest\` via Bash, then run \`omc install --force --skip-claude-check --refresh-hooks\` to reconcile hooks and CLAUDE.md
+- "Upgrade now" (Recommended): Run \`npm install -g @liangjie559567/ultrapower@latest\` via Bash, then run \`omc setup\` to reconcile hooks and CLAUDE.md
 - "Skip this time": Continue the session without upgrading
 - "Don't ask again": Tell the user to set "autoUpgradePrompt": false in ~/.claude/.omc-config.json to disable future prompts
 

@@ -1,7 +1,7 @@
 /**
  * Specification Generator - 基于 constitution 生成功能规范
  */
-export async function generateSpecification(feature, constitution, projectPath) {
+export async function generateSpecification(feature, constitution, _projectPath) {
     const featureType = inferFeatureType(feature);
     return {
         feature,
