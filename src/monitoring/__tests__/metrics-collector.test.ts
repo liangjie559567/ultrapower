@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, rmSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
@@ -57,14 +57,16 @@ describe('MetricsCollector', () => {
     });
 
     it('filters by timestamp', async () => {
+      vi.useFakeTimers();
       const now = Date.now();
       await collector.record('build', 1000);
-      await new Promise(resolve => setTimeout(resolve, 10));
+      vi.advanceTimersByTime(10);
       await collector.record('build', 2000);
 
       const metrics = await collector.getMetrics('build', now + 5);
       expect(metrics).toHaveLength(1);
       expect(metrics[0].value).toBe(2000);
+      vi.useRealTimers();
     });
 
     it('handles malformed JSON lines', async () => {
