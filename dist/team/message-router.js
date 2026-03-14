@@ -16,8 +16,8 @@ import { sanitizeName } from './tmux-session.js';
  * - Claude native: returns instruction to use SendMessage tool
  * - MCP worker: appends to worker's inbox JSONL
  */
-export function routeMessage(teamName, recipientName, content, workingDirectory) {
-    const members = getTeamMembers(teamName, workingDirectory);
+export async function routeMessage(teamName, recipientName, content, workingDirectory) {
+    const members = await getTeamMembers(teamName, workingDirectory);
     const member = members.find(m => m.name === recipientName);
     if (!member) {
         return {
@@ -53,8 +53,8 @@ export function routeMessage(teamName, recipientName, content, workingDirectory)
  * - Claude native: returns list for SendMessage broadcast
  * - MCP workers: appends to each worker's inbox
  */
-export function broadcastToTeam(teamName, content, workingDirectory) {
-    const members = getTeamMembers(teamName, workingDirectory);
+export async function broadcastToTeam(teamName, content, workingDirectory) {
+    const members = await getTeamMembers(teamName, workingDirectory);
     const nativeRecipients = [];
     const inboxRecipients = [];
     for (const member of members) {

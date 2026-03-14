@@ -24,5 +24,5 @@ export interface TaskRoutingDecision {
  * @param requiredCapabilities - Optional map of taskId -> required capabilities
  * @returns Array of routing decisions
  */
-export declare function routeTasks(teamName: string, workingDirectory: string, unassignedTasks: TaskFile[], requiredCapabilities?: Record<string, WorkerCapability[]>): TaskRoutingDecision[];
+export declare function routeTasks(teamName: string, workingDirectory: string, unassignedTasks: TaskFile[], requiredCapabilities?: Record<string, WorkerCapability[]>): Promise<TaskRoutingDecision[]>;
 //# sourceMappingURL=task-router.d.ts.map

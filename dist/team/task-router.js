@@ -11,10 +11,10 @@ import { scoreWorkerFitness } from './capabilities.js';
  * @param requiredCapabilities - Optional map of taskId -> required capabilities
  * @returns Array of routing decisions
  */
-export function routeTasks(teamName, workingDirectory, unassignedTasks, requiredCapabilities) {
+export async function routeTasks(teamName, workingDirectory, unassignedTasks, requiredCapabilities) {
     if (unassignedTasks.length === 0)
         return [];
-    const allMembers = getTeamMembers(teamName, workingDirectory);
+    const allMembers = await getTeamMembers(teamName, workingDirectory);
     // Filter to available workers (not dead, not quarantined)
     const available = allMembers.filter(m => m.status !== 'dead' && m.status !== 'quarantined');
     if (available.length === 0)
