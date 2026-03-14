@@ -23,6 +23,8 @@ export interface WorkflowState {
     securityReviewComplete: boolean;
     performanceReviewComplete: boolean;
     verificationComplete: boolean;
+    assumptionsValidated: boolean;
+    qualityGatePassed: boolean;
     lastStage: string;
     timestamp: number;
 }
@@ -97,6 +99,10 @@ export declare function detectPerformanceSensitive(prompt: string): boolean;
  * Detect if user is trying to use executing-plans or subagent-driven-development
  */
 export declare function detectPlanExecutionSkill(prompt: string): boolean;
+/**
+ * Detect if user is requesting verification
+ */
+export declare function detectVerificationIntent(prompt: string): boolean;
 /**
  * Detect if user is asking a vague question that needs brainstorming
  */

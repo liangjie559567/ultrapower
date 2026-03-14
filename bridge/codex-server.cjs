@@ -18195,6 +18195,7 @@ async function createWorkerAdapter(type, cwd, options = {}) {
       adapter = new JsonWorkerAdapter(cwd);
       const success = await adapter.init();
       if (success) return wrapWithCache(adapter, options);
+      return null;
     }
     return null;
   } catch (error2) {

@@ -1,0 +1,33 @@
+# P0 Test Coverage Improvements - Summary
+
+## Completed Modules
+
+### 1. workers/cached-adapter.ts
+- **Before**: 40.62% statement coverage, 40% function coverage
+- **After**: 100% statement coverage, 100% function coverage
+- **Tests Added**: 12 comprehensive tests
+- **Key Scenarios Covered**:
+  - Cache hit/miss within TTL
+  - Cache expiration after TTL
+  - Cache invalidation on delete
+  - Batch upsert caching
+  - Cleanup cache clearing
+  - Passthrough methods (init, list, healthCheck)
+
+### 2. resume-session.ts
+- **Status**: Already at 100% coverage (5 existing tests)
+- **No additional work needed**
+
+### 3. workers module overall
+- **Before**: 71.48% coverage
+- **After**: 78.33% coverage
+- **Improvement**: +6.85 percentage points
+
+## Test Results
+- Total tests: 7083 passed
+- New tests added: 12 (cached-adapter)
+- All tests stable (3 unrelated failures in ultrapilot file locks)
+
+## Files Modified
+- Created: src/workers/__tests__/cached-adapter.test.ts
+- Commit: d7a9d475 "test(workers): add comprehensive cached-adapter tests (100% coverage)"

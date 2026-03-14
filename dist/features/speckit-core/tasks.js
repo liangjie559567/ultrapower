@@ -47,7 +47,6 @@ function estimateEffort(component, spec) {
 function sortByPriority(tasks, spec) {
     if (!spec)
         return tasks;
-    const priorityMap = { high: 3, medium: 2, low: 1 };
     const hasHighPriority = spec.requirements.some(r => r.priority === 'high');
     if (!hasHighPriority)
         return tasks;

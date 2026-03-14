@@ -1,0 +1,421 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/tools/tool-prefix-migration.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/tools</a> tool-prefix-migration.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">62.5% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>10/16</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">33.33% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>2/6</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">60% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>3/5</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">60% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>9/15</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line medium'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * Tool Prefix Migration System
+ *
+ * Handles migration from legacy underscore names to ultrapower: prefix
+ * Provides deprecation warnings and dual registration
+ */
+&nbsp;
+import { GenericToolDefinition } from './index.js';
+&nbsp;
+export interface DeprecationInfo {
+  oldName: string;
+  newName: string;
+  deprecatedSince: string;
+  removalVersion: string;
+}
+&nbsp;
+const DEPRECATION_MAP: Record&lt;string, DeprecationInfo&gt; = {
+  // LSP Tools
+  'lsp_hover': { oldName: 'lsp_hover', newName: 'ultrapower:lsp_hover', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_goto_definition': { oldName: 'lsp_goto_definition', newName: 'ultrapower:lsp_goto_definition', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_find_references': { oldName: 'lsp_find_references', newName: 'ultrapower:lsp_find_references', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_document_symbols': { oldName: 'lsp_document_symbols', newName: 'ultrapower:lsp_document_symbols', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_workspace_symbols': { oldName: 'lsp_workspace_symbols', newName: 'ultrapower:lsp_workspace_symbols', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_diagnostics': { oldName: 'lsp_diagnostics', newName: 'ultrapower:lsp_diagnostics', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_servers': { oldName: 'lsp_servers', newName: 'ultrapower:lsp_servers', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_prepare_rename': { oldName: 'lsp_prepare_rename', newName: 'ultrapower:lsp_prepare_rename', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_rename': { oldName: 'lsp_rename', newName: 'ultrapower:lsp_rename', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_code_actions': { oldName: 'lsp_code_actions', newName: 'ultrapower:lsp_code_actions', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_code_action_resolve': { oldName: 'lsp_code_action_resolve', newName: 'ultrapower:lsp_action_resolve', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_diagnostics_directory': { oldName: 'lsp_diagnostics_directory', newName: 'ultrapower:lsp_diag_dir', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+&nbsp;
+  // State Tools
+  'state_read': { oldName: 'state_read', newName: 'ultrapower:state_read', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'state_write': { oldName: 'state_write', newName: 'ultrapower:state_write', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'state_clear': { oldName: 'state_clear', newName: 'ultrapower:state_clear', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'state_list_active': { oldName: 'state_list_active', newName: 'ultrapower:state_list_active', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'state_get_status': { oldName: 'state_get_status', newName: 'ultrapower:state_get_status', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+&nbsp;
+  // Notepad Tools
+  'notepad_read': { oldName: 'notepad_read', newName: 'ultrapower:notepad_read', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_write_priority': { oldName: 'notepad_write_priority', newName: 'ultrapower:notepad_priority', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_write_working': { oldName: 'notepad_write_working', newName: 'ultrapower:notepad_working', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_write_manual': { oldName: 'notepad_write_manual', newName: 'ultrapower:notepad_manual', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_prune': { oldName: 'notepad_prune', newName: 'ultrapower:notepad_prune', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_stats': { oldName: 'notepad_stats', newName: 'ultrapower:notepad_stats', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+&nbsp;
+  // Memory Tools
+  'project_memory_read': { oldName: 'project_memory_read', newName: 'ultrapower:project_memory_read', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'project_memory_write': { oldName: 'project_memory_write', newName: 'ultrapower:project_memory_write', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'project_memory_add_note': { oldName: 'project_memory_add_note', newName: 'ultrapower:project_memory_add_note', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'project_memory_add_directive': { oldName: 'project_memory_add_directive', newName: 'ultrapower:project_memory_add_directive', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+&nbsp;
+  // AST Tools
+  'ast_grep_search': { oldName: 'ast_grep_search', newName: 'ultrapower:ast_grep_search', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'ast_grep_replace': { oldName: 'ast_grep_replace', newName: 'ultrapower:ast_grep_replace', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+&nbsp;
+  // Python REPL
+  'python_repl': { oldName: 'python_repl', newName: 'ultrapower:python_repl', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+&nbsp;
+  // Trace Tools
+  'trace_timeline': { oldName: 'trace_timeline', newName: 'ultrapower:trace_timeline', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'trace_summary': { oldName: 'trace_summary', newName: 'ultrapower:trace_summary', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+&nbsp;
+  // New shortened names (5.5.28+)
+  'lsp_action_resolve': { oldName: 'lsp_action_resolve', newName: 'ultrapower:lsp_action_resolve', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'lsp_diag_dir': { oldName: 'lsp_diag_dir', newName: 'ultrapower:lsp_diag_dir', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_priority': { oldName: 'notepad_priority', newName: 'ultrapower:notepad_priority', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_working': { oldName: 'notepad_working', newName: 'ultrapower:notepad_working', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'notepad_manual': { oldName: 'notepad_manual', newName: 'ultrapower:notepad_manual', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'parallel_detector': { oldName: 'parallel_detector', newName: 'ultrapower:parallel_detector', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'load_skills_local': { oldName: 'load_skills_local', newName: 'ultrapower:load_skills_local', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'load_skills_global': { oldName: 'load_skills_global', newName: 'ultrapower:load_skills_global', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+  'list_skills': { oldName: 'list_skills', newName: 'ultrapower:list_skills', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
+};
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >createDeprecationWarning(i</span>nfo: DeprecationInfo): string {
+<span class="cstat-no" title="statement not covered" >  return `⚠️  DEPRECATED: Tool '${info.oldName}' is deprecated since v${info.deprecatedSince} and will be removed in v${info.removalVersion}.\n` +</span>
+         `Please use '${info.newName}' instead.\n\n`;
+}
+&nbsp;
+export function wrapWithDeprecation&lt;T extends GenericToolDefinition&gt;(tool: T): T {
+  const deprecationInfo = DEPRECATION_MAP[tool.name];
+  if (!deprecationInfo) return tool;
+&nbsp;
+  const originalHandler = tool.handler;
+  return {
+    ...tool,
+    handler: <span class="fstat-no" title="function not covered" >async (a</span>rgs: unknown) =&gt; {
+      const result = <span class="cstat-no" title="statement not covered" >await originalHandler(args);</span>
+      const warning = <span class="cstat-no" title="statement not covered" >createDeprecationWarning(deprecationInfo);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (result.content &amp;&amp; result.content[0]) {</span>
+<span class="cstat-no" title="statement not covered" >        result.content[0].text = warning + result.content[0].text;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return result;</span>
+    }
+  };
+}
+&nbsp;
+export function createPrefixedTool&lt;T extends GenericToolDefinition&gt;(tool: T): T {
+  return {
+    ...tool,
+    name: `ultrapower:${tool.name}`
+  };
+}
+&nbsp;
+export function registerToolWithBothNames&lt;T extends GenericToolDefinition&gt;(tool: T): T[] {
+  const prefixedTool = createPrefixedTool(tool);
+  const deprecatedTool = wrapWithDeprecation(tool);
+  return [prefixedTool, deprecatedTool];
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-14T08:37:45.252Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

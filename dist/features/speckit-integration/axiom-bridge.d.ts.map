@@ -1,1 +1,1 @@
-{"version":3,"file":"axiom-bridge.d.ts","sourceRoot":"","sources":["../../../src/features/speckit-integration/axiom-bridge.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAIH;;GAEG;AACH,wBAAgB,uBAAuB,CAAC,WAAW,EAAE,MAAM,GAAG,OAAO,CAGpE;AAED;;GAEG;AACH,eAAO,MAAM,qBAAqB;;;;;CAKxB,CAAC"}
+{"version":3,"file":"axiom-bridge.d.ts","sourceRoot":"","sources":["../../../src/features/speckit-integration/axiom-bridge.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAGH;;GAEG;AACH,wBAAgB,uBAAuB,CAAC,WAAW,EAAE,MAAM,GAAG,OAAO,CAGpE;AAED;;GAEG;AACH,eAAO,MAAM,qBAAqB;;;;;CAKxB,CAAC"}

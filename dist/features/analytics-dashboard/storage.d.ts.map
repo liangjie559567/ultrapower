@@ -1,0 +1,1 @@
+{"version":3,"file":"storage.d.ts","sourceRoot":"","sources":["../../../src/features/analytics-dashboard/storage.ts"],"names":[],"mappings":"AAGA,qBAAa,cAAc;IACzB,OAAO,CAAC,MAAM,CAAC,OAAO;IAMtB,MAAM,CAAC,IAAI,CAAC,IAAI,EAAE,GAAG,EAAE,GAAG,EAAE,MAAM,GAAG,IAAI;IAIzC,MAAM,CAAC,IAAI,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG;CAK9B"}

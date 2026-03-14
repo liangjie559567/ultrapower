@@ -37,6 +37,7 @@ export async function createWorkerAdapter(type, cwd, options = {}) {
             const success = await adapter.init();
             if (success)
                 return wrapWithCache(adapter, options);
+            return null;
         }
         return null;
     }
