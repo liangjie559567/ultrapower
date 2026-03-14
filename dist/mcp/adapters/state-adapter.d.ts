@@ -31,7 +31,7 @@ export declare const stateTools: ({
         required: string[];
     };
     handler: (args: {
-        mode: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan";
+        mode: "ultrawork" | "autopilot" | "ralph" | "ultrapilot" | "ultraqa" | "team" | "pipeline" | "swarm" | "ralplan";
         workingDirectory?: string | undefined;
         session_id?: string | undefined;
     }) => Promise<{
@@ -104,12 +104,12 @@ export declare const stateTools: ({
         required: string[];
     };
     handler: (args: {
-        mode: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan";
+        mode: "ultrawork" | "autopilot" | "ralph" | "ultrapilot" | "ultraqa" | "team" | "pipeline" | "swarm" | "ralplan";
         error?: string | undefined;
         state?: Record<string, unknown> | undefined;
+        active?: boolean | undefined;
         workingDirectory?: string | undefined;
         session_id?: string | undefined;
-        active?: boolean | undefined;
         iteration?: number | undefined;
         max_iterations?: number | undefined;
         current_phase?: string | undefined;
@@ -195,7 +195,7 @@ export declare const stateTools: ({
         required?: undefined;
     };
     handler: (args: {
-        mode?: "autopilot" | "ultrapilot" | "swarm" | "pipeline" | "team" | "ralph" | "ultrawork" | "ultraqa" | "ralplan" | undefined;
+        mode?: "ultrawork" | "autopilot" | "ralph" | "ultrapilot" | "ultraqa" | "team" | "pipeline" | "swarm" | "ralplan" | undefined;
         workingDirectory?: string | undefined;
         session_id?: string | undefined;
     }) => Promise<{
