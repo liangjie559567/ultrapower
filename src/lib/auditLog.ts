@@ -13,7 +13,7 @@ export interface SecurityEvent {
   timestamp: string;
   event: SecurityEventType;
   severity: Severity;
-  details: any;
+  details: Record<string, unknown>;
   sessionId?: string;
 }
 

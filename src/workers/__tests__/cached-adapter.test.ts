@@ -5,7 +5,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { CachedWorkerAdapter } from '../cached-adapter.js';
 import type { WorkerStateAdapter } from '../adapter.js';
-import type { WorkerState, HealthStatus } from '../types.js';
+import type { WorkerState } from '../types.js';
 
 describe('CachedWorkerAdapter', () => {
   let mockAdapter: WorkerStateAdapter;

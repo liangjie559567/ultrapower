@@ -5,7 +5,7 @@
  * - Resource usage monitoring
  */
 
-import { ResourceGuard, ResourceConfig } from './resource-guard.js';
+import { ResourceGuard } from './resource-guard.js';
 import { ConcurrencyControl } from './concurrency-control.js';
 
 export interface ResourceQuota {

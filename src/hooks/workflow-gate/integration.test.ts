@@ -8,7 +8,6 @@ import {
   processWorkflowGate,
   initWorkflowState,
   writeWorkflowState,
-  clearWorkflowState,
   type WorkflowGateInput
 } from './index.js';
 

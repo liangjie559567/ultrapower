@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ModelFallback, type ModelTier } from '../model-fallback.js';
+import { ModelFallback } from '../model-fallback.js';
 
 describe('ModelFallback', () => {
   it('should succeed with initial model', async () => {
@@ -13,10 +13,10 @@ describe('ModelFallback', () => {
 
   it('should fallback to next model on failure', async () => {
     const mf = new ModelFallback({ initialModel: 'opus' });
-    let attempts = 0;
+    let _attempts = 0;
 
     const result = await mf.execute(async (model) => {
-      attempts++;
+      _attempts++;
       if (model === 'opus') throw new Error('opus fail');
       return `success-${model}`;
     });

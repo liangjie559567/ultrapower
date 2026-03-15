@@ -25,7 +25,7 @@ import {
   formatWorkspaceEdit,
   countEdits
 } from './lsp/index.js';
-import { runDirectoryDiagnostics, LSP_DIAGNOSTICS_WAIT_MS } from './diagnostics/index.js';
+import { runDirectoryDiagnostics } from './diagnostics/index.js';
 import { ToolDefinition } from './types.js';
 
 /**

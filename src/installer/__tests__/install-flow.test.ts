@@ -4,8 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { existsSync, readFileSync } from 'fs';
-import { install, checkNodeVersion, isClaudeInstalled, isInstalled, getInstallInfo, CLAUDE_CONFIG_DIR } from '../index.js';
+import { install, checkNodeVersion, isClaudeInstalled, isInstalled, getInstallInfo } from '../index.js';
 
 describe('checkNodeVersion', () => {
   it('returns valid true when Node version meets requirement', () => {

@@ -1,4 +1,5 @@
 import { logSkip } from './audit-logger.js';
+import { readFileSync } from 'fs';
 
 export interface QualityCheckResult {
   passed: boolean;
@@ -23,7 +24,7 @@ export async function runQualityGate(
   for (const file of files) {
     if (!file.endsWith('ts.js') && !file.endsWith('js.js')) continue;
 
-    const content = require('fs').readFileSync(file, 'utf8');
+    const content = readFileSync(file, 'utf8');
 
     // 检查未实现的函数
     if (content.includes('TODO') || content.includes('FIXME')) {

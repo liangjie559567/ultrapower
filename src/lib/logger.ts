@@ -6,7 +6,7 @@ const LOG_PATH = '.omc/logs/security-audit.jsonl';
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 const SENSITIVE_FIELDS = ['token', 'apiKey', 'password', 'secret', 'accessToken', 'refreshToken', 'privateKey'];
 
-function sanitize(data: any): any {
+function sanitize(data: unknown): unknown {
   if (!data || typeof data !== 'object') return data;
   const sanitized = Array.isArray(data) ? [...data] : { ...data };
   for (const key in sanitized) {
@@ -32,7 +32,7 @@ function rotate(logPath: string): void {
   renameSync(logPath, `${logPath}.1`);
 }
 
-export function security(event: string, data: any): void {
+export function security(event: string, data: unknown): void {
   const logPath = join(process.cwd(), LOG_PATH);
   ensureDirSync(join(process.cwd(), '.omc/logs'));
   rotate(logPath);

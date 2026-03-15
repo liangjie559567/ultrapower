@@ -2,8 +2,7 @@
  * Python REPL Paths Tests
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import * as os from 'os';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as path from 'path';
 import {
   getRuntimeDir,

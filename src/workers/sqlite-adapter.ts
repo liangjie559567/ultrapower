@@ -8,6 +8,7 @@ import type { WorkerState, WorkerFilter, HealthStatus, WorkerStatus } from './ty
 import type { WorkerStateAdapter } from './adapter.js';
 
 type Database = import('better-sqlite3').Database;
+type DatabaseConstructor = new (filename: string) => Database;
 
 export class SqliteWorkerAdapter implements WorkerStateAdapter {
   private db: Database | null = null;
@@ -27,7 +28,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
       }
 
       const dbPath = join(stateDir, 'workers.db');
-      this.db = new (DatabaseConstructor as any)(dbPath) as Database;
+      this.db = new (DatabaseConstructor as DatabaseConstructor)(dbPath) as Database;
       if (this.db) {
         this.db.pragma('journal_mode = WAL');
         this.db.exec(`

@@ -107,7 +107,7 @@ describe('State Migration', () => {
     const validState = { active: true, mode: 'ralph', iteration: 1 };
     writeFileSync(join(stateDir, 'ralph-state.json'), JSON.stringify(validState));
 
-    const backup = backupBeforeMigration('ralph', TEST_DIR);
+    const _backup = backupBeforeMigration('ralph', TEST_DIR);
 
     writeFileSync(join(stateDir, 'ralph-state.json'), JSON.stringify({ active: 'invalid' }));
 

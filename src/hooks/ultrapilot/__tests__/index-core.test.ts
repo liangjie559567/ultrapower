@@ -1,6 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { existsSync } from 'fs';
-import { join } from 'path';
 import {
   startUltrapilot,
   decomposeTask,
@@ -13,8 +11,7 @@ import {
   assignFileToWorker,
   DEFAULT_CONFIG
 } from '../index.js';
-import { initUltrapilot, addWorker, completeWorker, failWorker } from '../state.js';
-import type { WorkerState } from '../types.js';
+import { initUltrapilot, addWorker } from '../state.js';
 import * as fs from 'fs';
 import * as path from 'path';
 

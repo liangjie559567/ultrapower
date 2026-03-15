@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { runTscDiagnostics } from '../tsc-runner.js';
 import * as fs from 'fs';
 import * as child_process from 'child_process';

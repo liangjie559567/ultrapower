@@ -907,7 +907,7 @@ export function install(options: InstallOptions = {}): InstallResult {
             }
           }
         }
-      } catch (e) {
+      } catch (_e) {
         log('Warning: Could not sync marketplace version (non-fatal)');
       }
     }

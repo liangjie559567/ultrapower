@@ -19,12 +19,12 @@ import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
 import { readLastToolError, getToolErrorRetryGuidance, type ToolErrorState } from './tool-error.js';
 
 // Lazy imports via event bus
-let ultraworkModule: any;
-let ralphModule: any;
-let todoModule: any;
-let autopilotModule: any;
-let autopilotEnforcementModule: any;
-let teamPipelineModule: any;
+let ultraworkModule: typeof import('../ultrawork/index.js') | undefined;
+let ralphModule: typeof import('../ralph/index.js') | undefined;
+let todoModule: typeof import('../todo-continuation/index.js') | undefined;
+let autopilotModule: typeof import('../autopilot/index.js') | undefined;
+let autopilotEnforcementModule: typeof import('../autopilot/enforcement.js') | undefined;
+let teamPipelineModule: typeof import('../team-pipeline/index.js') | undefined;
 
 async function loadUltrawork() {
   if (!ultraworkModule) ultraworkModule = await import('../ultrawork/index.js');

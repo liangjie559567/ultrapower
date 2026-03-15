@@ -84,6 +84,16 @@ export function withFileLockSync(filePath, fn, maxRetries = 20) {
         }
         catch (err) {
             const nodeErr = err;
+            if (nodeErr.code === 'EPERM') {
+                // Windows: lock directory exists but can't be accessed, treat as stale
+                try {
+                    fs.rmSync(lockPath, { recursive: true, force: true });
+                }
+                catch {
+                    // Ignore cleanup errors, will retry on next attempt
+                }
+                continue;
+            }
             if (nodeErr.code === 'EEXIST') {
                 let meta = null;
                 try {
@@ -129,7 +139,7 @@ export function withFileLockSync(filePath, fn, maxRetries = 20) {
         }
         catch (err) {
             const nodeErr = err;
-            if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
+            if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
                 console.warn(`Failed to remove lock: ${nodeErr.message}`);
             }
         }
@@ -165,6 +175,11 @@ export async function withFileLock(filePath, fn, maxRetries = 20, _retryDelay = 
         }
         catch (err) {
             const nodeErr = err;
+            if (nodeErr.code === 'EPERM') {
+                // Windows: lock directory exists but can't be accessed, treat as stale
+                await fs.promises.rm(lockPath, { recursive: true, force: true }).catch(() => { });
+                continue;
+            }
             if (nodeErr.code === 'EEXIST') {
                 let meta = null;
                 try {
@@ -206,8 +221,8 @@ export async function withFileLock(filePath, fn, maxRetries = 20, _retryDelay = 
     finally {
         await fs.promises.rm(lockPath, { recursive: true, force: true }).catch((err) => {
             const nodeErr = err;
-            // Ignore ENOENT (already deleted) and ENOTEMPTY (Windows race condition)
-            if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
+            // Ignore ENOENT (already deleted), ENOTEMPTY (Windows race condition), and EPERM (Windows file locking)
+            if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
                 throw err;
             }
         });
