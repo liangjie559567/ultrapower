@@ -1,5 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getAllKeywords, getPrimaryKeyword } from '../../src/hooks/keyword-detector/index';
+
+vi.mock('../../src/features/auto-update', () => ({
+  isTeamEnabled: () => true
+}));
 
 describe('BUG-005 关键词冲突', () => {
   it('should prioritize cancel over all other keywords', () => {
