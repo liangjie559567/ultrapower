@@ -795,6 +795,38 @@ export function install(options = {}) {
         else {
             log('Skipping version metadata (project-scoped plugin)');
         }
+        // Sync version to marketplace directory (skip for project-scoped plugins)
+        if (!projectScoped) {
+            try {
+                const marketplaceDir = join(CLAUDE_CONFIG_DIR, 'plugins/marketplaces/omc');
+                if (existsSync(marketplaceDir)) {
+                    const currentVersion = options.version ?? VERSION;
+                    // Update package.json
+                    const pkgPath = join(marketplaceDir, 'package.json');
+                    if (existsSync(pkgPath)) {
+                        const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+                        if (pkg.version !== currentVersion) {
+                            pkg.version = currentVersion;
+                            atomicWriteJsonSync(pkgPath, pkg);
+                            log(`Synced marketplace package.json to v${currentVersion}`);
+                        }
+                    }
+                    // Update .claude-plugin/plugin.json
+                    const pluginJsonPath = join(marketplaceDir, '.claude-plugin/plugin.json');
+                    if (existsSync(pluginJsonPath)) {
+                        const pluginJson = JSON.parse(readFileSync(pluginJsonPath, 'utf-8'));
+                        if (pluginJson.version !== currentVersion) {
+                            pluginJson.version = currentVersion;
+                            atomicWriteJsonSync(pluginJsonPath, pluginJson);
+                            log(`Synced marketplace plugin.json to v${currentVersion}`);
+                        }
+                    }
+                }
+            }
+            catch (e) {
+                log('Warning: Could not sync marketplace version (non-fatal)');
+            }
+        }
         result.success = true;
         const hookCount = Object.keys(getHookScripts()).length;
         result.message = `Successfully installed ${result.installedAgents.length} agents, ${result.installedCommands.length} commands, ${result.installedSkills.length} skills, and ${hookCount} hooks`;
