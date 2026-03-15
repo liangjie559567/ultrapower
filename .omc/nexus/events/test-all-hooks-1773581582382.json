@@ -1,0 +1,24 @@
+{
+  "sessionId": "test-all-hooks",
+  "timestamp": "2026-03-15T13:33:02.381Z",
+  "directory": "C:/Users/ljyih/Desktop/ultrapower",
+  "toolCalls": [
+    {
+      "toolName": "Bash",
+      "timestamp": 1773581581859
+    },
+    {
+      "toolName": "AskUserQuestion",
+      "timestamp": 1773581531942
+    },
+    {
+      "toolName": "Read",
+      "timestamp": 1773581529825
+    }
+  ],
+  "agentsSpawned": 0,
+  "agentsCompleted": 0,
+  "modesUsed": [],
+  "skillsInjected": [],
+  "patternsSeen": []
+}
