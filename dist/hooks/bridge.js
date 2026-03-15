@@ -92,12 +92,18 @@ export async function main() {
         chunks.push(chunk);
     }
     const inputStr = Buffer.concat(chunks).toString("utf-8");
+    // Validate empty input
+    if (!inputStr || inputStr.trim() === '') {
+        console.error('[hook-bridge] Hook input is empty');
+        process.exit(1);
+    }
     let input = {};
     try {
         input = JSON.parse(inputStr);
     }
     catch (err) {
-        console.error('[hook-bridge] Invalid JSON input:', err);
+        console.error('[hook-bridge] Invalid JSON input:', err.message);
+        process.exit(1);
     }
     const output = await processHook(hookType, input);
     console.log(JSON.stringify(output));

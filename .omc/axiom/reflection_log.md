@@ -1,3 +1,4 @@
-# Reflection Log
+# Axiom Reflection Log
 
-## Sessions
+## 反思记录
+（暂无反思记录）
