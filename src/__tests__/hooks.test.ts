@@ -1455,7 +1455,7 @@ describe('Mutual Exclusion - UltraQA and Ralph', () => {
   });
 
   describe('Ralph mutual exclusion', () => {
-    it('should fail to start Ralph when UltraQA is active', () => {
+    it('should fail to start Ralph when UltraQA is active', async () => {
       // Activate UltraQA first - write to session-scoped path since startLoop
       // passes sessionId which makes isUltraQAActive check session path only
       const sessionDir = join(testDir, '.omc', 'state', 'sessions', 'test-session');
@@ -1465,14 +1465,14 @@ describe('Mutual Exclusion - UltraQA and Ralph', () => {
 
       // Try to start Ralph
       const hook = createRalphLoopHook(testDir);
-      const result = hook.startLoop('test-session', 'test prompt');
+      const result = await hook.startLoop('test-session', 'test prompt');
 
       expect(result).toBe(false);
     });
 
-    it('should succeed starting Ralph when UltraQA is not active', () => {
+    it('should succeed starting Ralph when UltraQA is not active', async () => {
       const hook = createRalphLoopHook(testDir);
-      const result = hook.startLoop('test-session', 'test prompt');
+      const result = await hook.startLoop('test-session', 'test prompt');
 
       expect(result).toBe(true);
 
@@ -1480,12 +1480,12 @@ describe('Mutual Exclusion - UltraQA and Ralph', () => {
       clearRalphState(testDir);
     });
 
-    it('should succeed starting Ralph when ultraqa state exists but inactive', () => {
+    it('should succeed starting Ralph when ultraqa state exists but inactive', async () => {
       const ultraqaStateFile = join(testDir, '.omc', 'state', 'ultraqa-state.json');
       writeFileSync(ultraqaStateFile, JSON.stringify({ active: false }));
 
       const hook = createRalphLoopHook(testDir);
-      const result = hook.startLoop('test-session', 'test prompt');
+      const result = await hook.startLoop('test-session', 'test prompt');
 
       expect(result).toBe(true);
 
