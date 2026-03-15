@@ -37,8 +37,8 @@ describe('BUG-004 状态文件泄漏', () => {
     const staleFile = join(staleSession, 'autopilot-state.json');
     writeFileSync(staleFile, JSON.stringify({ active: false }));
 
-    // Set maxAge to 0 to treat all files as stale
-    const removed = clearStaleSessionDirs(testDir, 0);
+    // Set maxAge to -1 to ensure all files are treated as stale
+    const removed = clearStaleSessionDirs(testDir, -1);
     expect(removed.length).toBeGreaterThan(0);
     expect(existsSync(staleSession)).toBe(false);
   });
