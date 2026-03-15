@@ -28,10 +28,20 @@ describe('acquireLock', () => {
 
   afterEach(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
-    try {
-      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 });
-    } catch (_err) {
-      // Ignore cleanup errors on Windows
+    if (fs.existsSync(tmpDir)) {
+      try {
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      } catch (err) {
+        const error = err as NodeJS.ErrnoException;
+        if (error.code === 'EPERM' || error.code === 'EBUSY') {
+          await new Promise(resolve => setTimeout(resolve, 300));
+          try {
+            fs.rmSync(tmpDir, { recursive: true, force: true });
+          } catch {
+            // Ignore final cleanup errors on Windows
+          }
+        }
+      }
     }
   });
 
@@ -218,10 +228,20 @@ describe('withFileLock', () => {
 
   afterEach(async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
-    try {
-      fs.rmSync(tmpDir, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 });
-    } catch (_err) {
-      // Ignore cleanup errors on Windows
+    if (fs.existsSync(tmpDir)) {
+      try {
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      } catch (err) {
+        const error = err as NodeJS.ErrnoException;
+        if (error.code === 'EPERM' || error.code === 'EBUSY') {
+          await new Promise(resolve => setTimeout(resolve, 300));
+          try {
+            fs.rmSync(tmpDir, { recursive: true, force: true });
+          } catch {
+            // Ignore final cleanup errors on Windows
+          }
+        }
+      }
     }
   });
 
