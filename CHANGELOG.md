@@ -1,5 +1,13 @@
 # ultrapower v7.0.1
 
+## 7.4.1
+
+### Patch Changes
+
+- fix(upgrade): Replace Unix rm command with cross-platform rmSync for Windows compatibility
+  - Fix `omc update` failure on Windows due to 'rm' command not found
+  - Use Node.js native rmSync API instead of shell command
+
 ## 7.4.0
 
 ### Minor Changes
