@@ -1,4 +1,4 @@
-<!-- ultrapower v7.5.1 | updated: 2026-03-02 -->
+<!-- ultrapower v7.5.2 | updated: 2026-03-02 -->
 
 # ultrapower Reference — v5.5.33
 
