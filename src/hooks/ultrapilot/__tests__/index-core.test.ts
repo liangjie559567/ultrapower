@@ -24,9 +24,23 @@ describe('ultrapilot index', () => {
     }
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    // Wait for any pending file locks to be released
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     if (fs.existsSync(testDir)) {
-      fs.rmSync(testDir, { recursive: true, force: true });
+      try {
+        fs.rmSync(testDir, { recursive: true, force: true });
+      } catch (err) {
+        // Retry once on Windows EBUSY
+        const error = err as NodeJS.ErrnoException;
+        if (error.code === 'EBUSY') {
+          await new Promise(resolve => setTimeout(resolve, 200));
+          fs.rmSync(testDir, { recursive: true, force: true });
+        } else {
+          throw err;
+        }
+      }
     }
   });
 
