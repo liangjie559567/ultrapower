@@ -48,6 +48,11 @@
   - ReDoS protection: 10K-50K chars, <100ms
   - Memory leak detection: <1MB growth
 
+- fix(test): CI stability improvements
+  - Fix bridge test: use maxAge=-1 for stale detection
+  - Fix keyword-conflicts test: mock isTeamEnabled() for CI environment
+  - Add assertValidMode() 256-char truncation for DoS protection
+
 ## 7.4.1
 
 ### Patch Changes

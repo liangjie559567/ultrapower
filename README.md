@@ -230,6 +230,17 @@ graph LR
 * **team-verify**：`verifier` + 按需审查 agents
 * **team-fix**：根据缺陷类型路由到 `executor`/`build-fixer`/`debugger`
 
+**配置要求**：Team 模式需要在 `~/.claude/settings.json` 中启用：
+```json
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}
+```
+
+运行 `/ultrapower:omc-setup` 会自动配置此项。
+
 ### MCP 路由
 
 对只读分析任务优先使用 MCP 工具（更快更经济）：
