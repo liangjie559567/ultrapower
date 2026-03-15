@@ -40,7 +40,10 @@ export async function performUpgrade(): Promise<UpgradeResult> {
   } else if (method === 'local') {
     console.log('🔨 Rebuilding local installation...');
     const cwd = process.cwd();
-    execSync('rm -f .tsbuildinfo', { cwd, stdio: 'pipe' });
+    const tsbuildinfo = join(cwd, '.tsbuildinfo');
+    if (existsSync(tsbuildinfo)) {
+      rmSync(tsbuildinfo, { force: true });
+    }
     execSync('npm run build', { cwd, stdio: 'inherit' });
     execSync('npm install -g .', { cwd, stdio: 'inherit' });
     installPath = cwd;
