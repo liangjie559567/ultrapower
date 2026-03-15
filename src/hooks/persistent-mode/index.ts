@@ -52,7 +52,7 @@ async function loadAutopilotEnforcement() {
 }
 
 async function loadTeamPipeline() {
-  if (!teamPipelineModule) teamPipelineModule = await import('../team-pipeline/state.js');
+  if (!teamPipelineModule) teamPipelineModule = await import('../team-pipeline/index.js');
   return teamPipelineModule;
 }
 
@@ -201,7 +201,7 @@ async function checkRalphLoop(
   // When team mode is active alongside ralph, respect team phase transitions
   const team = await loadTeamPipeline();
   const teamState = team.readTeamPipelineState(workingDir, sessionId);
-  if (teamState && teamState.active !== undefined) {
+  if (teamState?.active !== undefined) {
     const teamPhase = teamState.phase;
 
     // If team pipeline reached a terminal state, ralph should also complete

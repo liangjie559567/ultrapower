@@ -5,6 +5,10 @@
 
 import type { SubagentStartInput, SubagentStopInput } from "./subagent-tracker/index.js";
 import type { PermissionRequestInput } from "./permission-handler/index.js";
+import type { SessionEndInput } from "./session-end/index.js";
+import type { PreCompactInput } from "./pre-compact/index.js";
+import type { SetupInput } from "./setup/index.js";
+import type { WorkflowGateInput } from "./workflow-gate/index.js";
 
 export function toSubagentStartInput(normalized: Record<string, unknown>): SubagentStartInput {
   return {
@@ -44,5 +48,47 @@ export function toPermissionRequestInput(normalized: Record<string, unknown>): P
     transcript_path: (normalized.transcriptPath ?? normalized.transcript_path) as string,
     permission_mode: (normalized.permissionMode ?? normalized.permission_mode) as string,
     hook_event_name: 'PermissionRequest',
+  };
+}
+
+export function toSessionEndInput(normalized: Record<string, unknown>): SessionEndInput {
+  return {
+    session_id: (normalized.sessionId ?? normalized.session_id) as string,
+    transcript_path: (normalized.transcriptPath ?? normalized.transcript_path) as string,
+    cwd: (normalized.directory ?? normalized.cwd) as string,
+    permission_mode: (normalized.permissionMode ?? normalized.permission_mode) as string,
+    hook_event_name: 'SessionEnd',
+    reason: (normalized.reason as 'clear' | 'logout' | 'prompt_input_exit' | 'other') ?? 'other',
+  };
+}
+
+export function toPreCompactInput(normalized: Record<string, unknown>): PreCompactInput {
+  return {
+    session_id: (normalized.sessionId ?? normalized.session_id) as string,
+    transcript_path: (normalized.transcriptPath ?? normalized.transcript_path) as string,
+    cwd: (normalized.directory ?? normalized.cwd) as string,
+    permission_mode: (normalized.permissionMode ?? normalized.permission_mode) as string,
+    hook_event_name: 'PreCompact',
+    trigger: (normalized.trigger as 'manual' | 'auto') ?? 'auto',
+    custom_instructions: normalized.custom_instructions as string | undefined,
+  };
+}
+
+export function toSetupInput(normalized: Record<string, unknown>): SetupInput {
+  return {
+    session_id: (normalized.sessionId ?? normalized.session_id) as string,
+    transcript_path: (normalized.transcriptPath ?? normalized.transcript_path) as string,
+    cwd: (normalized.directory ?? normalized.cwd) as string,
+    permission_mode: (normalized.permissionMode ?? normalized.permission_mode) as string,
+    hook_event_name: 'Setup',
+    trigger: normalized.trigger as 'init' | 'maintenance',
+  };
+}
+
+export function toWorkflowGateInput(normalized: Record<string, unknown>): WorkflowGateInput {
+  return {
+    type: 'UserPromptSubmit',
+    prompt: normalized.prompt as string,
+    workingDirectory: (normalized.workingDirectory ?? normalized.cwd) as string,
   };
 }

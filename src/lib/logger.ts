@@ -8,7 +8,10 @@ const SENSITIVE_FIELDS = ['token', 'apiKey', 'password', 'secret', 'accessToken'
 
 function sanitize(data: unknown): unknown {
   if (!data || typeof data !== 'object') return data;
-  const sanitized = Array.isArray(data) ? [...data] : { ...data };
+  if (Array.isArray(data)) {
+    return data.map(item => sanitize(item));
+  }
+  const sanitized: Record<string, unknown> = { ...data as Record<string, unknown> };
   for (const key in sanitized) {
     if (SENSITIVE_FIELDS.some(field => key.toLowerCase().includes(field))) {
       sanitized[key] = '[REDACTED]';
