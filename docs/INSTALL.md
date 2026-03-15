@@ -1,6 +1,6 @@
 # ultrapower 安装部署详细教程
 
-ultrapower v7.4.2 完整安装指南，覆盖从零开始到完全配置的所有步骤。
+ultrapower v7.5.0 完整安装指南，覆盖从零开始到完全配置的所有步骤。
 
 ---
 
@@ -102,7 +102,7 @@ git --version
 
 **预期输出：**
 ```
-✓ Installing ultrapower v7.4.2...
+✓ Installing ultrapower v7.5.0...
 ✓ Hooks registered: 39
 ✓ Agents loaded: 49
 ✓ Skills available: 71
