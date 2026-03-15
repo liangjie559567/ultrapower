@@ -119,9 +119,9 @@ describe('Ralph Loop', () => {
   });
 
   describe('Hook Interface', () => {
-    it('starts loop successfully', () => {
+    it('starts loop successfully', async () => {
       const hook = createRalphLoopHook(TEST_DIR);
-      const started = hook.startLoop('test-session', 'test task');
+      const started = await hook.startLoop('test-session', 'test task');
 
       expect(started).toBe(true);
 
@@ -130,7 +130,7 @@ describe('Ralph Loop', () => {
       expect(state?.prompt).toBe('test task');
     });
 
-    it('prevents start when UltraQA active', () => {
+    it('prevents start when UltraQA active', async () => {
       // Create fake ultraqa state with session
       const sessionDir = join(TEST_DIR, '.omc', 'state', 'sessions', 'test-session');
       mkdirSync(sessionDir, { recursive: true });
@@ -138,14 +138,14 @@ describe('Ralph Loop', () => {
       require('fs').writeFileSync(ultraqaPath, JSON.stringify({ active: true }));
 
       const hook = createRalphLoopHook(TEST_DIR);
-      const started = hook.startLoop('test-session', 'test task');
+      const started = await hook.startLoop('test-session', 'test task');
 
       expect(started).toBe(false);
     });
 
-    it('cancels loop and clears state', () => {
+    it('cancels loop and clears state', async () => {
       const hook = createRalphLoopHook(TEST_DIR);
-      hook.startLoop('test-session', 'test task');
+      await hook.startLoop('test-session', 'test task');
 
       const cancelled = hook.cancelLoop('test-session');
       expect(cancelled).toBe(true);
