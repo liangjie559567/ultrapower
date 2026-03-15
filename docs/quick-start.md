@@ -165,5 +165,5 @@ omc trace timeline
 
 **需要帮助？**
 
-- GitHub Issues: https://github.com/liangjie559567/ultrapower/issues
+- GitHub Issues: <https://github.com/liangjie559567/ultrapower>/issues
 - 文档: https://github.com/liangjie559567/ultrapower/tree/main/docs

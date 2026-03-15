@@ -130,7 +130,7 @@ npm audit signatures
 ```
 
 **查看 provenance：**
-访问 https://www.npmjs.com/package/@liangjie559567/ultrapower
+访问 <https://www.npmjs.com/package/@liangjie559567/ultrapower>
 查看验证徽章
 
 ### GitHub Actions 缓存
