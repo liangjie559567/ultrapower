@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import {
   startUltrapilot,
   decomposeTask,
@@ -131,7 +133,12 @@ describe('ultrapilot index', () => {
       });
 
       // Small delay to ensure file system sync in CI
-      await new Promise(resolve => setTimeout(resolve, 100));
+      const stateFile = join(testDir, '.omc', 'state', 'ultrapilot-state.json');
+      let retries = 0;
+      while (!existsSync(stateFile) && retries < 10) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        retries++;
+      }
 
       const progress = await trackProgress(testDir);
       expect(progress.completed).toBe(1);
