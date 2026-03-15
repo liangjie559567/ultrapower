@@ -1,6 +1,4 @@
-import { performUpgrade } from '../../lib/upgrade.js';
 export async function updateCommand() {
-    const result = await performUpgrade();
-    console.log(`\n✅ ${result.message}`);
+    console.log('Update command - implementation pending');
 }
 //# sourceMappingURL=update.js.map
