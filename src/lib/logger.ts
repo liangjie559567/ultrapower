@@ -1,4 +1,5 @@
-import { appendFileSync, existsSync, statSync, renameSync } from 'fs';
+import { appendFileSync, existsSync, statSync } from 'fs';
+import { renameSyncWithRetry } from './fs-utils.js';
 import { ensureDirSync } from './atomic-write.js';
 import { join } from 'path';
 
@@ -30,9 +31,9 @@ function rotate(logPath: string): void {
   for (let i = 6; i >= 1; i--) {
     const old = `${logPath}.${i}`;
     const next = `${logPath}.${i + 1}`;
-    if (existsSync(old)) renameSync(old, next);
+    if (existsSync(old)) renameSyncWithRetry(old, next);
   }
-  renameSync(logPath, `${logPath}.1`);
+  renameSyncWithRetry(logPath, `${logPath}.1`);
 }
 
 export function security(event: string, data: unknown): void {
