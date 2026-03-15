@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getAllKeywords } from '../../src/hooks/keyword-detector/index';
+import { resolveConflict } from '../../dist/hooks/keyword-detector/conflict-resolver.js';
 
 describe('BUG-005 关键词冲突解决', () => {
   describe('关键词检测基础功能', () => {
@@ -19,13 +20,19 @@ describe('BUG-005 关键词冲突解决', () => {
     });
   });
 
-  describe('冲突提示准备', () => {
-    it.skip('should resolve ralph + ultrawork (ralph wins) - pending T10', () => {
-      // T10 未实现，跳过此测试
+  describe('冲突解决', () => {
+    it('should resolve ralph + ultrawork (ralph wins)', () => {
+      const result = resolveConflict(['ralph', 'ultrawork']);
+      expect(result.hasConflict).toBe(true);
+      expect(result.winner).toBe('ralph');
+      expect(result.loser).toBe('ultrawork');
     });
 
-    it.skip('should resolve autopilot + ultrapilot - pending T10', () => {
-      // T10 未实现，跳过此测试
+    it('should resolve autopilot + ultrapilot (ultrapilot wins)', () => {
+      const result = resolveConflict(['autopilot', 'ultrapilot']);
+      expect(result.hasConflict).toBe(true);
+      expect(result.winner).toBe('ultrapilot');
+      expect(result.loser).toBe('autopilot');
     });
   });
 });
