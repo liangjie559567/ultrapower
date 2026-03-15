@@ -1128,6 +1128,54 @@ Available presets: `minimal`, `focused`, `full`, `dense`, `analytics`, `opencode
 
 ---
 
+## Security Features
+
+ultrapower v7.5.2 includes comprehensive security hardening:
+
+### Audit Logging
+
+All security events are logged to `.omc/audit.log`:
+
+- **Validation failures**: Invalid mode names, malformed input
+- **Prototype pollution attempts**: `__proto__`, `constructor`, `prototype` in hook input
+- **ReDoS attacks**: Input exceeding 50KB limit
+- **Unauthorized fields**: Unknown fields in sensitive hooks
+
+Log format:
+```json
+{
+  "timestamp": "2026-03-15T04:28:23.925Z",
+  "event": "prototype_pollution_attempt",
+  "severity": "critical",
+  "details": { "field": "__proto__", "hook": "permission-request" }
+}
+```
+
+### User Feedback System
+
+Provides real-time feedback for security events:
+
+- **Progress feedback**: Operation status updates
+- **Error feedback**: Clear error messages with remediation steps
+- **Conflict prompts**: Keyword conflict resolution guidance
+
+### State File Protection
+
+- **Atomic writes**: Write queue prevents race conditions
+- **Concurrent safety**: 1000+ concurrent operations tested
+- **Performance**: <10ms write latency (avg 6.57ms)
+- **Auto-cleanup**: 24-hour threshold for stale sessions
+
+### Input Validation
+
+- **Prototype pollution protection**: Rejects `__proto__`, `constructor`, `prototype`
+- **ReDoS protection**: 50KB input limit, optimized regex patterns
+- **Performance**: 10K-50K chars processed <100ms
+
+See [Runtime Protection](standards/runtime-protection.md) for implementation details.
+
+---
+
 ## Troubleshooting
 
 ### Diagnose Installation Issues

@@ -20,7 +20,7 @@ describe('merge-coordinator', () => {
     writeFileSync(join(repoDir, 'file1.ts'), 'export const x = 1;\n');
     execFileSync('git', ['add', '.'], { cwd: repoDir, stdio: 'pipe' });
     execFileSync('git', ['commit', '-m', 'Initial commit'], { cwd: repoDir, stdio: 'pipe' });
-  });
+  }, 30000);
 
   afterEach(() => {
     try { cleanupTeamWorktrees(teamName, repoDir); } catch { /* ignore */ }

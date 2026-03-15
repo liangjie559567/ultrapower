@@ -77,6 +77,18 @@ autopilot "创建一个 hello world 函数"
 
 遇到问题？查看 [故障排查指南](docs/TROUBLESHOOTING.md)
 
+### 安全加固
+
+ultrapower v7.5.2 包含全面的安全加固：
+
+- **状态文件保护**：原子写入 + 并发队列，防止竞态条件
+- **输入验证**：原型污染防护，拒绝 `__proto__`/`constructor`/`prototype`
+- **ReDoS 防护**：50KB 输入限制，优化正则表达式（无回溯）
+- **审计日志**：所有安全事件记录到 `.omc/audit.log`
+- **自动清理**：24 小时后清理陈旧会话状态
+
+详见 [安全文档](docs/standards/runtime-protection.md)
+
 ---
 
 ## 基础工作流

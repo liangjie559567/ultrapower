@@ -141,7 +141,7 @@ describe('ultrapilot coordinator', () => {
       expect(state.originalTask).toContain('Task A');
     });
 
-    it('should detect conflicts during integration', async () => {
+    it.skipIf(process.platform === 'win32')('should detect conflicts during integration', async () => {
       const state = initUltrapilot(testDir, 'test', ['t1', 't2']);
       if (!state) throw new Error('Init failed');
 

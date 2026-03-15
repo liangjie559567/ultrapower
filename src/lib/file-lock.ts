@@ -108,6 +108,15 @@ export function withFileLockSync<T>(
       break;
     } catch (err) {
       const nodeErr = err as NodeJS.ErrnoException;
+      if (nodeErr.code === 'EPERM') {
+        // Windows: lock directory exists but can't be accessed, treat as stale
+        try {
+          fs.rmSync(lockPath, { recursive: true, force: true });
+        } catch {
+          // Ignore cleanup errors, will retry on next attempt
+        }
+        continue;
+      }
       if (nodeErr.code === 'EEXIST') {
         let meta: LockMeta | null = null;
         try {
@@ -152,7 +161,7 @@ export function withFileLockSync<T>(
       fs.rmSync(lockPath, { recursive: true, force: true });
     } catch (err) {
       const nodeErr = err as NodeJS.ErrnoException;
-      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
+      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
         console.warn(`Failed to remove lock: ${nodeErr.message}`);
       }
     }
@@ -196,6 +205,11 @@ export async function withFileLock<T>(
       break; // Lock acquired
     } catch (err) {
       const nodeErr = err as NodeJS.ErrnoException;
+      if (nodeErr.code === 'EPERM') {
+        // Windows: lock directory exists but can't be accessed, treat as stale
+        await fs.promises.rm(lockPath, { recursive: true, force: true }).catch(() => {});
+        continue;
+      }
       if (nodeErr.code === 'EEXIST') {
         let meta: LockMeta | null = null;
         try {
@@ -237,8 +251,8 @@ export async function withFileLock<T>(
   } finally {
     await fs.promises.rm(lockPath, { recursive: true, force: true }).catch((err) => {
       const nodeErr = err as NodeJS.ErrnoException;
-      // Ignore ENOENT (already deleted) and ENOTEMPTY (Windows race condition)
-      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY') {
+      // Ignore ENOENT (already deleted), ENOTEMPTY (Windows race condition), and EPERM (Windows file locking)
+      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
         throw err;
       }
     });
