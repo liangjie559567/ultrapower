@@ -81,4 +81,4 @@ node scripts/release-local.mjs --dry-run
 
 - NPM 包页面: <https://www.npmjs.com/package/@liangjie559567/ultrapower>
 - GitHub Releases: <https://github.com/liangjie559567/ultrapower/releases>
-- 问题报告: https://github.com/liangjie559567/ultrapower/issues
+- 问题报告: <https://github.com/liangjie559567/ultrapower/issues>
