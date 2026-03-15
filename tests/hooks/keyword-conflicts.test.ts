@@ -9,8 +9,7 @@ describe('BUG-005 关键词冲突', () => {
 
   it('should prioritize team over autopilot', () => {
     const result = getAllKeywords('team autopilot');
-    expect(result).not.toContain('autopilot');
-    expect(result).toContain('team');
+    expect(result).toEqual(['team']);
   });
 
   it('should handle ralph + ultrawork combination', () => {
