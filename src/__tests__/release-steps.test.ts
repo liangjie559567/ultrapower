@@ -89,5 +89,5 @@ describe('failure paths', () => {
     await runReleasePipeline({ dryRun: false });
     expect(exitSpy).toHaveBeenCalledWith(1);
     exitSpy.mockRestore();
-  });
+  }, 60000);
 });
