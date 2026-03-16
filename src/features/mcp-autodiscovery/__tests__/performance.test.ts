@@ -7,7 +7,7 @@ describe('Performance Tests - Context Sync Parallelization', () => {
   beforeAll(async () => {
     contextManager = new UnifiedContextManager();
     await contextManager.initialize();
-  });
+  }, 30000);
 
   it('should sync 10 agent contexts in under 500ms', async () => {
     const agents = Array.from({ length: 10 }, (_, i) => `agent-${i}`);

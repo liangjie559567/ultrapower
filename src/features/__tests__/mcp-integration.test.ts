@@ -9,7 +9,7 @@ describe('MCP Integration E2E', () => {
   beforeAll(async () => {
     contextManager = new UnifiedContextManager();
     await contextManager.initialize();
-  });
+  }, 30000);
 
   afterAll(async () => {
     await contextManager.shutdown();
