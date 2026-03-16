@@ -162,11 +162,11 @@ npm install --save-dev @types/node
 
 **步骤：**
 1. 创建 `src/mcp/adapters/lsp-adapter.ts`
-2. 转换 lsp_hover, lsp_goto_definition, lsp_find_references
-3. 转换 lsp_document_symbols, lsp_workspace_symbols
-4. 转换 lsp_diagnostics, lsp_diagnostics_directory
-5. 转换 lsp_servers, lsp_prepare_rename, lsp_rename
-6. 转换 lsp_code_actions, lsp_code_action_resolve
+2. 转换 ultrapower:lsp_hover, ultrapower:lsp_goto_definition, ultrapower:lsp_find_references
+3. 转换 ultrapower:lsp_document_symbols, ultrapower:lsp_workspace_symbols
+4. 转换 ultrapower:lsp_diagnostics, ultrapower:lsp_diagnostics_directory
+5. 转换 ultrapower:lsp_servers, ultrapower:lsp_prepare_rename, ultrapower:lsp_rename
+6. 转换 ultrapower:lsp_code_actions, ultrapower:lsp_code_action_resolve
 
 **验收：**
 
@@ -379,8 +379,8 @@ npm install --save-dev @types/node
 **步骤：**
 1. 创建 `src/mcp/tool-resolver.ts`
 2. 实现 `resolveTool(name: string)` 函数
-3. 支持带前缀：`mcp__plugin_ultrapower_t__lsp_hover`
-4. 支持不带前缀：`lsp_hover`
+3. 支持带前缀：`mcp__plugin_ultrapower_t__ultrapower:lsp_hover`
+4. 支持不带前缀：`ultrapower:lsp_hover`
 5. 支持命名空间：`ultrapower:lsp_hover`
 
 **验收：**
@@ -530,8 +530,8 @@ npm install --save-dev @types/node
 **依赖：** 1.4.1
 
 **步骤：**
-1. 测试 `lsp_hover` 调用
-2. 测试 `lsp_diagnostics` 调用
+1. 测试 `ultrapower:lsp_hover` 调用
+2. 测试 `ultrapower:lsp_diagnostics` 调用
 3. 验证参数传递正确
 4. 验证返回结果格式
 
@@ -579,9 +579,9 @@ npm install --save-dev @types/node
 **依赖：** 1.4.3
 
 **步骤：**
-1. 使用旧前缀调用工具：`mcp__plugin_ultrapower_t__lsp_hover`
+1. 使用旧前缀调用工具：`mcp__plugin_ultrapower_t__ultrapower:lsp_hover`
 2. 使用新前缀调用工具：`ultrapower:lsp_hover`
-3. 使用无前缀调用工具：`lsp_hover`
+3. 使用无前缀调用工具：`ultrapower:lsp_hover`
 4. 验证三种方式都能成功
 
 **验收：**
@@ -1079,7 +1079,7 @@ npm install --save-dev @types/node
 
 **步骤：**
 1. 更新 `tool-adapter.ts`
-2. 工具名称从 `mcp__plugin_ultrapower_t__lsp_hover` 改为 `ultrapower:lsp_hover`
+2. 工具名称从 `mcp__plugin_ultrapower_t__ultrapower:lsp_hover` 改为 `ultrapower:lsp_hover`
 3. 保留旧前缀映射（向后兼容）
 
 **验收：**

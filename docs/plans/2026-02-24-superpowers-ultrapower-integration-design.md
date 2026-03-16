@@ -113,7 +113,7 @@ brainstorming 触发时的强制流程：
   verification-before-completion → [验证通过]
 
 阶段5b: 构建验证（新增）
-  build-fixer → lsp_diagnostics_directory → [零错误]
+  build-fixer → ultrapower:lsp_diagnostics_directory → [零错误]
 
 阶段6: 部署测试
   qa-tester → ultraqa循环 → [全部通过]
@@ -282,7 +282,7 @@ brainstorming 触发时的强制流程：
 
 | Agent | 关键节点 | 主推 | 备选 | 推荐理由 |
 | --- | --- | --- | --- | --- |
-| `build-fixer` agent | lsp_diagnostics 零错误后 | `qa-tester` agent | `requesting-code-review` | 构建通过进入部署测试 |
+| `build-fixer` agent | ultrapower:lsp_diagnostics 零错误后 | `qa-tester` agent | `requesting-code-review` | 构建通过进入部署测试 |
 
 ### 阶段6：部署测试
 

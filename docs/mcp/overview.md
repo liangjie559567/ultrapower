@@ -38,7 +38,7 @@ mcp__<server_name>__<tool_name>
 
 Examples:
 
-* `mcp__plugin_ultrapower_t__lsp_hover`
+* `mcp__plugin_ultrapower_t__ultrapower:lsp_hover`
 
 * `mcp__x__ask_codex`
 
@@ -200,7 +200,7 @@ LSP servers reuse connections:
 ### Direct Tool Call
 
 ```typescript
-const result = await mcp__plugin_ultrapower_t__lsp_hover({
+const result = await mcp__plugin_ultrapower_t__ultrapower:lsp_hover({
   file: 'src/index.ts',
   line: 10,
   character: 5

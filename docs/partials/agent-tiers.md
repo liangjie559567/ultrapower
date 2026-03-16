@@ -116,18 +116,18 @@ Task(subagent_type="ultrapower:explore",
 
 | 工具 | 类别 | 用途 | 是否分配给 Agent？ |
 | ------ | ---------- | --------- | --------------------- |
-| `lsp_hover` | LSP | 获取代码位置的类型信息和文档 | 否（orchestrator 直接使用） |
-| `lsp_goto_definition` | LSP | 跳转到符号定义处 | 否（orchestrator 直接使用） |
-| `lsp_find_references` | LSP | 查找符号在代码库中的所有用法 | 是（仅 `explore`） |
-| `lsp_document_symbols` | LSP | 获取文件中所有符号的概览 | 是 |
-| `lsp_workspace_symbols` | LSP | 按名称在工作区中搜索符号 | 是 |
-| `lsp_diagnostics` | LSP | 获取文件的错误、警告和提示 | 是 |
-| `lsp_diagnostics_directory` | LSP | 项目级类型检查（tsc --noEmit 或 LSP） | 是 |
-| `lsp_prepare_rename` | LSP | 检查符号是否可以重命名 | 否（orchestrator 直接使用） |
-| `lsp_rename` | LSP | 在整个项目中重命名符号 | 否（orchestrator 直接使用） |
-| `lsp_code_actions` | LSP | 获取可用的重构和快速修复 | 否（orchestrator 直接使用） |
-| `lsp_code_action_resolve` | LSP | 获取代码操作的完整编辑详情 | 否（orchestrator 直接使用） |
-| `lsp_servers` | LSP | 列出可用的语言服务器及安装状态 | 否（orchestrator 直接使用） |
+| `ultrapower:lsp_hover` | LSP | 获取代码位置的类型信息和文档 | 否（orchestrator 直接使用） |
+| `ultrapower:lsp_goto_definition` | LSP | 跳转到符号定义处 | 否（orchestrator 直接使用） |
+| `ultrapower:lsp_find_references` | LSP | 查找符号在代码库中的所有用法 | 是（仅 `explore`） |
+| `ultrapower:lsp_document_symbols` | LSP | 获取文件中所有符号的概览 | 是 |
+| `ultrapower:lsp_workspace_symbols` | LSP | 按名称在工作区中搜索符号 | 是 |
+| `ultrapower:lsp_diagnostics` | LSP | 获取文件的错误、警告和提示 | 是 |
+| `ultrapower:lsp_diagnostics_directory` | LSP | 项目级类型检查（tsc --noEmit 或 LSP） | 是 |
+| `ultrapower:lsp_prepare_rename` | LSP | 检查符号是否可以重命名 | 否（orchestrator 直接使用） |
+| `ultrapower:lsp_rename` | LSP | 在整个项目中重命名符号 | 否（orchestrator 直接使用） |
+| `ultrapower:lsp_code_actions` | LSP | 获取可用的重构和快速修复 | 否（orchestrator 直接使用） |
+| `ultrapower:lsp_code_action_resolve` | LSP | 获取代码操作的完整编辑详情 | 否（orchestrator 直接使用） |
+| `ultrapower:lsp_servers` | LSP | 列出可用的语言服务器及安装状态 | 否（orchestrator 直接使用） |
 | `ast_grep_search` | AST | 基于 AST 的模式化结构代码搜索 | 是 |
 | `ast_grep_replace` | AST | 基于模式的结构化代码转换 | 是 |
 | `python_repl` | Data | 用于数据分析和计算的持久化 Python REPL | 是 |
@@ -154,30 +154,30 @@ Task(subagent_type="ultrapower:explore",
 
 | 工具 | 直接使用时机 |
 | ------ | --------------------- |
-| `lsp_hover` | 对话中快速查询类型 |
-| `lsp_goto_definition` | 分析过程中导航到符号定义 |
-| `lsp_prepare_rename` | 在决定方案前检查重命名可行性 |
-| `lsp_rename` | 安全重命名操作（返回编辑预览，不自动应用） |
-| `lsp_code_actions` | 发现可用的重构操作 |
-| `lsp_code_action_resolve` | 获取特定代码操作的详情 |
-| `lsp_servers` | 检查语言服务器可用性 |
+| `ultrapower:lsp_hover` | 对话中快速查询类型 |
+| `ultrapower:lsp_goto_definition` | 分析过程中导航到符号定义 |
+| `ultrapower:lsp_prepare_rename` | 在决定方案前检查重命名可行性 |
+| `ultrapower:lsp_rename` | 安全重命名操作（返回编辑预览，不自动应用） |
+| `ultrapower:lsp_code_actions` | 发现可用的重构操作 |
+| `ultrapower:lsp_code_action_resolve` | 获取特定代码操作的详情 |
+| `ultrapower:lsp_servers` | 检查语言服务器可用性 |
 
 对于需要实现的复杂重命名或重构任务，委派给 `executor`（使用 `model="opus"`），它可以使用 `ast_grep_replace` 进行结构化转换。
 
 ### 工具选择指南
 
-* **需要文件符号概览或工作区搜索？** 通过 `explore` 使用 `lsp_document_symbols`/`lsp_workspace_symbols`
+* **需要文件符号概览或工作区搜索？** 通过 `explore` 使用 `ultrapower:lsp_document_symbols`/`ultrapower:lsp_workspace_symbols`
 
-* **需要查找符号的所有用法？** 通过 `explore` 使用 `lsp_find_references`
+* **需要查找符号的所有用法？** 通过 `explore` 使用 `ultrapower:lsp_find_references`
 
 * **需要结构化代码模式？**（如"查找所有匹配 X 形状的函数"）通过 `explore`、`architect` 或 `code-reviewer` 使用 `ast_grep_search`
 
 * **需要结构化代码转换？** 通过 `executor`（使用 `model="opus"`）使用 `ast_grep_replace`
 
-* **需要全项目类型检查？** 通过 `architect`、`executor` 或 `build-fixer` 使用 `lsp_diagnostics_directory`
+* **需要全项目类型检查？** 通过 `architect`、`executor` 或 `build-fixer` 使用 `ultrapower:lsp_diagnostics_directory`
 
-* **需要单文件错误检查？** 通过多个 agent 使用 `lsp_diagnostics`（参见矩阵）
+* **需要单文件错误检查？** 通过多个 agent 使用 `ultrapower:lsp_diagnostics`（参见矩阵）
 
 * **需要数据分析/计算？** 通过 `scientist` 使用 `python_repl`
 
-* **需要快速类型信息或定义查询？** 直接使用 `lsp_hover`/`lsp_goto_definition`（orchestrator 直接工具）
+* **需要快速类型信息或定义查询？** 直接使用 `ultrapower:lsp_hover`/`ultrapower:lsp_goto_definition`（orchestrator 直接工具）

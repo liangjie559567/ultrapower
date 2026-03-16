@@ -18,7 +18,7 @@ await ToolSearch("ask_codex");
 
 ```typescript
 // LSP hover
-const hover = await mcp__plugin_ultrapower_t__lsp_hover({
+const hover = await mcp__plugin_ultrapower_t__ultrapower:lsp_hover({
   file: 'src/index.ts',
   line: 10,
   character: 5

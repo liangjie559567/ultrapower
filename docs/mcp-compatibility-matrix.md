@@ -47,7 +47,7 @@ All community MCP server tools use the format: `mcp__servername__toolname`
 
 Internal OMC tools do not use namespace prefixes:
 
-* `lsp_*` - Language Server Protocol tools
+* `ultrapower:lsp_*` - Language Server Protocol tools
 
 * `ast_grep_*` - AST manipulation tools
 

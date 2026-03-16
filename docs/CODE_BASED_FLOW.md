@@ -628,18 +628,18 @@ export const allCustomTools: GenericToolDefinition[] = [
 
 ```typescript
 // 从 lsp-tools.ts 推断的工具列表
-- lsp_hover              // 类型信息和文档
-- lsp_goto_definition    // 跳转到定义
-- lsp_find_references    // 查找引用
-- lsp_document_symbols   // 文档符号大纲
-- lsp_workspace_symbols  // 工作区符号搜索
-- lsp_diagnostics        // 诊断信息（错误/警告）
-- lsp_diagnostics_directory // 项目级诊断
-- lsp_prepare_rename     // 重命名准备
-- lsp_rename             // 符号重命名
-- lsp_code_actions       // 代码操作
-- lsp_code_action_resolve // 代码操作详情
-- lsp_servers            // 列出语言服务器
+- ultrapower:lsp_hover              // 类型信息和文档
+- ultrapower:lsp_goto_definition    // 跳转到定义
+- ultrapower:lsp_find_references    // 查找引用
+- ultrapower:lsp_document_symbols   // 文档符号大纲
+- ultrapower:lsp_workspace_symbols  // 工作区符号搜索
+- ultrapower:lsp_diagnostics        // 诊断信息（错误/警告）
+- ultrapower:lsp_diagnostics_directory // 项目级诊断
+- ultrapower:lsp_prepare_rename     // 重命名准备
+- ultrapower:lsp_rename             // 符号重命名
+- ultrapower:lsp_code_actions       // 代码操作
+- ultrapower:lsp_code_action_resolve // 代码操作详情
+- ultrapower:lsp_servers            // 列出语言服务器
 ```
 
 ### 7.3 AST 工具
@@ -700,7 +700,7 @@ mcpServers: {
 
 ```typescript
 // OMC 工具
-'mcp__plugin_ultrapower_t__lsp_hover'
+'mcp__plugin_ultrapower_t__ultrapower:lsp_hover'
 'mcp__plugin_ultrapower_t__ast_grep_search'
 'mcp__plugin_ultrapower_t__python_repl'
 

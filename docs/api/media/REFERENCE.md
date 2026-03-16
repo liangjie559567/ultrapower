@@ -564,7 +564,7 @@ ultrapower exposes **35 custom tools** via the `mcp__plugin_ultrapower_t__` pref
 
 | Category | Count | Tool Prefix |
 | ---------- | ------- | ------------- |
-| LSP (Language Server Protocol) | 12 | `lsp_*` |
+| LSP (Language Server Protocol) | 12 | `ultrapower:lsp_*` |
 | AST (Structured code search) | 2 | `ast_grep_*` |
 | Python REPL | 1 | `python_repl` |
 | Notepad (Session memory) | 6 | `notepad_*` |
@@ -583,23 +583,23 @@ ultrapower exposes **35 custom tools** via the `mcp__plugin_ultrapower_t__` pref
 IDE-grade code intelligence via Language Server Protocol:
 
 ```
-mcp__plugin_ultrapower_t__lsp_hover              -- Type info and docs at position
-mcp__plugin_ultrapower_t__lsp_goto_definition    -- Jump to symbol definition
-mcp__plugin_ultrapower_t__lsp_find_references    -- Find all usages
-mcp__plugin_ultrapower_t__lsp_document_symbols   -- File outline (functions, classes)
-mcp__plugin_ultrapower_t__lsp_workspace_symbols  -- Search symbols across workspace
-mcp__plugin_ultrapower_t__lsp_diagnostics        -- Errors, warnings, hints (single file)
-mcp__plugin_ultrapower_t__lsp_diagnostics_directory  -- Project-level type checking
-mcp__plugin_ultrapower_t__lsp_servers            -- List available language servers
-mcp__plugin_ultrapower_t__lsp_prepare_rename     -- Check if rename is valid
-mcp__plugin_ultrapower_t__lsp_rename             -- Preview multi-file rename
-mcp__plugin_ultrapower_t__lsp_code_actions       -- Available refactors/quick fixes
-mcp__plugin_ultrapower_t__lsp_code_action_resolve -- Get action details
+mcp__plugin_ultrapower_t__ultrapower:lsp_hover              -- Type info and docs at position
+mcp__plugin_ultrapower_t__ultrapower:lsp_goto_definition    -- Jump to symbol definition
+mcp__plugin_ultrapower_t__ultrapower:lsp_find_references    -- Find all usages
+mcp__plugin_ultrapower_t__ultrapower:lsp_document_symbols   -- File outline (functions, classes)
+mcp__plugin_ultrapower_t__ultrapower:lsp_workspace_symbols  -- Search symbols across workspace
+mcp__plugin_ultrapower_t__ultrapower:lsp_diagnostics        -- Errors, warnings, hints (single file)
+mcp__plugin_ultrapower_t__ultrapower:lsp_diagnostics_directory  -- Project-level type checking
+mcp__plugin_ultrapower_t__ultrapower:lsp_servers            -- List available language servers
+mcp__plugin_ultrapower_t__ultrapower:lsp_prepare_rename     -- Check if rename is valid
+mcp__plugin_ultrapower_t__ultrapower:lsp_rename             -- Preview multi-file rename
+mcp__plugin_ultrapower_t__ultrapower:lsp_code_actions       -- Available refactors/quick fixes
+mcp__plugin_ultrapower_t__ultrapower:lsp_code_action_resolve -- Get action details
 ```
 
 Supported languages: TypeScript, Python, Rust, Go, C/C++, Java, JSON, HTML, CSS, YAML.
 
-> **Note**: LSP tools require language server installation (typescript-language-server, pylsp, rust-analyzer, gopls, etc.). Use `lsp_servers` to check installation status.
+> **Note**: LSP tools require language server installation (typescript-language-server, pylsp, rust-analyzer, gopls, etc.). Use `ultrapower:lsp_servers` to check installation status.
 
 ---
 
@@ -820,18 +820,18 @@ ultrapower exposes 32 custom tools through the MCP server using the `mcp__plugin
 
 | Tool | MCP Name | Description |
 | ------ | ---------- | ------------- |
-| `lsp_hover` | `mcp__plugin_ultrapower_t__lsp_hover` | Get type information and documentation at cursor position |
-| `lsp_goto_definition` | `mcp__plugin_ultrapower_t__lsp_goto_definition` | Find definition location of a symbol |
-| `lsp_find_references` | `mcp__plugin_ultrapower_t__lsp_find_references` | Find all references to a symbol across codebase |
-| `lsp_document_symbols` | `mcp__plugin_ultrapower_t__lsp_document_symbols` | Get hierarchical outline of symbols in a file |
-| `lsp_workspace_symbols` | `mcp__plugin_ultrapower_t__lsp_workspace_symbols` | Search for symbols by name across workspace |
-| `lsp_diagnostics` | `mcp__plugin_ultrapower_t__lsp_diagnostics` | Get language server diagnostics for a file |
-| `lsp_diagnostics_directory` | `mcp__plugin_ultrapower_t__lsp_diagnostics_directory` | Run project-level diagnostics on a directory |
-| `lsp_servers` | `mcp__plugin_ultrapower_t__lsp_servers` | List all known language servers and installation status |
-| `lsp_prepare_rename` | `mcp__plugin_ultrapower_t__lsp_prepare_rename` | Check if a symbol can be renamed |
-| `lsp_rename` | `mcp__plugin_ultrapower_t__lsp_rename` | Rename a symbol across all files in project |
-| `lsp_code_actions` | `mcp__plugin_ultrapower_t__lsp_code_actions` | Get available code actions (refactorings, quick fixes) |
-| `lsp_code_action_resolve` | `mcp__plugin_ultrapower_t__lsp_code_action_resolve` | Get full edit details for a specific code action |
+| `ultrapower:lsp_hover` | `mcp__plugin_ultrapower_t__ultrapower:lsp_hover` | Get type information and documentation at cursor position |
+| `ultrapower:lsp_goto_definition` | `mcp__plugin_ultrapower_t__ultrapower:lsp_goto_definition` | Find definition location of a symbol |
+| `ultrapower:lsp_find_references` | `mcp__plugin_ultrapower_t__ultrapower:lsp_find_references` | Find all references to a symbol across codebase |
+| `ultrapower:lsp_document_symbols` | `mcp__plugin_ultrapower_t__ultrapower:lsp_document_symbols` | Get hierarchical outline of symbols in a file |
+| `ultrapower:lsp_workspace_symbols` | `mcp__plugin_ultrapower_t__ultrapower:lsp_workspace_symbols` | Search for symbols by name across workspace |
+| `ultrapower:lsp_diagnostics` | `mcp__plugin_ultrapower_t__ultrapower:lsp_diagnostics` | Get language server diagnostics for a file |
+| `ultrapower:lsp_diagnostics_directory` | `mcp__plugin_ultrapower_t__ultrapower:lsp_diagnostics_directory` | Run project-level diagnostics on a directory |
+| `ultrapower:lsp_servers` | `mcp__plugin_ultrapower_t__ultrapower:lsp_servers` | List all known language servers and installation status |
+| `ultrapower:lsp_prepare_rename` | `mcp__plugin_ultrapower_t__ultrapower:lsp_prepare_rename` | Check if a symbol can be renamed |
+| `ultrapower:lsp_rename` | `mcp__plugin_ultrapower_t__ultrapower:lsp_rename` | Rename a symbol across all files in project |
+| `ultrapower:lsp_code_actions` | `mcp__plugin_ultrapower_t__ultrapower:lsp_code_actions` | Get available code actions (refactorings, quick fixes) |
+| `ultrapower:lsp_code_action_resolve` | `mcp__plugin_ultrapower_t__ultrapower:lsp_code_action_resolve` | Get full edit details for a specific code action |
 
 #### AST Tools (2)
 

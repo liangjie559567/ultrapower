@@ -574,7 +574,7 @@ ultrapower 提供内置 MCP 服务器，暴露以下工具类别：
 - **状态管理**: `state_read`, `state_write`, `state_clear`, `state_list_active`, `state_get_status`
 - **Notepad**: `notepad_read`, `notepad_priority`, `notepad_working`, `notepad_manual`, `notepad_prune`
 - **项目记忆**: `mem_read`, `mem_write`, `mem_add_note`, `mem_add_directive`
-- **LSP 工具**: `lsp_hover`, `lsp_goto_definition`, `lsp_diagnostics`, `lsp_diagnostics_directory`
+- **LSP 工具**: `ultrapower:lsp_hover`, `ultrapower:lsp_goto_definition`, `ultrapower:lsp_diagnostics`, `ultrapower:lsp_diagnostics_directory`
 - **AST 工具**: `ast_grep_search`, `ast_grep_replace`
 - **Python REPL**: `python_repl`
 - **追踪**: `trace_timeline`, `trace_summary`

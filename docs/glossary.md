@@ -96,7 +96,7 @@
 
 **Tool** - 可调用的功能单元。35 个自定义工具：LSP x12、AST x2、REPL x1、Notepad x6、State x5、Memory x4、Trace x2、Skills x3。
 
-**LSP Tool** - 语言服务器协议工具。lsp_hover、lsp_goto_definition、lsp_find_references、lsp_diagnostics 等。
+**LSP Tool** - 语言服务器协议工具。ultrapower:lsp_hover、ultrapower:lsp_goto_definition、ultrapower:lsp_find_references、ultrapower:lsp_diagnostics 等。
 
 **AST Tool** - 抽象语法树工具。ast_grep_search（结构化代码搜索）、ast_grep_replace（结构化转换）。
 

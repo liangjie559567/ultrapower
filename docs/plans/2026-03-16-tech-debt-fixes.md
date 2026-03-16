@@ -65,8 +65,8 @@ Resolves TD-1: Test timeout issues blocking CI pipeline"
 **Step 1: Update all documentation to use new naming**
 
 Search and replace in documentation:
-- `lsp_diagnostics` → `ultrapower:lsp_diagnostics`
-- `lsp_hover` → `ultrapower:lsp_hover`
+- `ultrapower:lsp_diagnostics` → `ultrapower:lsp_diagnostics`
+- `ultrapower:lsp_hover` → `ultrapower:lsp_hover`
 - (repeat for all 12 LSP tools)
 
 **Step 2: Add deprecation timeline to CHANGELOG**
@@ -81,7 +81,7 @@ Search and replace in documentation:
 
 **Step 3: Verify no old naming in docs**
 
-Run: `grep -r "lsp_diagnostics" docs/ README.md`
+Run: `grep -r "ultrapower:lsp_diagnostics" docs/ README.md`
 Expected: No matches (all should use `ultrapower:lsp_diagnostics`)
 
 **Step 4: Commit**

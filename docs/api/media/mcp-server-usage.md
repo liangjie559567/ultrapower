@@ -78,7 +78,7 @@ mcp__plugin_ultrapower_t__ultrapower:ast_grep_search
 
 **Note:** Legacy names without `ultrapower:` prefix are deprecated but still work:
 ```
-mcp__plugin_ultrapower_t__lsp_hover (deprecated, shows warning)
+mcp__plugin_ultrapower_t__ultrapower:lsp_hover (deprecated, shows warning)
 ```
 
 ---

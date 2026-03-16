@@ -227,7 +227,7 @@ analyze this codebase
 
 ```
 
-AI 应能调用 `lsp_hover`、`lsp_diagnostics` 等工具。
+AI 应能调用 `ultrapower:lsp_hover`、`ultrapower:lsp_diagnostics` 等工具。
 
 ### 检查点 6: 状态文件路径
 
