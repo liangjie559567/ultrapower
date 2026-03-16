@@ -14,6 +14,11 @@
   - Export logger object with info/warn/error/debug methods
   - Fix module import errors in security modules
 
+- fix(test): CI test stability improvements
+  - Increase timeout for release-steps.test.ts to 60s
+  - Backdate stale session files for cleanup test
+  - Add delay and retries for concurrent test cleanup
+
 ## 7.5.2
 
 ### Patch Changes
