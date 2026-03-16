@@ -39,4 +39,10 @@ export declare class ConcurrencyControl {
      */
     detectDeadlocks(): string[];
 }
+export interface Lock {
+    resourceId: string;
+    holderId: string;
+}
+export declare function acquireLock(resourceId: string, timeoutMs?: number): Promise<Lock>;
+export declare function releaseLock(lock: Lock): Promise<void>;
 //# sourceMappingURL=concurrency-control.d.ts.map

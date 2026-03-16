@@ -36,7 +36,12 @@ function rotate(logPath) {
     }
     renameSyncWithRetry(logPath, `${logPath}.1`);
 }
+const LOG_LEVELS = { DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3 };
+const currentLevel = LOG_LEVELS[process.env.LOG_LEVEL] ?? LOG_LEVELS.INFO;
 function log(level, message, meta) {
+    const levelValue = LOG_LEVELS[level];
+    if (levelValue < currentLevel)
+        return;
     const entry = JSON.stringify({
         timestamp: new Date().toISOString(),
         level,
@@ -46,10 +51,10 @@ function log(level, message, meta) {
     console.log(entry);
 }
 export const logger = {
-    info: (message, meta) => log('info', message, meta),
-    warn: (message, meta) => log('warn', message, meta),
-    error: (message, meta) => log('error', message, meta),
-    debug: (message, meta) => log('debug', message, meta)
+    info: (message, meta) => log('INFO', message, meta),
+    warn: (message, meta) => log('WARN', message, meta),
+    error: (message, meta) => log('ERROR', message, meta),
+    debug: (message, meta) => log('DEBUG', message, meta)
 };
 export function security(event, data) {
     const logPath = join(process.cwd(), LOG_PATH);
