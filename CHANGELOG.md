@@ -1,5 +1,11 @@
 # ultrapower v7.0.1
 
+## [Unreleased]
+
+### Deprecated
+- Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
+- Users should migrate to new naming: `ultrapower:lsp_*`
+
 ## 7.6.0
 
 ### Patch Changes
