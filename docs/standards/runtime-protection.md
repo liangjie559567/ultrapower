@@ -308,6 +308,13 @@ try {
 
 * 所有涉及文件操作的代码必须考虑 Windows 平台行为差异
 
+* 使用 `maxRetries` 参数在 `atomicWriteJsonSyncWithRetry` 中提高鲁棒性
+
+**测试覆盖**：
+
+* Windows 平台兼容性测试：`tests/platform/windows-atomic-write.test.ts`
+* 测试在非 Windows 平台自动跳过（`skipIf(process.platform !== 'win32')`）
+
 #### 2.3.1 Windows 命令注入防护（SEC-H02）
 
 **来源**: v5.5.18 P0 修复 (2026-03-05)
