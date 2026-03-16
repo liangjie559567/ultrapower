@@ -86,9 +86,11 @@ export function validatePath(userPath: string, baseDir: string): string {
       if (!normalizedParent.startsWith(normalizedBase)) {
         throw new SecurityError('Path traversal detected via parent directory');
       }
-      return path.normalize(joined);
+      // Use absolute path for non-existent files
+      resolved = path.resolve(joined);
+    } else {
+      resolved = path.resolve(joined);
     }
-    resolved = path.normalize(joined);
   }
 
   // Boundary check - normalize separators and case for cross-platform comparison
