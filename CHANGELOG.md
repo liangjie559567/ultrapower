@@ -6,7 +6,7 @@
 - Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
 - Users should migrate to new naming: `ultrapower:lsp_*`
 
-## 7.6.0 - 2026-03-16
+## 7.7.0 - 2026-03-16
 
 ### Technical Debt Fixes
 

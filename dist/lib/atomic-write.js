@@ -188,6 +188,8 @@ export function atomicWriteFileSync(filePath, content) {
         // Close before rename
         fsSync.closeSync(fd);
         fd = null;
+        // Ensure target directory exists before rename (Windows race condition fix)
+        ensureDirSync(dir);
         // Atomic rename with retry on Windows EPERM
         let renamed = false;
         for (let attempt = 0; attempt < 3 && !renamed; attempt++) {

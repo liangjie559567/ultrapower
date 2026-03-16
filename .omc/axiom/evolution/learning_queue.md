@@ -81,3 +81,143 @@
 - 状态: pending
 - 添加时间: 2026-03-16
 - 内容: mode used in session auto-test-ses
+
+### Q-009: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-010: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-011: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-012: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-013: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-014: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-015: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-016: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-017: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-018: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-019: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-020: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-021: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-022: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-023: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-024: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-025: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-026: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-027: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-028: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses

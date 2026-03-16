@@ -20198,6 +20198,7 @@ function atomicWriteFileSync(filePath, content) {
     fsSync.fsyncSync(fd);
     fsSync.closeSync(fd);
     fd = null;
+    ensureDirSync(dir);
     let renamed = false;
     for (let attempt = 0; attempt < 3 && !renamed; attempt++) {
       try {
