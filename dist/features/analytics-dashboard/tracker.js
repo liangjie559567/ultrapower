@@ -6,10 +6,22 @@ export class MetricsTracker {
             data.sessions.push({ timestamp: event.timestamp });
         }
         else if (event.type === 'skill_used') {
-            data.skills.push(event);
+            data.skills.push({
+                timestamp: event.timestamp,
+                type: event.type,
+                target: event.target || '',
+                success: event.success ?? false,
+                duration: event.duration
+            });
         }
         else if (event.type === 'agent_called') {
-            data.agents.push(event);
+            data.agents.push({
+                timestamp: event.timestamp,
+                type: event.type,
+                target: event.target || '',
+                success: event.success ?? false,
+                duration: event.duration
+            });
         }
         MetricsStorage.save(data, cwd);
     }

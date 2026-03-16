@@ -50,7 +50,7 @@ async function loadAutopilotEnforcement() {
 }
 async function loadTeamPipeline() {
     if (!teamPipelineModule)
-        teamPipelineModule = await import('../team-pipeline/state.js');
+        teamPipelineModule = await import('../team-pipeline/index.js');
     return teamPipelineModule;
 }
 /** Maximum todo-continuation attempts before giving up (prevents infinite loops) */
@@ -164,7 +164,7 @@ async function checkRalphLoop(sessionId, directory) {
     // When team mode is active alongside ralph, respect team phase transitions
     const team = await loadTeamPipeline();
     const teamState = team.readTeamPipelineState(workingDir, sessionId);
-    if (teamState && teamState.active !== undefined) {
+    if (teamState?.active !== undefined) {
         const teamPhase = teamState.phase;
         // If team pipeline reached a terminal state, ralph should also complete
         if (teamPhase === 'complete') {

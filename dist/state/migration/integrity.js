@@ -1,7 +1,7 @@
 /**
  * 状态迁移完整性保障
  */
-import { existsSync, readFileSync, copyFileSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, copyFileSync, unlinkSync, readdirSync } from 'fs';
 import { join } from 'path';
 /**
  * 计算文件校验和
@@ -86,7 +86,6 @@ export function cleanupOldBackups(mode, directory, keepCount = 5) {
     const stateDir = join(directory, '.omc', 'state');
     const pattern = `${mode}-state.json.backup-`;
     try {
-        const { readdirSync } = require('fs');
         const files = readdirSync(stateDir)
             .filter((f) => f.startsWith(pattern))
             .map((f) => ({

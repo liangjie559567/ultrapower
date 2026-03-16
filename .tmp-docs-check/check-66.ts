@@ -1,0 +1,5 @@
+- state_read         // 读取状态
+- state_write        // 写入状态
+- state_clear        // 清除状态
+- state_list_active  // 列出活动模式
+- state_get_status   // 获取状态详情

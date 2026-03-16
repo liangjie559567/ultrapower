@@ -107,8 +107,27 @@ export function atomicWriteSync(filePath, content) {
         finally {
             fsSync.closeSync(fd);
         }
-        // Atomic rename - replaces target file if it exists
-        fsSync.renameSync(tempPath, filePath);
+        // Atomic rename with retry on Windows EPERM
+        let renamed = false;
+        for (let attempt = 0; attempt < 3 && !renamed; attempt++) {
+            try {
+                fsSync.renameSync(tempPath, filePath);
+                renamed = true;
+            }
+            catch (err) {
+                const error = err;
+                if (error.code === 'EPERM' && attempt < 2) {
+                    const delayMs = 50 * (attempt + 1);
+                    const start = Date.now();
+                    while (Date.now() - start < delayMs) {
+                        // Busy wait for Windows file lock retry
+                    }
+                }
+                else {
+                    throw err;
+                }
+            }
+        }
         success = true;
         // Best-effort directory fsync to ensure rename is durable
         try {

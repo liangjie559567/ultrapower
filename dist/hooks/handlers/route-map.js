@@ -1,12 +1,12 @@
 import { requiredKeysForHook, validateHookInput } from "../validation.js";
-import { toSubagentStartInput, toSubagentStopInput, toPermissionRequestInput } from "../bridge-converter.js";
+import { toSubagentStartInput, toSubagentStopInput, toPermissionRequestInput, toSessionEndInput, toPreCompactInput, toSetupInput, toWorkflowGateInput } from "../bridge-converter.js";
 export const HOOK_ROUTES = {
     "session-end": async (input) => {
         if (!validateHookInput(input, requiredKeysForHook("session-end"), "session-end")) {
             return { continue: true };
         }
         const { handleSessionEnd } = await import("../session-end/index.js");
-        return await handleSessionEnd(input);
+        return await handleSessionEnd(toSessionEndInput(input));
     },
     "subagent-start": async (input) => {
         if (!validateHookInput(input, requiredKeysForHook("subagent-start"), "subagent-start")) {
@@ -27,21 +27,21 @@ export const HOOK_ROUTES = {
             return { continue: true };
         }
         const { processPreCompact } = await import("../pre-compact/index.js");
-        return await processPreCompact(input);
+        return await processPreCompact(toPreCompactInput(input));
     },
     "setup-init": async (input) => {
         if (!validateHookInput(input, requiredKeysForHook("setup-init"), "setup-init")) {
             return { continue: true };
         }
         const { processSetup } = await import("../setup/index.js");
-        return await processSetup({ ...input, trigger: "init", hook_event_name: "Setup" });
+        return await processSetup(toSetupInput({ ...input, trigger: "init" }));
     },
     "setup-maintenance": async (input) => {
         if (!validateHookInput(input, requiredKeysForHook("setup-maintenance"), "setup-maintenance")) {
             return { continue: true };
         }
         const { processSetup } = await import("../setup/index.js");
-        return await processSetup({ ...input, trigger: "maintenance", hook_event_name: "Setup" });
+        return await processSetup(toSetupInput({ ...input, trigger: "maintenance" }));
     },
     "permission-request": async (input) => {
         if (!validateHookInput(input, requiredKeysForHook("permission-request"), "permission-request")) {
@@ -65,7 +65,7 @@ export const HOOK_ROUTES = {
             return { continue: true };
         }
         const { processWorkflowGate } = await import("../workflow-gate/index.js");
-        const result = await processWorkflowGate(input);
+        const result = await processWorkflowGate(toWorkflowGateInput(input));
         if (result.shouldBlock && result.injectedSkill) {
             return {
                 continue: true,

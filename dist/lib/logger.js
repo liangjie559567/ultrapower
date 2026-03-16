@@ -1,4 +1,5 @@
-import { appendFileSync, existsSync, statSync, renameSync } from 'fs';
+import { appendFileSync, existsSync, statSync } from 'fs';
+import { renameSyncWithRetry } from './fs-utils.js';
 import { ensureDirSync } from './atomic-write.js';
 import { join } from 'path';
 const LOG_PATH = '.omc/logs/security-audit.jsonl';
@@ -7,7 +8,10 @@ const SENSITIVE_FIELDS = ['token', 'apiKey', 'password', 'secret', 'accessToken'
 function sanitize(data) {
     if (!data || typeof data !== 'object')
         return data;
-    const sanitized = Array.isArray(data) ? [...data] : { ...data };
+    if (Array.isArray(data)) {
+        return data.map(item => sanitize(item));
+    }
+    const sanitized = { ...data };
     for (const key in sanitized) {
         if (SENSITIVE_FIELDS.some(field => key.toLowerCase().includes(field))) {
             sanitized[key] = '[REDACTED]';
@@ -28,10 +32,25 @@ function rotate(logPath) {
         const old = `${logPath}.${i}`;
         const next = `${logPath}.${i + 1}`;
         if (existsSync(old))
-            renameSync(old, next);
+            renameSyncWithRetry(old, next);
     }
-    renameSync(logPath, `${logPath}.1`);
+    renameSyncWithRetry(logPath, `${logPath}.1`);
 }
+function log(level, message, meta) {
+    const entry = JSON.stringify({
+        timestamp: new Date().toISOString(),
+        level,
+        message,
+        ...meta
+    });
+    console.log(entry);
+}
+export const logger = {
+    info: (message, meta) => log('info', message, meta),
+    warn: (message, meta) => log('warn', message, meta),
+    error: (message, meta) => log('error', message, meta),
+    debug: (message, meta) => log('debug', message, meta)
+};
 export function security(event, data) {
     const logPath = join(process.cwd(), LOG_PATH);
     ensureDirSync(join(process.cwd(), '.omc/logs'));

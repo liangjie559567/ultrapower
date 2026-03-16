@@ -6,7 +6,7 @@
  */
 export interface VersionedState {
     version: number;
-    data: any;
+    data: Record<string, unknown>;
     timestamp: number;
 }
 export interface ConcurrencyConfig {

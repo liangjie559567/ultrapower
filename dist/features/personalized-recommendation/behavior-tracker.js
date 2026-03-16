@@ -27,6 +27,6 @@ export class BehaviorTracker {
     static loadHistory() {
         return [];
     }
-    static saveHistory(history) { }
+    static saveHistory(_history) { }
 }
 //# sourceMappingURL=behavior-tracker.js.map

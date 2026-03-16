@@ -7,12 +7,14 @@ import type { ValidMode } from '../lib/validateMode.js';
 export interface StateManagerOptions {
     mode: ValidMode;
     directory: string;
+    sessionId?: string;
     backend?: 'file' | 'sqlite';
     dualWrite?: boolean;
 }
 export declare class StateManager<T = Record<string, unknown>> {
     private adapter;
     private options;
+    private defaultSessionId?;
     constructor(options: StateManagerOptions);
     read(sessionId?: string): T | null;
     write(data: T, sessionId?: string): Promise<boolean>;

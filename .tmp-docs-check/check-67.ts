@@ -1,0 +1,6 @@
+- notepad_read       // 读取 notepad
+- notepad_priority   // 写入优先级上下文（<500 字符）
+- notepad_working    // 添加工作记忆条目（7 天自动清理）
+- notepad_manual     // 添加手动条目（永不清理）
+- notepad_prune      // 清理旧条目
+- notepad_stats      // 统计信息

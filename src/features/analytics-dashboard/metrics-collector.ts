@@ -21,6 +21,7 @@ export class MetricsCollector {
     const skillMap = new Map<string, { total: number; success: number; durations: number[] }>();
 
     for (const event of data.skills) {
+      if (!event.target) continue;
       const stats = skillMap.get(event.target) || { total: 0, success: 0, durations: [] };
       stats.total++;
       if (event.success) stats.success++;
@@ -43,6 +44,7 @@ export class MetricsCollector {
     const agentMap = new Map<string, { total: number; success: number; times: number[] }>();
 
     for (const event of data.agents) {
+      if (!event.target) continue;
       const stats = agentMap.get(event.target) || { total: 0, success: 0, times: [] };
       stats.total++;
       if (event.success) stats.success++;

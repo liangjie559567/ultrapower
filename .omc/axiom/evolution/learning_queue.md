@@ -25,3 +25,45 @@
 - P1: 高
 - P2: 中
 - P3: 低
+
+### Q-001: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-002: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-003: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-004: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-005: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses
+
+### Q-006: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-16
+- 内容: mode used in session auto-test-ses

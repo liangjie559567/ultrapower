@@ -823,7 +823,7 @@ export function install(options = {}) {
                     }
                 }
             }
-            catch (e) {
+            catch (_e) {
                 log('Warning: Could not sync marketplace version (non-fatal)');
             }
         }

@@ -11,7 +11,8 @@
  * API: api.anthropic.com/api/oauth/usage
  * Response: { five_hour: { utilization }, seven_day: { utilization } }
  */
-import { existsSync, readFileSync, writeFileSync, renameSync, unlinkSync, mkdirSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
+import { renameSyncWithRetry } from '../lib/fs-utils.js';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import { join, dirname } from 'path';
 import { execSync } from 'child_process';
@@ -370,7 +371,7 @@ function writeBackCredentials(creds) {
         const tmpPath = `${credPath}.tmp.${process.pid}`;
         try {
             writeFileSync(tmpPath, JSON.stringify(parsed, null, 2), { mode: 0o600 });
-            renameSync(tmpPath, credPath);
+            renameSyncWithRetry(tmpPath, credPath);
         }
         catch (writeErr) {
             // Clean up orphaned tmp file on failure

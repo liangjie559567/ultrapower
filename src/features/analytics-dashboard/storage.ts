@@ -2,9 +2,9 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 interface MetricsData {
-  sessions: Array<{ id: string; timestamp: string }>;
-  skills: Array<{ name: string; success: boolean; timestamp: string }>;
-  agents: Array<{ name: string; success: boolean; timestamp: string }>;
+  sessions: Array<{ timestamp: string }>;
+  skills: Array<{ timestamp: string; type: string; target: string; success?: boolean; duration?: number }>;
+  agents: Array<{ timestamp: string; type: string; target: string; success?: boolean; duration?: number }>;
 }
 
 export class MetricsStorage {

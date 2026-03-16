@@ -1,0 +1,42 @@
+{
+  "id": "1773669287374-5v433cf67",
+  "timestamp": 1773669287374,
+  "mode": "ultrawork",
+  "data": {
+    "sessionId": "b1bbb770b668658e",
+    "totalInputTokens": 9,
+    "totalOutputTokens": 4,
+    "totalCacheCreation": 1673,
+    "totalCacheRead": 133786,
+    "totalCost": 0,
+    "byAgent": {
+      "(main session)": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 9,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1673,
+          "cacheReadTokens": 133786,
+          "sessionId": "b1bbb770b668658e",
+          "timestamp": "2026-03-16T13:54:47.370Z"
+        }
+      ]
+    },
+    "byModel": {
+      "claude-sonnet-4.6": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 9,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1673,
+          "cacheReadTokens": 133786,
+          "sessionId": "b1bbb770b668658e",
+          "timestamp": "2026-03-16T13:54:47.370Z"
+        }
+      ]
+    },
+    "startTime": "2026-03-16T13:54:47.369Z",
+    "lastUpdate": "2026-03-16T13:54:47.370Z"
+  },
+  "committed": true
+}

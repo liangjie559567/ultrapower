@@ -36,7 +36,8 @@ export interface StateAdapter<T> {
 export declare class FileStateAdapter<T> implements StateAdapter<T> {
     private readonly mode;
     private readonly directory;
-    constructor(mode: ValidMode, directory: string);
+    private readonly noLegacyFallback;
+    constructor(mode: ValidMode, directory: string, noLegacyFallback?: boolean);
     /**
      * 获取状态文件路径
      */
@@ -73,5 +74,5 @@ export declare class FileStateAdapter<T> implements StateAdapter<T> {
 /**
  * 创建状态适配器工厂函数
  */
-export declare function createStateAdapter<T>(mode: ValidMode, directory: string): StateAdapter<T>;
+export declare function createStateAdapter<T>(mode: ValidMode, directory: string, noLegacyFallback?: boolean): StateAdapter<T>;
 //# sourceMappingURL=state-adapter.d.ts.map

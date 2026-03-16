@@ -1,0 +1,4 @@
+- mem_read           // 读取项目记忆
+- mem_write          // 写入项目记忆
+- mem_add_note       // 添加笔记
+- mem_add_directive  // 添加指令

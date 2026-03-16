@@ -40,4 +40,42 @@ export function toPermissionRequestInput(normalized) {
         hook_event_name: 'PermissionRequest',
     };
 }
+export function toSessionEndInput(normalized) {
+    return {
+        session_id: (normalized.sessionId ?? normalized.session_id),
+        transcript_path: (normalized.transcriptPath ?? normalized.transcript_path),
+        cwd: (normalized.directory ?? normalized.cwd),
+        permission_mode: (normalized.permissionMode ?? normalized.permission_mode),
+        hook_event_name: 'SessionEnd',
+        reason: normalized.reason ?? 'other',
+    };
+}
+export function toPreCompactInput(normalized) {
+    return {
+        session_id: (normalized.sessionId ?? normalized.session_id),
+        transcript_path: (normalized.transcriptPath ?? normalized.transcript_path),
+        cwd: (normalized.directory ?? normalized.cwd),
+        permission_mode: (normalized.permissionMode ?? normalized.permission_mode),
+        hook_event_name: 'PreCompact',
+        trigger: normalized.trigger ?? 'auto',
+        custom_instructions: normalized.custom_instructions,
+    };
+}
+export function toSetupInput(normalized) {
+    return {
+        session_id: (normalized.sessionId ?? normalized.session_id),
+        transcript_path: (normalized.transcriptPath ?? normalized.transcript_path),
+        cwd: (normalized.directory ?? normalized.cwd),
+        permission_mode: (normalized.permissionMode ?? normalized.permission_mode),
+        hook_event_name: 'Setup',
+        trigger: normalized.trigger,
+    };
+}
+export function toWorkflowGateInput(normalized) {
+    return {
+        type: 'UserPromptSubmit',
+        prompt: normalized.prompt,
+        workingDirectory: (normalized.workingDirectory ?? normalized.cwd),
+    };
+}
 //# sourceMappingURL=bridge-converter.js.map
