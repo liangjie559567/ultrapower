@@ -36,7 +36,13 @@ function rotate(logPath: string): void {
   renameSyncWithRetry(logPath, `${logPath}.1`);
 }
 
+const LOG_LEVELS = { DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3 };
+const currentLevel = LOG_LEVELS[process.env.LOG_LEVEL as keyof typeof LOG_LEVELS] ?? LOG_LEVELS.INFO;
+
 function log(level: string, message: string, meta?: Record<string, unknown>): void {
+  const levelValue = LOG_LEVELS[level as keyof typeof LOG_LEVELS];
+  if (levelValue < currentLevel) return;
+
   const entry = JSON.stringify({
     timestamp: new Date().toISOString(),
     level,
@@ -47,10 +53,10 @@ function log(level: string, message: string, meta?: Record<string, unknown>): vo
 }
 
 export const logger = {
-  info: (message: string, meta?: Record<string, unknown>) => log('info', message, meta),
-  warn: (message: string, meta?: Record<string, unknown>) => log('warn', message, meta),
-  error: (message: string, meta?: Record<string, unknown>) => log('error', message, meta),
-  debug: (message: string, meta?: Record<string, unknown>) => log('debug', message, meta)
+  info: (message: string, meta?: Record<string, unknown>) => log('INFO', message, meta),
+  warn: (message: string, meta?: Record<string, unknown>) => log('WARN', message, meta),
+  error: (message: string, meta?: Record<string, unknown>) => log('ERROR', message, meta),
+  debug: (message: string, meta?: Record<string, unknown>) => log('DEBUG', message, meta)
 };
 
 export function security(event: string, data: unknown): void {

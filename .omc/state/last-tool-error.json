@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"npm run build\",\"description\":\"Build project after fixing TypeScript errors\"}",
-  "error": "Exit code 2\n\n> @liangjie559567/ultrapower@7.6.0 build\n> tsc && node scripts/parallel-build.mjs && npm run compose-docs\n\nsrc/features/analytics-dashboard/metrics-collector.ts(24,18): error TS2339: Property 'target' does not exist on type '{ name: string; success: boolean; timestamp: string; }'.\r\nsrc/features/analytics-dashboard/metrics-collector.ts(25,40): error TS2339: Property 'target' does not exist on type '{ name: string; success: boolean; timestamp: string; }'.\r\nsrc/features/analytics-dashb...",
-  "timestamp": "2026-03-16T16:48:04.261Z",
-  "retry_count": 1
+  "tool_input_preview": "{\"command\":\"git checkout origin/main -B main && git pull origin main\",\"description\":\"切换到 origin/main 并创建本地 main 分支\"}",
+  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by checkout:\n\t.omc/state/last-tool-error.json\nPlease commit your changes or stash them before you switch branches.\nAborting",
+  "timestamp": "2026-03-16T16:55:53.847Z",
+  "retry_count": 2
 }

@@ -84,4 +84,26 @@ export class ConcurrencyControl {
         return deadlocked;
     }
 }
+// Singleton instance for global lock management
+const globalControl = new ConcurrencyControl();
+export async function acquireLock(resourceId, timeoutMs = 5000, controller = globalControl) {
+    const holderId = `${process.pid}-${Date.now()}-${Math.random()}`;
+    const startTime = Date.now();
+    while (Date.now() - startTime < timeoutMs) {
+        try {
+            controller.acquireLock(resourceId, holderId);
+            return { resourceId, holderId, controller };
+        }
+        catch (err) {
+            if (Date.now() - startTime >= timeoutMs) {
+                throw err;
+            }
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+    }
+    throw new Error(`Failed to acquire lock for ${resourceId} within ${timeoutMs}ms`);
+}
+export async function releaseLock(lock) {
+    lock.controller.releaseLock(lock.resourceId, lock.holderId);
+}
 //# sourceMappingURL=concurrency-control.js.map
