@@ -89,8 +89,11 @@ export function validatePath(userPath: string, baseDir: string): string {
     resolved = path.normalize(joined);
   }
 
-  // Boundary check
-  if (!resolved.startsWith(resolvedBase)) {
+  // Boundary check - normalize separators for cross-platform comparison
+  const normalizedResolved = resolved.replace(/\\/g, '/');
+  const normalizedBase = resolvedBase.replace(/\\/g, '/');
+
+  if (!normalizedResolved.startsWith(normalizedBase)) {
     throw new SecurityError('Path traversal detected: path outside base directory');
   }
 

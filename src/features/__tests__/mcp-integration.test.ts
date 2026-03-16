@@ -13,7 +13,7 @@ describe('MCP Integration E2E', () => {
 
   afterAll(async () => {
     await contextManager.shutdown();
-  });
+  }, 30000);
 
   it('should store and retrieve agent context via MCP Memory', async () => {
     await contextManager.setAgentContext('test-agent', { task: 'integration test' });

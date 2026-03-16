@@ -26,7 +26,7 @@ describe('validatePath', () => {
     });
 
     it('should allow nested path', () => {
-      const result = validatePath('subdir/file.txt', testDir);
+      const result = validatePath(path.join('subdir', 'file.txt'), testDir);
       expect(result).toBe(path.join(testDir, 'subdir', 'file.txt'));
     });
 

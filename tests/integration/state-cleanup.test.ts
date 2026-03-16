@@ -24,10 +24,16 @@ describe('Integration: State Cleanup (BUG-004)', () => {
     const crashedSession = join(sessionsDir, 'crashed-session-001');
     mkdirSync(crashedSession, { recursive: true });
 
+    const stateFile = join(crashedSession, 'autopilot-state.json');
+    const oldTime = Date.now() - 48 * 60 * 60 * 1000;
+
     writeFileSync(
-      join(crashedSession, 'autopilot-state.json'),
-      JSON.stringify({ active: true, startedAt: Date.now() - 48 * 60 * 60 * 1000 })
+      stateFile,
+      JSON.stringify({ active: true, startedAt: oldTime })
     );
+
+    // Explicitly set file modification time to 48 hours ago
+    utimesSync(stateFile, oldTime / 1000, oldTime / 1000);
 
     const removed = clearStaleSessionDirs(testDir, 0);
     expect(removed).toContain('crashed-session-001');
