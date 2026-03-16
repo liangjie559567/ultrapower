@@ -366,6 +366,24 @@
       "type": "skill_used",
       "target": "autopilot",
       "success": true
+    },
+    {
+      "timestamp": "2026-03-16T20:42:09.195Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-16T20:43:23.066Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-16T20:57:00.214Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
     }
   ],
   "agents": []
