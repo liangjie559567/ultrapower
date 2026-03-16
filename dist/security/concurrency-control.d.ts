@@ -42,7 +42,8 @@ export declare class ConcurrencyControl {
 export interface Lock {
     resourceId: string;
     holderId: string;
+    controller: ConcurrencyControl;
 }
-export declare function acquireLock(resourceId: string, timeoutMs?: number): Promise<Lock>;
+export declare function acquireLock(resourceId: string, timeoutMs?: number, controller?: ConcurrencyControl): Promise<Lock>;
 export declare function releaseLock(lock: Lock): Promise<void>;
 //# sourceMappingURL=concurrency-control.d.ts.map

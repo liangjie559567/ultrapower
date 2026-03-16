@@ -122,16 +122,17 @@ const globalControl = new ConcurrencyControl();
 export interface Lock {
   resourceId: string;
   holderId: string;
+  controller: ConcurrencyControl;
 }
 
-export async function acquireLock(resourceId: string, timeoutMs: number = 5000): Promise<Lock> {
+export async function acquireLock(resourceId: string, timeoutMs: number = 5000, controller: ConcurrencyControl = globalControl): Promise<Lock> {
   const holderId = `${process.pid}-${Date.now()}-${Math.random()}`;
   const startTime = Date.now();
 
   while (Date.now() - startTime < timeoutMs) {
     try {
-      globalControl.acquireLock(resourceId, holderId);
-      return { resourceId, holderId };
+      controller.acquireLock(resourceId, holderId);
+      return { resourceId, holderId, controller };
     } catch (err) {
       if (Date.now() - startTime >= timeoutMs) {
         throw err;
@@ -144,5 +145,5 @@ export async function acquireLock(resourceId: string, timeoutMs: number = 5000):
 }
 
 export async function releaseLock(lock: Lock): Promise<void> {
-  globalControl.releaseLock(lock.resourceId, lock.holderId);
+  lock.controller.releaseLock(lock.resourceId, lock.holderId);
 }
