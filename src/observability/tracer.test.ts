@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { startSpan, endSpan, withSpan } from './tracer';
-import { SpanStatusCode } from '@opentelemetry/api';
 
 describe('tracer', () => {
   beforeEach(() => {

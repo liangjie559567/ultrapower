@@ -4,7 +4,7 @@ import { MetricsStorage } from './storage.js';
 export class MetricsCollector {
   static collectUsageMetrics(cwd: string): UsageMetrics {
     const data = MetricsStorage.load(cwd);
-    const successCount = [...data.skills, ...data.agents].filter((e: any) => e.success).length;
+    const successCount = [...data.skills, ...data.agents].filter((e) => e.success).length;
     const totalCount = data.skills.length + data.agents.length;
 
     return {

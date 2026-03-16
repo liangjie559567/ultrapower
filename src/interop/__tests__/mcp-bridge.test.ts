@@ -67,7 +67,7 @@ describe('MCP Bridge Tools', () => {
     });
 
     it('displays tasks with all fields', async () => {
-      const task = await interopSendTaskTool.handler({
+      await interopSendTaskTool.handler({
         target: 'omx',
         type: 'implement',
         description: 'Full task',

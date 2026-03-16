@@ -9,8 +9,6 @@ import {
   clearWorkflowState,
   detectImplementationIntent,
   detectExecutionIntent,
-  detectBrainstormingComplete,
-  detectPlanComplete,
   detectTestsComplete,
   detectCodeReviewComplete,
   detectSecurityReviewComplete,

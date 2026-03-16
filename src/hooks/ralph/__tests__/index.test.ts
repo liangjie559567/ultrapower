@@ -21,9 +21,9 @@ describe('Ralph Module - Core Scenarios', () => {
   });
 
   describe('Normal Flow', () => {
-    it('starts ralph loop successfully', () => {
+    it('starts ralph loop successfully', async () => {
       const hook = createRalphLoopHook(TEST_DIR);
-      const started = hook.startLoop('test-session', 'build feature X');
+      const started = await hook.startLoop('test-session', 'build feature X');
 
       expect(started).toBe(true);
       const state = hook.getState('test-session');
@@ -31,9 +31,9 @@ describe('Ralph Module - Core Scenarios', () => {
       expect(state?.iteration).toBe(1);
     });
 
-    it('persists execution state across iterations', () => {
+    it('persists execution state across iterations', async () => {
       const hook = createRalphLoopHook(TEST_DIR);
-      hook.startLoop('test-session', 'task');
+      await hook.startLoop('test-session', 'task');
 
       incrementRalphIteration(TEST_DIR, 'test-session');
       const state1 = readRalphState(TEST_DIR, 'test-session');
@@ -44,9 +44,9 @@ describe('Ralph Module - Core Scenarios', () => {
       expect(state2?.iteration).toBe(3);
     });
 
-    it('exits on verification pass', () => {
+    it('exits on verification pass', async () => {
       const hook = createRalphLoopHook(TEST_DIR);
-      hook.startLoop('test-session', 'task');
+      await hook.startLoop('test-session', 'task');
 
       const cancelled = hook.cancelLoop('test-session');
       expect(cancelled).toBe(true);
@@ -70,9 +70,9 @@ describe('Ralph Module - Core Scenarios', () => {
       expect(state?.iteration).toBe(5);
     });
 
-    it('retries on verification failure', () => {
+    it('retries on verification failure', async () => {
       const hook = createRalphLoopHook(TEST_DIR);
-      hook.startLoop('test-session', 'task');
+      await hook.startLoop('test-session', 'task');
 
       incrementRalphIteration(TEST_DIR, 'test-session');
       incrementRalphIteration(TEST_DIR, 'test-session');

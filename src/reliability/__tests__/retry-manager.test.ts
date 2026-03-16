@@ -40,7 +40,7 @@ describe('RetryManager', () => {
   it('should use exponential backoff', async () => {
     vi.useFakeTimers();
     const rm = new RetryManager({ maxRetries: 2, baseDelay: 100 });
-    let attempts = 0;
+    const _attempts = 0;
 
     const promise = rm.execute(async () => {
       attempts++;

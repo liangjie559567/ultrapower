@@ -31,5 +31,5 @@ export class BehaviorTracker {
     return [];
   }
 
-  private static saveHistory(history: UserBehavior[]): void {}
+  private static saveHistory(_history: UserBehavior[]): void {}
 }

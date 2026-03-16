@@ -47,7 +47,8 @@ describe('rotateOutboxIfNeeded', () => {
     }
     rotateOutboxIfNeeded(TEST_TEAM, 'w1', 10);
     const lines = readFileSync(join(TEAMS_DIR, 'outbox', 'w1.jsonl'), 'utf-8').trim().split('\n');
-    expect(lines.length).toBeLessThanOrEqual(10);
+    // Should keep floor(10/2) = 5 most recent
+    expect(lines.length).toBe(5);
     // Should keep recent messages
     expect(JSON.parse(lines[lines.length - 1]).message).toBe('msg-19');
   });

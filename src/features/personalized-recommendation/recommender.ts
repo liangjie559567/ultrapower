@@ -1,8 +1,8 @@
-import type { UserProfile, Recommendation } from './types.js';
+import type { Recommendation } from './types.js';
 import { BehaviorTracker } from './behavior-tracker.js';
 
 export class PersonalizedRecommender {
-  static getRecommendations(prompt: string): Recommendation[] {
+  static getRecommendations(_prompt: string): Recommendation[] {
     const profile = BehaviorTracker.buildProfile();
     const recommendations: Recommendation[] = [];
 

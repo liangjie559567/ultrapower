@@ -19,12 +19,12 @@ import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
 import { readLastToolError, getToolErrorRetryGuidance, type ToolErrorState } from './tool-error.js';
 
 // Lazy imports via event bus
-let ultraworkModule: any;
-let ralphModule: any;
-let todoModule: any;
-let autopilotModule: any;
-let autopilotEnforcementModule: any;
-let teamPipelineModule: any;
+let ultraworkModule: typeof import('../ultrawork/index.js') | undefined;
+let ralphModule: typeof import('../ralph/index.js') | undefined;
+let todoModule: typeof import('../todo-continuation/index.js') | undefined;
+let autopilotModule: typeof import('../autopilot/index.js') | undefined;
+let autopilotEnforcementModule: typeof import('../autopilot/enforcement.js') | undefined;
+let teamPipelineModule: typeof import('../team-pipeline/index.js') | undefined;
 
 async function loadUltrawork() {
   if (!ultraworkModule) ultraworkModule = await import('../ultrawork/index.js');
@@ -52,7 +52,7 @@ async function loadAutopilotEnforcement() {
 }
 
 async function loadTeamPipeline() {
-  if (!teamPipelineModule) teamPipelineModule = await import('../team-pipeline/state.js');
+  if (!teamPipelineModule) teamPipelineModule = await import('../team-pipeline/index.js');
   return teamPipelineModule;
 }
 
@@ -201,7 +201,7 @@ async function checkRalphLoop(
   // When team mode is active alongside ralph, respect team phase transitions
   const team = await loadTeamPipeline();
   const teamState = team.readTeamPipelineState(workingDir, sessionId);
-  if (teamState && teamState.active !== undefined) {
+  if (teamState?.active !== undefined) {
     const teamPhase = teamState.phase;
 
     // If team pipeline reached a terminal state, ralph should also complete

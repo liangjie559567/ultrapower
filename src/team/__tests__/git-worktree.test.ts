@@ -23,7 +23,7 @@ describe('git-worktree', () => {
     writeFileSync(join(repoDir, 'README.md'), '# Test\n');
     execFileSync('git', ['add', '.'], { cwd: repoDir, stdio: 'pipe' });
     execFileSync('git', ['commit', '-m', 'Initial commit'], { cwd: repoDir, stdio: 'pipe' });
-  });
+  }, 30000);
 
   afterEach(() => {
     // Clean up worktrees first (git needs this before rmSync)

@@ -1,6 +1,6 @@
 
-> @liangjie559567/ultrapower@7.1.1 test
-> vitest --run
+> @liangjie559567/ultrapower@7.5.1 test
+> vitest
 
 
 [1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/ljyih/Desktop/ultrapower[39m
@@ -37,54 +37,9 @@
 [22m[39m[RetryManager] Attempt 2 failed: fail
 [RetryManager] Retrying in 200ms...
 
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns base backoff for first restart
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns base backoff for first restart
-[22m[39m[WorkerFactory] Using SQLite adapter
-
 [90mstdout[2m | tests/reliability/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould use exponential backoff
 [22m[39m[RetryManager] Attempt 3 failed: fail
 [RetryManager] Retrying in 400ms...
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/__tests__/job-management.test.ts[2m > [22m[2mjob-management[2m > [22m[2mhandleKillJob[2m > [22m[2msignal validation[2m > [22m[2mallows SIGTERM
-[22m[39m[WorkerFactory] Using SQLite adapter
 
 [90mstdout[2m | tests/reliability/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould use exponential backoff
 [22m[39m[RetryManager] Attempt 4 failed: fail
@@ -93,65 +48,123 @@
 [22m[39m[RetryManager] Attempt 1 failed: fail
 [RetryManager] Retrying in 1000ms...
 
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
+[90mstdout[2m | src/__tests__/job-management.test.ts[2m > [22m[2mjob-management[2m > [22m[2mhandleKillJob[2m > [22m[2msignal validation[2m > [22m[2mallows SIGTERM
 [22m[39m[WorkerFactory] Using SQLite adapter
 
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
-[22m[39m[WorkerFactory] Using SQLite adapter
-
- [32m✓[39m src/hooks/ultrapilot/__tests__/index-core.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 773[2mms[22m[39m
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2muses custom policy
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2muses custom policy
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
-[22m[39m[WorkerFactory] Using SQLite adapter
-
-[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
-[22m[39m[WorkerFactory] Using SQLite adapter
-
+ [32m✓[39m src/hooks/session-end/__tests__/nexus-integration.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1632[2mms[22m[39m
+     [33m[2m✓[22m[39m processSessionEnd completes without throwing when nexus enabled [33m 1629[2mms[22m[39m
 [90mstdout[2m | tests/reliability/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould use default options
 [22m[39m[RetryManager] Attempt 2 failed: fail
 [RetryManager] Retrying in 2000ms...
 
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns base backoff for first restart
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns base backoff for first restart
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns exponential backoff values
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mcaps backoff at backoffMaxMs
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2mreturns null after max restarts
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2muses custom policy
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mshouldRestart[2m > [22m[2muses custom policy
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mcreates restart state on first call
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+[90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mincrements restart count
+[22m[39m[WorkerFactory] Using SQLite adapter
+
+ [32m✓[39m src/features/ccg/__tests__/incremental-processor.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 3736[2mms[22m[39m
+     [33m[2m✓[22m[39m detects changed files [33m 1612[2mms[22m[39m
+     [33m[2m✓[22m[39m detects untracked files [33m 1064[2mms[22m[39m
+     [33m[2m✓[22m[39m gets all changed files [33m 1056[2mms[22m[39m
+[90mstdout[2m | tests/reliability/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould use default options
+[22m[39m[RetryManager] Attempt 3 failed: fail
+[RetryManager] Retrying in 4000ms...
+
+ [32m✓[39m src/notifications/__tests__/session-registry.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 3846[2mms[22m[39m
+       [33m[2m✓[22m[39m does not drop writes under contention (eventually appends) [33m 565[2mms[22m[39m
+       [33m[2m✓[22m[39m retries across lock-timeout windows and eventually appends [33m 2400[2mms[22m[39m
+       [33m[2m✓[22m[39m does not reap stale lock when owner pid is still alive [33m 507[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mupdates lastRestartAt timestamp
 [22m[39m[WorkerFactory] Using SQLite adapter
 
@@ -164,7 +177,6 @@
 [90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mupdates lastRestartAt timestamp
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/__tests__/job-state-db.test.ts [2m([22m[2m74 tests[22m[2m)[22m[33m 2037[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mupdates lastRestartAt timestamp
 [22m[39m[WorkerFactory] Using SQLite adapter
 
@@ -174,6 +186,10 @@
 [90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mrecordRestart[2m > [22m[2mupdates lastRestartAt timestamp
 [22m[39m[WorkerFactory] Using SQLite adapter
 
+ [32m✓[39m src/features/mcp-autodiscovery/__tests__/registry-client.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 4119[2mms[22m[39m
+     [33m[2m✓[22m[39m should fetch servers from registry [33m 2621[2mms[22m[39m
+     [33m[2m✓[22m[39m should search by capability [33m 779[2mms[22m[39m
+     [33m[2m✓[22m[39m should handle official filter query [33m 717[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mclearRestartState[2m > [22m[2mremoves restart state
 [22m[39m[WorkerFactory] Using SQLite adapter
 
@@ -195,70 +211,68 @@
 [90mstdout[2m | src/team/__tests__/worker-restart.test.ts[2m > [22m[2mworker-restart[2m > [22m[2mclearRestartState[2m > [22m[2mdoes not throw for non-existent state
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/hooks/session-end/__tests__/session-end-bridge-cleanup.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 636[2mms[22m[39m
-     [33m[2m✓[22m[39m passes extracted python_repl sessions to cleanupBridgeSessions [33m 634[2mms[22m[39m
- [32m✓[39m src/team/__tests__/worker-restart.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 3046[2mms[22m[39m
-       [33m[2m✓[22m[39m returns base backoff for first restart [33m 333[2mms[22m[39m
- [32m✓[39m src/hooks/workflow-gate/__tests__/git-helper.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 3645[2mms[22m[39m
-     [33m[2m✓[22m[39m should return changed files [33m 1531[2mms[22m[39m
-     [33m[2m✓[22m[39m should return empty array when no changes [33m 1212[2mms[22m[39m
-     [33m[2m✓[22m[39m should return empty array on git error [33m 896[2mms[22m[39m
-[90mstdout[2m | tests/reliability/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould use default options
-[22m[39m[RetryManager] Attempt 3 failed: fail
-[RetryManager] Retrying in 4000ms...
-
- [32m✓[39m src/notifications/__tests__/session-registry.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 4149[2mms[22m[39m
-       [33m[2m✓[22m[39m does not drop writes under contention (eventually appends) [33m 646[2mms[22m[39m
-       [33m[2m✓[22m[39m retries across lock-timeout windows and eventually appends [33m 2398[2mms[22m[39m
-       [33m[2m✓[22m[39m does not reap stale lock when owner pid is still alive [33m 618[2mms[22m[39m
- [32m✓[39m src/__tests__/cli-config-stop-callback.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 5456[2mms[22m[39m
-     [33m[2m✓[22m[39m updates telegram tagList options and preserves existing config fields [33m 2989[2mms[22m[39m
-     [33m[2m✓[22m[39m applies and clears discord tags and ignores tag options for file callback [33m 2461[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/incremental-processor.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 5834[2mms[22m[39m
-     [33m[2m✓[22m[39m detects changed files [33m 1301[2mms[22m[39m
-     [33m[2m✓[22m[39m detects untracked files [33m 2009[2mms[22m[39m
-     [33m[2m✓[22m[39m gets all changed files [33m 2521[2mms[22m[39m
- [32m✓[39m src/__tests__/hooks.test.ts [2m([22m[2m141 tests[22m[2m)[22m[33m 3541[2mms[22m[39m
-     [33m[2m✓[22m[39m restores active Team stage on session-start [33m 598[2mms[22m[39m
-     [33m[2m✓[22m[39m emits terminal Team restore guidance on cancelled stage [33m 503[2mms[22m[39m
-     [33m[2m✓[22m[39m enforces verify stage continuation while active and non-terminal [33m 556[2mms[22m[39m
-     [33m[2m✓[22m[39m enforces fix stage continuation while active and non-terminal [33m 429[2mms[22m[39m
-     [33m[2m✓[22m[39m allows terminal cleanup when Team stage is cancelled [33m 633[2mms[22m[39m
-     [33m[2m✓[22m[39m does not remove reply-session registry on idle Stop/persistent-mode [33m 324[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/validation.test.ts [2m([22m[2m47 tests[22m[2m)[22m[33m 2231[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/worktree-paths.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 2208[2mms[22m[39m
-       [33m[2m✓[22m[39m should handle bare repositories by falling back and logging [33m 721[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/cancel.test.ts [2m([22m[2m55 tests[22m[2m)[22m[33m 1994[2mms[22m[39m
- [32m✓[39m src/platform/__tests__/process-utils.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 6665[2mms[22m[39m
-     [33m[2m✓[22m[39m should handle Windows platform with SIGTERM [33m 661[2mms[22m[39m
-     [33m[2m✓[22m[39m should handle Windows platform with SIGKILL [33m 727[2mms[22m[39m
-     [33m[2m✓[22m[39m should escalate to SIGKILL after grace period [33m 2593[2mms[22m[39m
-     [33m[2m✓[22m[39m should return failed if process cannot be killed [33m 2510[2mms[22m[39m
- [32m✓[39m src/tools/diagnostics/__tests__/lsp-aggregator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1909[2mms[22m[39m
-       [33m[2m✓[22m[39m finds and checks TypeScript files [33m 315[2mms[22m[39m
-       [33m[2m✓[22m[39m aggregates diagnostics from multiple files [33m 616[2mms[22m[39m
-       [33m[2m✓[22m[39m skips ignored directories [33m 318[2mms[22m[39m
-       [33m[2m✓[22m[39m continues on LSP client errors [33m 307[2mms[22m[39m
-       [33m[2m✓[22m[39m filters files by extensions [33m 340[2mms[22m[39m
- [32m✓[39m src/features/speckit-core/__tests__/core.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1337[2mms[22m[39m
-     [33m[2m✓[22m[39m should generate plan with dependencies [33m 320[2mms[22m[39m
- [32m✓[39m src/team/__tests__/task-file-ops.test.ts [2m([22m[2m45 tests[22m[2m)[22m[33m 588[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/priority-chain.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 4135[2mms[22m[39m
+       [33m[2m✓[22m[39m should prioritize ralph over autopilot [33m 815[2mms[22m[39m
+       [33m[2m✓[22m[39m should execute cleanup in correct order [33m 492[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle tool-error hook [33m 332[2mms[22m[39m
+       [33m[2m✓[22m[39m should process all 15 HookTypes without errors [33m 1286[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/worker-restart.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 2923[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli-config-stop-callback.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 5174[2mms[22m[39m
+     [33m[2m✓[22m[39m updates telegram tagList options and preserves existing config fields [33m 3043[2mms[22m[39m
+     [33m[2m✓[22m[39m applies and clears discord tags and ignores tag options for file callback [33m 2128[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge-routing.test.ts [2m([22m[2m60 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 4869[2mms[22m[39m
+       [33m[2m✓[22m[39m should route "session-end" and return a valid HookOutput [33m 360[2mms[22m[39m
+       [33m[2m✓[22m[39m should route "pre-tool-use" and return a valid HookOutput [33m 879[2mms[22m[39m
+       [33m[2m✓[22m[39m "session-end" should pass validation with camelCase input (post-normalization) [33m 690[2mms[22m[39m
+       [33m[2m✓[22m[39m snake_case input should be normalized and pass validation [33m 665[2mms[22m[39m
+ [32m✓[39m src/platform/__tests__/process-utils.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 5814[2mms[22m[39m
+     [33m[2m✓[22m[39m should handle Windows platform with SIGTERM [33m 564[2mms[22m[39m
+     [33m[2m✓[22m[39m should handle Windows platform with SIGKILL [33m 537[2mms[22m[39m
+     [33m[2m✓[22m[39m should escalate to SIGKILL after grace period [33m 2309[2mms[22m[39m
+     [33m[2m✓[22m[39m should return failed if process cannot be killed [33m 2268[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/session-end-bridge-cleanup.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 6518[2mms[22m[39m
+     [33m[2m✓[22m[39m passes extracted python_repl sessions to cleanupBridgeSessions [33m 6511[2mms[22m[39m
+ [32m✓[39m src/hooks/workflow-gate/__tests__/git-helper.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2845[2mms[22m[39m
+     [33m[2m✓[22m[39m should return changed files [33m 1053[2mms[22m[39m
+     [33m[2m✓[22m[39m should return empty array when no changes [33m 917[2mms[22m[39m
+     [33m[2m✓[22m[39m should return empty array on git error [33m 873[2mms[22m[39m
+ [32m✓[39m src/features/mcp-autodiscovery/__tests__/capability-matcher.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2872[2mms[22m[39m
+     [33m[2m✓[22m[39m should return empty array when no matches found [33m 2264[2mms[22m[39m
+     [33m[2m✓[22m[39m should rank matches by confidence [33m 604[2mms[22m[39m
+ [32m✓[39m src/features/speckit-core/__tests__/core.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1726[2mms[22m[39m
+     [33m[2m✓[22m[39m should generate constitution with project analysis [33m 308[2mms[22m[39m
+     [33m[2m✓[22m[39m should generate plan with dependencies [33m 396[2mms[22m[39m
+     [33m[2m✓[22m[39m should reject invalid feature names in plan [33m 310[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/transitions.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1069[2mms[22m[39m
+ [32m✓[39m src/__tests__/job-state-db.test.ts [2m([22m[2m74 tests[22m[2m)[22m[33m 2098[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks.test.ts [2m([22m[2m141 tests[22m[2m)[22m[33m 2596[2mms[22m[39m
+     [33m[2m✓[22m[39m restores active Team stage on session-start [33m 426[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces verify stage continuation while active and non-terminal [33m 312[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces fix stage continuation while active and non-terminal [33m 379[2mms[22m[39m
+     [33m[2m✓[22m[39m does not remove reply-session registry on idle Stop/persistent-mode [33m 487[2mms[22m[39m
 [90mstdout[2m | tests/reliability/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould use default options
 [22m[39m[RetryManager] Attempt 4 failed: fail
 
- [32m✓[39m tests/reliability/retry-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 7878[2mms[22m[39m
-     [33m[2m✓[22m[39m should use exponential backoff [33m 741[2mms[22m[39m
-     [33m[2m✓[22m[39m should use default options [33m 7056[2mms[22m[39m
- [32m✓[39m src/hooks/ultrawork/session-isolation.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 787[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/enforcement.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 2037[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/priority-chain.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 8013[2mms[22m[39m
-       [33m[2m✓[22m[39m should prioritize ralph over autopilot [33m 1048[2mms[22m[39m
-       [33m[2m✓[22m[39m should execute cleanup in correct order [33m 1399[2mms[22m[39m
-       [33m[2m✓[22m[39m should handle tool-error hook [33m 564[2mms[22m[39m
-       [33m[2m✓[22m[39m should process all 15 HookTypes without errors [33m 2197[2mms[22m[39m
-       [33m[2m✓[22m[39m should execute hooks in priority order during Stop phase [33m 303[2mms[22m[39m
-       [33m[2m✓[22m[39m should handle post-tool-use timeout (5s default) [33m 318[2mms[22m[39m
-       [33m[2m✓[22m[39m should handle session-start hook [33m 409[2mms[22m[39m
+ [32m✓[39m tests/reliability/retry-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 7863[2mms[22m[39m
+     [33m[2m✓[22m[39m should use exponential backoff [33m 743[2mms[22m[39m
+     [33m[2m✓[22m[39m should use default options [33m 7029[2mms[22m[39m
+ [32m✓[39m src/__tests__/cli-notify-profile.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 8385[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a discord profile and stores it in notificationProfiles [33m 659[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a telegram profile [33m 707[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a discord-bot profile with --channel-id [33m 964[2mms[22m[39m
+     [33m[2m✓[22m[39m adds multiple platforms to the same profile [33m 1298[2mms[22m[39m
+     [33m[2m✓[22m[39m does not affect legacy stopHookCallbacks when using --profile [33m 698[2mms[22m[39m
+     [33m[2m✓[22m[39m shows profile config with --show [33m 757[2mms[22m[39m
+     [33m[2m✓[22m[39m lists all profiles [33m 701[2mms[22m[39m
+     [33m[2m✓[22m[39m shows a specific profile [33m 794[2mms[22m[39m
+     [33m[2m✓[22m[39m deletes a profile [33m 925[2mms[22m[39m
+     [33m[2m✓[22m[39m shows helpful message when no profiles exist [33m 878[2mms[22m[39m
+ [32m✓[39m src/tools/diagnostics/__tests__/lsp-aggregator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1871[2mms[22m[39m
+       [33m[2m✓[22m[39m finds and checks TypeScript files [33m 318[2mms[22m[39m
+       [33m[2m✓[22m[39m aggregates diagnostics from multiple files [33m 619[2mms[22m[39m
+       [33m[2m✓[22m[39m skips ignored directories [33m 307[2mms[22m[39m
+       [33m[2m✓[22m[39m continues on LSP client errors [33m 305[2mms[22m[39m
+       [33m[2m✓[22m[39m filters files by extensions [33m 312[2mms[22m[39m
 [90mstdout[2m | src/installer/__tests__/install-flow.test.ts[2m > [22m[2minstall - basic flow[2m > [22m[2mrespects verbose option
 [22m[39mPlatform: win32 (Node.js hooks)
 Creating directories...
@@ -334,7 +348,7 @@ Installing slash commands to ~/.claude/commands/
   Skipping execute-plan.md (already exists)
   Skipping wizard.md (already exists)
   Skipping write-plan.md (already exists)
-Backed up existing CLAUDE.md to C:\Users\ljyih\.claude\CLAUDE.md.backup.2026-03-14T08-53-12
+Backed up existing CLAUDE.md to C:\Users\ljyih\.claude\CLAUDE.md.backup.2026-03-15T04-10-51
 Updated CLAUDE.md (merged with existing content)
 Installing hook scripts...
   Skipping keyword-detector.mjs (already exists)
@@ -360,184 +374,199 @@ Configuring settings.json...
   settings.json updated
 Saved version metadata
 
- [32m✓[39m src/__tests__/cli-notify-profile.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 8929[2mms[22m[39m
-     [33m[2m✓[22m[39m creates a discord profile and stores it in notificationProfiles [33m 584[2mms[22m[39m
-     [33m[2m✓[22m[39m creates a telegram profile [33m 643[2mms[22m[39m
-     [33m[2m✓[22m[39m creates a discord-bot profile with --channel-id [33m 984[2mms[22m[39m
-     [33m[2m✓[22m[39m adds multiple platforms to the same profile [33m 1656[2mms[22m[39m
-     [33m[2m✓[22m[39m does not affect legacy stopHookCallbacks when using --profile [33m 915[2mms[22m[39m
-     [33m[2m✓[22m[39m shows profile config with --show [33m 685[2mms[22m[39m
-     [33m[2m✓[22m[39m lists all profiles [33m 768[2mms[22m[39m
-     [33m[2m✓[22m[39m shows a specific profile [33m 606[2mms[22m[39m
-     [33m[2m✓[22m[39m deletes a profile [33m 982[2mms[22m[39m
-     [33m[2m✓[22m[39m shows helpful message when no profiles exist [33m 1101[2mms[22m[39m
- [32m✓[39m src/team/__tests__/edge-cases.test.ts [2m([22m[2m67 tests[22m[2m)[22m[33m 1773[2mms[22m[39m
- [32m✓[39m src/installer/__tests__/install-flow.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1807[2mms[22m[39m
-     [33m[2m✓[22m[39m returns boolean without throwing [33m 696[2mms[22m[39m
-     [33m[2m✓[22m[39m respects force option [33m 597[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/transitions.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1858[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/bridge-routing.test.ts [2m([22m[2m60 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 8591[2mms[22m[39m
-       [33m[2m✓[22m[39m should route "stop-continuation" and return a valid HookOutput [33m 344[2mms[22m[39m
-       [33m[2m✓[22m[39m should route "ralph" and return a valid HookOutput [33m 355[2mms[22m[39m
-       [33m[2m✓[22m[39m should route "session-end" and return a valid HookOutput [33m 1292[2mms[22m[39m
-       [33m[2m✓[22m[39m should route "pre-tool-use" and return a valid HookOutput [33m 1435[2mms[22m[39m
-       [33m[2m✓[22m[39m "session-end" should pass validation with camelCase input (post-normalization) [33m 724[2mms[22m[39m
-       [33m[2m✓[22m[39m snake_case input should be normalized and pass validation [33m 1571[2mms[22m[39m
- [32m✓[39m src/__tests__/job-management-sqlite.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 538[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/git-utils.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 801[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/state-tools.test.ts [2m([22m[2m48 tests[22m[2m)[22m[33m 743[2mms[22m[39m
- [32m✓[39m src/hooks/project-memory/__tests__/detector.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 744[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/summary.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 755[2mms[22m[39m
-[90mstdout[2m | src/features/ccg/__tests__/e2e-performance.test.ts[2m > [22m[2mE2E: Performance Benchmarks[2m > [22m[2mshould handle timeout gracefully
-[22m[39m[Fallback] undefined: Codex succeeded
-
- [32m✓[39m src/features/ccg/__tests__/e2e-performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 435[2mms[22m[39m
-     [33m[2m✓[22m[39m should complete workflow within time limit [33m 307[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/transcript-parser.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 655[2mms[22m[39m
-       [33m[2m✓[22m[39m streams large files efficiently without loading all into memory [33m 515[2mms[22m[39m
- [32m✓[39m src/hooks/guards/__tests__/session-watchdog.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 585[2mms[22m[39m
- [32m✓[39m src/__tests__/consensus-execution-handoff.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 470[2mms[22m[39m
- [32m✓[39m src/hooks/subagent-tracker/__tests__/index.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 597[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/atomic-write.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 367[2mms[22m[39m
- [32m✓[39m src/hooks/project-memory/__tests__/integration.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 760[2mms[22m[39m
- [32m✓[39m src/__tests__/notepad.test.ts [2m([22m[2m40 tests[22m[2m)[22m[33m 815[2mms[22m[39m
- [32m✓[39m src/team/__tests__/summary-report.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 256[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/validation.test.ts [2m([22m[2m47 tests[22m[2m)[22m[33m 3294[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/enforcement.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1857[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/install-flow.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1264[2mms[22m[39m
+     [33m[2m✓[22m[39m returns boolean without throwing [33m 311[2mms[22m[39m
+     [33m[2m✓[22m[39m respects force option [33m 515[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/task-file-ops.test.ts [2m([22m[2m45 tests[22m[2m)[22m[33m 904[2mms[22m[39m
+ [32m✓[39m src/hooks/guards/__tests__/session-watchdog.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 856[2mms[22m[39m
+ [32m✓[39m src/__tests__/notepad.test.ts [2m([22m[2m40 tests[22m[2m)[22m[33m 761[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/worktree-paths.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 1941[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle bare repositories by falling back and logging [33m 380[2mms[22m[39m
+       [33m[2m✓[22m[39m should reject a workingDirectory that resolves to a different git root [33m 578[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/state-tools.test.ts [2m([22m[2m48 tests[22m[2m)[22m[33m 819[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/edge-cases.test.ts [2m([22m[2m67 tests[22m[2m)[22m[33m 2095[2mms[22m[39m
+ [31m❯[39m src/features/mcp-autodiscovery/__tests__/performance.test.ts [2m([22m[2m2 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[33m 10049[2mms[22m[39m
+     [2m[90m↓[39m[22m should sync 10 agent contexts in under 500ms
+     [2m[90m↓[39m[22m should handle 50 concurrent context operations
+ [32m✓[39m src/__tests__/job-management-sqlite.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 546[2mms[22m[39m
+ [32m✓[39m src/hooks/persistent-mode/__tests__/error-handling.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 977[2mms[22m[39m
+     [33m[2m✓[22m[39m should return continue:true on empty valid input without hanging [33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m should complete within timeout even on errors [33m 310[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/bridge-entry.test.ts [2m([22m[2m87 tests[22m[2m)[22m[33m 10078[2mms[22m[39m
+     [33m[2m✓[22m[39m throws if teamName is missing [33m 302[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts permissionEnforcement: off [33m 323[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts safe allowedPaths patterns [33m 639[2mms[22m[39m
+     [33m[2m✓[22m[39m throws if config is missing required fields [33m 307[2mms[22m[39m
+     [33m[2m✓[22m[39m skips permission validation when permissionEnforcement is off [33m 393[2mms[22m[39m
+     [33m[2m✓[22m[39m validates permissions only when enforcement is not off [33m 377[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects all dangerous patterns [33m 503[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves all custom config values [33m 321[2mms[22m[39m
+     [33m[2m✓[22m[39m handles config with minimal fields and applies all defaults [33m 388[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/bridge-integration.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 1033[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/edge-cases.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 2047[2mms[22m[39m
+     [33m[2m✓[22m[39m handles force and forceHooks together [33m 1057[2mms[22m[39m
+     [33m[2m✓[22m[39m handles skipHud with force [33m 868[2mms[22m[39m
+ [32m✓[39m src/__tests__/delegation-enforcement-levels.test.ts [2m([22m[2m63 tests[22m[2m)[22m[33m 696[2mms[22m[39m
+       [33m[2m✓[22m[39m calls enforcement before HUD tracking [33m 407[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/cancel.test.ts [2m([22m[2m55 tests[22m[2m)[22m[33m 2873[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrawork/session-isolation.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1071[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/transcript-parser.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 899[2mms[22m[39m
+       [33m[2m✓[22m[39m streams large files efficiently without loading all into memory [33m 729[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/git-utils.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 627[2mms[22m[39m
+ [32m✓[39m src/hooks/project-memory/__tests__/integration.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 889[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrapilot/__tests__/index-core.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1413[2mms[22m[39m
+       [33m[2m✓[22m[39m 跟踪 worker 进度 [33m 943[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/summary.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 537[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/atomic-write.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 527[2mms[22m[39m
+ [32m✓[39m src/platform/process-utils.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 689[2mms[22m[39m
+     [33m[2m✓[22m[39m should handle PID without command injection on Windows [33m 683[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mwrites initial heartbeat and exits on shutdown signal
-[22m[39m2026-03-14T08:53:15.030Z [bridge] w1@test-team starting (codex)
-2026-03-14T08:53:15.034Z [bridge] Shutdown signal received: test
-2026-03-14T08:53:15.034Z [bridge] Shutdown complete. Goodbye.
+[22m[39m2026-03-15T04:10:54.425Z [bridge] w1@test-team starting (codex)
+2026-03-15T04:10:54.427Z [bridge] Shutdown signal received: test
+2026-03-15T04:10:54.427Z [bridge] Shutdown complete. Goodbye.
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mwrites initial heartbeat and exits on shutdown signal
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/hooks/session-end/__tests__/nexus-integration.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 11134[2mms[22m[39m
-     [33m[2m✓[22m[39m processSessionEnd completes without throwing when nexus enabled [33m 11130[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2msends idle outbox when no tasks available
-[22m[39m2026-03-14T08:53:15.094Z [bridge] w1@test-team starting (codex)
+[22m[39m2026-03-15T04:10:54.471Z [bridge] w1@test-team starting (codex)
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2msends idle outbox when no tasks available
 [22m[39m[WorkerFactory] Using SQLite adapter
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2msends idle outbox when no tasks available
-[22m[39m2026-03-14T08:53:15.206Z [bridge] Shutdown signal received: test
-2026-03-14T08:53:15.206Z [bridge] Shutdown complete. Goodbye.
+[22m[39m2026-03-15T04:10:54.576Z [bridge] Shutdown signal received: test
+2026-03-15T04:10:54.576Z [bridge] Shutdown complete. Goodbye.
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
-[22m[39m2026-03-14T08:53:15.208Z [bridge] w1@test-team starting (codex)
+[22m[39m2026-03-15T04:10:54.584Z [bridge] w1@test-team starting (codex)
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
-[22m[39m2026-03-14T08:53:15.209Z [bridge] Executing task task-99: Do work
+[22m[39m2026-03-15T04:10:54.585Z [bridge] Executing task task-99: Do work
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
-[22m[39m2026-03-14T08:53:15.210Z [bridge] Task task-99 completed
+[22m[39m2026-03-15T04:10:54.587Z [bridge] Task task-99 completed
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/features/workflow-recommender/__tests__/git-analyzer.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 688[2mms[22m[39m
-     [33m[2m✓[22m[39m should get modified files [33m 453[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/race-condition.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 421[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mclaims task, spawns CLI, and marks completed on success
-[22m[39m2026-03-14T08:53:15.318Z [bridge] Shutdown signal received: done
-2026-03-14T08:53:15.318Z [bridge] Shutdown complete. Goodbye.
+[22m[39m2026-03-15T04:10:54.692Z [bridge] Shutdown signal received: done
+2026-03-15T04:10:54.692Z [bridge] Shutdown complete. Goodbye.
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
-[22m[39m2026-03-14T08:53:15.322Z [bridge] w1@test-team starting (codex)
+[22m[39m2026-03-15T04:10:54.702Z [bridge] w1@test-team starting (codex)
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
-[22m[39m2026-03-14T08:53:15.323Z [bridge] Executing task task-fail: Test task
+[22m[39m2026-03-15T04:10:54.708Z [bridge] Executing task task-fail: Test task
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
-[22m[39m2026-03-14T08:53:15.324Z [bridge] Task task-fail failed (attempt 1): CLI exited with code 1: CLI crashed
+[22m[39m2026-03-15T04:10:54.710Z [bridge] Task task-fail failed (attempt 1): CLI exited with code 1: CLI crashed
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
 [22m[39m[WorkerFactory] Using SQLite adapter
 
+ [32m✓[39m src/hooks/recovery/__tests__/storage.test.ts [2m([22m[2m33 tests[22m[2m)[22m[33m 608[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mretries task on CLI failure when retries not exhausted
-[22m[39m2026-03-14T08:53:15.436Z [bridge] Shutdown signal received: done
-2026-03-14T08:53:15.437Z [bridge] Shutdown complete. Goodbye.
+[22m[39m2026-03-15T04:10:54.816Z [bridge] Shutdown signal received: done
+2026-03-15T04:10:54.816Z [bridge] Shutdown complete. Goodbye.
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
-[22m[39m2026-03-14T08:53:15.439Z [bridge] w1@test-team starting (codex)
+[22m[39m2026-03-15T04:10:54.820Z [bridge] w1@test-team starting (codex)
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
-[22m[39m2026-03-14T08:53:15.440Z [bridge] Executing task task-perm: Test task
+[22m[39m2026-03-15T04:10:54.821Z [bridge] Executing task task-perm: Test task
 
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
-[22m[39m2026-03-14T08:53:15.441Z [bridge] Task task-perm permanently failed after 5 attempts
+[22m[39m2026-03-15T04:10:54.822Z [bridge] Task task-perm permanently failed after 5 attempts
 
+ [32m✓[39m src/hooks/project-memory/__tests__/detector.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 492[2mms[22m[39m
 [90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/hooks/recovery/__tests__/storage.test.ts [2m([22m[2m33 tests[22m[2m)[22m[33m 571[2mms[22m[39m
-[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
-[22m[39m2026-03-14T08:53:15.544Z [bridge] Shutdown signal received: done
-2026-03-14T08:53:15.544Z [bridge] Shutdown complete. Goodbye.
-
- [32m✓[39m src/team/__tests__/mcp-team-bridge.test.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 639[2mms[22m[39m
- [32m✓[39m src/__tests__/delegation-enforcement-levels.test.ts [2m([22m[2m63 tests[22m[2m)[22m[33m 865[2mms[22m[39m
-       [33m[2m✓[22m[39m calls enforcement before HUD tracking [33m 453[2mms[22m[39m
- [32m✓[39m src/hooks/persistent-mode/__tests__/ralph-max-iteration.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 569[2mms[22m[39m
-     [33m[2m✓[22m[39m extends max iterations and keeps ralph blocking instead of silently stopping [33m 565[2mms[22m[39m
- [32m✓[39m src/installer/__tests__/edge-cases.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 745[2mms[22m[39m
-     [33m[2m✓[22m[39m handles force and forceHooks together [33m 349[2mms[22m[39m
-     [33m[2m✓[22m[39m handles skipHud with force [33m 327[2mms[22m[39m
- [32m✓[39m src/platform/process-utils.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 867[2mms[22m[39m
-     [33m[2m✓[22m[39m should handle PID without command injection on Windows [33m 857[2mms[22m[39m
+ [32m✓[39m src/interop/__tests__/shared-state.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 293[2mms[22m[39m
 [90mstdout[2m | src/mcp/__tests__/job-management-adapter.test.ts[2m > [22m[2mjob-management with WorkerStateAdapter[2m > [22m[2menvironment variable control[2m > [22m[2mshould use auto backend by default
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/mcp/__tests__/job-management-adapter.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 501[2mms[22m[39m
- [32m✓[39m src/hooks/ultrapilot/__tests__/state.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 853[2mms[22m[39m
- [32m✓[39m src/hooks/guards/__tests__/post-tool.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 208[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/reply-listener.test.ts [2m([22m[2m74 tests[22m[2m)[22m[33m 601[2mms[22m[39m
- [32m✓[39m src/__tests__/agent-registry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 263[2mms[22m[39m
-[90mstdout[2m | src/hooks/ultrawork/__tests__/index.test.ts[2m > [22m[2multrawork state management[2m > [22m[2merror handling[2m > [22m[2mshould return null for corrupted state file
-[22m[39m[state-adapter] Read failed: SyntaxError: Unexpected token 'i', "invalid json{{{" is not valid JSON
-    at JSON.parse (<anonymous>)
-    at FileStateAdapter.read (C:/Users/ljyih/Desktop/ultrapower/src/lib/state-adapter.ts:92:26)
-    at readUltraworkState (C:/Users/ljyih/Desktop/ultrapower/src/hooks/ultrawork/index.ts:35:18)
-    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/ultrawork/__tests__/index.test.ts:76:21
-    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:145:11
-    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:26
-    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1243:20
-    at new Promise (<anonymous>)
-    at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
-    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
+ [32m✓[39m src/mcp/__tests__/job-management-adapter.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 583[2mms[22m[39m
+[90mstdout[2m | src/team/__tests__/mcp-team-bridge.test.ts[2m > [22m[2mrunBridge[2m > [22m[2mpermanently fails task when retries exhausted
+[22m[39m2026-03-15T04:10:54.930Z [bridge] Shutdown signal received: done
+2026-03-15T04:10:54.931Z [bridge] Shutdown complete. Goodbye.
 
- [32m✓[39m src/__tests__/tools/trace-tools.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 425[2mms[22m[39m
- [32m✓[39m src/__tests__/delegation-enforcer.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 550[2mms[22m[39m
- [32m✓[39m src/hooks/ultrawork/__tests__/index.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 282[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/compaction-concurrency.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 547[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/job-state-db-deprecation.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 510[2mms[22m[39m
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时 archived=1，kept=10
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+ [32m✓[39m src/team/__tests__/mcp-team-bridge.test.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 564[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/job-state-db-deprecation.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 481[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrapilot/__tests__/state.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 816[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/git-worktree.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 12830[2mms[22m[39m
+       [33m[2m✓[22m[39m creates worktree at correct path [33m 1293[2mms[22m[39m
+       [33m[2m✓[22m[39m branch name is properly sanitized [33m 1360[2mms[22m[39m
+       [33m[2m✓[22m[39m handles recreation of stale worktree [33m 1781[2mms[22m[39m
+       [33m[2m✓[22m[39m removes worktree and branch [33m 1366[2mms[22m[39m
+       [33m[2m✓[22m[39m does not throw for non-existent worktree [33m 1004[2mms[22m[39m
+       [33m[2m✓[22m[39m returns empty for team with no worktrees [33m 715[2mms[22m[39m
+       [33m[2m✓[22m[39m lists created worktrees [33m 2827[2mms[22m[39m
+       [33m[2m✓[22m[39m removes all worktrees for a team [33m 2480[2mms[22m[39m
+ [32m✓[39m src/workers/__tests__/sqlite-adapter.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 473[2mms[22m[39m
+ [32m✓[39m src/__tests__/consensus-execution-handoff.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 632[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge-pkill.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 257[2mms[22m[39m
+ [32m✓[39m src/__tests__/delegation-enforcer-integration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 505[2mms[22m[39m
+       [33m[2m✓[22m[39m injects model parameter for Task call without model [33m 320[2mms[22m[39m
+ [32m✓[39m src/__tests__/delegation-enforcer.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 361[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/learner/bridge.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 302[2mms[22m[39m
+[90mstdout[2m | src/features/ccg/__tests__/performance-benchmark.test.ts[2m > [22m[2mCCG Performance Benchmark[2m > [22m[2mTest 1: Large project detection (100+ files)
+[22m[39m[PERF] Large project detection: 4.16ms
 
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时，最旧的块（2026-01-01）出现在归档文件中
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+[90mstdout[2m | src/features/ccg/__tests__/performance-benchmark.test.ts[2m > [22m[2mCCG Performance Benchmark[2m > [22m[2mTest 2: Microservice detection (5 services)
+[22m[39m[PERF] Microservice detection: 4.11ms
 
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时，最新的 10 块保留在主文件中，最旧块不在主文件
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+ [32m✓[39m src/hooks/__tests__/compaction-concurrency.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 327[2mms[22m[39m
+[90mstdout[2m | src/features/ccg/__tests__/performance-benchmark.test.ts[2m > [22m[2mCCG Performance Benchmark[2m > [22m[2mTest 3: Module splitting performance
+[22m[39m[PERF] Module splitting: 12.16ms
 
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m15 条时 archived=5，kept=10，主文件只含 10 条 ## 反思 块
-[22m[39m[归档] reflection_log: 已移动 5 条反思至 reflection_log_archive.md
+ [32m✓[39m src/features/ccg/__tests__/performance-benchmark.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 372[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/ast-stream.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 13766[2mms[22m[39m
+     [33m[2m✓[22m[39m handles large files >10MB with streaming [33m 13751[2mms[22m[39m
+[90mstdout[2m | src/features/ccg/__tests__/e2e-performance.test.ts[2m > [22m[2mE2E: Performance Benchmarks[2m > [22m[2mshould handle timeout gracefully
+[22m[39m[Fallback] undefined: Codex succeeded
 
- [32m✓[39m src/hooks/mode-registry/__tests__/session-isolation.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 443[2mms[22m[39m
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m两次归档调用均追加到归档文件
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
-
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m两次归档调用均追加到归档文件
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
-
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档文件超过 5000 行时 result.warning 存在
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
-
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档完成后锁已释放，可立即再次调用
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
-
-[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档完成后锁已释放，可立即再次调用
-[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
-
- [32m✓[39m src/hooks/learner/__tests__/reflection-archiver.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 232[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/e2e-performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 554[2mms[22m[39m
+     [33m[2m✓[22m[39m should complete workflow within time limit [33m 424[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/background-process-guard.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 464[2mms[22m[39m
+ [32m✓[39m src/hooks/mode-registry/__tests__/session-isolation.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 503[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/audit-log.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 404[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/notepad-tools.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 341[2mms[22m[39m
+ [32m✓[39m src/workers/__tests__/json-adapter.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 269[2mms[22m[39m
+ [32m✓[39m src/hooks/persistent-mode/session-isolation.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 13345[2mms[22m[39m
+       [33m[2m✓[22m[39m should block stop when session_id matches active ultrawork [33m 708[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block stop when session_id does not match [33m 336[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block when no ultrawork state exists [33m 304[2mms[22m[39m
+       [33m[2m✓[22m[39m should block when sessionId matches ultrawork state [33m 438[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block when sessionId does not match ultrawork state [33m 419[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block for legacy state when sessionId is provided (session isolation) [33m 415[2mms[22m[39m
+       [33m[2m✓[22m[39m should ignore invalid sessionId when reading session-scoped state [33m 497[2mms[22m[39m
+       [33m[2m✓[22m[39m should not block legacy state when invalid sessionId is provided [33m 495[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block for legacy autopilot state when sessionId is provided [33m 507[2mms[22m[39m
+       [33m[2m✓[22m[39m should block for legacy state when no sessionId provided (backward compat) [33m 393[2mms[22m[39m
+       [33m[2m✓[22m[39m should block for legacy autopilot state when no sessionId provided [33m 684[2mms[22m[39m
+       [33m[2m✓[22m[39m should accept sessionId (camelCase) for session identification [33m 701[2mms[22m[39m
+       [33m[2m✓[22m[39m should accept session_id (snake_case) for session identification [33m 496[2mms[22m[39m
+       [33m[2m✓[22m[39m should accept sessionid (lowercase) for session identification [33m 569[2mms[22m[39m
+       [33m[2m✓[22m[39m should prefer sessionId over session_id when both provided [33m 767[2mms[22m[39m
+       [33m[2m✓[22m[39m should prefer session_id over sessionid when both provided [33m 504[2mms[22m[39m
+       [33m[2m✓[22m[39m should prefer sessionId over sessionid when both provided [33m 558[2mms[22m[39m
+       [33m[2m✓[22m[39m should fall back to session_id when sessionId is empty [33m 540[2mms[22m[39m
+       [33m[2m✓[22m[39m should block when project_path matches current directory [33m 587[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block when project_path does not match current directory [33m 415[2mms[22m[39m
+       [33m[2m✓[22m[39m should NOT block for legacy local state when sessionId provided (session isolation) [33m 511[2mms[22m[39m
+       [33m[2m✓[22m[39m should ignore invalid sessionId when checking session-scoped state [33m 576[2mms[22m[39m
+       [33m[2m✓[22m[39m should not block legacy state when invalid sessionId is provided (project isolation) [33m 431[2mms[22m[39m
+       [33m[2m✓[22m[39m should block for legacy local state when no sessionId (backward compat) [33m 469[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-p0-scenarios.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 343[2mms[22m[39m
+ [32m✓[39m src/features/workflow-recommender/__tests__/git-analyzer.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 497[2mms[22m[39m
+     [33m[2m✓[22m[39m should get modified files [33m 366[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/transcript-scanner.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 386[2mms[22m[39m
 [90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mvalidateBuild: dry-run returns success without executing
 [22m[39m[dry-run] npx tsc --noEmit
 [dry-run] npm run build
@@ -560,12 +589,22 @@ Saved version metadata
 [22m[39mStep 5/5: syncMarketplace...
 syncMarketplace: versions already in sync
 
- [32m✓[39m src/hooks/ralph/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 177[2mms[22m[39m
 [90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mrelease-steps[2m > [22m[2mrunReleasePipeline: startFrom skips earlier steps
 [22m[39mRelease pipeline completed successfully.
 
- [32m✓[39m src/__tests__/hooks/learner/bridge.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 269[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/notepad-tools.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 373[2mms[22m[39m
+[90mstdout[2m | src/hooks/ultrawork/__tests__/index.test.ts[2m > [22m[2multrawork state management[2m > [22m[2merror handling[2m > [22m[2mshould return null for corrupted state file
+[22m[39m[state-adapter] Read failed: SyntaxError: Unexpected token 'i', "invalid json{{{" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at FileStateAdapter.read (C:/Users/ljyih/Desktop/ultrapower/src/lib/state-adapter.ts:92:26)
+    at readUltraworkState (C:/Users/ljyih/Desktop/ultrapower/src/hooks/ultrawork/index.ts:35:18)
+    at C:/Users/ljyih/Desktop/ultrapower/src/hooks/ultrawork/__tests__/index.test.ts:76:21
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:145:11
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:915:26
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1243:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
+    at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
+
 [90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
 [22m[39mStep 1/5: preflight...
 
@@ -585,70 +624,12 @@ syncMarketplace: versions already in sync
 [90mstdout[2m | src/__tests__/release-steps.test.ts[2m > [22m[2mfailure paths[2m > [22m[2mrunReleasePipeline: calls process.exit(1) when validate fails
 [22m[39mRelease pipeline completed successfully.
 
- [32m✓[39m src/__tests__/release-steps.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 182[2mms[22m[39m
- [32m✓[39m src/team/__tests__/bridge-integration.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 723[2mms[22m[39m
- [32m✓[39m src/workers/__tests__/sqlite-adapter.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 350[2mms[22m[39m
-[90mstdout[2m | src/hooks/ultrapilot/__tests__/index.test.ts[2m > [22m[2multrapilot coordinator[2m > [22m[2mfile ownership[2m > [22m[2mshould track shared files correctly
-[22m[39mhandleSharedFiles result: [33mtrue[39m
-isSharedFile result: [33mtrue[39m
-
- [32m✓[39m src/hooks/ultrapilot/__tests__/index.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 292[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/queue-archiver.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 213[2mms[22m[39m
- [32m✓[39m src/features/state-manager/__tests__/encryption-integration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 157[2mms[22m[39m
- [32m✓[39m src/hooks/session-end/__tests__/session-duration.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 176[2mms[22m[39m
- [32m✓[39m src/__tests__/mnemosyne/finder.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 268[2mms[22m[39m
- [32m✓[39m src/__tests__/hud-axiom.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 278[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/ast-stream.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 14094[2mms[22m[39m
-     [33m[2m✓[22m[39m handles large files >10MB with streaming [33m 14083[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/state-adapter.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 176[2mms[22m[39m
- [32m✓[39m src/hooks/workflow-gate/index.test.ts [2m([22m[2m39 tests[22m[2m)[22m[33m 317[2mms[22m[39m
- [32m✓[39m src/workers/__tests__/json-adapter.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 214[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/token-tracker.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 191[2mms[22m[39m
- [32m✓[39m src/__tests__/compatibility-security.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 14007[2mms[22m[39m
-     [33m[2m✓[22m[39m should block LD_PRELOAD environment variable [33m 1144[2mms[22m[39m
-     [33m[2m✓[22m[39m should block LD_LIBRARY_PATH environment variable [33m 1129[2mms[22m[39m
-     [33m[2m✓[22m[39m should block DYLD_INSERT_LIBRARIES environment variable [33m 1146[2mms[22m[39m
-     [33m[2m✓[22m[39m should block DYLD_LIBRARY_PATH environment variable [33m 1144[2mms[22m[39m
-     [33m[2m✓[22m[39m should block NODE_OPTIONS environment variable [33m 1133[2mms[22m[39m
-     [33m[2m✓[22m[39m should block PYTHONSTARTUP environment variable [33m 1147[2mms[22m[39m
-     [33m[2m✓[22m[39m should block PYTHONPATH environment variable [33m 1162[2mms[22m[39m
-     [33m[2m✓[22m[39m should block RUBYOPT environment variable [33m 1193[2mms[22m[39m
-     [33m[2m✓[22m[39m should block PERL5OPT environment variable [33m 1147[2mms[22m[39m
-     [33m[2m✓[22m[39m should block BASH_ENV environment variable [33m 1146[2mms[22m[39m
-     [33m[2m✓[22m[39m should allow safe environment variables [33m 1141[2mms[22m[39m
-     [33m[2m✓[22m[39m should not leave zombie connections on spawn failure [33m 1149[2mms[22m[39m
- [32m✓[39m src/team/__tests__/bridge-entry.test.ts [2m([22m[2m87 tests[22m[2m)[22m[33m 13607[2mms[22m[39m
-     [33m[2m✓[22m[39m throws if workerName is missing [33m 512[2mms[22m[39m
-     [33m[2m✓[22m[39m throws if provider is invalid [32m 300[2mms[22m[39m
-     [33m[2m✓[22m[39m accepts codex provider [33m 411[2mms[22m[39m
-     [33m[2m✓[22m[39m accepts gemini provider [33m 367[2mms[22m[39m
-     [33m[2m✓[22m[39m applies default pollIntervalMs [33m 597[2mms[22m[39m
-     [33m[2m✓[22m[39m applies default taskTimeoutMs [33m 318[2mms[22m[39m
-     [33m[2m✓[22m[39m applies default maxConsecutiveErrors [33m 579[2mms[22m[39m
-     [33m[2m✓[22m[39m accepts permissionEnforcement: audit [33m 640[2mms[22m[39m
-     [33m[2m✓[22m[39m accepts permissionEnforcement: enforce [33m 350[2mms[22m[39m
-     [33m[2m✓[22m[39m throws if allowedPaths is not an array [33m 992[2mms[22m[39m
-     [33m[2m✓[22m[39m throws if deniedPaths is not an array [33m 505[2mms[22m[39m
-     [33m[2m✓[22m[39m throws if allowedCommands is not an array [33m 369[2mms[22m[39m
-     [33m[2m✓[22m[39m throws if config is missing required fields [33m 330[2mms[22m[39m
-     [33m[2m✓[22m[39m loads and validates valid config [33m 509[2mms[22m[39m
-     [33m[2m✓[22m[39m successfully loads and normalizes a complete config [33m 727[2mms[22m[39m
-     [33m[2m✓[22m[39m handles config with minimal fields and applies all defaults [33m 352[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/transcript-scanner.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 524[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/background-process-guard.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 506[2mms[22m[39m
-       [33m[2m✓[22m[39m should allow background Task when under limit [33m 320[2mms[22m[39m
- [32m✓[39m src/hooks/project-memory/__tests__/storage.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 130[2mms[22m[39m
- [32m✓[39m src/team/__tests__/git-worktree.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 15049[2mms[22m[39m
-       [33m[2m✓[22m[39m creates worktree at correct path [33m 1727[2mms[22m[39m
-       [33m[2m✓[22m[39m branch name is properly sanitized [33m 1846[2mms[22m[39m
-       [33m[2m✓[22m[39m handles recreation of stale worktree [33m 2692[2mms[22m[39m
-       [33m[2m✓[22m[39m removes worktree and branch [33m 2254[2mms[22m[39m
-       [33m[2m✓[22m[39m does not throw for non-existent worktree [33m 1082[2mms[22m[39m
-       [33m[2m✓[22m[39m returns empty for team with no worktrees [33m 737[2mms[22m[39m
-       [33m[2m✓[22m[39m lists created worktrees [33m 2276[2mms[22m[39m
-       [33m[2m✓[22m[39m removes all worktrees for a team [33m 2431[2mms[22m[39m
- [32m✓[39m tests/security/concurrency-control.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 276[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/transition.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 172[2mms[22m[39m
+ [32m✓[39m src/__tests__/release-steps.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 110[2mms[22m[39m
+ [32m✓[39m src/features/__tests__/mcp-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 14176[2mms[22m[39m
+     [33m[2m✓[22m[39m should query MCP Registry and match capabilities [33m 4404[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/index.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 694[2mms[22m[39m
+ [32m✓[39m src/hooks/persistent-mode/__tests__/ralph-max-iteration.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 345[2mms[22m[39m
+     [33m[2m✓[22m[39m extends max iterations and keeps ralph blocking instead of silently stopping [33m 341[2mms[22m[39m
 [90mstdout[2m | src/hooks/ralph/__tests__/loop.test.ts[2m > [22m[2mRalph Loop[2m > [22m[2mError Handling[2m > [22m[2mhandles corrupted state file gracefully
 [22m[39m[state-adapter] Read failed: SyntaxError: Unexpected token 'i', "invalid json" is not valid JSON
     at JSON.parse (<anonymous>)
@@ -662,120 +643,165 @@ isSharedFile result: [33mtrue[39m
     at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
     at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
 
- [32m✓[39m src/hooks/guards/__tests__/index.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 517[2mms[22m[39m
- [32m✓[39m src/hooks/ralph/__tests__/loop.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 315[2mms[22m[39m
- [32m✓[39m src/__tests__/skills.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 291[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/client-p0-scenarios.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 378[2mms[22m[39m
-       [33m[2m✓[22m[39m should disconnect when buffer exceeds 64MB limit [33m 321[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/client.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 342[2mms[22m[39m
-       [33m[2m✓[22m[39m should retry on connection failure [33m 318[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/gemini-yolo-env.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 313[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/reply-config.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 100[2mms[22m[39m
- [32m✓[39m src/__tests__/delegation-enforcer-integration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 839[2mms[22m[39m
-       [33m[2m✓[22m[39m injects model parameter for Task call without model [33m 584[2mms[22m[39m
- [32m✓[39m src/team/__tests__/team-status.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 363[2mms[22m[39m
-[90mstdout[2m | src/features/ccg/__tests__/performance-benchmark.test.ts[2m > [22m[2mCCG Performance Benchmark[2m > [22m[2mTest 1: Large project detection (100+ files)
-[22m[39m[PERF] Large project detection: 12.75ms
+ [32m✓[39m src/interop/__tests__/omx-team-state.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 279[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/loop.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 631[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrawork/__tests__/index.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 480[2mms[22m[39m
+ [32m✓[39m src/__tests__/compatibility-security.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 14278[2mms[22m[39m
+     [33m[2m✓[22m[39m should block LD_PRELOAD environment variable [33m 1169[2mms[22m[39m
+     [33m[2m✓[22m[39m should block LD_LIBRARY_PATH environment variable [33m 1164[2mms[22m[39m
+     [33m[2m✓[22m[39m should block DYLD_INSERT_LIBRARIES environment variable [33m 1142[2mms[22m[39m
+     [33m[2m✓[22m[39m should block DYLD_LIBRARY_PATH environment variable [33m 1155[2mms[22m[39m
+     [33m[2m✓[22m[39m should block NODE_OPTIONS environment variable [33m 1191[2mms[22m[39m
+     [33m[2m✓[22m[39m should block PYTHONSTARTUP environment variable [33m 1165[2mms[22m[39m
+     [33m[2m✓[22m[39m should block PYTHONPATH environment variable [33m 1162[2mms[22m[39m
+     [33m[2m✓[22m[39m should block RUBYOPT environment variable [33m 1179[2mms[22m[39m
+     [33m[2m✓[22m[39m should block PERL5OPT environment variable [33m 1162[2mms[22m[39m
+     [33m[2m✓[22m[39m should block BASH_ENV environment variable [33m 1160[2mms[22m[39m
+     [33m[2m✓[22m[39m should allow safe environment variables [33m 1166[2mms[22m[39m
+     [33m[2m✓[22m[39m should not leave zombie connections on spawn failure [33m 1186[2mms[22m[39m
+ [32m✓[39m src/hooks/project-memory/__tests__/learner.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 199[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/state-cache.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 316[2mms[22m[39m
+[90mstdout[2m | src/hooks/ultrapilot/__tests__/index.test.ts[2m > [22m[2multrapilot coordinator[2m > [22m[2mfile ownership[2m > [22m[2mshould track shared files correctly
+[22m[39mhandleSharedFiles result: [33mtrue[39m
+isSharedFile result: [33mtrue[39m
 
- [32m✓[39m src/team/__tests__/outbox-reader.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 263[2mms[22m[39m
- [32m✓[39m src/team/__tests__/inbox-outbox.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 323[2mms[22m[39m
-[90mstdout[2m | src/features/ccg/__tests__/performance-benchmark.test.ts[2m > [22m[2mCCG Performance Benchmark[2m > [22m[2mTest 2: Microservice detection (5 services)
-[22m[39m[PERF] Microservice detection: 3.80ms
-
- [32m✓[39m src/lib/__tests__/race-condition.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 271[2mms[22m[39m
-[90mstdout[2m | src/features/ccg/__tests__/performance-benchmark.test.ts[2m > [22m[2mCCG Performance Benchmark[2m > [22m[2mTest 3: Module splitting performance
-[22m[39m[PERF] Module splitting: 8.99ms
-
- [32m✓[39m src/hooks/__tests__/askuserquestion-lifecycle.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 125[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/performance-benchmark.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 370[2mms[22m[39m
- [32m✓[39m src/hooks/project-memory/__tests__/learner.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 182[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/memory-tools.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 256[2mms[22m[39m
- [32m✓[39m src/interop/__tests__/omx-team-state.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 243[2mms[22m[39m
- [32m✓[39m src/workers/__tests__/performance.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m src/__tests__/skills.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 459[2mms[22m[39m
+ [32m✓[39m src/__tests__/tools/trace-tools.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 260[2mms[22m[39m
+ [32m✓[39m tests/security/concurrency-control.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 293[2mms[22m[39m
+ [32m✓[39m src/hooks/guards/__tests__/index.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 307[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/client.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 359[2mms[22m[39m
+       [33m[2m✓[22m[39m should retry on connection failure [33m 331[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/backfill-engine.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 327[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrapilot/__tests__/index.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 401[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/queue-archiver.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 249[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/askuserquestion-lifecycle.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 134[2mms[22m[39m
 [90mstdout[2m | src/workers/__tests__/factory.test.ts[2m > [22m[2mcreateWorkerAdapter[2m > [22m[2mauto mode[2m > [22m[2mshould create SQLite adapter when available
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/hooks/persistent-mode/__tests__/error-handling.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 754[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/registry.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 185[2mms[22m[39m
 [90mstdout[2m | src/workers/__tests__/factory.test.ts[2m > [22m[2mcreateWorkerAdapter[2m > [22m[2mauto mode[2m > [22m[2mshould fallback to JSON when SQLite fails
 [22m[39m[WorkerFactory] Using SQLite adapter
 
- [32m✓[39m src/workers/__tests__/factory.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 267[2mms[22m[39m
- [32m✓[39m tests/backup/backup-manager.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 83[2mms[22m[39m
- [32m✓[39m src/interop/__tests__/shared-state.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 447[2mms[22m[39m
- [32m✓[39m src/__tests__/ralph-prd.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 296[2mms[22m[39m
- [32m✓[39m src/team/__tests__/audit-log.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 204[2mms[22m[39m
- [32m✓[39m src/tools/python-repl/__tests__/session-lock.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 267[2mms[22m[39m
- [32m✓[39m src/__tests__/ralph-progress.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 421[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/e2e-old-project.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 85[2mms[22m[39m
- [32m✓[39m src/monitoring/__tests__/metrics-collector.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 141[2mms[22m[39m
- [32m✓[39m src/team/__tests__/heartbeat.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 156[2mms[22m[39m
- [32m✓[39m src/hooks/persistent-mode/session-isolation.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 16854[2mms[22m[39m
-       [33m[2m✓[22m[39m should block stop when session_id matches active ultrawork [33m 847[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block stop when session_id does not match [33m 626[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block after ultrawork is deactivated [33m 359[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block when session_id is undefined and state has session_id [33m 405[2mms[22m[39m
-       [33m[2m✓[22m[39m should support session-scoped state files [33m 490[2mms[22m[39m
-       [33m[2m✓[22m[39m Session A cannot see Session B state in session-scoped dirs [33m 320[2mms[22m[39m
-       [33m[2m✓[22m[39m should block when sessionId matches ultrawork state [33m 941[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block when sessionId does not match ultrawork state [33m 788[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block for legacy state when sessionId is provided (session isolation) [33m 463[2mms[22m[39m
-       [33m[2m✓[22m[39m should ignore invalid sessionId when reading session-scoped state [33m 410[2mms[22m[39m
-       [33m[2m✓[22m[39m should not block legacy state when invalid sessionId is provided [33m 328[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block for legacy autopilot state when sessionId is provided [33m 1065[2mms[22m[39m
-       [33m[2m✓[22m[39m should block for legacy state when no sessionId provided (backward compat) [33m 1161[2mms[22m[39m
-       [33m[2m✓[22m[39m should block for legacy autopilot state when no sessionId provided [33m 727[2mms[22m[39m
-       [33m[2m✓[22m[39m should accept sessionId (camelCase) for session identification [33m 467[2mms[22m[39m
-       [33m[2m✓[22m[39m should accept session_id (snake_case) for session identification [33m 563[2mms[22m[39m
-       [33m[2m✓[22m[39m should accept sessionid (lowercase) for session identification [33m 714[2mms[22m[39m
-       [33m[2m✓[22m[39m should prefer sessionId over session_id when both provided [33m 755[2mms[22m[39m
-       [33m[2m✓[22m[39m should prefer session_id over sessionid when both provided [33m 548[2mms[22m[39m
-       [33m[2m✓[22m[39m should prefer sessionId over sessionid when both provided [33m 481[2mms[22m[39m
-       [33m[2m✓[22m[39m should fall back to session_id when sessionId is empty [33m 810[2mms[22m[39m
-       [33m[2m✓[22m[39m should block when project_path matches current directory [33m 584[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block when project_path does not match current directory [33m 624[2mms[22m[39m
-       [33m[2m✓[22m[39m should NOT block for legacy local state when sessionId provided (session isolation) [33m 479[2mms[22m[39m
-       [33m[2m✓[22m[39m should ignore invalid sessionId when checking session-scoped state [33m 566[2mms[22m[39m
-       [33m[2m✓[22m[39m should not block legacy state when invalid sessionId is provided (project isolation) [33m 636[2mms[22m[39m
-       [33m[2m✓[22m[39m should block for legacy local state when no sessionId (backward compat) [33m 409[2mms[22m[39m
- [32m✓[39m src/__tests__/mnemosyne/loader.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 187[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/codex-reasoning-effort.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 172[2mms[22m[39m
- [32m✓[39m src/team/__tests__/task-router.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 203[2mms[22m[39m
- [32m✓[39m src/interop/__tests__/mcp-bridge.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 173[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/backfill-engine.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 268[2mms[22m[39m
- [32m✓[39m src/__tests__/inline-prompt-integration.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 209[2mms[22m[39m
- [32m✓[39m src/__tests__/e2e-workflow.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 171[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/state-cache.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 205[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/state.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 209[2mms[22m[39m
- [32m✓[39m src/__tests__/compatibility.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 85[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/bridge-pkill.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 362[2mms[22m[39m
-       [33m[2m✓[22m[39m should warn for pkill -f command [33m 340[2mms[22m[39m
- [32m✓[39m src/features/token-tracker/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 142[2mms[22m[39m
- [32m✓[39m src/hooks/pre-compact/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 176[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/index-manager-filter.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 166[2mms[22m[39m
- [32m✓[39m src/__tests__/directory-context-injector.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 226[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/tokscale-adapter.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 106[2mms[22m[39m
- [32m✓[39m src/__tests__/rate-limit-wait/integration.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 155[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/e2e-new-project.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 110[2mms[22m[39m
- [32m✓[39m src/team/__tests__/team-registration.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 141[2mms[22m[39m
- [32m✓[39m src/hooks/subagent-tracker/__tests__/boundary-conditions.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 148[2mms[22m[39m
- [32m✓[39m src/features/model-routing/__tests__/external-model-policy.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 63[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/backfill-dedup.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 87[2mms[22m[39m
- [32m✓[39m src/__tests__/learner/auto-learner.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 149[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/plugin-security.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 50[2mms[22m[39m
- [32m✓[39m src/features/state-manager/__tests__/wal-recovery.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 88[2mms[22m[39m
- [32m✓[39m src/__tests__/rate-limit-wait/daemon.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 90[2mms[22m[39m
- [32m✓[39m src/hooks/permission-handler/__tests__/index.test.ts [2m([22m[2m119 tests[22m[2m)[22m[32m 167[2mms[22m[39m
- [32m✓[39m src/hooks/persistent-mode/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 551[2mms[22m[39m
-     [33m[2m✓[22m[39m should not block when no persistent modes active [33m 427[2mms[22m[39m
- [32m✓[39m src/hooks/subagent-tracker/__tests__/session-replay.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 134[2mms[22m[39m
- [32m✓[39m src/hooks/subagent-tracker/__tests__/flush-race.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 133[2mms[22m[39m
- [32m✓[39m src/team/__tests__/lifecycle.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 110[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/windows-platform.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 194[2mms[22m[39m
- [32m✓[39m src/state/__tests__/manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 121[2mms[22m[39m
- [32m✓[39m tests/state/backup-manager.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 51[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/cache-performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 135[2mms[22m[39m
- [32m✓[39m src/state/migration/__tests__/migration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 175[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/inbox-outbox.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 262[2mms[22m[39m
+ [32m✓[39m src/workers/__tests__/factory.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 207[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/team-status.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 272[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/session-lock.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 263[2mms[22m[39m
+ [32m✓[39m src/hooks/guards/__tests__/post-tool.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 161[2mms[22m[39m
+ [32m✓[39m src/hooks/permission-handler/__tests__/index.test.ts [2m([22m[2m119 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/state.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 231[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/merge-coordinator.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 16306[2mms[22m[39m
+       [33m[2m✓[22m[39m returns empty for non-conflicting branches [33m 2266[2mms[22m[39m
+       [33m[2m✓[22m[39m detects potentially conflicting files [33m 2408[2mms[22m[39m
+       [33m[2m✓[22m[39m succeeds for clean merge [33m 2663[2mms[22m[39m
+       [33m[2m✓[22m[39m fails and aborts on conflict [33m 3938[2mms[22m[39m
+       [33m[2m✓[22m[39m returns empty for team with no worktrees [33m 955[2mms[22m[39m
+       [33m[2m✓[22m[39m merges multiple worker branches [33m 4068[2mms[22m[39m
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时 archived=1，kept=10
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时，最旧的块（2026-01-01）出现在归档文件中
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/notifications/__tests__/reply-listener.test.ts [2m([22m[2m74 tests[22m[2m)[22m[32m 261[2mms[22m[39m
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m11 条时，最新的 10 块保留在主文件中，最旧块不在主文件
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m15 条时 archived=5，kept=10，主文件只含 10 条 ## 反思 块
+[22m[39m[归档] reflection_log: 已移动 5 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/team/__tests__/summary-report.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 349[2mms[22m[39m
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m两次归档调用均追加到归档文件
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m两次归档调用均追加到归档文件
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/syncSleep.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 265[2mms[22m[39m
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档文件超过 5000 行时 result.warning 存在
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/tools/__tests__/memory-tools.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 232[2mms[22m[39m
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档完成后锁已释放，可立即再次调用
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/hooks/learner/__tests__/index-manager-filter.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/session-duration.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 324[2mms[22m[39m
+[90mstdout[2m | src/hooks/learner/__tests__/reflection-archiver.test.ts[2m > [22m[2marchiveReflections[2m > [22m[2m归档完成后锁已释放，可立即再次调用
+[22m[39m[归档] reflection_log: 已移动 1 条反思至 reflection_log_archive.md
+
+ [32m✓[39m src/hooks/learner/__tests__/reflection-archiver.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 372[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/state-adapter.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 211[2mms[22m[39m
+ [32m✓[39m src/hooks/workflow-gate/index.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 200[2mms[22m[39m
+ [32m✓[39m src/__tests__/agent-registry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 605[2mms[22m[39m
+     [33m[2m✓[22m[39m all registry agents are exported from index.ts [33m 572[2mms[22m[39m
+ [32m✓[39m src/state/__tests__/manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/encryption-integration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 196[2mms[22m[39m
+ [32m✓[39m tests/state/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 214[2mms[22m[39m
+ [32m✓[39m src/__tests__/rate-limit-wait/daemon.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/boundary-conditions.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m src/__tests__/ralph-progress.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 226[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud-axiom.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 210[2mms[22m[39m
+[90mstdout[2m | src/hooks/guards/__tests__/status-dashboard.test.ts[2m > [22m[2mStatusDashboard[2m > [22m[2mprintDashboard[2m > [22m[2mshould not throw
+[22m[39m╔══════════════════════════════════════╗
+║        Axiom System Status           ║
+╠══════════════════════════════════════╣
+║  Task Status  : IDLE                ║
+║  Last Updated : -                   ║
+║  Knowledge    : 0                   ║
+║  Queue Pending: 0                   ║
+║  Last Commit  : -                   ║
+╚══════════════════════════════════════╝
+
+ [32m✓[39m src/hooks/guards/__tests__/status-dashboard.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 132[2mms[22m[39m
+ [32m✓[39m src/hooks/persistent-mode/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 569[2mms[22m[39m
+     [33m[2m✓[22m[39m should not block when no persistent modes active [33m 442[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/finder.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 261[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/learning-queue-parser.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/task-router.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 252[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/outbox-reader.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 230[2mms[22m[39m
+ [32m✓[39m src/__tests__/learner/auto-learner.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/transition.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 246[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/windows-platform.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 219[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/token-tracker.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/gemini-yolo-env.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 406[2mms[22m[39m
+ [32m✓[39m src/monitoring/__tests__/metrics-collector.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 159[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/team-registration.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 244[2mms[22m[39m
+ [32m✓[39m src/__tests__/inline-prompt-integration.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 208[2mms[22m[39m
+ [32m✓[39m src/state/migration/__tests__/migration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/codex-reasoning-effort.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 165[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/loader.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 183[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/path-validator.test.ts [2m([22m[2m25 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 84[2mms[22m[39m
+ [32m✓[39m src/hooks/pre-compact/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 184[2mms[22m[39m
+ [32m✓[39m src/interop/__tests__/mcp-bridge.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32m✓[39m src/__tests__/doctor-conflicts.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/promotion.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-rollback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 141[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/registry.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m src/__tests__/e2e-workflow.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+ [32m✓[39m src/monitoring/__tests__/dashboard.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/mode-cancel-sync.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/index-manager-import.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 131[2mms[22m[39m
+ [32m✓[39m src/__tests__/compatibility.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 189[2mms[22m[39m
+ [32m✓[39m src/__tests__/ralph-prd.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 170[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/flush-race.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 177[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/heartbeat.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m src/__tests__/rate-limit-wait/integration.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m src/workflows/axiom/__tests__/workflow.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 176[2mms[22m[39m
+ [32m✓[39m src/hooks/team-pipeline/__tests__/pipeline-transitions.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 193[2mms[22m[39m
+ [32m✓[39m src/features/ccg/loop-controller.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 120[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m src/hooks/workflow-gate/__tests__/quality-gate-sync.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/tokscale-adapter.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m src/hooks/project-memory/__tests__/storage.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m src/workers/__tests__/performance.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/wal-recovery.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/session-replay.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m src/hooks/keyword-detector/__tests__/index.test.ts [2m([22m[2m165 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/__tests__/job-management.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 19574[2mms[22m[39m
+         [33m[2m✓[22m[39m clamps negative to 1000ms minimum [33m 1272[2mms[22m[39m
+         [33m[2m✓[22m[39m clamps zero to 1000ms minimum [33m 1263[2mms[22m[39m
+       [33m[2m✓[22m[39m retries when job is not found initially then succeeds [33m 2418[2mms[22m[39m
+       [33m[2m✓[22m[39m gives up after 10 not-found retries [33m 14162[2mms[22m[39m
 [90mstdout[2m | src/hooks/__tests__/bridge-security.test.ts[2m > [22m[2mState Poisoning Resilience[2m > [22m[2mshould return null for completely invalid JSON state
 [22m[39m[state-adapter] Read failed: SyntaxError: Unexpected token 'T', "THIS IS NO"... is not valid JSON
     at JSON.parse (<anonymous>)
@@ -789,7 +815,7 @@ isSharedFile result: [33mtrue[39m
     at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
     at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
 
- [32m✓[39m src/hooks/ultraqa/__tests__/index.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 112[2mms[22m[39m
+ [32m✓[39m src/hooks/setup/__tests__/prune.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 129[2mms[22m[39m
 [90mstdout[2m | src/hooks/__tests__/bridge-security.test.ts[2m > [22m[2mState Poisoning Resilience[2m > [22m[2mshould return null for empty string state file
 [22m[39m[state-adapter] Read failed: SyntaxError: Unexpected end of JSON input
     at JSON.parse (<anonymous>)
@@ -816,7 +842,6 @@ isSharedFile result: [33mtrue[39m
     at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
     at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
 
- [32m✓[39m src/hooks/subagent-tracker/__tests__/syncSleep.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 172[2mms[22m[39m
 [90mstdout[2m | src/hooks/__tests__/bridge-security.test.ts[2m > [22m[2mState Poisoning Resilience[2m > [22m[2mshould return null for binary data state file
 [22m[39m[state-adapter] Read failed: SyntaxError: Unexpected token ' ', " ��" is not valid JSON
     at JSON.parse (<anonymous>)
@@ -830,62 +855,32 @@ isSharedFile result: [33mtrue[39m
     at runWithTimeout [90m(file:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1209:10[90m)[39m
     at [90mfile:///C:/Users/ljyih/Desktop/ultrapower/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1653:37
 
+ [32m✓[39m src/hooks/learner/__tests__/writer.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/sleepMs.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 126[2mms[22m[39m
 [90mstdout[2m | src/hooks/__tests__/bridge-security.test.ts[2m > [22m[2mInput Normalization Security[2m > [22m[2mshould pass through unknown fields for non-sensitive hooks
 [22m[39m[bridge-normalize] Unknown field "custom_field" passed through for hook "pre-tool-use"
 
- [32m✓[39m src/features/ccg/loop-controller.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 113[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/bridge-security.test.ts [2m([22m[2m89 tests[22m[2m)[22m[32m 198[2mms[22m[39m
-[90mstdout[2m | src/hooks/guards/__tests__/status-dashboard.test.ts[2m > [22m[2mStatusDashboard[2m > [22m[2mprintDashboard[2m > [22m[2mshould not throw
-[22m[39m╔══════════════════════════════════════╗
-║        Axiom System Status           ║
-╠══════════════════════════════════════╣
-║  Task Status  : IDLE                ║
-║  Last Updated : -                   ║
-║  Knowledge    : 0                   ║
-║  Queue Pending: 0                   ║
-║  Last Commit  : -                   ║
-╚══════════════════════════════════════╝
-
- [32m✓[39m src/hooks/guards/__tests__/status-dashboard.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 157[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/plugin-rollback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 114[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/learning-queue-parser.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 176[2mms[22m[39m
- [32m✓[39m src/state/migration/__tests__/integrity.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 57[2mms[22m[39m
- [32m✓[39m src/team/__tests__/merge-coordinator.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 20162[2mms[22m[39m
-       [33m[2m✓[22m[39m returns empty for non-conflicting branches [33m 2976[2mms[22m[39m
-       [33m[2m✓[22m[39m detects potentially conflicting files [33m 3509[2mms[22m[39m
-       [33m[2m✓[22m[39m succeeds for clean merge [33m 3956[2mms[22m[39m
-       [33m[2m✓[22m[39m fails and aborts on conflict [33m 4387[2mms[22m[39m
-       [33m[2m✓[22m[39m returns empty for team with no worktrees [33m 932[2mms[22m[39m
-       [33m[2m✓[22m[39m merges multiple worker branches [33m 4394[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/mode-cancel-sync.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 73[2mms[22m[39m
- [32m✓[39m src/hooks/team-pipeline/__tests__/state.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 110[2mms[22m[39m
- [32m✓[39m src/hooks/auto-slash-command/__tests__/executor.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 47[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/promotion.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 63[2mms[22m[39m
- [32m✓[39m src/__tests__/job-management.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 19624[2mms[22m[39m
-         [33m[2m✓[22m[39m clamps negative to 1000ms minimum [33m 1268[2mms[22m[39m
-         [33m[2m✓[22m[39m clamps zero to 1000ms minimum [33m 1274[2mms[22m[39m
-       [33m[2m✓[22m[39m retries when job is not found initially then succeeds [33m 2416[2mms[22m[39m
-       [33m[2m✓[22m[39m gives up after 10 not-found retries [33m 14182[2mms[22m[39m
- [32m✓[39m src/team/__tests__/messaging.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 117[2mms[22m[39m
- [32m✓[39m src/hooks/think-mode/__tests__/index.test.ts [2m([22m[2m107 tests[22m[2m)[22m[32m 51[2mms[22m[39m
- [32m✓[39m src/hooks/observability/__tests__/observability.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 99[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/index-manager-import.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 205[2mms[22m[39m
- [32m✓[39m src/hooks/ralph/__tests__/prd.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 166[2mms[22m[39m
- [32m✓[39m src/hooks/session-end/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 78[2mms[22m[39m
- [32m✓[39m src/team/__tests__/message-router.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 71[2mms[22m[39m
- [32m✓[39m src/team/__tests__/usage-tracker.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 69[2mms[22m[39m
- [32m✓[39m tests/state/migration/integrity.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 79[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/formatter.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 41[2mms[22m[39m
- [32m✓[39m src/monitoring/__tests__/dashboard.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 74[2mms[22m[39m
- [32m✓[39m src/features/ccg/module-splitter.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 57[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/codex-integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 90[2mms[22m[39m
- [32m✓[39m src/hooks/team-pipeline/__tests__/pipeline-transitions.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 145[2mms[22m[39m
- [32m✓[39m src/hooks/setup/__tests__/prune.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 90[2mms[22m[39m
- [32m✓[39m src/__tests__/tools/skills-tools.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 102[2mms[22m[39m
- [32m✓[39m src/__tests__/prompt-injection.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 43[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/bridge.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 82[2mms[22m[39m
- [32m✓[39m src/hooks/rules-injector/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 33[2mms[22m[39m
- [32m✓[39m src/hooks/keyword-detector/__tests__/index.test.ts [2m([22m[2m165 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge-security.test.ts [2m([22m[2m89 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/prd.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/notify-registry-integration.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/unified-team.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/reply-config.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+ [32m✓[39m src/state/__tests__/state-manager.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/progress.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 99[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/backfill-dedup.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 99[2mms[22m[39m
+ [32m✓[39m src/hooks/ultraqa/__tests__/index.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m src/__tests__/directory-context-injector.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m src/workers/__tests__/cached-adapter.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m src/__tests__/tools/skills-tools.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/cache-performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/messaging.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/hooks/team-pipeline/__tests__/state.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m src/hooks/auto-slash-command/__tests__/executor.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/activity-log.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/codex-integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/message-router.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 119[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/usage-tracker.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 98[2mms[22m[39m
 [90mstdout[2m | src/reliability/__tests__/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould succeed on first attempt
 [22m[39m[RetryManager] Success on attempt 1
 
@@ -893,7 +888,6 @@ isSharedFile result: [33mtrue[39m
 [22m[39m[RetryManager] Attempt 1 failed: fail
 [RetryManager] Retrying in 10ms...
 
- [32m✓[39m src/__tests__/installer.test.ts [2m([22m[2m35 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 68[2mms[22m[39m
 [90mstdout[2m | src/reliability/__tests__/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould retry on failure
 [22m[39m[RetryManager] Success on attempt 2
 
@@ -901,12 +895,12 @@ isSharedFile result: [33mtrue[39m
 [22m[39m[RetryManager] Attempt 1 failed: always fail
 [RetryManager] Retrying in 10ms...
 
+ [32m✓[39m src/team/__tests__/lifecycle.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 62[2mms[22m[39m
+ [32m✓[39m src/features/ccg/module-loop-controller.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 57[2mms[22m[39m
 [90mstdout[2m | src/reliability/__tests__/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould fail after max retries
 [22m[39m[RetryManager] Attempt 2 failed: always fail
 [RetryManager] Retrying in 20ms...
 
- [32m✓[39m src/hooks/rules-injector/__tests__/finder.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 46[2mms[22m[39m
- [32m✓[39m src/hooks/ralph/__tests__/progress.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 75[2mms[22m[39m
 [90mstdout[2m | src/reliability/__tests__/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould fail after max retries
 [22m[39m[RetryManager] Attempt 3 failed: always fail
 
@@ -921,100 +915,91 @@ isSharedFile result: [33mtrue[39m
 [90mstdout[2m | src/reliability/__tests__/retry-manager.test.ts[2m > [22m[2mRetryManager[2m > [22m[2mshould use exponential backoff
 [22m[39m[RetryManager] Attempt 3 failed: fail
 
- [32m✓[39m src/workflows/axiom/__tests__/workflow.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 109[2mms[22m[39m
- [32m✓[39m src/reliability/__tests__/retry-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 82[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/top-agents.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 45[2mms[22m[39m
- [32m✓[39m src/mcp/client/__tests__/MCPClient.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 85[2mms[22m[39m
- [32m✓[39m src/__tests__/learner/matcher.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 43[2mms[22m[39m
- [32m✓[39m src/utils/__tests__/paths.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 33[2mms[22m[39m
- [32m✓[39m src/features/state-manager/__tests__/cache.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/reliability/__tests__/retry-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m src/hooks/subagent-tracker/__tests__/flow-tracer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 80[2mms[22m[39m
+ [32m✓[39m src/mcp/client/__tests__/MCPClient.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/e2e-new-project.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+ [32m✓[39m src/__tests__/model-routing.test.ts [2m([22m[2m95 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/e2e-old-project.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m src/features/ccg/module-splitter.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/backup/backup-manager.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 91[2mms[22m[39m
 [90mstdout[2m | tests/reliability/retry-classifier.test.ts[2m > [22m[2mRetryClassifier[2m > [22m[2mintegrates with RetryManager to allow idempotent retries
 [22m[39m[RetryManager] Attempt 1 failed: fail
 [RetryManager] Retrying in 10ms...
 
+ [32m✓[39m src/tools/lsp/__tests__/client-win32-spawn.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 136[2mms[22m[39m
 [90mstdout[2m | tests/reliability/retry-classifier.test.ts[2m > [22m[2mRetryClassifier[2m > [22m[2mintegrates with RetryManager to allow idempotent retries
 [22m[39m[RetryManager] Attempt 2 failed: fail
 [RetryManager] Retrying in 20ms...
 
- [32m✓[39m src/features/delegation-routing/__tests__/resolver.test.ts [2m([22m[2m57 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/file-lock.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 22657[2mms[22m[39m
+     [33m[2m✓[22m[39m 加锁后锁目录存在 [33m 509[2mms[22m[39m
+     [33m[2m✓[22m[39m 加锁后 lock.json 包含 pid 和 timestamp [33m 508[2mms[22m[39m
+     [33m[2m✓[22m[39m unlock() 后锁目录不再存在 [33m 512[2mms[22m[39m
+     [33m[2m✓[22m[39m unlock() 幂等：重复调用不抛出 [33m 516[2mms[22m[39m
+     [33m[2m✓[22m[39m 活跃锁未释放时第二次 acquireLock 抛出 Error [33m 521[2mms[22m[39m
+     [33m[2m✓[22m[39m 抛出的错误信息包含锁路径 [33m 534[2mms[22m[39m
+     [33m[2m✓[22m[39m timestamp 超过 staleMs 的锁视为陈旧，可被自动抢占 [33m 512[2mms[22m[39m
+     [33m[2m✓[22m[39m 陈旧锁抢占后 lock.json 更新为当前进程 pid [33m 511[2mms[22m[39m
+     [33m[2m✓[22m[39m 锁目录存在但 lock.json 不可读 → 视为陈旧，自动抢占 [33m 514[2mms[22m[39m
+     [33m[2m✓[22m[39m 释放后可再次加锁 [33m 515[2mms[22m[39m
+     [33m[2m✓[22m[39m 不同路径的锁互不干扰，可同时持有 [33m 527[2mms[22m[39m
+     [33m[2m✓[22m[39m 刚好在 staleMs 边界的锁不被视为陈旧 [33m 513[2mms[22m[39m
+     [33m[2m✓[22m[39m 超过 staleMs 边界 1ms 的锁被视为陈旧 [33m 510[2mms[22m[39m
+     [33m[2m✓[22m[39m mkdir 抛出非 EEXIST 错误时向上传播 [33m 511[2mms[22m[39m
+     [33m[2m✓[22m[39m lock.json 包含无效 JSON 时视为陈旧 [33m 532[2mms[22m[39m
+     [33m[2m✓[22m[39m 执行函数并返回结果 [33m 521[2mms[22m[39m
+     [33m[2m✓[22m[39m 支持异步函数 [33m 528[2mms[22m[39m
+     [33m[2m✓[22m[39m 函数执行完成后自动释放锁 [33m 526[2mms[22m[39m
+     [33m[2m✓[22m[39m 函数抛出异常时仍释放锁 [33m 526[2mms[22m[39m
+     [33m[2m✓[22m[39m 并发调用时串行执行 [33m 634[2mms[22m[39m
+     [33m[2m✓[22m[39m 3个进程并发竞争时串行执行 [33m 681[2mms[22m[39m
+     [33m[2m✓[22m[39m 重试机制：锁被占用时自动重试 [33m 647[2mms[22m[39m
+     [33m[2m✓[22m[39m 陈旧锁（>30秒）自动清理并获取 [33m 587[2mms[22m[39m
+     [33m[2m✓[22m[39m lock.json 损坏时视为陈旧锁 [33m 524[2mms[22m[39m
+     [33m[2m✓[22m[39m 锁目录在 mkdir 和 writeFile 之间被删除时重试 [33m 525[2mms[22m[39m
+     [33m[2m✓[22m[39m 模拟 ENOENT 竞态：writeFile 时锁目录被删除 [33m 528[2mms[22m[39m
+     [33m[2m✓[22m[39m 父目录不存在时自动创建 [33m 532[2mms[22m[39m
+     [33m[2m✓[22m[39m 超过最大重试次数时抛出错误 [33m 920[2mms[22m[39m
+     [33m[2m✓[22m[39m 指数退避：重试延迟递增 [33m 1327[2mms[22m[39m
+     [33m[2m✓[22m[39m 指数退避最大延迟限制为 1000ms [33m 3191[2mms[22m[39m
+     [33m[2m✓[22m[39m unlock 时锁目录已被删除不抛出错误 [33m 521[2mms[22m[39m
+     [33m[2m✓[22m[39m mkdir 抛出非 EEXIST 错误时向上传播 [33m 509[2mms[22m[39m
+     [33m[2m✓[22m[39m writeFile 抛出非 ENOENT 错误时向上传播 [33m 513[2mms[22m[39m
+     [33m[2m✓[22m[39m 未超过 30000ms 的锁不被视为陈旧 [33m 647[2mms[22m[39m
+     [33m[2m✓[22m[39m 超过 30000ms 的锁被视为陈旧 [33m 520[2mms[22m[39m
 [90mstdout[2m | tests/reliability/retry-classifier.test.ts[2m > [22m[2mRetryClassifier[2m > [22m[2mintegrates with RetryManager to allow idempotent retries
 [22m[39m[RetryManager] Attempt 3 failed: fail
 
- [32m✓[39m tests/reliability/retry-classifier.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 60[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 78[2mms[22m[39m
- [32m✓[39m tests/backup/disaster-drill.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 54[2mms[22m[39m
- [32m✓[39m src/features/ccg/workflows/old-project-workflow.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 38[2mms[22m[39m
- [32m✓[39m src/hooks/workflow-gate/__tests__/assumption-extractor.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 40[2mms[22m[39m
- [32m✓[39m src/tools/ast-tools.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 50[2mms[22m[39m
- [32m✓[39m src/audit/__tests__/logger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 76[2mms[22m[39m
- [32m✓[39m src/features/ccg/module-loop-controller.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 80[2mms[22m[39m
- [32m✓[39m src/hooks/notepad/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 81[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/config-loader.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 47[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/writer.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 62[2mms[22m[39m
- [32m✓[39m src/workers/__tests__/cached-adapter.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 88[2mms[22m[39m
- [32m✓[39m src/cli/__tests__/autocomplete.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 50[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/file-lock.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 22886[2mms[22m[39m
-     [33m[2m✓[22m[39m 加锁后锁目录存在 [33m 525[2mms[22m[39m
-     [33m[2m✓[22m[39m 加锁后 lock.json 包含 pid 和 timestamp [33m 508[2mms[22m[39m
-     [33m[2m✓[22m[39m unlock() 后锁目录不再存在 [33m 516[2mms[22m[39m
-     [33m[2m✓[22m[39m unlock() 幂等：重复调用不抛出 [33m 519[2mms[22m[39m
-     [33m[2m✓[22m[39m 活跃锁未释放时第二次 acquireLock 抛出 Error [33m 520[2mms[22m[39m
-     [33m[2m✓[22m[39m 抛出的错误信息包含锁路径 [33m 514[2mms[22m[39m
-     [33m[2m✓[22m[39m timestamp 超过 staleMs 的锁视为陈旧，可被自动抢占 [33m 521[2mms[22m[39m
-     [33m[2m✓[22m[39m 陈旧锁抢占后 lock.json 更新为当前进程 pid [33m 516[2mms[22m[39m
-     [33m[2m✓[22m[39m 锁目录存在但 lock.json 不可读 → 视为陈旧，自动抢占 [33m 519[2mms[22m[39m
-     [33m[2m✓[22m[39m 释放后可再次加锁 [33m 521[2mms[22m[39m
-     [33m[2m✓[22m[39m 不同路径的锁互不干扰，可同时持有 [33m 517[2mms[22m[39m
-     [33m[2m✓[22m[39m 刚好在 staleMs 边界的锁不被视为陈旧 [33m 527[2mms[22m[39m
-     [33m[2m✓[22m[39m 超过 staleMs 边界 1ms 的锁被视为陈旧 [33m 520[2mms[22m[39m
-     [33m[2m✓[22m[39m mkdir 抛出非 EEXIST 错误时向上传播 [33m 518[2mms[22m[39m
-     [33m[2m✓[22m[39m lock.json 包含无效 JSON 时视为陈旧 [33m 517[2mms[22m[39m
-     [33m[2m✓[22m[39m 执行函数并返回结果 [33m 553[2mms[22m[39m
-     [33m[2m✓[22m[39m 支持异步函数 [33m 548[2mms[22m[39m
-     [33m[2m✓[22m[39m 函数执行完成后自动释放锁 [33m 569[2mms[22m[39m
-     [33m[2m✓[22m[39m 函数抛出异常时仍释放锁 [33m 532[2mms[22m[39m
-     [33m[2m✓[22m[39m 并发调用时串行执行 [33m 700[2mms[22m[39m
-     [33m[2m✓[22m[39m 3个进程并发竞争时串行执行 [33m 665[2mms[22m[39m
-     [33m[2m✓[22m[39m 重试机制：锁被占用时自动重试 [33m 705[2mms[22m[39m
-     [33m[2m✓[22m[39m 陈旧锁（>30秒）自动清理并获取 [33m 540[2mms[22m[39m
-     [33m[2m✓[22m[39m lock.json 损坏时视为陈旧锁 [33m 539[2mms[22m[39m
-     [33m[2m✓[22m[39m 锁目录在 mkdir 和 writeFile 之间被删除时重试 [33m 538[2mms[22m[39m
-     [33m[2m✓[22m[39m 模拟 ENOENT 竞态：writeFile 时锁目录被删除 [33m 532[2mms[22m[39m
-     [33m[2m✓[22m[39m 父目录不存在时自动创建 [33m 530[2mms[22m[39m
-     [33m[2m✓[22m[39m 超过最大重试次数时抛出错误 [33m 942[2mms[22m[39m
-     [33m[2m✓[22m[39m 指数退避：重试延迟递增 [33m 1313[2mms[22m[39m
-     [33m[2m✓[22m[39m 指数退避最大延迟限制为 1000ms [33m 3155[2mms[22m[39m
-     [33m[2m✓[22m[39m unlock 时锁目录已被删除不抛出错误 [33m 526[2mms[22m[39m
-     [33m[2m✓[22m[39m mkdir 抛出非 EEXIST 错误时向上传播 [33m 521[2mms[22m[39m
-     [33m[2m✓[22m[39m writeFile 抛出非 ENOENT 错误时向上传播 [33m 518[2mms[22m[39m
-     [33m[2m✓[22m[39m 未超过 30000ms 的锁不被视为陈旧 [33m 644[2mms[22m[39m
-     [33m[2m✓[22m[39m 超过 30000ms 的锁被视为陈旧 [33m 530[2mms[22m[39m
- [32m✓[39m src/team/__tests__/unified-team.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 72[2mms[22m[39m
- [32m✓[39m src/state/__tests__/state-manager.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 74[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/sleepMs.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 95[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/tech-stack-detector.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 38[2mms[22m[39m
- [32m✓[39m src/__tests__/doctor-conflicts.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 105[2mms[22m[39m
- [32m✓[39m src/__tests__/model-routing.test.ts [2m([22m[2m95 tests[22m[2m)[22m[32m 64[2mms[22m[39m
- [32m✓[39m src/team/__tests__/activity-log.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 93[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/client-additional.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 35[2mms[22m[39m
- [32m✓[39m src/hooks/workflow-gate/integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 39[2mms[22m[39m
- [32m✓[39m src/hooks/subagent-tracker/__tests__/flow-tracer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 112[2mms[22m[39m
+ [32m✓[39m src/hooks/notepad/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/cli/__tests__/autocomplete.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m tests/reliability/retry-classifier.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m tests/backup/disaster-drill.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m src/hooks/axiom-boot/__tests__/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/features/ccg/workflows/old-project-workflow.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m tests/state/migration/integrity.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m tests/state/backup-manager.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m src/state/migration/__tests__/integrity.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-security.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m src/tools/ast-tools.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m src/__tests__/omc-tools-contract.test.ts [2m([22m[2m172 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+ [32m✓[39m src/features/token-tracker/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m src/hooks/observability/__tests__/observability.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m tests/hooks/bridge.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m src/audit/__tests__/logger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 65[2mms[22m[39m
 [90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mwrites file when file callback is enabled
 [22m[39m[stop-callback] Session summary written to /tmp/test-test-session-123.md
 
 [90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mwrites JSON format when configured
 [22m[39m[stop-callback] Session summary written to /tmp/test.json
 
- [32m✓[39m src/hooks/axiom-boot/__tests__/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 55[2mms[22m[39m
- [32m✓[39m src/team/__tests__/state.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 61[2mms[22m[39m
 [90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2msends Telegram notification when enabled
 [22m[39m[stop-callback] Telegram notification sent
 
- [32m✓[39m src/notifications/__tests__/notify-registry-integration.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 80[2mms[22m[39m
 [90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2mprefixes Telegram messages with normalized tags from tagList
 [22m[39m[stop-callback] Telegram notification sent
 
- [32m✓[39m src/__tests__/task-continuation.test.ts [2m([22m[2m93 tests[22m[2m)[22m[32m 78[2mms[22m[39m
 [90mstdout[2m | src/hooks/session-end/__tests__/callbacks.test.ts[2m > [22m[2mtriggerStopCallbacks[2m > [22m[2msends Discord notification when enabled
 [22m[39m[stop-callback] Discord notification sent
 
@@ -1028,36 +1013,52 @@ isSharedFile result: [33mtrue[39m
 [22m[39m[stop-callback] Telegram notification sent
 [stop-callback] Discord notification sent
 
- [32m✓[39m src/hooks/session-end/__tests__/callbacks.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/callbacks.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m src/__tests__/task-continuation.test.ts [2m([22m[2m93 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/shared-exec.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/fs-utils.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/features/model-routing/__tests__/external-model-policy.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m tests/lib/atomic-write.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/hooks/ralph/__tests__/verifier.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/gemini-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/cache.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+[1/2] Syncing marketplace... ✓
+[1/2] Syncing marketplace... ✓
+[1/2] Syncing marketplace... ✓
+[1/2] Syncing marketplace... ⚠
+[1/2] Syncing marketplace... ⚠
+[1/2] Syncing marketplace... ✓
+ [32m✓[39m src/__tests__/auto-update.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/formatter.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/profiles.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/paths.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/hooks/auto-slash-command/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m src/hooks/memory/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/worker-cleanup.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/state.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+ [32m✓[39m src/__tests__/installer.test.ts [2m([22m[2m35 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/timeout-wrapper.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/__tests__/prompt-file-only.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/config-loader.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m src/hooks/workflow-gate/integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/improvement-puller.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/__tests__/session-catalog.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/__tests__/learner/matcher.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/top-agents.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/dispatcher.test.ts [2m([22m[2m55 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/finder.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/tech-stack-detector.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/hooks/workflow-gate/__tests__/assumption-extractor.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/skills-tools.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 32[2mms[22m[39m
  [32m✓[39m src/__tests__/lsp-servers.test.ts [2m([22m[2m83 tests[22m[2m)[22m[32m 33[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/worker-cleanup.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 39[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/path-validator.test.ts [2m([22m[2m25 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 113[2mms[22m[39m
- [32m✓[39m src/hooks/auto-slash-command/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 51[2mms[22m[39m
- [32m✓[39m src/__tests__/prompt-file-only.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 54[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/profiles.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 25[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/structure-analyzer.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 33[2mms[22m[39m
- [32m✓[39m src/__tests__/live-data.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 30[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/dispatcher.test.ts [2m([22m[2m55 tests[22m[2m)[22m[32m 51[2mms[22m[39m
- [32m✓[39m src/__tests__/omc-tools-contract.test.ts [2m([22m[2m172 tests[22m[2m)[22m[32m 61[2mms[22m[39m
- [32m✓[39m src/tools/python-repl/__tests__/tool.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 29[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/tmux.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/plugin-marketplace.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/hooks/nexus/__tests__/improvement-puller.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 25[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/skills-tools.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 48[2mms[22m[39m
- [32m✓[39m src/hooks/ultrapilot/__tests__/decomposer.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 37[2mms[22m[39m
- [32m✓[39m src/hooks/workflow-gate/__tests__/quality-gate-sync.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 82[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/gemini-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 88[2mms[22m[39m
- [32m✓[39m src/hooks/persistent-mode/__tests__/tool-error.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 31[2mms[22m[39m
- [32m✓[39m src/__tests__/inline-success-shape.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 66[2mms[22m[39m
- [32m✓[39m src/features/state-manager/__tests__/tiered-writer.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 45[2mms[22m[39m
- [32m✓[39m src/hooks/memory/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 62[2mms[22m[39m
- [32m✓[39m src/team/__tests__/worker-health.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 62[2mms[22m[39m
- [32m✓[39m src/hooks/recovery/__tests__/context-window.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 82[2mms[22m[39m
- [32m✓[39m src/platform/__tests__/index.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/hooks/ralph/__tests__/verifier.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 50[2mms[22m[39m
- [32m✓[39m src/__tests__/hud-windows.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 51[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/shared-exec.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 44[2mms[22m[39m
- [32m✓[39m src/features/state-manager/__tests__/index.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/index.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/hooks/think-mode/__tests__/index.test.ts [2m([22m[2m107 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/dependency-analyzer.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/context-window.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/microservice.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/bridge-manager-cleanup.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/features/delegation-routing/__tests__/resolver.test.ts [2m([22m[2m57 tests[22m[2m)[22m[32m 36[2mms[22m[39m
 [90mstdout[2m | src/hooks/__tests__/bridge-normalize.test.ts[2m > [22m[2mbridge-normalize[2m > [22m[2mT2: permission-request error handling[2m > [22m[2mshould allow unknown fields for non-sensitive hooks
 [22m[39m[bridge-normalize] Unknown field "unknown_field" passed through for hook "tool-use"
 
@@ -1065,49 +1066,24 @@ isSharedFile result: [33mtrue[39m
 [22m[39m[bridge-normalize] Unknown field "unknown1" passed through for hook "tool-use"
 [bridge-normalize] Unknown field "unknown2" passed through for hook "tool-use"
 
- [32m✓[39m src/hooks/__tests__/bridge-normalize.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 58[2mms[22m[39m
- [32m✓[39m src/team/__tests__/tmux-session.test.ts [2m([22m[2m22 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 39[2mms[22m[39m
- [32m✓[39m src/__tests__/session-catalog.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 60[2mms[22m[39m
- [32m✓[39m src/__tests__/disable-tools.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/client-eviction.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 37[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/microservice.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 38[2mms[22m[39m
- [32m✓[39m src/tools/python-repl/__tests__/bridge-manager-cleanup.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 52[2mms[22m[39m
-[1/2] Syncing marketplace... ✓
- [32m✓[39m src/team/__tests__/fs-utils.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 39[2mms[22m[39m
-[1/2] Syncing marketplace... ✓
-[1/2] Syncing marketplace... ✓
-[1/2] Syncing marketplace... ⚠
-[1/2] Syncing marketplace... ⚠
-[1/2] Syncing marketplace... ✓
- [32m✓[39m src/hooks/nexus/__tests__/data-collector.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 30[2mms[22m[39m
- [32m✓[39m src/__tests__/auto-update.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 43[2mms[22m[39m
- [32m✓[39m src/features/ccg/doc-manager.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/agents/__tests__/timeout-manager.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/ast-tools.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/client-win32-spawn.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 122[2mms[22m[39m
- [32m✓[39m src/hooks/nexus/__tests__/session-end-hook.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 32[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/validateMode.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/__tests__/codex-backoff.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 30[2mms[22m[39m
- [32m✓[39m src/tools/python-repl/__tests__/socket-client.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 31[2mms[22m[39m
- [32m✓[39m src/hooks/nexus/__tests__/config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 28[2mms[22m[39m
- [32m✓[39m src/hooks/__tests__/timeout-wrapper.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 42[2mms[22m[39m
- [32m✓[39m src/__tests__/hud-agents.test.ts [2m([22m[2m73 tests[22m[2m)[22m[32m 43[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/command-exists.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/team/__tests__/capabilities.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/tools/diagnostics/__tests__/index.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/hooks/setup/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
- [32m✓[39m src/features/ccg/project-detector.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 44[2mms[22m[39m
- [32m✓[39m src/__tests__/installer-hooks-merge.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 26[2mms[22m[39m
- [32m✓[39m src/hooks/session-end/__tests__/python-repl-cleanup.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 37[2mms[22m[39m
- [32m✓[39m src/__tests__/load-agent-prompt.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/utils/__tests__/string-width.test.ts [2m([22m[2m41 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/hooks/recovery/__tests__/index.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/__tests__/mnemosyne/detector.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 24[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/config.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 29[2mms[22m[39m
- [32m✓[39m src/__tests__/providers/gitlab.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud-windows.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/tool.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/bridge-normalize.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/structure-analyzer.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/socket-client.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/features/ccg/project-detector.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/__tests__/prompt-injection.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/__tests__/live-data.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/__tests__/codex-backoff.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/cache-stats.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/tiered-writer.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/__tests__/inline-success-shape.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m src/agents/__tests__/timeout-manager.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/stream-processor.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 33[2mms[22m[39m
 [90mstdout[2m | src/__tests__/session-migration.test.ts[2m > [22m[2mSessionManager migration[2m > [22m[2mmigrates local history to global when only local exists
 [22m[39m[session-manager] Migrated session history from local to global state
 
+ [32m✓[39m src/lib/__tests__/plugin-marketplace.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
 [90mstdout[2m | src/__tests__/session-migration.test.ts[2m > [22m[2mSessionManager migration[2m > [22m[2mmerges and deduplicates when both exist
 [22m[39m[session-manager] Merged 1 sessions from local to global state
 
@@ -1117,214 +1093,251 @@ isSharedFile result: [33mtrue[39m
 [90mstdout[2m | src/__tests__/session-migration.test.ts[2m > [22m[2mSessionManager migration[2m > [22m[2mcleans up local current-session when global is newer
 [22m[39m[session-manager] Migrated session history from local to global state
 
- [32m✓[39m src/__tests__/multi-model-mcp-integration.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 434[2mms[22m[39m
- [32m✓[39m src/__tests__/session-migration.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/stream-processor.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 58[2mms[22m[39m
- [32m✓[39m tests/lib/atomic-write.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 51[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/client-timer-buffer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 29[2mms[22m[39m
- [32m✓[39m src/mcp/config/__tests__/loader.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 31[2mms[22m[39m
- [32m✓[39m src/installer/__tests__/safe-installer.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 21[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/model.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 31[2mms[22m[39m
- [32m✓[39m tests/reliability/circuit-breaker.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
- [32m✓[39m tests/security/resource-guard.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/__tests__/post-tool-verifier.test.mjs [2m([22m[2m21 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/__tests__/providers/bitbucket.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/config.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/lsp-tools.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/notifications/__tests__/config-merge.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/worker-health.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/tmux.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/mcp/config/__tests__/loader.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/config.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/usage-api.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/lib/auditLog.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud-agents.test.ts [2m([22m[2m73 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m src/__tests__/session-migration.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/hooks/empty-message-sanitizer/__tests__/index.test.ts [2m([22m[2m60 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/cli/tutorial/__tests__/tutorial.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/hooks/ultrapilot/__tests__/decomposer.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-timer-buffer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/schema-conversion.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-additional.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m src/__tests__/rate-limit-wait/rate-limit-monitor.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/notifications/__tests__/config-merge.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/hooks/persistent-mode/__tests__/tool-error.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/azure-devops.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-deps.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/platform/__tests__/index.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 112[2mms[22m[39m
+ [32m✓[39m tests/security/audit-logger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/__tests__/load-agent-prompt.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-eviction.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/paths.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/matcher.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 18[2mms[22m[39m
  [32m✓[39m src/__tests__/multi-model-mcp.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/observability/masker.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/call-counts.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/installer/__tests__/hooks.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 12[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/schema-conversion.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 47[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/detector.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 41[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/codex-core.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/omc-tools-server.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/hooks/beads-context/__tests__/index.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/__tests__/omc-tools-server.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/plugin-deps.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 39[2mms[22m[39m
- [32m✓[39m tests/concurrency/cache-concurrent-write.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/safe-json.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/mnemosyne/parser.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/render.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 35[2mms[22m[39m
- [32m✓[39m src/__tests__/hooks/learner/parser.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/__tests__/providers/gitea.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 40[2mms[22m[39m
- [32m✓[39m src/hooks/empty-message-sanitizer/__tests__/index.test.ts [2m([22m[2m60 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/plugin-registry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/security.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/env-validator.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/version.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/state.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/cli/tutorial/__tests__/tutorial.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 32[2mms[22m[39m
- [32m✓[39m src/hooks/guards/__tests__/pre-tool.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/output-estimator.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/__tests__/permission-enforcement.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/__tests__/mnemosyne/config.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/sanitize.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 26[2mms[22m[39m
- [32m✓[39m src/tools/python-repl/__tests__/paths.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 40[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/client-p1-scenarios.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 29[2mms[22m[39m
- [32m✓[39m src/hooks/directory-readme-injector/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
- [32m✓[39m tests/security/audit-logger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 31[2mms[22m[39m
- [32m✓[39m src/verification/tier-selector.test.ts [2m([22m[2m45 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/hooks/permission-handler/__tests__/integration.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/rate-limit-wait/rate-limit-monitor.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 35[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/version-display.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/index.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/detector.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/data-collector.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/reliability/circuit-breaker.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/lsp-tools.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/doc-sync.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/tools/python-repl/__tests__/bridge-manager.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 28115[2mms[22m[39m
+       [33m[2m✓[22m[39m kills bridge with SIGINT first [33m 628[2mms[22m[39m
+       [33m[2m✓[22m[39m escalates to SIGTERM when SIGINT fails [33m 6764[2mms[22m[39m
+       [33m[2m✓[22m[39m escalates to SIGKILL when SIGTERM fails [33m 10195[2mms[22m[39m
+       [33m[2m✓[22m[39m returns failure when all signals fail [33m 10429[2mms[22m[39m
+ [32m✓[39m tests/concurrency/cache-concurrent-write.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/__tests__/plugin-registry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-p1-scenarios.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/hooks/session-end/__tests__/python-repl-cleanup.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/gitea.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/validator.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/bitbucket.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/session-end-hook.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/observability/masker.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/github.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/ast-tools.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks-json-paths.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/hooks/keyword-conflicts.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/verification/tier-selector.test.ts [2m([22m[2m45 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/env-validator.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/omc-state.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/claude-md-merge.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/hooks/setup/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/utils/__tests__/string-width.test.ts [2m([22m[2m41 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/safe-installer.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/security.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/hooks/guards/__tests__/pre-tool.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/__tests__/installer-hooks-merge.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/learner/parser.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/codex-core.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/parser.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/matcher.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/__tests__/mcp-fallback-429.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/render.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/command-exists.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/config.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/tmux-session.test.ts [2m([22m[2m22 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/utils.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/permissions.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/features/ccg/codex-fallback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 30022[2mms[22m[39m
+     [33m[2m✓[22m[39m should fallback to Agent on Codex timeout [33m 30010[2mms[22m[39m
+ [32m✓[39m src/skills/__tests__/mingw-escape.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/hooks.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/cache/security.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/detector.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/permission-enforcement.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/analytics-display.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/env-validator-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/cli/progress/__tests__/progress.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/session-recovery.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/concurrency/circuit-breaker-race.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/features/workflow-recommender/__tests__/intent-classifier.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud-suggestions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/capabilities.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/validator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/lib/state-cache.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/__tests__/bash-history.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/reliability/__tests__/model-fallback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/thinking.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
  [32m✓[39m src/hooks/learner/__tests__/reflection-parser.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/observability/tracer.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m src/__tests__/validateMode.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 32[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/namespace-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/prompt-injection.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/team/__tests__/permissions.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 35[2mms[22m[39m
- [32m✓[39m src/skills/__tests__/mingw-escape.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m src/__tests__/mcp-fallback-429.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 29[2mms[22m[39m
- [32m✓[39m src/hooks/recovery/__tests__/edit-error.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/gitlab.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/features/ccg/doc-manager.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/mcp-server-workflows.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/hooks/team-pipeline/__tests__/transitions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/hooks/omc-orchestrator/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/validateMode.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/output-estimator.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/hooks/agent-usage-reminder/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/validateMode.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/hooks/beads-context/__tests__/index.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/features/mcp-autodiscovery/__tests__/security.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/state.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/errors/__tests__/classifier.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/skills.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 14[2mms[22m[39m
 [90mstdout[2m | src/features/ccg/__tests__/progress-bar.test.ts[2m > [22m[2mProgressBar[2m > [22m[2mcompletes progress
 [22m[39m
 
- [32m✓[39m src/__tests__/providers/azure-devops.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 21[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/progress-bar.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 24[2mms[22m[39m
- [32m✓[39m src/hooks/recovery/__tests__/session-recovery.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 34[2mms[22m[39m
- [32m✓[39m src/installer/__tests__/claude-md-merge.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 21[2mms[22m[39m
- [32m✓[39m src/hooks/agent-usage-reminder/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 35[2mms[22m[39m
- [32m✓[39m src/hooks/omc-orchestrator/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 35[2mms[22m[39m
- [32m✓[39m src/__tests__/plugin-registry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 28[2mms[22m[39m
- [32m✓[39m src/features/ccg/codex-fallback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 30032[2mms[22m[39m
-     [33m[2m✓[22m[39m should fallback to Agent on Codex timeout [33m 30015[2mms[22m[39m
- [32m✓[39m src/team/__tests__/prompt-sanitization.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 12[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/progress-indicator.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/utils.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/hooks/project-memory/__tests__/formatter.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m tests/security/tenant-isolator.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
- [32m✓[39m src/__tests__/mcp-server-workflows.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/__tests__/providers/github.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/git.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/features/task-templates/__tests__/wizard-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/matcher.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 36[2mms[22m[39m
- [32m✓[39m src/team/workflow-integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/tools/python-repl/__tests__/bridge-manager.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 30197[2mms[22m[39m
-       [33m[2m✓[22m[39m kills bridge with SIGINT first [33m 770[2mms[22m[39m
-       [33m[2m✓[22m[39m escalates to SIGTERM when SIGINT fails [33m 7064[2mms[22m[39m
-       [33m[2m✓[22m[39m escalates to SIGKILL when SIGTERM fails [33m 11293[2mms[22m[39m
-       [33m[2m✓[22m[39m returns failure when all signals fail [33m 10976[2mms[22m[39m
- [32m✓[39m src/__tests__/rate-limit-wait/tmux-detector.test.ts [2m([22m[2m20 tests[22m[2m | [22m[33m5 skipped[39m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/agents/__tests__/agent-wrapper.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/team/__tests__/deadlock-detector.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m src/__tests__/bash-history.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/tools/lsp/__tests__/client-coverage-boost.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/cwd.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/features/wizard/__tests__/engine.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 23[2mms[22m[39m
- [32m✓[39m tests/concurrency/circuit-breaker-race.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/other-tools.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/reliability/__tests__/circuit-breaker.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/cache-stats.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 26[2mms[22m[39m
- [32m✓[39m src/__tests__/providers/detection.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/background-tasks.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/features/workflow-recommender/__tests__/integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/community-servers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m tests/reliability/model-fallback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/validator.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/features/state-manager/__tests__/encryption.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 30[2mms[22m[39m
- [32m✓[39m src/hooks/preemptive-compaction/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m tests/hooks/permission-request.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/hooks/plugin-patterns/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/errors/__tests__/classifier.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/progress-bar.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/hooks/keyword-detector.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/reliability/__tests__/circuit-breaker.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/git.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/__tests__/providers/detection.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/features/quality-gate/__tests__/integration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/encryption.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/__tests__/rate-limit-wait/tmux-detector.test.ts [2m([22m[2m20 tests[22m[2m | [22m[33m5 skipped[39m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/multi-model-mcp-integration.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 364[2mms[22m[39m
  [32m✓[39m src/features/wizard/__tests__/recommendation-engine.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/thinking.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/hud-suggestions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 26[2mms[22m[39m
- [32m✓[39m src/hooks/rules-injector/__tests__/parser.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/hooks/team-pipeline/__tests__/transitions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/features/analytics-dashboard/__tests__/integration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 26[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/usage-api.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 21[2mms[22m[39m
- [32m✓[39m src/features/onboarding/__tests__/tutorial.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/ast-tools-coverage.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m src/__tests__/example.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/cli/progress/__tests__/progress.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 25[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/analytics-display.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/features/task-templates/__tests__/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/tools/diagnostics/__tests__/tsc-runner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/features/wizard/__tests__/engine.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/hooks/learner/__tests__/confidence.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/tools/diagnostics/__tests__/index.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/hooks/permission-request.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/hooks/permission-handler/__tests__/integration.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/ast-tools-coverage.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/agents/__tests__/agent-wrapper.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/hooks/whitelist-validation.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/hooks/directory-readme-injector/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/token-extractor.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/disable-tools.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/deadlock-detector.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/__tests__/standalone-server.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/safe-json.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 19[2mms[22m[39m
  [32m✓[39m tests/concurrency/state-conflict.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m src/features/prompt-optimizer/__tests__/index.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/token-extractor.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/hooks/rules-injector/__tests__/matcher.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 34[2mms[22m[39m
- [32m✓[39m src/hooks/thinking-block-validator/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/__tests__/hooks-json-paths.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/hooks/todo-continuation/__tests__/isUserAbort.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m src/features/state-manager/__tests__/encryption-performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/background-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/lib/__tests__/env-validator-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/installer-hud-skip.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/tools/__tests__/resume-session.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/gemini-core.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/hooks/rules-injector/__tests__/parser.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/__tests__/mnemosyne/config.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/dependency-graph.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/parallel-opportunity-detector.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/__tests__/omc-tools-server.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/prompt-injection.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/cli-detection.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/team/workflow-integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/version-display.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/observability/tracer.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/sanitize.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/features/analytics-dashboard/__tests__/integration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/hooks/thinking-block-validator/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/hooks/todo-continuation/__tests__/isUserAbort.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/team/__tests__/prompt-sanitization.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/lib/userFeedback.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/community-servers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/security/resource-guard.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/hooks/non-interactive-env/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/post-tool-verifier.test.mjs [2m([22m[2m21 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/prd-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/features/mcp-autodiscovery/__tests__/installer.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/call-counts.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/tools/diagnostics/__tests__/tsc-runner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/features/prompt-optimizer/__tests__/index.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/features/onboarding/__tests__/tutorial.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/plugin-registry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/version.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/features/workflow-recommender/__tests__/integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/hooks/nexus/__tests__/consciousness-sync.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/installer-hud-skip.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/__tests__/types.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/omc-tools-server.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/context-warning.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/model.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/hooks/auto-slash-command/__tests__/detector.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/features/task-templates/__tests__/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
  [32m✓[39m src/mcp/__tests__/worker-lifecycle.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/features/workflow-recommender/__tests__/intent-classifier.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/lib/state-cache.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m tests/hooks/whitelist-validation.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/__tests__/standalone-server.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/skills.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/hooks/auto-slash-command/__tests__/detector.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 20[2mms[22m[39m
- [32m✓[39m tests/security/budget-controller.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/defaults.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/hooks/learner/__tests__/confidence.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/prompts.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 12[2mms[22m[39m
- [32m✓[39m src/installer/__tests__/hooks-config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/context-warning.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/team/__tests__/dependency-graph.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/features/personalized-recommendation/__tests__/integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/__tests__/analytics/transcript-token-extractor.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 19[2mms[22m[39m
- [32m✓[39m src/features/quality-gate/__tests__/integration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/omc-state.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/__tests__/mnemosyne/validator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/__tests__/types.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/gemini-core.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/permission-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/agents/__tests__/timeout-config.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/reliability/__tests__/model-fallback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/limits-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/__tests__/version-helper.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/__tests__/version-helper.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/analytics/transcript-token-extractor.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/features/workflow-recommender/__tests__/context-analyzer.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/validate-and-read-file.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/hooks/recovery/__tests__/edit-error.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/prompts.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/features/personalized-recommendation/__tests__/integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/features/diagnostics/__tests__/error-matcher.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/security/tenant-isolator.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/reliability/model-fallback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/tools/lsp/__tests__/client-coverage-boost.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/features/task-templates/__tests__/wizard-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/features/workflow-recommender/__tests__/context-enhancer.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/agents/__tests__/timeout-config.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
  [32m✓[39m src/hooks/comment-checker/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/hooks/permission-handler/__tests__/security.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/prd-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
- [32m✓[39m src/features/diagnostics/__tests__/solution-suggester.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/features/diagnostics/__tests__/error-matcher.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 16[2mms[22m[39m
- [32m✓[39m src/installer/__tests__/error-recovery.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/features/workflow-recommender/__tests__/recommendation-engine.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/session-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
- [32m✓[39m src/__tests__/auto-upgrade-prompt.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
- [32m✓[39m tests/cache/security.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/config.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/features/workflow-recommender/__tests__/context-analyzer.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
- [32m✓[39m src/hooks/axiom-guards/__tests__/index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/features/ccg/__tests__/task-assigner.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/prompt-optimization-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/__tests__/validate-and-read-file.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/hooks/non-interactive-env/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
- [32m✓[39m src/errors/__tests__/spelling.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/hooks/nexus/__tests__/consciousness-sync.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/todos-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/features/speckit-integration/__tests__/integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/tool-adapter.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/cli-detection.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
- [32m✓[39m src/skills/__tests__/ax-context-init.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/features/ccg/ci-validator.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/sanitize-extended.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/hooks/autopilot/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
- [32m✓[39m src/hooks/background-notification/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/features/assumption-validator/__tests__/integration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/autopilot-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/cli/commands/__tests__/cleanup.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/backward-compatibility.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
- [32m✓[39m src/features/workflow-recommender/__tests__/context-enhancer.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
- [32m✓[39m src/features/session-recovery/__tests__/integration.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
- [32m✓[39m src/__tests__/release-local.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/namespace-manager.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/hooks/axiom-guards/__tests__/index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/defaults.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/features/ccg/__tests__/task-assigner.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/features/state-manager/__tests__/encryption-performance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/features/diagnostics/__tests__/solution-suggester.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/tools/__tests__/resume-session.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/hooks-config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/features/ccg/ci-validator.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/hooks/background-notification/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/hooks/autopilot/__tests__/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/cwd.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/hooks/project-memory/__tests__/formatter.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/hooks/permission-handler/__tests__/security.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/errors/__tests__/spelling.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/tool-adapter.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/background-tasks.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/hooks/plugin-patterns/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/example.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/skills/__tests__/ax-context-init.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/auto-upgrade-prompt.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/render-analytics.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/todos-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/features/workflow-recommender/__tests__/recommendation-engine.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/installer/__tests__/error-recovery.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/background-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/features/assumption-validator/__tests__/integration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/hooks/preemptive-compaction/__tests__/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/limits-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/prompt-optimization-integration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/session-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/features/mcp-autodiscovery/__tests__/config-injector.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/release-local.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
  [32m✓[39m src/__tests__/hud/ralph-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/usage.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
- [32m✓[39m src/__tests__/hud/render-analytics.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/lsp-tools.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
- [32m✓[39m src/mcp/__tests__/server-startup.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/speckit-integration/__tests__/integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/config.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/security/budget-controller.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/progress-indicator.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/permission-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/sanitize-extended.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/autopilot-element.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/hud/usage.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/cli/commands/__tests__/cleanup.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/other-tools.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [2m[90m↓[39m[22m src/team/__tests__/unified-context-integration.test.ts [2m([22m[2m1 test[22m[2m | [22m[33m1 skipped[39m[2m)[22m
+ [32m✓[39m src/features/session-recovery/__tests__/integration.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
+ [2m[90m↓[39m[22m src/features/unified-context/__tests__/mcp-memory-client.test.ts [2m([22m[2m1 test[22m[2m | [22m[33m1 skipped[39m[2m)[22m
+ [2m[90m↓[39m[22m src/features/unified-context/__tests__/context-manager.test.ts [2m([22m[2m1 test[22m[2m | [22m[33m1 skipped[39m[2m)[22m
+ [32m✓[39m src/mcp/__tests__/integration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/backward-compatibility.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/server-startup.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/mcp/__tests__/lsp-tools.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
 
-[2m Test Files [22m [1m[32m485 passed[39m[22m[90m (485)[39m
-[2m      Tests [22m [1m[32m7086 passed[39m[22m[2m | [22m[33m11 skipped[39m[90m (7097)[39m
-[2m   Start at [22m 16:53:02
-[2m   Duration [22m 35.81s[2m (transform 106.35s, setup 27.69s, import 162.71s, tests 347.10s, environment 189ms)[22m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m500 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (504)[39m
+[2m      Tests [22m [1m[32m7140 passed[39m[22m[2m | [22m[33m16 skipped[39m[90m (7156)[39m
+[2m   Start at [22m 12:10:41
+[2m   Duration [22m 38.01s[2m (transform 132.18s, setup 36.04s, import 203.45s, tests 350.01s, environment 180ms)[22m
 

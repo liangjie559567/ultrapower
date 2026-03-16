@@ -1,5 +1,78 @@
 # ultrapower v7.0.1
 
+## 7.5.2
+
+### Patch Changes
+
+- fix(security): BUG-001 - State file race conditions
+  - Implement atomic write with write queue
+  - Add concurrent write protection (1000+ operations tested)
+  - Write latency <10ms (avg 6.57ms)
+
+- fix(security): BUG-002 - Hook input validation bypass
+  - Add prototype pollution protection (__proto__, constructor, prototype)
+  - Enforce strict validation for sensitive hooks
+  - Integrate audit logging for suspicious inputs
+
+- fix(security): BUG-003 - ReDoS attack protection
+  - Add 50KB input length limit
+  - Optimize regex patterns (no backtracking)
+  - Performance: 10K chars <100ms (avg 1-2ms)
+
+- fix(security): BUG-004 - State file leakage
+  - Auto-cleanup stale sessions (24h threshold)
+  - Remove empty session directories on startup
+  - Prevent orphaned state files after crashes
+
+- fix(security): BUG-005 - Keyword conflict resolution
+  - Implement priority-based keyword routing
+  - Add conflict detection and user feedback
+  - Test coverage: all 2-3 keyword combinations
+
+- feat(audit): Add security audit logging system
+  - Log validation failures, prototype pollution attempts, ReDoS attacks
+  - Write to .omc/audit.log with timestamps and severity
+  - 100% test coverage
+
+- feat(feedback): Add user feedback mechanism
+  - Progress feedback, error feedback, conflict prompts
+  - Integration with all security modules
+
+- test: Add P1 integration tests
+  - ReDoS protection end-to-end tests
+  - State cleanup recovery tests
+  - 5 integration tests, 100% passing
+
+- test: Add performance benchmarks
+  - State write: 1000 iterations, avg 6.57ms
+  - ReDoS protection: 10K-50K chars, <100ms
+  - Memory leak detection: <1MB growth
+
+- fix(test): CI stability improvements
+  - Fix bridge test: use maxAge=-1 for stale detection
+  - Fix keyword-conflicts test: mock isTeamEnabled() for CI environment
+  - Add assertValidMode() 256-char truncation for DoS protection
+
+## 7.4.1
+
+### Patch Changes
+
+- fix(upgrade): Replace Unix rm command with cross-platform rmSync for Windows compatibility
+  - Fix `omc update` failure on Windows due to 'rm' command not found
+  - Use Node.js native rmSync API instead of shell command
+
+## 7.4.0
+
+### Minor Changes
+
+- feat(upgrade): Complete upgrade workflow with automatic cache clearing
+  - Add `omc update` command for seamless upgrades
+  - Auto-detect installation method (npm global/local/marketplace)
+  - Clear all caches (plugins, npm-cache, tsbuildinfo)
+  - Update metadata files (.omc-version.json, installed_plugins.json)
+  - Refresh hooks after upgrade
+  - Add upgrade documentation (docs/UPGRADE.md)
+
 ## 7.1.1
 
 ### Patch Changes

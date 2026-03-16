@@ -489,6 +489,62 @@ function fixMissingMarketplaceJson() {
 
 fixMissingMarketplaceJson();
 
+// Fix: Sync version to marketplaces/omc/ directory (where Claude Code reads plugin version)
+function syncMarketplaceVersion() {
+  try {
+    const pluginRoot = dirname(__dirname);
+    const pkgPath = join(pluginRoot, 'package.json');
+    if (!existsSync(pkgPath)) return;
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+    const version = pkg.version || '0.0.0';
+
+    const marketplaceDir = join(CLAUDE_DIR, 'plugins/marketplaces/omc');
+    if (!existsSync(marketplaceDir)) return;
+
+    // Update package.json
+    const mktPkgPath = join(marketplaceDir, 'package.json');
+    if (existsSync(mktPkgPath)) {
+      const mktPkg = JSON.parse(readFileSync(mktPkgPath, 'utf-8'));
+      if (mktPkg.version !== version) {
+        mktPkg.version = version;
+        writeFileSync(mktPkgPath, JSON.stringify(mktPkg, null, 2));
+        console.log(`[OMC] Updated marketplaces/omc/package.json: ${mktPkg.version || 'unknown'} -> ${version}`);
+      }
+    }
+
+    // Update .claude-plugin/plugin.json
+    const mktPluginJsonPath = join(marketplaceDir, '.claude-plugin/plugin.json');
+    if (existsSync(mktPluginJsonPath)) {
+      const mktPluginJson = JSON.parse(readFileSync(mktPluginJsonPath, 'utf-8'));
+      if (mktPluginJson.version !== version) {
+        mktPluginJson.version = version;
+        writeFileSync(mktPluginJsonPath, JSON.stringify(mktPluginJson, null, 2));
+        console.log(`[OMC] Updated marketplaces/omc/.claude-plugin/plugin.json: ${mktPluginJson.version || 'unknown'} -> ${version}`);
+      }
+    }
+
+    // Update .claude-plugin/marketplace.json
+    const mktMarketplaceJsonPath = join(marketplaceDir, '.claude-plugin/marketplace.json');
+    if (existsSync(mktMarketplaceJsonPath)) {
+      const mktMarketplaceJson = JSON.parse(readFileSync(mktMarketplaceJsonPath, 'utf-8'));
+      if (mktMarketplaceJson.plugins?.[0]?.version !== version) {
+        if (mktMarketplaceJson.plugins?.[0]) {
+          mktMarketplaceJson.plugins[0].version = version;
+          if (mktMarketplaceJson.plugins[0].source) {
+            mktMarketplaceJson.plugins[0].source.version = version;
+          }
+        }
+        writeFileSync(mktMarketplaceJsonPath, JSON.stringify(mktMarketplaceJson, null, 2));
+        console.log(`[OMC] Updated marketplaces/omc/.claude-plugin/marketplace.json: -> ${version}`);
+      }
+    }
+  } catch (e) {
+    console.log('[OMC] Warning: Could not sync marketplace version:', e.message);
+  }
+}
+
+syncMarketplaceVersion();
+
 // 1. Create HUD directory
 if (!existsSync(HUD_DIR)) {
   mkdirSync(HUD_DIR, { recursive: true });

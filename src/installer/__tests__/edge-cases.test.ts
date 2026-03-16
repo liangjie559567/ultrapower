@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, afterEach } from 'vitest';
-import { install, isRunningAsPlugin, isProjectScopedPlugin, CLAUDE_CONFIG_DIR } from '../index.js';
+import { install, CLAUDE_CONFIG_DIR } from '../index.js';
 import { join } from 'path';
 
 describe('plugin detection edge cases', () => {

@@ -39,10 +39,10 @@ describe('message-router', () => {
   }
 
   describe('routeMessage', () => {
-    it('routes to MCP worker via inbox', () => {
+    it('routes to MCP worker via inbox', async () => {
       registerWorker('codex-1');
 
-      const result = routeMessage(teamName, 'codex-1', 'Hello worker', testDir);
+      const result = await routeMessage(teamName, 'codex-1', 'Hello worker', testDir);
       expect(result.method).toBe('inbox');
       expect(result.details).toContain('inbox');
 
@@ -55,19 +55,19 @@ describe('message-router', () => {
       expect(msg.type).toBe('message');
     });
 
-    it('returns native instruction for unknown recipient', () => {
-      const result = routeMessage(teamName, 'unknown-worker', 'Hello', testDir);
+    it('returns native instruction for unknown recipient', async () => {
+      const result = await routeMessage(teamName, 'unknown-worker', 'Hello', testDir);
       expect(result.method).toBe('native');
       expect(result.details).toContain('Unknown recipient');
     });
   });
 
   describe('broadcastToTeam', () => {
-    it('broadcasts to all MCP workers', () => {
+    it('broadcasts to all MCP workers', async () => {
       registerWorker('worker1');
       registerWorker('worker2');
 
-      const result = broadcastToTeam(teamName, 'Team announcement', testDir);
+      const result = await broadcastToTeam(teamName, 'Team announcement', testDir);
       expect(result.inboxRecipients).toContain('worker1');
       expect(result.inboxRecipients).toContain('worker2');
       expect(result.nativeRecipients).toEqual([]);
@@ -79,8 +79,8 @@ describe('message-router', () => {
       expect(existsSync(inbox2)).toBe(true);
     });
 
-    it('returns empty arrays when no members', () => {
-      const result = broadcastToTeam(teamName, 'Hello', testDir);
+    it('returns empty arrays when no members', async () => {
+      const result = await broadcastToTeam(teamName, 'Hello', testDir);
       expect(result.nativeRecipients).toEqual([]);
       expect(result.inboxRecipients).toEqual([]);
     });

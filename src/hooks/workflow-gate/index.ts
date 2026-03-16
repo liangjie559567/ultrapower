@@ -13,9 +13,9 @@
  * 6. verification-before-completion (required before merge)
  */
 
-import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
-import { validateAssumptions, type Assumption } from '../../features/assumption-validator/index.js';
+import { validateAssumptions } from '../../features/assumption-validator/index.js';
 import { extractAssumptionsFromPlan } from './assumption-extractor.js';
 import { getChangedFiles } from './git-helper.js';
 import { runQualityGateSync } from './quality-gate-sync.js';
@@ -84,7 +84,7 @@ export function writeWorkflowState(workingDir: string, state: WorkflowState): vo
   const dir = join(workingDir, '.omc');
 
   if (!existsSync(dir)) {
-    require('fs').mkdirSync(dir, { recursive: true });
+    mkdirSync(dir, { recursive: true });
   }
 
   writeFileSync(statePath, JSON.stringify(state, null, 2), 'utf-8');
@@ -451,7 +451,7 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
 
           state.qualityGatePassed = true;
           writeWorkflowState(workingDirectory, state);
-        } catch (error) {
+        } catch (_error) {
           state.qualityGatePassed = true;
           writeWorkflowState(workingDirectory, state);
         }
@@ -508,6 +508,6 @@ export function processWorkflowGate(input: WorkflowGateInput): WorkflowGateOutpu
 export function clearWorkflowState(workingDir: string): void {
   const statePath = getWorkflowStatePath(workingDir);
   if (existsSync(statePath)) {
-    require('fs').unlinkSync(statePath);
+    unlinkSync(statePath);
   }
 }

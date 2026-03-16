@@ -3,7 +3,7 @@
  */
 import type { HookType, HookInput, HookOutput } from "../bridge-types.js";
 import { requiredKeysForHook, validateHookInput } from "../validation.js";
-import { toSubagentStartInput, toSubagentStopInput, toPermissionRequestInput } from "../bridge-converter.js";
+import { toSubagentStartInput, toSubagentStopInput, toPermissionRequestInput, toSessionEndInput, toPreCompactInput, toSetupInput, toWorkflowGateInput } from "../bridge-converter.js";
 
 type HookHandler = (input: HookInput) => Promise<HookOutput>;
 
@@ -13,7 +13,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
       return { continue: true };
     }
     const { handleSessionEnd } = await import("../session-end/index.js");
-    return await handleSessionEnd(input as any);
+    return await handleSessionEnd(toSessionEndInput(input as Record<string, unknown>));
   },
 
   "subagent-start": async (input) => {
@@ -21,7 +21,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
       return { continue: true };
     }
     const { processSubagentStart } = await import("../subagent-tracker/index.js");
-    return processSubagentStart(toSubagentStartInput(input as any));
+    return processSubagentStart(toSubagentStartInput(input as Record<string, unknown>));
   },
 
   "subagent-stop": async (input) => {
@@ -29,7 +29,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
       return { continue: true };
     }
     const { processSubagentStop } = await import("../subagent-tracker/index.js");
-    return processSubagentStop(toSubagentStopInput(input as any));
+    return processSubagentStop(toSubagentStopInput(input as Record<string, unknown>));
   },
 
   "pre-compact": async (input) => {
@@ -37,7 +37,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
       return { continue: true };
     }
     const { processPreCompact } = await import("../pre-compact/index.js");
-    return await processPreCompact(input as any);
+    return await processPreCompact(toPreCompactInput(input as Record<string, unknown>));
   },
 
   "setup-init": async (input) => {
@@ -45,7 +45,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
       return { continue: true };
     }
     const { processSetup } = await import("../setup/index.js");
-    return await processSetup({ ...input as any, trigger: "init", hook_event_name: "Setup" });
+    return await processSetup(toSetupInput({ ...(input as Record<string, unknown>), trigger: "init" }));
   },
 
   "setup-maintenance": async (input) => {
@@ -53,7 +53,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
       return { continue: true };
     }
     const { processSetup } = await import("../setup/index.js");
-    return await processSetup({ ...input as any, trigger: "maintenance", hook_event_name: "Setup" });
+    return await processSetup(toSetupInput({ ...(input as Record<string, unknown>), trigger: "maintenance" }));
   },
 
   "permission-request": async (input) => {
@@ -62,7 +62,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
     }
     const { handlePermissionRequest } = await import("../permission-handler/index.js");
     const { auditLogger } = await import("../../audit/logger.js");
-    const permInput = toPermissionRequestInput(input as any);
+    const permInput = toPermissionRequestInput(input as Record<string, unknown>);
     const result = await handlePermissionRequest(permInput);
 
     auditLogger.log({
@@ -81,7 +81,7 @@ export const HOOK_ROUTES: Partial<Record<HookType, HookHandler>> = {
       return { continue: true };
     }
     const { processWorkflowGate } = await import("../workflow-gate/index.js");
-    const result = await processWorkflowGate(input as any);
+    const result = await processWorkflowGate(toWorkflowGateInput(input as Record<string, unknown>));
 
     if (result.shouldBlock && result.injectedSkill) {
       return {

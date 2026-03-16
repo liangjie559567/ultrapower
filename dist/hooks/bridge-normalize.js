@@ -11,6 +11,7 @@
  */
 import { z } from 'zod';
 import * as logger from '../lib/logger.js';
+import { auditLog } from '../lib/auditLog.js';
 // --- Zod schemas for hook input validation ---
 /** Base schema fields */
 const baseSchemaFields = {
@@ -203,6 +204,15 @@ export function normalizeHookInput(raw, hookType) {
     if (!isSensitive && isAlreadyCamelCase(rawObj)) {
         return normalizeFastPath(rawObj, hookType);
     }
+    // Audit suspicious camelCase input on sensitive hooks
+    if (isSensitive && isAlreadyCamelCase(rawObj)) {
+        auditLog('security', {
+            timestamp: new Date().toISOString(),
+            event: 'validation_failed',
+            severity: 'medium',
+            details: { hookType, reason: 'camelCase input on sensitive hook bypassed fast-path' },
+        });
+    }
     // Pre-filter sensitive hooks before validation
     const inputToValidate = isSensitive
         ? preFilterSensitiveInput(rawObj, hookType)
@@ -233,17 +243,30 @@ function validateRequiredKeys(normalized, hookType) {
 /**
  * Pre-filter sensitive hook input to remove unknown fields before Zod validation.
  * This prevents Zod strict mode from throwing on unknown fields.
+ * Also blocks prototype pollution attempts.
  */
 function preFilterSensitiveInput(input, hookType) {
     const whitelist = STRICT_WHITELIST[hookType] || [];
     const filtered = {};
     const droppedKeys = [];
+    const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
     // Include all base schema fields (both snake_case and camelCase)
     const allowedKeys = new Set([
         ...Object.keys(baseSchemaFields),
         ...whitelist,
     ]);
     for (const [key, value] of Object.entries(input)) {
+        // Block prototype pollution
+        if (dangerousKeys.includes(key)) {
+            auditLog('security', {
+                timestamp: new Date().toISOString(),
+                event: 'prototype_pollution_attempt',
+                severity: 'high',
+                details: { hookType, field: key },
+            });
+            droppedKeys.push(key);
+            continue;
+        }
         if (allowedKeys.has(key)) {
             filtered[key] = value;
         }

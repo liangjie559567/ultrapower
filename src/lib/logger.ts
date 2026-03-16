@@ -1,4 +1,5 @@
-import { appendFileSync, existsSync, statSync, renameSync } from 'fs';
+import { appendFileSync, existsSync, statSync } from 'fs';
+import { renameSyncWithRetry } from './fs-utils.js';
 import { ensureDirSync } from './atomic-write.js';
 import { join } from 'path';
 
@@ -6,9 +7,12 @@ const LOG_PATH = '.omc/logs/security-audit.jsonl';
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 const SENSITIVE_FIELDS = ['token', 'apiKey', 'password', 'secret', 'accessToken', 'refreshToken', 'privateKey'];
 
-function sanitize(data: any): any {
+function sanitize(data: unknown): unknown {
   if (!data || typeof data !== 'object') return data;
-  const sanitized = Array.isArray(data) ? [...data] : { ...data };
+  if (Array.isArray(data)) {
+    return data.map(item => sanitize(item));
+  }
+  const sanitized: Record<string, unknown> = { ...data as Record<string, unknown> };
   for (const key in sanitized) {
     if (SENSITIVE_FIELDS.some(field => key.toLowerCase().includes(field))) {
       sanitized[key] = '[REDACTED]';
@@ -27,12 +31,12 @@ function rotate(logPath: string): void {
   for (let i = 6; i >= 1; i--) {
     const old = `${logPath}.${i}`;
     const next = `${logPath}.${i + 1}`;
-    if (existsSync(old)) renameSync(old, next);
+    if (existsSync(old)) renameSyncWithRetry(old, next);
   }
-  renameSync(logPath, `${logPath}.1`);
+  renameSyncWithRetry(logPath, `${logPath}.1`);
 }
 
-export function security(event: string, data: any): void {
+export function security(event: string, data: unknown): void {
   const logPath = join(process.cwd(), LOG_PATH);
   ensureDirSync(join(process.cwd(), '.omc/logs'));
   rotate(logPath);

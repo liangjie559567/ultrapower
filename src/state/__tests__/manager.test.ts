@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, rmSync, existsSync, writeFileSync } from 'fs';
+import { mkdirSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
 import { createStateManager } from '../index.js';
 

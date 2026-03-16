@@ -2,7 +2,7 @@
  * 状态迁移完整性保障
  */
 
-import { existsSync, readFileSync, writeFileSync, copyFileSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, copyFileSync, unlinkSync, readdirSync } from 'fs';
 import { join } from 'path';
 import type { ValidMode } from '../../lib/validateMode.js';
 
@@ -10,6 +10,12 @@ export interface BackupInfo {
   path: string;
   timestamp: number;
   checksum: string;
+}
+
+interface BackupFile {
+  name: string;
+  path: string;
+  timestamp: number;
 }
 
 export interface IntegrityResult {
@@ -113,7 +119,6 @@ export function cleanupOldBackups(mode: ValidMode, directory: string, keepCount:
   const pattern = `${mode}-state.json.backup-`;
 
   try {
-    const { readdirSync } = require('fs');
     const files = readdirSync(stateDir)
       .filter((f: string) => f.startsWith(pattern))
       .map((f: string) => ({
@@ -121,7 +126,7 @@ export function cleanupOldBackups(mode: ValidMode, directory: string, keepCount:
         path: join(stateDir, f),
         timestamp: parseInt(f.replace(pattern, ''))
       }))
-      .sort((a: any, b: any) => b.timestamp - a.timestamp);
+      .sort((a: BackupFile, b: BackupFile) => b.timestamp - a.timestamp);
 
     let deleted = 0;
     for (let i = keepCount; i < files.length; i++) {

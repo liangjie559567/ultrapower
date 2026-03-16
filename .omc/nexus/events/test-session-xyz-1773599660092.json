@@ -1,0 +1,24 @@
+{
+  "sessionId": "test-session-xyz",
+  "timestamp": "2026-03-15T18:34:20.090Z",
+  "directory": "C:/Users/ljyih/Desktop/ultrapower",
+  "toolCalls": [
+    {
+      "toolName": "Bash",
+      "timestamp": 1773599657705
+    },
+    {
+      "toolName": "Read",
+      "timestamp": 1773599653977
+    },
+    {
+      "toolName": "AskUserQuestion",
+      "timestamp": 1773599548995
+    }
+  ],
+  "agentsSpawned": 0,
+  "agentsCompleted": 0,
+  "modesUsed": [],
+  "skillsInjected": [],
+  "patternsSeen": []
+}

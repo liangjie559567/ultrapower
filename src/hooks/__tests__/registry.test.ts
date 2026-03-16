@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { loadHandler } from '../handlers/index.js';
 import { HOOK_ROUTES } from '../handlers/route-map.js';
 import { requiredKeysForHook, validateHookInput, getSkipHooks, resetSkipHooksCache } from '../validation.js';

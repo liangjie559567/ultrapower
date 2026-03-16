@@ -165,10 +165,35 @@ describe('Installer Constants', () => {
     });
   });
 
-  describe('Commands directory removed (#582)', () => {
-    it.skip('should NOT have a commands/ directory in the package root', () => {
+  describe('Commands directory (#582)', () => {
+    it('should not contain self-referential deprecated stubs', () => {
       const commandsDir = join(getPackageDir(), 'commands');
-      expect(existsSync(commandsDir)).toBe(false);
+
+      // commands/ may exist for Axiom workflow commands
+      if (!existsSync(commandsDir)) {
+        expect(true).toBe(true);
+        return;
+      }
+
+      const files = readdirSync(commandsDir).filter(f => f.endsWith('.md'));
+      const selfReferentialStubs: string[] = [];
+
+      for (const file of files) {
+        const commandName = file.replace('.md', '');
+        const content = readFileSync(join(commandsDir, file), 'utf-8');
+
+        // Detect: command that tells user to invoke same-named skill
+        const skillInvokePattern = new RegExp(
+          `/ultrapower:${commandName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`,
+          'i'
+        );
+
+        if (skillInvokePattern.test(content) && content.toLowerCase().includes('deprecated')) {
+          selfReferentialStubs.push(file);
+        }
+      }
+
+      expect(selfReferentialStubs).toEqual([]);
     });
   });
 

@@ -151,7 +151,7 @@ describe('ast-tools coverage', () => {
       root: vi.fn().mockReturnValue({ findAll: vi.fn().mockReturnValue([]) })
     } as any);
 
-    const result = await astGrepSearchTool.handler({
+    await astGrepSearchTool.handler({
       pattern: 'const',
       language: 'javascript',
       path: '/test'
