@@ -21,7 +21,7 @@ import { geminiMcpServer } from './mcp/gemini-server.js';
 import { createMagicKeywordProcessor, detectMagicKeywords } from './features/magic-keywords.js';
 import { continuationSystemPromptAddition } from './features/continuation-enforcement.js';
 import { createLogger } from './lib/unified-logger.js';
-const logger = createLogger('src:index');
+const _logger = createLogger('src:index');
 import { createBackgroundTaskManager, shouldRunInBackground as shouldRunInBackgroundFn } from './features/background-tasks.js';
 export { loadConfig, getAgentDefinitions, omcSystemPrompt };
 export { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';

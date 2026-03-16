@@ -1,5 +1,5 @@
 <!-- OMC:START -->
-<!-- OMC:VERSION:7.5.2 -->
+<!-- OMC:VERSION:7.6.0 -->
 
 # ultrapower - Multi-Agent Orchestration 智能多 Agent 编排
 

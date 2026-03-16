@@ -1,4 +1,5 @@
 import { logSkip } from './audit-logger.js';
+import { readFileSync } from 'fs';
 export async function runQualityGate(files, cwd, skipRequested) {
     if (skipRequested) {
         await logSkip('User manually skipped quality gate', cwd);
@@ -10,7 +11,7 @@ export async function runQualityGate(files, cwd, skipRequested) {
     for (const file of files) {
         if (!file.endsWith('ts.js') && !file.endsWith('js.js'))
             continue;
-        const content = require('fs').readFileSync(file, 'utf8');
+        const content = readFileSync(file, 'utf8');
         // 检查未实现的函数
         if (content.includes('TODO') || content.includes('FIXME')) {
             issues.push(`${file}: Contains TODO/FIXME`);

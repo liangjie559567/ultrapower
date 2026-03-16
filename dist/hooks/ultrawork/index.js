@@ -10,14 +10,14 @@ import { createStateAdapter } from '../../lib/state-adapter.js';
  * Read Ultrawork state from disk (local only)
  */
 export function readUltraworkState(directory, sessionId) {
-    const adapter = createStateAdapter('ultrawork', directory || process.cwd());
+    const adapter = createStateAdapter('ultrawork', directory || process.cwd(), true);
     return adapter.read(sessionId);
 }
 /**
  * Write Ultrawork state to disk (local only)
  */
 export async function writeUltraworkState(state, directory, sessionId) {
-    const adapter = createStateAdapter('ultrawork', directory || process.cwd());
+    const adapter = createStateAdapter('ultrawork', directory || process.cwd(), true);
     return await adapter.write(state, sessionId);
 }
 /**
@@ -48,7 +48,7 @@ export function deactivateUltrawork(directory, sessionId) {
     // if it belongs to this session or has no session_id (orphaned)
     if (sessionId) {
         const legacyState = adapter.read(); // Read legacy state without sessionId
-        if (legacyState && (!legacyState.session_id || legacyState.session_id === sessionId)) {
+        if (legacyState && (legacyState.session_id === undefined || legacyState.session_id === sessionId)) {
             adapter.clear(); // Clear legacy file
         }
     }

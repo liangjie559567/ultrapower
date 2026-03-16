@@ -79,7 +79,7 @@ autopilot "创建一个 hello world 函数"
 
 ### 安全加固
 
-ultrapower v7.5.2 包含全面的安全加固：
+ultrapower v7.6.0 包含全面的安全加固：
 
 - **状态文件保护**：原子写入 + 并发队列，防止竞态条件
 - **输入验证**：原型污染防护，拒绝 `__proto__`/`constructor`/`prototype`

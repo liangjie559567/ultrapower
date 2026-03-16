@@ -7,28 +7,30 @@ import { FileStateAdapter } from '../lib/state-adapter.js';
 export class StateManager {
     adapter;
     options;
+    defaultSessionId;
     constructor(options) {
         this.options = options;
+        this.defaultSessionId = options.sessionId;
         // 当前仅支持文件后端，SQLite 后端预留
         this.adapter = new FileStateAdapter(options.mode, options.directory);
     }
     read(sessionId) {
-        return this.adapter.read(sessionId);
+        return this.adapter.read(sessionId || this.defaultSessionId);
     }
     async write(data, sessionId) {
-        return this.adapter.write(data, sessionId);
+        return this.adapter.write(data, sessionId || this.defaultSessionId);
     }
     writeSync(data, sessionId) {
-        return this.adapter.writeSync(data, sessionId);
+        return this.adapter.writeSync(data, sessionId || this.defaultSessionId);
     }
     clear(sessionId) {
-        return this.adapter.clear(sessionId);
+        return this.adapter.clear(sessionId || this.defaultSessionId);
     }
     exists(sessionId) {
-        return this.adapter.exists(sessionId);
+        return this.adapter.exists(sessionId || this.defaultSessionId);
     }
     getPath(sessionId) {
-        return this.adapter.getPath(sessionId);
+        return this.adapter.getPath(sessionId || this.defaultSessionId);
     }
     list() {
         return this.adapter.list();

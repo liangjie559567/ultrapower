@@ -12,7 +12,7 @@
  * 5. requesting-code-review (required before completion)
  * 6. verification-before-completion (required before merge)
  */
-import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { validateAssumptions } from '../../features/assumption-validator/index.js';
 import { extractAssumptionsFromPlan } from './assumption-extractor.js';
@@ -48,7 +48,7 @@ export function writeWorkflowState(workingDir, state) {
     const statePath = getWorkflowStatePath(workingDir);
     const dir = join(workingDir, '.omc');
     if (!existsSync(dir)) {
-        require('fs').mkdirSync(dir, { recursive: true });
+        mkdirSync(dir, { recursive: true });
     }
     writeFileSync(statePath, JSON.stringify(state, null, 2), 'utf-8');
 }
@@ -361,7 +361,7 @@ export function processWorkflowGate(input) {
                     state.qualityGatePassed = true;
                     writeWorkflowState(workingDirectory, state);
                 }
-                catch (error) {
+                catch (_error) {
                     state.qualityGatePassed = true;
                     writeWorkflowState(workingDirectory, state);
                 }
@@ -415,7 +415,7 @@ export function processWorkflowGate(input) {
 export function clearWorkflowState(workingDir) {
     const statePath = getWorkflowStatePath(workingDir);
     if (existsSync(statePath)) {
-        require('fs').unlinkSync(statePath);
+        unlinkSync(statePath);
     }
 }
 //# sourceMappingURL=index.js.map

@@ -23,9 +23,11 @@ import { readStateWithCache, invalidateStateCache } from './state-cache.js';
 export class FileStateAdapter {
     mode;
     directory;
-    constructor(mode, directory) {
+    noLegacyFallback;
+    constructor(mode, directory, noLegacyFallback = false) {
         this.mode = assertValidMode(mode);
         this.directory = resolve(directory);
+        this.noLegacyFallback = noLegacyFallback;
     }
     /**
      * 获取状态文件路径
@@ -57,6 +59,13 @@ export class FileStateAdapter {
     read(sessionId) {
         const stateFile = this.getPath(sessionId);
         if (!existsSync(stateFile)) {
+            // Fallback: if session-specific file doesn't exist, try legacy path (unless disabled)
+            if (sessionId && !this.noLegacyFallback) {
+                const legacyPath = this.getPath();
+                if (existsSync(legacyPath)) {
+                    return this.read(); // Read from legacy path
+                }
+            }
             return null;
         }
         try {
@@ -169,7 +178,7 @@ export class FileStateAdapter {
 /**
  * 创建状态适配器工厂函数
  */
-export function createStateAdapter(mode, directory) {
-    return new FileStateAdapter(mode, directory);
+export function createStateAdapter(mode, directory, noLegacyFallback = false) {
+    return new FileStateAdapter(mode, directory, noLegacyFallback);
 }
 //# sourceMappingURL=state-adapter.js.map
