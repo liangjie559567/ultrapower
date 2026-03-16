@@ -45,10 +45,12 @@ export interface StateAdapter<T> {
 export class FileStateAdapter<T> implements StateAdapter<T> {
   private readonly mode: ValidMode;
   private readonly directory: string;
+  private readonly noLegacyFallback: boolean;
 
-  constructor(mode: ValidMode, directory: string) {
+  constructor(mode: ValidMode, directory: string, noLegacyFallback = false) {
     this.mode = assertValidMode(mode);
     this.directory = resolve(directory);
+    this.noLegacyFallback = noLegacyFallback;
   }
 
   /**
@@ -84,6 +86,13 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
     const stateFile = this.getPath(sessionId);
 
     if (!existsSync(stateFile)) {
+      // Fallback: if session-specific file doesn't exist, try legacy path (unless disabled)
+      if (sessionId && !this.noLegacyFallback) {
+        const legacyPath = this.getPath();
+        if (existsSync(legacyPath)) {
+          return this.read(); // Read from legacy path
+        }
+      }
       return null;
     }
 
@@ -205,6 +214,6 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
 /**
  * 创建状态适配器工厂函数
  */
-export function createStateAdapter<T>(mode: ValidMode, directory: string): StateAdapter<T> {
-  return new FileStateAdapter<T>(mode, directory);
+export function createStateAdapter<T>(mode: ValidMode, directory: string, noLegacyFallback = false): StateAdapter<T> {
+  return new FileStateAdapter<T>(mode, directory, noLegacyFallback);
 }

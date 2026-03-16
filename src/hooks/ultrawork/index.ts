@@ -31,7 +31,7 @@ export interface UltraworkState {
  * Read Ultrawork state from disk (local only)
  */
 export function readUltraworkState(directory?: string, sessionId?: string): UltraworkState | null {
-  const adapter = createStateAdapter<UltraworkState>('ultrawork', directory || process.cwd());
+  const adapter = createStateAdapter<UltraworkState>('ultrawork', directory || process.cwd(), true);
   return adapter.read(sessionId);
 }
 
@@ -39,7 +39,7 @@ export function readUltraworkState(directory?: string, sessionId?: string): Ultr
  * Write Ultrawork state to disk (local only)
  */
 export async function writeUltraworkState(state: UltraworkState, directory?: string, sessionId?: string): Promise<boolean> {
-  const adapter = createStateAdapter<UltraworkState>('ultrawork', directory || process.cwd());
+  const adapter = createStateAdapter<UltraworkState>('ultrawork', directory || process.cwd(), true);
   return await adapter.write(state, sessionId);
 }
 
@@ -79,7 +79,7 @@ export function deactivateUltrawork(directory?: string, sessionId?: string): boo
   // if it belongs to this session or has no session_id (orphaned)
   if (sessionId) {
     const legacyState = adapter.read(); // Read legacy state without sessionId
-    if (legacyState && (!legacyState.session_id || legacyState.session_id === sessionId)) {
+    if (legacyState && (legacyState.session_id === undefined || legacyState.session_id === sessionId)) {
       adapter.clear(); // Clear legacy file
     }
   }
