@@ -6,7 +6,29 @@
 - Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
 - Users should migrate to new naming: `ultrapower:lsp_*`
 
-## 7.6.0
+## 7.6.0 - 2026-03-16
+
+### Technical Debt Fixes
+
+- fix(test): TD-1 - Fix MCP integration test timeouts (P0)
+  - Add explicit 30000ms timeout to beforeAll hooks
+  - Fixes: mcp-integration.test.ts, performance.test.ts
+  - Test stability significantly improved
+
+- docs(lsp): TD-2 - Migrate LSP tool documentation naming (P1)
+  - Update 34 documentation files (218 changes)
+  - Correct format: mcp__plugin_ultrapower_t__lsp_* (not ultrapower:lsp_*)
+  - Add deprecation notice in CHANGELOG
+
+- test(windows): TD-3 - Add Windows platform compatibility tests (P1)
+  - New test: tests/platform/windows-atomic-write.test.ts
+  - Uses skipIf for platform detection
+  - Tests atomic write retry mechanism
+
+- docs(verification): TD-4 - Clarify atomic write protection status (P2)
+  - Verify atomicWriteJsonSyncWithRetry usage in subagent-tracker
+  - Clarify pre-existing implementation from v7.1.1
+  - All state files use atomic write protection
 
 ### Patch Changes
 
