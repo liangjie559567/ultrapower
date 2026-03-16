@@ -69,8 +69,8 @@ export function validatePath(userPath: string, baseDir: string): string {
   normalized = normalized.replace(/\\/g, '/');
 
   // Vector 1: Path normalization (handles ../, ./, etc)
-  const joined = path.join(baseDir, normalized);
   const resolvedBase = fs.realpathSync.native(baseDir);
+  const joined = path.join(resolvedBase, normalized);
 
   // Vector 3: Symlink resolution
   let resolved: string;
