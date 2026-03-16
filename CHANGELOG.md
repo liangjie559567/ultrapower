@@ -1,5 +1,19 @@
 # ultrapower v7.0.1
 
+## 7.6.0
+
+### Patch Changes
+
+- fix(types): Fix TypeScript compilation errors in analytics-dashboard
+  - Align MetricsData interface with SessionEvent structure
+  - Add optional fields (success?, duration?) to skills/agents arrays
+  - Remove unused 'id' field from sessions array
+  - Add null checks for optional target field in metrics-collector
+
+- fix(logger): Add missing logger export for deadlock-detector
+  - Export logger object with info/warn/error/debug methods
+  - Fix module import errors in security modules
+
 ## 7.5.2
 
 ### Patch Changes
