@@ -58,9 +58,9 @@ Run independent tools concurrently:
 
 ```typescript
 const [hover, refs, symbols] = await Promise.all([
-  mcp__plugin_ultrapower_t__ultrapower:lsp_hover({ file, line, character }),
-  mcp__plugin_ultrapower_t__ultrapower:lsp_find_references({ file, line, character }),
-  mcp__plugin_ultrapower_t__ultrapower:lsp_document_symbols({ file })
+  mcp__plugin_ultrapower_t__lsp_hover({ file, line, character }),
+  mcp__plugin_ultrapower_t__lsp_find_references({ file, line, character }),
+  mcp__plugin_ultrapower_t__lsp_document_symbols({ file })
 ]);
 ```
 
@@ -112,11 +112,11 @@ Group related calls:
 ```typescript
 // Bad - 10 separate calls
 for (const file of files) {
-  await mcp__plugin_ultrapower_t__ultrapower:lsp_diagnostics({ file });
+  await mcp__plugin_ultrapower_t__lsp_diagnostics({ file });
 }
 
 // Good - 1 directory call
-await mcp__plugin_ultrapower_t__ultrapower:lsp_diagnostics_directory({
+await mcp__plugin_ultrapower_t__lsp_diagnostics_directory({
   directory: 'src/'
 });
 ```

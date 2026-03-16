@@ -379,7 +379,7 @@ npm install --save-dev @types/node
 **步骤：**
 1. 创建 `src/mcp/tool-resolver.ts`
 2. 实现 `resolveTool(name: string)` 函数
-3. 支持带前缀：`mcp__plugin_ultrapower_t__ultrapower:lsp_hover`
+3. 支持带前缀：`mcp__plugin_ultrapower_t__lsp_hover`
 4. 支持不带前缀：`ultrapower:lsp_hover`
 5. 支持命名空间：`ultrapower:lsp_hover`
 
@@ -579,7 +579,7 @@ npm install --save-dev @types/node
 **依赖：** 1.4.3
 
 **步骤：**
-1. 使用旧前缀调用工具：`mcp__plugin_ultrapower_t__ultrapower:lsp_hover`
+1. 使用旧前缀调用工具：`mcp__plugin_ultrapower_t__lsp_hover`
 2. 使用新前缀调用工具：`ultrapower:lsp_hover`
 3. 使用无前缀调用工具：`ultrapower:lsp_hover`
 4. 验证三种方式都能成功
@@ -1079,7 +1079,7 @@ npm install --save-dev @types/node
 
 **步骤：**
 1. 更新 `tool-adapter.ts`
-2. 工具名称从 `mcp__plugin_ultrapower_t__ultrapower:lsp_hover` 改为 `ultrapower:lsp_hover`
+2. 工具名称从 `mcp__plugin_ultrapower_t__lsp_hover` 改为 `ultrapower:lsp_hover`
 3. 保留旧前缀映射（向后兼容）
 
 **验收：**

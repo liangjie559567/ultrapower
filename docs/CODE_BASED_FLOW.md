@@ -700,7 +700,7 @@ mcpServers: {
 
 ```typescript
 // OMC 工具
-'mcp__plugin_ultrapower_t__ultrapower:lsp_hover'
+'mcp__plugin_ultrapower_t__lsp_hover'
 'mcp__plugin_ultrapower_t__ast_grep_search'
 'mcp__plugin_ultrapower_t__python_repl'
 
