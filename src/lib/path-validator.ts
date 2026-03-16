@@ -77,20 +77,16 @@ export function validatePath(userPath: string, baseDir: string): string {
   try {
     resolved = fs.realpathSync.native(joined);
   } catch (_err) {
-    // Path doesn't exist yet - validate parent directory
-    const parent = path.dirname(joined);
-    if (fs.existsSync(parent)) {
-      const resolvedParent = fs.realpathSync.native(parent);
-      const normalizedParent = resolvedParent.replace(/\\/g, '/').toLowerCase();
-      const normalizedBase = resolvedBase.replace(/\\/g, '/').toLowerCase();
-      if (!normalizedParent.startsWith(normalizedBase)) {
-        throw new SecurityError('Path traversal detected via parent directory');
-      }
-      // Use absolute path for non-existent files
-      resolved = path.resolve(joined);
-    } else {
-      resolved = path.resolve(joined);
+    // Path doesn't exist yet - validate using normalized joined path
+    const normalizedJoined = path.normalize(joined).replace(/\\/g, '/').toLowerCase();
+    const normalizedBase = resolvedBase.replace(/\\/g, '/').toLowerCase();
+
+    if (!normalizedJoined.startsWith(normalizedBase)) {
+      throw new SecurityError('Path traversal detected: path outside base directory');
     }
+
+    // Return the normalized absolute path
+    return path.normalize(joined);
   }
 
   // Boundary check - normalize separators and case for cross-platform comparison
