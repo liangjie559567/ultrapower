@@ -81,7 +81,9 @@ export function validatePath(userPath: string, baseDir: string): string {
     const parent = path.dirname(joined);
     if (fs.existsSync(parent)) {
       const resolvedParent = fs.realpathSync.native(parent);
-      if (!resolvedParent.startsWith(resolvedBase)) {
+      const normalizedParent = resolvedParent.replace(/\\/g, '/').toLowerCase();
+      const normalizedBase = resolvedBase.replace(/\\/g, '/').toLowerCase();
+      if (!normalizedParent.startsWith(normalizedBase)) {
         throw new SecurityError('Path traversal detected via parent directory');
       }
       return path.normalize(joined);
@@ -89,9 +91,9 @@ export function validatePath(userPath: string, baseDir: string): string {
     resolved = path.normalize(joined);
   }
 
-  // Boundary check - normalize separators for cross-platform comparison
-  const normalizedResolved = resolved.replace(/\\/g, '/');
-  const normalizedBase = resolvedBase.replace(/\\/g, '/');
+  // Boundary check - normalize separators and case for cross-platform comparison
+  const normalizedResolved = resolved.replace(/\\/g, '/').toLowerCase();
+  const normalizedBase = resolvedBase.replace(/\\/g, '/').toLowerCase();
 
   if (!normalizedResolved.startsWith(normalizedBase)) {
     throw new SecurityError('Path traversal detected: path outside base directory');
