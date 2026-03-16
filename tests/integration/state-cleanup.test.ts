@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { existsSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, rmSync, mkdirSync, writeFileSync, utimesSync } from 'node:fs';
 import { join } from 'node:path';
 import { clearStaleSessionDirs } from '../../src/hooks/mode-registry/index';
 
@@ -45,11 +45,20 @@ describe('Integration: State Cleanup (BUG-004)', () => {
     mkdirSync(stale2, { recursive: true });
     mkdirSync(recent, { recursive: true });
 
-    writeFileSync(join(stale1, 'ralph-state.json'), JSON.stringify({ active: false }));
-    writeFileSync(join(stale2, 'ultrawork-state.json'), JSON.stringify({ active: false }));
+    // Create old files (48 hours ago) for stale sessions
+    const oldTime = Date.now() - 48 * 60 * 60 * 1000;
+    const stale1File = join(stale1, 'ralph-state.json');
+    const stale2File = join(stale2, 'ultrawork-state.json');
+
+    writeFileSync(stale1File, JSON.stringify({ active: false }));
+    writeFileSync(stale2File, JSON.stringify({ active: false }));
     writeFileSync(join(recent, 'team-state.json'), JSON.stringify({ active: true }));
 
-    const removed = clearStaleSessionDirs(testDir, 0);
+    // Backdate the stale files
+    utimesSync(stale1File, oldTime / 1000, oldTime / 1000);
+    utimesSync(stale2File, oldTime / 1000, oldTime / 1000);
+
+    const removed = clearStaleSessionDirs(testDir, 24 * 60 * 60 * 1000);
 
     expect(removed.length).toBeGreaterThanOrEqual(2);
     expect(existsSync(stale1)).toBe(false);
