@@ -6,12 +6,14 @@ import { createStateManager } from '../../src/state/index';
 describe('BUG-001 并发状态写入集成测试', () => {
   const testDirs: string[] = [];
 
-  afterEach(() => {
-    testDirs.forEach(dir => {
+  afterEach(async () => {
+    for (const dir of testDirs) {
       if (existsSync(dir)) {
-        rmSync(dir, { recursive: true, force: true, maxRetries: 3 });
+        // Wait for any pending file operations to complete
+        await new Promise(resolve => setTimeout(resolve, 100));
+        rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
       }
-    });
+    }
     testDirs.length = 0;
   });
   it.skipIf(process.platform === 'win32')('should handle 1000+ concurrent writes without corruption', async () => {
