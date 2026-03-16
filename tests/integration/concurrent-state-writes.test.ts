@@ -1,11 +1,22 @@
-import { describe, it, expect } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { describe, it, expect, afterEach } from 'vitest';
+import { existsSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { createStateManager } from '../../src/state/index';
 
 describe('BUG-001 并发状态写入集成测试', () => {
+  const testDirs: string[] = [];
+
+  afterEach(() => {
+    testDirs.forEach(dir => {
+      if (existsSync(dir)) {
+        rmSync(dir, { recursive: true, force: true, maxRetries: 3 });
+      }
+    });
+    testDirs.length = 0;
+  });
   it.skipIf(process.platform === 'win32')('should handle 1000+ concurrent writes without corruption', async () => {
     const testDir = join(process.cwd(), '.test-concurrent-' + Date.now());
+    testDirs.push(testDir);
     const manager = createStateManager({ mode: 'autopilot', directory: testDir });
     const writes = 1000;
 
@@ -26,6 +37,7 @@ describe('BUG-001 并发状态写入集成测试', () => {
 
   it.skipIf(process.platform === 'win32')('should preserve data integrity under concurrent load', async () => {
     const testDir = join(process.cwd(), '.test-concurrent-' + Date.now());
+    testDirs.push(testDir);
     const manager = createStateManager({ mode: 'ralph', directory: testDir });
 
     await Promise.all(
