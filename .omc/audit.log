@@ -1,0 +1,335 @@
+{"timestamp":"2026-03-17T03:49:47.594Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:47.599Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:47.673Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:47.686Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:49.691Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:49.794Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:49.798Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:50.805Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:56.187Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:57.479Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:57.497Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:57.501Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:49:58.532Z","event":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"},"category":"security"}
+{"timestamp":"2026-03-17T03:49:59.127Z","event":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"},"category":"security"}
+{"timestamp":"2026-03-17T03:49:59.128Z","event":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"},"category":"security"}
+{"timestamp":"2026-03-17T03:49:59.557Z","event":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"},"category":"security"}
+{"timestamp":"2026-03-17T03:50:04.310Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:04.331Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:04.334Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:04.655Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:05.223Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:05.237Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:10.003Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:10.012Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:10.018Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:10.019Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:10.021Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:50:10.023Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:44.779Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:44.795Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:44.843Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:44.857Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:46.807Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:53.740Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:53.850Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:53.856Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:53.861Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:53.888Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:53.892Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:54.138Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:54.294Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:54.752Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:54.757Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T03:52:55.179Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:55.187Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:55.202Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:52:56.833Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:01.705Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:01.710Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:01.716Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:23.583Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:23.611Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:23.647Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:23.657Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:25.391Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:26.029Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:26.120Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:26.171Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:27.078Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:31.939Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:31.985Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:31.999Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:32.294Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:32.670Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:32.690Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:32.893Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:32.899Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:32.904Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:34.055Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:34.535Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:34.538Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T03:53:36.445Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:46.986Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:46.990Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:46.994Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:46.995Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:46.996Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:53:46.997Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:28.236Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:28.264Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:28.292Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:28.304Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:30.116Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:30.933Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:31.047Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:31.052Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:32.026Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:37.053Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:37.087Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:37.091Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:37.473Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:38.037Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:38.041Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:38.042Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:38.045Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:38.059Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:39.549Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:40.077Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:55:40.080Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T03:55:42.052Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:02.728Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:02.760Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:02.772Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:02.940Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:05.904Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:06.199Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:06.291Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:06.295Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:07.269Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:12.393Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:12.399Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:12.404Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:13.163Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:13.183Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:13.186Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:13.569Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:14.080Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:14.100Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:15.049Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:15.551Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:15.580Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T03:56:17.774Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:29.148Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:29.158Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:29.163Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:29.166Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:29.168Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:56:29.170Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:07.046Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:07.099Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:07.112Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:07.182Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:08.988Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:09.120Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:09.126Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:10.179Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:15.498Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:15.552Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:15.570Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:15.574Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:19.013Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:19.637Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:19.645Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T03:57:20.665Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:25.654Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:25.732Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:25.736Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:25.990Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:26.431Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:26.446Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:31.198Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:31.207Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:31.211Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"permission-request","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:31.212Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-init","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:31.214Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"setup-maintenance","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T03:57:31.215Z","eventType":"validation_failed","severity":"medium","details":{"hookType":"session-end","reason":"camelCase input on sensitive hook bypassed fast-path"}}
+{"timestamp":"2026-03-17T04:00:38.105Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"tool-use","field":"__proto__","path":"fast-path"}}
+{"timestamp":"2026-03-17T04:01:30.179Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:01:30.208Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:01:30.214Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:01:30.223Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:01:30.228Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"tool-use","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:01:30.236Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:02:49.156Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:02:49.160Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:03:11.675Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:03:11.679Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:03:11.683Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:03:32.869Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:03:32.875Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:03:32.879Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:04:02.205Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:04:02.211Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:04:02.213Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:05:17.517Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:17.568Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:17.635Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:17.676Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:20.054Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:20.077Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:20.083Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:21.869Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:22.865Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:24.772Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:24.835Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:24.840Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:24.844Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:24.928Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:24.942Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:35.438Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:36.683Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:39.954Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:40.615Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"setup","field":"constructor"}}
+{"timestamp":"2026-03-17T04:05:49.423Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:49.437Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:05:49.471Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:00.990Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:06:00.999Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:06:01.007Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:06:37.406Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:37.411Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:37.860Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:37.871Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"setup","field":"constructor"}}
+{"timestamp":"2026-03-17T04:06:39.478Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:39.496Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:39.507Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:40.317Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:40.337Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:40.404Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:40.812Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:42.356Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:42.387Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:42.393Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:42.826Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:43.162Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:44.108Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:44.206Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:44.211Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:44.216Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:44.235Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:06:44.245Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:07:18.730Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:07:18.739Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:07:18.750Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:08:06.351Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:06.423Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:06.654Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"setup","field":"constructor"}}
+{"timestamp":"2026-03-17T04:08:06.760Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:08.301Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:08.315Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:08.328Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:08.597Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:08.614Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:08.636Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:09.137Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:09.944Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:10.307Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:10.535Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:10.562Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:10.569Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:11.097Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:11.105Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:11.722Z","eventType":"validation_failed","severity":"high","details":{"hookType":"session-end","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:11.844Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:11.849Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-maintenance","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:11.853Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:33.370Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:08:33.617Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"setup","field":"constructor"}}
+{"timestamp":"2026-03-17T04:09:43.451Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:09:43.468Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:09:43.750Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"setup","field":"constructor"}}
+{"timestamp":"2026-03-17T04:09:43.752Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:10:07.220Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:11:48.088Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:11:48.099Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:11:48.403Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:11:48.430Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:12:53.721Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:13:23.122Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:15:33.084Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:15:33.104Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:15:33.495Z","eventType":"validation_failed","severity":"high","details":{"hookType":"permission-request","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:15:33.576Z","eventType":"validation_failed","severity":"high","details":{"hookType":"setup-init","reason":"camelCase input rejected on sensitive hook"}}
+{"timestamp":"2026-03-17T04:16:17.234Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:16:17.255Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:16:17.259Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:16:31.525Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:16:31.964Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T04:17:21.487Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:17:21.507Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:17:21.514Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:18:57.060Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:18:57.063Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T04:18:57.090Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T04:18:57.099Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T04:18:57.111Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:21:04.765Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:21:04.771Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:21:04.772Z","eventType":"prototype_pollution_attempt","severity":"high","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:21:29.916Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:21:29.918Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:21:29.919Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:24:13.927Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:24:13.972Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:24:34.860Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:24:34.864Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:24:34.866Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:24:52.090Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:25:09.043Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:28:16.460Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:28:16.460Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:28:25.982Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:29:05.899Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:29:05.962Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:29:24.050Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:29:24.218Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:29:25.161Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:29:28.983Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:29:28.986Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:29:28.988Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:34:40.948Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:34:41.011Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:34:41.078Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"nested.deep.__proto__"}}
+{"timestamp":"2026-03-17T18:34:56.992Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:34:57.187Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:34:59.541Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:34:59.763Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:34:59.915Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"nested.deep.__proto__"}}
+{"timestamp":"2026-03-17T18:35:04.423Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:35:04.435Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:35:04.438Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:35:28.081Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:35:28.090Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:35:28.092Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:35:35.730Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:35:35.889Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:35:35.905Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:35:36.064Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:35:36.361Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"nested.deep.__proto__"}}
+{"timestamp":"2026-03-17T18:36:17.706Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:36:17.709Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:36:17.709Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:36:33.907Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:36:34.058Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:36:34.232Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"nested.deep.__proto__"}}
+{"timestamp":"2026-03-17T18:36:34.311Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:36:34.491Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:36:45.468Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:36:45.478Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:36:45.482Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"prototype"}}
+{"timestamp":"2026-03-17T18:40:42.135Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:40:42.336Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"constructor"}}
+{"timestamp":"2026-03-17T18:40:43.033Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"__proto__"}}
+{"timestamp":"2026-03-17T18:40:43.249Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"setup-init","field":"constructor"}}
+{"timestamp":"2026-03-17T18:40:43.406Z","eventType":"prototype_pollution_attempt","severity":"critical","details":{"hookType":"permission-request","field":"nested.deep.__proto__"}}

@@ -60,26 +60,22 @@ export function validatePath(userPath, baseDir) {
     // This ensures Windows-style paths (..\..\) are detected as traversal on all platforms
     normalized = normalized.replace(/\\/g, '/');
     // Vector 1: Path normalization (handles ../, ./, etc)
-    const joined = path.join(baseDir, normalized);
     const resolvedBase = fs.realpathSync.native(baseDir);
+    const joined = path.join(resolvedBase, normalized);
     // Vector 3: Symlink resolution
     let resolved;
     try {
         resolved = fs.realpathSync.native(joined);
     }
     catch (_err) {
-        // Path doesn't exist yet - validate parent directory
-        const parent = path.dirname(joined);
-        if (fs.existsSync(parent)) {
-            const resolvedParent = fs.realpathSync.native(parent);
-            const normalizedParent = resolvedParent.replace(/\\/g, '/').toLowerCase();
-            const normalizedBase = resolvedBase.replace(/\\/g, '/').toLowerCase();
-            if (!normalizedParent.startsWith(normalizedBase)) {
-                throw new SecurityError('Path traversal detected via parent directory');
-            }
-            return path.normalize(joined);
+        // Path doesn't exist yet - validate using normalized joined path
+        const normalizedJoined = path.normalize(joined).replace(/\\/g, '/').toLowerCase();
+        const normalizedBase = resolvedBase.replace(/\\/g, '/').toLowerCase();
+        if (!normalizedJoined.startsWith(normalizedBase)) {
+            throw new SecurityError('Path traversal detected: path outside base directory');
         }
-        resolved = path.normalize(joined);
+        // Return the normalized absolute path
+        return path.normalize(joined);
     }
     // Boundary check - normalize separators and case for cross-platform comparison
     const normalizedResolved = resolved.replace(/\\/g, '/').toLowerCase();
