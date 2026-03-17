@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Security Fixes
+
+- fix(security): BUG-002 - Enhance prototype pollution protection with recursive checking
+  - Implement recursive 10-level deep prototype pollution detection in bridge-normalize
+  - Add fast-path type validation for sensitive hooks (sessionId, toolName, directory)
+  - Integrate audit logging for security events (logAuditEvent)
+  - Fix integration tests to use JSON strings (bypass JSON.stringify filtering)
+  - Add comprehensive test coverage for nested pollution attacks
+  - Tests: 7269/7269 passing
+  - Files: src/hooks/bridge-normalize.ts, tests/integration/hook-input-security.test.ts, tests/security/penetration.test.ts
+
 ### Deprecated
 - Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
 - Users should migrate to new naming: `ultrapower:lsp_*`
