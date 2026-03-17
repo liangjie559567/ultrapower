@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Deprecated
+- Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
+- Users should migrate to new naming: `ultrapower:lsp_*`
+
+## 7.7.1 - 2026-03-17
+
 ### Security Fixes
 
 - fix(security): BUG-002 - Enhance prototype pollution protection with recursive checking
@@ -12,10 +18,6 @@
   - Add comprehensive test coverage for nested pollution attacks
   - Tests: 7269/7269 passing
   - Files: src/hooks/bridge-normalize.ts, tests/integration/hook-input-security.test.ts, tests/security/penetration.test.ts
-
-### Deprecated
-- Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
-- Users should migrate to new naming: `ultrapower:lsp_*`
 
 ## 7.7.0 - 2026-03-16
 
