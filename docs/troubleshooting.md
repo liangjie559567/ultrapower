@@ -468,7 +468,7 @@ find .omc/checkpoints -type f -mtime +1 -delete
 
 # 在 Claude Code 中运行
 
-/lsp_servers
+/ultrapower:lsp_servers
 
 # 重启 LSP 服务器
 

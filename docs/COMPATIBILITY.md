@@ -26,7 +26,7 @@
 
 | 工具类别 | 工具列表 |
 | ---------- | ---------- |
-| LSP（12 个） | `lsp_hover`、`lsp_goto_definition`、`lsp_find_references`、`lsp_document_symbols`、`lsp_workspace_symbols`、`lsp_diagnostics`、`lsp_diagnostics_directory`、`lsp_prepare_rename`、`lsp_rename`、`lsp_code_actions`、`lsp_code_action_resolve`、`lsp_servers` |
+| LSP（12 个） | `ultrapower:lsp_hover`、`ultrapower:lsp_goto_definition`、`ultrapower:lsp_find_references`、`ultrapower:lsp_document_symbols`、`ultrapower:lsp_workspace_symbols`、`ultrapower:lsp_diagnostics`、`ultrapower:lsp_diagnostics_directory`、`ultrapower:lsp_prepare_rename`、`ultrapower:lsp_rename`、`ultrapower:lsp_code_actions`、`ultrapower:lsp_code_action_resolve`、`ultrapower:lsp_servers` |
 | AST | `ast_grep_search`、`ast_grep_replace` |
 | Python REPL | `python_repl` |
 

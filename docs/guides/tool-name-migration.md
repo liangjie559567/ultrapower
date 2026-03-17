@@ -17,29 +17,29 @@ Starting from v5.6.0, all ultrapower tools use the `ultrapower:` prefix instead 
 
 ### LSP Tools
 
-* `lsp_hover` → `ultrapower:lsp_hover`
+* `ultrapower:lsp_hover` → `ultrapower:lsp_hover`
 
-* `lsp_goto_definition` → `ultrapower:lsp_goto_definition`
+* `ultrapower:lsp_goto_definition` → `ultrapower:lsp_goto_definition`
 
-* `lsp_find_references` → `ultrapower:lsp_find_references`
+* `ultrapower:lsp_find_references` → `ultrapower:lsp_find_references`
 
-* `lsp_document_symbols` → `ultrapower:lsp_document_symbols`
+* `ultrapower:lsp_document_symbols` → `ultrapower:lsp_document_symbols`
 
-* `lsp_workspace_symbols` → `ultrapower:lsp_workspace_symbols`
+* `ultrapower:lsp_workspace_symbols` → `ultrapower:lsp_workspace_symbols`
 
-* `lsp_diagnostics` → `ultrapower:lsp_diagnostics`
+* `ultrapower:lsp_diagnostics` → `ultrapower:lsp_diagnostics`
 
-* `lsp_diagnostics_directory` → `ultrapower:lsp_diagnostics_directory`
+* `ultrapower:lsp_diagnostics_directory` → `ultrapower:lsp_diagnostics_directory`
 
-* `lsp_servers` → `ultrapower:lsp_servers`
+* `ultrapower:lsp_servers` → `ultrapower:lsp_servers`
 
-* `lsp_prepare_rename` → `ultrapower:lsp_prepare_rename`
+* `ultrapower:lsp_prepare_rename` → `ultrapower:lsp_prepare_rename`
 
-* `lsp_rename` → `ultrapower:lsp_rename`
+* `ultrapower:lsp_rename` → `ultrapower:lsp_rename`
 
-* `lsp_code_actions` → `ultrapower:lsp_code_actions`
+* `ultrapower:lsp_code_actions` → `ultrapower:lsp_code_actions`
 
-* `lsp_code_action_resolve` → `ultrapower:lsp_code_action_resolve`
+* `ultrapower:lsp_code_action_resolve` → `ultrapower:lsp_code_action_resolve`
 
 ### State Tools
 

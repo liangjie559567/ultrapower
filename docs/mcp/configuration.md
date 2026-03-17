@@ -91,7 +91,7 @@ Location: `.claude/mcp.json` (workspace)
       "args": ["bridge/mcp-server.cjs"],
       "disabled": false,
       "autoApprove": [
-        "lsp_hover",
+        "ultrapower:lsp_hover",
         "state_read",
         "notepad_read"
       ]
@@ -137,8 +137,8 @@ Edit `src/mcp/timeout.ts`:
 
 ```typescript
 export const TOOL_TIMEOUTS: Record<string, number> = {
-  lsp_hover: 30000,
-  lsp_diagnostics: 60000,
+  ultrapower:lsp_hover: 30000,
+  ultrapower:lsp_diagnostics: 60000,
   ast_grep_search: 60000,
   ask_codex: 300000,
   ask_gemini: 300000
@@ -160,8 +160,8 @@ Skip permission prompts for trusted tools:
   "mcpServers": {
     "ultrapower": {
       "autoApprove": [
-        "lsp_hover",
-        "lsp_goto_definition",
+        "ultrapower:lsp_hover",
+        "ultrapower:lsp_goto_definition",
         "state_read",
         "notepad_read",
         "project_memory_read"

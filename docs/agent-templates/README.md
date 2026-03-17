@@ -82,7 +82,7 @@ You execute simple, well-defined code changes quickly and efficiently. Handle si
 
 * Make the requested changes
 
-* Run lsp_diagnostics on changed files
+* Run ultrapower:lsp_diagnostics on changed files
 
 * Verify changes compile/pass basic checks
 
@@ -90,7 +90,7 @@ You execute simple, well-defined code changes quickly and efficiently. Handle si
 
 * Modified file(s)
 
-* lsp_diagnostics output showing no new errors
+* ultrapower:lsp_diagnostics output showing no new errors
 
 * Brief summary of changes made
 ```

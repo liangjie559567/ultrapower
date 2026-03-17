@@ -29,7 +29,21 @@ describe('Stream Processor', () => {
     expect(count).toBe(1000);
   });
 
-  afterEach(() => {
-    rmSync(TEST_DIR, { recursive: true, force: true });
+  afterEach(async () => {
+    // Add delay on Windows to allow file handles to close
+    if (process.platform === 'win32') {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    try {
+      rmSync(TEST_DIR, { recursive: true, force: true });
+    } catch (err) {
+      // Retry once on Windows if cleanup fails
+      if (process.platform === 'win32') {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        rmSync(TEST_DIR, { recursive: true, force: true });
+      } else {
+        throw err;
+      }
+    }
   });
 });

@@ -6,9 +6,9 @@
 
 | Tool | Cold Start | Warm | Notes |
 | ------ | ----------- | ------ | ------- |
-| `lsp_hover` | 150ms | 20ms | LSP server cached |
-| `lsp_diagnostics` | 300ms | 50ms | File-level |
-| `lsp_diagnostics_directory` | 2s | 500ms | Directory scan |
+| `ultrapower:lsp_hover` | 150ms | 20ms | LSP server cached |
+| `ultrapower:lsp_diagnostics` | 300ms | 50ms | File-level |
+| `ultrapower:lsp_diagnostics_directory` | 2s | 500ms | Directory scan |
 | `ast_grep_search` | 100ms | 30ms | Pattern complexity varies |
 | `state_read` | 10ms | 5ms | JSON parse |
 | `notepad_read` | 15ms | 8ms | Markdown parse |
@@ -137,8 +137,8 @@ await mcp__plugin_ultrapower_t__lsp_diagnostics_directory({
 
 Output includes timing:
 ```
-[debug] lsp_hover started
-[debug] lsp_hover completed in 23ms
+[debug] ultrapower:lsp_hover started
+[debug] ultrapower:lsp_hover completed in 23ms
 ```
 
 ### Measure Tool Calls

@@ -70,8 +70,8 @@ Edit `~/.claude/claude_desktop_config.json`:
 After configuration, restart Claude Desktop. The MCP server tools should appear in the tool list:
 
 ```
-mcp__plugin_ultrapower_t__ultrapower:lsp_hover
-mcp__plugin_ultrapower_t__ultrapower:lsp_goto_definition
+mcp__plugin_ultrapower_t__lsp_hover
+mcp__plugin_ultrapower_t__lsp_goto_definition
 mcp__plugin_ultrapower_t__ultrapower:ast_grep_search
 ... (64 tools total - each tool has both new and legacy names)
 ```
@@ -121,12 +121,12 @@ Restart Cursor. Check the MCP panel to confirm the server is connected and all 3
 
 Get type information at cursor position:
 ```
-Use mcp__plugin_ultrapower_t__ultrapower:lsp_hover with file and position
+Use mcp__plugin_ultrapower_t__lsp_hover with file and position
 ```
 
 Find all references to a symbol:
 ```
-Use mcp__plugin_ultrapower_t__ultrapower:lsp_find_references to locate usage
+Use mcp__plugin_ultrapower_t__lsp_find_references to locate usage
 ```
 
 ### AST Tools

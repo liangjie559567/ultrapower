@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git checkout origin/main -B main && git pull origin main\",\"description\":\"切换到 origin/main 并创建本地 main 分支\"}",
-  "error": "Exit code 1\nerror: Your local changes to the following files would be overwritten by checkout:\n\t.omc/state/last-tool-error.json\nPlease commit your changes or stash them before you switch branches.\nAborting",
-  "timestamp": "2026-03-16T16:55:53.847Z",
-  "retry_count": 2
+  "tool_input_preview": "{\"command\":\"npm publish --access public --no-provenance\",\"description\":\"Publish v7.7.0 to npm registry\"}",
+  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@7.7.0 prepublishOnly\n> npm run validate:versions && npm run build && npm run compose-docs && npm run validate:skills && npm run sync:marketplace\n\n\n> @liangjie559567/ultrapower@7.7.0 validate:versions\n> node scripts/validate-versions.mjs\n\nVersion mismatch detected:\n  package.json: 7.7.0\n  .claude-plugin/plugin.json: 7.7.0\n  .claude-plugin/marketplace.json: 7.7.0\n  marketplace.json: 7.6.0\nnpm error code 1\nnpm error path C:\\Users\\ljyih\\Desktop\\ultrapower\nnp...",
+  "timestamp": "2026-03-16T20:24:18.410Z",
+  "retry_count": 1
 }

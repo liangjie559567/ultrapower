@@ -6,7 +6,7 @@
 
 | 层级 | 标准 | Agent | 模型 | 所需证据 |
 | ------ | ---------- | ------- | ------- | ------------------- |
-| **LIGHT** | <5 个文件，<100 行，完整测试覆盖 | architect-low | haiku | lsp_diagnostics 无错误 |
+| **LIGHT** | <5 个文件，<100 行，完整测试覆盖 | architect-low | haiku | ultrapower:lsp_diagnostics 无错误 |
 | **STANDARD** | 默认（非 LIGHT 或 THOROUGH） | architect-medium | sonnet | diagnostics + 构建通过 |
 | **THOROUGH** | >20 个文件，或架构/安全变更 | architect | opus | 完整审查 + 所有测试 |
 
@@ -94,7 +94,7 @@ ELSE:
 | 声明 | 所需证据 |
 | ------- | ------------------- |
 | "已修复" | 显示现在通过的测试 |
-| "已实现" | lsp_diagnostics 无错误 + 构建通过 |
+| "已实现" | ultrapower:lsp_diagnostics 无错误 + 构建通过 |
 | "已重构" | 所有测试仍然通过 |
 | "已调试" | 定位到 file:line 的根本原因 |
 

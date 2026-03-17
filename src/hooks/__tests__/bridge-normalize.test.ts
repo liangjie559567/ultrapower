@@ -242,4 +242,30 @@ describe('bridge-normalize', () => {
       expect(result.toolInput).toEqual({ camel: true });
     });
   });
+
+  describe('security: prototype pollution protection', () => {
+    it('should block __proto__ in sensitive hooks', () => {
+      const maliciousInput = JSON.parse('{"session_id":"test","tool_name":"test","__proto__":{"polluted":true}}');
+
+      expect(() => {
+        normalizeHookInput(maliciousInput, 'permission-request');
+      }).toThrow(/Prototype pollution attempt blocked in field: __proto__/);
+    });
+
+    it('should block constructor in sensitive hooks', () => {
+      const maliciousInput = JSON.parse('{"session_id":"test","tool_name":"test","constructor":{"polluted":true}}');
+
+      expect(() => {
+        normalizeHookInput(maliciousInput, 'permission-request');
+      }).toThrow(/Prototype pollution attempt blocked in field: constructor/);
+    });
+
+    it('should block prototype in sensitive hooks', () => {
+      const maliciousInput = JSON.parse('{"session_id":"test","tool_name":"test","prototype":{"polluted":true}}');
+
+      expect(() => {
+        normalizeHookInput(maliciousInput, 'permission-request');
+      }).toThrow(/Prototype pollution attempt blocked in field: prototype/);
+    });
+  });
 });

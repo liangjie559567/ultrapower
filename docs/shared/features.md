@@ -59,7 +59,7 @@
 
 ## 目录诊断工具
 
-通过 `lsp_diagnostics_directory` 工具进行项目级类型检查。
+通过 `ultrapower:lsp_diagnostics_directory` 工具进行项目级类型检查。
 
 **策略：**
 

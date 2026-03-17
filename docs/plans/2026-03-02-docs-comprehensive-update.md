@@ -311,18 +311,18 @@ Total: **35 tools** exposed via `mcp__plugin_ultrapower_t__` prefix.
 ### LSP Tools (12)
 
 ```
-lsp_hover                  — Type info and docs at position
-lsp_goto_definition        — Jump to definition
-lsp_find_references        — Find all usages
-lsp_document_symbols       — File outline
-lsp_workspace_symbols      — Cross-workspace symbol search
-lsp_diagnostics            — Per-file errors/warnings
-lsp_diagnostics_directory  — Project-level type check
-lsp_servers                — List available language servers
-lsp_prepare_rename         — Check if rename is valid
-lsp_rename                 — Preview multi-file rename
-lsp_code_actions           — Available refactors/fixes
-lsp_code_action_resolve    — Get action details
+ultrapower:lsp_hover                  — Type info and docs at position
+ultrapower:lsp_goto_definition        — Jump to definition
+ultrapower:lsp_find_references        — Find all usages
+ultrapower:lsp_document_symbols       — File outline
+ultrapower:lsp_workspace_symbols      — Cross-workspace symbol search
+ultrapower:lsp_diagnostics            — Per-file errors/warnings
+ultrapower:lsp_diagnostics_directory  — Project-level type check
+ultrapower:lsp_servers                — List available language servers
+ultrapower:lsp_prepare_rename         — Check if rename is valid
+ultrapower:lsp_rename                 — Preview multi-file rename
+ultrapower:lsp_code_actions           — Available refactors/fixes
+ultrapower:lsp_code_action_resolve    — Get action details
 ```
 
 Supported languages: TypeScript, Python, Rust, Go, C/C++, Java, JSON, HTML, CSS, YAML
@@ -860,17 +860,17 @@ Directives are the highest-priority memory: they survive context compression and
 
 ### LSP Tools (12)
 
-Require a running language server. Use `lsp_servers()` to check availability.
+Require a running language server. Use `ultrapower:lsp_servers()` to check availability.
 
 ```typescript
 // Type info at cursor position
-lsp_hover({ file: "src/hooks/bridge.ts", line: 42, character: 15 })
+ultrapower:lsp_hover({ file: "src/hooks/bridge.ts", line: 42, character: 15 })
 
 // Find all usages
-lsp_find_references({ file: "src/lib/validateMode.ts", symbol: "assertValidMode" })
+ultrapower:lsp_find_references({ file: "src/lib/validateMode.ts", symbol: "assertValidMode" })
 
 // Project-wide diagnostics
-lsp_diagnostics_directory({ directory: "src/", includeWarnings: false })
+ultrapower:lsp_diagnostics_directory({ directory: "src/", includeWarnings: false })
 ```
 
 ### AST Tools (2)

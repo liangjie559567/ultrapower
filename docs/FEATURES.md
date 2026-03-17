@@ -288,7 +288,7 @@ project_memory_add_directive(directive: string): boolean
     { "category": "architecture", "content": "...", "timestamp": "2026-03-02" }
   ],
   "directives": [
-    "始终在修改文件前运行 lsp_diagnostics",
+    "始终在修改文件前运行 ultrapower:lsp_diagnostics",
     "禁止直接修改 main 分支"
   ]
 }
@@ -313,24 +313,24 @@ ultrapower 通过 Language Server Protocol、AST-grep 和 Python REPL 提供类 
 
 | 工具 | 描述 |
 | ------ | ------ |
-| `lsp_hover` | 获取光标位置的类型信息和文档注释 |
-| `lsp_goto_definition` | 跳转到符号的定义位置 |
-| `lsp_find_references` | 查找符号在整个代码库中的所有引用 |
-| `lsp_document_symbols` | 获取文件的符号大纲（函数、类、变量） |
-| `lsp_workspace_symbols` | 跨工作区搜索符号 |
-| `lsp_diagnostics` | 获取单个文件的错误和警告 |
-| `lsp_diagnostics_directory` | 项目级类型检查（优先使用 `tsc --noEmit`，回退到 LSP） |
-| `lsp_servers` | 列出当前可用的语言服务器 |
-| `lsp_prepare_rename` | 检查符号是否可安全重命名 |
-| `lsp_rename` | 预览并执行跨文件重命名重构 |
-| `lsp_code_actions` | 获取可用的快速修复和重构操作 |
-| `lsp_code_action_resolve` | 获取特定代码操作的详细信息 |
+| `ultrapower:lsp_hover` | 获取光标位置的类型信息和文档注释 |
+| `ultrapower:lsp_goto_definition` | 跳转到符号的定义位置 |
+| `ultrapower:lsp_find_references` | 查找符号在整个代码库中的所有引用 |
+| `ultrapower:lsp_document_symbols` | 获取文件的符号大纲（函数、类、变量） |
+| `ultrapower:lsp_workspace_symbols` | 跨工作区搜索符号 |
+| `ultrapower:lsp_diagnostics` | 获取单个文件的错误和警告 |
+| `ultrapower:lsp_diagnostics_directory` | 项目级类型检查（优先使用 `tsc --noEmit`，回退到 LSP） |
+| `ultrapower:lsp_servers` | 列出当前可用的语言服务器 |
+| `ultrapower:lsp_prepare_rename` | 检查符号是否可安全重命名 |
+| `ultrapower:lsp_rename` | 预览并执行跨文件重命名重构 |
+| `ultrapower:lsp_code_actions` | 获取可用的快速修复和重构操作 |
+| `ultrapower:lsp_code_action_resolve` | 获取特定代码操作的详细信息 |
 
 **支持语言：** TypeScript、JavaScript、Python、Rust、Go、C/C++、Java、JSON、HTML、CSS、YAML
 
 #### 诊断策略
 
-`lsp_diagnostics_directory` 使用双策略方法：
+`ultrapower:lsp_diagnostics_directory` 使用双策略方法：
 
 ```typescript
 type DiagnosticsStrategy = 'tsc' | 'lsp' | 'auto';
@@ -343,14 +343,14 @@ type DiagnosticsStrategy = 'tsc' | 'lsp' | 'auto';
 
 ```typescript
 // 在修改文件后立即验证
-const diagnostics = await lsp_diagnostics({ file: 'src/foo.ts' });
+const diagnostics = await ultrapower:lsp_diagnostics({ file: 'src/foo.ts' });
 if (diagnostics.errorCount > 0) {
   // 在生产代码中修复，而非测试 hack
   console.error(diagnostics.messages);
 }
 
 // 项目级检查
-const result = await lsp_diagnostics_directory({ directory: process.cwd() });
+const result = await ultrapower:lsp_diagnostics_directory({ directory: process.cwd() });
 console.log(`${result.errorCount} errors, ${result.warningCount} warnings`);
 ```
 
