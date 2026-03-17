@@ -22,23 +22,25 @@ describe('validatePath', () => {
   describe('Valid paths', () => {
     it('should allow simple relative path', () => {
       const result = validatePath('file.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      const expected = path.join(resolvedBase, 'file.txt');
-      expect(path.normalize(result).toLowerCase()).toBe(path.normalize(expected).toLowerCase());
+      const expected = path.join(testDir, 'file.txt');
+      // Compare resolved real paths to handle Windows 8.3 short names
+      expect(fs.realpathSync(path.dirname(result))).toBe(fs.realpathSync(testDir));
+      expect(path.basename(result)).toBe('file.txt');
     });
 
     it('should allow nested path', () => {
       const result = validatePath(path.join('subdir', 'file.txt'), testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      const expected = path.join(resolvedBase, 'subdir', 'file.txt');
-      expect(path.normalize(result).toLowerCase()).toBe(path.normalize(expected).toLowerCase());
+      // For non-existent paths, compare normalized lowercase paths
+      const normalizedResult = path.normalize(result).toLowerCase();
+      const normalizedExpected = path.normalize(path.resolve(testDir, 'subdir', 'file.txt')).toLowerCase();
+      expect(normalizedResult).toBe(normalizedExpected);
     });
 
     it('should allow current directory reference', () => {
       const result = validatePath('./file.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      const expected = path.join(resolvedBase, 'file.txt');
-      expect(path.normalize(result).toLowerCase()).toBe(path.normalize(expected).toLowerCase());
+      const expected = path.join(testDir, 'file.txt');
+      expect(fs.realpathSync(path.dirname(result))).toBe(fs.realpathSync(testDir));
+      expect(path.basename(result)).toBe('file.txt');
     });
   });
 
@@ -105,9 +107,8 @@ describe('validatePath', () => {
       // U+FF0E (fullwidth full stop) normalizes to .
       const result = validatePath('file\uFF0Etxt', testDir);
       // After normalization, fullwidth dot becomes ASCII dot
-      const resolvedBase = fs.realpathSync(testDir);
-      const expected = path.join(resolvedBase, 'file.txt');
-      expect(path.normalize(result).toLowerCase()).toBe(path.normalize(expected).toLowerCase());
+      expect(fs.realpathSync(path.dirname(result))).toBe(fs.realpathSync(testDir));
+      expect(path.basename(result)).toBe('file.txt');
     });
 
     it('should block Unicode path traversal', () => {
@@ -175,16 +176,18 @@ describe('validatePath', () => {
   describe('Edge cases', () => {
     it('should handle non-existent file in valid directory', () => {
       const result = validatePath('newfile.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      const expected = path.join(resolvedBase, 'newfile.txt');
-      expect(path.normalize(result).toLowerCase()).toBe(path.normalize(expected).toLowerCase());
+      // For non-existent paths, compare normalized lowercase paths
+      const normalizedResult = path.normalize(result).toLowerCase();
+      const normalizedExpected = path.normalize(path.resolve(testDir, 'newfile.txt')).toLowerCase();
+      expect(normalizedResult).toBe(normalizedExpected);
     });
 
     it('should handle deeply nested non-existent path', () => {
       const result = validatePath('a/b/c/file.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      const expected = path.join(resolvedBase, 'a', 'b', 'c', 'file.txt');
-      expect(path.normalize(result).toLowerCase()).toBe(path.normalize(expected).toLowerCase());
+      // For non-existent paths, compare normalized lowercase paths
+      const normalizedResult = path.normalize(result).toLowerCase();
+      const normalizedExpected = path.normalize(path.resolve(testDir, 'a', 'b', 'c', 'file.txt')).toLowerCase();
+      expect(normalizedResult).toBe(normalizedExpected);
     });
 
     it('should throw on invalid URL encoding', () => {
