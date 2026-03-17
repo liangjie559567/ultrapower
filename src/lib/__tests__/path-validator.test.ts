@@ -22,22 +22,19 @@ describe('validatePath', () => {
   describe('Valid paths', () => {
     it('should allow simple relative path', () => {
       const result = validatePath('file.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      expect(path.dirname(result).toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(path.dirname(result).toLowerCase()).toBe(fs.realpathSync(testDir).toLowerCase());
       expect(path.basename(result)).toBe('file.txt');
     });
 
     it('should allow nested path', () => {
       const result = validatePath(path.join('subdir', 'file.txt'), testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      const resultDir = path.dirname(result);
-      expect(resultDir.toLowerCase()).toBe(path.join(resolvedBase, 'subdir').toLowerCase());
+      const expectedDir = path.join(fs.realpathSync(testDir), 'subdir');
+      expect(path.dirname(result).toLowerCase()).toBe(expectedDir.toLowerCase());
     });
 
     it('should allow current directory reference', () => {
       const result = validatePath('./file.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      expect(path.dirname(result).toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(path.dirname(result).toLowerCase()).toBe(fs.realpathSync(testDir).toLowerCase());
       expect(path.basename(result)).toBe('file.txt');
     });
   });
@@ -104,8 +101,7 @@ describe('validatePath', () => {
     it('should normalize Unicode characters', () => {
       // U+FF0E (fullwidth full stop) normalizes to .
       const result = validatePath('file\uFF0Etxt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      expect(fs.realpathSync(path.dirname(result)).toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(fs.realpathSync(path.dirname(result)).toLowerCase()).toBe(fs.realpathSync(testDir).toLowerCase());
       expect(path.basename(result)).toBe('file.txt');
     });
 
@@ -174,17 +170,15 @@ describe('validatePath', () => {
   describe('Edge cases', () => {
     it('should handle non-existent file in valid directory', () => {
       const result = validatePath('newfile.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      expect(path.dirname(result).toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(path.dirname(result).toLowerCase()).toBe(fs.realpathSync(testDir).toLowerCase());
       expect(path.basename(result)).toBe('newfile.txt');
     });
 
     it('should handle deeply nested non-existent path', () => {
       const result = validatePath('a/b/c/file.txt', testDir);
-      const resolvedBase = fs.realpathSync(testDir);
       // Go up 4 levels: file.txt -> c -> b -> a -> testDir
       const resultDir = path.dirname(path.dirname(path.dirname(path.dirname(result))));
-      expect(resultDir.toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(resultDir.toLowerCase()).toBe(fs.realpathSync(testDir).toLowerCase());
       expect(path.basename(result)).toBe('file.txt');
     });
 
