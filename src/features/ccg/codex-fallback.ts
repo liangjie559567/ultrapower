@@ -49,5 +49,5 @@ export async function executeWithFallback<T>(
  */
 export function isCodexAvailable(): boolean {
   // Check if MCP tool exists in global scope
-  return typeof (globalThis as any).mcp__plugin_ultrapower_x__ask_codex === 'function';
+  return typeof (globalThis as Record<string, unknown>).mcp__plugin_ultrapower_x__ask_codex === 'function';
 }

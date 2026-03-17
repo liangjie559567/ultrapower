@@ -1,7 +1,7 @@
 export interface LoopConfig {
   maxRounds: number;
   timeout: number;
-  convergenceCheck: (result: any) => boolean;
+  convergenceCheck: (result: unknown) => boolean;
 }
 
 export interface LoopResult {
@@ -13,7 +13,7 @@ export interface LoopResult {
 export class LoopController {
   async execute(
     config: LoopConfig,
-    task: () => Promise<any>
+    task: () => Promise<unknown>
   ): Promise<LoopResult> {
     for (let round = 1; round <= config.maxRounds; round++) {
       try {

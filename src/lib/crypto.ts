@@ -44,15 +44,22 @@ function decrypt(encrypted: string): string {
   }
 }
 
-function processFields(obj: any, fields: string[], fn: (val: string) => string): any {
+/**
+ * Process specified fields in an object using a transformation function.
+ * @param obj - Object or array to process
+ * @param fields - Field names to transform
+ * @param fn - Transformation function for string values
+ * @returns Processed object with same structure
+ */
+function processFields(obj: unknown, fields: string[], fn: (val: string) => string): unknown {
   if (!obj || typeof obj !== 'object') return obj;
 
   const result = Array.isArray(obj) ? [...obj] : { ...obj };
 
   for (const field of fields) {
-    if (field in result && typeof result[field] === 'string') {
+    if (field in result && typeof (result as Record<string, unknown>)[field] === 'string') {
       try {
-        result[field] = fn(result[field]);
+        (result as Record<string, unknown>)[field] = fn((result as Record<string, unknown>)[field] as string);
       } catch (err) {
         throw err;
       }
@@ -62,10 +69,22 @@ function processFields(obj: any, fields: string[], fn: (val: string) => string):
   return result;
 }
 
-export function encryptSensitiveFields(data: any, fields: string[]): any {
-  return processFields(data, fields, encrypt);
+/**
+ * Encrypt specified string fields in an object.
+ * @param data - Object containing fields to encrypt
+ * @param fields - Array of field names to encrypt
+ * @returns Object with encrypted fields
+ */
+export function encryptSensitiveFields<T>(data: T, fields: string[]): T {
+  return processFields(data, fields, encrypt) as T;
 }
 
-export function decryptSensitiveFields(data: any, fields: string[]): any {
-  return processFields(data, fields, decrypt);
+/**
+ * Decrypt specified string fields in an object.
+ * @param data - Object containing fields to decrypt
+ * @param fields - Array of field names to decrypt
+ * @returns Object with decrypted fields
+ */
+export function decryptSensitiveFields<T>(data: T, fields: string[]): T {
+  return processFields(data, fields, decrypt) as T;
 }

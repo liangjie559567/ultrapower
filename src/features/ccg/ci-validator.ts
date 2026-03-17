@@ -15,20 +15,23 @@ export async function runCIValidation(): Promise<CIResult> {
 
   try {
     await execAsync('tsc --noEmit', { cwd: process.cwd() });
-  } catch (err: any) {
-    errors.push(`TypeScript compilation failed: ${err.message}`);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    errors.push(`TypeScript compilation failed: ${message}`);
   }
 
   try {
     await execAsync('npm run build', { cwd: process.cwd() });
-  } catch (err: any) {
-    errors.push(`Build failed: ${err.message}`);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    errors.push(`Build failed: ${message}`);
   }
 
   try {
     await execAsync('npm test', { cwd: process.cwd() });
-  } catch (err: any) {
-    errors.push(`Tests failed: ${err.message}`);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    errors.push(`Tests failed: ${message}`);
   }
 
   return {

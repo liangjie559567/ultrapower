@@ -123,3 +123,40 @@ export const HOOK_SEVERITY: Record<HookType, HookSeverity> = {
   'setup': HookSeverity.HIGH,
   'agent-execution-complete': HookSeverity.LOW,
 };
+
+/**
+ * Type guard: Check if value is a valid HookType
+ */
+export function isHookType(value: unknown): value is HookType {
+  return typeof value === 'string' && value in HOOK_SEVERITY;
+}
+
+/**
+ * Type guard: Check if value is a valid HookInput
+ */
+export function isHookInput(value: unknown): value is HookInput {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Type guard: Check if value is a valid HookOutput
+ */
+export function isHookOutput(value: unknown): value is HookOutput {
+  if (typeof value !== 'object' || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return typeof obj.continue === 'boolean';
+}
+
+/**
+ * Type guard: Check if value is a string
+ */
+export function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+/**
+ * Type guard: Check if value is a non-null object
+ */
+export function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
