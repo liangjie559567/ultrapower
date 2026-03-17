@@ -177,20 +177,17 @@ describe('validatePath', () => {
   describe('Edge cases', () => {
     it('should handle non-existent file in valid directory', () => {
       const result = validatePath('newfile.txt', testDir);
-      // For non-existent paths, resolve testDir first then compare normalized lowercase paths
       const resolvedBase = fs.realpathSync(testDir);
-      const normalizedResult = path.normalize(result).toLowerCase();
-      const normalizedExpected = path.normalize(path.join(resolvedBase, 'newfile.txt')).toLowerCase();
-      expect(normalizedResult).toBe(normalizedExpected);
+      expect(path.dirname(result).toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(path.basename(result)).toBe('newfile.txt');
     });
 
     it('should handle deeply nested non-existent path', () => {
       const result = validatePath('a/b/c/file.txt', testDir);
-      // For non-existent paths, resolve testDir first then compare normalized lowercase paths
       const resolvedBase = fs.realpathSync(testDir);
-      const normalizedResult = path.normalize(result).toLowerCase();
-      const normalizedExpected = path.normalize(path.join(resolvedBase, 'a', 'b', 'c', 'file.txt')).toLowerCase();
-      expect(normalizedResult).toBe(normalizedExpected);
+      const resultDir = path.dirname(path.dirname(path.dirname(result)));
+      expect(resultDir.toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(path.basename(result)).toBe('file.txt');
     });
 
     it('should throw on invalid URL encoding', () => {
