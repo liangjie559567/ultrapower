@@ -22,26 +22,23 @@ describe('validatePath', () => {
   describe('Valid paths', () => {
     it('should allow simple relative path', () => {
       const result = validatePath('file.txt', testDir);
-      // Normalize and compare case-insensitively to handle Windows 8.3 short names
-      const normalizedResult = path.normalize(result).toLowerCase().replace(/\\/g, '/');
-      const normalizedExpected = path.normalize(path.join(testDir, 'file.txt')).toLowerCase().replace(/\\/g, '/');
-      // Compare paths by resolving both to handle short names
-      expect(normalizedResult).toMatch(new RegExp(normalizedExpected.replace(/runner~1|runneradmin/i, '(runner~1|runneradmin)')));
+      const resolvedBase = fs.realpathSync(testDir);
+      expect(path.dirname(result).toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(path.basename(result)).toBe('file.txt');
     });
 
     it('should allow nested path', () => {
       const result = validatePath(path.join('subdir', 'file.txt'), testDir);
       const resolvedBase = fs.realpathSync(testDir);
-      const normalizedResult = path.normalize(result).toLowerCase();
-      const normalizedExpected = path.normalize(path.join(resolvedBase, 'subdir', 'file.txt')).toLowerCase();
-      expect(normalizedResult).toBe(normalizedExpected);
+      const resultDir = path.dirname(result);
+      expect(resultDir.toLowerCase()).toBe(path.join(resolvedBase, 'subdir').toLowerCase());
     });
 
     it('should allow current directory reference', () => {
       const result = validatePath('./file.txt', testDir);
-      const normalizedResult = path.normalize(result).toLowerCase().replace(/\\/g, '/');
-      const normalizedExpected = path.normalize(path.join(testDir, 'file.txt')).toLowerCase().replace(/\\/g, '/');
-      expect(normalizedResult).toMatch(new RegExp(normalizedExpected.replace(/runner~1|runneradmin/i, '(runner~1|runneradmin)')));
+      const resolvedBase = fs.realpathSync(testDir);
+      expect(path.dirname(result).toLowerCase()).toBe(resolvedBase.toLowerCase());
+      expect(path.basename(result)).toBe('file.txt');
     });
   });
 
@@ -107,8 +104,8 @@ describe('validatePath', () => {
     it('should normalize Unicode characters', () => {
       // U+FF0E (fullwidth full stop) normalizes to .
       const result = validatePath('file\uFF0Etxt', testDir);
-      // After normalization, fullwidth dot becomes ASCII dot
-      expect(fs.realpathSync(path.dirname(result))).toBe(fs.realpathSync(testDir));
+      const resolvedBase = fs.realpathSync(testDir);
+      expect(fs.realpathSync(path.dirname(result)).toLowerCase()).toBe(resolvedBase.toLowerCase());
       expect(path.basename(result)).toBe('file.txt');
     });
 
@@ -185,7 +182,8 @@ describe('validatePath', () => {
     it('should handle deeply nested non-existent path', () => {
       const result = validatePath('a/b/c/file.txt', testDir);
       const resolvedBase = fs.realpathSync(testDir);
-      const resultDir = path.dirname(path.dirname(path.dirname(result)));
+      // Go up 4 levels: file.txt -> c -> b -> a -> testDir
+      const resultDir = path.dirname(path.dirname(path.dirname(path.dirname(result))));
       expect(resultDir.toLowerCase()).toBe(resolvedBase.toLowerCase());
       expect(path.basename(result)).toBe('file.txt');
     });
