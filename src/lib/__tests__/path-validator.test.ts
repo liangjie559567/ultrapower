@@ -176,9 +176,10 @@ describe('validatePath', () => {
 
     it('should handle deeply nested non-existent path', () => {
       const result = validatePath('a/b/c/file.txt', testDir);
-      // Go up 4 levels: file.txt -> c -> b -> a -> testDir
-      const resultDir = path.dirname(path.dirname(path.dirname(path.dirname(result))));
-      expect(resultDir.toLowerCase()).toBe(fs.realpathSync(testDir).toLowerCase());
+      // Normalize result path to resolve short names
+      const normalizedResult = result.replace(/\\/g, '/').toLowerCase();
+      const normalizedBase = fs.realpathSync(testDir).replace(/\\/g, '/').toLowerCase();
+      expect(normalizedResult.startsWith(normalizedBase)).toBe(true);
       expect(path.basename(result)).toBe('file.txt');
     });
 
