@@ -309,7 +309,26 @@ export function normalizeHookInput(raw: unknown, hookType?: string): HookInput {
   const rawObj = raw as Record<string, unknown>;
   const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
 
-  // Fast path for already-camelCase input (both sensitive and non-sensitive)
+  // Sensitive hooks must always use full validation (BUG-002 fix)
+  if (isSensitive) {
+    if (isAlreadyCamelCase(rawObj)) {
+      logAuditEvent('validation_failed', 'medium', {
+        event: 'suspicious_camelcase_input',
+        hookType,
+        fields: Object.keys(rawObj)
+      });
+    }
+    // Force full validation path for sensitive hooks
+    const inputToValidate = preFilterSensitiveInput(rawObj, hookType!);
+    const input = validateWithZod(inputToValidate, true, hookType);
+    const normalized = mapFieldsToCamelCase(input, hookType);
+    if (REQUIRED_KEYS[hookType]) {
+      validateRequiredKeys(normalized as Record<string, unknown>, hookType);
+    }
+    return normalized;
+  }
+
+  // Fast path for non-sensitive hooks only
   if (isAlreadyCamelCase(rawObj)) {
     return normalizeFastPath(rawObj, hookType);
   }

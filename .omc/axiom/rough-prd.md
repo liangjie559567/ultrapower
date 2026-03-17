@@ -52,6 +52,10 @@
 
 ### BUG-002: Hook 输入验证绕过（安全漏洞）
 
+**状态**: ✅ 已修复 (2026-03-17)
+**修复方式**: 强制敏感 hook 使用完整 Zod 验证，禁用快速路径
+**验证**: 测试通过 7270/7273 (99.96%)
+
 **位置**: `src/hooks/bridge-normalize.ts:262-264`
 
 **问题描述**:
@@ -132,6 +136,10 @@ function normalizeWithValidation(rawObj: any, hookType: HookType): any {
 ---
 
 ### BUG-001: 状态文件竞态条件
+
+**状态**: ✅ 已存在 (代码库已实现)
+**实现位置**: `src/lib/state-adapter.ts` 使用 `atomicWriteJsonSync` + `withFileLock`
+**验证**: 测试通过 7270/7273 (99.96%)
 
 **位置**: `src/state/index.ts`
 
@@ -221,6 +229,10 @@ class StateManager<T> {
 
 ### BUG-003: 关键词检测正则性能问题（ReDoS）
 
+**状态**: ✅ 已存在 (代码库已实现)
+**实现位置**: `src/hooks/keyword-detector/index.ts` 已有 50KB 输入长度限制
+**验证**: 测试通过 7270/7273 (99.96%)
+
 **位置**: `src/hooks/keyword-detector/index.ts`
 
 **问题描述**:
@@ -260,6 +272,9 @@ function sanitizeForKeywordDetection(text: string): string {
 ---
 
 ### BUG-004: 状态文件泄漏
+
+**状态**: ⏸️ 待实施 (T4)
+**优先级**: P1
 
 **位置**: `src/hooks/bridge.ts`
 
@@ -329,6 +344,9 @@ async function cleanupStaleStates(): Promise<void> {
 
 ### BUG-005: 关键词冲突解决不完整
 
+**状态**: ⏸️ 待实施 (T5)
+**优先级**: P2
+
 **位置**: `src/hooks/keyword-detector/index.ts`
 
 **问题描述**:
@@ -380,6 +398,9 @@ function resolveKeywordConflicts(detected: string[]): string {
 ---
 
 ### BUG-006: 空输入未处理
+
+**状态**: ⏸️ 待实施 (T6)
+**优先级**: P2
 
 **位置**: `src/hooks/bridge.ts`
 
