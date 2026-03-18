@@ -30,12 +30,10 @@ const mockedGetRunningTaskCount = vi.mocked(getRunningTaskCount);
 const mockedLoadConfig = vi.mocked(loadConfig);
 
 describe('Background Process Guard (issue #302)', () => {
-  const originalEnv = process.env;
-
   beforeEach(() => {
-    process.env = { ...originalEnv };
-    delete process.env.DISABLE_OMC;
-    delete process.env.OMC_SKIP_HOOKS;
+    // K001: Use vi.stubEnv for isolated environment
+    vi.stubEnv('DISABLE_OMC', undefined);
+    vi.stubEnv('OMC_SKIP_HOOKS', undefined);
     resetSkipHooksCache();
     vi.clearAllMocks();
     mockedGetRunningTaskCount.mockReturnValue(0);
@@ -45,7 +43,7 @@ describe('Background Process Guard (issue #302)', () => {
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
     resetSkipHooksCache();
   });
 

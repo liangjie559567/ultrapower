@@ -18,13 +18,12 @@ import {
 } from "../handlers/pre-tool-use.js";
 
 describe("AskUserQuestion notification lifecycle (issue #597)", () => {
-  const originalEnv = process.env;
   let dispatchSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    process.env = { ...originalEnv };
-    delete process.env.DISABLE_OMC;
-    delete process.env.OMC_SKIP_HOOKS;
+    // K001: Use vi.stubEnv for isolated environment
+    vi.stubEnv('DISABLE_OMC', undefined);
+    vi.stubEnv('OMC_SKIP_HOOKS', undefined);
     resetSkipHooksCache();
     // Spy on the object-wrapped helper — avoids ESM module-internal call issue
     dispatchSpy = vi
@@ -33,7 +32,7 @@ describe("AskUserQuestion notification lifecycle (issue #597)", () => {
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
     resetSkipHooksCache();
     dispatchSpy.mockRestore();
   });

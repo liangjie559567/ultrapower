@@ -18174,13 +18174,15 @@ Install with: ${this.serverConfig.installHint}`
       this.process.on("error", (error2) => {
         reject(new Error(`Failed to start LSP server: ${error2.message}`));
       });
-      this.process.on("exit", (code) => {
-        this.process = null;
-        this.initialized = false;
-        if (code !== 0) {
-          console.error(`LSP server exited with code ${code}`);
-        }
-      });
+      if (process.exitCode === void 0) {
+        this.process.on("exit", (code) => {
+          this.process = null;
+          this.initialized = false;
+          if (code !== 0) {
+            console.error(`LSP server exited with code ${code}`);
+          }
+        });
+      }
       this.initialize().then(() => {
         this.initialized = true;
         resolve7();

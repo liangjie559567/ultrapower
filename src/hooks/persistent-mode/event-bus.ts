@@ -16,7 +16,7 @@ class EventBus {
 
   async emit(event: string, data?: unknown): Promise<void> {
     const handlers = this.handlers.get(event) || [];
-    await Promise.all(handlers.map(h => h(data)));
+    await Promise.allSettled(handlers.map(h => h(data)));
   }
 }
 

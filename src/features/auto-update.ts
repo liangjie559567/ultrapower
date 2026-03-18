@@ -547,12 +547,18 @@ export async function performUpdate(options?: {
       } catch { /* ignore */ }
 
       // [1/2] Sync marketplace clone
-      process.stdout.write('[1/2] Syncing marketplace... ');
+      if (!process.stdout.destroyed) {
+        process.stdout.write('[1/2] Syncing marketplace... ');
+      }
       const syncResult = syncMarketplaceClone(options?.verbose ?? false);
       if (!syncResult.ok) {
-        process.stdout.write('⚠\n');
+        if (!process.stdout.destroyed) {
+          process.stdout.write('⚠\n');
+        }
       } else {
-        process.stdout.write('✓\n');
+        if (!process.stdout.destroyed) {
+          process.stdout.write('✓\n');
+        }
         // Update registry version after successful sync
         try {
           if (latestVersion && latestVersion !== 'unknown') {

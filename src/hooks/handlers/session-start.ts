@@ -66,7 +66,7 @@ export async function processSessionStart(input: HookInput): Promise<HookOutput>
       });
     }).catch((err: unknown) => {
       const msg = err instanceof Error ? err.message : String(err);
-      if (process.env.OMC_DEBUG) {
+      if (process.env.OMC_DEBUG && !process.stderr.destroyed) {
         process.stderr.write(`[bridge] reply-listener setup error: ${msg}\n`);
       }
     });

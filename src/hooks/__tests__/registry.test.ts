@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { loadHandler } from '../handlers/index.js';
 import { HOOK_ROUTES } from '../handlers/route-map.js';
 import { requiredKeysForHook, validateHookInput, getSkipHooks, resetSkipHooksCache } from '../validation.js';
@@ -85,16 +85,14 @@ describe('Hook Registry - Configuration Validation', () => {
 });
 
 describe('Hook Registry - Skip Hooks Cache', () => {
-  const originalEnv = process.env;
-
   beforeEach(() => {
-    process.env = { ...originalEnv };
-    delete process.env.OMC_SKIP_HOOKS;
+    // K001: Use vi.stubEnv for isolated environment
+    vi.stubEnv('OMC_SKIP_HOOKS', undefined);
     resetSkipHooksCache();
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
     resetSkipHooksCache();
   });
 

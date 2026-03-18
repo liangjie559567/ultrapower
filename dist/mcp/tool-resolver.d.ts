@@ -5,7 +5,7 @@
  * Resolve tool name to tool definition
  * Supports both plain names and namespaced names (mcp__server__tool)
  */
-export declare function resolveTool(name: string): import("../tools/index.js").GenericToolDefinition | undefined;
+export declare function resolveTool(name: string): import("../tools/tool-prefix-migration.js").GenericToolDefinition | undefined;
 /**
  * Get all available tool names
  */

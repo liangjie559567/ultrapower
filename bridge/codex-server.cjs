@@ -17164,8 +17164,10 @@ function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingDirector
           error: `Stdin write error: ${err.message}`
         }, workingDirectory);
       });
-      child.stdin?.write(fullPrompt);
-      child.stdin?.end();
+      if (child.stdin && !child.stdin.destroyed) {
+        child.stdin.write(fullPrompt);
+        child.stdin.end();
+      }
       writeJobStatus({ ...initialStatus, status: "running" }, workingDirectory);
       child.on("close", (code) => {
         if (settled) return;

@@ -3,6 +3,7 @@ import { UnifiedContextManager } from '../unified-context';
 import { MCPRegistryClient } from '../mcp-autodiscovery/registry-client';
 import { CapabilityMatcher } from '../mcp-autodiscovery/capability-matcher';
 
+// TODO: E2E tests require MCP Memory server and registry setup
 describe.skip('MCP Integration E2E', () => {
   let contextManager: UnifiedContextManager;
 

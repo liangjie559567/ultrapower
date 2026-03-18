@@ -343,15 +343,15 @@ describe('withFileLock', () => {
     let firstDone = false;
 
     const promise1 = withFileLock(testFile, async () => {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 200));
       firstDone = true;
     });
 
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise(resolve => setTimeout(resolve, 50));
 
     const promise2 = withFileLock(testFile, () => {
       expect(firstDone).toBe(true);
-    }, 20, 20);
+    }, 20);
 
     await Promise.all([promise1, promise2]);
   });

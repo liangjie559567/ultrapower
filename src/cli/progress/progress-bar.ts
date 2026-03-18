@@ -27,9 +27,11 @@ export class ProgressBar {
     const bar = '█'.repeat(filled) + '░'.repeat(empty);
     const display = `[${bar}] ${percent}% (${this.current}/${this.total})`;
 
-    process.stdout.write(`\r${display}${text ? ' ' + text : ''}`);
+    if (!process.stdout.destroyed) {
+      process.stdout.write(`\r${display}${text ? ' ' + text : ''}`);
+    }
 
-    if (this.current >= this.total) {
+    if (this.current >= this.total && !process.stdout.destroyed) {
       process.stdout.write('\n');
     }
   }

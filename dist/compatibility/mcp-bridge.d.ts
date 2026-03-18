@@ -70,6 +70,10 @@ export declare class McpBridge extends EventEmitter {
      */
     getServerResources(serverName: string): McpResourceDefinition[];
     /**
+     * Check if a child process is alive (not killed and not exited)
+     */
+    private isProcessAlive;
+    /**
      * Wait for server to be ready
      */
     private waitForReady;

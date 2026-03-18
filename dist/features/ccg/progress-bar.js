@@ -21,7 +21,9 @@ export class ProgressBar {
         const percent = Math.floor((this.current / this.total) * 100);
         const filled = Math.floor(percent / 2);
         const bar = '█'.repeat(filled) + '░'.repeat(50 - filled);
-        process.stdout.write(`\r${this.label}: [${bar}] ${percent}%`);
+        if (!process.stdout.destroyed) {
+            process.stdout.write(`\r${this.label}: [${bar}] ${percent}%`);
+        }
     }
 }
 export const progressBar = new ProgressBar();

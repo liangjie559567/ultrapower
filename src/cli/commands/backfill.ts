@@ -40,7 +40,9 @@ function _formatFileSize(bytes: number): string {
  * Clear current line in terminal
  */
 function clearLine(): void {
-  process.stdout.write('\r\x1b[K');
+  if (!process.stdout.destroyed) {
+    process.stdout.write('\r\x1b[K');
+  }
 }
 
 /**
@@ -94,12 +96,14 @@ export async function backfillCommand(options: BackfillCommandOptions): Promise<
         ? '...' + progress.currentFile.slice(-27)
         : progress.currentFile;
 
-      process.stdout.write(
-        `${progressBar} ${colors.cyan(currentFile)} | ` +
-        `${colors.green('+' + progress.entriesAdded)} | ` +
-        `${colors.yellow('~' + progress.duplicatesSkipped)} | ` +
-        formatCostWithColor(progress.currentCost)
-      );
+      if (!process.stdout.destroyed) {
+        process.stdout.write(
+          `${progressBar} ${colors.cyan(currentFile)} | ` +
+          `${colors.green('+' + progress.entriesAdded)} | ` +
+          `${colors.yellow('~' + progress.duplicatesSkipped)} | ` +
+          formatCostWithColor(progress.currentCost)
+        );
+      }
     } else if (options.verbose && !options.json) {
       console.log(
         `[${progress.filesProcessed}/${progress.totalFiles}] ${progress.currentFile} ` +

@@ -5,6 +5,7 @@
  * for creating MCP servers with the Claude Agent SDK.
  */
 import { z } from 'zod';
+import { GenericToolDefinition } from './tool-prefix-migration.js';
 export { lspTools } from './lsp-tools.js';
 export { astTools } from './ast-tools.js';
 export { pythonReplTool } from './python-repl/index.js';
@@ -16,21 +17,7 @@ export { skillsTools } from './skills-tools.js';
 export { dependencyAnalyzerTool } from './dependency-analyzer.js';
 export { docSyncTool } from './doc-sync.js';
 export { parallelOpportunityDetectorTool } from './parallel-opportunity-detector.js';
-/**
- * Generic tool definition type
- */
-export interface GenericToolDefinition {
-    name: string;
-    description: string;
-    schema: z.ZodRawShape;
-    handler: (args: unknown) => Promise<{
-        content: Array<{
-            type: 'text';
-            text: string;
-        }>;
-        isError?: boolean;
-    }>;
-}
+export { GenericToolDefinition } from './tool-prefix-migration.js';
 /**
  * All custom tools available in the system
  * Each tool is registered with both legacy (underscore) and new (ultrapower:) names

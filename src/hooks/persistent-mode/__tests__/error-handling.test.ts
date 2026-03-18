@@ -83,7 +83,9 @@ function runHook(input: string, closeImmediately = false): Promise<HookResult> {
     if (closeImmediately) {
       proc.stdin.end();
     } else {
-      proc.stdin.write(input);
+      if (proc.stdin && !proc.stdin.destroyed) {
+        proc.stdin.write(input);
+      }
       proc.stdin.end();
     }
   });

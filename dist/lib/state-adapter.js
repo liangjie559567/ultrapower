@@ -116,8 +116,8 @@ export class FileStateAdapter {
     writeSync(data, sessionId) {
         const stateFile = this.getPath(sessionId);
         try {
+            this.ensureDir(sessionId);
             const result = withFileLockSync(stateFile, () => {
-                this.ensureDir(sessionId);
                 atomicWriteJsonSync(stateFile, data);
                 return true;
             });

@@ -11,7 +11,7 @@ class EventBus {
     }
     async emit(event, data) {
         const handlers = this.handlers.get(event) || [];
-        await Promise.all(handlers.map(h => h(data)));
+        await Promise.allSettled(handlers.map(h => h(data)));
     }
 }
 export const hookEventBus = new EventBus();

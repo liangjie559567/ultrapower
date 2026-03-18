@@ -220,13 +220,16 @@ export class LspClient {
         reject(new Error(`Failed to start LSP server: ${error.message}`));
       });
 
-      this.process.on('exit', (code) => {
-        this.process = null;
-        this.initialized = false;
-        if (code !== 0) {
-          console.error(`LSP server exited with code ${code}`);
-        }
-      });
+      // K008: Check process.exitCode before registering exit handler
+      if (process.exitCode === undefined) {
+        this.process.on('exit', (code) => {
+          this.process = null;
+          this.initialized = false;
+          if (code !== 0) {
+            console.error(`LSP server exited with code ${code}`);
+          }
+        });
+      }
 
       // Send initialize request
       this.initialize()

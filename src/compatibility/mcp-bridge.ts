@@ -213,7 +213,7 @@ export class McpBridge extends EventEmitter {
       this.emit('server-error', { server: serverName, error: data.toString() });
     });
 
-    if (!child.killed && child.exitCode === null) {
+    if (this.isProcessAlive(child)) {
       child.on('exit', (code) => {
         this.connections.delete(serverName);
         this.emit('server-disconnected', { server: serverName, code });
@@ -270,7 +270,7 @@ export class McpBridge extends EventEmitter {
     // Wait briefly for process to exit gracefully
     await new Promise<void>((resolve) => {
       // Check if already exited
-      if (connection.process.exitCode !== null || connection.process.killed) {
+      if (!this.isProcessAlive(connection.process)) {
         resolve();
         return;
       }
@@ -288,7 +288,7 @@ export class McpBridge extends EventEmitter {
         resolve();
       }, 1000);
 
-      if (!connection.process.killed && connection.process.exitCode === null) {
+      if (this.isProcessAlive(connection.process)) {
         connection.process.once('exit', () => {
           clearTimeout(timeout);
           resolve();
@@ -412,6 +412,13 @@ export class McpBridge extends EventEmitter {
   }
 
   /**
+   * Check if a child process is alive (not killed and not exited)
+   */
+  private isProcessAlive(process: ChildProcess): boolean {
+    return !process.killed && process.exitCode === null;
+  }
+
+  /**
    * Wait for server to be ready
    */
   private async waitForReady(serverName: string, timeout: number = TIMEOUT.MCP_READY): Promise<void> {
@@ -520,8 +527,8 @@ export class McpBridge extends EventEmitter {
       if (connection.process.stdin && !connection.process.stdin.destroyed && connection.process.stdin.writable) {
         try {
           connection.process.stdin.write(message);
-        } catch (err: any) {
-          if (err.code !== 'EPIPE') throw err;
+        } catch (err) {
+          if (err && typeof err === 'object' && 'code' in err && err.code !== 'EPIPE') throw err;
         }
       }
     });
@@ -544,8 +551,8 @@ export class McpBridge extends EventEmitter {
     if (connection.process.stdin && !connection.process.stdin.destroyed && connection.process.stdin.writable) {
       try {
         connection.process.stdin.write(message);
-      } catch (err: any) {
-        if (err.code !== 'EPIPE') throw err;
+      } catch (err) {
+        if (err && typeof err === 'object' && 'code' in err && err.code !== 'EPIPE') throw err;
       }
     }
   }

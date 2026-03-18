@@ -2,6 +2,8 @@
 
 ## 编码要求
 
+* **编码前必须执行 K012 快速验证检查清单** - 参见 [quick-verification-checklist.md](./quick-verification-checklist.md)
+
 * 编码前先描述方案并等待批准
 
 * 修改超3个文件需先分解任务

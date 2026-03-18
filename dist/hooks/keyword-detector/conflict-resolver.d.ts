@@ -2,7 +2,7 @@
  * Keyword Conflict Resolver
  * Detects and resolves conflicts between multiple detected keywords
  */
-import type { KeywordType } from './index.js';
+import type { KeywordType } from './types.js';
 export interface ConflictResolution {
     hasConflict: boolean;
     winner: KeywordType | null;

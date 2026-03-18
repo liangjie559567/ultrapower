@@ -1,8 +1,9 @@
 # Axiom Active Context
 
-**更新时间**: 2026-03-18T13:16:55Z
-**当前状态**: IDLE
-**当前阶段**: REFLECTION_COMPLETE
+**更新时间**: 2026-03-18T15:29:44Z
+**当前状态**: SUSPENDED
+**当前阶段**: CHECKPOINT_SAVED
+**检查点**: checkpoint-2026-03-18T15-29.md
 
 ## 当前任务
 

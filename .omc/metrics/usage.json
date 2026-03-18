@@ -570,6 +570,144 @@
       "type": "skill_used",
       "target": "autopilot",
       "success": true
+    },
+    {
+      "timestamp": "2026-03-18T15:57:25.528Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:01:48.456Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:02:11.048Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:03:36.126Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:05:55.627Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:07:43.946Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:12:37.212Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:14:53.554Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:17:06.211Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T16:58:19.756Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T17:14:50.924Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T17:39:49.906Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T17:42:14.075Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:02:25.642Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:16:30.344Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:17:37.607Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:27:58.328Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:33:40.671Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:37:09.363Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:39:55.949Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:44:47.598Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T18:46:57.055Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T19:07:13.878Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
     }
   ],
   "agents": []

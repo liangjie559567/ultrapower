@@ -121,6 +121,7 @@ describe('validatePath', () => {
   });
 
   describe('Attack Vector 6: Symlink traversal', () => {
+    // TODO: Requires admin privileges on Windows for symlink creation
     it.skip('should block symlink pointing outside base (requires admin on Windows)', () => {
       const linkPath = path.join(testDir, 'link');
       const targetPath = path.join(os.tmpdir(), 'outside');
@@ -135,6 +136,7 @@ describe('validatePath', () => {
       }
     });
 
+    // TODO: Requires admin privileges on Windows for symlink creation
     it.skip('should allow symlink within base (requires admin on Windows)', () => {
       const targetPath = path.join(testDir, 'target');
       const linkPath = path.join(testDir, 'link');

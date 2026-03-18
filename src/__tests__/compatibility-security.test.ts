@@ -15,6 +15,34 @@ import { join } from 'path';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { tmpdir } from 'os';
 
+// Mock child_process to prevent EPIPE errors
+vi.mock('child_process', async () => {
+  const actual = await vi.importActual<typeof import('child_process')>('child_process');
+  return {
+    ...actual,
+    spawn: vi.fn((...args) => {
+      const proc = actual.spawn(...args);
+      const originalStdin = proc.stdin;
+      if (originalStdin) {
+        proc.stdin = new Proxy(originalStdin, {
+          get(target, prop) {
+            if (prop === 'write') {
+              return (...writeArgs: unknown[]) => {
+                if (!target.destroyed && target.writable) {
+                  return target.write(...writeArgs);
+                }
+                return true;
+              };
+            }
+            return target[prop as keyof typeof target];
+          }
+        });
+      }
+      return proc;
+    })
+  };
+});
+
 // Import functions under test
 import {
   discoverPlugins,
@@ -118,6 +146,7 @@ describe('Security: Command Whitelist', () => {
 // Security Test: Environment Variable Injection
 // ============================================================
 
+// TODO: Needs environment isolation strategy for safe injection testing
 describe.skip('Security: Environment Variable Injection', () => {
   let bridge: McpBridge;
   let emittedWarnings: Array<{ server: string; message: string }>;

@@ -89,6 +89,7 @@ describe('atomicWriteJson', () => {
     expect(tempFiles.length).toBe(0);
   });
 
+  // TODO: Platform-dependent permission behavior needs cross-platform test strategy
   it.skip('权限错误处理', async () => {
     // Skipped: Platform-dependent permission behavior
     if (process.platform === 'win32') return;

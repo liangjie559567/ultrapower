@@ -1,5 +1,16 @@
 # 上下文收集规范
 
+## 前置步骤：K012 快速验证（必须先执行）
+
+**在开始上下文收集前，必须先执行 K012 快速验证检查清单**：
+1. 检查现有实现 - `grep -r "functionName" src/`
+2. 检查现有测试 - `grep -r "functionName" tests/`
+3. 运行相关测试 - `npm test -- pattern`
+
+详见：[quick-verification-checklist.md](./quick-verification-checklist.md)
+
+---
+
 ## 编码前强制检索清单（7项必查）
 
 ### 1. 文件名搜索（必须）

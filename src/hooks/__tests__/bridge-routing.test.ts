@@ -11,6 +11,12 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { execFileSync } from 'child_process';
+
+// K001: Mock external dependencies for test isolation
+vi.mock('../../features/auto-update.js', () => ({
+  isTeamEnabled: vi.fn(() => false)
+}));
+
 import * as _autoUpdate from '../../features/auto-update.js';
 import {
   processHook,
@@ -25,18 +31,16 @@ import {
 // ============================================================================
 
 describe('processHook - Routing Matrix', () => {
-  const originalEnv = process.env;
-
   beforeEach(() => {
-    process.env = { ...originalEnv };
-    delete process.env.DISABLE_OMC;
-    delete process.env.OMC_SKIP_HOOKS;
+    // K001: Use vi.stubEnv for isolated environment
+    vi.stubEnv('DISABLE_OMC', undefined);
+    vi.stubEnv('OMC_SKIP_HOOKS', undefined);
     resetSkipHooksCache();
   });
 
   afterEach(() => {
+    vi.unstubAllEnvs();
     vi.restoreAllMocks();
-    process.env = originalEnv;
     resetSkipHooksCache();
   });
 
@@ -142,6 +146,7 @@ describe('processHook - Routing Matrix', () => {
       expect(result.continue).toBe(true);
     });
 
+    // TODO: Needs state file mocking for ralph/ultrawork activation flow
     it.skip('should activate ralph and linked ultrawork when Skill tool invokes ralph', async () => {
       const tempDir = mkdtempSync(join(tmpdir(), 'bridge-routing-ralph-'));
       try {

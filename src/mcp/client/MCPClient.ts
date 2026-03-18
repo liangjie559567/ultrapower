@@ -100,13 +100,15 @@ export class MCPClient {
             return;
           }
 
-          await Promise.race([
-            new Promise<void>(resolve => proc.once('exit', () => resolve())),
-            new Promise(resolve => setTimeout(() => {
-              if (!proc.killed) proc.kill('SIGKILL');
-              resolve(undefined);
-            }, 5000))
-          ]);
+          if (proc.exitCode === null && !proc.killed) {
+            await Promise.race([
+              new Promise<void>(resolve => proc.once('exit', () => resolve())),
+              new Promise(resolve => setTimeout(() => {
+                if (!proc.killed) proc.kill('SIGKILL');
+                resolve(undefined);
+              }, 5000))
+            ]);
+          }
         }
 
         this.transport = null;

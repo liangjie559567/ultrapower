@@ -27,7 +27,9 @@ function _formatFileSize(bytes) {
  * Clear current line in terminal
  */
 function clearLine() {
-    process.stdout.write('\r\x1b[K');
+    if (!process.stdout.destroyed) {
+        process.stdout.write('\r\x1b[K');
+    }
 }
 /**
  * omc backfill command handler
@@ -72,10 +74,12 @@ export async function backfillCommand(options) {
             const currentFile = progress.currentFile.length > 30
                 ? '...' + progress.currentFile.slice(-27)
                 : progress.currentFile;
-            process.stdout.write(`${progressBar} ${colors.cyan(currentFile)} | ` +
-                `${colors.green('+' + progress.entriesAdded)} | ` +
-                `${colors.yellow('~' + progress.duplicatesSkipped)} | ` +
-                formatCostWithColor(progress.currentCost));
+            if (!process.stdout.destroyed) {
+                process.stdout.write(`${progressBar} ${colors.cyan(currentFile)} | ` +
+                    `${colors.green('+' + progress.entriesAdded)} | ` +
+                    `${colors.yellow('~' + progress.duplicatesSkipped)} | ` +
+                    formatCostWithColor(progress.currentCost));
+            }
         }
         else if (options.verbose && !options.json) {
             console.log(`[${progress.filesProcessed}/${progress.totalFiles}] ${progress.currentFile} ` +

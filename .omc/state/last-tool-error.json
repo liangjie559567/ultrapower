@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"cat &gt;&gt; /www/wwwroot/ultrapower/.omc/axiom/reflection_log.md &lt;&lt;'EOF'\\n\\n## 2026-03-18: 测试稳定性改进 - Reflection Log 过滤与 MCP Bridge 修复\\n\\n### 会话摘要\\n- **任务**: 实现两个改进项（reflection_log 写...",
-  "error": "Exit code 2\n/bin/bash: eval: line 43: syntax error near unexpected token `;&'\n/bin/bash: eval: line 43: `cat &gt;&gt; /www/wwwroot/ultrapower/.omc/axiom/reflection_log.md &lt;&lt;'EOF''",
-  "timestamp": "2026-03-18T13:28:24.849Z",
-  "retry_count": 2
+  "tool_input_preview": "{\"command\":\"timeout 60 npm test 2>&1 | tail -50\",\"description\":\"获取测试结果摘要\"}",
+  "error": "Exit code 143\nTerminated",
+  "timestamp": "2026-03-18T17:39:15.813Z",
+  "retry_count": 1
 }

@@ -1,0 +1,78 @@
+{
+  "id": "1773848741790-7ep2tjc6x",
+  "timestamp": 1773848741790,
+  "mode": "ultrawork",
+  "data": {
+    "sessionId": "5bae43281966a78f",
+    "totalInputTokens": 93,
+    "totalOutputTokens": 36,
+    "totalCacheCreation": 1012,
+    "totalCacheRead": 480935,
+    "totalCost": 0,
+    "byAgent": {
+      "(main session)": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 407,
+          "cacheReadTokens": 160176,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:34.277Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 407,
+          "cacheReadTokens": 160176,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:34.978Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 198,
+          "cacheReadTokens": 160583,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:41.787Z"
+        }
+      ]
+    },
+    "byModel": {
+      "claude-sonnet-4.6": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 407,
+          "cacheReadTokens": 160176,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:34.277Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 407,
+          "cacheReadTokens": 160176,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:34.978Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 198,
+          "cacheReadTokens": 160583,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:41.787Z"
+        }
+      ]
+    },
+    "startTime": "2026-03-18T15:45:34.277Z",
+    "lastUpdate": "2026-03-18T15:45:41.787Z"
+  },
+  "committed": true
+}

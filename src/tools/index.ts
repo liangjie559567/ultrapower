@@ -17,7 +17,7 @@ import { skillsTools } from './skills-tools.js';
 import { dependencyAnalyzerTool } from './dependency-analyzer.js';
 import { docSyncTool } from './doc-sync.js';
 import { parallelOpportunityDetectorTool } from './parallel-opportunity-detector.js';
-import { registerToolWithBothNames } from './tool-prefix-migration.js';
+import { registerToolWithBothNames, GenericToolDefinition } from './tool-prefix-migration.js';
 
 export { lspTools } from './lsp-tools.js';
 export { astTools } from './ast-tools.js';
@@ -30,16 +30,7 @@ export { skillsTools } from './skills-tools.js';
 export { dependencyAnalyzerTool } from './dependency-analyzer.js';
 export { docSyncTool } from './doc-sync.js';
 export { parallelOpportunityDetectorTool } from './parallel-opportunity-detector.js';
-
-/**
- * Generic tool definition type
- */
-export interface GenericToolDefinition {
-  name: string;
-  description: string;
-  schema: z.ZodRawShape;
-  handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }>; isError?: boolean }>;
-}
+export { GenericToolDefinition } from './tool-prefix-migration.js';
 
 /**
  * All custom tools available in the system

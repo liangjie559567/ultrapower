@@ -5,7 +5,14 @@
  * Provides deprecation warnings and dual registration
  */
 
-import { GenericToolDefinition } from './index.js';
+import { z } from 'zod';
+
+export interface GenericToolDefinition {
+  name: string;
+  description: string;
+  schema: z.ZodRawShape;
+  handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }>; isError?: boolean }>;
+}
 
 export interface DeprecationInfo {
   oldName: string;

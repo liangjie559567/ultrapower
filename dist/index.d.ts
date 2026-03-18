@@ -1,6 +1,12 @@
 /**
  * Oh-My-Claude-Sisyphus
  *
+ * @deprecated Use 'ultrapower/api' instead. This entry point will be removed after 2026-09-19.
+ *
+ * Migration guide:
+ * - import { Task } from 'ultrapower' → import { Task } from 'ultrapower/api'
+ * - import { createSisyphusSession } from 'ultrapower' → import { createSisyphusSession } from 'ultrapower/api'
+ *
  * A multi-agent orchestration system for the Claude Agent SDK.
  * Inspired by oh-my-opencode, reimagined for Claude Code.
  *

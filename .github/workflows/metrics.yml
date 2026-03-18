@@ -1,0 +1,47 @@
+name: Performance Metrics
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - run: chmod +x scripts/measure-baseline.sh
+      - run: ./scripts/measure-baseline.sh
+      - name: Upload metrics
+        uses: actions/upload-artifact@v3
+        with:
+          name: metrics
+          path: .omc/metrics/baseline.json
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const metrics = JSON.parse(fs.readFileSync('.omc/metrics/baseline.json'));
+            const body = `## 📊 性能指标
+
+            - 构建时间: ${metrics.metrics.build_time_seconds}s
+            - 包大小: ${metrics.metrics.bundle_size_human}
+            - 循环依赖: ${metrics.metrics.circular_dependencies}
+            - 测试覆盖率: ${metrics.metrics.test_coverage_percent}%
+            - TypeScript 编译: ${metrics.metrics.tsc_time_seconds}s
+            - Barrel exports: ${metrics.metrics.barrel_exports_count}
+            `;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

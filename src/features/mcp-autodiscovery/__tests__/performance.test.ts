@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { UnifiedContextManager } from '../../unified-context/index.js';
 
+// TODO: Performance tests require MCP Memory server and baseline metrics
 describe.skip('Performance Tests - Context Sync Parallelization', () => {
   let contextManager: UnifiedContextManager;
 

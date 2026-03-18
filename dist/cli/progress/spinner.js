@@ -10,7 +10,9 @@ export class Spinner {
         this.text = text;
         this.frameIndex = 0;
         this.interval = setInterval(() => {
-            process.stdout.write(`\r${this.frames[this.frameIndex]} ${this.text}`);
+            if (!process.stdout.destroyed) {
+                process.stdout.write(`\r${this.frames[this.frameIndex]} ${this.text}`);
+            }
             this.frameIndex = (this.frameIndex + 1) % this.frames.length;
         }, 80);
     }
@@ -28,7 +30,9 @@ export class Spinner {
             error: '✗',
             info: 'ℹ'
         };
-        process.stdout.write(`\r${symbols[status]} ${finalText || this.text}\n`);
+        if (!process.stdout.destroyed) {
+            process.stdout.write(`\r${symbols[status]} ${finalText || this.text}\n`);
+        }
     }
 }
 //# sourceMappingURL=spinner.js.map

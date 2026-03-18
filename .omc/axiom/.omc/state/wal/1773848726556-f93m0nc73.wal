@@ -1,0 +1,96 @@
+{
+  "id": "1773848726556-f93m0nc73",
+  "timestamp": 1773848726556,
+  "mode": "ultrawork",
+  "data": {
+    "sessionId": "5bae43281966a78f",
+    "totalInputTokens": 124,
+    "totalOutputTokens": 48,
+    "totalCacheCreation": 4294,
+    "totalCacheRead": 634448,
+    "totalCost": 0,
+    "byAgent": {
+      "(main session)": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 1166,
+          "cacheReadTokens": 158029,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:15.678Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 1166,
+          "cacheReadTokens": 158029,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:17.024Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 981,
+          "cacheReadTokens": 159195,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:25.033Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 981,
+          "cacheReadTokens": 159195,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:26.549Z"
+        }
+      ]
+    },
+    "byModel": {
+      "claude-sonnet-4.6": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 1166,
+          "cacheReadTokens": 158029,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:15.678Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 1166,
+          "cacheReadTokens": 158029,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:17.024Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 981,
+          "cacheReadTokens": 159195,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:25.033Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 31,
+          "outputTokens": 12,
+          "cacheCreationTokens": 981,
+          "cacheReadTokens": 159195,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T15:45:26.549Z"
+        }
+      ]
+    },
+    "startTime": "2026-03-18T15:45:15.678Z",
+    "lastUpdate": "2026-03-18T15:45:26.549Z"
+  },
+  "committed": true
+}
