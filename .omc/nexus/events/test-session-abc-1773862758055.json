@@ -1,0 +1,24 @@
+{
+  "sessionId": "test-session-abc",
+  "timestamp": "2026-03-18T19:39:18.055Z",
+  "directory": "/www/wwwroot/ultrapower",
+  "toolCalls": [
+    {
+      "toolName": "Read",
+      "timestamp": 1773862757996
+    },
+    {
+      "toolName": "Bash",
+      "timestamp": 1773862757956
+    },
+    {
+      "toolName": "AskUserQuestion",
+      "timestamp": 1773861854401
+    }
+  ],
+  "agentsSpawned": 1,
+  "agentsCompleted": 1,
+  "modesUsed": [],
+  "skillsInjected": [],
+  "patternsSeen": []
+}
