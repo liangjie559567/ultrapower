@@ -1,0 +1,24 @@
+{
+  "sessionId": "test-nexus-int-001",
+  "timestamp": "2026-03-18T12:11:24.142Z",
+  "directory": "/www/wwwroot/ultrapower",
+  "toolCalls": [
+    {
+      "toolName": "Read",
+      "timestamp": 1773835882628
+    },
+    {
+      "toolName": "Bash",
+      "timestamp": 1773835881479
+    },
+    {
+      "toolName": "AskUserQuestion",
+      "timestamp": 1773835752913
+    }
+  ],
+  "agentsSpawned": 0,
+  "agentsCompleted": 0,
+  "modesUsed": [],
+  "skillsInjected": [],
+  "patternsSeen": []
+}
