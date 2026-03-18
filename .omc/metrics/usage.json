@@ -708,6 +708,12 @@
       "type": "skill_used",
       "target": "autopilot",
       "success": true
+    },
+    {
+      "timestamp": "2026-03-18T19:24:31.982Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
     }
   ],
   "agents": []

@@ -299,7 +299,7 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
 
     it('should update last_checked_at on reinforcement without changing session_id', async () => {
       const sessionId = 'session-timestamp';
-      activateUltrawork('Timestamp test', sessionId, tempDir);
+      await activateUltrawork('Timestamp test', sessionId, tempDir);
 
       const initialState = readUltraworkState(tempDir, sessionId);
       const initialTimestamp = initialState?.last_checked_at;
@@ -307,7 +307,7 @@ describe('Ultrawork Session Isolation (Issue #269)', () => {
       // Wait a tiny bit to ensure timestamp difference
       await new Promise(resolve => setTimeout(resolve, 10));
 
-      incrementReinforcement(tempDir, sessionId);
+      await incrementReinforcement(tempDir, sessionId);
 
       const updatedState = readUltraworkState(tempDir, sessionId);
       expect(updatedState?.session_id).toBe(sessionId);

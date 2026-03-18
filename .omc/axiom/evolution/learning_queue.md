@@ -444,3 +444,17 @@
 - 状态: pending
 - 添加时间: 2026-03-18
 - 内容: mode used in session auto-test-ses
+
+### Q-021: autopilot
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-18
+- 内容: mode used in session auto-test-ses
+
+### Q-022: ralph
+- 优先级: P3
+- 来源类型: session_mode
+- 状态: pending
+- 添加时间: 2026-03-18
+- 内容: mode used in session auto-test-ses

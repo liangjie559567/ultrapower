@@ -1,0 +1,28 @@
+{
+  "platform": "web",
+  "techStack": {
+    "frontend": [
+      "React",
+      "TypeScript"
+    ],
+    "backend": [
+      "Node.js",
+      "Express",
+      "TypeScript"
+    ],
+    "database": [
+      "PostgreSQL"
+    ]
+  },
+  "code": "import { Request, Response } from 'express';\n\nexport class AuthService {\n  private secretKey = 'default-secret';\n  async authenticate() { return true; }\n}\n",
+  "deployConfig": {
+    "type": "docker",
+    "config": {
+      "image": "node:18-alpine",
+      "port": 3000,
+      "env": [
+        "NODE_ENV=production"
+      ]
+    }
+  }
+}
