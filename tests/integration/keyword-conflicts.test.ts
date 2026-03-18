@@ -21,11 +21,9 @@ describe('BUG-005 关键词冲突解决', () => {
   });
 
   describe('冲突解决', () => {
-    it('should resolve ralph + ultrawork (ralph wins)', () => {
+    it('should allow ralph + ultrawork to coexist', () => {
       const result = resolveConflict(['ralph', 'ultrawork']);
-      expect(result.hasConflict).toBe(true);
-      expect(result.winner).toBe('ralph');
-      expect(result.loser).toBe('ultrawork');
+      expect(result.hasConflict).toBe(false);
     });
 
     it('should resolve autopilot + ultrapilot (ultrapilot wins)', () => {
