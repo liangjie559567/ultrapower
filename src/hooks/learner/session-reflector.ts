@@ -39,7 +39,10 @@ export async function reflectOnSessionEnd(
       const hasAgents = (input.agentsSpawned ?? 0) > 0;
       const hasModes = (input.modesUsed?.length ?? 0) > 0;
       const hasSignificantDuration = (input.durationMs ?? 0) >= 60000;
-      if (!hasAgents && !hasModes && !hasSignificantDuration) {
+      const hasCompletedWork = (input.agentsCompleted ?? 0) > 0;
+
+      // Block auto-test sessions with zero activity
+      if (!hasAgents && !hasModes && !hasSignificantDuration && !hasCompletedWork) {
         return { reflected: false, queuedItems: 0 };
       }
 

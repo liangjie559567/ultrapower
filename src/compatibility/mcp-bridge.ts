@@ -476,7 +476,9 @@ export class McpBridge extends EventEmitter {
 
       // Send the request
       const message = JSON.stringify(request) + '\n';
-      connection.process.stdin?.write(message);
+      if (connection.process.stdin && !connection.process.stdin.destroyed) {
+        connection.process.stdin.write(message);
+      }
     });
   }
 
@@ -494,7 +496,9 @@ export class McpBridge extends EventEmitter {
     };
 
     const message = JSON.stringify(notification) + '\n';
-    connection.process.stdin?.write(message);
+    if (connection.process.stdin && !connection.process.stdin.destroyed) {
+      connection.process.stdin.write(message);
+    }
   }
 
   /**
