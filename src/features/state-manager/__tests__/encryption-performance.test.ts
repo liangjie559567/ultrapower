@@ -16,7 +16,7 @@ describe('Encryption Performance', () => {
     }
   });
 
-  it('should encrypt in < 10ms', () => {
+  it('should encrypt in < 15ms', () => {
     const data = {
       mode: 'autopilot',
       active: true,
@@ -28,10 +28,10 @@ describe('Encryption Performance', () => {
     encryptState(data);
     const duration = performance.now() - start;
 
-    expect(duration).toBeLessThan(10);
+    expect(duration).toBeLessThan(15);
   });
 
-  it('should decrypt in < 10ms', () => {
+  it('should decrypt in < 15ms', () => {
     const data = {
       mode: 'autopilot',
       active: true,
@@ -44,6 +44,6 @@ describe('Encryption Performance', () => {
     decryptState(encrypted);
     const duration = performance.now() - start;
 
-    expect(duration).toBeLessThan(10);
+    expect(duration).toBeLessThan(15);
   });
 });

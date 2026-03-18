@@ -213,14 +213,16 @@ export class McpBridge extends EventEmitter {
       this.emit('server-error', { server: serverName, error: data.toString() });
     });
 
-    child.on('exit', (code) => {
-      this.connections.delete(serverName);
-      this.emit('server-disconnected', { server: serverName, code });
+    if (!child.killed && child.exitCode === null) {
+      child.on('exit', (code) => {
+        this.connections.delete(serverName);
+        this.emit('server-disconnected', { server: serverName, code });
 
-      // Update registry
-      const registry = getRegistry();
-      registry.updateMcpServer(serverName, { connected: false });
-    });
+        // Update registry
+        const registry = getRegistry();
+        registry.updateMcpServer(serverName, { connected: false });
+      });
+    }
 
     // Wait for server to be ready
     await this.waitForReady(serverName);
@@ -286,10 +288,15 @@ export class McpBridge extends EventEmitter {
         resolve();
       }, 1000);
 
-      connection.process.once('exit', () => {
+      if (!connection.process.killed && connection.process.exitCode === null) {
+        connection.process.once('exit', () => {
+          clearTimeout(timeout);
+          resolve();
+        });
+      } else {
         clearTimeout(timeout);
         resolve();
-      });
+      }
     });
 
     this.connections.delete(serverName);
@@ -510,8 +517,12 @@ export class McpBridge extends EventEmitter {
 
       // Send the request
       const message = JSON.stringify(request) + '\n';
-      if (connection.process.stdin && !connection.process.stdin.destroyed) {
-        connection.process.stdin.write(message);
+      if (connection.process.stdin && !connection.process.stdin.destroyed && connection.process.stdin.writable) {
+        try {
+          connection.process.stdin.write(message);
+        } catch (err: any) {
+          if (err.code !== 'EPIPE') throw err;
+        }
       }
     });
   }
@@ -530,8 +541,12 @@ export class McpBridge extends EventEmitter {
     };
 
     const message = JSON.stringify(notification) + '\n';
-    if (connection.process.stdin && !connection.process.stdin.destroyed) {
-      connection.process.stdin.write(message);
+    if (connection.process.stdin && !connection.process.stdin.destroyed && connection.process.stdin.writable) {
+      try {
+        connection.process.stdin.write(message);
+      } catch (err: any) {
+        if (err.code !== 'EPIPE') throw err;
+      }
     }
   }
 

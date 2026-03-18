@@ -148,8 +148,8 @@ export class FileStateAdapter<T> implements StateAdapter<T> {
     const stateFile = this.getPath(sessionId);
 
     try {
+      this.ensureDir(sessionId);
       const result = withFileLockSync(stateFile, () => {
-        this.ensureDir(sessionId);
         atomicWriteJsonSync(stateFile, data);
         return true;
       });

@@ -1,26 +1,24 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, rmSync, existsSync } from 'fs';
+import { mkdirSync, rmSync, existsSync, mkdtempSync } from 'fs';
 import { join } from 'path';
+import { tmpdir } from 'os';
 import { createStateManager } from '../index.js';
 
-const TEST_DIR = join(process.cwd(), '.test-state-manager');
-
 describe('StateManager', () => {
+  let testDir: string;
+
   beforeEach(() => {
-    if (existsSync(TEST_DIR)) {
-      rmSync(TEST_DIR, { recursive: true, force: true });
-    }
-    mkdirSync(TEST_DIR, { recursive: true });
+    testDir = mkdtempSync(join(tmpdir(), 'state-manager-test-'));
   });
 
   afterEach(() => {
-    if (existsSync(TEST_DIR)) {
-      rmSync(TEST_DIR, { recursive: true, force: true });
+    if (existsSync(testDir)) {
+      rmSync(testDir, { recursive: true, force: true });
     }
   });
 
   it('should write and read state', () => {
-    const manager = createStateManager({ mode: 'autopilot', directory: TEST_DIR });
+    const manager = createStateManager({ mode: 'autopilot', directory: testDir });
     const state = { active: true, iteration: 1 };
 
     const written = manager.writeSync(state);
@@ -31,7 +29,7 @@ describe('StateManager', () => {
   });
 
   it('should support session-scoped state', () => {
-    const manager = createStateManager({ mode: 'team', directory: TEST_DIR });
+    const manager = createStateManager({ mode: 'team', directory: testDir });
     const state1 = { active: true, team_name: 'test-team-1' };
     const state2 = { active: true, team_name: 'test-team-2' };
 
@@ -43,7 +41,7 @@ describe('StateManager', () => {
   });
 
   it('should clear state', () => {
-    const manager = createStateManager({ mode: 'ralph', directory: TEST_DIR });
+    const manager = createStateManager({ mode: 'ralph', directory: testDir });
     manager.writeSync({ active: true });
 
     expect(manager.exists()).toBe(true);
