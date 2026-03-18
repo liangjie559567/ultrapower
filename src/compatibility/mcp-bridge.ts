@@ -256,15 +256,32 @@ export class McpBridge extends EventEmitter {
   /**
    * Disconnect from an MCP server
    */
-  disconnect(serverName: string): void {
+  async disconnect(serverName: string): Promise<void> {
     const connection = this.connections.get(serverName);
     if (!connection) return;
 
-    try {
-      connection.process.kill();
-    } catch {
-      // Ignore kill errors
+    // Graceful shutdown: close stdin first
+    if (connection.process.stdin && !connection.process.stdin.destroyed) {
+      connection.process.stdin.end();
     }
+
+    // Wait briefly for process to exit gracefully
+    await new Promise<void>((resolve) => {
+      const timeout = setTimeout(() => {
+        // Force kill if still running
+        try {
+          connection.process.kill();
+        } catch {
+          // Ignore kill errors
+        }
+        resolve();
+      }, 1000);
+
+      connection.process.once('exit', () => {
+        clearTimeout(timeout);
+        resolve();
+      });
+    });
 
     this.connections.delete(serverName);
 
@@ -276,10 +293,11 @@ export class McpBridge extends EventEmitter {
   /**
    * Disconnect from all servers
    */
-  disconnectAll(): void {
-    for (const serverName of this.connections.keys()) {
-      this.disconnect(serverName);
-    }
+  async disconnectAll(): Promise<void> {
+    const disconnectPromises = Array.from(this.connections.keys()).map(
+      serverName => this.disconnect(serverName)
+    );
+    await Promise.all(disconnectPromises);
   }
 
   /**
@@ -647,9 +665,9 @@ export function getMcpBridge(): McpBridge {
 /**
  * Reset bridge instance (for testing)
  */
-export function resetMcpBridge(): void {
+export async function resetMcpBridge(): Promise<void> {
   if (bridgeInstance) {
-    bridgeInstance.disconnectAll();
+    await bridgeInstance.disconnectAll();
     bridgeInstance = null;
   }
 }
