@@ -267,12 +267,21 @@ export class McpBridge extends EventEmitter {
 
     // Wait briefly for process to exit gracefully
     await new Promise<void>((resolve) => {
+      // Check if already exited
+      if (connection.process.exitCode !== null || connection.process.killed) {
+        resolve();
+        return;
+      }
+
       const timeout = setTimeout(() => {
         // Force kill if still running
         try {
           connection.process.kill();
-        } catch {
-          // Ignore kill errors
+        } catch (error) {
+          this.emit('kill-error', {
+            server: serverName,
+            error: error instanceof Error ? error.message : String(error),
+          });
         }
         resolve();
       }, 1000);
@@ -667,8 +676,11 @@ export function getMcpBridge(): McpBridge {
  */
 export async function resetMcpBridge(): Promise<void> {
   if (bridgeInstance) {
-    await bridgeInstance.disconnectAll();
-    bridgeInstance = null;
+    try {
+      await bridgeInstance.disconnectAll();
+    } finally {
+      bridgeInstance = null;
+    }
   }
 }
 
