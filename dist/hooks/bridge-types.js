@@ -38,4 +38,37 @@ export const HOOK_SEVERITY = {
     'setup': HookSeverity.HIGH,
     'agent-execution-complete': HookSeverity.LOW,
 };
+/**
+ * Type guard: Check if value is a valid HookType
+ */
+export function isHookType(value) {
+    return typeof value === 'string' && value in HOOK_SEVERITY;
+}
+/**
+ * Type guard: Check if value is a valid HookInput
+ */
+export function isHookInput(value) {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+/**
+ * Type guard: Check if value is a valid HookOutput
+ */
+export function isHookOutput(value) {
+    if (typeof value !== 'object' || value === null)
+        return false;
+    const obj = value;
+    return typeof obj.continue === 'boolean';
+}
+/**
+ * Type guard: Check if value is a string
+ */
+export function isString(value) {
+    return typeof value === 'string';
+}
+/**
+ * Type guard: Check if value is a non-null object
+ */
+export function isObject(value) {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 //# sourceMappingURL=bridge-types.js.map

@@ -260,7 +260,7 @@
  */
 import type { HookType, HookInput, HookOutput } from "../bridge-types.js";
 import { requiredKeysForHook, validateHookInput } from "../validation.js";
-import { toSubagentStartInput, toSubagentStopInput, toPermissionRequestInput } from "../bridge-converter.js";
+import { toSubagentStartInput, toSubagentStopInput, toPermissionRequestInput, toSessionEndInput, toPreCompactInput, toSetupInput, toWorkflowGateInput } from "../bridge-converter.js";
 &nbsp;
 type HookHandler = (input: HookInput) =&gt; Promise&lt;HookOutput&gt;;
 &nbsp;
@@ -270,7 +270,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: true };</span>
     }
     const { handleSessionEnd } = <span class="cstat-no" title="statement not covered" >await import("../session-end/index.js");</span>
-<span class="cstat-no" title="statement not covered" >    return await handleSessionEnd(input as any);</span>
+<span class="cstat-no" title="statement not covered" >    return await handleSessionEnd(toSessionEndInput(input as Record&lt;string, unknown&gt;));</span>
   },
 &nbsp;
   "subagent-start": <span class="fstat-no" title="function not covered" >async (i</span>nput) =&gt; {
@@ -278,7 +278,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: true };</span>
     }
     const { processSubagentStart } = <span class="cstat-no" title="statement not covered" >await import("../subagent-tracker/index.js");</span>
-<span class="cstat-no" title="statement not covered" >    return processSubagentStart(toSubagentStartInput(input as any));</span>
+<span class="cstat-no" title="statement not covered" >    return processSubagentStart(toSubagentStartInput(input as Record&lt;string, unknown&gt;));</span>
   },
 &nbsp;
   "subagent-stop": <span class="fstat-no" title="function not covered" >async (i</span>nput) =&gt; {
@@ -286,7 +286,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: true };</span>
     }
     const { processSubagentStop } = <span class="cstat-no" title="statement not covered" >await import("../subagent-tracker/index.js");</span>
-<span class="cstat-no" title="statement not covered" >    return processSubagentStop(toSubagentStopInput(input as any));</span>
+<span class="cstat-no" title="statement not covered" >    return processSubagentStop(toSubagentStopInput(input as Record&lt;string, unknown&gt;));</span>
   },
 &nbsp;
   "pre-compact": <span class="fstat-no" title="function not covered" >async (i</span>nput) =&gt; {
@@ -294,7 +294,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: true };</span>
     }
     const { processPreCompact } = <span class="cstat-no" title="statement not covered" >await import("../pre-compact/index.js");</span>
-<span class="cstat-no" title="statement not covered" >    return await processPreCompact(input as any);</span>
+<span class="cstat-no" title="statement not covered" >    return await processPreCompact(toPreCompactInput(input as Record&lt;string, unknown&gt;));</span>
   },
 &nbsp;
   "setup-init": <span class="fstat-no" title="function not covered" >async (i</span>nput) =&gt; {
@@ -302,7 +302,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: true };</span>
     }
     const { processSetup } = <span class="cstat-no" title="statement not covered" >await import("../setup/index.js");</span>
-<span class="cstat-no" title="statement not covered" >    return await processSetup({ ...input as any, trigger: "init", hook_event_name: "Setup" });</span>
+<span class="cstat-no" title="statement not covered" >    return await processSetup(toSetupInput({ ...(input as Record&lt;string, unknown&gt;), trigger: "init" }));</span>
   },
 &nbsp;
   "setup-maintenance": <span class="fstat-no" title="function not covered" >async (i</span>nput) =&gt; {
@@ -310,7 +310,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: true };</span>
     }
     const { processSetup } = <span class="cstat-no" title="statement not covered" >await import("../setup/index.js");</span>
-<span class="cstat-no" title="statement not covered" >    return await processSetup({ ...input as any, trigger: "maintenance", hook_event_name: "Setup" });</span>
+<span class="cstat-no" title="statement not covered" >    return await processSetup(toSetupInput({ ...(input as Record&lt;string, unknown&gt;), trigger: "maintenance" }));</span>
   },
 &nbsp;
   "permission-request": <span class="fstat-no" title="function not covered" >async (i</span>nput) =&gt; {
@@ -318,8 +318,8 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: false };</span>
     }
     const { handlePermissionRequest } = <span class="cstat-no" title="statement not covered" >await import("../permission-handler/index.js");</span>
-    const { auditLogger } = <span class="cstat-no" title="statement not covered" >await import("../../audit/logger.js")</span>;
-    const <span class="cstat-no" title="statement not covered" >permInput = toPermissionRequestInput(input as any);</span>
+    const { auditLogger } = <span class="cstat-no" title="statement not covered" >await import("../../audit/logger.js");</span>
+    const <span class="cstat-no" title="statement not covered" >permInput = toPermissionRequestInput(input as Record&lt;string, unknown&gt;);</span>
     const result = <span class="cstat-no" title="statement not covered" >await handlePermissionRequest(permInput);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    auditLogger.log({</span>
@@ -328,7 +328,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
       resource: permInput.tool_name,
       result: result.continue ? 'success' : 'failure',
       metadata: { tool_use_id: permInput.tool_use_id, permission_mode: permInput.permission_mode }
-    }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>});
+    }).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span>});
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return result;</span>
   },
@@ -338,7 +338,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
 <span class="cstat-no" title="statement not covered" >      return { continue: true };</span>
     }
     const { processWorkflowGate } = <span class="cstat-no" title="statement not covered" >await import("../workflow-gate/index.js");</span>
-    const result = <span class="cstat-no" title="statement not covered" >await processWorkflowGate(input as any);</span>
+    const result = <span class="cstat-no" title="statement not covered" >await processWorkflowGate(toWorkflowGateInput(input as Record&lt;string, unknown&gt;));</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (result.shouldBlock &amp;&amp; result.injectedSkill) {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
@@ -358,7 +358,7 @@ export const HOOK_ROUTES: Partial&lt;Record&lt;HookType, HookHandler&gt;&gt; = <
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

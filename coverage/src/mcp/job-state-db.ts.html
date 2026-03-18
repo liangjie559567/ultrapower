@@ -1901,7 +1901,7 @@ export async function <span class="fstat-no" title="function not covered" >initJ
     const versionStmt = <span class="cstat-no" title="statement not covered" >db.prepare(</span>
       "SELECT value FROM schema_info WHERE key = 'version'",
     );
-    const versionRow = <span class="cstat-no" title="statement not covered" >versionStmt.get() as { value: string } | undefined;</span>
+    const versionRow = <span class="cstat-no" title="statement not covered" >versionStmt.get() </span>as { value: string } | undefined;
     const currentVersion = <span class="cstat-no" title="statement not covered" >versionRow ? parseInt(versionRow.value, 10) : 0;</span>
 &nbsp;
     // Migration from v1 to v2: Add composite indexes
@@ -1939,7 +1939,7 @@ export function <span class="fstat-no" title="function not covered" >closeJobDb(
     const <span class="cstat-no" title="statement not covered" >resolvedCwd = resolve(cwd);</span>
     const db = <span class="cstat-no" title="statement not covered" >dbMap.get(resolvedCwd);</span>
 <span class="cstat-no" title="statement not covered" >    if (db) {</span>
-<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >db.close(); }</span> catch { /* Ignore close errors */ }</span>
+<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >db.close(); } catch {</span> /* Ignore close errors */ }</span>
 <span class="cstat-no" title="statement not covered" >      dbMap.delete(resolvedCwd);</span>
 <span class="cstat-no" title="statement not covered" >      if (_lastCwd === resolvedCwd) <span class="cstat-no" title="statement not covered" >_lastCwd = null;</span></span>
     }
@@ -1949,7 +1949,7 @@ export function <span class="fstat-no" title="function not covered" >closeJobDb(
     }
     // Close all connections
 <span class="cstat-no" title="statement not covered" >    for (const [key, db] of dbMap.entries()) {</span>
-<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >db.close(); }</span> catch { /* Ignore close errors */ }</span>
+<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >db.close(); } catch {</span> /* Ignore close errors */ }</span>
 <span class="cstat-no" title="statement not covered" >      dbMap.delete(key);</span>
     }
 <span class="cstat-no" title="statement not covered" >    _lastCwd = null;</span>
@@ -1962,7 +1962,7 @@ export function <span class="fstat-no" title="function not covered" >closeJobDb(
  */
 export function <span class="fstat-no" title="function not covered" >closeAllJobDbs(): void {</span>
 <span class="cstat-no" title="statement not covered" >  for (const [key, db] of dbMap.entries()) {</span>
-<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >db.close(); }</span> catch { /* Ignore close errors */ }</span>
+<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >db.close(); } catch {</span> /* Ignore close errors */ }</span>
 <span class="cstat-no" title="statement not covered" >    dbMap.delete(key);</span>
   }
 <span class="cstat-no" title="statement not covered" >  _lastCwd = null;</span>
@@ -2059,7 +2059,7 @@ export function <span class="fstat-no" title="function not covered" >getJob(</sp
     const stmt = <span class="cstat-no" title="statement not covered" >db.prepare(</span>
       "SELECT * FROM jobs WHERE provider = ? AND job_id = ?",
     );
-    const row = <span class="cstat-no" title="statement not covered" >stmt.get(provider, jobId) as Record&lt;string, unknown&gt; | undefined;</span>
+    const row = <span class="cstat-no" title="statement not covered" >stmt.get(provider, jobId) </span>as Record&lt;string, unknown&gt; | undefined;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!row) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >    return rowToJobStatus(row);</span>
@@ -2310,16 +2310,16 @@ export function <span class="fstat-no" title="function not covered" >migrateFrom
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >files = readdirSync(promptsDir);</span>
-    const statusFiles = <span class="cstat-no" title="statement not covered" >files.filter(</span>
-<span class="fstat-no" title="function not covered" >      (f</span>: string) =&gt; <span class="cstat-no" title="statement not covered" >f.includes("-status-") &amp;&amp; f.endsWith(".json"),</span>
+    const statusFiles = <span class="cstat-no" title="statement not covered" >files.<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (f: string) =&gt; <span class="cstat-no" title="statement not covered" >f.includes("-status-") &amp;&amp; f.endsWith(".json"),</span>
     );
 &nbsp;
     // Use a transaction for bulk import efficiency
-    const importAll = <span class="cstat-no" title="statement not covered" >db.transaction(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+    const importAll = <span class="cstat-no" title="statement not covered" >db.<span class="fstat-no" title="function not covered" >transaction(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      for (const file of statusFiles) {</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
           const <span class="cstat-no" title="statement not covered" >content = readFileSync(join(promptsDir, file), "utf-8");</span>
-          const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as JobStatus;</span>
+          const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as JobStatus;
 &nbsp;
           // Validate minimum required fields
 <span class="cstat-no" title="statement not covered" >          if (!status.provider || !status.jobId || !status.promptFile) {</span>
@@ -2405,7 +2405,7 @@ export function <span class="fstat-no" title="function not covered" >getJobStats
         SUM(CASE WHEN status IN ('failed', 'timeout') THEN 1 ELSE 0 END) as failed
       FROM jobs
     `);
-    const row = <span class="cstat-no" title="statement not covered" >stmt.get() as {</span>
+    const row = <span class="cstat-no" title="statement not covered" >stmt.get() </span>as {
       total: number;
       active: number;
       completed: number;
@@ -2459,8 +2459,8 @@ export function <span class="fstat-no" title="function not covered" >getJobSumma
 &nbsp;
     // Recent completed/failed jobs (last hour) - brief summary
     const recentJobs = <span class="cstat-no" title="statement not covered" >getRecentJobs(undefined, 60 * 60 * 1000, cwd);</span>
-    const terminalJobs = <span class="cstat-no" title="statement not covered" >recentJobs.filter(</span>
-<span class="fstat-no" title="function not covered" >      (j</span>) =&gt; <span class="cstat-no" title="statement not covered" >j.status === "completed" || j.status === "failed" || j.status === "timeout",</span>
+    const terminalJobs = <span class="cstat-no" title="statement not covered" >recentJobs.<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (j) =&gt; <span class="cstat-no" title="statement not covered" >j.status === "completed" || j.status === "failed" || j.status === "timeout",</span>
     );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (terminalJobs.length &gt; 0) {</span>
@@ -2506,7 +2506,7 @@ export function <span class="fstat-no" title="function not covered" >getJobSumma
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

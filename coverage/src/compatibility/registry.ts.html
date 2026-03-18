@@ -1118,7 +1118,7 @@ export class ToolRegistry {
   /**
    * Handle tool name conflict
    */
-  private <span class="fstat-no" title="function not covered" >handleConflict(e</span>xisting: ExternalTool, incoming: ExternalTool): void {
+<span class="fstat-no" title="function not covered" >  private h</span>andleConflict(existing: ExternalTool, incoming: ExternalTool): void {
     const conflictKey = <span class="cstat-no" title="statement not covered" >existing.name;</span>
 &nbsp;
     // Get or create conflict record
@@ -1176,14 +1176,14 @@ export class ToolRegistry {
    * Get all tools from a specific source
    */
 <span class="fstat-no" title="function not covered" >  getToolsBySource(s</span>ource: string): ExternalTool[] {
-<span class="cstat-no" title="statement not covered" >    return Array.from(this.tools.values()).filter(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >t</span>.source === source)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return Array.from(this.tools.values()).<span class="fstat-no" title="function not covered" >filter(t</span> =&gt; <span class="cstat-no" title="statement not covered" >t.source === source);</span></span>
   }
 &nbsp;
   /**
    * Get all tools of a specific type
    */
 <span class="fstat-no" title="function not covered" >  getToolsByType(t</span>ype: ExternalTool['type']): ExternalTool[] {
-<span class="cstat-no" title="statement not covered" >    return Array.from(this.tools.values()).filter(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >t</span>.type === type)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return Array.from(this.tools.values()).<span class="fstat-no" title="function not covered" >filter(t</span> =&gt; <span class="cstat-no" title="statement not covered" >t.type === type);</span></span>
   }
 &nbsp;
   /**
@@ -1224,7 +1224,7 @@ export class ToolRegistry {
     }
 &nbsp;
     // Determine if permission is required based on capabilities
-    const requiresPermission = <span class="cstat-no" title="statement not covered" >tool.capabilities?.some(<span class="fstat-no" title="function not covered" >c =&gt;</span></span>
+    const requiresPermission = <span class="cstat-no" title="statement not covered" >tool.capabilities?.<span class="fstat-no" title="function not covered" >some(c</span> =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      c === 'write' || c === 'execute'</span>
     ) ?? false;
 &nbsp;
@@ -1237,8 +1237,8 @@ export class ToolRegistry {
 <span class="cstat-no" title="statement not covered" >    if (tool.type === 'plugin') {</span>
       const plugin = <span class="cstat-no" title="statement not covered" >this.plugins.get(tool.source);</span>
 <span class="cstat-no" title="statement not covered" >      if (plugin?.manifest.tools) {</span>
-        const toolDef = <span class="cstat-no" title="statement not covered" >plugin.manifest.tools.find(</span>
-<span class="fstat-no" title="function not covered" >          t =&gt; <span class="cstat-no" title="statement not covered" >`</span>${plugin.name}:${t.name}` === tool.name</span>
+        const toolDef = <span class="cstat-no" title="statement not covered" >plugin.manifest.tools.<span class="fstat-no" title="function not covered" >find(</span></span>
+          t =&gt; <span class="cstat-no" title="statement not covered" >`${plugin.name}:${t.name}` === tool.name</span>
         );
 <span class="cstat-no" title="statement not covered" >        if (toolDef) {</span>
 <span class="cstat-no" title="statement not covered" >          route.handler = toolDef.handler;</span>
@@ -1338,7 +1338,7 @@ export class ToolRegistry {
    */
 <span class="fstat-no" title="function not covered" >  searchTools(q</span>uery: string): ExternalTool[] {
     const lowerQuery = <span class="cstat-no" title="statement not covered" >query.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >    return Array.from(this.tools.values()).filter(<span class="fstat-no" title="function not covered" >tool =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    return Array.from(this.tools.values()).<span class="fstat-no" title="function not covered" >filter(t</span>ool =&gt; {</span>
       const searchText = <span class="cstat-no" title="statement not covered" >`${tool.name} ${tool.description || ''} ${tool.source}`.toLowerCase();</span>
 <span class="cstat-no" title="statement not covered" >      return searchText.includes(lowerQuery);</span>
     });
@@ -1361,7 +1361,7 @@ export class ToolRegistry {
   /**
    * Emit event to all listeners
    */
-  private <span class="fstat-no" title="function not covered" >emit(e</span>vent: RegistryEvent): void {
+<span class="fstat-no" title="function not covered" >  private e</span>mit(event: RegistryEvent): void {
 <span class="cstat-no" title="statement not covered" >    for (const listener of this.listeners) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
 <span class="cstat-no" title="statement not covered" >        listener(event);</span>
@@ -1456,7 +1456,7 @@ export function <span class="fstat-no" title="function not covered" >hasMcpServe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

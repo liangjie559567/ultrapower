@@ -609,11 +609,11 @@ export class LearningQueue {
     description = <span class="branch-0 cbranch-no" title="branch not covered" >''</span>
   ): Promise&lt;QueueItem&gt; {
     const items = <span class="cstat-no" title="statement not covered" >await this.loadItems();</span>
-<span class="cstat-no" title="statement not covered" >    if (items.filter(<span class="fstat-no" title="function not covered" >i =&gt; <span class="cstat-no" title="statement not covered" >i</span>.status === 'pending')</span>.length &gt;= this.maxSize) {</span>
+<span class="cstat-no" title="statement not covered" >    if (items.<span class="fstat-no" title="function not covered" >filter(i</span> =&gt; <span class="cstat-no" title="statement not covered" >i.status === 'pending').</span>length &gt;= this.maxSize) {</span>
       // 移除最低优先级的 pending 条目
       const lowest = <span class="cstat-no" title="statement not covered" >items</span>
-        .filter(<span class="fstat-no" title="function not covered" >i =&gt; <span class="cstat-no" title="statement not covered" >i</span>.status === 'pending')</span>
-        .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >PRIORITY_ORDER[b.priority] - PRIORITY_ORDER[a.priority])</span>[0];
+        .<span class="fstat-no" title="function not covered" >filter(i</span> =&gt; <span class="cstat-no" title="statement not covered" >i.status === 'pending')</span>
+        .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >PRIORITY_ORDER[b.priority] - PRIORITY_ORDER[a.priority])[</span>0];
 <span class="cstat-no" title="statement not covered" >      if (lowest &amp;&amp; PRIORITY_ORDER[lowest.priority] &gt; PRIORITY_ORDER[priority]) {</span>
 <span class="cstat-no" title="statement not covered" >        await this.updateStatus(lowest.id, 'done');</span>
       }
@@ -636,8 +636,8 @@ export class LearningQueue {
   async <span class="fstat-no" title="function not covered" >getNextBatch(l</span>imit = <span class="branch-0 cbranch-no" title="branch not covered" >3): Promise&lt;QueueItem[]&gt; {</span>
     const items = <span class="cstat-no" title="statement not covered" >await this.loadItems();</span>
 <span class="cstat-no" title="statement not covered" >    return items</span>
-      .filter(<span class="fstat-no" title="function not covered" >i =&gt; <span class="cstat-no" title="statement not covered" >i</span>.status === 'pending')</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])</span>
+      .<span class="fstat-no" title="function not covered" >filter(i</span> =&gt; <span class="cstat-no" title="statement not covered" >i.status === 'pending')</span>
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])</span>
       .slice(0, limit);
   }
 &nbsp;
@@ -681,7 +681,7 @@ export class LearningQueue {
     const items = <span class="cstat-no" title="statement not covered" >await this.loadItems();</span>
     const cutoff = <span class="cstat-no" title="statement not covered" >new Date();</span>
 <span class="cstat-no" title="statement not covered" >    cutoff.setDate(cutoff.getDate() - daysOld);</span>
-    const toRemove = <span class="cstat-no" title="statement not covered" >items.filter(<span class="fstat-no" title="function not covered" >i =&gt; <span class="cstat-no" title="statement not covered" >i</span>.status === 'done' &amp;&amp; new Date(i.created) &lt; cutoff)</span>;</span>
+    const toRemove = <span class="cstat-no" title="statement not covered" >items.<span class="fstat-no" title="function not covered" >filter(i</span> =&gt; <span class="cstat-no" title="statement not covered" >i.status === 'done' &amp;&amp; new Date(i.created) &lt; cutoff);</span></span>
     // 简单实现：重写文件去掉过期条目
 <span class="cstat-no" title="statement not covered" >    return toRemove.length;</span>
   }
@@ -689,8 +689,8 @@ export class LearningQueue {
   async <span class="fstat-no" title="function not covered" >getStats(): Promise&lt;{ pending: number; done: number; total: number }&gt; {</span>
     const items = <span class="cstat-no" title="statement not covered" >await this.loadItems();</span>
 <span class="cstat-no" title="statement not covered" >    return {</span>
-      pending: items.filter(<span class="fstat-no" title="function not covered" >i =&gt; <span class="cstat-no" title="statement not covered" >i</span>.status === 'pending')</span>.length,
-      done: items.filter(<span class="fstat-no" title="function not covered" >i =&gt; <span class="cstat-no" title="statement not covered" >i</span>.status === 'done')</span>.length,
+      pending: items.<span class="fstat-no" title="function not covered" >filter(i</span> =&gt; <span class="cstat-no" title="statement not covered" >i.status === 'pending').</span>length,
+      done: items.<span class="fstat-no" title="function not covered" >filter(i</span> =&gt; <span class="cstat-no" title="statement not covered" >i.status === 'done').</span>length,
       total: items.length,
     };
   }
@@ -712,7 +712,7 @@ export class LearningQueue {
 <span class="cstat-no" title="statement not covered" >      if (line.includes('| ID |')) { <span class="cstat-no" title="statement not covered" >inTable = true; <span class="cstat-no" title="statement not covered" >c</span>ontinue; }</span></span>
 <span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; line.startsWith('|---')) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; line.startsWith('|')) {</span>
-        const parts = <span class="cstat-no" title="statement not covered" >line.split('|').map(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.trim())</span>;</span>
+        const parts = <span class="cstat-no" title="statement not covered" >line.split('|').<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.trim())</span>;</span>
 <span class="cstat-no" title="statement not covered" >        if (parts.length &gt;= 7 &amp;&amp; parts[1]) {</span>
 <span class="cstat-no" title="statement not covered" >          items.push({</span>
             id: parts[1] ?? '',
@@ -724,21 +724,21 @@ export class LearningQueue {
             description: parts[7] ?? '',
           });
         }
-<span class="cstat-no" title="statement not covered" >      } else if (inTable &amp;&amp; !line.startsWith('|')) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >inTable &amp;&amp; !line.startsWith('|')) {</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
       }
     }
 <span class="cstat-no" title="statement not covered" >    return items;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >parseBlockFormat(t</span>ext: string): QueueItem[] {
+<span class="fstat-no" title="function not covered" >  private p</span>arseBlockFormat(text: string): QueueItem[] {
     const items: QueueItem[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const lines = <span class="cstat-no" title="statement not covered" >text.split('\n');</span>
     let currentId = <span class="cstat-no" title="statement not covered" >'';</span>
     let currentTitle = <span class="cstat-no" title="statement not covered" >'';</span>
     const fields: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 &nbsp;
-    const flush = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(): void =&gt; {</span></span>
+    const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >flush = (): void =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      if (!currentId) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >      items.push({</span>
         id: currentId,
@@ -761,7 +761,7 @@ export class LearningQueue {
 <span class="cstat-no" title="statement not covered" >        flush();</span>
 <span class="cstat-no" title="statement not covered" >        currentId = headerMatch[1] ?? '';</span>
 <span class="cstat-no" title="statement not covered" >        currentTitle = (headerMatch[2] ?? '').trim();</span>
-<span class="cstat-no" title="statement not covered" >        Object.keys(fields).forEach(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >d</span>elete fields[k])</span>;</span>
+<span class="cstat-no" title="statement not covered" >        Object.keys(fields).<span class="fstat-no" title="function not covered" >forEach(k</span> =&gt; <span class="cstat-no" title="statement not covered" >delete fields[k]);</span></span>
 <span class="cstat-no" title="statement not covered" >        continue;</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (currentId) {</span>
@@ -807,8 +807,8 @@ export class LearningQueue {
     let inTable = <span class="cstat-no" title="statement not covered" >false;</span>
 <span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0; i</span> &lt; lines.length; i++) {</span>
 <span class="cstat-no" title="statement not covered" >      if (lines[i]?.includes('| ID |')) { <span class="cstat-no" title="statement not covered" >inTable = true; <span class="cstat-no" title="statement not covered" >c</span>ontinue; }</span></span>
-<span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; lines[i]?.startsWith('|')) <span class="cstat-no" title="statement not covered" >insertPos = <span class="cstat-no" title="statement not covered" >i;</span></span></span>
-      else if (inTable &amp;&amp; !lines[i]?.startsWith('|')) <span class="cstat-no" title="statement not covered" >break;</span>
+<span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; lines[i]?.startsWith('|')) <span class="cstat-no" title="statement not covered" >insertPos = i;</span></span>
+      else if (<span class="cstat-no" title="statement not covered" >inTable &amp;&amp; !lines[i]?.startsWith('|')) <span class="cstat-no" title="statement not covered" >break;</span></span>
     }
 <span class="cstat-no" title="statement not covered" >    if (insertPos &gt;= 0) {</span>
 <span class="cstat-no" title="statement not covered" >      lines.splice(insertPos + 1, 0, row);</span>
@@ -823,7 +823,7 @@ export class LearningQueue {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

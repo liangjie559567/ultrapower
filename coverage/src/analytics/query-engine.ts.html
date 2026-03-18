@@ -800,7 +800,7 @@ export class QueryEngine {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const content = <span class="cstat-no" title="statement not covered" >await fs.readFile(tokenLogPath, 'utf-8');</span>
-      const lines = <span class="cstat-no" title="statement not covered" >content.trim().split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.length &gt; 0)</span>;</span>
+      const lines = <span class="cstat-no" title="statement not covered" >content.trim().split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.length &gt; 0);</span></span>
 &nbsp;
       let totalCost = <span class="cstat-no" title="statement not covered" >0;</span>
       const byAgent: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
@@ -872,7 +872,7 @@ export class QueryEngine {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const content = <span class="cstat-no" title="statement not covered" >await fs.readFile(tokenLogPath, 'utf-8');</span>
-      const lines = <span class="cstat-no" title="statement not covered" >content.trim().split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.length &gt; 0)</span>;</span>
+      const lines = <span class="cstat-no" title="statement not covered" >content.trim().split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.length &gt; 0);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      for (const line of lines) {</span>
         let record: ReturnType&lt;typeof JSON.parse&gt;;
@@ -913,7 +913,7 @@ export class QueryEngine {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const content = <span class="cstat-no" title="statement not covered" >await fs.readFile(tokenLogPath, 'utf-8');</span>
-      const lines = <span class="cstat-no" title="statement not covered" >content.trim().split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.length &gt; 0)</span>;</span>
+      const lines = <span class="cstat-no" title="statement not covered" >content.trim().split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.length &gt; 0);</span></span>
 &nbsp;
       const hourCounts: Record&lt;number, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
       const operationCosts: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
@@ -946,15 +946,15 @@ export class QueryEngine {
 &nbsp;
       // Find peak hours (top 3)
       const peakHours = <span class="cstat-no" title="statement not covered" >Object.entries(hourCounts)</span>
-        .sort(<span class="fstat-no" title="function not covered" >([</span>, a], [, b]) =&gt; <span class="cstat-no" title="statement not covered" >b - a)</span>
+        .<span class="fstat-no" title="function not covered" >sort(([</span>, a], [, b]) =&gt; <span class="cstat-no" title="statement not covered" >b - a)</span>
         .slice(0, 3)
-        .map(<span class="fstat-no" title="function not covered" >([</span>hour]) =&gt; <span class="cstat-no" title="statement not covered" >parseInt(hour))</span>;
+        .<span class="fstat-no" title="function not covered" >map(([</span>hour]) =&gt; <span class="cstat-no" title="statement not covered" >parseInt(hour))</span>;
 &nbsp;
       // Find most expensive operations (top 5)
       const mostExpensiveOperations = <span class="cstat-no" title="statement not covered" >Object.entries(operationCosts)</span>
-        .sort(<span class="fstat-no" title="function not covered" >([</span>, a], [, b]) =&gt; <span class="cstat-no" title="statement not covered" >b - a)</span>
+        .<span class="fstat-no" title="function not covered" >sort(([</span>, a], [, b]) =&gt; <span class="cstat-no" title="statement not covered" >b - a)</span>
         .slice(0, 5)
-        .map(<span class="fstat-no" title="function not covered" >([</span>operation, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ operation, cost }))</span>;
+        .<span class="fstat-no" title="function not covered" >map(([</span>operation, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ operation, cost }));</span>
 &nbsp;
       const averageCostPerSession = <span class="cstat-no" title="statement not covered" >history.totalSessions &gt; 0</span>
         ? history.totalCost / history.totalSessions
@@ -986,15 +986,15 @@ export class QueryEngine {
 <span class="cstat-no" title="statement not covered" >    return { removedTokens, removedMetrics };</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >calculateTimeRange(p</span>eriod: 'daily' | 'weekly' | 'monthly'): TimeRange {
+<span class="fstat-no" title="function not covered" >  private c</span>alculateTimeRange(period: 'daily' | 'weekly' | 'monthly'): TimeRange {
     const end = <span class="cstat-no" title="statement not covered" >new Date();</span>
     const start = <span class="cstat-no" title="statement not covered" >new Date();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (period === 'daily') {</span>
 <span class="cstat-no" title="statement not covered" >      start.setDate(start.getDate() - 1);</span>
-<span class="cstat-no" title="statement not covered" >    } else if (period === 'weekly') {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >period === 'weekly') {</span>
 <span class="cstat-no" title="statement not covered" >      start.setDate(start.getDate() - 7);</span>
-<span class="cstat-no" title="statement not covered" >    } else if (period === 'monthly') {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >period === 'monthly') {</span>
 <span class="cstat-no" title="statement not covered" >      start.setDate(start.getDate() - 30);</span>
     }
 &nbsp;
@@ -1021,7 +1021,7 @@ export function <span class="fstat-no" title="function not covered" >getQueryEng
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

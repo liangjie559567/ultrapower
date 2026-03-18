@@ -1,0 +1,194 @@
+{
+  "audit_date": "2026-03-17",
+  "codebase_stats": {
+    "total_source_files": 1206,
+    "total_test_files": 482,
+    "test_coverage": "40%",
+    "todo_comments": 60,
+    "files_with_any_type": 55
+  },
+  "health_score": 7.5,
+  "summary": "Mature codebase with good test coverage (99.79% pass rate). Main issues: type safety (55 files with 'any'), 60 TODO/FIXME markers, and some architectural complexity in hooks system.",
+
+  "critical_debt": [
+    {
+      "id": "C1",
+      "title": "Type Safety - Excessive 'any' usage",
+      "location": "55 files across src/",
+      "impact": "Runtime errors, poor IDE support, maintenance difficulty",
+      "current_cost": "2-3 hours/week debugging type-related issues",
+      "fix_effort": "40 hours",
+      "priority": "next_sprint",
+      "approach": "Gradual migration: tools/ → hooks/ → features/. Use strict TypeScript, add proper interfaces."
+    }
+  ],
+
+  "high_debt": [
+    {
+      "id": "H1",
+      "title": "Hook System Complexity",
+      "location": "src/hooks/bridge-normalize.ts (470 lines)",
+      "impact": "Hard to maintain, security-critical code is complex",
+      "current_cost": "4 hours/sprint for bug fixes",
+      "fix_effort": "16 hours",
+      "priority": "next_sprint",
+      "approach": "Split into: validation.ts, normalization.ts, security.ts. Extract SENSITIVE_HOOKS config."
+    },
+    {
+      "id": "H2",
+      "title": "60 TODO/FIXME markers",
+      "location": "22 files (hooks/, features/, mcp/)",
+      "impact": "Incomplete features, deferred decisions",
+      "current_cost": "1 hour/week context switching",
+      "fix_effort": "24 hours",
+      "priority": "backlog",
+      "approach": "Triage: convert to issues (30%), fix immediately (20%), delete stale (50%)."
+    },
+    {
+      "id": "H3",
+      "title": "MCP Integration Complexity",
+      "location": "src/mcp/ (multiple clients, adapters)",
+      "impact": "3 test failures in MCP bridge, hard to debug",
+      "current_cost": "2 hours/sprint",
+      "fix_effort": "12 hours",
+      "priority": "next_sprint",
+      "approach": "Consolidate client logic, add integration tests, document error handling."
+    }
+  ],
+
+  "medium_debt": [
+    {
+      "id": "M1",
+      "title": "Duplicate Code in Test Files",
+      "location": "tests/hooks/, tests/mcp/",
+      "impact": "Test maintenance overhead",
+      "current_cost": "1 hour/sprint",
+      "fix_effort": "8 hours",
+      "priority": "backlog",
+      "approach": "Extract test utilities: createMockHookInput(), setupMCPClient()."
+    },
+    {
+      "id": "M2",
+      "title": "Inconsistent Error Handling",
+      "location": "src/hooks/, src/mcp/",
+      "impact": "Inconsistent user experience",
+      "current_cost": "30 min/week",
+      "fix_effort": "6 hours",
+      "priority": "backlog",
+      "approach": "Standardize: use Result<T, E> pattern or custom error classes."
+    },
+    {
+      "id": "M3",
+      "title": "Large Config Objects",
+      "location": "src/hooks/mode-registry/, src/features/",
+      "impact": "Hard to navigate, prone to typos",
+      "current_cost": "30 min/week",
+      "fix_effort": "4 hours",
+      "priority": "backlog",
+      "approach": "Use TypeScript const assertions, split into domain-specific configs."
+    }
+  ],
+
+  "low_debt": [
+    {
+      "id": "L1",
+      "title": "Outdated Comments",
+      "location": "Various files",
+      "impact": "Minor confusion",
+      "current_cost": "15 min/week",
+      "fix_effort": "2 hours",
+      "priority": "backlog",
+      "approach": "Cleanup pass during regular refactoring."
+    },
+    {
+      "id": "L2",
+      "title": "Inconsistent Naming",
+      "location": "src/hooks/ (some use index.ts, others use main file name)",
+      "impact": "Minor navigation friction",
+      "current_cost": "10 min/week",
+      "fix_effort": "2 hours",
+      "priority": "backlog",
+      "approach": "Standardize on index.ts for public API, named files for internals."
+    }
+  ],
+
+  "quick_wins": [
+    {
+      "title": "Fix MCP Bridge Test Failures",
+      "impact": "High - improves CI reliability",
+      "effort": "2 hours",
+      "approach": "Debug 3 failing tests in src/compatibility/mcp-bridge.ts, likely async timing issues.",
+      "roi": "10x - prevents false negatives in CI"
+    },
+    {
+      "title": "Add Type Guards for Hook Inputs",
+      "impact": "High - prevents runtime errors",
+      "effort": "4 hours",
+      "approach": "Add isValidHookInput() guards in bridge-normalize.ts, replace 5 'any' casts.",
+      "roi": "8x - catches bugs at compile time"
+    },
+    {
+      "title": "Extract Test Utilities",
+      "impact": "Medium - reduces test maintenance",
+      "effort": "3 hours",
+      "approach": "Create tests/helpers/ with createMockHookInput(), setupTestEnv(). Refactor 20 test files.",
+      "roi": "5x - saves 15 min per test file edit"
+    }
+  ],
+
+  "refactoring_roadmap": [
+    {
+      "phase": "1. Stabilization (Sprint 1)",
+      "tasks": [
+        "Fix MCP bridge test failures (C1 quick win)",
+        "Add type guards for hook inputs (C2 quick win)",
+        "Triage and close 30 stale TODO comments"
+      ],
+      "outcome": "99.99% test pass rate, reduced 'any' usage by 10%"
+    },
+    {
+      "phase": "2. Type Safety (Sprint 2-3)",
+      "tasks": [
+        "Migrate src/tools/ to strict TypeScript",
+        "Migrate src/hooks/ to strict TypeScript",
+        "Add proper interfaces for all hook types"
+      ],
+      "outcome": "50% reduction in 'any' usage, better IDE support"
+    },
+    {
+      "phase": "3. Architecture Cleanup (Sprint 4-5)",
+      "tasks": [
+        "Split bridge-normalize.ts into 3 modules",
+        "Consolidate MCP client logic",
+        "Extract test utilities"
+      ],
+      "outcome": "Reduced complexity, faster onboarding"
+    },
+    {
+      "phase": "4. Polish (Sprint 6)",
+      "tasks": [
+        "Standardize error handling",
+        "Clean up remaining TODOs",
+        "Update documentation"
+      ],
+      "outcome": "Health score 9/10, production-ready"
+    }
+  ],
+
+  "recommendations": {
+    "immediate": [
+      "Fix 3 MCP bridge test failures",
+      "Add type guards in bridge-normalize.ts"
+    ],
+    "next_sprint": [
+      "Reduce 'any' usage in src/tools/ and src/hooks/",
+      "Split bridge-normalize.ts into smaller modules",
+      "Consolidate MCP integration"
+    ],
+    "backlog": [
+      "Extract test utilities",
+      "Standardize error handling",
+      "Clean up TODO comments"
+    ]
+  }
+}

@@ -1003,8 +1003,8 @@ export async function <span class="fstat-no" title="function not covered" >listO
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const entries = <span class="cstat-no" title="statement not covered" >await readdir(teamsRoot, { withFileTypes: true });</span>
 <span class="cstat-no" title="statement not covered" >    return entries</span>
-      .filter(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.isDirectory())</span>
-      .map(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.name)</span>
+      .<span class="fstat-no" title="function not covered" >filter((e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.isDirectory())</span>
+      .<span class="fstat-no" title="function not covered" >map((e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.name)</span>
       .sort();
   } catch {
 <span class="cstat-no" title="statement not covered" >    return [];</span>
@@ -1027,7 +1027,7 @@ export async function <span class="fstat-no" title="function not covered" >readO
 <span class="cstat-no" title="statement not covered" >  if (existsSync(manifestPath)) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const raw = <span class="cstat-no" title="statement not covered" >await readFile(manifestPath, 'utf8');</span>
-      const manifest = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as OmxTeamManifestV2;</span>
+      const manifest = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as OmxTeamManifestV2;
 <span class="cstat-no" title="statement not covered" >      if (manifest.schema_version === 2 &amp;&amp; manifest.name) {</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           name: manifest.name,
@@ -1052,7 +1052,7 @@ export async function <span class="fstat-no" title="function not covered" >readO
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const raw = <span class="cstat-no" title="statement not covered" >await readFile(configPath, 'utf8');</span>
-    const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as unknown;</span>
+    const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as unknown;
 <span class="cstat-no" title="statement not covered" >    if (!parsed || typeof parsed !== 'object') <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >    return parsed as OmxTeamConfig;</span>
   } catch {
@@ -1076,7 +1076,7 @@ export async function <span class="fstat-no" title="function not covered" >readO
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    if (!existsSync(p)) <span class="cstat-no" title="statement not covered" >return { worker: workerName, messages: [] };</span></span>
     const raw = <span class="cstat-no" title="statement not covered" >await readFile(p, 'utf8');</span>
-    const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as { worker?: unknown; messages?: unknown };</span>
+    const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as { worker?: unknown; messages?: unknown };
 <span class="cstat-no" title="statement not covered" >    if (parsed.worker !== workerName || !Array.isArray(parsed.messages)) {</span>
 <span class="cstat-no" title="statement not covered" >      return { worker: workerName, messages: [] };</span>
     }
@@ -1167,7 +1167,7 @@ export async function <span class="fstat-no" title="function not covered" >markO
   cwd: string,
 ): Promise&lt;boolean&gt; {
   const mailbox = <span class="cstat-no" title="statement not covered" >await readOmxMailbox(teamName, workerName, cwd);</span>
-  const msg = <span class="cstat-no" title="statement not covered" >mailbox.messages.find(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.message_id === messageId)</span>;</span>
+  const msg = <span class="cstat-no" title="statement not covered" >mailbox.messages.<span class="fstat-no" title="function not covered" >find((m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.message_id === messageId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (!msg) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 <span class="cstat-no" title="statement not covered" >  if (!msg.delivered_at) {</span>
 <span class="cstat-no" title="statement not covered" >    msg.delivered_at = new Date().toISOString();</span>
@@ -1193,7 +1193,7 @@ export async function <span class="fstat-no" title="function not covered" >readO
 <span class="cstat-no" title="statement not covered" >  if (!existsSync(p)) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const raw = <span class="cstat-no" title="statement not covered" >await readFile(p, 'utf8');</span>
-    const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as unknown;</span>
+    const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as unknown;
 <span class="cstat-no" title="statement not covered" >    if (!parsed || typeof parsed !== 'object') <span class="cstat-no" title="statement not covered" >return null;</span></span>
     const t = <span class="cstat-no" title="statement not covered" >parsed as Record&lt;string, unknown&gt;;</span>
 <span class="cstat-no" title="statement not covered" >    if (typeof t.id !== 'string' || typeof t.subject !== 'string' || typeof t.status !== 'string') <span class="cstat-no" title="statement not covered" >return null;</span></span>
@@ -1224,7 +1224,7 @@ export async function <span class="fstat-no" title="function not covered" >listO
 <span class="cstat-no" title="statement not covered" >      if (task) <span class="cstat-no" title="statement not covered" >tasks.push(task);</span></span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    tasks.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >Number(a.id) - Number(b.id))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    tasks.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >Number(a.id) - Number(b.id))</span>;</span>
 <span class="cstat-no" title="statement not covered" >    return tasks;</span>
   } catch {
 <span class="cstat-no" title="statement not covered" >    return [];</span>
@@ -1261,7 +1261,7 @@ export async function <span class="fstat-no" title="function not covered" >appen
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

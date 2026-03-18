@@ -384,6 +384,192 @@
       "type": "skill_used",
       "target": "autopilot",
       "success": true
+    },
+    {
+      "timestamp": "2026-03-18T10:41:33.515Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T10:42:28.924Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T10:43:07.721Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T11:01:12.514Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T11:09:12.852Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T11:13:03.247Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T11:14:37.510Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T11:16:00.890Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T11:17:08.030Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T11:19:47.441Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:03:49.308Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:07:22.475Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:09:26.812Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:11:46.254Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:12:57.544Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:13:58.961Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:15:07.743Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:52:05.824Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:54:00.190Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:55:53.793Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:57:12.740Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T12:59:11.768Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:08:37.905Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:11:27.002Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:12:40.264Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:14:36.056Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:22:36.935Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:23:23.211Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:24:47.447Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T13:34:12.628Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
+    },
+    {
+      "timestamp": "2026-03-18T15:21:39.702Z",
+      "type": "skill_used",
+      "target": "autopilot",
+      "success": true
     }
   ],
   "agents": []

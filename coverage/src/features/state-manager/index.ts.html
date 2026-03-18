@@ -2137,7 +2137,7 @@ export function <span class="fstat-no" title="function not covered" >readState&l
           resource: name,
           result: 'success',
           metadata: { operation: 'read', location, cached: true }
-        }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>});
+        }).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span>});
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        return {</span>
           exists: true,
@@ -2152,7 +2152,7 @@ export function <span class="fstat-no" title="function not covered" >readState&l
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const content = <span class="cstat-no" title="statement not covered" >fs.readFileSync(standardPath, "utf-8");</span>
-      const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) as T;</span>
+      const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) </span>as T;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      auditLogger.log({</span>
         actor: 'system',
@@ -2160,7 +2160,7 @@ export function <span class="fstat-no" title="function not covered" >readState&l
         resource: name,
         result: 'success',
         metadata: { operation: 'read', location, cached: false }
-      }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>});
+      }).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span>});
 &nbsp;
       // Update cache with a defensive clone so callers cannot corrupt it
 <span class="cstat-no" title="statement not covered" >      try {</span>
@@ -2193,7 +2193,7 @@ export function <span class="fstat-no" title="function not covered" >readState&l
 <span class="cstat-no" title="statement not covered" >      if (fs.existsSync(resolvedPath)) {</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
           const content = <span class="cstat-no" title="statement not covered" >fs.readFileSync(resolvedPath, "utf-8");</span>
-          const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) as T;</span>
+          const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) </span>as T;
 <span class="cstat-no" title="statement not covered" >          return {</span>
             exists: true,
             data: structuredClone(data) as T,
@@ -2261,7 +2261,7 @@ export function <span class="fstat-no" title="function not covered" >writeState&
       resource: name,
       result: 'success',
       metadata: { operation: 'write', location, encrypted: !!process.env.OMC_ENCRYPTION_KEY }
-    }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>});
+    }).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span>});
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
       success: true,
@@ -2274,7 +2274,7 @@ export function <span class="fstat-no" title="function not covered" >writeState&
       resource: name,
       result: 'failure',
       metadata: { operation: 'write', location, error: String(error) }
-    }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>});
+    }).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span>});
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
       success: false,
@@ -2429,7 +2429,7 @@ export function <span class="fstat-no" title="function not covered" >listStates(
   const pattern = <span class="cstat-no" title="statement not covered" >options?.pattern;</span>
 &nbsp;
   // Helper to check if name matches pattern
-  const matchesPattern = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ame: string): boolean =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >matchesPattern = (n</span>ame: string): boolean =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!pattern) <span class="cstat-no" title="statement not covered" >return true;</span></span>
     // Simple glob: * matches anything
     const escapedPattern = <span class="cstat-no" title="statement not covered" >pattern</span>
@@ -2440,7 +2440,7 @@ export function <span class="fstat-no" title="function not covered" >listStates(
   };
 &nbsp;
   // Helper to add state files from a directory
-  const addStatesFromDir = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >addStatesFromDir = (</span></span>
     dir: string,
     location: StateLocation,
     isLegacy: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false,</span>
@@ -2452,7 +2452,7 @@ export function <span class="fstat-no" title="function not covered" >listStates(
 <span class="cstat-no" title="statement not covered" >      for (const file of files) {</span>
 <span class="cstat-no" title="statement not covered" >        if (!file.endsWith(".json")) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
-        const name = <span class="cstat-no" title="statement not covered" >file.slice(0, -5); // Remove .json</span>
+        const name = <span class="cstat-no" title="statement not covered" >file.slice(0, -5);</span> // Remove .json
 <span class="cstat-no" title="statement not covered" >        if (!matchesPattern(name)) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
         const filePath = <span class="cstat-no" title="statement not covered" >path.join(dir, file);</span>
@@ -2516,7 +2516,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupOrph
 <span class="cstat-no" title="statement not covered" >  for (const state of states) {</span>
     // Skip excluded patterns
 <span class="cstat-no" title="statement not covered" >    if (</span>
-      exclude.some(<span class="fstat-no" title="function not covered" >(p</span>attern) =&gt; {
+      exclude.<span class="fstat-no" title="function not covered" >some((p</span>attern) =&gt; {
       const escapedPattern = <span class="cstat-no" title="statement not covered" >pattern</span>
           .replace(/[+()[\]{}^$|\\]/g, '\\$&amp;')
           .replace(/\*/g, '.*');
@@ -2625,7 +2625,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupStal
       const filePath = <span class="cstat-no" title="statement not covered" >path.join(stateDir, file);</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const content = <span class="cstat-no" title="statement not covered" >fs.readFileSync(filePath, "utf-8");</span>
-        const data = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as Record&lt;string, unknown&gt;;</span>
+        const data = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as Record&lt;string, unknown&gt;;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        if (data.active !== true) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
@@ -2799,7 +2799,7 @@ export async function <span class="fstat-no" title="function not covered" >readS
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const content = <span class="cstat-no" title="statement not covered" >await fs.promises.readFile(standardPath, "utf-8");</span>
-      const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) as T;</span>
+      const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) </span>as T;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      await auditLogger.log({</span>
         actor: 'system',
@@ -2836,7 +2836,7 @@ export async function <span class="fstat-no" title="function not covered" >readS
 <span class="cstat-no" title="statement not covered" >    if (await existsAsync(legacyPath)) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const content = <span class="cstat-no" title="statement not covered" >await fs.promises.readFile(legacyPath, "utf-8");</span>
-        const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) as T;</span>
+        const <span class="cstat-no" title="statement not covered" >data = readEncryptedState(content) </span>as T;
 <span class="cstat-no" title="statement not covered" >        return {</span>
           exists: true,
           data,
@@ -2911,7 +2911,7 @@ export {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

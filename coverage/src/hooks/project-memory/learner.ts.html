@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.05% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/85</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.66% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/75</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.09% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/11</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.22% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/83</span>
+                <span class='fraction'>0/83</span>
             </div>
         
             
@@ -566,25 +566,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -710,8 +710,8 @@ export async function <span class="fstat-no" title="function not covered" >learn
 <span class="cstat-no" title="statement not covered" >    if (hints.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      for (const hint of hints) {</span>
         // Only add if not already present
-        const exists = <span class="cstat-no" title="statement not covered" >memory.customNotes.some(</span>
-<span class="fstat-no" title="function not covered" >          n =&gt; <span class="cstat-no" title="statement not covered" >n</span>.category === hint.category &amp;&amp; n.content === hint.content</span>
+        const exists = <span class="cstat-no" title="statement not covered" >memory.customNotes.<span class="fstat-no" title="function not covered" >some(</span></span>
+          n =&gt; <span class="cstat-no" title="statement not covered" >n.category === hint.category &amp;&amp; n.content === hint.content</span>
         );
 <span class="cstat-no" title="statement not covered" >        if (!exists) {</span>
 <span class="cstat-no" title="statement not covered" >          memory.customNotes.push(hint);</span>
@@ -739,14 +739,14 @@ export async function <span class="fstat-no" title="function not covered" >learn
  * Check if command is a build command
  */
 function <span class="fstat-no" title="function not covered" >isBuildCommand(c</span>ommand: string): boolean {
-<span class="cstat-no" title="statement not covered" >  return BUILD_COMMAND_PATTERNS.some(<span class="fstat-no" title="function not covered" >pattern =&gt; <span class="cstat-no" title="statement not covered" >p</span>attern.test(command))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return BUILD_COMMAND_PATTERNS.<span class="fstat-no" title="function not covered" >some(p</span>attern =&gt; <span class="cstat-no" title="statement not covered" >pattern.test(command))</span>;</span>
 }
 &nbsp;
 /**
  * Check if command is a test command
  */
 function <span class="fstat-no" title="function not covered" >isTestCommand(c</span>ommand: string): boolean {
-<span class="cstat-no" title="statement not covered" >  return TEST_COMMAND_PATTERNS.some(<span class="fstat-no" title="function not covered" >pattern =&gt; <span class="cstat-no" title="statement not covered" >p</span>attern.test(command))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return TEST_COMMAND_PATTERNS.<span class="fstat-no" title="function not covered" >some(p</span>attern =&gt; <span class="cstat-no" title="statement not covered" >pattern.test(command))</span>;</span>
 }
 &nbsp;
 /**
@@ -824,18 +824,18 @@ function <span class="fstat-no" title="function not covered" >extractEnvironment
  * @param category - Note category (build, test, deploy, env, etc.)
  * @param content - Note content
  */
-export async function addCustomNote(
+export async function <span class="fstat-no" title="function not covered" >addCustomNote(</span>
   projectRoot: string,
   category: string,
   content: string
 ): Promise&lt;void&gt; {
-  try {
-    const memory = await loadProjectMemory(projectRoot);
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!memory) {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    const memory = <span class="cstat-no" title="statement not covered" >await loadProjectMemory(projectRoot);</span>
+<span class="cstat-no" title="statement not covered" >    if (!memory) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    memory.customNotes.push({
+<span class="cstat-no" title="statement not covered" >    memory.customNotes.push({</span>
       timestamp: Date.now(),
       source: 'manual',
       category,
@@ -843,11 +843,11 @@ export async function addCustomNote(
     });
 &nbsp;
     // Limit to 20 entries
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (memory.customNotes.length &gt; 20) {
+<span class="cstat-no" title="statement not covered" >    if (memory.customNotes.length &gt; 20) {</span>
 <span class="cstat-no" title="statement not covered" >      memory.customNotes = memory.customNotes.slice(-20);</span>
     }
 &nbsp;
-    await saveProjectMemory(projectRoot, memory);
+<span class="cstat-no" title="statement not covered" >    await saveProjectMemory(projectRoot, memory);</span>
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    console.error('Error adding custom note:', error);</span>
   }
@@ -859,7 +859,7 @@ export async function addCustomNote(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

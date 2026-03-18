@@ -1118,7 +1118,7 @@ const SLEEP_ARRAY = <span class="cstat-no" title="statement not covered" >new In
 function <span class="fstat-no" title="function not covered" >detectIsMainThread(): boolean {</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const wt = <span class="cstat-no" title="statement not covered" >require('worker_threads') as { isMainThread: boolean };</span>
+    const wt = <span class="cstat-no" title="statement not covered" >require('worker_threads') </span>as { isMainThread: boolean };
 <span class="cstat-no" title="statement not covered" >    return wt.isMainThread === true;</span>
   } catch {
     // worker_threads unavailable — treat as main thread (safe fallback)
@@ -1223,7 +1223,7 @@ function <span class="fstat-no" title="function not covered" >readLockSnapshot()
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(trimmed) as { pid?: unknown; token?: unknown };</span>
+      const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(trimmed) </span>as { pid?: unknown; token?: unknown };
       const pid = <span class="cstat-no" title="statement not covered" >typeof parsed.pid === 'number' &amp;&amp; Number.isFinite(parsed.pid) ? parsed.pid : null;</span>
       const token = <span class="cstat-no" title="statement not covered" >typeof parsed.token === 'string' &amp;&amp; parsed.token.length &gt; 0 ? parsed.token : null;</span>
 <span class="cstat-no" title="statement not covered" >      return { raw, pid, token };</span>
@@ -1391,8 +1391,8 @@ function <span class="fstat-no" title="function not covered" >withRegistryLock&l
  * Each mapping serializes to well under 4096 bytes, making this operation atomic.
  */
 export function <span class="fstat-no" title="function not covered" >registerMessage(m</span>apping: SessionMapping): void {
-<span class="cstat-no" title="statement not covered" >  withRegistryLockOrWait(</span>
-<span class="fstat-no" title="function not covered" >    () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  withRegistryLockOrWait(</span></span>
+    () =&gt; {
 <span class="cstat-no" title="statement not covered" >      ensureRegistryDir();</span>
 &nbsp;
       const line = <span class="cstat-no" title="statement not covered" >JSON.stringify(mapping) + '\n';</span>
@@ -1416,7 +1416,7 @@ export function <span class="fstat-no" title="function not covered" >registerMes
  * Load all mappings from the JSONL file
  */
 export function <span class="fstat-no" title="function not covered" >loadAllMappings(): SessionMapping[] {</span>
-<span class="cstat-no" title="statement not covered" >  return withRegistryLockOrWait(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>eadAllMappingsUnsafe())</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >withRegistryLockOrWait(() =&gt; <span class="cstat-no" title="statement not covered" >r</span>eadAllMappingsUnsafe())</span>;</span>
 }
 &nbsp;
 /**
@@ -1432,15 +1432,15 @@ function <span class="fstat-no" title="function not covered" >readAllMappingsUns
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(getRegistryPath(), 'utf-8');</span>
 <span class="cstat-no" title="statement not covered" >    return content</span>
       .split('\n')
-      .filter(<span class="fstat-no" title="function not covered" >line =&gt; <span class="cstat-no" title="statement not covered" >l</span>ine.trim())</span>
-      .map(<span class="fstat-no" title="function not covered" >line =&gt; {</span>
+      .<span class="fstat-no" title="function not covered" >filter(l</span>ine =&gt; <span class="cstat-no" title="statement not covered" >line.trim())</span>
+      .<span class="fstat-no" title="function not covered" >map(l</span>ine =&gt; {
 <span class="cstat-no" title="statement not covered" >        try {</span>
 <span class="cstat-no" title="statement not covered" >          return JSON.parse(line) as SessionMapping;</span>
         } catch {
 <span class="cstat-no" title="statement not covered" >          return null;</span>
         }
       })
-      .filter(<span class="fstat-no" title="function not covered" >(m</span>): m is SessionMapping =&gt; <span class="cstat-no" title="statement not covered" >m !== null)</span>;
+      .<span class="fstat-no" title="function not covered" >filter((m</span>): m is SessionMapping =&gt; <span class="cstat-no" title="statement not covered" >m !== null);</span>
   } catch {
 <span class="cstat-no" title="statement not covered" >    return [];</span>
   }
@@ -1454,7 +1454,7 @@ export function <span class="fstat-no" title="function not covered" >lookupByMes
   const mappings = <span class="cstat-no" title="statement not covered" >loadAllMappings();</span>
 &nbsp;
   // Find first match (JSONL is append-only, so first occurrence is the original)
-<span class="cstat-no" title="statement not covered" >  return mappings.find(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >m</span>.platform === platform &amp;&amp; m.messageId === messageId)</span> || null;</span>
+<span class="cstat-no" title="statement not covered" >  return mappings.<span class="fstat-no" title="function not covered" >find(m</span> =&gt; <span class="cstat-no" title="statement not covered" >m.platform === platform &amp;&amp; m.messageId === messageId) </span>|| null;</span>
 }
 &nbsp;
 /**
@@ -1462,10 +1462,10 @@ export function <span class="fstat-no" title="function not covered" >lookupByMes
  * This is a rewrite operation (infrequent - only on session-end).
  */
 export function <span class="fstat-no" title="function not covered" >removeSession(s</span>essionId: string): void {
-<span class="cstat-no" title="statement not covered" >  withRegistryLock(</span>
-<span class="fstat-no" title="function not covered" >    () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  withRegistryLock(</span></span>
+    () =&gt; {
       const mappings = <span class="cstat-no" title="statement not covered" >readAllMappingsUnsafe();</span>
-      const filtered = <span class="cstat-no" title="statement not covered" >mappings.filter(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >m</span>.sessionId !== sessionId)</span>;</span>
+      const filtered = <span class="cstat-no" title="statement not covered" >mappings.<span class="fstat-no" title="function not covered" >filter(m</span> =&gt; <span class="cstat-no" title="statement not covered" >m.sessionId !== sessionId);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (filtered.length === mappings.length) {</span>
         // No changes needed
@@ -1474,7 +1474,7 @@ export function <span class="fstat-no" title="function not covered" >removeSessi
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      rewriteRegistryUnsafe(filtered);</span>
     },
-<span class="fstat-no" title="function not covered" >    () =&gt; {</span>
+    () =&gt; <span class="fstat-no" title="function not covered" >{</span>
       // Best-effort cleanup: if lock unavailable, leave entries as-is.
     },
   );
@@ -1485,10 +1485,10 @@ export function <span class="fstat-no" title="function not covered" >removeSessi
  * Called by reply listener when pane verification fails (stale pane cleanup).
  */
 export function <span class="fstat-no" title="function not covered" >removeMessagesByPane(p</span>aneId: string): void {
-<span class="cstat-no" title="statement not covered" >  withRegistryLock(</span>
-<span class="fstat-no" title="function not covered" >    () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  withRegistryLock(</span></span>
+    () =&gt; {
       const mappings = <span class="cstat-no" title="statement not covered" >readAllMappingsUnsafe();</span>
-      const filtered = <span class="cstat-no" title="statement not covered" >mappings.filter(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >m</span>.tmuxPaneId !== paneId)</span>;</span>
+      const filtered = <span class="cstat-no" title="statement not covered" >mappings.<span class="fstat-no" title="function not covered" >filter(m</span> =&gt; <span class="cstat-no" title="statement not covered" >m.tmuxPaneId !== paneId);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (filtered.length === mappings.length) {</span>
         // No changes needed
@@ -1497,7 +1497,7 @@ export function <span class="fstat-no" title="function not covered" >removeMessa
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      rewriteRegistryUnsafe(filtered);</span>
     },
-<span class="fstat-no" title="function not covered" >    () =&gt; {</span>
+    () =&gt; <span class="fstat-no" title="function not covered" >{</span>
       // Best-effort cleanup: if lock unavailable, leave entries as-is.
     },
   );
@@ -1508,11 +1508,11 @@ export function <span class="fstat-no" title="function not covered" >removeMessa
  * This is a rewrite operation (infrequent - called periodically by daemon).
  */
 export function <span class="fstat-no" title="function not covered" >pruneStale(): void {</span>
-<span class="cstat-no" title="statement not covered" >  withRegistryLock(</span>
-<span class="fstat-no" title="function not covered" >    () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  withRegistryLock(</span></span>
+    () =&gt; {
       const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
       const mappings = <span class="cstat-no" title="statement not covered" >readAllMappingsUnsafe();</span>
-      const filtered = <span class="cstat-no" title="statement not covered" >mappings.filter(<span class="fstat-no" title="function not covered" >m =&gt; {</span></span>
+      const filtered = <span class="cstat-no" title="statement not covered" >mappings.<span class="fstat-no" title="function not covered" >filter(m</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
           const age = <span class="cstat-no" title="statement not covered" >now - new Date(m.createdAt).getTime();</span>
 <span class="cstat-no" title="statement not covered" >          return age &lt; MAX_AGE_MS;</span>
@@ -1529,7 +1529,7 @@ export function <span class="fstat-no" title="function not covered" >pruneStale(
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      rewriteRegistryUnsafe(filtered);</span>
     },
-<span class="fstat-no" title="function not covered" >    () =&gt; {</span>
+    () =&gt; <span class="fstat-no" title="function not covered" >{</span>
       // Best-effort cleanup: if lock unavailable, leave entries as-is.
     },
   );
@@ -1548,7 +1548,7 @@ function <span class="fstat-no" title="function not covered" >rewriteRegistryUns
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
 &nbsp;
-  const content = <span class="cstat-no" title="statement not covered" >mappings.map(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >J</span>SON.stringify(m))</span>.join('\n') + '\n';</span>
+  const content = <span class="cstat-no" title="statement not covered" >mappings.<span class="fstat-no" title="function not covered" >map(m</span> =&gt; <span class="cstat-no" title="statement not covered" >JSON.stringify(m))</span>.join('\n') + '\n';</span>
 <span class="cstat-no" title="statement not covered" >  writeFileSync(getRegistryPath(), content, { mode: SECURE_FILE_MODE });</span>
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -1558,7 +1558,7 @@ function <span class="fstat-no" title="function not covered" >rewriteRegistryUns
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

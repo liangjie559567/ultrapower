@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.24% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/178</span>
+                <span class='fraction'>0/178</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.58% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/155</span>
+                <span class='fraction'>0/155</span>
             </div>
         
             
@@ -695,12 +695,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1232,12 +1232,12 @@ export interface ReplaySummary {
 // Constants
 // ============================================================================
 &nbsp;
-const REPLAY_PREFIX = 'agent-replay-';
-const MAX_REPLAY_FILES = 10;
-const MAX_REPLAY_SIZE_BYTES = 5 * 1024 * 1024; // 5MB per session
+const REPLAY_PREFIX = <span class="cstat-no" title="statement not covered" >'agent-replay-';</span>
+const MAX_REPLAY_FILES = <span class="cstat-no" title="statement not covered" >10;</span>
+const MAX_REPLAY_SIZE_BYTES = <span class="cstat-no" title="statement not covered" >5 * 1024 * 1024; // 5MB per session</span>
 &nbsp;
 // Session start time cache (per session)
-const sessionStartTimes = new Map&lt;string, number&gt;();
+const sessionStartTimes = <span class="cstat-no" title="statement not covered" >new Map&lt;string, number&gt;();</span>
 &nbsp;
 // ============================================================================
 // Core Functions
@@ -1432,11 +1432,11 @@ export function <span class="fstat-no" title="function not covered" >readReplayE
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
 <span class="cstat-no" title="statement not covered" >    return content</span>
       .split('\n')
-      .filter(<span class="fstat-no" title="function not covered" >line =&gt; <span class="cstat-no" title="statement not covered" >l</span>ine.trim())</span>
-      .map(<span class="fstat-no" title="function not covered" >line =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        try { <span class="cstat-no" title="statement not covered" >return JSON.parse(line); }</span> catch { <span class="cstat-no" title="statement not covered" >return null; }</span></span>
+      .<span class="fstat-no" title="function not covered" >filter(l</span>ine =&gt; <span class="cstat-no" title="statement not covered" >line.trim())</span>
+      .<span class="fstat-no" title="function not covered" >map(l</span>ine =&gt; {
+<span class="cstat-no" title="statement not covered" >        try { <span class="cstat-no" title="statement not covered" >return JSON.parse(line); } catch {</span> <span class="cstat-no" title="statement not covered" >return null; }</span></span>
       })
-      .filter(<span class="fstat-no" title="function not covered" >(e</span>): e is ReplayEvent =&gt; <span class="cstat-no" title="statement not covered" >e !== null)</span>;
+      .<span class="fstat-no" title="function not covered" >filter((e</span>): e is ReplayEvent =&gt; <span class="cstat-no" title="statement not covered" >e !== null);</span>
   } catch {
 <span class="cstat-no" title="statement not covered" >    return [];</span>
   }
@@ -1457,7 +1457,7 @@ export function <span class="fstat-no" title="function not covered" >detectCycle
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0; i</span> + patLen &lt;= sequence.length; i += patLen) {</span>
       const chunk = <span class="cstat-no" title="statement not covered" >sequence.slice(i, i + patLen);</span>
-<span class="cstat-no" title="statement not covered" >      if (chunk.every(<span class="fstat-no" title="function not covered" >(v</span>, idx) =&gt; <span class="cstat-no" title="statement not covered" >v === candidate[idx])</span>) {</span>
+<span class="cstat-no" title="statement not covered" >      if (chunk.<span class="fstat-no" title="function not covered" >every((v</span>, idx) =&gt; <span class="cstat-no" title="statement not covered" >v === candidate[idx]))</span> {</span>
 <span class="cstat-no" title="statement not covered" >        fullCycles++;</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        break;</span>
@@ -1546,7 +1546,7 @@ export function <span class="fstat-no" title="function not covered" >getReplaySu
 <span class="cstat-no" title="statement not covered" >            if (!agentToolTimings.has(event.agent)) {</span>
 <span class="cstat-no" title="statement not covered" >              agentToolTimings.set(event.agent, new Map());</span>
             }
-            const agentTools = <span class="cstat-no" title="statement not covered" >agentToolTimings.get(event.agent)!;</span>
+            const agentTools = <span class="cstat-no" title="statement not covered" >agentToolTimings.get(event.agent)!</span>;
 <span class="cstat-no" title="statement not covered" >            if (!agentTools.has(event.tool)) {</span>
 <span class="cstat-no" title="statement not covered" >              agentTools.set(event.tool, []);</span>
             }
@@ -1603,7 +1603,7 @@ export function <span class="fstat-no" title="function not covered" >getReplaySu
       });
     }
     // Sort by count descending
-<span class="cstat-no" title="statement not covered" >    summary.agent_breakdown.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.count - a.count)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    summary.agent_breakdown.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.count - a.count);</span></span>
   }
 &nbsp;
   // Detect cycles: alternating agent type patterns (e.g., planner→critic→planner→critic = 2 cycles)
@@ -1619,7 +1619,7 @@ export function <span class="fstat-no" title="function not covered" >getReplaySu
 <span class="cstat-no" title="statement not covered" >  for (const [agent, tools] of agentToolTimings) {</span>
 <span class="cstat-no" title="statement not covered" >    for (const [tool, durations] of tools) {</span>
 <span class="cstat-no" title="statement not covered" >      if (durations.length &gt;= 2) {</span>
-        const avg = <span class="cstat-no" title="statement not covered" >Math.round(durations.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / durations.length);</span>
+        const avg = <span class="cstat-no" title="statement not covered" >Math.round(durations.<span class="fstat-no" title="function not covered" >reduce((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / durations.length);</span>
 <span class="cstat-no" title="statement not covered" >        if (avg &gt; 1000) { // Only flag tools averaging &gt;1s</span>
 <span class="cstat-no" title="statement not covered" >          summary.bottlenecks.push({ tool, agent, avg_ms: avg });</span>
         }
@@ -1628,7 +1628,7 @@ export function <span class="fstat-no" title="function not covered" >getReplaySu
   }
 &nbsp;
   // Sort bottlenecks by avg_ms descending
-<span class="cstat-no" title="statement not covered" >  summary.bottlenecks.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.avg_ms - a.avg_ms)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  summary.bottlenecks.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.avg_ms - a.avg_ms);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return summary;</span>
 }
@@ -1646,13 +1646,13 @@ export function <span class="fstat-no" title="function not covered" >cleanupRepl
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >files = readdirSync(stateDir)</span>
-      .filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.startsWith(REPLAY_PREFIX) &amp;&amp; f.endsWith('.jsonl'))</span>
-      .map(<span class="fstat-no" title="function not covered" >f =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+      .<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.startsWith(REPLAY_PREFIX) &amp;&amp; f.endsWith('.jsonl'))</span>
+      .<span class="fstat-no" title="function not covered" >map(f</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         name: f,
         path: join(stateDir, f),
         mtime: statSync(join(stateDir, f)).mtimeMs,
       }))
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.mtime - a.mtime)</span>;
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.mtime - a.mtime);</span>
 &nbsp;
     let removed = <span class="cstat-no" title="statement not covered" >0;</span>
 <span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >MAX_REPLAY_FILES; i</span> &lt; files.length; i++) {</span>
@@ -1681,7 +1681,7 @@ export function <span class="fstat-no" title="function not covered" >resetSessio
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

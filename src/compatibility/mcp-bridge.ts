@@ -303,10 +303,17 @@ export class McpBridge extends EventEmitter {
    * Disconnect from all servers
    */
   async disconnectAll(): Promise<void> {
-    const disconnectPromises = Array.from(this.connections.keys()).map(
-      serverName => this.disconnect(serverName)
+    const serverNames = Array.from(this.connections.keys());
+    const results = await Promise.allSettled(
+      serverNames.map(serverName => this.disconnect(serverName))
     );
-    await Promise.all(disconnectPromises);
+
+    // Log failures but don't throw
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].status === 'rejected') {
+        console.warn(`MCP disconnectAll: failed to disconnect "${serverNames[i]}": ${(results[i] as PromiseRejectedResult).reason}`);
+      }
+    }
   }
 
   /**

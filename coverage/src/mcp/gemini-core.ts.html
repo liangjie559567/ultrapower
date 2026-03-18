@@ -1754,7 +1754,7 @@ export function <span class="fstat-no" title="function not covered" >isGeminiRet
  * Execute Gemini CLI command and return the response
  */
 export function <span class="fstat-no" title="function not covered" >executeGemini(p</span>rompt: string, model?: string, cwd?: string): Promise&lt;string&gt; {
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve, reject) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (model) <span class="cstat-no" title="statement not covered" >validateModelName(model);</span></span>
     const MAX_PROMPT_BYTES = <span class="cstat-no" title="statement not covered" >4 * 1024 * 1024; // 4MB</span>
     const promptBytes = <span class="cstat-no" title="statement not covered" >Buffer.byteLength(prompt, 'utf-8');</span>
@@ -1773,7 +1773,7 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
       env: getSpawnEnv()
     });
 &nbsp;
-    const timeoutHandle = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+    const timeoutHandle = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        child.kill('SIGTERM');</span>
@@ -1784,15 +1784,15 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
     const <span class="cstat-no" title="statement not covered" >collector = createStdoutCollector(MAX_STDOUT_BYTES);</span>
     let stderr = <span class="cstat-no" title="statement not covered" >'';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.stdout.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stdout.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      collector.append(data.toString());</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.stderr.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stderr.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      stderr += data.toString();</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.on('close', <span class="fstat-no" title="function not covered" >(c</span>ode) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'close', (c</span>ode) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -1817,7 +1817,7 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
       }
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -1826,7 +1826,7 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
       }
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.stdin.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stdin.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -1866,7 +1866,7 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
           : [effectiveModel, ...GEMINI_MODEL_FALLBACKS]);
 &nbsp;
     // Helper to try spawning with a specific model
-    const trySpawnWithModel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>ryModel: string, remainingModels: string[]): { pid: number } | { error: string } =&gt; {</span>
+    const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >trySpawnWithModel = (t</span>ryModel: string, remainingModels: string[]): { pid: number } | { error: string } =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      validateModelName(tryModel);</span>
       const args = <span class="cstat-no" title="statement not covered" >['-p=.', ...(GEMINI_YOLO ? ['--yolo'] : []), '--model', tryModel];</span>
       const <span class="cstat-no" title="statement not covered" >child = spawn(getCliCommand('gemini'), args, {</span>
@@ -1903,7 +1903,7 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
       let stderr = <span class="cstat-no" title="statement not covered" >'';</span>
       let settled = <span class="cstat-no" title="statement not covered" >false;</span>
 &nbsp;
-      const timeoutHandle = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+      const timeoutHandle = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >          settled = true;</span>
 <span class="cstat-no" title="statement not covered" >          spawnedPids.delete(pid);</span>
@@ -1922,12 +1922,12 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
         }
       }, GEMINI_TIMEOUT);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      child.stdout?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.stdout?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        collector.append(data.toString());</span>
       });
-<span class="cstat-no" title="statement not covered" >      child.stderr?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; { <span class="cstat-no" title="statement not covered" >stderr += data.toString(); }</span>);</span>
+<span class="cstat-no" title="statement not covered" >      child.stderr?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; { <span class="cstat-no" title="statement not covered" >stderr += data.toString(); });</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      child.stdin?.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr: Error) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.stdin?.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr: Error) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (settled) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -1942,7 +1942,7 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
 <span class="cstat-no" title="statement not covered" >      child.stdin?.end();</span>
 <span class="cstat-no" title="statement not covered" >      writeJobStatus({ ...initialStatus, status: 'running' }, workingDirectory);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      child.on('close', <span class="fstat-no" title="function not covered" >(c</span>ode) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.on(<span class="fstat-no" title="function not covered" >'close', (c</span>ode) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (settled) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2029,7 +2029,7 @@ export function <span class="fstat-no" title="function not covered" >executeGemi
         }
       });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      child.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (settled) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2299,7 +2299,7 @@ ${resolvedPrompt}`;
   // Build file context
   let fileContext: string | undefined;
 <span class="cstat-no" title="statement not covered" >  if (files &amp;&amp; files.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    fileContext = files.map(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >v</span>alidateAndReadFile(f, baseDir))</span>.join('\n\n');</span>
+<span class="cstat-no" title="statement not covered" >    fileContext = files.<span class="fstat-no" title="function not covered" >map(f</span> =&gt; <span class="cstat-no" title="statement not covered" >validateAndReadFile(f, baseDir))</span>.join('\n\n');</span>
   }
 &nbsp;
   // Combine: system prompt &gt; file context &gt; user prompt
@@ -2455,7 +2455,7 @@ ${resolvedPrompt}`;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

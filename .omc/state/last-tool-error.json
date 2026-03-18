@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"npm publish --access public --no-provenance\",\"description\":\"Publish v7.7.0 to npm registry\"}",
-  "error": "Exit code 1\n\n> @liangjie559567/ultrapower@7.7.0 prepublishOnly\n> npm run validate:versions && npm run build && npm run compose-docs && npm run validate:skills && npm run sync:marketplace\n\n\n> @liangjie559567/ultrapower@7.7.0 validate:versions\n> node scripts/validate-versions.mjs\n\nVersion mismatch detected:\n  package.json: 7.7.0\n  .claude-plugin/plugin.json: 7.7.0\n  .claude-plugin/marketplace.json: 7.7.0\n  marketplace.json: 7.6.0\nnpm error code 1\nnpm error path C:\\Users\\ljyih\\Desktop\\ultrapower\nnp...",
-  "timestamp": "2026-03-16T20:24:18.410Z",
-  "retry_count": 1
+  "tool_input_preview": "{\"command\":\"cat &gt;&gt; /www/wwwroot/ultrapower/.omc/axiom/reflection_log.md &lt;&lt;'EOF'\\n\\n## 2026-03-18: 测试稳定性改进 - Reflection Log 过滤与 MCP Bridge 修复\\n\\n### 会话摘要\\n- **任务**: 实现两个改进项（reflection_log 写...",
+  "error": "Exit code 2\n/bin/bash: eval: line 43: syntax error near unexpected token `;&'\n/bin/bash: eval: line 43: `cat &gt;&gt; /www/wwwroot/ultrapower/.omc/axiom/reflection_log.md &lt;&lt;'EOF''",
+  "timestamp": "2026-03-18T13:28:24.849Z",
+  "retry_count": 2
 }

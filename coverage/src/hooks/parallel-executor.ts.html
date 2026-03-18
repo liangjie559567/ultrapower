@@ -307,7 +307,7 @@ export class ParallelExecutor {
   private maxConcurrency: number;
   private onError?: (hookType: string, error: Error) =&gt; void;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(o</span>ptions: ParallelExecutorOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}) {</span>
+<span class="fstat-no" title="function not covered" >  constructor(o</span>ptions: ParallelExecutorOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
 <span class="cstat-no" title="statement not covered" >    this.maxConcurrency = options.maxConcurrency ?? 4;</span>
 <span class="cstat-no" title="statement not covered" >    this.onError = options.onError;</span>
   }
@@ -319,15 +319,15 @@ export class ParallelExecutor {
     const results: ExecutionResult[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const completed = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span>
     const inProgress = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span>
-    const pending = <span class="cstat-no" title="statement not covered" >new Set(graph.nodes.map(<span class="fstat-no" title="function not covered" >n =&gt; <span class="cstat-no" title="statement not covered" >n</span>.hookType)</span>);</span>
+    const pending = <span class="cstat-no" title="statement not covered" >new Set(graph.nodes.<span class="fstat-no" title="function not covered" >map(n</span> =&gt; <span class="cstat-no" title="statement not covered" >n.hookType))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    while (pending.size &gt; 0 || inProgress.size &gt; 0) {</span>
       // 找出可以执行的 hooks（依赖已完成）
-      const ready = <span class="cstat-no" title="statement not covered" >Array.from(pending).filter(<span class="fstat-no" title="function not covered" >hookType =&gt; {</span></span>
+      const ready = <span class="cstat-no" title="statement not covered" >Array.from(pending).<span class="fstat-no" title="function not covered" >filter(h</span>ookType =&gt; {</span>
         const deps = <span class="cstat-no" title="statement not covered" >graph.edges</span>
-          .filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.to === hookType)</span>
-          .map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.from)</span>;
-<span class="cstat-no" title="statement not covered" >        return deps.every(<span class="fstat-no" title="function not covered" >dep =&gt; <span class="cstat-no" title="statement not covered" >c</span>ompleted.has(dep))</span>;</span>
+          .<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.to === hookType)</span>
+          .<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.from);</span>
+<span class="cstat-no" title="statement not covered" >        return deps.<span class="fstat-no" title="function not covered" >every(d</span>ep =&gt; <span class="cstat-no" title="statement not covered" >completed.has(dep))</span>;</span>
       });
 &nbsp;
       // 启动新任务（不超过并发限制）
@@ -351,12 +351,12 @@ export class ParallelExecutor {
         }
 &nbsp;
         // 异步执行（错误隔离）
-<span class="cstat-no" title="statement not covered" >        this.executeHook(hookType, executor).then(<span class="fstat-no" title="function not covered" >result =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        this.executeHook(hookType, executor).<span class="fstat-no" title="function not covered" >then(r</span>esult =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          results.push(result);</span>
 <span class="cstat-no" title="statement not covered" >          inProgress.delete(hookType);</span>
 <span class="cstat-no" title="statement not covered" >          if (result.success) {</span>
 <span class="cstat-no" title="statement not covered" >            completed.add(hookType);</span>
-<span class="cstat-no" title="statement not covered" >          } else if (this.onError) {</span>
+          } else if (<span class="cstat-no" title="statement not covered" >this.onError) {</span>
 <span class="cstat-no" title="statement not covered" >            this.onError(hookType, result.error!);</span>
           }
         });
@@ -364,7 +364,7 @@ export class ParallelExecutor {
 &nbsp;
       // 等待至少一个任务完成
 <span class="cstat-no" title="statement not covered" >      if (inProgress.size &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >        await new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, 10))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 10))</span>;</span>
       }
     }
 &nbsp;
@@ -400,7 +400,7 @@ export class ParallelExecutor {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

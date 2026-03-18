@@ -1,12 +1,15 @@
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-export function auditLog(category, event) {
-    const logEntry = {
-        ...event,
+export function logAuditEvent(eventType, severity, details, workingDirectory) {
+    const entry = {
         timestamp: new Date().toISOString(),
-        category,
+        eventType,
+        severity,
+        details
     };
-    const logPath = join(process.cwd(), '.omc', 'audit.log');
-    appendFileSync(logPath, JSON.stringify(logEntry) + '\n', { flag: 'a' });
+    const logDir = join(workingDirectory || process.cwd(), '.omc');
+    const logPath = join(logDir, 'audit.log');
+    mkdirSync(logDir, { recursive: true });
+    appendFileSync(logPath, JSON.stringify(entry) + '\n', 'utf8');
 }
 //# sourceMappingURL=auditLog.js.map

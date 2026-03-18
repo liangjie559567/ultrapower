@@ -1125,7 +1125,7 @@ export function <span class="fstat-no" title="function not covered" >generateDec
   codebaseContext: string,
   options: DecompositionOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}</span>
 ): string {
-  const { maxSubtasks = <span class="branch-0 cbranch-no" title="branch not covered" >5, p</span>referredModel = <span class="branch-0 cbranch-no" title="branch not covered" >'sonnet', p</span>rojectContext = <span class="branch-0 cbranch-no" title="branch not covered" >'' }</span> = <span class="cstat-no" title="statement not covered" >options;</span>
+  const { maxSubtasks = <span class="branch-0 cbranch-no" title="branch not covered" >5, p</span>referredModel = <span class="branch-0 cbranch-no" title="branch not covered" >'sonnet', p</span>rojectContext = <span class="branch-0 cbranch-no" title="branch not covered" >'' } = <span class="cstat-no" title="statement not covered" >o</span>ptions;</span>
 &nbsp;
   const additionalContext = <span class="cstat-no" title="statement not covered" >projectContext ? `\nPROJECT NOTES:\n${projectContext}\n` : '';</span>
 &nbsp;
@@ -1351,7 +1351,7 @@ export function <span class="fstat-no" title="function not covered" >parseDecomp
 export function <span class="fstat-no" title="function not covered" >generateParallelGroups(s</span>ubtasks: DecomposedTask[]): string[][] {
   const groups: string[][] = <span class="cstat-no" title="statement not covered" >[];</span>
   const completed = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span>
-  const remaining = <span class="cstat-no" title="statement not covered" >new Set(subtasks.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.id)</span>);</span>
+  const remaining = <span class="cstat-no" title="statement not covered" >new Set(subtasks.<span class="fstat-no" title="function not covered" >map((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.id))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  while (remaining.size &gt; 0) {</span>
     const currentGroup: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -1360,7 +1360,7 @@ export function <span class="fstat-no" title="function not covered" >generatePar
 <span class="cstat-no" title="statement not covered" >      if (!remaining.has(subtask.id)) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
       // Check if all dependencies are completed
-      const depsCompleted = <span class="cstat-no" title="statement not covered" >subtask.blockedBy.every(<span class="fstat-no" title="function not covered" >(d</span>ep) =&gt; <span class="cstat-no" title="statement not covered" >completed.has(dep))</span>;</span>
+      const depsCompleted = <span class="cstat-no" title="statement not covered" >subtask.blockedBy.<span class="fstat-no" title="function not covered" >every((d</span>ep) =&gt; <span class="cstat-no" title="statement not covered" >completed.has(dep))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (depsCompleted) {</span>
 <span class="cstat-no" title="statement not covered" >        currentGroup.push(subtask.id);</span>
       }
@@ -1436,9 +1436,9 @@ export function <span class="fstat-no" title="function not covered" >extractShar
   const sharedSet = <span class="cstat-no" title="statement not covered" >new Set(result.sharedFiles);</span>
 &nbsp;
   // Simple pattern matching (exact match or basic glob)
-  const isSharedFile = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>ile: string): boolean =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >isSharedFile = (f</span>ile: string): boolean =&gt; {</span>
     const fileName = <span class="cstat-no" title="statement not covered" >file.split('/').pop() || file;</span>
-<span class="cstat-no" title="statement not covered" >    return patterns.some(<span class="fstat-no" title="function not covered" >(p</span>attern) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return patterns.<span class="fstat-no" title="function not covered" >some((p</span>attern) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (pattern.includes('*')) {</span>
         // Basic glob: convert to regex
         const regex = <span class="cstat-no" title="statement not covered" >new RegExp(</span>
@@ -1451,7 +1451,7 @@ export function <span class="fstat-no" title="function not covered" >extractShar
   };
 &nbsp;
   // Process each subtask
-  const updatedSubtasks = <span class="cstat-no" title="statement not covered" >result.subtasks.map(<span class="fstat-no" title="function not covered" >(s</span>ubtask) =&gt; {</span>
+  const updatedSubtasks = <span class="cstat-no" title="statement not covered" >result.subtasks.<span class="fstat-no" title="function not covered" >map((s</span>ubtask) =&gt; {</span>
     const ownedFiles: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    for (const file of subtask.files) {</span>
 <span class="cstat-no" title="statement not covered" >      if (isSharedFile(file)) {</span>
@@ -1477,7 +1477,7 @@ export function <span class="fstat-no" title="function not covered" >extractShar
  * @returns Array of task description strings
  */
 export function <span class="fstat-no" title="function not covered" >toSimpleSubtasks(r</span>esult: DecompositionResult): string[] {
-<span class="cstat-no" title="statement not covered" >  return result.subtasks.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.description)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return result.subtasks.<span class="fstat-no" title="function not covered" >map((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.description);</span></span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -1486,7 +1486,7 @@ export function <span class="fstat-no" title="function not covered" >toSimpleSub
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

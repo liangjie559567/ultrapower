@@ -221,13 +221,13 @@ export interface CostSummary {
 &nbsp;
 function <span class="fstat-no" title="function not covered" >p95(v</span>alues: number[]): number {
 <span class="cstat-no" title="statement not covered" >  if (values.length === 0) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
-  const sorted = <span class="cstat-no" title="statement not covered" >[...values].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a - b)</span>;</span>
+  const sorted = <span class="cstat-no" title="statement not covered" >[...values].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a - b);</span></span>
   const idx = <span class="cstat-no" title="statement not covered" >Math.floor(sorted.length * 0.95);</span>
 <span class="cstat-no" title="statement not covered" >  return sorted[Math.min(idx, sorted.length - 1)]!;</span>
 }
 &nbsp;
 export class QueryEngine {
-<span class="fstat-no" title="function not covered" >  getAgentRuns(o</span>pts: { session_id?: string; agent_type?: string; last?: number } = <span class="branch-0 cbranch-no" title="branch not covered" >{}): AgentRunSummary[] {</span>
+<span class="fstat-no" title="function not covered" >  getAgentRuns(o</span>pts: { session_id?: string; agent_type?: string; last?: number } = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span>: AgentRunSummary[] {
     const <span class="cstat-no" title="statement not covered" >db = getDb();</span>
     let sql = <span class="cstat-no" title="statement not covered" >'SELECT agent_type, COUNT(*) as count, AVG(duration_ms) as avg_ms, SUM(duration_ms) as total_ms FROM agent_runs WHERE 1=1';</span>
     const params: unknown[] = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -235,19 +235,19 @@ export class QueryEngine {
 <span class="cstat-no" title="statement not covered" >    if (opts.agent_type) { <span class="cstat-no" title="statement not covered" >sql += ' AND agent_type = ?'; <span class="cstat-no" title="statement not covered" >p</span>arams.push(opts.agent_type); }</span></span>
 <span class="cstat-no" title="statement not covered" >    sql += ' GROUP BY agent_type';</span>
 <span class="cstat-no" title="statement not covered" >    if (opts.last) { <span class="cstat-no" title="statement not covered" >sql += ' LIMIT ?'; <span class="cstat-no" title="statement not covered" >p</span>arams.push(opts.last); }</span></span>
-<span class="cstat-no" title="statement not covered" >    return (db.prepare(sql).all(...params) as AgentRunSummary[]).map(<span class="fstat-no" title="function not covered" >r =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span></span>
+<span class="cstat-no" title="statement not covered" >    return (db.prepare(sql).all(...params) as AgentRunSummary[]).<span class="fstat-no" title="function not covered" >map(r</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       ...r, avg_ms: Math.round(r.avg_ms ?? 0), total_ms: r.total_ms ?? 0,
     }));
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  getToolCalls(o</span>pts: { session_id?: string; tool_name?: string; last?: number } = <span class="branch-0 cbranch-no" title="branch not covered" >{}): ToolCallSummary[] {</span>
+<span class="fstat-no" title="function not covered" >  getToolCalls(o</span>pts: { session_id?: string; tool_name?: string; last?: number } = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span>: ToolCallSummary[] {
     const <span class="cstat-no" title="statement not covered" >db = getDb();</span>
     let sql = <span class="cstat-no" title="statement not covered" >'SELECT tool_name, success, duration_ms FROM tool_calls WHERE 1=1';</span>
     const params: unknown[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    if (opts.session_id) { <span class="cstat-no" title="statement not covered" >sql += ' AND session_id = ?'; <span class="cstat-no" title="statement not covered" >p</span>arams.push(opts.session_id); }</span></span>
 <span class="cstat-no" title="statement not covered" >    if (opts.tool_name) { <span class="cstat-no" title="statement not covered" >sql += ' AND tool_name = ?'; <span class="cstat-no" title="statement not covered" >p</span>arams.push(opts.tool_name); }</span></span>
 <span class="cstat-no" title="statement not covered" >    sql += ' ORDER BY start_time DESC LIMIT 1000';</span>
-    const rows = <span class="cstat-no" title="statement not covered" >db.prepare(sql).all(...params) as { tool_name: string; success: number; duration_ms: number | null }[];</span>
+    const rows = <span class="cstat-no" title="statement not covered" >db.prepare(sql).all(...params) </span>as { tool_name: string; success: number; duration_ms: number | null }[];
 &nbsp;
     const byTool = <span class="cstat-no" title="statement not covered" >new Map&lt;string, { durations: number[]; failures: number; total: number }&gt;();</span>
 <span class="cstat-no" title="statement not covered" >    for (const r of rows) {</span>
@@ -261,14 +261,14 @@ export class QueryEngine {
     let results: ToolCallSummary[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    for (const [tool_name, { durations, failures, total }] of byTool) {</span>
       const count = <span class="cstat-no" title="statement not covered" >durations.length;</span>
-      const avg_ms = <span class="cstat-no" title="statement not covered" >count ? Math.round(durations.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / count) : 0;</span>
+      const avg_ms = <span class="cstat-no" title="statement not covered" >count ? Math.round(durations.<span class="fstat-no" title="function not covered" >reduce((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / count) : 0;</span>
 <span class="cstat-no" title="statement not covered" >      results.push({ tool_name, count, avg_ms, p95_ms: p95(durations), failure_rate: total ? failures / total : 0 });</span>
     }
 <span class="cstat-no" title="statement not covered" >    if (opts.last) <span class="cstat-no" title="statement not covered" >results = results.slice(0, opts.last);</span></span>
 <span class="cstat-no" title="statement not covered" >    return results;</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  getCostSummary(o</span>pts: { session_id?: string } = <span class="branch-0 cbranch-no" title="branch not covered" >{}): CostSummary[] {</span>
+<span class="fstat-no" title="function not covered" >  getCostSummary(o</span>pts: { session_id?: string } = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span>: CostSummary[] {
     const <span class="cstat-no" title="statement not covered" >db = getDb();</span>
     let sql = <span class="cstat-no" title="statement not covered" >'SELECT model, SUM(cost_usd) as total_cost_usd, SUM(input_tokens) as total_input_tokens, SUM(output_tokens) as total_output_tokens FROM cost_records WHERE 1=1';</span>
     const params: unknown[] = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -286,7 +286,7 @@ export const queryEngine = <span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

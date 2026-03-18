@@ -612,7 +612,7 @@ export function <span class="fstat-no" title="function not covered" >createRules
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const <span class="cstat-no" title="statement not covered" >rawContent = readFileSync(candidate.path, 'utf-8');</span>
-        const { metadata, body <span class="cstat-no" title="statement not covered" >} = parseRuleFrontmatter(rawContent);</span>
+        const { metadata, <span class="cstat-no" title="statement not covered" >body } = parseRuleFrontmatter(rawContent);</span>
 &nbsp;
         let matchReason: string;
 <span class="cstat-no" title="statement not covered" >        if (candidate.isSingleFile) {</span>
@@ -646,7 +646,7 @@ export function <span class="fstat-no" title="function not covered" >createRules
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (toInject.length &gt; 0) {</span>
       // Sort by distance (closest first)
-<span class="cstat-no" title="statement not covered" >      toInject.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.distance - b.distance)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      toInject.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.distance - b.distance);</span></span>
 <span class="cstat-no" title="statement not covered" >      saveInjectedRules(sessionId, cache);</span>
     }
 &nbsp;
@@ -670,7 +670,7 @@ export function <span class="fstat-no" title="function not covered" >createRules
     /**
      * Process a tool execution and inject rules if relevant.
      */
-    processToolExecution: <span class="fstat-no" title="function not covered" >(</span>
+<span class="fstat-no" title="function not covered" >    processToolExecution: (</span>
       toolName: string,
       filePath: string,
       sessionId: string
@@ -686,7 +686,7 @@ export function <span class="fstat-no" title="function not covered" >createRules
     /**
      * Get rules for a specific file without marking as injected.
      */
-    getRulesForFile: <span class="fstat-no" title="function not covered" >(f</span>ilePath: string): RuleToInject[] =&gt; {
+<span class="fstat-no" title="function not covered" >    getRulesForFile: (f</span>ilePath: string): RuleToInject[] =&gt; {
       const resolved = <span class="cstat-no" title="statement not covered" >resolveFilePath(filePath);</span>
 <span class="cstat-no" title="statement not covered" >      if (!resolved) <span class="cstat-no" title="statement not covered" >return [];</span></span>
 &nbsp;
@@ -699,7 +699,7 @@ export function <span class="fstat-no" title="function not covered" >createRules
 <span class="cstat-no" title="statement not covered" >      for (const candidate of ruleFileCandidates) {</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
           const <span class="cstat-no" title="statement not covered" >rawContent = readFileSync(candidate.path, 'utf-8');</span>
-          const { metadata, body <span class="cstat-no" title="statement not covered" >} = parseRuleFrontmatter(rawContent);</span>
+          const { metadata, <span class="cstat-no" title="statement not covered" >body } = parseRuleFrontmatter(rawContent);</span>
 &nbsp;
           let matchReason: string;
 <span class="cstat-no" title="statement not covered" >          if (candidate.isSingleFile) {</span>
@@ -725,13 +725,13 @@ export function <span class="fstat-no" title="function not covered" >createRules
         }
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return rules.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.distance - b.distance)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      return rules.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.distance - b.distance);</span></span>
     },
 &nbsp;
     /**
      * Clear session cache when session ends.
      */
-    clearSession: <span class="fstat-no" title="function not covered" >(s</span>essionId: string): void =&gt; {
+<span class="fstat-no" title="function not covered" >    clearSession: (s</span>essionId: string): void =&gt; {
 <span class="cstat-no" title="statement not covered" >      sessionCaches.delete(sessionId);</span>
 <span class="cstat-no" title="statement not covered" >      clearInjectedRules(sessionId);</span>
     },
@@ -739,7 +739,7 @@ export function <span class="fstat-no" title="function not covered" >createRules
     /**
      * Check if a tool triggers rule injection.
      */
-    isTrackedTool: <span class="fstat-no" title="function not covered" >(t</span>oolName: string): boolean =&gt; {
+<span class="fstat-no" title="function not covered" >    isTrackedTool: (t</span>oolName: string): boolean =&gt; {
 <span class="cstat-no" title="statement not covered" >      return TRACKED_TOOLS.includes(toolName.toLowerCase());</span>
     },
   };
@@ -760,7 +760,7 @@ export function <span class="fstat-no" title="function not covered" >getRulesFor
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

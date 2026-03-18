@@ -2975,7 +2975,7 @@ function <span class="fstat-no" title="function not covered" >isProcessAlive(p</
 function <span class="fstat-no" title="function not covered" >detectIsMainThread(): boolean {</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const wt = <span class="cstat-no" title="statement not covered" >require('worker_threads') as { isMainThread: boolean };</span>
+    const wt = <span class="cstat-no" title="statement not covered" >require('worker_threads') </span>as { isMainThread: boolean };
 <span class="cstat-no" title="statement not covered" >    return wt.isMainThread === true;</span>
   } catch {
     // worker_threads unavailable — treat as main thread (safe fallback)
@@ -3270,7 +3270,7 @@ export function <span class="fstat-no" title="function not covered" >writeTracki
 <span class="cstat-no" title="statement not covered" >    clearTimeout(existing.timeout);</span>
   }
 &nbsp;
-  const timeout = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+  const timeout = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span></span>
     const pending = <span class="cstat-no" title="statement not covered" >pendingWrites.get(directory);</span>
 <span class="cstat-no" title="statement not covered" >    if (!pending) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
@@ -3281,7 +3281,7 @@ export function <span class="fstat-no" title="function not covered" >writeTracki
       // Re-queue: put it back and let the next debounce cycle handle it
 <span class="cstat-no" title="statement not covered" >      pendingWrites.set(directory, {</span>
         state: pending.state,
-        timeout: setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+        timeout: <span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          writeTrackingState(directory, pending.state);</span>
         }, WRITE_DEBOUNCE_MS),
       });
@@ -3307,7 +3307,7 @@ export function <span class="fstat-no" title="function not covered" >writeTracki
         // Put data back in pending so the next writeTrackingState call will retry
 <span class="cstat-no" title="statement not covered" >        pendingWrites.set(directory, {</span>
           state: pending.state,
-          timeout: setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+          timeout: <span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span>
             // No-op: data is just stored, will be picked up by next write or flushPendingWrites
           }, 0),
         });
@@ -3400,7 +3400,7 @@ function <span class="fstat-no" title="function not covered" >detectParentMode(d
 export function <span class="fstat-no" title="function not covered" >getStaleAgents(s</span>tate: SubagentTrackingState): SubagentInfo[] {
   const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>gent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>gent) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (agent.status !== "running") {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
@@ -3459,8 +3459,8 @@ export function <span class="fstat-no" title="function not covered" >processSuba
       hookSpecificOutput: {
         hookEventName: "SubagentStart",
         additionalContext: `Agent ${input.agent_type} started (${input.agent_id})`,
-        agent_count: state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>.length,
-        stale_agents: staleAgents.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id)</span>,
+        agent_count: state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running").</span>length,
+        stale_agents: staleAgents.<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id),</span>
       },
     };
   } finally {
@@ -3480,8 +3480,8 @@ export function <span class="fstat-no" title="function not covered" >processSuba
     const state = <span class="cstat-no" title="statement not covered" >readTrackingState(input.cwd);</span>
 &nbsp;
     // Find the agent
-    const agentIndex = <span class="cstat-no" title="statement not covered" >state.agents.findIndex(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === input.agent_id,</span>
+    const agentIndex = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >findIndex(</span></span>
+      (a) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === input.agent_id,</span>
     );
 &nbsp;
     // SDK does not provide `success` field, so default to 'completed' when undefined (Bug #1 fix)
@@ -3511,21 +3511,21 @@ export function <span class="fstat-no" title="function not covered" >processSuba
     }
 &nbsp;
     // Evict oldest completed agents if over limit
-    const completedAgents = <span class="cstat-no" title="statement not covered" >state.agents.filter(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "completed" || a.status === "failed",</span>
+    const completedAgents = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (a) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "completed" || a.status === "failed",</span>
     );
 <span class="cstat-no" title="statement not covered" >    if (completedAgents.length &gt; MAX_COMPLETED_AGENTS) {</span>
       // Sort by completed_at and keep only the most recent
-<span class="cstat-no" title="statement not covered" >      completedAgents.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      completedAgents.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; {</span>
         const timeA = <span class="cstat-no" title="statement not covered" >a.completed_at ? new Date(a.completed_at).getTime() : 0;</span>
         const timeB = <span class="cstat-no" title="statement not covered" >b.completed_at ? new Date(b.completed_at).getTime() : 0;</span>
 <span class="cstat-no" title="statement not covered" >        return timeB - timeA; // Newest first</span>
       });
 &nbsp;
       const toRemove = <span class="cstat-no" title="statement not covered" >new Set(</span>
-        completedAgents.slice(MAX_COMPLETED_AGENTS).map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id)</span>,
+        completedAgents.slice(MAX_COMPLETED_AGENTS).<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id),</span>
       );
-<span class="cstat-no" title="statement not covered" >      state.agents = state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >!toRemove.has(a.agent_id))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      state.agents = state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >!toRemove.has(a.agent_id))</span>;</span>
     }
 &nbsp;
     // Write updated state
@@ -3539,8 +3539,8 @@ export function <span class="fstat-no" title="function not covered" >processSuba
 <span class="cstat-no" title="statement not covered" >      recordAgentStop(input.cwd, input.session_id, input.agent_id, agentType, succeeded, trackedAgent?.duration_ms);</span>
     } catch { /* best-effort */ }
 &nbsp;
-    const runningCount = <span class="cstat-no" title="statement not covered" >state.agents.filter(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running",</span>
+    const runningCount = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (a) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running",</span>
     ).length;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -3577,8 +3577,8 @@ export function <span class="fstat-no" title="function not covered" >cleanupStal
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const stale of staleAgents) {</span>
-      const agentIndex = <span class="cstat-no" title="statement not covered" >state.agents.findIndex(</span>
-<span class="fstat-no" title="function not covered" >        (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === stale.agent_id,</span>
+      const agentIndex = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >findIndex(</span></span>
+        (a) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === stale.agent_id,</span>
       );
 <span class="cstat-no" title="statement not covered" >      if (agentIndex !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >        state.agents[agentIndex].status = "failed";</span>
@@ -3606,7 +3606,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupStal
  */
 export function <span class="fstat-no" title="function not covered" >getActiveAgentCount(d</span>irectory: string): number {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-<span class="cstat-no" title="statement not covered" >  return state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>.length;</span>
+<span class="cstat-no" title="statement not covered" >  return state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running").</span>length;</span>
 }
 &nbsp;
 /**
@@ -3617,7 +3617,7 @@ export function <span class="fstat-no" title="function not covered" >getAgentsBy
   agentType: string,
 ): SubagentInfo[] {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-<span class="cstat-no" title="statement not covered" >  return state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_type === agentType)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_type === agentType);</span></span>
 }
 &nbsp;
 /**
@@ -3625,7 +3625,7 @@ export function <span class="fstat-no" title="function not covered" >getAgentsBy
  */
 export function <span class="fstat-no" title="function not covered" >getRunningAgents(d</span>irectory: string): SubagentInfo[] {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-<span class="cstat-no" title="statement not covered" >  return state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
 }
 &nbsp;
 /**
@@ -3639,7 +3639,7 @@ export function <span class="fstat-no" title="function not covered" >getTracking
 } {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
 <span class="cstat-no" title="statement not covered" >  return {</span>
-    running: state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>.length,
+    running: state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running").</span>length,
     completed: state.total_completed,
     failed: state.total_failed,
     total: state.total_spawned,
@@ -3660,8 +3660,8 @@ export function <span class="fstat-no" title="function not covered" >recordToolU
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-    const agent = <span class="cstat-no" title="statement not covered" >state.agents.find(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId &amp;&amp; a.status === "running",</span>
+    const agent = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >find(</span></span>
+      (a) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId &amp;&amp; a.status === "running",</span>
     );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (agent) {</span>
@@ -3697,8 +3697,8 @@ export function <span class="fstat-no" title="function not covered" >recordToolU
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-    const agent = <span class="cstat-no" title="statement not covered" >state.agents.find(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId &amp;&amp; a.status === "running",</span>
+    const agent = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >find(</span></span>
+      (a) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId &amp;&amp; a.status === "running",</span>
     );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (agent) {</span>
@@ -3725,7 +3725,7 @@ export function <span class="fstat-no" title="function not covered" >recordToolU
  */
 export function <span class="fstat-no" title="function not covered" >getAgentDashboard(d</span>irectory: string): string {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-  const running = <span class="cstat-no" title="statement not covered" >state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+  const running = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0) <span class="cstat-no" title="statement not covered" >return "";</span></span>
 &nbsp;
@@ -3773,7 +3773,7 @@ export function <span class="fstat-no" title="function not covered" >getAgentObs
   };
 } {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-  const running = <span class="cstat-no" title="statement not covered" >state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+  const running = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
   const efficiency = <span class="cstat-no" title="statement not covered" >calculateParallelEfficiency(directory);</span>
   const interventions = <span class="cstat-no" title="statement not covered" >suggestInterventions(directory);</span>
 &nbsp;
@@ -3796,11 +3796,11 @@ export function <span class="fstat-no" title="function not covered" >getAgentObs
       : "-";
 &nbsp;
     // Status indicator
-    const stale = <span class="cstat-no" title="statement not covered" >getStaleAgents(state).some(</span>
-<span class="fstat-no" title="function not covered" >      (s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.agent_id === agent.agent_id,</span>
+    const stale = <span class="cstat-no" title="statement not covered" >getStaleAgents(state).<span class="fstat-no" title="function not covered" >some(</span></span>
+      (s) =&gt; <span class="cstat-no" title="statement not covered" >s.agent_id === agent.agent_id,</span>
     );
-    const hasIntervention = <span class="cstat-no" title="statement not covered" >interventions.some(</span>
-<span class="fstat-no" title="function not covered" >      (i</span>) =&gt; <span class="cstat-no" title="statement not covered" >i.agent_id === agent.agent_id,</span>
+    const hasIntervention = <span class="cstat-no" title="statement not covered" >interventions.<span class="fstat-no" title="function not covered" >some(</span></span>
+      (i) =&gt; <span class="cstat-no" title="statement not covered" >i.agent_id === agent.agent_id,</span>
     );
     const status = <span class="cstat-no" title="statement not covered" >stale ? "🔴" : hasIntervention ? "🟡" : "🟢";</span>
 &nbsp;
@@ -3852,7 +3852,7 @@ export function <span class="fstat-no" title="function not covered" >getAgentObs
 export function <span class="fstat-no" title="function not covered" >suggestInterventions(d</span>irectory: string): AgentIntervention[] {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
   const interventions: AgentIntervention[] = <span class="cstat-no" title="statement not covered" >[];</span>
-  const running = <span class="cstat-no" title="statement not covered" >state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+  const running = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
 &nbsp;
   // 1. Stale agent detection
   const stale = <span class="cstat-no" title="statement not covered" >getStaleAgents(state);</span>
@@ -3927,7 +3927,7 @@ export function <span class="fstat-no" title="function not covered" >calculatePa
   total: number;
 } {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-  const running = <span class="cstat-no" title="statement not covered" >state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+  const running = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
   const stale = <span class="cstat-no" title="statement not covered" >getStaleAgents(state);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0)</span>
@@ -3956,8 +3956,8 @@ export function <span class="fstat-no" title="function not covered" >recordFileO
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-    const agent = <span class="cstat-no" title="statement not covered" >state.agents.find(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId &amp;&amp; a.status === "running",</span>
+    const agent = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >find(</span></span>
+      (a) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId &amp;&amp; a.status === "running",</span>
     );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (agent) {</span>
@@ -3987,7 +3987,7 @@ export function <span class="fstat-no" title="function not covered" >detectFileC
   agents: string[];
 }&gt; {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-  const running = <span class="cstat-no" title="statement not covered" >state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+  const running = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
 &nbsp;
   const fileToAgents = <span class="cstat-no" title="statement not covered" >new Map&lt;string, string[]&gt;();</span>
 &nbsp;
@@ -4017,7 +4017,7 @@ export function <span class="fstat-no" title="function not covered" >detectFileC
  */
 export function <span class="fstat-no" title="function not covered" >getFileOwnershipMap(d</span>irectory: string): Map&lt;string, string&gt; {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-  const running = <span class="cstat-no" title="statement not covered" >state.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+  const running = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
   const map = <span class="cstat-no" title="statement not covered" >new Map&lt;string, string&gt;();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (const agent of running) {</span>
@@ -4042,7 +4042,7 @@ export function <span class="fstat-no" title="function not covered" >getAgentPer
   agentId: string,
 ): AgentPerformance | null {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-  const agent = <span class="cstat-no" title="statement not covered" >state.agents.find(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId)</span>;</span>
+  const agent = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >find((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (!agent) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
   const toolTimings: Record&lt;string, ToolTimingStats&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
@@ -4096,9 +4096,9 @@ export function <span class="fstat-no" title="function not covered" >getAgentPer
 export function <span class="fstat-no" title="function not covered" >getAllAgentPerformance(d</span>irectory: string): AgentPerformance[] {
   const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
 <span class="cstat-no" title="statement not covered" >  return state.agents</span>
-    .filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>
-    .map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >getAgentPerformance(directory, a.agent_id))</span>
-    .filter(<span class="fstat-no" title="function not covered" >(p</span>): p is AgentPerformance =&gt; <span class="cstat-no" title="statement not covered" >p !== null)</span>;
+    .<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>
+    .<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >getAgentPerformance(directory, a.agent_id))</span>
+    .<span class="fstat-no" title="function not covered" >filter((p</span>): p is AgentPerformance =&gt; <span class="cstat-no" title="statement not covered" >p !== null);</span>
 }
 &nbsp;
 /**
@@ -4113,7 +4113,7 @@ export function <span class="fstat-no" title="function not covered" >updateToken
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const state = <span class="cstat-no" title="statement not covered" >readTrackingState(directory);</span>
-    const agent = <span class="cstat-no" title="statement not covered" >state.agents.find(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId)</span>;</span>
+    const agent = <span class="cstat-no" title="statement not covered" >state.agents.<span class="fstat-no" title="function not covered" >find((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.agent_id === agentId);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (agent) {</span>
 <span class="cstat-no" title="statement not covered" >      if (!agent.token_usage) {</span>
@@ -4180,7 +4180,7 @@ export function <span class="fstat-no" title="function not covered" >clearTracki
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

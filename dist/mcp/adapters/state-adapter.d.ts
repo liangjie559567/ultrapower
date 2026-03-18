@@ -31,7 +31,7 @@ export declare const stateTools: ({
         required: string[];
     };
     handler: (args: {
-        mode: "ultrawork" | "autopilot" | "ralph" | "ultrapilot" | "ultraqa" | "team" | "pipeline" | "swarm" | "ralplan";
+        mode: "autopilot" | "ultrapilot" | "team" | "pipeline" | "ralph" | "ultrawork" | "ultraqa" | "swarm" | "ralplan";
         workingDirectory?: string | undefined;
         session_id?: string | undefined;
     }) => Promise<{
@@ -104,12 +104,11 @@ export declare const stateTools: ({
         required: string[];
     };
     handler: (args: {
-        mode: "ultrawork" | "autopilot" | "ralph" | "ultrapilot" | "ultraqa" | "team" | "pipeline" | "swarm" | "ralplan";
-        error?: string | undefined;
+        mode: "autopilot" | "ultrapilot" | "team" | "pipeline" | "ralph" | "ultrawork" | "ultraqa" | "swarm" | "ralplan";
         state?: Record<string, unknown> | undefined;
-        active?: boolean | undefined;
         workingDirectory?: string | undefined;
         session_id?: string | undefined;
+        active?: boolean | undefined;
         iteration?: number | undefined;
         max_iterations?: number | undefined;
         current_phase?: string | undefined;
@@ -117,6 +116,7 @@ export declare const stateTools: ({
         plan_path?: string | undefined;
         started_at?: string | undefined;
         completed_at?: string | undefined;
+        error?: string | undefined;
     }) => Promise<{
         content: Array<{
             type: "text";
@@ -195,7 +195,7 @@ export declare const stateTools: ({
         required?: undefined;
     };
     handler: (args: {
-        mode?: "ultrawork" | "autopilot" | "ralph" | "ultrapilot" | "ultraqa" | "team" | "pipeline" | "swarm" | "ralplan" | undefined;
+        mode?: "autopilot" | "ultrapilot" | "team" | "pipeline" | "ralph" | "ultrawork" | "ultraqa" | "swarm" | "ralplan" | undefined;
         workingDirectory?: string | undefined;
         session_id?: string | undefined;
     }) => Promise<{

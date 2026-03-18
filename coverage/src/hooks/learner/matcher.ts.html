@@ -699,7 +699,7 @@ export function <span class="fstat-no" title="function not covered" >matchSkills
   skills: SkillInput[],
   options: MatchOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}</span>
 ): MatchResult[] {
-  const { threshold = <span class="branch-0 cbranch-no" title="branch not covered" >30, m</span>axResults = <span class="branch-0 cbranch-no" title="branch not covered" >10 }</span> = <span class="cstat-no" title="statement not covered" >options;</span>
+  const { threshold = <span class="branch-0 cbranch-no" title="branch not covered" >30, m</span>axResults = <span class="branch-0 cbranch-no" title="branch not covered" >10 } = <span class="cstat-no" title="statement not covered" >o</span>ptions;</span>
   const trimmedPrompt = <span class="cstat-no" title="statement not covered" >prompt.trim();</span>
 &nbsp;
   // Early return for empty or whitespace-only prompts
@@ -744,16 +744,16 @@ export function <span class="fstat-no" title="function not covered" >matchSkills
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (matches.length &gt; 0) {</span>
       // Calculate overall confidence based on best matches
-      const bestMatch = <span class="cstat-no" title="statement not covered" >matches.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; (<span class="cstat-no" title="statement not covered" >a.score &gt; b.score ? a : b))</span>;</span>
+      const bestMatch = <span class="cstat-no" title="statement not covered" >matches.<span class="fstat-no" title="function not covered" >reduce((a</span>, b) =&gt; (<span class="cstat-no" title="statement not covered" >a.score &gt; b.score ? a : b));</span></span>
       const avgScore =
-<span class="cstat-no" title="statement not covered" >        matches.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, m) =&gt; <span class="cstat-no" title="statement not covered" >sum + m.score, 0</span>) / matches.length;</span>
+<span class="cstat-no" title="statement not covered" >        matches.<span class="fstat-no" title="function not covered" >reduce((s</span>um, m) =&gt; <span class="cstat-no" title="statement not covered" >sum + m.score, 0</span>) / matches.length;</span>
       const confidence = <span class="cstat-no" title="statement not covered" >Math.round(bestMatch.score * 0.7 + avgScore * 0.3);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (confidence &gt;= threshold) {</span>
 <span class="cstat-no" title="statement not covered" >        results.push({</span>
           skillId: skill.id,
           confidence,
-          matchedTriggers: matches.map(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.trigger)</span>,
+          matchedTriggers: matches.<span class="fstat-no" title="function not covered" >map((m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.trigger),</span>
           matchType: bestMatch.type,
           context,
         });
@@ -763,7 +763,7 @@ export function <span class="fstat-no" title="function not covered" >matchSkills
 &nbsp;
   // Sort by confidence (descending) and limit results
 <span class="cstat-no" title="statement not covered" >  return results</span>
-    .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.confidence - a.confidence)</span>
+    .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.confidence - a.confidence)</span>
     .slice(0, maxResults);
 }
 &nbsp;
@@ -775,7 +775,7 @@ export function <span class="fstat-no" title="function not covered" >fuzzyMatch(
 <span class="cstat-no" title="statement not covered" >  if (!text.trim() || !pattern.trim()) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
 &nbsp;
   // Check if pattern is a substring first (partial match bonus)
-  const words = <span class="cstat-no" title="statement not covered" >text.split(/\s+/).filter(<span class="fstat-no" title="function not covered" >w =&gt; <span class="cstat-no" title="statement not covered" >w</span>.length &gt; 0)</span>;</span>
+  const words = <span class="cstat-no" title="statement not covered" >text.split(/\s+/).<span class="fstat-no" title="function not covered" >filter(w</span> =&gt; <span class="cstat-no" title="statement not covered" >w.length &gt; 0);</span></span>
 <span class="cstat-no" title="statement not covered" >  for (const word of words) {</span>
 <span class="cstat-no" title="statement not covered" >    if (word === pattern) <span class="cstat-no" title="statement not covered" >return 100;</span></span>
 <span class="cstat-no" title="statement not covered" >    if (word.length &gt; 0 &amp;&amp; pattern.length &gt; 0 &amp;&amp;</span>
@@ -806,7 +806,7 @@ function <span class="fstat-no" title="function not covered" >levenshteinDistanc
   // Create distance matrix
   const dp: number[][] = <span class="cstat-no" title="statement not covered" >Array(m + 1)</span>
     .fill(null)
-    .map(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >A</span>rray(n + 1).fill(0))</span>;
+    .<span class="fstat-no" title="function not covered" >map(() =&gt; <span class="cstat-no" title="statement not covered" >A</span>rray(n + 1).fill(0))</span>;
 &nbsp;
   // Initialize first row and column
 <span class="cstat-no" title="statement not covered" >  for (let i = <span class="cstat-no" title="statement not covered" >0; i</span> &lt;= m; i++) <span class="cstat-no" title="statement not covered" >dp[i][0] = i;</span></span>
@@ -888,7 +888,7 @@ export function <span class="fstat-no" title="function not covered" >extractCont
     const matches = <span class="cstat-no" title="statement not covered" >prompt.match(pattern);</span>
 <span class="cstat-no" title="statement not covered" >    if (matches) {</span>
 <span class="cstat-no" title="statement not covered" >      detectedErrors.push(</span>
-        ...matches.map(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.trim())</span>.filter(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.length &gt; 0)</span>
+        ...matches.<span class="fstat-no" title="function not covered" >map((m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.trim())</span>.<span class="fstat-no" title="function not covered" >filter((m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.length &gt; 0)</span>
       );
     }
   }
@@ -904,7 +904,7 @@ export function <span class="fstat-no" title="function not covered" >extractCont
     const matches = <span class="cstat-no" title="statement not covered" >prompt.match(pattern);</span>
 <span class="cstat-no" title="statement not covered" >    if (matches) {</span>
 <span class="cstat-no" title="statement not covered" >      detectedFiles.push(</span>
-        ...matches.map(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.trim())</span>.filter(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.length &gt; 0)</span>
+        ...matches.<span class="fstat-no" title="function not covered" >map((m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.trim())</span>.<span class="fstat-no" title="function not covered" >filter((m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.length &gt; 0)</span>
       );
     }
   }
@@ -970,7 +970,7 @@ export function <span class="fstat-no" title="function not covered" >calculateCo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

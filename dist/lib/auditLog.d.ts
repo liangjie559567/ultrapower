@@ -1,11 +1,10 @@
-export type SecurityEventType = 'validation_failed' | 'prototype_pollution_attempt' | 'redos_detected' | 'unauthorized_field';
-export type Severity = 'low' | 'medium' | 'high';
-export interface SecurityEvent {
+export type AuditEventType = 'validation_failed' | 'prototype_pollution_attempt' | 'redos_detected' | 'unauthorized_field' | 'state_cleanup';
+export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
+export interface AuditLogEntry {
     timestamp: string;
-    event: SecurityEventType;
-    severity: Severity;
+    eventType: AuditEventType;
+    severity: AuditSeverity;
     details: Record<string, unknown>;
-    sessionId?: string;
 }
-export declare function auditLog(category: string, event: SecurityEvent): void;
+export declare function logAuditEvent(eventType: AuditEventType, severity: AuditSeverity, details: Record<string, unknown>, workingDirectory?: string): void;
 //# sourceMappingURL=auditLog.d.ts.map

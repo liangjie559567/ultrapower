@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -125,7 +125,9 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,6 +155,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -169,6 +172,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -193,7 +197,7 @@ import { MetricsStorage } from './storage.js';
 export class MetricsCollector {
   static <span class="fstat-no" title="function not covered" >collectUsageMetrics(c</span>wd: string): UsageMetrics {
     const data = <span class="cstat-no" title="statement not covered" >MetricsStorage.load(cwd);</span>
-    const successCount = <span class="cstat-no" title="statement not covered" >[...data.skills, ...data.agents].filter(<span class="fstat-no" title="function not covered" >(e</span>: any) =&gt; <span class="cstat-no" title="statement not covered" >e.success)</span>.length;</span>
+    const successCount = <span class="cstat-no" title="statement not covered" >[...data.skills, ...data.agents].<span class="fstat-no" title="function not covered" >filter((e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.success).</span>length;</span>
     const totalCount = <span class="cstat-no" title="statement not covered" >data.skills.length + data.agents.length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -210,6 +214,7 @@ export class MetricsCollector {
     const skillMap = <span class="cstat-no" title="statement not covered" >new Map&lt;string, { total: number; success: number; durations: number[] }&gt;();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const event of data.skills) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!event.target) <span class="cstat-no" title="statement not covered" >continue;</span></span>
       const stats = <span class="cstat-no" title="statement not covered" >skillMap.get(event.target) || { total: 0, success: 0, durations: [] };</span>
 <span class="cstat-no" title="statement not covered" >      stats.total++;</span>
 <span class="cstat-no" title="statement not covered" >      if (event.success) <span class="cstat-no" title="statement not covered" >stats.success++;</span></span>
@@ -217,12 +222,12 @@ export class MetricsCollector {
 <span class="cstat-no" title="statement not covered" >      skillMap.set(event.target, stats);</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return Array.from(skillMap.entries()).map(<span class="fstat-no" title="function not covered" >([</span>name, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >    return Array.from(skillMap.entries()).<span class="fstat-no" title="function not covered" >map(([</span>name, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       name,
       usageCount: stats.total,
       successCount: stats.success,
       averageDuration: stats.durations.length &gt; 0
-        ? stats.durations.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / stats.durations.length
+        ? stats.durations.<span class="fstat-no" title="function not covered" >reduce((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / stats.durations.length
         : 0
     }));
   }
@@ -232,6 +237,7 @@ export class MetricsCollector {
     const agentMap = <span class="cstat-no" title="statement not covered" >new Map&lt;string, { total: number; success: number; times: number[] }&gt;();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const event of data.agents) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!event.target) <span class="cstat-no" title="statement not covered" >continue;</span></span>
       const stats = <span class="cstat-no" title="statement not covered" >agentMap.get(event.target) || { total: 0, success: 0, times: [] };</span>
 <span class="cstat-no" title="statement not covered" >      stats.total++;</span>
 <span class="cstat-no" title="statement not covered" >      if (event.success) <span class="cstat-no" title="statement not covered" >stats.success++;</span></span>
@@ -239,12 +245,12 @@ export class MetricsCollector {
 <span class="cstat-no" title="statement not covered" >      agentMap.set(event.target, stats);</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return Array.from(agentMap.entries()).map(<span class="fstat-no" title="function not covered" >([</span>name, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >    return Array.from(agentMap.entries()).<span class="fstat-no" title="function not covered" >map(([</span>name, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       name,
       callCount: stats.total,
       successRate: stats.total &gt; 0 ? stats.success / stats.total : 0,
       averageResponseTime: stats.times.length &gt; 0
-        ? stats.times.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / stats.times.length
+        ? stats.times.<span class="fstat-no" title="function not covered" >reduce((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>) / stats.times.length
         : 0
     }));
   }
@@ -256,7 +262,7 @@ export class MetricsCollector {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

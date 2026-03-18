@@ -1307,11 +1307,11 @@ export class TokenTracker {
 <span class="cstat-no" title="statement not covered" >    this.sessionStats = this.initializeSessionStats();</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >generateSessionId(): string {</span>
+<span class="fstat-no" title="function not covered" >  private g</span>enerateSessionId(): string {
 <span class="cstat-no" title="statement not covered" >    return `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >initializeSessionStats(): SessionTokenStats {</span>
+<span class="fstat-no" title="function not covered" >  private i</span>nitializeSessionStats(): SessionTokenStats {
 <span class="cstat-no" title="statement not covered" >    return {</span>
       sessionId: this.currentSessionId,
       totalInputTokens: 0,
@@ -1354,7 +1354,7 @@ export class TokenTracker {
 <span class="cstat-no" title="statement not covered" >    updateSessionIndex(record.sessionId);</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >updateSessionStats(r</span>ecord: TokenUsage): void {
+<span class="fstat-no" title="function not covered" >  private u</span>pdateSessionStats(record: TokenUsage): void {
 <span class="cstat-no" title="statement not covered" >    this.sessionStats.totalInputTokens += record.inputTokens;</span>
 <span class="cstat-no" title="statement not covered" >    this.sessionStats.totalOutputTokens += record.outputTokens;</span>
 <span class="cstat-no" title="statement not covered" >    this.sessionStats.totalCacheCreation += record.cacheCreationTokens;</span>
@@ -1511,7 +1511,7 @@ export class TokenTracker {
       const lines = <span class="cstat-no" title="statement not covered" >content</span>
         .trim()
         .split("\n")
-        .filter(<span class="fstat-no" title="function not covered" >(l</span>ine) =&gt; <span class="cstat-no" title="statement not covered" >line.trim())</span>;
+        .<span class="fstat-no" title="function not covered" >filter((l</span>ine) =&gt; <span class="cstat-no" title="statement not covered" >line.trim())</span>;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (lines.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >        return result;</span>
@@ -1650,15 +1650,15 @@ export class TokenTracker {
   ): Promise&lt;Array&lt;{ agent: string; tokens: number; cost: number }&gt;&gt; {
     const allStats = <span class="cstat-no" title="statement not covered" >await this.getAllStats();</span>
 &nbsp;
-    const agentStats = <span class="cstat-no" title="statement not covered" >Object.entries(allStats.byAgent).map(</span>
-<span class="fstat-no" title="function not covered" >      ([</span>agent, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+    const agentStats = <span class="cstat-no" title="statement not covered" >Object.entries(allStats.byAgent).<span class="fstat-no" title="function not covered" >map(</span></span>
+      ([agent, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         agent,
         tokens: stats.tokens,
         cost: stats.cost,
       }),
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return agentStats.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost)</span>.slice(0, limit);</span>
+<span class="cstat-no" title="statement not covered" >    return agentStats.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost).</span>slice(0, limit);</span>
   }
 &nbsp;
   async <span class="fstat-no" title="function not covered" >getTopAgents(</span>
@@ -1666,13 +1666,13 @@ export class TokenTracker {
   ): Promise&lt;Array&lt;{ agent: string; tokens: number; cost: number }&gt;&gt; {
     const { calculateCost } = <span class="cstat-no" title="statement not covered" >await import("./cost-estimator.js");</span>
 &nbsp;
-    const agentStats = <span class="cstat-no" title="statement not covered" >Object.entries(this.sessionStats.byAgent).map(</span>
-<span class="fstat-no" title="function not covered" >      ([</span>agent, usages]) =&gt; {
-        const totalTokens = <span class="cstat-no" title="statement not covered" >usages.reduce(</span>
-<span class="fstat-no" title="function not covered" >          (s</span>um, u) =&gt; <span class="cstat-no" title="statement not covered" >sum + u.inputTokens + u.outputTokens,</span>
+    const agentStats = <span class="cstat-no" title="statement not covered" >Object.entries(this.sessionStats.byAgent).<span class="fstat-no" title="function not covered" >map(</span></span>
+      ([agent, usages]) =&gt; {
+        const totalTokens = <span class="cstat-no" title="statement not covered" >usages.<span class="fstat-no" title="function not covered" >reduce(</span></span>
+          (sum, u) =&gt; <span class="cstat-no" title="statement not covered" >sum + u.inputTokens + u.outputTokens,</span>
           0,
         );
-        const totalCost = <span class="cstat-no" title="statement not covered" >usages.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, u) =&gt; {</span>
+        const totalCost = <span class="cstat-no" title="statement not covered" >usages.<span class="fstat-no" title="function not covered" >reduce((s</span>um, u) =&gt; {</span>
           const cost = <span class="cstat-no" title="statement not covered" >calculateCost({</span>
             modelName: u.modelName,
             inputTokens: u.inputTokens,
@@ -1687,7 +1687,7 @@ export class TokenTracker {
       },
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return agentStats.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost)</span>.slice(0, limit);</span>
+<span class="cstat-no" title="statement not covered" >    return agentStats.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost).</span>slice(0, limit);</span>
   }
 &nbsp;
   async <span class="fstat-no" title="function not covered" >cleanupOldLogs(r</span>etentionDays: number = <span class="branch-0 cbranch-no" title="branch not covered" >30): Promise&lt;number&gt; {</span>
@@ -1700,7 +1700,7 @@ export class TokenTracker {
       let _kept = <span class="cstat-no" title="statement not covered" >0;</span>
       let removed = <span class="cstat-no" title="statement not covered" >0;</span>
 &nbsp;
-      const filteredLines = <span class="cstat-no" title="statement not covered" >lines.filter(<span class="fstat-no" title="function not covered" >(l</span>ine) =&gt; {</span>
+      const filteredLines = <span class="cstat-no" title="statement not covered" >lines.<span class="fstat-no" title="function not covered" >filter((l</span>ine) =&gt; {</span>
         const record: TokenUsage = <span class="cstat-no" title="statement not covered" >JSON.parse(line);</span>
         const recordDate = <span class="cstat-no" title="statement not covered" >new Date(record.timestamp);</span>
 <span class="cstat-no" title="statement not covered" >        if (recordDate &gt;= cutoffDate) {</span>
@@ -1744,7 +1744,7 @@ export function <span class="fstat-no" title="function not covered" >resetTokenT
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.13% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/187</span>
+                <span class='fraction'>0/187</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.31% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/173</span>
+                <span class='fraction'>0/173</span>
             </div>
         
             
@@ -549,7 +549,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -738,7 +738,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -820,7 +820,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -986,7 +986,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Trace Tools - MCP tools for viewing agent flow traces
  *
@@ -1011,7 +1011,7 @@ import { ToolDefinition } from './types.js';
 // Helpers
 // ============================================================================
 &nbsp;
-const REPLAY_PREFIX = 'agent-replay-';
+const REPLAY_PREFIX = <span class="cstat-no" title="statement not covered" >'agent-replay-';</span>
 &nbsp;
 /**
  * Find the latest session ID from replay files
@@ -1020,13 +1020,13 @@ function <span class="fstat-no" title="function not covered" >findLatestSessionI
   const <span class="cstat-no" title="statement not covered" >stateDir = join(directory, '.omc', 'state');</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >files = readdirSync(stateDir)</span>
-      .filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.startsWith(REPLAY_PREFIX) &amp;&amp; f.endsWith('.jsonl'))</span>
-      .map(<span class="fstat-no" title="function not covered" >f =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+      .<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.startsWith(REPLAY_PREFIX) &amp;&amp; f.endsWith('.jsonl'))</span>
+      .<span class="fstat-no" title="function not covered" >map(f</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         name: f,
         sessionId: f.slice(REPLAY_PREFIX.length, -'.jsonl'.length),
         mtime: statSync(join(stateDir, f)).mtimeMs,
       }))
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.mtime - a.mtime)</span>;
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.mtime - a.mtime);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return files.length &gt; 0 ? files[0].sessionId : null;</span>
   } catch {
@@ -1139,7 +1139,7 @@ function <span class="fstat-no" title="function not covered" >filterEvents(e</sp
 &nbsp;
   const allowed = <span class="cstat-no" title="statement not covered" >filterMap[filter];</span>
 <span class="cstat-no" title="statement not covered" >  if (!allowed) <span class="cstat-no" title="statement not covered" >return events;</span></span>
-<span class="cstat-no" title="statement not covered" >  return events.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >a</span>llowed.includes(e.event))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return events.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >allowed.includes(e.event))</span>;</span>
 }
 &nbsp;
 // ============================================================================
@@ -1200,7 +1200,7 @@ export const traceTimelineTool: ToolDefinition&lt;{
   filter: z.ZodOptional&lt;z.ZodEnum&lt;['all', 'hooks', 'skills', 'agents', 'keywords', 'tools', 'modes']&gt;&gt;;
   last: z.ZodOptional&lt;z.ZodNumber&gt;;
   workingDirectory: z.ZodOptional&lt;z.ZodString&gt;;
-}&gt; = {
+}&gt; = <span class="cstat-no" title="statement not covered" >{</span>
   name: 'trace_timeline',
   description: 'Show chronological agent flow trace timeline. Displays hooks, keywords, skills, agents, and tools in time order. Use filter to show specific event types.',
   schema: {
@@ -1282,7 +1282,7 @@ export const traceTimelineTool: ToolDefinition&lt;{
 export const traceSummaryTool: ToolDefinition&lt;{
   sessionId: z.ZodOptional&lt;z.ZodString&gt;;
   workingDirectory: z.ZodOptional&lt;z.ZodString&gt;;
-}&gt; = {
+}&gt; = <span class="cstat-no" title="statement not covered" >{</span>
   name: 'trace_summary',
   description: 'Show aggregate statistics for an agent flow trace session. Includes hook stats, keyword frequencies, skill activations, mode transitions, and tool bottlenecks.',
   schema: {
@@ -1402,7 +1402,7 @@ export const traceSummaryTool: ToolDefinition&lt;{
 <span class="cstat-no" title="statement not covered" >        lines.push(`### Tool Performance`);</span>
 <span class="cstat-no" title="statement not covered" >        lines.push('| Tool | Calls | Avg (ms) | Max (ms) | Total (ms) |');</span>
 <span class="cstat-no" title="statement not covered" >        lines.push('|------|-------|----------|----------|------------|');</span>
-<span class="cstat-no" title="statement not covered" >        for (const [tool, stats] of toolEntries.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b[1].total_ms - a[1].total_ms)</span>) {</span>
+<span class="cstat-no" title="statement not covered" >        for (const [tool, stats] of toolEntries.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b[1].total_ms - a[1].total_ms))</span> {</span>
 <span class="cstat-no" title="statement not covered" >          lines.push(`| ${tool} | ${stats.count} | ${stats.avg_ms} | ${stats.max_ms} | ${stats.total_ms} |`);</span>
         }
 <span class="cstat-no" title="statement not covered" >        lines.push('');</span>
@@ -1448,7 +1448,7 @@ export const traceSummaryTool: ToolDefinition&lt;{
 /**
  * All trace tools for registration
  */
-export const traceTools = [traceTimelineTool, traceSummaryTool];
+export const traceTools = <span class="cstat-no" title="statement not covered" >[traceTimelineTool, traceSummaryTool];</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -1456,7 +1456,7 @@ export const traceTools = [traceTimelineTool, traceSummaryTool];
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

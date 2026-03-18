@@ -314,13 +314,13 @@ export class Dashboard {
 <span class="cstat-no" title="statement not covered" >    this.collector = new MetricsCollector(baseDir);</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >calculateStats(v</span>alues: number[]): Stats {
+<span class="fstat-no" title="function not covered" >  private c</span>alculateStats(values: number[]): Stats {
 <span class="cstat-no" title="statement not covered" >    if (values.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return { avg: 0, min: 0, max: 0, p95: 0, count: 0 };</span>
     }
 &nbsp;
-    const sorted = <span class="cstat-no" title="statement not covered" >[...values].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a - b)</span>;</span>
-    const sum = <span class="cstat-no" title="statement not covered" >sorted.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>);</span>
+    const sorted = <span class="cstat-no" title="statement not covered" >[...values].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a - b);</span></span>
+    const sum = <span class="cstat-no" title="statement not covered" >sorted.<span class="fstat-no" title="function not covered" >reduce((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b, 0</span>);</span>
     const p95Index = <span class="cstat-no" title="statement not covered" >Math.floor(sorted.length * 0.95);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -332,12 +332,12 @@ export class Dashboard {
     };
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >formatDuration(m</span>s: number): string {
+<span class="fstat-no" title="function not covered" >  private f</span>ormatDuration(ms: number): string {
 <span class="cstat-no" title="statement not covered" >    if (ms &lt; 1000) <span class="cstat-no" title="statement not covered" >return `${ms.toFixed(0)}ms`;</span></span>
 <span class="cstat-no" title="statement not covered" >    return `${(ms / 1000).toFixed(2)}s`;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >formatMemory(b</span>ytes: number): string {
+<span class="fstat-no" title="function not covered" >  private f</span>ormatMemory(bytes: number): string {
 <span class="cstat-no" title="statement not covered" >    return `${(bytes / 1024 / 1024).toFixed(1)}MB`;</span>
   }
 &nbsp;
@@ -376,7 +376,7 @@ export class Dashboard {
 <span class="cstat-no" title="statement not covered" >        continue;</span>
       }
 &nbsp;
-      const values = <span class="cstat-no" title="statement not covered" >metrics.map(<span class="fstat-no" title="function not covered" >(m</span>: Metric) =&gt; <span class="cstat-no" title="statement not covered" >m.value)</span>;</span>
+      const values = <span class="cstat-no" title="statement not covered" >metrics.<span class="fstat-no" title="function not covered" >map((m</span>: Metric) =&gt; <span class="cstat-no" title="statement not covered" >m.value);</span></span>
       const stats = <span class="cstat-no" title="statement not covered" >this.calculateStats(values);</span>
       const formatter = <span class="cstat-no" title="statement not covered" >type === 'memory' ? this.formatMemory : this.formatDuration;</span>
       const regression = <span class="cstat-no" title="statement not covered" >await this.checkRegression(type, stats.avg);</span>
@@ -395,7 +395,7 @@ export class Dashboard {
 <span class="cstat-no" title="statement not covered" >    for (const type of types) {</span>
       const metrics = <span class="cstat-no" title="statement not covered" >await this.collector.getMetrics(type);</span>
 <span class="cstat-no" title="statement not covered" >      if (metrics.length &gt; 0) {</span>
-        const values = <span class="cstat-no" title="statement not covered" >metrics.map(<span class="fstat-no" title="function not covered" >(m</span>: Metric) =&gt; <span class="cstat-no" title="statement not covered" >m.value)</span>;</span>
+        const values = <span class="cstat-no" title="statement not covered" >metrics.<span class="fstat-no" title="function not covered" >map((m</span>: Metric) =&gt; <span class="cstat-no" title="statement not covered" >m.value);</span></span>
         const stats = <span class="cstat-no" title="statement not covered" >this.calculateStats(values);</span>
 <span class="cstat-no" title="statement not covered" >        await this.collector.setBaseline(type, stats.avg);</span>
       }
@@ -408,7 +408,7 @@ export class Dashboard {
 <span class="cstat-no" title="statement not covered" >    if (format === 'json') {</span>
 <span class="cstat-no" title="statement not covered" >      await this.collector.exportToJSON(outputPath);</span>
 <span class="cstat-no" title="statement not covered" >      console.log(`✅ Exported to ${outputPath}`);</span>
-<span class="cstat-no" title="statement not covered" >    } else if (type) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >type) {</span>
 <span class="cstat-no" title="statement not covered" >      await this.collector.exportToCSV(type, outputPath);</span>
 <span class="cstat-no" title="statement not covered" >      console.log(`✅ Exported ${type} to ${outputPath}`);</span>
     }
@@ -421,7 +421,7 @@ export class Dashboard {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

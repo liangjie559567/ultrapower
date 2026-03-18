@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10.71% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/56</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.71% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/35</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.09% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/11</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.53% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/52</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
@@ -257,7 +257,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -379,27 +379,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -441,7 +441,7 @@ import { UserDirective } from './types.js';
 /**
  * Patterns that indicate user directives
  */
-const DIRECTIVE_PATTERNS = [
+const DIRECTIVE_PATTERNS = <span class="cstat-no" title="statement not covered" >[</span>
   // Explicit directives
   /only (?:look at|focus on|work on|use) (.+)/i,
   /always (?:use|check|include|remember) (.+)/i,
@@ -505,7 +505,7 @@ export function <span class="fstat-no" title="function not covered" >detectDirec
  */
 function <span class="fstat-no" title="function not covered" >isPriorityDirective(t</span>ext: string): boolean {
   const priorityKeywords = <span class="cstat-no" title="statement not covered" >['must', 'critical', 'important', 'always', 'never', 'requirement'];</span>
-<span class="cstat-no" title="statement not covered" >  return priorityKeywords.some(<span class="fstat-no" title="function not covered" >keyword =&gt; <span class="cstat-no" title="statement not covered" >t</span>ext.toLowerCase().includes(keyword))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return priorityKeywords.<span class="fstat-no" title="function not covered" >some(k</span>eyword =&gt; <span class="cstat-no" title="statement not covered" >text.toLowerCase().includes(keyword))</span>;</span>
 }
 &nbsp;
 /**
@@ -558,21 +558,21 @@ function <span class="fstat-no" title="function not covered" >normalizeCommand(c
 /**
  * Add directive if not duplicate
  */
-export function addDirective(
+export function <span class="fstat-no" title="function not covered" >addDirective(</span>
   directives: UserDirective[],
   newDirective: UserDirective
 ): UserDirective[] {
   // Check for duplicates
-  const isDuplicate = directives.some(<span class="fstat-no" title="function not covered" >d =&gt;</span>
+  const isDuplicate = <span class="cstat-no" title="statement not covered" >directives.<span class="fstat-no" title="function not covered" >some(d</span> =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    d.directive.toLowerCase() === newDirective.directive.toLowerCase()</span>
   );
 &nbsp;
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (!isDuplicate) {
-    directives.push(newDirective);
+<span class="cstat-no" title="statement not covered" >  if (!isDuplicate) {</span>
+<span class="cstat-no" title="statement not covered" >    directives.push(newDirective);</span>
 &nbsp;
     // Keep only most recent 20 directives
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (directives.length &gt; 20) {
-<span class="cstat-no" title="statement not covered" >      directives.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (directives.length &gt; 20) {</span>
+<span class="cstat-no" title="statement not covered" >      directives.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; {</span>
         // Sort by priority first, then by timestamp
 <span class="cstat-no" title="statement not covered" >        if (a.priority !== b.priority) {</span>
 <span class="cstat-no" title="statement not covered" >          return a.priority === 'high' ? -1 : 1;</span>
@@ -583,7 +583,7 @@ export function addDirective(
     }
   }
 &nbsp;
-  return directives;
+<span class="cstat-no" title="statement not covered" >  return directives;</span>
 }
 &nbsp;
 /**
@@ -595,8 +595,8 @@ export function <span class="fstat-no" title="function not covered" >formatDirec
   const lines = <span class="cstat-no" title="statement not covered" >['**User Directives (Must Follow):**'];</span>
 &nbsp;
   // Group by priority
-  const highPriority = <span class="cstat-no" title="statement not covered" >directives.filter(<span class="fstat-no" title="function not covered" >d =&gt; <span class="cstat-no" title="statement not covered" >d</span>.priority === 'high')</span>;</span>
-  const normalPriority = <span class="cstat-no" title="statement not covered" >directives.filter(<span class="fstat-no" title="function not covered" >d =&gt; <span class="cstat-no" title="statement not covered" >d</span>.priority === 'normal')</span>;</span>
+  const highPriority = <span class="cstat-no" title="statement not covered" >directives.<span class="fstat-no" title="function not covered" >filter(d</span> =&gt; <span class="cstat-no" title="statement not covered" >d.priority === 'high');</span></span>
+  const normalPriority = <span class="cstat-no" title="statement not covered" >directives.<span class="fstat-no" title="function not covered" >filter(d</span> =&gt; <span class="cstat-no" title="statement not covered" >d.priority === 'normal');</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (highPriority.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push('');</span>
@@ -622,7 +622,7 @@ export function <span class="fstat-no" title="function not covered" >formatDirec
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

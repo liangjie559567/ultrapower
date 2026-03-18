@@ -1198,7 +1198,7 @@ const pendingPermissionMap = <span class="cstat-no" title="statement not covered
 /**
  * Content block types that indicate extended thinking mode.
  */
-const THINKING_PART_TYPES = <span class="cstat-no" title="statement not covered" >["thinking", "reasoning"] as const;</span>
+const THINKING_PART_TYPES = <span class="cstat-no" title="statement not covered" >["thinking", "reasoning"] </span>as const;
 &nbsp;
 /**
  * Time threshold for considering thinking "active".
@@ -1328,11 +1328,11 @@ export async function <span class="fstat-no" title="function not covered" >parse
   }
 &nbsp;
   // Get running agents first, then recent completed (up to 10 total)
-  const running = <span class="cstat-no" title="statement not covered" >Array.from(agentMap.values()).filter(</span>
-<span class="fstat-no" title="function not covered" >    (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running",</span>
+  const running = <span class="cstat-no" title="statement not covered" >Array.from(agentMap.values()).<span class="fstat-no" title="function not covered" >filter(</span></span>
+    (a) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running",</span>
   );
-  const completed = <span class="cstat-no" title="statement not covered" >Array.from(agentMap.values()).filter(</span>
-<span class="fstat-no" title="function not covered" >    (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "completed",</span>
+  const completed = <span class="cstat-no" title="statement not covered" >Array.from(agentMap.values()).<span class="fstat-no" title="function not covered" >filter(</span></span>
+    (a) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "completed",</span>
   );
 <span class="cstat-no" title="statement not covered" >  result.agents = [</span>
     ...running,
@@ -1387,7 +1387,7 @@ function <span class="fstat-no" title="function not covered" >extractBackgroundA
   const text =
 <span class="cstat-no" title="statement not covered" >    typeof content === "string"</span>
       ? content
-      : content.find(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.type === "text")</span>?.text || "";
+      : content.<span class="fstat-no" title="function not covered" >find((c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.type === "text")?</span>.text || "";
 &nbsp;
   // Pattern: "agentId: a8de3dd"
   const match = <span class="cstat-no" title="statement not covered" >text.match(/agentId:\s*([a-zA-Z0-9]+)/);</span>
@@ -1403,7 +1403,7 @@ function <span class="fstat-no" title="function not covered" >parseTaskOutputRes
   const text =
 <span class="cstat-no" title="statement not covered" >    typeof content === "string"</span>
       ? content
-      : content.find(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.type === "text")</span>?.text || "";
+      : content.<span class="fstat-no" title="function not covered" >find((c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.type === "text")?</span>.text || "";
 &nbsp;
   // Extract task_id and status from XML-like format
   const taskIdMatch = <span class="cstat-no" title="statement not covered" >text.match(/&lt;task_id&gt;([^&lt;]+)&lt;\/task_id&gt;/);</span>
@@ -1512,20 +1512,20 @@ function <span class="fstat-no" title="function not covered" >processEntry(</spa
         }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        agentMap.set(block.id, agentEntry);</span>
-<span class="cstat-no" title="statement not covered" >      } else if (block.name === "TodoWrite") {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >block.name === "TodoWrite") {</span>
         const input = <span class="cstat-no" title="statement not covered" >block.input as TodoWriteInput | undefined;</span>
 <span class="cstat-no" title="statement not covered" >        if (input?.todos &amp;&amp; Array.isArray(input.todos)) {</span>
           // Replace latest todos with new ones
 <span class="cstat-no" title="statement not covered" >          latestTodos.length = 0;</span>
 <span class="cstat-no" title="statement not covered" >          latestTodos.push(</span>
-            ...input.todos.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+            ...input.todos.<span class="fstat-no" title="function not covered" >map((t</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
               content: t.content,
               status: t.status as TodoItem["status"],
               activeForm: t.activeForm,
             })),
           );
         }
-<span class="cstat-no" title="statement not covered" >      } else if (block.name === "Skill" || block.name === "proxy_Skill") {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >block.name === "Skill" || block.name === "proxy_Skill") {</span>
 <span class="cstat-no" title="statement not covered" >        result.skillCallCount++;</span>
         // Track last activated skill
         const input = <span class="cstat-no" title="statement not covered" >block.input as SkillInput | undefined;</span>
@@ -1566,8 +1566,8 @@ function <span class="fstat-no" title="function not covered" >processEntry(</spa
 <span class="cstat-no" title="statement not covered" >          typeof blockContent === "string"</span>
             ? blockContent.includes("Async agent launched")
             : Array.isArray(blockContent) &amp;&amp;
-              blockContent.some(
-<span class="fstat-no" title="function not covered" >                (c</span>: { type?: string; text?: string }) =&gt;
+              blockContent.<span class="fstat-no" title="function not covered" >some(</span>
+                (c: { type?: string; text?: string }) =&gt;
 <span class="cstat-no" title="statement not covered" >                  c.type === "text" &amp;&amp; c.text?.includes("Async agent launched"),</span>
               );
 &nbsp;
@@ -1654,7 +1654,7 @@ interface SkillInput {
  * Get count of running agents
  */
 export function <span class="fstat-no" title="function not covered" >getRunningAgentCount(a</span>gents: ActiveAgent[]): number {
-<span class="cstat-no" title="statement not covered" >  return agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>.length;</span>
+<span class="cstat-no" title="statement not covered" >  return agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running").</span>length;</span>
 }
 &nbsp;
 /**
@@ -1666,9 +1666,9 @@ export function <span class="fstat-no" title="function not covered" >getTodoStat
   inProgress: number;
 } {
 <span class="cstat-no" title="statement not covered" >  return {</span>
-    completed: todos.filter(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === "completed")</span>.length,
+    completed: todos.<span class="fstat-no" title="function not covered" >filter((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === "completed").</span>length,
     total: todos.length,
-    inProgress: todos.filter(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === "in_progress")</span>.length,
+    inProgress: todos.<span class="fstat-no" title="function not covered" >filter((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === "in_progress").</span>length,
   };
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -1678,7 +1678,7 @@ export function <span class="fstat-no" title="function not covered" >getTodoStat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

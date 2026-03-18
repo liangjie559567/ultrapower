@@ -85,6 +85,28 @@ export declare const accessibilityAuditorAgent: AgentConfig;
  */
 export declare const apiDesignerAgent: AgentConfig;
 /**
+ * Deployment-Manager Agent - Deployment Configuration Generation (Sonnet)
+ */
+export declare const deploymentManagerAgent: AgentConfig;
+/**
+ * Opensource-Analyzer Agent - Open Source Project Analysis (Sonnet)
+ */
+export declare const opensourceAnalyzerAgent: AgentConfig;
+/**
+ * Tech-Selector Agent - Technology Stack Selection (Sonnet)
+ */
+export declare const techSelectorAgent: AgentConfig;
+/**
+ * Requirement Clarifier Agent - Multi-round dialogue for requirement clarification (Sonnet)
+ * Extends analyst agent with platform detection and structured requirement extraction
+ */
+export declare const requirementClarifierAgent: AgentConfig;
+/**
+ * Code Generator Agent - Context-aware code generation with AST manipulation (Sonnet)
+ * Extends executor agent with template matching and quality checking
+ */
+export declare const codeGeneratorAgent: AgentConfig;
+/**
  * Product Manager Agent - Problem Framing & Value Hypothesis (Sonnet)
  */
 export declare const productManagerAgent: AgentConfig;

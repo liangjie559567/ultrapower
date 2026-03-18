@@ -8,6 +8,7 @@
  */
 
 import { isTeamEnabled } from '../../features/auto-update.js';
+import { resolveConflict } from './conflict-resolver.js';
 
 export type KeywordType =
   | 'cancel'      // Priority 1
@@ -234,9 +235,10 @@ export function getAllKeywords(text: string): KeywordType[] {
   // Exclusive: cancel suppresses everything
   if (types.includes('cancel')) return ['cancel'];
 
-  // Mutual exclusion: team beats autopilot (ultrapilot/swarm now map to team at detection)
-  if (types.includes('team') && types.includes('autopilot')) {
-    types = types.filter(t => t !== 'autopilot');
+  // Apply conflict resolution
+  const resolution = resolveConflict(types);
+  if (resolution.hasConflict && resolution.loser) {
+    types = types.filter(t => t !== resolution.loser);
   }
 
   // Sort by priority order

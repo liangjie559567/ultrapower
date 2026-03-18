@@ -629,9 +629,9 @@ export class KnowledgeIndexManager {
     }
 &nbsp;
     const entries: IndexEntry[] = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >    for (const file of files.filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >/</span>^k-\d+.*\.md$/.test(f) &amp;&amp; f !== 'index.md')</span>) {</span>
+<span class="cstat-no" title="statement not covered" >    for (const file of files.<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >/^k-\d+.*\.md$/.test(f) &amp;&amp; f !== 'index.md'))</span> {</span>
       const filePath = <span class="cstat-no" title="statement not covered" >path.join(this.knowledgeDir, file);</span>
-      const content = <span class="cstat-no" title="statement not covered" >await fs.readFile(filePath, 'utf-8').catch(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >'</span>')</span>;</span>
+      const content = <span class="cstat-no" title="statement not covered" >await fs.readFile(filePath, 'utf-8').<span class="fstat-no" title="function not covered" >catch(() =&gt; <span class="cstat-no" title="statement not covered" >'</span>');</span></span>
       const meta = <span class="cstat-no" title="statement not covered" >parseFrontmatter(content);</span>
 <span class="cstat-no" title="statement not covered" >      if (!meta) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
@@ -645,14 +645,14 @@ export class KnowledgeIndexManager {
       });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    entries.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.id.localeCompare(b.id))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    entries.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.id.localeCompare(b.id))</span>;</span>
 <span class="cstat-no" title="statement not covered" >    await this.writeIndex(entries);</span>
 <span class="cstat-no" title="statement not covered" >    return entries;</span>
   }
 &nbsp;
   async <span class="fstat-no" title="function not covered" >addToIndex(e</span>ntry: IndexEntry): Promise&lt;void&gt; {
     const entries = <span class="cstat-no" title="statement not covered" >await this.loadIndex();</span>
-    const existing = <span class="cstat-no" title="statement not covered" >entries.findIndex(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.id === entry.id)</span>;</span>
+    const existing = <span class="cstat-no" title="statement not covered" >entries.<span class="fstat-no" title="function not covered" >findIndex(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.id === entry.id);</span></span>
 <span class="cstat-no" title="statement not covered" >    if (existing &gt;= 0) {</span>
 <span class="cstat-no" title="statement not covered" >      entries[existing] = entry;</span>
     } else {
@@ -664,7 +664,7 @@ export class KnowledgeIndexManager {
   /** 从索引中移除指定条目（对齐 Python remove_from_index） */
   async <span class="fstat-no" title="function not covered" >removeFromIndex(i</span>d: string): Promise&lt;void&gt; {
     const entries = <span class="cstat-no" title="statement not covered" >await this.loadIndex();</span>
-    const filtered = <span class="cstat-no" title="statement not covered" >entries.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.id !== id)</span>;</span>
+    const filtered = <span class="cstat-no" title="statement not covered" >entries.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.id !== id);</span></span>
 <span class="cstat-no" title="statement not covered" >    if (filtered.length !== entries.length) {</span>
 <span class="cstat-no" title="statement not covered" >      await this.writeIndex(filtered);</span>
     }
@@ -673,7 +673,7 @@ export class KnowledgeIndexManager {
   /** 更新指定条目的置信度（对齐 Python update_confidence） */
   async <span class="fstat-no" title="function not covered" >updateConfidence(i</span>d: string, newConfidence: number): Promise&lt;void&gt; {
     const entries = <span class="cstat-no" title="statement not covered" >await this.loadIndex();</span>
-    const entry = <span class="cstat-no" title="statement not covered" >entries.find(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.id === id)</span>;</span>
+    const entry = <span class="cstat-no" title="statement not covered" >entries.<span class="fstat-no" title="function not covered" >find(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.id === id);</span></span>
 <span class="cstat-no" title="statement not covered" >    if (entry) {</span>
 <span class="cstat-no" title="statement not covered" >      entry.confidence = newConfidence;</span>
 <span class="cstat-no" title="statement not covered" >      await this.writeIndex(entries);</span>
@@ -692,8 +692,8 @@ export class KnowledgeIndexManager {
     }
     const all = <span class="cstat-no" title="statement not covered" >await this.loadIndex();</span>
     const kw = <span class="cstat-no" title="statement not covered" >keyword.toLowerCase();</span>
-    const entries = <span class="cstat-no" title="statement not covered" >all.filter(</span>
-<span class="fstat-no" title="function not covered" >      e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.title.toLowerCase().includes(kw) || e.category.toLowerCase().includes(kw)</span>
+    const entries = <span class="cstat-no" title="statement not covered" >all.<span class="fstat-no" title="function not covered" >filter(</span></span>
+      e =&gt; <span class="cstat-no" title="statement not covered" >e.title.toLowerCase().includes(kw) || e.category.toLowerCase().includes(kw)</span>
     );
 <span class="cstat-no" title="statement not covered" >    return { entries, total: all.length };</span>
   }
@@ -706,7 +706,7 @@ export class KnowledgeIndexManager {
   async <span class="fstat-no" title="function not covered" >filterByCategory(c</span>ategory: string): Promise&lt;{ entries: IndexEntry[]; total: number }&gt; {
     const all = <span class="cstat-no" title="statement not covered" >await this.loadIndex();</span>
     const cat = <span class="cstat-no" title="statement not covered" >category.toLowerCase();</span>
-    const entries = <span class="cstat-no" title="statement not covered" >all.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.category.toLowerCase() === cat)</span>;</span>
+    const entries = <span class="cstat-no" title="statement not covered" >all.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.category.toLowerCase() === cat);</span></span>
 <span class="cstat-no" title="statement not covered" >    return { entries, total: all.length };</span>
   }
 &nbsp;
@@ -724,7 +724,7 @@ export class KnowledgeIndexManager {
 <span class="cstat-no" title="statement not covered" >      if (line.includes('| ID |')) { <span class="cstat-no" title="statement not covered" >inTable = true; <span class="cstat-no" title="statement not covered" >c</span>ontinue; }</span></span>
 <span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; line.startsWith('|---')) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; line.startsWith('|')) {</span>
-        const parts = <span class="cstat-no" title="statement not covered" >line.split('|').map(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.trim())</span>;</span>
+        const parts = <span class="cstat-no" title="statement not covered" >line.split('|').<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.trim())</span>;</span>
 <span class="cstat-no" title="statement not covered" >        if (parts.length &gt;= 6 &amp;&amp; parts[1]) {</span>
 <span class="cstat-no" title="statement not covered" >          entries.push({</span>
             id: parts[1] ?? '',
@@ -735,7 +735,7 @@ export class KnowledgeIndexManager {
             file: `${parts[1]}.md`,
           });
         }
-<span class="cstat-no" title="statement not covered" >      } else if (inTable &amp;&amp; !line.startsWith('|')) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >inTable &amp;&amp; !line.startsWith('|')) {</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
       }
     }
@@ -751,20 +751,20 @@ export class KnowledgeIndexManager {
 <span class="cstat-no" title="statement not covered" >      categoryCount[e.category] = (categoryCount[e.category] ?? 0) + 1;</span>
     }
     const categoryLines = <span class="cstat-no" title="statement not covered" >Object.entries(categoryCount)</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b[1] - a[1])</span>
-      .map(<span class="fstat-no" title="function not covered" >([</span>cat, cnt]) =&gt; <span class="cstat-no" title="statement not covered" >`| ${cat} | ${cnt} |`)</span>;
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b[1] - a[1])</span>
+      .<span class="fstat-no" title="function not covered" >map(([</span>cat, cnt]) =&gt; <span class="cstat-no" title="statement not covered" >`| ${cat} | ${cnt} |`);</span>
 &nbsp;
     // 标签云（从 title 提取关键词）
     const wordFreq: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 <span class="cstat-no" title="statement not covered" >    for (const e of entries) {</span>
-<span class="cstat-no" title="statement not covered" >      for (const word of e.title.toLowerCase().split(/\W+/).filter(<span class="fstat-no" title="function not covered" >w =&gt; <span class="cstat-no" title="statement not covered" >w</span>.length &gt; 3)</span>) {</span>
+<span class="cstat-no" title="statement not covered" >      for (const word of e.title.toLowerCase().split(/\W+/).<span class="fstat-no" title="function not covered" >filter(w</span> =&gt; <span class="cstat-no" title="statement not covered" >w.length &gt; 3))</span> {</span>
 <span class="cstat-no" title="statement not covered" >        wordFreq[word] = (wordFreq[word] ?? 0) + 1;</span>
       }
     }
     const tagCloud = <span class="cstat-no" title="statement not covered" >Object.entries(wordFreq)</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b[1] - a[1])</span>
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b[1] - a[1])</span>
       .slice(0, 20)
-      .map(<span class="fstat-no" title="function not covered" >([</span>w, c]) =&gt; <span class="cstat-no" title="statement not covered" >`${w}(${c})`)</span>
+      .<span class="fstat-no" title="function not covered" >map(([</span>w, c]) =&gt; <span class="cstat-no" title="statement not covered" >`${w}(${c})`)</span>
       .join(' ');
 &nbsp;
     const lines = <span class="cstat-no" title="statement not covered" >[</span>
@@ -776,7 +776,7 @@ export class KnowledgeIndexManager {
       '',
       '| ID | Title | Category | Confidence | Created | Status |',
       '|---|---|---|---|---|---|',
-      ...entries.map(<span class="fstat-no" title="function not covered" >e =&gt;</span>
+      ...entries.<span class="fstat-no" title="function not covered" >map(e</span> =&gt;
 <span class="cstat-no" title="statement not covered" >        `| ${e.id} | ${e.title} | ${e.category} | ${e.confidence.toFixed(2)} | ${e.created} | active |`</span>
       ),
       '',
@@ -792,9 +792,9 @@ export class KnowledgeIndexManager {
       '',
       '## Quality Management',
       '',
-      `- High confidence (≥0.8): ${entries.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.confidence &gt;= 0.8)</span>.length}`,
-      `- Medium confidence (0.5-0.8): ${entries.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.confidence &gt;= 0.5 &amp;&amp; e.confidence &lt; 0.8)</span>.length}`,
-      `- Low confidence (&lt;0.5): ${entries.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.confidence &lt; 0.5)</span>.length}`,
+      `- High confidence (≥0.8): ${entries.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.confidence &gt;= 0.8).</span>length}`,
+      `- Medium confidence (0.5-0.8): ${entries.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.confidence &gt;= 0.5 &amp;&amp; e.confidence &lt; 0.8).</span>length}`,
+      `- Low confidence (&lt;0.5): ${entries.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.confidence &lt; 0.5).</span>length}`,
       '',
     ];
 <span class="cstat-no" title="statement not covered" >    await fs.writeFile(this.indexFile, lines.join('\n'), 'utf-8');</span>
@@ -822,7 +822,7 @@ export async function <span class="fstat-no" title="function not covered" >impor
 &nbsp;
   const manager = <span class="cstat-no" title="statement not covered" >new KnowledgeIndexManager(baseDir);</span>
   const existing = <span class="cstat-no" title="statement not covered" >await manager.loadIndex();</span>
-  const existingIds = <span class="cstat-no" title="statement not covered" >new Set(existing.map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.id)</span>);</span>
+  const existingIds = <span class="cstat-no" title="statement not covered" >new Set(existing.<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.id))</span>;</span>
 &nbsp;
   let imported = <span class="cstat-no" title="statement not covered" >0;</span>
   let skipped = <span class="cstat-no" title="statement not covered" >0;</span>
@@ -862,7 +862,7 @@ function <span class="fstat-no" title="function not covered" >parseFrontmatter(t
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

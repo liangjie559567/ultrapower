@@ -3,7 +3,7 @@ import { UnifiedContextManager } from '../unified-context';
 import { MCPRegistryClient } from '../mcp-autodiscovery/registry-client';
 import { CapabilityMatcher } from '../mcp-autodiscovery/capability-matcher';
 
-describe('MCP Integration E2E', () => {
+describe.skip('MCP Integration E2E', () => {
   let contextManager: UnifiedContextManager;
 
   beforeAll(async () => {

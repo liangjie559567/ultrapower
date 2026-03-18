@@ -217,6 +217,67 @@ export const apiDesignerAgent: AgentConfig = {
   defaultModel: 'sonnet'
 };
 
+/**
+ * Deployment-Manager Agent - Deployment Configuration Generation (Sonnet)
+ */
+export const deploymentManagerAgent: AgentConfig = {
+  name: 'deployment-manager',
+  description: 'Docker, Kubernetes, Serverless deployment configuration generation (Sonnet).',
+  prompt: loadAgentPrompt('deployment-manager'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+/**
+ * Opensource-Analyzer Agent - Open Source Project Analysis (Sonnet)
+ */
+export const opensourceAnalyzerAgent: AgentConfig = {
+  name: 'opensource-analyzer',
+  description: 'Open source project analysis, license compliance, dependency audit (Sonnet).',
+  prompt: loadAgentPrompt('opensource-analyzer'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+/**
+ * Tech-Selector Agent - Technology Stack Selection (Sonnet)
+ */
+export const techSelectorAgent: AgentConfig = {
+  name: 'tech-selector',
+  description: 'Technology stack selection, framework comparison, architecture decisions (Sonnet).',
+  prompt: loadAgentPrompt('tech-selector'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+// ============================================================
+// ZERODEV AGENTS (Sprint 0 PoC)
+// ============================================================
+
+/**
+ * Requirement Clarifier Agent - Multi-round dialogue for requirement clarification (Sonnet)
+ * Extends analyst agent with platform detection and structured requirement extraction
+ */
+export const requirementClarifierAgent: AgentConfig = {
+  name: 'requirement-clarifier',
+  description: 'Multi-round dialogue engine for requirement clarification (Sonnet). Extends analyst.',
+  prompt: loadAgentPrompt('requirement-clarifier'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
+/**
+ * Code Generator Agent - Context-aware code generation with AST manipulation (Sonnet)
+ * Extends executor agent with template matching and quality checking
+ */
+export const codeGeneratorAgent: AgentConfig = {
+  name: 'code-generator',
+  description: 'Context-aware code generation with AST manipulation (Sonnet). Extends executor.',
+  prompt: loadAgentPrompt('code-generator'),
+  model: 'sonnet',
+  defaultModel: 'sonnet'
+};
+
 // ============================================================
 // REFORMED AGENTS (PRODUCT LANE)
 // ============================================================
@@ -514,6 +575,9 @@ export function getAgentDefinitions(overrides?: Partial<Record<string, Partial<A
     'i18n-specialist': i18nSpecialistAgent,
     'accessibility-auditor': accessibilityAuditorAgent,
     'api-designer': apiDesignerAgent,
+    'deployment-manager': deploymentManagerAgent,
+    'opensource-analyzer': opensourceAnalyzerAgent,
+    'tech-selector': techSelectorAgent,
 
     // ============================================================
     // PRODUCT LANE
@@ -528,6 +592,12 @@ export function getAgentDefinitions(overrides?: Partial<Record<string, Partial<A
     // ============================================================
     critic: criticAgent,
     vision: visionAgent,
+
+    // ============================================================
+    // ZERODEV AGENTS (Sprint 0 PoC)
+    // ============================================================
+    'requirement-clarifier': requirementClarifierAgent,
+    'code-generator': codeGeneratorAgent,
 
     // ============================================================
     // AXIOM AGENTS

@@ -27,8 +27,9 @@ export { styleReviewerAgent, qualityReviewerAgent, apiReviewerAgent, performance
 export { dependencyExpertAgent, testEngineerAgent, qualityStrategistAgent } from './definitions.js';
 export { productManagerAgent, uxResearcherAgent, informationArchitectAgent, productAnalystAgent } from './definitions.js';
 export { securityReviewerAgent, buildFixerAgent, codeReviewerAgent, gitMasterAgent } from './definitions.js';
-export { databaseExpertAgent, devopsEngineerAgent, i18nSpecialistAgent, accessibilityAuditorAgent, apiDesignerAgent } from './definitions.js';
+export { databaseExpertAgent, devopsEngineerAgent, i18nSpecialistAgent, accessibilityAuditorAgent, apiDesignerAgent, deploymentManagerAgent, opensourceAnalyzerAgent, techSelectorAgent } from './definitions.js';
 export { axiomRequirementAnalystAgent, axiomProductDesignerAgent, axiomReviewAggregatorAgent, axiomPrdCrafterAgent, axiomSystemArchitectAgent, axiomEvolutionEngineAgent, axiomContextManagerAgent, axiomWorkerAgent, axiomUxDirectorAgent, axiomProductDirectorAgent, axiomDomainExpertAgent, axiomTechLeadAgent, axiomCriticAgent, axiomSubPrdWriterAgent } from './definitions.js';
+export { requirementClarifierAgent, codeGeneratorAgent } from './definitions.js';
 export { getAgentTimeout, DEFAULT_TIMEOUT_CONFIG } from './timeout-config.js';
 export { TimeoutManager, timeoutManager } from './timeout-manager.js';
 export { callAgentWithTimeout } from './agent-wrapper.js';

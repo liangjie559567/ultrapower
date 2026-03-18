@@ -487,10 +487,10 @@ export class PatternDetector {
 <span class="fstat-no" title="function not covered" >  detectFromDiff(d</span>iffText: string): PatternMatch[] {
 <span class="cstat-no" title="statement not covered" >    if (!diffText) <span class="cstat-no" title="statement not covered" >return [];</span></span>
     const matches: PatternMatch[] = <span class="cstat-no" title="statement not covered" >[];</span>
-    const files = <span class="cstat-no" title="statement not covered" >[...diffText.matchAll(/\+\+\+ b\/(.+)/g)].map(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >m</span>[1] ?? '')</span>;</span>
+    const files = <span class="cstat-no" title="statement not covered" >[...diffText.matchAll(/\+\+\+ b\/(.+)/g)].<span class="fstat-no" title="function not covered" >map(m</span> =&gt; <span class="cstat-no" title="statement not covered" >m[1] ?? '');</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const pattern of BUILTIN_PATTERNS) {</span>
-      const keywordHits = <span class="cstat-no" title="statement not covered" >pattern.keywords.filter(<span class="fstat-no" title="function not covered" >kw =&gt; <span class="cstat-no" title="statement not covered" >d</span>iffText.includes(kw))</span>.length;</span>
+      const keywordHits = <span class="cstat-no" title="statement not covered" >pattern.keywords.<span class="fstat-no" title="function not covered" >filter(k</span>w =&gt; <span class="cstat-no" title="statement not covered" >diffText.includes(kw))</span>.length;</span>
       const structMatch = <span class="cstat-no" title="statement not covered" >pattern.structureRegex.test(diffText);</span>
 <span class="cstat-no" title="statement not covered" >      if (keywordHits &gt;= 2 || structMatch) {</span>
 <span class="cstat-no" title="statement not covered" >        for (const f of files) {</span>
@@ -519,7 +519,7 @@ export class PatternDetector {
 <span class="cstat-no" title="statement not covered" >      if (line.includes('| ID | Name |')) { <span class="cstat-no" title="statement not covered" >inTable = true; <span class="cstat-no" title="statement not covered" >c</span>ontinue; }</span></span>
 <span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; line.startsWith('|---')) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (inTable &amp;&amp; line.startsWith('|')) {</span>
-        const parts = <span class="cstat-no" title="statement not covered" >line.split('|').map(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.trim())</span>;</span>
+        const parts = <span class="cstat-no" title="statement not covered" >line.split('|').<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.trim())</span>;</span>
 <span class="cstat-no" title="statement not covered" >        if (parts.length &gt;= 7 &amp;&amp; parts[1]) {</span>
 <span class="cstat-no" title="statement not covered" >          patterns.push({</span>
             id: parts[1] ?? '',
@@ -531,7 +531,7 @@ export class PatternDetector {
             firstSeen: new Date().toISOString().slice(0, 10),
           });
         }
-<span class="cstat-no" title="statement not covered" >      } else if (inTable &amp;&amp; !line.startsWith('|')) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >inTable &amp;&amp; !line.startsWith('|')) {</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
       }
     }
@@ -541,7 +541,7 @@ export class PatternDetector {
   async <span class="fstat-no" title="function not covered" >detectAndUpdate(d</span>iffText: string): Promise&lt;DetectionResult&gt; {
     const matches = <span class="cstat-no" title="statement not covered" >this.detectFromDiff(diffText);</span>
     const current = <span class="cstat-no" title="statement not covered" >await this.loadPatterns();</span>
-    const result: DetectionResult = <span class="cstat-no" title="statement not covered" >{ newPatterns: [], promoted: [], matches: matches.map(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >m</span>.patternName)</span> };</span>
+    const result: DetectionResult = <span class="cstat-no" title="statement not covered" >{ newPatterns: [], promoted: [], matches: matches.<span class="fstat-no" title="function not covered" >map(m</span> =&gt; <span class="cstat-no" title="statement not covered" >m.patternName) };</span></span>
 &nbsp;
     const patternFiles = <span class="cstat-no" title="statement not covered" >new Map&lt;string, Set&lt;string&gt;&gt;();</span>
 <span class="cstat-no" title="statement not covered" >    for (const m of matches) {</span>
@@ -550,7 +550,7 @@ export class PatternDetector {
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const [pname, files] of patternFiles) {</span>
-      const existing = <span class="cstat-no" title="statement not covered" >current.find(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.name === pname)</span>;</span>
+      const existing = <span class="cstat-no" title="statement not covered" >current.<span class="fstat-no" title="function not covered" >find(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.name === pname);</span></span>
 <span class="cstat-no" title="statement not covered" >      if (existing) {</span>
 <span class="cstat-no" title="statement not covered" >        existing.occurrences += files.size;</span>
 <span class="cstat-no" title="statement not covered" >        if (existing.occurrences &gt;= this.promoteThreshold &amp;&amp; existing.status === 'pending') {</span>
@@ -561,7 +561,7 @@ export class PatternDetector {
         const newEntry: PatternEntry = <span class="cstat-no" title="statement not covered" >{</span>
           id: `P-${String(current.length + result.newPatterns.length + 1).padStart(3, '0')}`,
           name: pname,
-          category: BUILTIN_PATTERNS.find(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.name === pname)</span>?.category ?? 'common',
+          category: BUILTIN_PATTERNS.<span class="fstat-no" title="function not covered" >find(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.name === pname)?</span>.category ?? 'common',
           occurrences: files.size,
           confidence: 0.7,
           status: 'pending',
@@ -589,7 +589,7 @@ export class PatternDetector {
       '',
       '| ID | Name | Category | Occurrences | Confidence | Status |',
       '|---|---|---|---|---|---|',
-      ...patterns.map(<span class="fstat-no" title="function not covered" >p =&gt;</span>
+      ...patterns.<span class="fstat-no" title="function not covered" >map(p</span> =&gt;
 <span class="cstat-no" title="statement not covered" >        `| ${p.id} | ${p.name} | ${p.category} | ${p.occurrences} | ${p.confidence.toFixed(2)} | ${p.status} |`</span>
       ),
       '',
@@ -604,7 +604,7 @@ export class PatternDetector {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

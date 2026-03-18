@@ -953,6 +953,27 @@ The `SENSITIVE_HOOKS` constant in bridge-normalize defines hooks with sensitive 
 
 Never read `input.success` directly. Use `input.success !== false` to allow undefined/missing values to be treated as success. This prevents false-positive blocking of legitimate sub-agent completions.
 
+**6. Audit Logging (v7.7.1+)**
+
+All security-sensitive operations are logged to `.omc/audit.log` with timestamps, event types, and context. The audit log tracks:
+- Hook input validation failures
+- Prototype pollution detection
+- Path traversal attempts
+- State file operations
+- Permission requests
+
+Access via `logAuditEvent(event, context)` from `src/lib/auditLog.ts`.
+
+**7. User Feedback Mechanism (v7.7.1+)**
+
+User feedback is collected and stored for system improvements. Feedback includes:
+- Feature requests
+- Bug reports
+- Usability issues
+- Performance concerns
+
+Access via `collectFeedback(feedback)` from `src/lib/userFeedback.ts`.
+
 ### Delegation Enforcer (v5.5.2+)
 
 The `delegation-enforcer` feature ensures the orchestrator delegates implementation work rather than executing it directly. When triggered, it routes substantial code changes to the appropriate executor agent and logs the delegation decision.
@@ -970,6 +991,16 @@ When modifying security-sensitive code, verify:
 * [ ] No `eval()` or dynamic `require()` with untrusted input
 
 * [ ] State file paths constrained to `.omc/state/` directory
+
+* [ ] Prototype pollution checks applied recursively (10 levels deep)
+
+* [ ] Input length limits enforced (50KB max for hook inputs)
+
+* [ ] Security events logged to audit log
+
+* [ ] Atomic write operations used for state files
+
+* [ ] File locks acquired for concurrent write operations
 
 ---
 

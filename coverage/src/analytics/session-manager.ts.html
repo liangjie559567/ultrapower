@@ -1089,8 +1089,8 @@ function <span class="fstat-no" title="function not covered" >getModifiedSourceF
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >gitStats = getGitDiffStats(projectPath);</span>
 <span class="cstat-no" title="statement not covered" >    return gitStats</span>
-      .map(<span class="fstat-no" title="function not covered" >stat =&gt; <span class="cstat-no" title="statement not covered" >s</span>tat.path)</span>
-      .filter(<span class="fstat-no" title="function not covered" >filePath =&gt; {</span>
+      .<span class="fstat-no" title="function not covered" >map(s</span>tat =&gt; <span class="cstat-no" title="statement not covered" >stat.path)</span>
+      .<span class="fstat-no" title="function not covered" >filter(f</span>ilePath =&gt; {
         const ext = <span class="cstat-no" title="statement not covered" >path.extname(filePath).toLowerCase();</span>
 <span class="cstat-no" title="statement not covered" >        return SOURCE_FILE_EXTENSIONS.has(ext);</span>
       });
@@ -1115,7 +1115,7 @@ export class SessionManager {
   private currentSession: SessionMetadata | null = <span class="cstat-no" title="statement not covered" >null;</span>
   private history: SessionHistory | null = <span class="cstat-no" title="statement not covered" >null;</span>
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >startSession(g</span>oals: string[], tags: SessionTag[] = <span class="branch-0 cbranch-no" title="branch not covered" >['other'], n</span>otes: string = <span class="branch-0 cbranch-no" title="branch not covered" >''): Promise&lt;SessionMetadata&gt; {</span>
+  async <span class="fstat-no" title="function not covered" >startSession(g</span>oals: string[], tags: SessionTag[] = <span class="branch-0 cbranch-no" title="branch not covered" >['other'],</span> notes: string = <span class="branch-0 cbranch-no" title="branch not covered" >''): Promise&lt;SessionMetadata&gt; {</span>
     const session: SessionMetadata = <span class="cstat-no" title="statement not covered" >{</span>
       id: this.generateSessionId(),
       projectPath: process.cwd(),
@@ -1138,7 +1138,7 @@ export class SessionManager {
 <span class="cstat-no" title="statement not covered" >      throw new Error('No active session to end');</span>
     }
 &nbsp;
-    const <span class="cstat-no" title="statement not covered" >endTime = new Date().toISOString();</span>
+    const endTime = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
     const startTime = <span class="cstat-no" title="statement not covered" >new Date(this.currentSession.startTime);</span>
     const duration = <span class="cstat-no" title="statement not covered" >new Date(endTime).getTime() - startTime.getTime();</span>
 &nbsp;
@@ -1169,7 +1169,7 @@ export class SessionManager {
 &nbsp;
   async <span class="fstat-no" title="function not covered" >resumeSession(s</span>essionId: string): Promise&lt;SessionMetadata&gt; {
     const history = <span class="cstat-no" title="statement not covered" >await this.loadHistory();</span>
-    const session = <span class="cstat-no" title="statement not covered" >history.sessions.find(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id === sessionId)</span>;</span>
+    const session = <span class="cstat-no" title="statement not covered" >history.sessions.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === sessionId);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!session) {</span>
 <span class="cstat-no" title="statement not covered" >      throw new Error(`Session ${sessionId} not found in history`);</span>
@@ -1197,7 +1197,7 @@ export class SessionManager {
 &nbsp;
     // Get session metadata to find project path
     const history = <span class="cstat-no" title="statement not covered" >await this.loadHistory();</span>
-    const sessionMeta = <span class="cstat-no" title="statement not covered" >history.sessions.find(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id === sessionId)</span>;</span>
+    const sessionMeta = <span class="cstat-no" title="statement not covered" >history.sessions.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === sessionId);</span></span>
     const projectPath = <span class="cstat-no" title="statement not covered" >sessionMeta?.projectPath || this.currentSession?.projectPath || process.cwd();</span>
 &nbsp;
     // Get modified files from git
@@ -1224,13 +1224,13 @@ export class SessionManager {
     // Aggregate agent usage
     const agentUsage: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 <span class="cstat-no" title="statement not covered" >    for (const [agent, usages] of Object.entries(stats.byAgent)) {</span>
-<span class="cstat-no" title="statement not covered" >      agentUsage[agent] = usages.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, u) =&gt; <span class="cstat-no" title="statement not covered" >sum + u.inputTokens + u.outputTokens, 0</span>);</span>
+<span class="cstat-no" title="statement not covered" >      agentUsage[agent] = usages.<span class="fstat-no" title="function not covered" >reduce((s</span>um, u) =&gt; <span class="cstat-no" title="statement not covered" >sum + u.inputTokens + u.outputTokens, 0</span>);</span>
     }
 &nbsp;
     // Aggregate model usage
     const modelUsage: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 <span class="cstat-no" title="statement not covered" >    for (const [model, usages] of Object.entries(stats.byModel)) {</span>
-<span class="cstat-no" title="statement not covered" >      modelUsage[model] = usages.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, u) =&gt; <span class="cstat-no" title="statement not covered" >sum + u.inputTokens + u.outputTokens, 0</span>);</span>
+<span class="cstat-no" title="statement not covered" >      modelUsage[model] = usages.<span class="fstat-no" title="function not covered" >reduce((s</span>um, u) =&gt; <span class="cstat-no" title="statement not covered" >sum + u.inputTokens + u.outputTokens, 0</span>);</span>
     }
 &nbsp;
     const totalTokens = <span class="cstat-no" title="statement not covered" >stats.totalInputTokens + stats.totalOutputTokens;</span>
@@ -1250,7 +1250,7 @@ export class SessionManager {
 &nbsp;
   async <span class="fstat-no" title="function not covered" >getSessionSummary(s</span>essionId: string): Promise&lt;SessionSummary&gt; {
     const history = <span class="cstat-no" title="statement not covered" >await this.loadHistory();</span>
-    const metadata = <span class="cstat-no" title="statement not covered" >history.sessions.find(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id === sessionId)</span>;</span>
+    const metadata = <span class="cstat-no" title="statement not covered" >history.sessions.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === sessionId);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!metadata) {</span>
 <span class="cstat-no" title="statement not covered" >      throw new Error(`Session ${sessionId} not found`);</span>
@@ -1274,8 +1274,8 @@ export class SessionManager {
   }): Promise&lt;SessionMetadata[]&gt; {
     const history = <span class="cstat-no" title="statement not covered" >await this.loadHistory();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return history.sessions.filter(<span class="fstat-no" title="function not covered" >session =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >      if (query.tags &amp;&amp; !query.tags.some(<span class="fstat-no" title="function not covered" >tag =&gt; <span class="cstat-no" title="statement not covered" >s</span>ession.tags.includes(tag))</span>) {</span>
+<span class="cstat-no" title="statement not covered" >    return history.sessions.<span class="fstat-no" title="function not covered" >filter(s</span>ession =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (query.tags &amp;&amp; !query.tags.<span class="fstat-no" title="function not covered" >some(t</span>ag =&gt; <span class="cstat-no" title="statement not covered" >session.tags.includes(tag))</span>) {</span>
 <span class="cstat-no" title="statement not covered" >        return false;</span>
       }
 &nbsp;
@@ -1360,8 +1360,8 @@ export class SessionManager {
       }
     } else {
       // Case 2: Both exist - merge and dedup by session ID
-      const existingIds = <span class="cstat-no" title="statement not covered" >new Set(globalResult.data.sessions.map(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id)</span>);</span>
-      const newSessions = <span class="cstat-no" title="statement not covered" >localResult.data.sessions.filter(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >!</span>existingIds.has(s.id))</span>;</span>
+      const existingIds = <span class="cstat-no" title="statement not covered" >new Set(globalResult.data.sessions.<span class="fstat-no" title="function not covered" >map(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id))</span>;</span>
+      const newSessions = <span class="cstat-no" title="statement not covered" >localResult.data.sessions.<span class="fstat-no" title="function not covered" >filter(s</span> =&gt; <span class="cstat-no" title="statement not covered" >!existingIds.has(s.id))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (newSessions.length &gt; 0) {</span>
         const merged: SessionHistory = <span class="cstat-no" title="statement not covered" >{</span>
@@ -1446,10 +1446,10 @@ export class SessionManager {
 <span class="cstat-no" title="statement not covered" >    history.lastUpdated = new Date().toISOString();</span>
 &nbsp;
     // Recalculate aggregates
-    const completedSessions = <span class="cstat-no" title="statement not covered" >history.sessions.filter(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.status === 'completed')</span>;</span>
+    const completedSessions = <span class="cstat-no" title="statement not covered" >history.sessions.<span class="fstat-no" title="function not covered" >filter(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.status === 'completed');</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (completedSessions.length &gt; 0) {</span>
-      const totalDuration = <span class="cstat-no" title="statement not covered" >completedSessions.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, s) =&gt; <span class="cstat-no" title="statement not covered" >sum + (s.duration || 0), 0</span>);</span>
+      const totalDuration = <span class="cstat-no" title="statement not covered" >completedSessions.<span class="fstat-no" title="function not covered" >reduce((s</span>um, s) =&gt; <span class="cstat-no" title="statement not covered" >sum + (s.duration || 0), 0</span>);</span>
 <span class="cstat-no" title="statement not covered" >      history.averageDuration = totalDuration / completedSessions.length;</span>
 <span class="cstat-no" title="statement not covered" >      history.successRate = completedSessions.length / history.totalSessions;</span>
     }
@@ -1466,7 +1466,7 @@ export class SessionManager {
 <span class="cstat-no" title="statement not covered" >    this.history = history;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >generateSessionId(): string {</span>
+<span class="fstat-no" title="function not covered" >  private g</span>enerateSessionId(): string {
 <span class="cstat-no" title="statement not covered" >    return `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;</span>
   }
 }
@@ -1492,7 +1492,7 @@ export function <span class="fstat-no" title="function not covered" >resetSessio
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

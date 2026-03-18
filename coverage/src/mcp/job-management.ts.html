@@ -2003,7 +2003,7 @@ async function <span class="fstat-no" title="function not covered" >getAdapter(c
 <span class="cstat-no" title="statement not covered" >    if (adapterInstance) {</span>
       const cleanupDays = <span class="cstat-no" title="statement not covered" >parseInt(process.env.WORKER_CLEANUP_DAYS || '7', 10);</span>
       const maxAgeMs = <span class="cstat-no" title="statement not covered" >cleanupDays * 24 * 60 * 60 * 1000;</span>
-<span class="cstat-no" title="statement not covered" >      adapterInstance.cleanup(maxAgeMs).catch(<span class="fstat-no" title="function not covered" >err =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      adapterInstance.cleanup(maxAgeMs).<span class="fstat-no" title="function not covered" >catch(e</span>rr =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        console.error('[MCP] Worker cleanup failed:', err);</span>
       });
     }
@@ -2110,7 +2110,7 @@ export function <span class="fstat-no" title="function not covered" >findJobStat
 <span class="cstat-no" title="statement not covered" >    for (const match of matches) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const <span class="cstat-no" title="statement not covered" >content = readFileSync(match.statusPath, 'utf-8');</span>
-        const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as JobStatus;</span>
+        const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as JobStatus;
         const isActive = <span class="cstat-no" title="statement not covered" >status.status === 'spawned' || status.status === 'running';</span>
         const spawnedAt = <span class="cstat-no" title="statement not covered" >new Date(status.spawnedAt).getTime();</span>
 &nbsp;
@@ -2198,7 +2198,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
           ].filter(Boolean).join('\n'), true);
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        await new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, pollDelay))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, pollDelay))</span>;</span>
 <span class="cstat-no" title="statement not covered" >        pollDelay = Math.min(pollDelay * 1.5, 2000);</span>
 <span class="cstat-no" title="statement not covered" >        continue;</span>
       }
@@ -2237,7 +2237,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
           ].filter(Boolean).join('\n'), true);
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        await new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, pollDelay))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, pollDelay))</span>;</span>
 <span class="cstat-no" title="statement not covered" >        pollDelay = Math.min(pollDelay * 1.5, 2000);</span>
 <span class="cstat-no" title="statement not covered" >        continue;</span>
       }
@@ -2252,7 +2252,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
 <span class="cstat-no" title="statement not covered" >      if (notFoundCount &gt;= 10) {</span>
 <span class="cstat-no" title="statement not covered" >        return textResult(`No job found with ID: ${jobId}`, true);</span>
       }
-<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, pollDelay))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, pollDelay))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      pollDelay = Math.min(pollDelay * 1.5, 2000);</span>
 <span class="cstat-no" title="statement not covered" >      continue;</span>
     }
@@ -2295,7 +2295,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
     }
 &nbsp;
     // Still running - wait with exponential backoff and poll again
-<span class="cstat-no" title="statement not covered" >    await new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, pollDelay))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, pollDelay))</span>;</span>
 <span class="cstat-no" title="statement not covered" >    pollDelay = Math.min(pollDelay * 1.5, 2000);</span>
   }
 &nbsp;
@@ -2574,7 +2574,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
 &nbsp;
     // Retry loop: background handler may overwrite our 'failed' status
 <span class="cstat-no" title="statement not covered" >    for (let attempt = <span class="cstat-no" title="statement not covered" >0; a</span>ttempt &lt; 3; attempt++) {</span>
-<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, 50))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 50))</span>;</span>
       const <span class="cstat-no" title="statement not covered" >recheckStatus = readJobStatus(provider, found.slug, jobId);</span>
 <span class="cstat-no" title="statement not covered" >      if (!recheckStatus || recheckStatus.status === 'failed') {</span>
 <span class="cstat-no" title="statement not covered" >        break; // Our write stuck, or status is already what we want</span>
@@ -2634,9 +2634,9 @@ export async function <span class="fstat-no" title="function not covered" >handl
     let statusArray: Array&lt;'spawned' | 'running' | 'completed' | 'failed' | 'timeout'&gt; = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    if (statusFilter === 'active') {</span>
 <span class="cstat-no" title="statement not covered" >      statusArray = ['spawned', 'running'];</span>
-<span class="cstat-no" title="statement not covered" >    } else if (statusFilter === 'completed') {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >statusFilter === 'completed') {</span>
 <span class="cstat-no" title="statement not covered" >      statusArray = ['completed'];</span>
-<span class="cstat-no" title="statement not covered" >    } else if (statusFilter === 'failed') {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >statusFilter === 'failed') {</span>
 <span class="cstat-no" title="statement not covered" >      statusArray = ['failed', 'timeout'];</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      statusArray = ['spawned', 'running', 'completed', 'failed', 'timeout'];</span>
@@ -2650,7 +2650,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
     }
 &nbsp;
     const limited = <span class="cstat-no" title="statement not covered" >workers.slice(0, limit);</span>
-    const lines = <span class="cstat-no" title="statement not covered" >limited.map(<span class="fstat-no" title="function not covered" >(w</span>orker) =&gt; {</span>
+    const lines = <span class="cstat-no" title="statement not covered" >limited.<span class="fstat-no" title="function not covered" >map((w</span>orker) =&gt; {</span>
       const parts = <span class="cstat-no" title="statement not covered" >[</span>
         `- **${worker.name}** [${worker.status}] ${worker.provider}/${worker.model} (${worker.agentRole})`,
         `  Spawned: ${worker.spawnedAt}`,
@@ -2675,7 +2675,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
       }
 &nbsp;
       const limited = <span class="cstat-no" title="statement not covered" >activeJobs.slice(0, limit);</span>
-      const lines = <span class="cstat-no" title="statement not covered" >limited.map(<span class="fstat-no" title="function not covered" >(j</span>ob) =&gt; {</span>
+      const lines = <span class="cstat-no" title="statement not covered" >limited.<span class="fstat-no" title="function not covered" >map((j</span>ob) =&gt; {</span>
         const parts = <span class="cstat-no" title="statement not covered" >[</span>
           `- **${job.jobId}** [${job.status}] ${job.provider}/${job.model} (${job.agentRole})`,
           `  Spawned: ${job.spawnedAt}`,
@@ -2694,10 +2694,10 @@ export async function <span class="fstat-no" title="function not covered" >handl
     }
 &nbsp;
     // Sort by spawnedAt descending (newest first), apply limit
-<span class="cstat-no" title="statement not covered" >    activeJobs.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime())</span>;</span>
+<span class="cstat-no" title="statement not covered" >    activeJobs.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime())</span>;</span>
     const limited = <span class="cstat-no" title="statement not covered" >activeJobs.slice(0, limit);</span>
 &nbsp;
-    const lines = <span class="cstat-no" title="statement not covered" >limited.map(<span class="fstat-no" title="function not covered" >(j</span>ob) =&gt; {</span>
+    const lines = <span class="cstat-no" title="statement not covered" >limited.<span class="fstat-no" title="function not covered" >map((j</span>ob) =&gt; {</span>
       const parts = <span class="cstat-no" title="statement not covered" >[</span>
         `- **${job.jobId}** [${job.status}] ${job.provider}/${job.model} (${job.agentRole})`,
         `  Spawned: ${job.spawnedAt}`,
@@ -2714,12 +2714,12 @@ export async function <span class="fstat-no" title="function not covered" >handl
     let dbJobs: JobStatus[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    if (statusFilter === 'completed') {</span>
 <span class="cstat-no" title="statement not covered" >      dbJobs = getJobsByStatus(provider, 'completed');</span>
-<span class="cstat-no" title="statement not covered" >    } else if (statusFilter === 'failed') {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >statusFilter === 'failed') {</span>
 <span class="cstat-no" title="statement not covered" >      dbJobs = [</span>
         ...getJobsByStatus(provider, 'failed'),
         ...getJobsByStatus(provider, 'timeout'),
       ];
-<span class="cstat-no" title="statement not covered" >    } else if (statusFilter === 'all') {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >statusFilter === 'all') {</span>
 <span class="cstat-no" title="statement not covered" >      dbJobs = [</span>
         ...getActiveJobsFromDb(provider),
         ...getJobsByStatus(provider, 'completed'),
@@ -2738,9 +2738,9 @@ export async function <span class="fstat-no" title="function not covered" >handl
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (uniqueJobs.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      uniqueJobs.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime())</span>;</span>
+<span class="cstat-no" title="statement not covered" >      uniqueJobs.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime())</span>;</span>
       const limited = <span class="cstat-no" title="statement not covered" >uniqueJobs.slice(0, limit);</span>
-      const lines = <span class="cstat-no" title="statement not covered" >limited.map(<span class="fstat-no" title="function not covered" >(j</span>ob) =&gt; {</span>
+      const lines = <span class="cstat-no" title="statement not covered" >limited.<span class="fstat-no" title="function not covered" >map((j</span>ob) =&gt; {</span>
         const parts = <span class="cstat-no" title="statement not covered" >[</span>
           `- **${job.jobId}** [${job.status}] ${job.provider}/${job.model} (${job.agentRole})`,
           `  Spawned: ${job.spawnedAt}`,
@@ -2762,15 +2762,15 @@ export async function <span class="fstat-no" title="function not covered" >handl
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >files = readdirSync(promptsDir);</span>
-    const statusFiles = <span class="cstat-no" title="statement not covered" >files.filter(</span>
-<span class="fstat-no" title="function not covered" >      (f</span>: string) =&gt; <span class="cstat-no" title="statement not covered" >f.startsWith(`${provider}-status-`) &amp;&amp; f.endsWith('.json'),</span>
+    const statusFiles = <span class="cstat-no" title="statement not covered" >files.<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (f: string) =&gt; <span class="cstat-no" title="statement not covered" >f.startsWith(`${provider}-status-`) &amp;&amp; f.endsWith('.json'),</span>
     );
 &nbsp;
     const jobs: JobStatus[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    for (const file of statusFiles) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const <span class="cstat-no" title="statement not covered" >content = readFileSync(join(promptsDir, file), 'utf-8');</span>
-        const job = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as JobStatus;</span>
+        const job = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as JobStatus;
 &nbsp;
         // Apply status filter
 <span class="cstat-no" title="statement not covered" >        if (statusFilter === 'completed' &amp;&amp; job.status !== 'completed') <span class="cstat-no" title="statement not covered" >continue;</span></span>
@@ -2789,10 +2789,10 @@ export async function <span class="fstat-no" title="function not covered" >handl
     }
 &nbsp;
     // Sort by spawnedAt descending (newest first), apply limit
-<span class="cstat-no" title="statement not covered" >    jobs.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime())</span>;</span>
+<span class="cstat-no" title="statement not covered" >    jobs.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime())</span>;</span>
     const limited = <span class="cstat-no" title="statement not covered" >jobs.slice(0, limit);</span>
 &nbsp;
-    const lines = <span class="cstat-no" title="statement not covered" >limited.map(<span class="fstat-no" title="function not covered" >(j</span>ob) =&gt; {</span>
+    const lines = <span class="cstat-no" title="statement not covered" >limited.<span class="fstat-no" title="function not covered" >map((j</span>ob) =&gt; {</span>
       const parts = <span class="cstat-no" title="statement not covered" >[</span>
         `- **${job.jobId}** [${job.status}] ${job.provider}/${job.model} (${job.agentRole})`,
         `  Spawned: ${job.spawnedAt}`,
@@ -2813,7 +2813,7 @@ export async function <span class="fstat-no" title="function not covered" >handl
 // Tool Schema Definitions (for both SDK and standalone servers)
 // ---------------------------------------------------------------------------
 &nbsp;
-// TODO: _provider parameter reserved for future per-provider schema customization
+// Note: _provider parameter reserved for future per-provider schema customization
 export function <span class="fstat-no" title="function not covered" >getJobManagementToolSchemas(_</span>provider?: 'codex' | 'gemini') {
 <span class="cstat-no" title="statement not covered" >  return [</span>
     {
@@ -2899,7 +2899,7 @@ export function <span class="fstat-no" title="function not covered" >getJobManag
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

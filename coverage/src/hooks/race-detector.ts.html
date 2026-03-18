@@ -401,7 +401,7 @@ export class RaceDetector {
   private conflicts: RaceConflict[] = <span class="cstat-no" title="statement not covered" >[];</span>
   private onRaceDetected?: (conflict: RaceConflict) =&gt; void;
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(o</span>ptions: RaceDetectorOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}) {</span>
+<span class="fstat-no" title="function not covered" >  constructor(o</span>ptions: RaceDetectorOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
 <span class="cstat-no" title="statement not covered" >    this.onRaceDetected = options.onRaceDetected;</span>
   }
 &nbsp;
@@ -415,7 +415,7 @@ export class RaceDetector {
 <span class="cstat-no" title="statement not covered" >      this.fileAccess.set(filePath, []);</span>
     }
 &nbsp;
-    const accesses = <span class="cstat-no" title="statement not covered" >this.fileAccess.get(filePath)!;</span>
+    const accesses = <span class="cstat-no" title="statement not covered" >this.fileAccess.get(filePath)!</span>;
 <span class="cstat-no" title="statement not covered" >    accesses.push({ hook: hookType, type: accessType, timestamp: now });</span>
 &nbsp;
     // 检测冲突（100ms 窗口内）
@@ -432,7 +432,7 @@ export class RaceDetector {
 <span class="cstat-no" title="statement not covered" >      this.envAccess.set(envVar, []);</span>
     }
 &nbsp;
-    const accesses = <span class="cstat-no" title="statement not covered" >this.envAccess.get(envVar)!;</span>
+    const accesses = <span class="cstat-no" title="statement not covered" >this.envAccess.get(envVar)!</span>;
 <span class="cstat-no" title="statement not covered" >    accesses.push({ hook: hookType, timestamp: now });</span>
 &nbsp;
     // 检测冲突（50ms 窗口内）
@@ -442,7 +442,7 @@ export class RaceDetector {
   /**
    * 检测文件访问冲突
    */
-  private <span class="fstat-no" title="function not covered" >detectFileConflict(</span>
+<span class="fstat-no" title="function not covered" >  private d</span>etectFileConflict(
     filePath: string,
     accesses: { hook: string; type: 'read' | 'write'; timestamp: number }[]
   ): void {
@@ -450,32 +450,32 @@ export class RaceDetector {
     const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
     // 只检查窗口内的访问
-    const recent = <span class="cstat-no" title="statement not covered" >accesses.filter(<span class="fstat-no" title="function not covered" >a =&gt; <span class="cstat-no" title="statement not covered" >n</span>ow - a.timestamp &lt; window)</span>;</span>
+    const recent = <span class="cstat-no" title="statement not covered" >accesses.<span class="fstat-no" title="function not covered" >filter(a</span> =&gt; <span class="cstat-no" title="statement not covered" >now - a.timestamp &lt; window);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (recent.length &lt; 2) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
     // 检测 read-write 或 write-write 冲突
-    const writes = <span class="cstat-no" title="statement not covered" >recent.filter(<span class="fstat-no" title="function not covered" >a =&gt; <span class="cstat-no" title="statement not covered" >a</span>.type === 'write')</span>;</span>
-    const reads = <span class="cstat-no" title="statement not covered" >recent.filter(<span class="fstat-no" title="function not covered" >a =&gt; <span class="cstat-no" title="statement not covered" >a</span>.type === 'read')</span>;</span>
+    const writes = <span class="cstat-no" title="statement not covered" >recent.<span class="fstat-no" title="function not covered" >filter(a</span> =&gt; <span class="cstat-no" title="statement not covered" >a.type === 'write');</span></span>
+    const reads = <span class="cstat-no" title="statement not covered" >recent.<span class="fstat-no" title="function not covered" >filter(a</span> =&gt; <span class="cstat-no" title="statement not covered" >a.type === 'read');</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (writes.length &gt; 1) {</span>
       // write-write 冲突
       const conflict: RaceConflict = <span class="cstat-no" title="statement not covered" >{</span>
         type: 'file-write-write',
         resource: filePath,
-        hooks: writes.map(<span class="fstat-no" title="function not covered" >w =&gt; <span class="cstat-no" title="statement not covered" >w</span>.hook)</span>,
+        hooks: writes.<span class="fstat-no" title="function not covered" >map(w</span> =&gt; <span class="cstat-no" title="statement not covered" >w.hook),</span>
         timestamp: now,
       };
 <span class="cstat-no" title="statement not covered" >      this.conflicts.push(conflict);</span>
 <span class="cstat-no" title="statement not covered" >      if (this.onRaceDetected) {</span>
 <span class="cstat-no" title="statement not covered" >        this.onRaceDetected(conflict);</span>
       }
-<span class="cstat-no" title="statement not covered" >    } else if (writes.length &gt; 0 &amp;&amp; reads.length &gt; 0) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >writes.length &gt; 0 &amp;&amp; reads.length &gt; 0) {</span>
       // read-write 冲突
       const conflict: RaceConflict = <span class="cstat-no" title="statement not covered" >{</span>
         type: 'file-read-write',
         resource: filePath,
-        hooks: [...writes.map(<span class="fstat-no" title="function not covered" >w =&gt; <span class="cstat-no" title="statement not covered" >w</span>.hook)</span>, ...reads.map(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.hook)</span>],
+        hooks: [...writes.<span class="fstat-no" title="function not covered" >map(w</span> =&gt; <span class="cstat-no" title="statement not covered" >w.hook),</span> ...reads.<span class="fstat-no" title="function not covered" >map(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.hook)]</span>,
         timestamp: now,
       };
 <span class="cstat-no" title="statement not covered" >      this.conflicts.push(conflict);</span>
@@ -488,20 +488,20 @@ export class RaceDetector {
   /**
    * 检测环境变量冲突
    */
-  private <span class="fstat-no" title="function not covered" >detectEnvConflict(</span>
+<span class="fstat-no" title="function not covered" >  private d</span>etectEnvConflict(
     envVar: string,
     accesses: { hook: string; timestamp: number }[]
   ): void {
     const window = <span class="cstat-no" title="statement not covered" >50; // 50ms 窗口</span>
     const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
-    const recent = <span class="cstat-no" title="statement not covered" >accesses.filter(<span class="fstat-no" title="function not covered" >a =&gt; <span class="cstat-no" title="statement not covered" >n</span>ow - a.timestamp &lt; window)</span>;</span>
+    const recent = <span class="cstat-no" title="statement not covered" >accesses.<span class="fstat-no" title="function not covered" >filter(a</span> =&gt; <span class="cstat-no" title="statement not covered" >now - a.timestamp &lt; window);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (recent.length &gt; 1) {</span>
       const conflict: RaceConflict = <span class="cstat-no" title="statement not covered" >{</span>
         type: 'env-race',
         resource: envVar,
-        hooks: recent.map(<span class="fstat-no" title="function not covered" >a =&gt; <span class="cstat-no" title="statement not covered" >a</span>.hook)</span>,
+        hooks: recent.<span class="fstat-no" title="function not covered" >map(a</span> =&gt; <span class="cstat-no" title="statement not covered" >a.hook),</span>
         timestamp: now,
       };
 <span class="cstat-no" title="statement not covered" >      this.conflicts.push(conflict);</span>
@@ -541,7 +541,7 @@ export class RaceDetector {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

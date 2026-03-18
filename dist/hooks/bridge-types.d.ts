@@ -73,4 +73,24 @@ export declare enum HookSeverity {
  * Severity mapping for each hook type
  */
 export declare const HOOK_SEVERITY: Record<HookType, HookSeverity>;
+/**
+ * Type guard: Check if value is a valid HookType
+ */
+export declare function isHookType(value: unknown): value is HookType;
+/**
+ * Type guard: Check if value is a valid HookInput
+ */
+export declare function isHookInput(value: unknown): value is HookInput;
+/**
+ * Type guard: Check if value is a valid HookOutput
+ */
+export declare function isHookOutput(value: unknown): value is HookOutput;
+/**
+ * Type guard: Check if value is a string
+ */
+export declare function isString(value: unknown): value is string;
+/**
+ * Type guard: Check if value is a non-null object
+ */
+export declare function isObject(value: unknown): value is Record<string, unknown>;
 //# sourceMappingURL=bridge-types.d.ts.map

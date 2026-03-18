@@ -9,16 +9,16 @@ export declare const MCPServerConfigSchema: z.ZodObject<{
     disabled: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
     autoApprove: z.ZodDefault<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
 }, "strip", z.ZodTypeAny, {
-    disabled: boolean;
     command: string;
+    disabled: boolean;
     autoApprove: string[];
     env?: Record<string, string> | undefined;
     args?: string[] | undefined;
 }, {
     command: string;
-    disabled?: boolean | undefined;
     env?: Record<string, string> | undefined;
     args?: string[] | undefined;
+    disabled?: boolean | undefined;
     autoApprove?: string[] | undefined;
 }>;
 export type MCPServerConfig = z.infer<typeof MCPServerConfigSchema>;
@@ -30,22 +30,22 @@ export declare const MCPConfigSchema: z.ZodObject<{
         disabled: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
         autoApprove: z.ZodDefault<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
     }, "strip", z.ZodTypeAny, {
-        disabled: boolean;
         command: string;
+        disabled: boolean;
         autoApprove: string[];
         env?: Record<string, string> | undefined;
         args?: string[] | undefined;
     }, {
         command: string;
-        disabled?: boolean | undefined;
         env?: Record<string, string> | undefined;
         args?: string[] | undefined;
+        disabled?: boolean | undefined;
         autoApprove?: string[] | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
     mcpServers: Record<string, {
-        disabled: boolean;
         command: string;
+        disabled: boolean;
         autoApprove: string[];
         env?: Record<string, string> | undefined;
         args?: string[] | undefined;
@@ -53,9 +53,9 @@ export declare const MCPConfigSchema: z.ZodObject<{
 }, {
     mcpServers: Record<string, {
         command: string;
-        disabled?: boolean | undefined;
         env?: Record<string, string> | undefined;
         args?: string[] | undefined;
+        disabled?: boolean | undefined;
         autoApprove?: string[] | undefined;
     }>;
 }>;

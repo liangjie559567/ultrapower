@@ -1,0 +1,17 @@
+// Template: Email Notification
+// Platform: {{platform}}
+// Dependencies: nodemailer
+
+import nodemailer from 'nodemailer';
+
+export class {{className}} {
+  private transporter = nodemailer.createTransport({
+    host: '{{smtpHost}}',
+    port: 587,
+    auth: { user: '{{user}}', pass: '{{pass}}' }
+  });
+
+  async send(to: string, subject: string, text: string) {
+    return this.transporter.sendMail({ from: '{{from}}', to, subject, text });
+  }
+}

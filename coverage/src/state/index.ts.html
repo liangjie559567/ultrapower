@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -123,7 +123,10 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,6 +147,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -195,6 +201,7 @@ import type { ValidMode } from '../lib/validateMode.js';
 export interface StateManagerOptions {
   mode: ValidMode;
   directory: string;
+  sessionId?: string;
   backend?: 'file' | 'sqlite';
   dualWrite?: boolean; // 双写模式：同时写入旧版和新版
 }
@@ -202,35 +209,37 @@ export interface StateManagerOptions {
 export class StateManager&lt;T = Record&lt;string, unknown&gt;&gt; {
   private adapter: StateAdapter&lt;T&gt;;
   private options: StateManagerOptions;
+  private defaultSessionId?: string;
 &nbsp;
 <span class="fstat-no" title="function not covered" >  constructor(o</span>ptions: StateManagerOptions) {
 <span class="cstat-no" title="statement not covered" >    this.options = options;</span>
+<span class="cstat-no" title="statement not covered" >    this.defaultSessionId = options.sessionId;</span>
     // 当前仅支持文件后端，SQLite 后端预留
 <span class="cstat-no" title="statement not covered" >    this.adapter = new FileStateAdapter&lt;T&gt;(options.mode, options.directory);</span>
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  read(s</span>essionId?: string): T | null {
-<span class="cstat-no" title="statement not covered" >    return this.adapter.read(sessionId);</span>
+<span class="cstat-no" title="statement not covered" >    return this.adapter.read(sessionId || this.defaultSessionId);</span>
   }
 &nbsp;
   async <span class="fstat-no" title="function not covered" >write(d</span>ata: T, sessionId?: string): Promise&lt;boolean&gt; {
-<span class="cstat-no" title="statement not covered" >    return this.adapter.write(data, sessionId);</span>
+<span class="cstat-no" title="statement not covered" >    return this.adapter.write(data, sessionId || this.defaultSessionId);</span>
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  writeSync(d</span>ata: T, sessionId?: string): boolean {
-<span class="cstat-no" title="statement not covered" >    return this.adapter.writeSync(data, sessionId);</span>
+<span class="cstat-no" title="statement not covered" >    return this.adapter.writeSync(data, sessionId || this.defaultSessionId);</span>
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  clear(s</span>essionId?: string): boolean {
-<span class="cstat-no" title="statement not covered" >    return this.adapter.clear(sessionId);</span>
+<span class="cstat-no" title="statement not covered" >    return this.adapter.clear(sessionId || this.defaultSessionId);</span>
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  exists(s</span>essionId?: string): boolean {
-<span class="cstat-no" title="statement not covered" >    return this.adapter.exists(sessionId);</span>
+<span class="cstat-no" title="statement not covered" >    return this.adapter.exists(sessionId || this.defaultSessionId);</span>
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  getPath(s</span>essionId?: string): string {
-<span class="cstat-no" title="statement not covered" >    return this.adapter.getPath(sessionId);</span>
+<span class="cstat-no" title="statement not covered" >    return this.adapter.getPath(sessionId || this.defaultSessionId);</span>
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  list(): string[] {</span>
@@ -250,7 +259,7 @@ export function <span class="fstat-no" title="function not covered" >createState
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -20,8 +20,9 @@ ultrapower transforms Claude Code into an intelligent orchestrator of specialize
 │                    ultrapower v5.5.18                             │
 │                                                                  │
 │  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                 SECURITY LAYER (new v5.5.5)                 │ │
+│  │                 SECURITY LAYER (v7.7.1)                     │ │
 │  │  bridge-normalize  │  assertValidMode  │  SENSITIVE_HOOKS   │ │
+│  │  auditLog (NEW)    │  userFeedback (NEW)  │  file-lock      │ │
 │  └──────────────────────────┬──────────────────────────────────┘ │
 │                             │                                    │
 │  ┌──────────────────────────▼──────────────────────────────────┐ │
@@ -64,6 +65,15 @@ ultrapower transforms Claude Code into an intelligent orchestrator of specialize
 * 35 custom tools (LSP x12, AST x2, REPL x1, Notepad x6, State x5, Memory x4, Trace x2, Skills x3)
 
 * 8 validated execution modes (autopilot, ultrapilot, team, pipeline, ralph, ultrawork, ultraqa, swarm)
+
+**New in v7.7.1:**
+
+* Audit logging system (`src/lib/auditLog.ts`, `src/audit/logger.ts`)
+* User feedback mechanism (`src/lib/userFeedback.ts`)
+* Atomic write operations with file locking (`src/lib/atomic-write.ts`, `src/lib/file-lock.ts`)
+* Enhanced prototype pollution protection (recursive 10-level deep checking)
+* ReDoS protection (50KB input limit)
+* Automatic state file cleanup (24-hour stale session removal)
 
 ---
 
@@ -210,6 +220,82 @@ Note (D-03): The original PRD listed 7 modes; `swarm` was added in a subsequent 
 | Swarm (SQLite) | `{worktree}/.omc/state/swarm-state.db` |
 
 All state access must go through the `state_read` / `state_write` MCP tools, not direct file I/O.
+
+### Audit Logging System (new in v7.7.1)
+
+**Location:** `src/lib/auditLog.ts`, `src/audit/logger.ts`
+
+The Audit Logging System provides comprehensive security event tracking to `.omc/audit.log`. All security-sensitive operations are logged with timestamps, event types, and context.
+
+#### Logged Events
+
+* Hook input validation failures
+* Prototype pollution detection attempts
+* Path traversal attempts
+* State file read/write operations
+* Permission request decisions
+* Security rule violations
+
+#### Usage
+
+```typescript
+import { logAuditEvent } from './src/lib/auditLog';
+
+logAuditEvent('PROTOTYPE_POLLUTION_DETECTED', {
+  field: '__proto__',
+  hookType: 'permission-request',
+  timestamp: new Date().toISOString()
+});
+```
+
+### User Feedback Mechanism (new in v7.7.1)
+
+**Location:** `src/lib/userFeedback.ts`
+
+The User Feedback Mechanism collects user feedback for continuous system improvement.
+
+#### Feedback Types
+
+* Feature requests
+* Bug reports
+* Usability issues
+* Performance concerns
+
+#### Usage
+
+```typescript
+import { collectFeedback } from './src/lib/userFeedback';
+
+collectFeedback({
+  type: 'bug',
+  description: 'Issue description',
+  context: { sessionId, mode }
+});
+```
+
+### Atomic Write Operations (new in v7.7.1)
+
+**Location:** `src/lib/atomic-write.ts`, `src/lib/file-lock.ts`
+
+Atomic write operations with file locking prevent race conditions in concurrent state file access.
+
+#### Features
+
+* Write-to-temp + atomic rename pattern
+* File-based locking with timeout
+* Concurrent write queue
+* Automatic lock cleanup
+
+#### Usage
+
+```typescript
+import { atomicWrite } from './src/lib/atomic-write';
+import { withFileLock } from './src/lib/file-lock';
+
+await withFileLock(filePath, async () => {
+  await atomicWrite(filePath, content);
+});
+```
 
 ---
 

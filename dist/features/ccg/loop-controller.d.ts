@@ -1,7 +1,7 @@
 export interface LoopConfig {
     maxRounds: number;
     timeout: number;
-    convergenceCheck: (result: any) => boolean;
+    convergenceCheck: (result: unknown) => boolean;
 }
 export interface LoopResult {
     completed: boolean;
@@ -9,6 +9,6 @@ export interface LoopResult {
     reason: 'converged' | 'max_rounds' | 'timeout';
 }
 export declare class LoopController {
-    execute(config: LoopConfig, task: () => Promise<any>): Promise<LoopResult>;
+    execute(config: LoopConfig, task: () => Promise<unknown>): Promise<LoopResult>;
 }
 //# sourceMappingURL=loop-controller.d.ts.map

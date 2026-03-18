@@ -1104,9 +1104,9 @@
  * 6. verification-before-completion (required before merge)
  */
 &nbsp;
-import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
-import { validateAssumptions, type Assumption } from '../../features/assumption-validator/index.js';
+import { validateAssumptions } from '../../features/assumption-validator/index.js';
 import { extractAssumptionsFromPlan } from './assumption-extractor.js';
 import { getChangedFiles } from './git-helper.js';
 import { runQualityGateSync } from './quality-gate-sync.js';
@@ -1175,7 +1175,7 @@ export function <span class="fstat-no" title="function not covered" >writeWorkfl
   const <span class="cstat-no" title="statement not covered" >dir = join(workingDir, '.omc');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!existsSync(dir)) {</span>
-<span class="cstat-no" title="statement not covered" >    require('fs').mkdirSync(dir, { recursive: true });</span>
+<span class="cstat-no" title="statement not covered" >    mkdirSync(dir, { recursive: true });</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  writeFileSync(statePath, JSON.stringify(state, null, 2), 'utf-8');</span>
@@ -1217,7 +1217,7 @@ export function <span class="fstat-no" title="function not covered" >detectImple
   ];
 &nbsp;
   const lowerPrompt = <span class="cstat-no" title="statement not covered" >prompt.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >  return implementationKeywords.some(<span class="fstat-no" title="function not covered" >kw =&gt; <span class="cstat-no" title="statement not covered" >l</span>owerPrompt.includes(kw))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return implementationKeywords.<span class="fstat-no" title="function not covered" >some(k</span>w =&gt; <span class="cstat-no" title="statement not covered" >lowerPrompt.includes(kw))</span>;</span>
 }
 &nbsp;
 /**
@@ -1230,7 +1230,7 @@ export function <span class="fstat-no" title="function not covered" >detectExecu
   ];
 &nbsp;
   const lowerPrompt = <span class="cstat-no" title="statement not covered" >prompt.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >  return executionKeywords.some(<span class="fstat-no" title="function not covered" >kw =&gt; <span class="cstat-no" title="statement not covered" >l</span>owerPrompt.includes(kw))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return executionKeywords.<span class="fstat-no" title="function not covered" >some(k</span>w =&gt; <span class="cstat-no" title="statement not covered" >lowerPrompt.includes(kw))</span>;</span>
 }
 &nbsp;
 /**
@@ -1290,7 +1290,7 @@ export function <span class="fstat-no" title="function not covered" >detectSecur
     '认证', '密码', '加密', '令牌'
   ];
   const lowerPrompt = <span class="cstat-no" title="statement not covered" >prompt.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >  return securityKeywords.some(<span class="fstat-no" title="function not covered" >kw =&gt; <span class="cstat-no" title="statement not covered" >l</span>owerPrompt.includes(kw) || prompt.includes(kw))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return securityKeywords.<span class="fstat-no" title="function not covered" >some(k</span>w =&gt; <span class="cstat-no" title="statement not covered" >lowerPrompt.includes(kw) || prompt.includes(kw))</span>;</span>
 }
 &nbsp;
 /**
@@ -1302,7 +1302,7 @@ export function <span class="fstat-no" title="function not covered" >detectPerfo
     '性能', '优化', '缓存', '查询', '数据库'
   ];
   const lowerPrompt = <span class="cstat-no" title="statement not covered" >prompt.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >  return performanceKeywords.some(<span class="fstat-no" title="function not covered" >kw =&gt; <span class="cstat-no" title="statement not covered" >l</span>owerPrompt.includes(kw) || prompt.includes(kw))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return performanceKeywords.<span class="fstat-no" title="function not covered" >some(k</span>w =&gt; <span class="cstat-no" title="statement not covered" >lowerPrompt.includes(kw) || prompt.includes(kw))</span>;</span>
 }
 &nbsp;
 /**
@@ -1324,7 +1324,7 @@ export function <span class="fstat-no" title="function not covered" >detectVerif
     '验证', '检查完成'
   ];
   const lowerPrompt = <span class="cstat-no" title="statement not covered" >prompt.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >  return verificationKeywords.some(<span class="fstat-no" title="function not covered" >kw =&gt; <span class="cstat-no" title="statement not covered" >l</span>owerPrompt.includes(kw) || prompt.includes(kw))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return verificationKeywords.<span class="fstat-no" title="function not covered" >some(k</span>w =&gt; <span class="cstat-no" title="statement not covered" >lowerPrompt.includes(kw) || prompt.includes(kw))</span>;</span>
 }
 &nbsp;
 /**
@@ -1338,7 +1338,7 @@ export function <span class="fstat-no" title="function not covered" >detectVague
 &nbsp;
   // Check both original and lowercase for case-insensitive English matching
   const lowerPrompt = <span class="cstat-no" title="statement not covered" >prompt.toLowerCase();</span>
-  const hasVaguePattern = <span class="cstat-no" title="statement not covered" >vaguePatterns.some(<span class="fstat-no" title="function not covered" >pattern =&gt;</span></span>
+  const hasVaguePattern = <span class="cstat-no" title="statement not covered" >vaguePatterns.<span class="fstat-no" title="function not covered" >some(p</span>attern =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    lowerPrompt.includes(pattern.toLowerCase()) || prompt.includes(pattern)</span>
   );
 &nbsp;
@@ -1536,13 +1536,13 @@ export function <span class="fstat-no" title="function not covered" >processWork
 <span class="cstat-no" title="statement not covered" >            return {</span>
               success: true,
               shouldBlock: true,
-              message: `⚠️ Workflow Gate: 质量门禁未通过 (得分: ${result.score}/100)\n问题:\n${result.issues.slice(0, 5).map(<span class="fstat-no" title="function not covered" >i =&gt; <span class="cstat-no" title="statement not covered" >`</span>  - ${i}`)</span>.join('\n')}`
+              message: `⚠️ Workflow Gate: 质量门禁未通过 (得分: ${result.score}/100)\n问题:\n${result.issues.slice(0, 5).<span class="fstat-no" title="function not covered" >map(i</span> =&gt; <span class="cstat-no" title="statement not covered" >`  - ${i}`).</span>join('\n')}`
             };
           }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >          state.qualityGatePassed = true;</span>
 <span class="cstat-no" title="statement not covered" >          writeWorkflowState(workingDirectory, state);</span>
-        } catch (error) {
+        } catch (_error) {
 <span class="cstat-no" title="statement not covered" >          state.qualityGatePassed = true;</span>
 <span class="cstat-no" title="statement not covered" >          writeWorkflowState(workingDirectory, state);</span>
         }
@@ -1599,7 +1599,7 @@ export function <span class="fstat-no" title="function not covered" >processWork
 export function <span class="fstat-no" title="function not covered" >clearWorkflowState(w</span>orkingDir: string): void {
   const statePath = <span class="cstat-no" title="statement not covered" >getWorkflowStatePath(workingDir);</span>
 <span class="cstat-no" title="statement not covered" >  if (existsSync(statePath)) {</span>
-<span class="cstat-no" title="statement not covered" >    require('fs').unlinkSync(statePath);</span>
+<span class="cstat-no" title="statement not covered" >    unlinkSync(statePath);</span>
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -1609,7 +1609,7 @@ export function <span class="fstat-no" title="function not covered" >clearWorkfl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

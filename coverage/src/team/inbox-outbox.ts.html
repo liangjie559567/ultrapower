@@ -853,7 +853,7 @@ export function <span class="fstat-no" title="function not covered" >rotateOutbo
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-    const lines = <span class="cstat-no" title="statement not covered" >content.split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.trim())</span>;</span>
+    const lines = <span class="cstat-no" title="statement not covered" >content.split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.trim())</span>;</span>
 <span class="cstat-no" title="statement not covered" >    if (lines.length &lt;= maxLines) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
     // Keep the most recent half
@@ -885,7 +885,7 @@ export function <span class="fstat-no" title="function not covered" >rotateInbox
 <span class="cstat-no" title="statement not covered" >    if (stat.size &lt; maxSizeBytes) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-    const lines = <span class="cstat-no" title="statement not covered" >content.split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.trim())</span>;</span>
+    const lines = <span class="cstat-no" title="statement not covered" >content.split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.trim())</span>;</span>
 &nbsp;
     // Keep the most recent half
     const keepCount = <span class="cstat-no" title="statement not covered" >Math.max(1, Math.floor(lines.length / 2));</span>
@@ -1030,10 +1030,10 @@ export function <span class="fstat-no" title="function not covered" >clearInbox(
   const cursorFile = <span class="cstat-no" title="statement not covered" >inboxCursorPath(teamName, workerName);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (existsSync(inbox)) {</span>
-<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >writeFileWithMode(inbox, ''); }</span> catch { /* ignore */ }</span>
+<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >writeFileWithMode(inbox, ''); } catch {</span> /* ignore */ }</span>
   }
 <span class="cstat-no" title="statement not covered" >  if (existsSync(cursorFile)) {</span>
-<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >writeFileWithMode(cursorFile, JSON.stringify({ bytesRead: 0 })); }</span> catch { /* ignore */ }</span>
+<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >writeFileWithMode(cursorFile, JSON.stringify({ bytesRead: 0 })); } catch {</span> /* ignore */ }</span>
   }
 }
 &nbsp;
@@ -1067,7 +1067,7 @@ export function <span class="fstat-no" title="function not covered" >checkShutdo
 export function <span class="fstat-no" title="function not covered" >deleteShutdownSignal(t</span>eamName: string, workerName: string): void {
   const filePath = <span class="cstat-no" title="statement not covered" >signalPath(teamName, workerName);</span>
 <span class="cstat-no" title="statement not covered" >  if (existsSync(filePath)) {</span>
-<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >unlinkSync(filePath); }</span> catch { /* ignore */ }</span>
+<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >unlinkSync(filePath); } catch {</span> /* ignore */ }</span>
   }
 }
 &nbsp;
@@ -1101,7 +1101,7 @@ export function <span class="fstat-no" title="function not covered" >checkDrainS
 export function <span class="fstat-no" title="function not covered" >deleteDrainSignal(t</span>eamName: string, workerName: string): void {
   const filePath = <span class="cstat-no" title="statement not covered" >drainSignalPath(teamName, workerName);</span>
 <span class="cstat-no" title="statement not covered" >  if (existsSync(filePath)) {</span>
-<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >unlinkSync(filePath); }</span> catch { /* ignore */ }</span>
+<span class="cstat-no" title="statement not covered" >    try { <span class="cstat-no" title="statement not covered" >unlinkSync(filePath); } catch {</span> /* ignore */ }</span>
   }
 }
 &nbsp;
@@ -1118,7 +1118,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupWork
   ];
 <span class="cstat-no" title="statement not covered" >  for (const f of files) {</span>
 <span class="cstat-no" title="statement not covered" >    if (existsSync(f)) {</span>
-<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >unlinkSync(f); }</span> catch { /* ignore */ }</span>
+<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >unlinkSync(f); } catch {</span> /* ignore */ }</span>
     }
   }
 }
@@ -1129,7 +1129,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupWork
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

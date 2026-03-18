@@ -337,14 +337,14 @@ export function <span class="fstat-no" title="function not covered" >generateTea
   const <span class="cstat-no" title="statement not covered" >auditEvents = readAuditLog(workingDirectory, teamName);</span>
 &nbsp;
   // Compute stats
-  const taskCompleted = <span class="cstat-no" title="statement not covered" >auditEvents.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.eventType === 'task_completed')</span>.length;</span>
-  const taskFailed = <span class="cstat-no" title="statement not covered" >auditEvents.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.eventType === 'task_permanently_failed')</span>.length;</span>
+  const taskCompleted = <span class="cstat-no" title="statement not covered" >auditEvents.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.eventType === 'task_completed').</span>length;</span>
+  const taskFailed = <span class="cstat-no" title="statement not covered" >auditEvents.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.eventType === 'task_permanently_failed').</span>length;</span>
   const taskTotal = <span class="cstat-no" title="statement not covered" >taskCompleted + taskFailed;</span>
-  const workerCount = <span class="cstat-no" title="statement not covered" >new Set(auditEvents.map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.workerName)</span>).size;</span>
+  const workerCount = <span class="cstat-no" title="statement not covered" >new Set(auditEvents.<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.workerName))</span>.size;</span>
 &nbsp;
   // Duration
-  const startEvents = <span class="cstat-no" title="statement not covered" >auditEvents.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.eventType === 'bridge_start')</span>;</span>
-  const endEvents = <span class="cstat-no" title="statement not covered" >auditEvents.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.eventType === 'bridge_shutdown')</span>;</span>
+  const startEvents = <span class="cstat-no" title="statement not covered" >auditEvents.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.eventType === 'bridge_start');</span></span>
+  const endEvents = <span class="cstat-no" title="statement not covered" >auditEvents.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.eventType === 'bridge_shutdown');</span></span>
   let durationStr = <span class="cstat-no" title="statement not covered" >'unknown';</span>
 <span class="cstat-no" title="statement not covered" >  if (startEvents.length &gt; 0) {</span>
     const startTime = <span class="cstat-no" title="statement not covered" >new Date(startEvents[0].timestamp).getTime();</span>
@@ -367,7 +367,7 @@ export function <span class="fstat-no" title="function not covered" >generateTea
 <span class="cstat-no" title="statement not covered" >  lines.push('');</span>
 &nbsp;
   // Task results table
-  const taskEvents = <span class="cstat-no" title="statement not covered" >auditEvents.filter(<span class="fstat-no" title="function not covered" >e =&gt;</span></span>
+  const taskEvents = <span class="cstat-no" title="statement not covered" >auditEvents.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    e.eventType === 'task_completed' || e.eventType === 'task_permanently_failed'</span>
   );
 <span class="cstat-no" title="statement not covered" >  if (taskEvents.length &gt; 0) {</span>
@@ -395,7 +395,7 @@ export function <span class="fstat-no" title="function not covered" >generateTea
 &nbsp;
   // Activity timeline
 <span class="cstat-no" title="statement not covered" >  lines.push('## Activity Timeline');</span>
-  const <span class="cstat-no" title="statement not covered" >timeline = formatActivityTimeline(activities.slice(-50)); // Last 50 entries</span>
+  const <span class="cstat-no" title="statement not covered" >timeline = formatActivityTimeline(activities.slice(-50));</span> // Last 50 entries
 <span class="cstat-no" title="statement not covered" >  lines.push(timeline);</span>
 <span class="cstat-no" title="statement not covered" >  lines.push('');</span>
 &nbsp;
@@ -423,7 +423,7 @@ export function <span class="fstat-no" title="function not covered" >saveTeamRep
   const report = <span class="cstat-no" title="statement not covered" >generateTeamReport(workingDirectory, teamName);</span>
   const <span class="cstat-no" title="statement not covered" >dir = join(workingDirectory, '.omc', 'reports');</span>
 <span class="cstat-no" title="statement not covered" >  ensureDirWithMode(dir);</span>
-  const <span class="cstat-no" title="statement not covered" >timestamp = new Date().toISOString().replace(/[:.]/g, '-');</span>
+  const timestamp = <span class="cstat-no" title="statement not covered" >new Date().toISOString().replace(/[:.]/g, '-');</span>
   const <span class="cstat-no" title="statement not covered" >filePath = join(dir, `team-${teamName}-${timestamp}.md`);</span>
 <span class="cstat-no" title="statement not covered" >  validateResolvedPath(filePath, workingDirectory);</span>
 <span class="cstat-no" title="statement not covered" >  writeFileWithMode(filePath, report);</span>
@@ -436,7 +436,7 @@ export function <span class="fstat-no" title="function not covered" >saveTeamRep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

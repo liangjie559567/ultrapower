@@ -398,7 +398,7 @@ export async function <span class="fstat-no" title="function not covered" >gener
 }
 &nbsp;
 function <span class="fstat-no" title="function not covered" >generateApproach(s</span>pec: Specification): string {
-  const hasHighPriorityReqs = <span class="cstat-no" title="statement not covered" >spec.requirements.some(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.priority === 'high')</span>;</span>
+  const hasHighPriorityReqs = <span class="cstat-no" title="statement not covered" >spec.requirements.<span class="fstat-no" title="function not covered" >some(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.priority === 'high');</span></span>
   const approach = <span class="cstat-no" title="statement not covered" >`Implement ${spec.feature} using modular architecture`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (hasHighPriorityReqs) {</span>
@@ -420,7 +420,7 @@ async function <span class="fstat-no" title="function not covered" >scanExisting
         const relativePath = <span class="cstat-no" title="statement not covered" >path.join(base, entry.name);</span>
 <span class="cstat-no" title="statement not covered" >        if (entry.isFile() &amp;&amp; (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {</span>
 <span class="cstat-no" title="statement not covered" >          existing.push(relativePath);</span>
-<span class="cstat-no" title="statement not covered" >        } else if (entry.isDirectory()) {</span>
+        } else if (<span class="cstat-no" title="statement not covered" >entry.isDirectory()) {</span>
 <span class="cstat-no" title="statement not covered" >          await scanRecursive(fullPath, relativePath);</span>
         }
       }
@@ -451,7 +451,7 @@ function <span class="fstat-no" title="function not covered" >identifyComponents
     });
   }
 &nbsp;
-  const hasTypeReqs = <span class="cstat-no" title="statement not covered" >spec.requirements.some(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.description.toLowerCase().includes('type'))</span>;</span>
+  const hasTypeReqs = <span class="cstat-no" title="statement not covered" >spec.requirements.<span class="fstat-no" title="function not covered" >some(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.description.toLowerCase().includes('type'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >  if (hasTypeReqs) {</span>
 <span class="cstat-no" title="statement not covered" >    components.push({</span>
       name: 'Type Definitions',
@@ -471,7 +471,7 @@ function <span class="fstat-no" title="function not covered" >identifyComponents
 &nbsp;
 function <span class="fstat-no" title="function not covered" >extractDependencies(s</span>pec: Specification): string[] {
   const deps: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
-  const reqText = <span class="cstat-no" title="statement not covered" >spec.requirements.map(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.description.toLowerCase())</span>.join(' ');</span>
+  const reqText = <span class="cstat-no" title="statement not covered" >spec.requirements.<span class="fstat-no" title="function not covered" >map(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.description.toLowerCase())</span>.join(' ');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (reqText.includes('api') || reqText.includes('http')) <span class="cstat-no" title="statement not covered" >deps.push('axios or fetch');</span></span>
 <span class="cstat-no" title="statement not covered" >  if (reqText.includes('validation')) <span class="cstat-no" title="statement not covered" >deps.push('zod or yup');</span></span>
@@ -483,7 +483,7 @@ function <span class="fstat-no" title="function not covered" >extractDependencie
 function <span class="fstat-no" title="function not covered" >identifyRisks(s</span>pec: Specification): Risk[] {
   const risks: Risk[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-  const highPriorityCount = <span class="cstat-no" title="statement not covered" >spec.requirements.filter(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.priority === 'high')</span>.length;</span>
+  const highPriorityCount = <span class="cstat-no" title="statement not covered" >spec.requirements.<span class="fstat-no" title="function not covered" >filter(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.priority === 'high').</span>length;</span>
 <span class="cstat-no" title="statement not covered" >  if (highPriorityCount &gt; 3) {</span>
 <span class="cstat-no" title="statement not covered" >    risks.push({</span>
       description: 'High complexity with multiple critical requirements',
@@ -491,7 +491,7 @@ function <span class="fstat-no" title="function not covered" >identifyRisks(s</s
     });
   }
 &nbsp;
-  const hasSecurityReqs = <span class="cstat-no" title="statement not covered" >spec.requirements.some(<span class="fstat-no" title="function not covered" >r =&gt;</span></span>
+  const hasSecurityReqs = <span class="cstat-no" title="statement not covered" >spec.requirements.<span class="fstat-no" title="function not covered" >some(r</span> =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    r.description.toLowerCase().includes('auth') ||</span>
     r.description.toLowerCase().includes('security')
   );
@@ -515,12 +515,12 @@ function <span class="fstat-no" title="function not covered" >identifyRisks(s</s
 export function <span class="fstat-no" title="function not covered" >formatPlan(p</span>lan: TechnicalPlan): string {
   let output = <span class="cstat-no" title="statement not covered" >`# Technical Plan\n\n## Approach\n${plan.approach}\n\n`;</span>
 <span class="cstat-no" title="statement not covered" >  output += `## Components\n`;</span>
-<span class="cstat-no" title="statement not covered" >  plan.components.forEach(<span class="fstat-no" title="function not covered" >c =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  plan.components.<span class="fstat-no" title="function not covered" >forEach(c</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    output += `### ${c.name}\n${c.purpose}\n`;</span>
-<span class="cstat-no" title="statement not covered" >    output += `Files:\n${c.files.map(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >`</span>- ${f}`)</span>.join('\n')}\n\n`;</span>
+<span class="cstat-no" title="statement not covered" >    output += `Files:\n${c.files.<span class="fstat-no" title="function not covered" >map(f</span> =&gt; <span class="cstat-no" title="statement not covered" >`- ${f}`).</span>join('\n')}\n\n`;</span>
   });
 <span class="cstat-no" title="statement not covered" >  output += `## Risks\n`;</span>
-<span class="cstat-no" title="statement not covered" >  plan.risks.forEach(<span class="fstat-no" title="function not covered" >r =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  plan.risks.<span class="fstat-no" title="function not covered" >forEach(r</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    output += `- **${r.description}**: ${r.mitigation}\n`;</span>
   });
 <span class="cstat-no" title="statement not covered" >  return output;</span>
@@ -532,7 +532,7 @@ export function <span class="fstat-no" title="function not covered" >formatPlan(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

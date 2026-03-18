@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -194,7 +194,15 @@
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
 <a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -307,10 +315,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -358,7 +374,7 @@ export async function <span class="fstat-no" title="function not covered" >proce
   }
 &nbsp;
   // Normalize snake_case fields from Claude Code to camelCase
-  const <span class="cstat-no" title="statement not covered" >input = normalizeHookInput(rawInput, hookType) as HookInput;</span>
+  const <span class="cstat-no" title="statement not covered" >input = normalizeHookInput(rawInput, hookType) </span>as HookInput;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     // Try lazy-loaded handlers first
@@ -419,14 +435,14 @@ export async function <span class="fstat-no" title="function not covered" >proce
  */
 export async function <span class="fstat-no" title="function not covered" >main(): Promise&lt;void&gt; {</span>
   const args = <span class="cstat-no" title="statement not covered" >process.argv.slice(2);</span>
-  const hookArg = <span class="cstat-no" title="statement not covered" >args.find(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.startsWith("--hook="))</span>;</span>
+  const hookArg = <span class="cstat-no" title="statement not covered" >args.<span class="fstat-no" title="function not covered" >find((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.startsWith("--hook="))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!hookArg) {</span>
 <span class="cstat-no" title="statement not covered" >    console.error("Usage: node hook-bridge.mjs --hook=&lt;type&gt;");</span>
 <span class="cstat-no" title="statement not covered" >    process.exit(1);</span>
   }
 &nbsp;
-  const hookType = <span class="cstat-no" title="statement not covered" >hookArg.slice("--hook=".length).trim() as HookType;</span>
+  const hookType = <span class="cstat-no" title="statement not covered" >hookArg.slice("--hook=".length).trim() </span>as HookType;
 <span class="cstat-no" title="statement not covered" >  if (!hookType) {</span>
 <span class="cstat-no" title="statement not covered" >    console.error("Invalid hook argument format: missing hook type");</span>
 <span class="cstat-no" title="statement not covered" >    process.exit(1);</span>
@@ -438,11 +454,19 @@ export async function <span class="fstat-no" title="function not covered" >main(
   }
 &nbsp;
   const inputStr = <span class="cstat-no" title="statement not covered" >Buffer.concat(chunks).toString("utf-8");</span>
+&nbsp;
+  // Validate empty input
+<span class="cstat-no" title="statement not covered" >  if (!inputStr || inputStr.trim() === '') {</span>
+<span class="cstat-no" title="statement not covered" >    console.error('[hook-bridge] Hook input is empty');</span>
+<span class="cstat-no" title="statement not covered" >    process.exit(1);</span>
+  }
+&nbsp;
   let input: HookInput = <span class="cstat-no" title="statement not covered" >{};</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    input = JSON.parse(inputStr);</span>
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    console.error('[hook-bridge] Invalid JSON input:', err);</span>
+<span class="cstat-no" title="statement not covered" >    console.error('[hook-bridge] Invalid JSON input:', (err as Error).message);</span>
+<span class="cstat-no" title="statement not covered" >    process.exit(1);</span>
   }
 &nbsp;
   const output = <span class="cstat-no" title="statement not covered" >await processHook(hookType, input);</span>
@@ -451,7 +475,7 @@ export async function <span class="fstat-no" title="function not covered" >main(
 &nbsp;
 // Run if called directly
 <span class="cstat-no" title="statement not covered" >if (import.meta.url === pathToFileURL(process.argv[1]).href) {</span>
-<span class="cstat-no" title="statement not covered" >  main().catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  main().<span class="fstat-no" title="function not covered" >catch((e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    console.error("[hook-bridge] Fatal error:", err);</span>
 <span class="cstat-no" title="statement not covered" >    process.exit(1);</span>
   });
@@ -463,7 +487,7 @@ export async function <span class="fstat-no" title="function not covered" >main(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

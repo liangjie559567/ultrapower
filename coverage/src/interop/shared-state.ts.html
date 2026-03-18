@@ -963,13 +963,13 @@ export function <span class="fstat-no" title="function not covered" >readSharedT
 <span class="cstat-no" title="statement not covered" >    return [];</span>
   }
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >files = readdirSync(tasksDir).filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.endsWith('.json'))</span>;</span>
+  const <span class="cstat-no" title="statement not covered" >files = readdirSync(tasksDir).<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.endsWith('.json'))</span>;</span>
   const tasks: SharedTask[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (const file of files) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const <span class="cstat-no" title="statement not covered" >content = readFileSync(join(tasksDir, file), 'utf-8');</span>
-      const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as SharedTask;</span>
+      const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as SharedTask;
 &nbsp;
       // Apply filters
 <span class="cstat-no" title="statement not covered" >      if (filter?.source &amp;&amp; task.source !== filter.source) <span class="cstat-no" title="statement not covered" >continue;</span></span>
@@ -983,7 +983,7 @@ export function <span class="fstat-no" title="function not covered" >readSharedT
   }
 &nbsp;
   // Sort by creation time (newest first)
-<span class="cstat-no" title="statement not covered" >  return tasks.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  return tasks.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()</span>
   );
 }
@@ -1004,7 +1004,7 @@ export function <span class="fstat-no" title="function not covered" >updateShare
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(taskPath, 'utf-8');</span>
-    const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as SharedTask;</span>
+    const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as SharedTask;
 &nbsp;
     const updatedTask: SharedTask = <span class="cstat-no" title="statement not covered" >{</span>
       ...task,
@@ -1070,13 +1070,13 @@ export function <span class="fstat-no" title="function not covered" >readSharedM
 <span class="cstat-no" title="statement not covered" >    return [];</span>
   }
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >files = readdirSync(messagesDir).filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.endsWith('.json'))</span>;</span>
+  const <span class="cstat-no" title="statement not covered" >files = readdirSync(messagesDir).<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.endsWith('.json'))</span>;</span>
   const messages: SharedMessage[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (const file of files) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const <span class="cstat-no" title="statement not covered" >content = readFileSync(join(messagesDir, file), 'utf-8');</span>
-      const message = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as SharedMessage;</span>
+      const message = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as SharedMessage;
 &nbsp;
       // Apply filters
 <span class="cstat-no" title="statement not covered" >      if (filter?.source &amp;&amp; message.source !== filter.source) <span class="cstat-no" title="statement not covered" >continue;</span></span>
@@ -1090,7 +1090,7 @@ export function <span class="fstat-no" title="function not covered" >readSharedM
   }
 &nbsp;
   // Sort by timestamp (newest first)
-<span class="cstat-no" title="statement not covered" >  return messages.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  return messages.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()</span>
   );
 }
@@ -1107,7 +1107,7 @@ export function <span class="fstat-no" title="function not covered" >markMessage
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(messagePath, 'utf-8');</span>
-    const message = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as SharedMessage;</span>
+    const message = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as SharedMessage;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    message.read = true;</span>
 <span class="cstat-no" title="statement not covered" >    atomicWriteJsonSync(messagePath, message);</span>
@@ -1139,7 +1139,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupInte
 <span class="cstat-no" title="statement not covered" >  if (!options?.keepTasks) {</span>
     const <span class="cstat-no" title="statement not covered" >tasksDir = join(interopDir, 'tasks');</span>
 <span class="cstat-no" title="statement not covered" >    if (existsSync(tasksDir)) {</span>
-      const <span class="cstat-no" title="statement not covered" >files = readdirSync(tasksDir).filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.endsWith('.json'))</span>;</span>
+      const <span class="cstat-no" title="statement not covered" >files = readdirSync(tasksDir).<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.endsWith('.json'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      for (const file of files) {</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
@@ -1147,7 +1147,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupInte
 &nbsp;
 <span class="cstat-no" title="statement not covered" >          if (options?.olderThan) {</span>
             const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-            const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as SharedTask;</span>
+            const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as SharedTask;
             const taskTime = <span class="cstat-no" title="statement not covered" >new Date(task.createdAt).getTime();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            if (taskTime &lt; cutoffTime) {</span>
@@ -1169,7 +1169,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupInte
 <span class="cstat-no" title="statement not covered" >  if (!options?.keepMessages) {</span>
     const <span class="cstat-no" title="statement not covered" >messagesDir = join(interopDir, 'messages');</span>
 <span class="cstat-no" title="statement not covered" >    if (existsSync(messagesDir)) {</span>
-      const <span class="cstat-no" title="statement not covered" >files = readdirSync(messagesDir).filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.endsWith('.json'))</span>;</span>
+      const <span class="cstat-no" title="statement not covered" >files = readdirSync(messagesDir).<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.endsWith('.json'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      for (const file of files) {</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
@@ -1177,7 +1177,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupInte
 &nbsp;
 <span class="cstat-no" title="statement not covered" >          if (options?.olderThan) {</span>
             const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-            const message = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as SharedMessage;</span>
+            const message = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as SharedMessage;
             const messageTime = <span class="cstat-no" title="statement not covered" >new Date(message.timestamp).getTime();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            if (messageTime &lt; cutoffTime) {</span>
@@ -1204,7 +1204,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupInte
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

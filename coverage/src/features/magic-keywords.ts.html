@@ -1184,7 +1184,7 @@ THE USER ASKED FOR X. DELIVER EXACTLY X. NOT A SUBSET. NOT A DEMO. NOT A STARTIN
 const ultraworkEnhancement: MagicKeyword = <span class="cstat-no" title="statement not covered" >{</span>
   triggers: ['ultrawork', 'ulw', 'uw'],
   description: 'Activates maximum performance mode with parallel agent orchestration',
-  action: <span class="fstat-no" title="function not covered" >(p</span>rompt: string) =&gt; {
+<span class="fstat-no" title="function not covered" >  action: (p</span>rompt: string) =&gt; {
     // Remove the trigger word and add enhancement instructions
     const cleanPrompt = <span class="cstat-no" title="statement not covered" >removeTriggerWords(prompt, ['ultrawork', 'ulw', 'uw']);</span>
 <span class="cstat-no" title="statement not covered" >    return getUltraworkMessage() + cleanPrompt;</span>
@@ -1198,7 +1198,7 @@ const ultraworkEnhancement: MagicKeyword = <span class="cstat-no" title="stateme
 const searchEnhancement: MagicKeyword = <span class="cstat-no" title="statement not covered" >{</span>
   triggers: ['search', 'find', 'locate', 'lookup', 'explore', 'discover', 'scan', 'grep', 'query', 'browse', 'detect', 'trace', 'seek', 'track', 'pinpoint', 'hunt'],
   description: 'Maximizes search effort and thoroughness',
-  action: <span class="fstat-no" title="function not covered" >(p</span>rompt: string) =&gt; {
+<span class="fstat-no" title="function not covered" >  action: (p</span>rompt: string) =&gt; {
     // Multi-language search pattern
     const searchPattern = <span class="cstat-no" title="statement not covered" >/\b(search|find|locate|lookup|look\s*up|explore|discover|scan|grep|query|browse|detect|trace|seek|track|pinpoint|hunt)\b|where\s+is|show\s+me|list\s+all|검색|찾아|탐색|조회|스캔|서치|뒤져|찾기|어디|추적|탐지|찾아봐|찾아내|보여줘|목록|検索|探して|見つけて|サーチ|探索|スキャン|どこ|発見|捜索|見つけ出す|一覧|搜索|查找|寻找|查询|检索|定位|扫描|发现|在哪里|找出来|列出|tìm kiếm|tra cứu|định vị|quét|phát hiện|truy tìm|tìm ra|ở đâu|liệt kê/i;</span>
 &nbsp;
@@ -1226,7 +1226,7 @@ NEVER stop at first result - be exhaustive.`;
 const analyzeEnhancement: MagicKeyword = <span class="cstat-no" title="statement not covered" >{</span>
   triggers: ['analyze', 'analyse', 'investigate', 'examine', 'study', 'deep-dive', 'inspect', 'audit', 'evaluate', 'assess', 'review', 'diagnose', 'scrutinize', 'dissect', 'debug', 'comprehend', 'interpret', 'breakdown', 'understand'],
   description: 'Activates deep analysis and investigation mode',
-  action: <span class="fstat-no" title="function not covered" >(p</span>rompt: string) =&gt; {
+<span class="fstat-no" title="function not covered" >  action: (p</span>rompt: string) =&gt; {
     // Multi-language analyze pattern
     const analyzePattern = <span class="cstat-no" title="statement not covered" >/\b(analyze|analyse|investigate|examine|study|deep[\s-]?dive|inspect|audit|evaluate|assess|review|diagnose|scrutinize|dissect|debug|comprehend|interpret|breakdown|understand)\b|why\s+is|how\s+does|how\s+to|분석|조사|파악|연구|검토|진단|이해|설명|원인|이유|뜯어봐|따져봐|평가|해석|디버깅|디버그|어떻게|왜|살펴|分析|調査|解析|検討|研究|診断|理解|説明|検証|精査|究明|デバッグ|なぜ|どう|仕組み|调查|检查|剖析|深入|诊断|解释|调试|为什么|原理|搞清楚|弄明白|phân tích|điều tra|nghiên cứu|kiểm tra|xem xét|chẩn đoán|giải thích|tìm hiểu|gỡ lỗi|tại sao/i;</span>
 &nbsp;
@@ -1260,7 +1260,7 @@ SYNTHESIZE findings before proceeding.`;
 const ultrathinkEnhancement: MagicKeyword = <span class="cstat-no" title="statement not covered" >{</span>
   triggers: ['ultrathink', 'think', 'reason', 'ponder'],
   description: 'Activates extended thinking mode for deep reasoning',
-  action: <span class="fstat-no" title="function not covered" >(p</span>rompt: string) =&gt; {
+<span class="fstat-no" title="function not covered" >  action: (p</span>rompt: string) =&gt; {
     // Check if ultrathink-related triggers are present
     const hasThinkCommand = <span class="cstat-no" title="statement not covered" >/\b(ultrathink|think|reason|ponder)\b/i.test(removeCodeBlocks(prompt));</span>
 &nbsp;
@@ -1320,36 +1320,36 @@ export function <span class="fstat-no" title="function not covered" >createMagic
   // Override triggers from config
 <span class="cstat-no" title="statement not covered" >  if (config) {</span>
 <span class="cstat-no" title="statement not covered" >    if (config.ultrawork) {</span>
-      const ultrawork = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('ultrawork'))</span>;</span>
+      const ultrawork = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('ultrawork'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (ultrawork) {</span>
 <span class="cstat-no" title="statement not covered" >        ultrawork.triggers = config.ultrawork;</span>
       }
     }
 <span class="cstat-no" title="statement not covered" >    if (config.search) {</span>
-      const search = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('search'))</span>;</span>
+      const search = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('search'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (search) {</span>
 <span class="cstat-no" title="statement not covered" >        search.triggers = config.search;</span>
       }
     }
 <span class="cstat-no" title="statement not covered" >    if (config.analyze) {</span>
-      const analyze = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('analyze'))</span>;</span>
+      const analyze = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('analyze'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (analyze) {</span>
 <span class="cstat-no" title="statement not covered" >        analyze.triggers = config.analyze;</span>
       }
     }
 <span class="cstat-no" title="statement not covered" >    if (config.ultrathink) {</span>
-      const ultrathink = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('ultrathink'))</span>;</span>
+      const ultrathink = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('ultrathink'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (ultrathink) {</span>
 <span class="cstat-no" title="statement not covered" >        ultrathink.triggers = config.ultrathink;</span>
       }
     }
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(p</span>rompt: string): string =&gt; {</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  return (p</span>rompt: string): string =&gt; {</span>
     let result = <span class="cstat-no" title="statement not covered" >prompt;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const keyword of keywords) {</span>
-      const hasKeyword = <span class="cstat-no" title="statement not covered" >keyword.triggers.some(<span class="fstat-no" title="function not covered" >trigger =&gt; {</span></span>
+      const hasKeyword = <span class="cstat-no" title="statement not covered" >keyword.triggers.<span class="fstat-no" title="function not covered" >some(t</span>rigger =&gt; {</span>
         const regex = <span class="cstat-no" title="statement not covered" >new RegExp(`\\b${trigger}\\b`, 'i');</span>
 <span class="cstat-no" title="statement not covered" >        return regex.test(removeCodeBlocks(result));</span>
       });
@@ -1374,19 +1374,19 @@ export function <span class="fstat-no" title="function not covered" >detectMagic
   // Apply config overrides
 <span class="cstat-no" title="statement not covered" >  if (config) {</span>
 <span class="cstat-no" title="statement not covered" >    if (config.ultrawork) {</span>
-      const ultrawork = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('ultrawork'))</span>;</span>
+      const ultrawork = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('ultrawork'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (ultrawork) <span class="cstat-no" title="statement not covered" >ultrawork.triggers = config.ultrawork;</span></span>
     }
 <span class="cstat-no" title="statement not covered" >    if (config.search) {</span>
-      const search = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('search'))</span>;</span>
+      const search = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('search'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (search) <span class="cstat-no" title="statement not covered" >search.triggers = config.search;</span></span>
     }
 <span class="cstat-no" title="statement not covered" >    if (config.analyze) {</span>
-      const analyze = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('analyze'))</span>;</span>
+      const analyze = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('analyze'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (analyze) <span class="cstat-no" title="statement not covered" >analyze.triggers = config.analyze;</span></span>
     }
 <span class="cstat-no" title="statement not covered" >    if (config.ultrathink) {</span>
-      const ultrathink = <span class="cstat-no" title="statement not covered" >keywords.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k</span>.triggers.includes('ultrathink'))</span>;</span>
+      const ultrathink = <span class="cstat-no" title="statement not covered" >keywords.<span class="fstat-no" title="function not covered" >find(k</span> =&gt; <span class="cstat-no" title="statement not covered" >k.triggers.includes('ultrathink'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (ultrathink) <span class="cstat-no" title="statement not covered" >ultrathink.triggers = config.ultrathink;</span></span>
     }
   }
@@ -1409,8 +1409,8 @@ export function <span class="fstat-no" title="function not covered" >detectMagic
  */
 export function <span class="fstat-no" title="function not covered" >extractPromptText(p</span>arts: Array&lt;{ type: string; text?: string; [key: string]: unknown }&gt;): string {
 <span class="cstat-no" title="statement not covered" >  return parts</span>
-    .filter(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.type === 'text')</span>
-    .map(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.text ?? '')</span>
+    .<span class="fstat-no" title="function not covered" >filter(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.type === 'text')</span>
+    .<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.text ?? '')</span>
     .join('\n');
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -1420,7 +1420,7 @@ export function <span class="fstat-no" title="function not covered" >extractProm
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

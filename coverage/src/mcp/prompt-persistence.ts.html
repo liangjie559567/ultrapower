@@ -1061,7 +1061,7 @@ function <span class="fstat-no" title="function not covered" >ensureJobDb(w</spa
 <span class="cstat-no" title="statement not covered" >  if (_dbInitAttempted || isJobDbInitialized()) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >  _dbInitAttempted = true;</span>
   const <span class="cstat-no" title="statement not covered" >root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();</span>
-<span class="cstat-no" title="statement not covered" >  initJobDb(root).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span> /* graceful fallback to JSON */ });</span>
+<span class="cstat-no" title="statement not covered" >  initJobDb(root).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span> /* graceful fallback to JSON */ });</span>
 }
 &nbsp;
 function <span class="fstat-no" title="function not covered" >yamlString(v</span>alue: string): string {
@@ -1437,7 +1437,7 @@ export function <span class="fstat-no" title="function not covered" >listActiveJ
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >files = readdirSync(promptsDir);</span>
-    const statusFiles = <span class="cstat-no" title="statement not covered" >files.filter(<span class="fstat-no" title="function not covered" >(f</span>: string) =&gt; {</span>
+    const statusFiles = <span class="cstat-no" title="statement not covered" >files.<span class="fstat-no" title="function not covered" >filter((f</span>: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!f.endsWith('.json')) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 <span class="cstat-no" title="statement not covered" >      if (provider) {</span>
 <span class="cstat-no" title="statement not covered" >        return f.startsWith(`${provider}-status-`);</span>
@@ -1449,7 +1449,7 @@ export function <span class="fstat-no" title="function not covered" >listActiveJ
 <span class="cstat-no" title="statement not covered" >    for (const file of statusFiles) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const <span class="cstat-no" title="statement not covered" >content = readFileSync(join(promptsDir, file), 'utf-8');</span>
-        const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as JobStatus;</span>
+        const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as JobStatus;
 <span class="cstat-no" title="statement not covered" >        if (status.status === 'spawned' || status.status === 'running') {</span>
 <span class="cstat-no" title="statement not covered" >          activeJobs.push(status);</span>
         }
@@ -1481,7 +1481,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupStal
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >files = readdirSync(promptsDir);</span>
-    const statusFiles = <span class="cstat-no" title="statement not covered" >files.filter(<span class="fstat-no" title="function not covered" >(f</span>: string) =&gt; <span class="cstat-no" title="statement not covered" >f.includes('-status-') &amp;&amp; f.endsWith('.json'))</span>;</span>
+    const statusFiles = <span class="cstat-no" title="statement not covered" >files.<span class="fstat-no" title="function not covered" >filter((f</span>: string) =&gt; <span class="cstat-no" title="statement not covered" >f.includes('-status-') &amp;&amp; f.endsWith('.json'))</span>;</span>
 &nbsp;
     let cleanedCount = <span class="cstat-no" title="statement not covered" >0;</span>
     const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
@@ -1490,7 +1490,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupStal
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const <span class="cstat-no" title="statement not covered" >filePath = join(promptsDir, file);</span>
         const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-        const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as JobStatus;</span>
+        const status = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as JobStatus;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        if (status.status === 'spawned' || status.status === 'running') {</span>
           const spawnedAt = <span class="cstat-no" title="statement not covered" >new Date(status.spawnedAt).getTime();</span>
@@ -1519,7 +1519,7 @@ export function <span class="fstat-no" title="function not covered" >cleanupStal
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -697,7 +697,9 @@
 <a name='L632'></a><a href='#L632'>632</a>
 <a name='L633'></a><a href='#L633'>633</a>
 <a name='L634'></a><a href='#L634'>634</a>
-<a name='L635'></a><a href='#L635'>635</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L635'></a><a href='#L635'>635</a>
+<a name='L636'></a><a href='#L636'>636</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1345,7 +1347,8 @@
  * Response: { five_hour: { utilization }, seven_day: { utilization } }
  */
 &nbsp;
-import { existsSync, readFileSync, writeFileSync, renameSync, unlinkSync, mkdirSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
+import { renameSyncWithRetry } from '../lib/fs-utils.js';
 import { getClaudeConfigDir } from '../utils/paths.js';
 import { join, dirname } from 'path';
 import { execSync } from 'child_process';
@@ -1432,7 +1435,7 @@ function <span class="fstat-no" title="function not covered" >readCache(): Usage
 <span class="cstat-no" title="statement not covered" >    if (!existsSync(cachePath)) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(cachePath, 'utf-8');</span>
-    const cache = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as UsageCache;</span>
+    const cache = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as UsageCache;
 &nbsp;
     // Re-hydrate Date objects from JSON strings
 <span class="cstat-no" title="statement not covered" >    if (cache.data) {</span>
@@ -1586,7 +1589,7 @@ function <span class="fstat-no" title="function not covered" >validateCredential
  * Returns updated credentials on success, null on failure.
  */
 function <span class="fstat-no" title="function not covered" >refreshAccessToken(r</span>efreshToken: string): Promise&lt;OAuthCredentials | null&gt; {
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve) =&gt; {</span>
     const clientId = <span class="cstat-no" title="statement not covered" >process.env.CLAUDE_CODE_OAUTH_CLIENT_ID || DEFAULT_OAUTH_CLIENT_ID;</span>
     const body = <span class="cstat-no" title="statement not covered" >new URLSearchParams({</span>
       grant_type: 'refresh_token',
@@ -1604,11 +1607,11 @@ function <span class="fstat-no" title="function not covered" >refreshAccessToken
           'Content-Length': Buffer.byteLength(body),
         },
         timeout: API_TIMEOUT_MS,
-      },
-<span class="fstat-no" title="function not covered" >      (r</span>es) =&gt; {
+      }<span class="fstat-no" title="function not covered" >,</span>
+      (res) =&gt; {
         let data = <span class="cstat-no" title="statement not covered" >'';</span>
-<span class="cstat-no" title="statement not covered" >        res.on('data', <span class="fstat-no" title="function not covered" >(c</span>hunk) =&gt; { <span class="cstat-no" title="statement not covered" >data += chunk; }</span>);</span>
-<span class="cstat-no" title="statement not covered" >        res.on('end', <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        res.on(<span class="fstat-no" title="function not covered" >'data', (c</span>hunk) =&gt; { <span class="cstat-no" title="statement not covered" >data += chunk; });</span></span>
+<span class="cstat-no" title="statement not covered" >        res.on(<span class="fstat-no" title="function not covered" >'end', () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >          if (res.statusCode === 200) {</span>
 <span class="cstat-no" title="statement not covered" >            try {</span>
               const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(data);</span>
@@ -1634,8 +1637,8 @@ function <span class="fstat-no" title="function not covered" >refreshAccessToken
       }
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    req.on('error', <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve(null))</span>;</span>
-<span class="cstat-no" title="statement not covered" >    req.on('timeout', <span class="fstat-no" title="function not covered" >() =&gt; {</span> <span class="cstat-no" title="statement not covered" >req.destroy(); <span class="cstat-no" title="statement not covered" >r</span>esolve(null); }</span>);</span>
+<span class="cstat-no" title="statement not covered" >    req.on(<span class="fstat-no" title="function not covered" >'error', () =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve(null))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    req.on(<span class="fstat-no" title="function not covered" >'timeout', () =&gt; {</span> <span class="cstat-no" title="statement not covered" >req.destroy(); <span class="cstat-no" title="statement not covered" >r</span>esolve(null); });</span></span>
 <span class="cstat-no" title="statement not covered" >    req.end(body);</span>
   });
 }
@@ -1644,7 +1647,7 @@ function <span class="fstat-no" title="function not covered" >refreshAccessToken
  * Fetch usage from Anthropic API
  */
 function <span class="fstat-no" title="function not covered" >fetchUsageFromApi(a</span>ccessToken: string): Promise&lt;UsageApiResponse | null&gt; {
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve) =&gt; {</span>
     const req = <span class="cstat-no" title="statement not covered" >https.request(</span>
       {
         hostname: 'api.anthropic.com',
@@ -1656,15 +1659,15 @@ function <span class="fstat-no" title="function not covered" >fetchUsageFromApi(
           'Content-Type': 'application/json',
         },
         timeout: API_TIMEOUT_MS,
-      },
-<span class="fstat-no" title="function not covered" >      (r</span>es) =&gt; {
+      }<span class="fstat-no" title="function not covered" >,</span>
+      (res) =&gt; {
         let data = <span class="cstat-no" title="statement not covered" >'';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        res.on('data', <span class="fstat-no" title="function not covered" >(c</span>hunk) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        res.on(<span class="fstat-no" title="function not covered" >'data', (c</span>hunk) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          data += chunk;</span>
         });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        res.on('end', <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        res.on(<span class="fstat-no" title="function not covered" >'end', () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >          if (res.statusCode === 200) {</span>
 <span class="cstat-no" title="statement not covered" >            try {</span>
 <span class="cstat-no" title="statement not covered" >              resolve(JSON.parse(data));</span>
@@ -1678,8 +1681,8 @@ function <span class="fstat-no" title="function not covered" >fetchUsageFromApi(
       }
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    req.on('error', <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve(null))</span>;</span>
-<span class="cstat-no" title="statement not covered" >    req.on('timeout', <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    req.on(<span class="fstat-no" title="function not covered" >'error', () =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve(null))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    req.on(<span class="fstat-no" title="function not covered" >'timeout', () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      req.destroy();</span>
 <span class="cstat-no" title="statement not covered" >      resolve(null);</span>
     });
@@ -1692,7 +1695,7 @@ function <span class="fstat-no" title="function not covered" >fetchUsageFromApi(
  * Fetch usage from z.ai GLM API
  */
 function <span class="fstat-no" title="function not covered" >fetchUsageFromZai(): Promise&lt;ZaiQuotaResponse | null&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve) =&gt; {</span>
     const baseUrl = <span class="cstat-no" title="statement not covered" >process.env.ANTHROPIC_BASE_URL;</span>
     const authToken = <span class="cstat-no" title="statement not covered" >process.env.ANTHROPIC_AUTH_TOKEN;</span>
 &nbsp;
@@ -1718,11 +1721,11 @@ function <span class="fstat-no" title="function not covered" >fetchUsageFromZai(
             'Accept-Language': 'en-US,en',
           },
           timeout: API_TIMEOUT_MS,
-        },
-<span class="fstat-no" title="function not covered" >        (r</span>es) =&gt; {
+        }<span class="fstat-no" title="function not covered" >,</span>
+        (res) =&gt; {
           let data = <span class="cstat-no" title="statement not covered" >'';</span>
-<span class="cstat-no" title="statement not covered" >          res.on('data', <span class="fstat-no" title="function not covered" >(c</span>hunk) =&gt; { <span class="cstat-no" title="statement not covered" >data += chunk; }</span>);</span>
-<span class="cstat-no" title="statement not covered" >          res.on('end', <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >          res.on(<span class="fstat-no" title="function not covered" >'data', (c</span>hunk) =&gt; { <span class="cstat-no" title="statement not covered" >data += chunk; });</span></span>
+<span class="cstat-no" title="statement not covered" >          res.on(<span class="fstat-no" title="function not covered" >'end', () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >            if (res.statusCode === 200) {</span>
 <span class="cstat-no" title="statement not covered" >              try {</span>
 <span class="cstat-no" title="statement not covered" >                resolve(JSON.parse(data));</span>
@@ -1736,8 +1739,8 @@ function <span class="fstat-no" title="function not covered" >fetchUsageFromZai(
         }
       );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      req.on('error', <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve(null))</span>;</span>
-<span class="cstat-no" title="statement not covered" >      req.on('timeout', <span class="fstat-no" title="function not covered" >() =&gt; {</span> <span class="cstat-no" title="statement not covered" >req.destroy(); <span class="cstat-no" title="statement not covered" >r</span>esolve(null); }</span>);</span>
+<span class="cstat-no" title="statement not covered" >      req.on(<span class="fstat-no" title="function not covered" >'error', () =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve(null))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      req.on(<span class="fstat-no" title="function not covered" >'timeout', () =&gt; {</span> <span class="cstat-no" title="statement not covered" >req.destroy(); <span class="cstat-no" title="statement not covered" >r</span>esolve(null); });</span></span>
 <span class="cstat-no" title="statement not covered" >      req.end();</span>
     } catch {
 <span class="cstat-no" title="statement not covered" >      resolve(null);</span>
@@ -1782,7 +1785,7 @@ function <span class="fstat-no" title="function not covered" >writeBackCredentia
     const tmpPath = <span class="cstat-no" title="statement not covered" >`${credPath}.tmp.${process.pid}`;</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      writeFileSync(tmpPath, JSON.stringify(parsed, null, 2), { mode: 0o600 });</span>
-<span class="cstat-no" title="statement not covered" >      renameSync(tmpPath, credPath);</span>
+<span class="cstat-no" title="statement not covered" >      renameSyncWithRetry(tmpPath, credPath);</span>
     } catch (writeErr) {
       // Clean up orphaned tmp file on failure
 <span class="cstat-no" title="statement not covered" >      try {</span>
@@ -1821,7 +1824,7 @@ function <span class="fstat-no" title="function not covered" >parseUsageResponse
 <span class="cstat-no" title="statement not covered" >  if (fiveHour == null &amp;&amp; sevenDay == null) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
   // Parse ISO 8601 date strings to Date objects
-  const parseDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ateStr: string | undefined): Date | null =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >parseDate = (d</span>ateStr: string | undefined): Date | null =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!dateStr) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const date = <span class="cstat-no" title="statement not covered" >new Date(dateStr);</span>
@@ -1867,13 +1870,13 @@ export function <span class="fstat-no" title="function not covered" >parseZaiRes
   const limits = <span class="cstat-no" title="statement not covered" >response.data?.limits;</span>
 <span class="cstat-no" title="statement not covered" >  if (!limits || limits.length === 0) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
-  const tokensLimit = <span class="cstat-no" title="statement not covered" >limits.find(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.type === 'TOKENS_LIMIT')</span>;</span>
-  const timeLimit = <span class="cstat-no" title="statement not covered" >limits.find(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.type === 'TIME_LIMIT')</span>;</span>
+  const tokensLimit = <span class="cstat-no" title="statement not covered" >limits.<span class="fstat-no" title="function not covered" >find(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.type === 'TOKENS_LIMIT');</span></span>
+  const timeLimit = <span class="cstat-no" title="statement not covered" >limits.<span class="fstat-no" title="function not covered" >find(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.type === 'TIME_LIMIT');</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!tokensLimit &amp;&amp; !timeLimit) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
   // Parse nextResetTime (Unix timestamp in milliseconds) to Date
-  const parseResetTime = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>imestamp: number | undefined): Date | null =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >parseResetTime = (t</span>imestamp: number | undefined): Date | null =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!timestamp) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const date = <span class="cstat-no" title="statement not covered" >new Date(timestamp);</span>
@@ -1972,7 +1975,7 @@ export async function <span class="fstat-no" title="function not covered" >getUs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

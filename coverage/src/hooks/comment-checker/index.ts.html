@@ -567,8 +567,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -934,12 +934,12 @@ import type { CommentInfo, CommentCheckResult, PendingCall } from './types.js';
 const DEBUG = <span class="cstat-no" title="statement not covered" >process.env.COMMENT_CHECKER_DEBUG === '1';</span>
 const DEBUG_FILE = <span class="cstat-no" title="statement not covered" >path.join(tmpdir(), 'comment-checker-debug.log');</span>
 &nbsp;
-function <span class="fstat-no" title="function not covered" >debugLog(...a</span>rgs: unknown[]): void {
+function <span class="fstat-no" title="function not covered" >debugLog(.</span>..args: unknown[]): void {
 <span class="cstat-no" title="statement not covered" >  if (DEBUG) {</span>
     const msg = <span class="cstat-no" title="statement not covered" >`[${new Date().toISOString()}] [comment-checker] ${args</span>
-      .map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; (<span class="cstat-no" title="statement not covered" >typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)))</span>
+      .<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; (<span class="cstat-no" title="statement not covered" >typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a))</span>)
       .join(' ')}\n`;
-<span class="cstat-no" title="statement not covered" >    fs.promises.appendFile(DEBUG_FILE, msg).catch(<span class="fstat-no" title="function not covered" >err =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    fs.promises.appendFile(DEBUG_FILE, msg).<span class="fstat-no" title="function not covered" >catch(e</span>rr =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      console.error('[comment-checker] Failed to write debug log:', err);</span>
     });
   }
@@ -990,8 +990,8 @@ function <span class="fstat-no" title="function not covered" >detectComments(c</
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (matchText.startsWith('/*') || matchText.startsWith('&lt;!--')) {</span>
 <span class="cstat-no" title="statement not covered" >      commentType = 'block';</span>
-<span class="cstat-no" title="statement not covered" >    } else if (</span>
-      matchText.startsWith("'''") ||
+    } else if (
+<span class="cstat-no" title="statement not covered" >      matchText.startsWith("'''") ||</span>
       matchText.startsWith('"""') ||
       matchText.startsWith('=begin')
     ) {
@@ -1034,10 +1034,10 @@ function <span class="fstat-no" title="function not covered" >extractCommentsFro
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (oldString) {</span>
     const oldComments = <span class="cstat-no" title="statement not covered" >detectComments(oldString, filePath);</span>
-    const oldTexts = <span class="cstat-no" title="statement not covered" >new Set(oldComments.map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.text)</span>);</span>
+    const oldTexts = <span class="cstat-no" title="statement not covered" >new Set(oldComments.<span class="fstat-no" title="function not covered" >map((c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.text))</span>;</span>
 &nbsp;
     // Filter out comments that existed before
-<span class="cstat-no" title="statement not covered" >    return newComments.filter(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >!oldTexts.has(c.text))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return newComments.<span class="fstat-no" title="function not covered" >filter((c</span>) =&gt; <span class="cstat-no" title="statement not covered" >!oldTexts.has(c.text))</span>;</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return newComments;</span>
@@ -1086,10 +1086,10 @@ export function <span class="fstat-no" title="function not covered" >checkForCom
 <span class="cstat-no" title="statement not covered" >  if (content) {</span>
     // Write tool - check entire content
 <span class="cstat-no" title="statement not covered" >    allComments = extractCommentsFromContent(content, filePath);</span>
-<span class="cstat-no" title="statement not covered" >  } else if (newString) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >newString) {</span>
     // Edit tool - check new content
 <span class="cstat-no" title="statement not covered" >    allComments = extractCommentsFromEdit(newString, filePath, oldString);</span>
-<span class="cstat-no" title="statement not covered" >  } else if (edits &amp;&amp; edits.length &gt; 0) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >edits &amp;&amp; edits.length &gt; 0) {</span>
     // MultiEdit tool - check all edits
 <span class="cstat-no" title="statement not covered" >    for (const edit of edits) {</span>
       const editComments = <span class="cstat-no" title="statement not covered" >extractCommentsFromEdit(</span>
@@ -1169,7 +1169,7 @@ export function <span class="fstat-no" title="function not covered" >createComme
     /**
      * PreToolUse - Track pending write/edit calls
      */
-    preToolUse: <span class="fstat-no" title="function not covered" >(i</span>nput: {
+<span class="fstat-no" title="function not covered" >    preToolUse: (i</span>nput: {
       tool_name: string;
       session_id: string;
       tool_input: Record&lt;string, unknown&gt;;
@@ -1226,7 +1226,7 @@ export function <span class="fstat-no" title="function not covered" >createComme
     /**
      * PostToolUse - Check for comments after successful write/edit
      */
-    postToolUse: <span class="fstat-no" title="function not covered" >(i</span>nput: {
+<span class="fstat-no" title="function not covered" >    postToolUse: (i</span>nput: {
       tool_name: string;
       session_id: string;
       tool_input: Record&lt;string, unknown&gt;;
@@ -1339,7 +1339,7 @@ export {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

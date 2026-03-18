@@ -3,6 +3,8 @@
  */
 
 import { pathToFileURL } from 'url';
+import { readdirSync, statSync, unlinkSync } from 'fs';
+import { join } from 'path';
 import { normalizeHookInput } from "./bridge-normalize.js";
 import type { HookInput, HookOutput, HookType } from "./bridge-types.js";
 import { HookSeverity, HOOK_SEVERITY } from "./bridge-types.js";
@@ -11,8 +13,43 @@ import { HOOK_ROUTES } from "./handlers/route-map.js";
 import { loadConfig } from "../config/loader.js";
 import { requiredKeysForHook, getSkipHooks, resetSkipHooksCache } from "./validation.js";
 import { clearStaleSessionDirs } from "./mode-registry/index.js";
+import { logAuditEvent } from "../lib/auditLog.js";
 
 export { resetSkipHooksCache, requiredKeysForHook };
+
+/**
+ * Clean up stale state files older than 24 hours
+ */
+function cleanupStaleStateFiles(cwd: string): void {
+  const stateDir = join(cwd, '.omc', 'state');
+  const now = Date.now();
+  const threshold = 24 * 60 * 60 * 1000; // 24 hours
+
+  try {
+    const files = readdirSync(stateDir);
+    const cleaned: string[] = [];
+
+    for (const file of files) {
+      if (!file.endsWith('.json') || file === 'last-tool-error.json') continue;
+
+      const filePath = join(stateDir, file);
+      const stats = statSync(filePath);
+
+      if (now - stats.mtimeMs > threshold) {
+        unlinkSync(filePath);
+        cleaned.push(file);
+      }
+    }
+
+    if (cleaned.length > 0) {
+      logAuditEvent('state_cleanup', 'low', { cleaned, count: cleaned.length }, cwd);
+    }
+  } catch (err) {
+    // Silent fail - cleanup is best-effort
+  }
+}
+
+let cleanupInitialized = false;
 /**
  * Main hook processor
  * Routes to specific hook handler based on type
@@ -32,6 +69,13 @@ export async function processHook(
 
   // Normalize snake_case fields from Claude Code to camelCase
   const input = normalizeHookInput(rawInput, hookType) as HookInput;
+
+  // Run cleanup once per process
+  if (!cleanupInitialized) {
+    cleanupInitialized = true;
+    const cwd = input.directory || input.cwd || process.cwd();
+    cleanupStaleStateFiles(cwd);
+  }
 
   try {
     // Try lazy-loaded handlers first

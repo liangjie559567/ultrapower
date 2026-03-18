@@ -1701,7 +1701,7 @@ import { safeJsonParse } from '../lib/safe-json.js';
 &nbsp;
 /** Simple logger */
 function <span class="fstat-no" title="function not covered" >log(m</span>essage: string): void {
-  const <span class="cstat-no" title="statement not covered" >ts = new Date().toISOString();</span>
+  const ts = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
 <span class="cstat-no" title="statement not covered" >  console.log(`${ts} ${message}`);</span>
 }
 &nbsp;
@@ -1721,7 +1721,7 @@ function <span class="fstat-no" title="function not covered" >audit(c</span>onfi
 &nbsp;
 /** Sleep helper */
 function <span class="fstat-no" title="function not covered" >sleep(m</span>s: number): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, ms))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, ms))</span>;</span>
 }
 &nbsp;
 /**
@@ -1961,7 +1961,7 @@ const MAX_CODEX_OUTPUT_SIZE = <span class="cstat-no" title="statement not covere
 &nbsp;
 /** Parse Codex JSONL output to extract text responses */
 function <span class="fstat-no" title="function not covered" >parseCodexOutput(o</span>utput: string): string {
-  const lines = <span class="cstat-no" title="statement not covered" >output.trim().split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.trim())</span>;</span>
+  const lines = <span class="cstat-no" title="statement not covered" >output.trim().split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.trim())</span>;</span>
   const messages: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
   let totalSize = <span class="cstat-no" title="statement not covered" >0;</span>
 &nbsp;
@@ -1982,7 +1982,7 @@ function <span class="fstat-no" title="function not covered" >parseCodexOutput(o
 <span class="cstat-no" title="statement not covered" >      if (typeof event.content === 'string') {</span>
 <span class="cstat-no" title="statement not covered" >        messages.push(event.content);</span>
 <span class="cstat-no" title="statement not covered" >        totalSize += event.content.length;</span>
-<span class="cstat-no" title="statement not covered" >      } else if (Array.isArray(event.content)) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >Array.isArray(event.content)) {</span>
 <span class="cstat-no" title="statement not covered" >        for (const part of event.content) {</span>
 <span class="cstat-no" title="statement not covered" >          if (part.type === 'text' &amp;&amp; part.text) {</span>
 <span class="cstat-no" title="statement not covered" >            messages.push(part.text);</span>
@@ -2029,12 +2029,12 @@ function <span class="fstat-no" title="function not covered" >spawnCliProcess(</
     ...(process.platform === 'win32' ? { shell: true } : {})
   });
 &nbsp;
-  const result = <span class="cstat-no" title="statement not covered" >new Promise&lt;string&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
+  const result = <span class="cstat-no" title="statement not covered" >new <span class="fstat-no" title="function not covered" >Promise&lt;string&gt;((r</span>esolve, reject) =&gt; {</span>
     let stdout = <span class="cstat-no" title="statement not covered" >'';</span>
     let stderr = <span class="cstat-no" title="statement not covered" >'';</span>
     let settled = <span class="cstat-no" title="statement not covered" >false;</span>
 &nbsp;
-    const timeoutHandle = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+    const timeoutHandle = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        child.kill('SIGTERM');</span>
@@ -2042,14 +2042,14 @@ function <span class="fstat-no" title="function not covered" >spawnCliProcess(</
       }
     }, timeoutMs);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.stdout?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stdout?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (stdout.length &lt; MAX_BUFFER_SIZE) <span class="cstat-no" title="statement not covered" >stdout += data.toString();</span></span>
     });
-<span class="cstat-no" title="statement not covered" >    child.stderr?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stderr?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (stderr.length &lt; MAX_BUFFER_SIZE) <span class="cstat-no" title="statement not covered" >stderr += data.toString();</span></span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.on('close', <span class="fstat-no" title="function not covered" >(c</span>ode) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'close', (c</span>ode) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2063,7 +2063,7 @@ function <span class="fstat-no" title="function not covered" >spawnCliProcess(</
       }
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2072,7 +2072,7 @@ function <span class="fstat-no" title="function not covered" >spawnCliProcess(</
     });
 &nbsp;
     // Write prompt via stdin
-<span class="cstat-no" title="statement not covered" >    child.stdin?.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stdin?.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2100,10 +2100,10 @@ async function <span class="fstat-no" title="function not covered" >handleShutdo
   // 1. Kill running CLI subprocess
 <span class="cstat-no" title="statement not covered" >  if (activeChild &amp;&amp; !activeChild.killed) {</span>
     let closed = <span class="cstat-no" title="statement not covered" >false;</span>
-<span class="cstat-no" title="statement not covered" >    activeChild.on('close', <span class="fstat-no" title="function not covered" >() =&gt; {</span> <span class="cstat-no" title="statement not covered" >closed = true; }</span>);</span>
+<span class="cstat-no" title="statement not covered" >    activeChild.on(<span class="fstat-no" title="function not covered" >'close', () =&gt; {</span> <span class="cstat-no" title="statement not covered" >closed = true; });</span></span>
 <span class="cstat-no" title="statement not covered" >    activeChild.kill('SIGTERM');</span>
 <span class="cstat-no" title="statement not covered" >    await Promise.race([</span>
-      new Promise&lt;void&gt;(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >a</span>ctiveChild!.on('close', <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve())</span>)</span>,
+      new <span class="fstat-no" title="function not covered" >Promise&lt;void&gt;(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >activeChild!.on(<span class="fstat-no" title="function not covered" >'close', () =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve())</span>)</span>,
       sleep(5000)
     ]);
 <span class="cstat-no" title="statement not covered" >    if (!closed) {</span>
@@ -2154,13 +2154,13 @@ export async function <span class="fstat-no" title="function not covered" >runBr
   // Auto-cleanup expired worker heartbeats on startup
   const cleanupDays = <span class="cstat-no" title="statement not covered" >parseInt(process.env.WORKER_CLEANUP_DAYS || '7', 10);</span>
   const maxAgeMs = <span class="cstat-no" title="statement not covered" >cleanupDays * 24 * 60 * 60 * 1000;</span>
-<span class="cstat-no" title="statement not covered" >  createWorkerAdapter('auto', workingDirectory).then(<span class="fstat-no" title="function not covered" >adapter =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  createWorkerAdapter('auto', workingDirectory).<span class="fstat-no" title="function not covered" >then(a</span>dapter =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (adapter) {</span>
-<span class="cstat-no" title="statement not covered" >      adapter.cleanup(maxAgeMs).catch(<span class="fstat-no" title="function not covered" >err =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      adapter.cleanup(maxAgeMs).<span class="fstat-no" title="function not covered" >catch(e</span>rr =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        log(`[bridge] Worker cleanup failed: ${err}`);</span>
       });
     }
-  }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>});
+  }).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span>});
 &nbsp;
   // Write initial heartbeat (protected so startup I/O failure doesn't prevent loop entry)
 <span class="cstat-no" title="statement not covered" >  try {</span>
@@ -2313,13 +2313,13 @@ export async function <span class="fstat-no" title="function not covered" >runBr
           // 8c. Handle violations
 <span class="cstat-no" title="statement not covered" >          if (violations.length &gt; 0) {</span>
             const violationSummary = <span class="cstat-no" title="statement not covered" >violations</span>
-              .map(<span class="fstat-no" title="function not covered" >v =&gt; <span class="cstat-no" title="statement not covered" >`</span>  - ${v.path}: ${v.reason}`)</span>
+              .<span class="fstat-no" title="function not covered" >map(v</span> =&gt; <span class="cstat-no" title="statement not covered" >`  - ${v.path}: ${v.reason}`)</span>
               .join('\n');
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            if (enforcementMode === 'enforce') {</span>
               // ENFORCE: fail the task, audit, report error
 <span class="cstat-no" title="statement not covered" >              audit(config, 'permission_violation', task.id, {</span>
-                violations: violations.map(<span class="fstat-no" title="function not covered" >v =&gt; (<span class="cstat-no" title="statement not covered" >{</span> path: v.path, reason: v.reason }))</span>,
+                violations: violations.<span class="fstat-no" title="function not covered" >map(v</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ path: v.path, reason: v.reason })),</span>
                 mode: 'enforce',
               });
 &nbsp;
@@ -2346,7 +2346,7 @@ export async function <span class="fstat-no" title="function not covered" >runBr
             } else {
               // AUDIT: log warning but allow task to succeed
 <span class="cstat-no" title="statement not covered" >              audit(config, 'permission_audit', task.id, {</span>
-                violations: violations.map(<span class="fstat-no" title="function not covered" >v =&gt; (<span class="cstat-no" title="statement not covered" >{</span> path: v.path, reason: v.reason }))</span>,
+                violations: violations.<span class="fstat-no" title="function not covered" >map(v</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ path: v.path, reason: v.reason })),</span>
                 mode: 'audit',
               });
 &nbsp;
@@ -2479,7 +2479,7 @@ export { parseCodexOutput, buildTaskPrompt, diffSnapshots, readOutputSummary, sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

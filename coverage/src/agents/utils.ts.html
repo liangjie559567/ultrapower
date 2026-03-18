@@ -1186,10 +1186,10 @@ export function <span class="fstat-no" title="function not covered" >buildDelega
   }
 &nbsp;
   const rows = <span class="cstat-no" title="statement not covered" >availableAgents</span>
-    .filter(<span class="fstat-no" title="function not covered" >a =&gt; <span class="cstat-no" title="statement not covered" >a</span>.metadata.triggers.length &gt; 0)</span>
-    .map(<span class="fstat-no" title="function not covered" >a =&gt; {</span>
+    .<span class="fstat-no" title="function not covered" >filter(a</span> =&gt; <span class="cstat-no" title="statement not covered" >a.metadata.triggers.length &gt; 0)</span>
+    .<span class="fstat-no" title="function not covered" >map(a</span> =&gt; {
       const triggers = <span class="cstat-no" title="statement not covered" >a.metadata.triggers</span>
-        .map(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >`</span>${t.domain}: ${t.trigger}`)</span>
+        .<span class="fstat-no" title="function not covered" >map(t</span> =&gt; <span class="cstat-no" title="statement not covered" >`${t.domain}: ${t.trigger}`)</span>
         .join('; ');
 <span class="cstat-no" title="statement not covered" >      return `| ${a.metadata.promptAlias || a.name} | ${a.metadata.cost} | ${triggers} |`;</span>
     });
@@ -1213,12 +1213,12 @@ export function <span class="fstat-no" title="function not covered" >buildUseAvo
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (metadata.useWhen &amp;&amp; metadata.useWhen.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    sections.push(`**USE when:**</span>
-${metadata.useWhen.map(<span class="fstat-no" title="function not covered" >u =&gt; <span class="cstat-no" title="statement not covered" >`</span>- ${u}`)</span>.join('\n')}`);
+${metadata.useWhen.<span class="fstat-no" title="function not covered" >map(u</span> =&gt; <span class="cstat-no" title="statement not covered" >`- ${u}`).</span>join('\n')}`);
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (metadata.avoidWhen &amp;&amp; metadata.avoidWhen.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    sections.push(`**AVOID when:**</span>
-${metadata.avoidWhen.map(<span class="fstat-no" title="function not covered" >a =&gt; <span class="cstat-no" title="statement not covered" >`</span>- ${a}`)</span>.join('\n')}`);
+${metadata.avoidWhen.<span class="fstat-no" title="function not covered" >map(a</span> =&gt; <span class="cstat-no" title="statement not covered" >`- ${a}`).</span>join('\n')}`);
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return sections.join('\n\n');</span>
@@ -1254,8 +1254,8 @@ export function <span class="fstat-no" title="function not covered" >getAvailabl
   agents: Record&lt;string, AgentConfig&gt;
 ): AvailableAgent[] {
 <span class="cstat-no" title="statement not covered" >  return Object.entries(agents)</span>
-    .filter(<span class="fstat-no" title="function not covered" >([</span>_, config]) =&gt; <span class="cstat-no" title="statement not covered" >config.metadata)</span>
-    .map(<span class="fstat-no" title="function not covered" >([</span>name, config]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+    .<span class="fstat-no" title="function not covered" >filter(([</span>_, config]) =&gt; <span class="cstat-no" title="statement not covered" >config.metadata)</span>
+    .<span class="fstat-no" title="function not covered" >map(([</span>name, config]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       name,
       description: config.description,
       metadata: config.metadata!
@@ -1340,7 +1340,7 @@ export function <span class="fstat-no" title="function not covered" >parseDisall
 <span class="cstat-no" title="statement not covered" >    if (!disallowedMatch) <span class="cstat-no" title="statement not covered" >return undefined;</span></span>
 &nbsp;
     // Parse comma-separated list
-<span class="cstat-no" title="statement not covered" >    return disallowedMatch[1].split(',').map(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >t</span>.trim())</span>.filter(Boolean);</span>
+<span class="cstat-no" title="statement not covered" >    return disallowedMatch[1].split(',').<span class="fstat-no" title="function not covered" >map(t</span> =&gt; <span class="cstat-no" title="statement not covered" >t.trim())</span>.filter(Boolean);</span>
   } catch {
 <span class="cstat-no" title="statement not covered" >    return undefined;</span>
   }
@@ -1364,9 +1364,9 @@ export function <span class="fstat-no" title="function not covered" >formatOpenQ
 ): string {
 <span class="cstat-no" title="statement not covered" >  if (questions.length === 0) <span class="cstat-no" title="statement not covered" >return '';</span></span>
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >date = new Date().toISOString().split('T')[0];</span>
+  const date = <span class="cstat-no" title="statement not covered" >new Date().toISOString().split('T')[0];</span>
   const items = <span class="cstat-no" title="statement not covered" >questions</span>
-    .map(<span class="fstat-no" title="function not covered" >q =&gt; <span class="cstat-no" title="statement not covered" >`</span>- [ ] ${q.question} — ${q.reason}`)</span>
+    .<span class="fstat-no" title="function not covered" >map(q</span> =&gt; <span class="cstat-no" title="statement not covered" >`- [ ] ${q.question} — ${q.reason}`)</span>
     .join('\n');
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return `\n## ${topic} - ${date}\n${items}\n`;</span>
@@ -1397,7 +1397,7 @@ export function <span class="fstat-no" title="function not covered" >deepMerge&l
         targetValue as Record&lt;string, unknown&gt;,
         sourceValue as Record&lt;string, unknown&gt;
       );
-<span class="cstat-no" title="statement not covered" >    } else if (sourceValue !== undefined) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >sourceValue !== undefined) {</span>
       (<span class="cstat-no" title="statement not covered" >result as Record&lt;string, unknown&gt;)[key] = sourceValue;</span>
     }
   }
@@ -1411,7 +1411,7 @@ export function <span class="fstat-no" title="function not covered" >deepMerge&l
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

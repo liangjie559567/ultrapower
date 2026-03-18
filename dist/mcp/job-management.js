@@ -747,7 +747,7 @@ export async function handleListJobs(provider, statusFilter = 'active', limit = 
 // ---------------------------------------------------------------------------
 // Tool Schema Definitions (for both SDK and standalone servers)
 // ---------------------------------------------------------------------------
-// TODO: _provider parameter reserved for future per-provider schema customization
+// Note: _provider parameter reserved for future per-provider schema customization
 export function getJobManagementToolSchemas(_provider) {
     return [
         {

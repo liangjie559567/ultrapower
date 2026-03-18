@@ -1,0 +1,19 @@
+// Template: JWT Authentication
+// Platform: {{platform}}
+// Dependencies: jsonwebtoken, express
+
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+
+export class {{className}} {
+  private secretKey = '{{secretKey}}';
+
+  async authenticate(req: Request, res: Response) {
+    const token = jwt.sign({ userId: 1 }, this.secretKey);
+    return res.json({ token });
+  }
+
+  async verify(token: string) {
+    return jwt.verify(token, this.secretKey);
+  }
+}

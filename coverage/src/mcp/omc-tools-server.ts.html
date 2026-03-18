@@ -424,7 +424,7 @@ interface ToolDef {
 &nbsp;
 // Tag each tool array with its category before aggregation
 function <span class="fstat-no" title="function not covered" >tagCategory&lt;T extends { name: string }&gt;(t</span>ools: T[], category: ToolCategory): (T &amp; { category: ToolCategory })[] {
-<span class="cstat-no" title="statement not covered" >  return tools.map(<span class="fstat-no" title="function not covered" >t =&gt; (<span class="cstat-no" title="statement not covered" >{</span> ...t, category }))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return tools.<span class="fstat-no" title="function not covered" >map(t</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ ...t, category }));</span></span>
 }
 &nbsp;
 /**
@@ -491,11 +491,11 @@ const allTools: ToolDef[] = <span class="cstat-no" title="statement not covered"
 const _startupDisabledGroups = <span class="cstat-no" title="statement not covered" >parseDisabledGroups();</span>
 const enabledTools: ToolDef[] = <span class="cstat-no" title="statement not covered" >_startupDisabledGroups.size === 0</span>
   ? allTools
-  : allTools.filter(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >!</span>t.category || !_startupDisabledGroups.has(t.category))</span>;
+  : allTools.<span class="fstat-no" title="function not covered" >filter(t</span> =&gt; <span class="cstat-no" title="statement not covered" >!t.category || !_startupDisabledGroups.has(t.category))</span>;
 &nbsp;
 // Convert to SDK tool format
 // The SDK's tool() expects a ZodRawShape directly (not wrapped in z.object())
-const sdkTools = <span class="cstat-no" title="statement not covered" >enabledTools.map(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >t =&gt;</span></span></span>
+const sdkTools = <span class="cstat-no" title="statement not covered" >enabledTools.<span class="fstat-no" title="function not covered" >map(<span class="cstat-no" title="statement not covered" >t</span> =&gt;</span></span>
   tool(
     t.name,
     t.description,
@@ -520,12 +520,12 @@ export const <span class="cstat-no" title="statement not covered" >omcToolsServe
  * Tool names in MCP format for allowedTools configuration.
  * Only includes tools that are enabled (not disabled via OMC_DISABLE_TOOLS).
  */
-export const omcToolNames = <span class="cstat-no" title="statement not covered" >enabledTools.map(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >`</span>mcp__t__${t.name}`)</span>;</span>
+export const omcToolNames = <span class="cstat-no" title="statement not covered" >enabledTools.<span class="fstat-no" title="function not covered" >map(t</span> =&gt; <span class="cstat-no" title="statement not covered" >`mcp__t__${t.name}`);</span></span>
 &nbsp;
 // Build a map from MCP tool name to category for efficient lookup
 // Built from allTools so getOmcToolNames() category filtering works correctly
 const toolCategoryMap = <span class="cstat-no" title="statement not covered" >new Map&lt;string, ToolCategory&gt;(</span>
-  allTools.map(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >[</span>`mcp__t__${t.name}`, t.category!])</span>
+  allTools.<span class="fstat-no" title="function not covered" >map(t</span> =&gt; <span class="cstat-no" title="statement not covered" >[`mcp__t__${t.name}`, t.category!])</span>
 );
 &nbsp;
 /**
@@ -542,7 +542,7 @@ export function <span class="fstat-no" title="function not covered" >getOmcToolN
   includeMemory?: boolean;
   includeTrace?: boolean;
 }): string[] {
-  const { includeLsp = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeAst = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludePython = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeSkills = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeState = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeNotepad = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeMemory = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeTrace = <span class="branch-0 cbranch-no" title="branch not covered" >true }</span> = <span class="cstat-no" title="statement not covered" >options || {};</span>
+  const { includeLsp = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeAst = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludePython = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeSkills = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeState = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeNotepad = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeMemory = <span class="branch-0 cbranch-no" title="branch not covered" >true, i</span>ncludeTrace = <span class="branch-0 cbranch-no" title="branch not covered" >true } = <span class="cstat-no" title="statement not covered" >o</span>ptions || {};</span>
 &nbsp;
   const excludedCategories = <span class="cstat-no" title="statement not covered" >new Set&lt;ToolCategory&gt;();</span>
 <span class="cstat-no" title="statement not covered" >  if (!includeLsp) <span class="cstat-no" title="statement not covered" >excludedCategories.add(TOOL_CATEGORIES.LSP);</span></span>
@@ -556,7 +556,7 @@ export function <span class="fstat-no" title="function not covered" >getOmcToolN
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (excludedCategories.size === 0) <span class="cstat-no" title="statement not covered" >return [...omcToolNames];</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return omcToolNames.filter(<span class="fstat-no" title="function not covered" >name =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  return omcToolNames.<span class="fstat-no" title="function not covered" >filter(n</span>ame =&gt; {</span>
     const category = <span class="cstat-no" title="statement not covered" >toolCategoryMap.get(name);</span>
 <span class="cstat-no" title="statement not covered" >    return !category || !excludedCategories.has(category);</span>
   });
@@ -568,7 +568,7 @@ export function <span class="fstat-no" title="function not covered" >getOmcToolN
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

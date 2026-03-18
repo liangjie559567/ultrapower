@@ -1067,7 +1067,7 @@ export function <span class="fstat-no" title="function not covered" >readMessage
     }
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return messages.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return messages.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; {</span>
     const aTime = <span class="cstat-no" title="statement not covered" >a.time?.created ?? 0;</span>
     const bTime = <span class="cstat-no" title="statement not covered" >b.time?.created ?? 0;</span>
 <span class="cstat-no" title="statement not covered" >    if (aTime !== bTime) <span class="cstat-no" title="statement not covered" >return aTime - bTime;</span></span>
@@ -1220,7 +1220,7 @@ export function <span class="fstat-no" title="function not covered" >findMessage
 <span class="cstat-no" title="statement not covered" >    if (msg.role !== 'assistant') <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
     const parts = <span class="cstat-no" title="statement not covered" >readParts(msg.id);</span>
-    const hasThinking = <span class="cstat-no" title="statement not covered" >parts.some(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >THINKING_TYPES.has(p.type))</span>;</span>
+    const hasThinking = <span class="cstat-no" title="statement not covered" >parts.<span class="fstat-no" title="function not covered" >some((p</span>) =&gt; <span class="cstat-no" title="statement not covered" >THINKING_TYPES.has(p.type))</span>;</span>
 <span class="cstat-no" title="statement not covered" >    if (hasThinking) {</span>
 <span class="cstat-no" title="statement not covered" >      result.push(msg.id);</span>
     }
@@ -1242,7 +1242,7 @@ export function <span class="fstat-no" title="function not covered" >findMessage
     const parts = <span class="cstat-no" title="statement not covered" >readParts(msg.id);</span>
 <span class="cstat-no" title="statement not covered" >    if (parts.length === 0) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
-    const hasThinking = <span class="cstat-no" title="statement not covered" >parts.some(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >THINKING_TYPES.has(p.type))</span>;</span>
+    const hasThinking = <span class="cstat-no" title="statement not covered" >parts.<span class="fstat-no" title="function not covered" >some((p</span>) =&gt; <span class="cstat-no" title="statement not covered" >THINKING_TYPES.has(p.type))</span>;</span>
     const hasTextContent = <span class="cstat-no" title="statement not covered" >parts.some(hasContent);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (hasThinking &amp;&amp; !hasTextContent) {</span>
@@ -1266,7 +1266,7 @@ export function <span class="fstat-no" title="function not covered" >findMessage
     const parts = <span class="cstat-no" title="statement not covered" >readParts(msg.id);</span>
 <span class="cstat-no" title="statement not covered" >    if (parts.length === 0) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
-    const sortedParts = <span class="cstat-no" title="statement not covered" >[...parts].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.id.localeCompare(b.id))</span>;</span>
+    const sortedParts = <span class="cstat-no" title="statement not covered" >[...parts].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.id.localeCompare(b.id))</span>;</span>
     const firstPart = <span class="cstat-no" title="statement not covered" >sortedParts[0];</span>
 &nbsp;
     const firstIsThinking = <span class="cstat-no" title="statement not covered" >THINKING_TYPES.has(firstPart.type);</span>
@@ -1288,7 +1288,7 @@ function <span class="fstat-no" title="function not covered" >findLastThinkingCo
 ): string {
   const messages = <span class="cstat-no" title="statement not covered" >readMessages(sessionID);</span>
 &nbsp;
-  const currentIndex = <span class="cstat-no" title="statement not covered" >messages.findIndex(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.id === beforeMessageID)</span>;</span>
+  const currentIndex = <span class="cstat-no" title="statement not covered" >messages.<span class="fstat-no" title="function not covered" >findIndex((m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.id === beforeMessageID);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (currentIndex === -1) <span class="cstat-no" title="statement not covered" >return '';</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (let i = <span class="cstat-no" title="statement not covered" >currentIndex - 1; i</span> &gt;= 0; i--) {</span>
@@ -1357,7 +1357,7 @@ export function <span class="fstat-no" title="function not covered" >stripThinki
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const <span class="cstat-no" title="statement not covered" >filePath = join(partDir, file);</span>
       const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-      const part = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as StoredPart;</span>
+      const part = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as StoredPart;
 <span class="cstat-no" title="statement not covered" >      if (THINKING_TYPES.has(part.type)) {</span>
 <span class="cstat-no" title="statement not covered" >        unlinkSync(filePath);</span>
 <span class="cstat-no" title="statement not covered" >        anyRemoved = true;</span>
@@ -1386,7 +1386,7 @@ export function <span class="fstat-no" title="function not covered" >replaceEmpt
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const <span class="cstat-no" title="statement not covered" >filePath = join(partDir, file);</span>
       const <span class="cstat-no" title="statement not covered" >content = readFileSync(filePath, 'utf-8');</span>
-      const part = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as StoredPart;</span>
+      const part = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as StoredPart;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (part.type === 'text') {</span>
         const textPart = <span class="cstat-no" title="statement not covered" >part as StoredTextPart;</span>
@@ -1414,7 +1414,7 @@ export function <span class="fstat-no" title="function not covered" >findMessage
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (const msg of messages) {</span>
     const parts = <span class="cstat-no" title="statement not covered" >readParts(msg.id);</span>
-    const hasEmptyTextPart = <span class="cstat-no" title="statement not covered" >parts.some(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; {</span>
+    const hasEmptyTextPart = <span class="cstat-no" title="statement not covered" >parts.<span class="fstat-no" title="function not covered" >some((p</span>) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (p.type !== 'text') <span class="cstat-no" title="statement not covered" >return false;</span></span>
       const textPart = <span class="cstat-no" title="statement not covered" >p as StoredTextPart;</span>
 <span class="cstat-no" title="statement not covered" >      return !textPart.text?.trim();</span>
@@ -1445,7 +1445,7 @@ export function <span class="fstat-no" title="function not covered" >findMessage
   const parts = <span class="cstat-no" title="statement not covered" >readParts(targetMsg.id);</span>
 <span class="cstat-no" title="statement not covered" >  if (parts.length === 0) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 &nbsp;
-  const sortedParts = <span class="cstat-no" title="statement not covered" >[...parts].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.id.localeCompare(b.id))</span>;</span>
+  const sortedParts = <span class="cstat-no" title="statement not covered" >[...parts].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.id.localeCompare(b.id))</span>;</span>
   const firstPart = <span class="cstat-no" title="statement not covered" >sortedParts[0];</span>
   const firstIsThinking = <span class="cstat-no" title="statement not covered" >THINKING_TYPES.has(firstPart.type);</span>
 &nbsp;
@@ -1462,7 +1462,7 @@ export function <span class="fstat-no" title="function not covered" >findMessage
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

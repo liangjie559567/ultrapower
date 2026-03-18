@@ -668,7 +668,7 @@ export class DependencyAnalyzer {
     };
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >buildEdges(): Array&lt;{ from: string; to: string; reason: string }&gt; {</span>
+<span class="fstat-no" title="function not covered" >  private b</span>uildEdges(): Array&lt;{ from: string; to: string; reason: string }&gt; {
     const edges: Array&lt;{ from: string; to: string; reason: string }&gt; = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const hook1 of this.dependencies) {</span>
@@ -677,7 +677,7 @@ export class DependencyAnalyzer {
 &nbsp;
         // 写后读依赖
 <span class="cstat-no" title="statement not covered" >        for (const write of hook1.writes) {</span>
-<span class="cstat-no" title="statement not covered" >          if (hook2.reads.some(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >t</span>his.pathMatches(r, write))</span>) {</span>
+<span class="cstat-no" title="statement not covered" >          if (hook2.reads.<span class="fstat-no" title="function not covered" >some(r</span> =&gt; <span class="cstat-no" title="statement not covered" >this.pathMatches(r, write))</span>) {</span>
 <span class="cstat-no" title="statement not covered" >            edges.push({</span>
               from: hook1.hookType,
               to: hook2.hookType,
@@ -688,7 +688,7 @@ export class DependencyAnalyzer {
 &nbsp;
         // 写后写依赖
 <span class="cstat-no" title="statement not covered" >        for (const write of hook1.writes) {</span>
-<span class="cstat-no" title="statement not covered" >          if (hook2.writes.some(<span class="fstat-no" title="function not covered" >w =&gt; <span class="cstat-no" title="statement not covered" >t</span>his.pathMatches(w, write))</span>) {</span>
+<span class="cstat-no" title="statement not covered" >          if (hook2.writes.<span class="fstat-no" title="function not covered" >some(w</span> =&gt; <span class="cstat-no" title="statement not covered" >this.pathMatches(w, write))</span>) {</span>
 <span class="cstat-no" title="statement not covered" >            edges.push({</span>
               from: hook1.hookType,
               to: hook2.hookType,
@@ -702,7 +702,7 @@ export class DependencyAnalyzer {
 <span class="cstat-no" title="statement not covered" >    return edges;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >pathMatches(p</span>attern: string, path: string): boolean {
+<span class="fstat-no" title="function not covered" >  private p</span>athMatches(pattern: string, path: string): boolean {
 <span class="cstat-no" title="statement not covered" >    if (pattern === path) <span class="cstat-no" title="statement not covered" >return true;</span></span>
 <span class="cstat-no" title="statement not covered" >    if (pattern.includes('*')) {</span>
       const regex = <span class="cstat-no" title="statement not covered" >new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');</span>
@@ -711,7 +711,7 @@ export class DependencyAnalyzer {
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >findParallelGroups(e</span>dges: Array&lt;{ from: string; to: string }&gt;): string[][] {
+<span class="fstat-no" title="function not covered" >  private f</span>indParallelGroups(edges: Array&lt;{ from: string; to: string }&gt;): string[][] {
     const groups: string[][] = <span class="cstat-no" title="statement not covered" >[];</span>
     const processed = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span>
 &nbsp;
@@ -724,8 +724,8 @@ export class DependencyAnalyzer {
 <span class="cstat-no" title="statement not covered" >      for (const other of this.dependencies) {</span>
 <span class="cstat-no" title="statement not covered" >        if (processed.has(other.hookType)) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
-        const hasEdge = <span class="cstat-no" title="statement not covered" >edges.some(</span>
-<span class="fstat-no" title="function not covered" >          e =&gt; (<span class="cstat-no" title="statement not covered" >e</span>.from === hook.hookType &amp;&amp; e.to === other.hookType) ||</span>
+        const hasEdge = <span class="cstat-no" title="statement not covered" >edges.<span class="fstat-no" title="function not covered" >some(</span></span>
+          e =&gt; (<span class="cstat-no" title="statement not covered" >e.from === hook.hookType &amp;&amp; e.to === other.hookType) ||</span>
                (e.from === other.hookType &amp;&amp; e.to === hook.hookType)
         );
 &nbsp;
@@ -743,7 +743,7 @@ export class DependencyAnalyzer {
 <span class="cstat-no" title="statement not covered" >    return groups;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >findSerialChains(e</span>dges: Array&lt;{ from: string; to: string }&gt;): string[][] {
+<span class="fstat-no" title="function not covered" >  private f</span>indSerialChains(edges: Array&lt;{ from: string; to: string }&gt;): string[][] {
     const chains: string[][] = <span class="cstat-no" title="statement not covered" >[];</span>
     const visited = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span>
 &nbsp;
@@ -759,7 +759,7 @@ export class DependencyAnalyzer {
 <span class="cstat-no" title="statement not covered" >    return chains;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >buildChain(</span>
+<span class="fstat-no" title="function not covered" >  private b</span>uildChain(
     start: string,
     edges: Array&lt;{ from: string; to: string }&gt;,
     visited: Set&lt;string&gt;
@@ -769,7 +769,7 @@ export class DependencyAnalyzer {
 &nbsp;
     let current = <span class="cstat-no" title="statement not covered" >start;</span>
 <span class="cstat-no" title="statement not covered" >    while (true) {</span>
-      const next = <span class="cstat-no" title="statement not covered" >edges.find(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >e</span>.from === current &amp;&amp; !visited.has(e.to))</span>;</span>
+      const next = <span class="cstat-no" title="statement not covered" >edges.<span class="fstat-no" title="function not covered" >find(e</span> =&gt; <span class="cstat-no" title="statement not covered" >e.from === current &amp;&amp; !visited.has(e.to))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (!next) <span class="cstat-no" title="statement not covered" >break;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      chain.push(next.to);</span>
@@ -787,7 +787,7 @@ export class DependencyAnalyzer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

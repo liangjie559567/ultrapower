@@ -1,0 +1,16 @@
+// Template: Stripe Payment
+// Platform: {{platform}}
+// Dependencies: stripe
+
+import Stripe from 'stripe';
+
+export class {{className}} {
+  private stripe = new Stripe('{{apiKey}}');
+
+  async createPayment(amount: number) {
+    return this.stripe.paymentIntents.create({
+      amount,
+      currency: 'usd'
+    });
+  }
+}

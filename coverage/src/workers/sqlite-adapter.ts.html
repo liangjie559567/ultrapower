@@ -366,7 +366,9 @@
 <a name='L301'></a><a href='#L301'>301</a>
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -679,6 +681,7 @@ import type { WorkerState, WorkerFilter, HealthStatus, WorkerStatus } from './ty
 import type { WorkerStateAdapter } from './adapter.js';
 &nbsp;
 type Database = import('better-sqlite3').Database;
+type DatabaseConstructor = new (filename: string) =&gt; Database;
 &nbsp;
 export class SqliteWorkerAdapter implements WorkerStateAdapter {
   private db: Database | null = <span class="cstat-no" title="statement not covered" >null;</span>
@@ -698,7 +701,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
       }
 &nbsp;
       const <span class="cstat-no" title="statement not covered" >dbPath = join(stateDir, 'workers.db');</span>
-<span class="cstat-no" title="statement not covered" >      this.db = new (DatabaseConstructor as any)(dbPath) as Database;</span>
+<span class="cstat-no" title="statement not covered" >      this.db = new (DatabaseConstructor as DatabaseConstructor)(dbPath) as Database;</span>
 <span class="cstat-no" title="statement not covered" >      if (this.db) {</span>
 <span class="cstat-no" title="statement not covered" >        this.db.pragma('journal_mode = WAL');</span>
 <span class="cstat-no" title="statement not covered" >        this.db.exec(`</span>
@@ -789,7 +792,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
 <span class="cstat-no" title="statement not covered" >    if (!this.db) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const stmt = <span class="cstat-no" title="statement not covered" >this.db.prepare('SELECT * FROM workers WHERE worker_id = ?');</span>
-      const row = <span class="cstat-no" title="statement not covered" >stmt.get(workerId) as Record&lt;string, unknown&gt; | undefined;</span>
+      const row = <span class="cstat-no" title="statement not covered" >stmt.get(workerId) </span>as Record&lt;string, unknown&gt; | undefined;
 <span class="cstat-no" title="statement not covered" >      return row ? this.rowToWorkerState(row) : null;</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('[SqliteWorkerAdapter] Get failed:', error);</span>
@@ -809,7 +812,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
       }
 <span class="cstat-no" title="statement not covered" >      if (filter?.status) {</span>
         const statuses = <span class="cstat-no" title="statement not covered" >Array.isArray(filter.status) ? filter.status : [filter.status];</span>
-<span class="cstat-no" title="statement not covered" >        query += ` AND status IN (${statuses.map(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >'</span>?')</span>.join(',')})`;</span>
+<span class="cstat-no" title="statement not covered" >        query += ` AND status IN (${statuses.<span class="fstat-no" title="function not covered" >map(() =&gt; <span class="cstat-no" title="statement not covered" >'</span>?').</span>join(',')})`;</span>
 <span class="cstat-no" title="statement not covered" >        params.push(...statuses);</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (filter?.teamName) {</span>
@@ -832,8 +835,8 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
 <span class="cstat-no" title="statement not covered" >      query += ' ORDER BY spawned_at DESC';</span>
 &nbsp;
       const stmt = <span class="cstat-no" title="statement not covered" >this.db.prepare(query);</span>
-      const rows = <span class="cstat-no" title="statement not covered" >stmt.all(...params) as Record&lt;string, unknown&gt;[];</span>
-<span class="cstat-no" title="statement not covered" >      return rows.map(<span class="fstat-no" title="function not covered" >row =&gt; <span class="cstat-no" title="statement not covered" >t</span>his.rowToWorkerState(row))</span>;</span>
+      const rows = <span class="cstat-no" title="statement not covered" >stmt.all(...params) </span>as Record&lt;string, unknown&gt;[];
+<span class="cstat-no" title="statement not covered" >      return rows.<span class="fstat-no" title="function not covered" >map(r</span>ow =&gt; <span class="cstat-no" title="statement not covered" >this.rowToWorkerState(row))</span>;</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('[SqliteWorkerAdapter] List failed:', error);</span>
 <span class="cstat-no" title="statement not covered" >      return [];</span>
@@ -875,7 +878,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
   async <span class="fstat-no" title="function not covered" >batchUpsert(w</span>orkers: WorkerState[]): Promise&lt;number&gt; {
 <span class="cstat-no" title="statement not covered" >    if (!this.db) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const transaction = <span class="cstat-no" title="statement not covered" >this.db.transaction(<span class="fstat-no" title="function not covered" >(w</span>orkers: WorkerState[]) =&gt; {</span>
+      const transaction = <span class="cstat-no" title="statement not covered" >this.db.<span class="fstat-no" title="function not covered" >transaction((w</span>orkers: WorkerState[]) =&gt; {</span>
         let count = <span class="cstat-no" title="statement not covered" >0;</span>
 <span class="cstat-no" title="statement not covered" >        for (const worker of workers) {</span>
 <span class="cstat-no" title="statement not covered" >          if (this.upsertSync(worker)) <span class="cstat-no" title="statement not covered" >count++;</span></span>
@@ -913,7 +916,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
     }
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >rowToWorkerState(r</span>ow: Record&lt;string, unknown&gt;): WorkerState {
+<span class="fstat-no" title="function not covered" >  private r</span>owToWorkerState(row: Record&lt;string, unknown&gt;): WorkerState {
 <span class="cstat-no" title="statement not covered" >    return {</span>
       workerId: row.worker_id as string,
       workerType: row.worker_type as 'mcp' | 'team',
@@ -937,7 +940,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
     };
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >upsertSync(w</span>orker: WorkerState): boolean {
+<span class="fstat-no" title="function not covered" >  private u</span>psertSync(worker: WorkerState): boolean {
 <span class="cstat-no" title="statement not covered" >    if (!this.db) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const stmt = <span class="cstat-no" title="statement not covered" >this.db.prepare(`</span>
@@ -979,7 +982,7 @@ export class SqliteWorkerAdapter implements WorkerStateAdapter {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

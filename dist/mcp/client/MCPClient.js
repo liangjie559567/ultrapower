@@ -73,6 +73,10 @@ export class MCPClient {
                 const proc = this.transport._process;
                 if (proc && !proc.killed) {
                     proc.kill('SIGTERM');
+                    // Check if already exited
+                    if (proc.exitCode !== null || proc.killed) {
+                        return;
+                    }
                     await Promise.race([
                         new Promise(resolve => proc.once('exit', () => resolve())),
                         new Promise(resolve => setTimeout(() => {

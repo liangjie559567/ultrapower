@@ -1054,7 +1054,7 @@ export function <span class="fstat-no" title="function not covered" >readPrd(d</
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(prdPath, 'utf-8');</span>
-    const prd = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as PRD;</span>
+    const prd = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as PRD;
 &nbsp;
     // Validate structure
 <span class="cstat-no" title="statement not covered" >    if (!prd.userStories || !Array.isArray(prd.userStories)) {</span>
@@ -1103,11 +1103,11 @@ export function <span class="fstat-no" title="function not covered" >writePrd(d<
  */
 export function <span class="fstat-no" title="function not covered" >getPrdStatus(p</span>rd: PRD): PRDStatus {
   const stories = <span class="cstat-no" title="statement not covered" >prd.userStories;</span>
-  const completed = <span class="cstat-no" title="statement not covered" >stories.filter(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.passes)</span>;</span>
-  const pending = <span class="cstat-no" title="statement not covered" >stories.filter(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >!</span>s.passes)</span>;</span>
+  const completed = <span class="cstat-no" title="statement not covered" >stories.<span class="fstat-no" title="function not covered" >filter(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.passes);</span></span>
+  const pending = <span class="cstat-no" title="statement not covered" >stories.<span class="fstat-no" title="function not covered" >filter(s</span> =&gt; <span class="cstat-no" title="statement not covered" >!s.passes);</span></span>
 &nbsp;
   // Sort pending by priority to find next story
-  const sortedPending = <span class="cstat-no" title="statement not covered" >[...pending].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.priority - b.priority)</span>;</span>
+  const sortedPending = <span class="cstat-no" title="statement not covered" >[...pending].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.priority - b.priority);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
     total: stories.length,
@@ -1115,7 +1115,7 @@ export function <span class="fstat-no" title="function not covered" >getPrdStatu
     pending: pending.length,
     allComplete: pending.length === 0,
     nextStory: sortedPending[0] || null,
-    incompleteIds: pending.map(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id)</span>
+    incompleteIds: pending.<span class="fstat-no" title="function not covered" >map(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id)</span>
   };
 }
 &nbsp;
@@ -1132,7 +1132,7 @@ export function <span class="fstat-no" title="function not covered" >markStoryCo
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   }
 &nbsp;
-  const story = <span class="cstat-no" title="statement not covered" >prd.userStories.find(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id === storyId)</span>;</span>
+  const story = <span class="cstat-no" title="statement not covered" >prd.userStories.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === storyId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (!story) {</span>
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   }
@@ -1158,7 +1158,7 @@ export function <span class="fstat-no" title="function not covered" >markStoryIn
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   }
 &nbsp;
-  const story = <span class="cstat-no" title="statement not covered" >prd.userStories.find(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id === storyId)</span>;</span>
+  const story = <span class="cstat-no" title="statement not covered" >prd.userStories.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === storyId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (!story) {</span>
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   }
@@ -1180,7 +1180,7 @@ export function <span class="fstat-no" title="function not covered" >getStory(d<
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return prd.userStories.find(<span class="fstat-no" title="function not covered" >s =&gt; <span class="cstat-no" title="statement not covered" >s</span>.id === storyId)</span> || null;</span>
+<span class="cstat-no" title="statement not covered" >  return prd.userStories.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === storyId) </span>|| null;</span>
 }
 &nbsp;
 /**
@@ -1220,7 +1220,7 @@ export function <span class="fstat-no" title="function not covered" >createPrd(<
     project,
     branchName,
     description,
-    userStories: stories.map(<span class="fstat-no" title="function not covered" >(s</span>, index) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+    userStories: stories.<span class="fstat-no" title="function not covered" >map((s</span>, index) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       ...s,
       priority: s.priority ?? index + 1,
       passes: false
@@ -1306,7 +1306,7 @@ export function <span class="fstat-no" title="function not covered" >formatStory
 <span class="cstat-no" title="statement not covered" >  lines.push(story.description);</span>
 <span class="cstat-no" title="statement not covered" >  lines.push('');</span>
 <span class="cstat-no" title="statement not covered" >  lines.push('**Acceptance Criteria:**');</span>
-<span class="cstat-no" title="statement not covered" >  story.acceptanceCriteria.forEach(<span class="fstat-no" title="function not covered" >(c</span>, i) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  story.acceptanceCriteria.<span class="fstat-no" title="function not covered" >forEach((c</span>, i) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push(`${i + 1}. ${c}`);</span>
   });
 &nbsp;
@@ -1336,7 +1336,7 @@ export function <span class="fstat-no" title="function not covered" >formatPrd(p
 <span class="cstat-no" title="statement not covered" >  lines.push('');</span>
 &nbsp;
   // Sort by priority for display
-  const sortedStories = <span class="cstat-no" title="statement not covered" >[...prd.userStories].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.priority - b.priority)</span>;</span>
+  const sortedStories = <span class="cstat-no" title="statement not covered" >[...prd.userStories].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.priority - b.priority);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (const story of sortedStories) {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push(formatStory(story));</span>
@@ -1359,7 +1359,7 @@ export function <span class="fstat-no" title="function not covered" >formatNextS
 ${story.description}
 &nbsp;
 **Acceptance Criteria:**
-${story.acceptanceCriteria.map(<span class="fstat-no" title="function not covered" >(c</span>, i) =&gt; <span class="cstat-no" title="statement not covered" >`${i + 1}. ${c}`)</span>.join('\n')}
+${story.acceptanceCriteria.<span class="fstat-no" title="function not covered" >map((c</span>, i) =&gt; <span class="cstat-no" title="statement not covered" >`${i + 1}. ${c}`).</span>join('\n')}
 &nbsp;
 **Instructions:**
 1. Implement this story completely
@@ -1381,7 +1381,7 @@ ${story.acceptanceCriteria.map(<span class="fstat-no" title="function not covere
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

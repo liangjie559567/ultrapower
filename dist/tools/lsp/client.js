@@ -270,7 +270,9 @@ export class LspClient {
         };
         const content = JSON.stringify(notification);
         const message = `Content-Length: ${Buffer.byteLength(content)}\r\n\r\n${content}`;
-        this.process.stdin.write(message);
+        if (this.process.stdin && !this.process.stdin.destroyed) {
+            this.process.stdin.write(message);
+        }
     }
     /**
      * Initialize the LSP connection

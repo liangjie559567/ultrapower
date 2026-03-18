@@ -627,12 +627,12 @@ function <span class="fstat-no" title="function not covered" >registerInConfig(t
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >raw = readFileSync(filePath, 'utf-8');</span>
-    const config = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as Record&lt;string, unknown&gt;;</span>
+    const config = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as Record&lt;string, unknown&gt;;
     const members = <span class="cstat-no" title="statement not covered" >Array.isArray(config.members) ? config.members as Record&lt;string, unknown&gt;[] : [];</span>
 &nbsp;
     // Remove existing entry for this worker if present
-    const filtered = <span class="cstat-no" title="statement not covered" >members.filter(</span>
-<span class="fstat-no" title="function not covered" >      (m</span>) =&gt; <span class="cstat-no" title="statement not covered" >m.name !== member.name</span>
+    const filtered = <span class="cstat-no" title="statement not covered" >members.<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (m) =&gt; <span class="cstat-no" title="statement not covered" >m.name !== member.name</span>
     );
 <span class="cstat-no" title="statement not covered" >    filtered.push(member as unknown as Record&lt;string, unknown&gt;);</span>
 <span class="cstat-no" title="statement not covered" >    config.members = filtered;</span>
@@ -659,7 +659,7 @@ function <span class="fstat-no" title="function not covered" >registerInShadow(w
   }
 &nbsp;
   // Remove existing entry for this worker
-<span class="cstat-no" title="statement not covered" >  registry.workers = (registry.workers || []).filter(<span class="fstat-no" title="function not covered" >w =&gt; <span class="cstat-no" title="statement not covered" >w</span>.name !== member.name)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  registry.workers = (registry.workers || []).<span class="fstat-no" title="function not covered" >filter(w</span> =&gt; <span class="cstat-no" title="statement not covered" >w.name !== member.name);</span></span>
 <span class="cstat-no" title="statement not covered" >  registry.workers.push(member);</span>
 <span class="cstat-no" title="statement not covered" >  registry.teamName = teamName;</span>
 &nbsp;
@@ -680,9 +680,9 @@ export function <span class="fstat-no" title="function not covered" >unregisterM
 <span class="cstat-no" title="statement not covered" >  if (existsSync(configFile)) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const <span class="cstat-no" title="statement not covered" >raw = readFileSync(configFile, 'utf-8');</span>
-      const config = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as Record&lt;string, unknown&gt;;</span>
+      const config = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as Record&lt;string, unknown&gt;;
       const members = <span class="cstat-no" title="statement not covered" >Array.isArray(config.members) ? config.members as Record&lt;string, unknown&gt;[] : [];</span>
-<span class="cstat-no" title="statement not covered" >      config.members = members.filter(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >m</span>.name !== workerName)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      config.members = members.<span class="fstat-no" title="function not covered" >filter(m</span> =&gt; <span class="cstat-no" title="statement not covered" >m.name !== workerName);</span></span>
 <span class="cstat-no" title="statement not covered" >      atomicWriteJson(configFile, config);</span>
     } catch { /* ignore */ }
   }
@@ -691,11 +691,11 @@ export function <span class="fstat-no" title="function not covered" >unregisterM
   const shadowFile = <span class="cstat-no" title="statement not covered" >shadowRegistryPath(workingDirectory);</span>
 <span class="cstat-no" title="statement not covered" >  if (existsSync(shadowFile)) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const registry = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(shadowFile, 'utf-8')) as {</span>
+      const registry = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(shadowFile, 'utf-8')) </span>as {
         teamName: string;
         workers: McpWorkerMember[];
       };
-<span class="cstat-no" title="statement not covered" >      registry.workers = (registry.workers || []).filter(<span class="fstat-no" title="function not covered" >w =&gt; <span class="cstat-no" title="statement not covered" >w</span>.name !== workerName)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      registry.workers = (registry.workers || []).<span class="fstat-no" title="function not covered" >filter(w</span> =&gt; <span class="cstat-no" title="statement not covered" >w.name !== workerName);</span></span>
 <span class="cstat-no" title="statement not covered" >      atomicWriteJson(shadowFile, registry);</span>
     } catch { /* ignore */ }
   }
@@ -715,7 +715,7 @@ export function <span class="fstat-no" title="function not covered" >listMcpWork
 <span class="cstat-no" title="statement not covered" >  if (existsSync(configFile)) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const <span class="cstat-no" title="statement not covered" >raw = readFileSync(configFile, 'utf-8');</span>
-      const config = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as Record&lt;string, unknown&gt;;</span>
+      const config = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as Record&lt;string, unknown&gt;;
       const members = <span class="cstat-no" title="statement not covered" >Array.isArray(config.members) ? config.members as Record&lt;string, unknown&gt;[] : [];</span>
 <span class="cstat-no" title="statement not covered" >      for (const m of members) {</span>
 <span class="cstat-no" title="statement not covered" >        if (isMcpWorker(m)) {</span>
@@ -729,7 +729,7 @@ export function <span class="fstat-no" title="function not covered" >listMcpWork
   const shadowFile = <span class="cstat-no" title="statement not covered" >shadowRegistryPath(workingDirectory);</span>
 <span class="cstat-no" title="statement not covered" >  if (existsSync(shadowFile)) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const registry = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(shadowFile, 'utf-8')) as {</span>
+      const registry = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(shadowFile, 'utf-8')) </span>as {
         teamName: string;
         workers: McpWorkerMember[];
       };
@@ -748,7 +748,7 @@ export function <span class="fstat-no" title="function not covered" >listMcpWork
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

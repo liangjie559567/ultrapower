@@ -1381,9 +1381,9 @@ function <span class="fstat-no" title="function not covered" >formatDuration(d</
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (seconds &lt; 10) {</span>
 <span class="cstat-no" title="statement not covered" >    return ''; // No suffix for very short durations</span>
-<span class="cstat-no" title="statement not covered" >  } else if (seconds &lt; 60) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >seconds &lt; 60) {</span>
 <span class="cstat-no" title="statement not covered" >    return `(${seconds}s)`;</span>
-<span class="cstat-no" title="statement not covered" >  } else if (minutes &lt; 10) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >minutes &lt; 10) {</span>
 <span class="cstat-no" title="statement not covered" >    return `(${minutes}m)`;</span>
   } else {
 <span class="cstat-no" title="statement not covered" >    return '!'; // Alert for very long durations</span>
@@ -1401,7 +1401,7 @@ function <span class="fstat-no" title="function not covered" >formatDuration(d</
  * Format: agents:2
  */
 export function <span class="fstat-no" title="function not covered" >renderAgents(a</span>gents: ActiveAgent[]): string | null {
-  const running = <span class="cstat-no" title="statement not covered" >agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running')</span>.length;</span>
+  const running = <span class="cstat-no" title="statement not covered" >agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running').</span>length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -1414,7 +1414,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
  * Sort agents by start time (freshest first, oldest last)
  */
 function <span class="fstat-no" title="function not covered" >sortByFreshest(a</span>gents: ActiveAgent[]): ActiveAgent[] {
-<span class="cstat-no" title="statement not covered" >  return [...agents].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.startTime.getTime() - a.startTime.getTime())</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return [...agents].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.startTime.getTime() - a.startTime.getTime())</span>;</span>
 }
 &nbsp;
 /**
@@ -1425,14 +1425,14 @@ function <span class="fstat-no" title="function not covered" >sortByFreshest(a</
  * Format: agents:Oes
  */
 export function <span class="fstat-no" title="function not covered" >renderAgentsCoded(a</span>gents: ActiveAgent[]): string | null {
-  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running')</span>);</span>
+  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }
 &nbsp;
   // Build coded string with colors
-  const codes = <span class="cstat-no" title="statement not covered" >running.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; {</span>
+  const codes = <span class="cstat-no" title="statement not covered" >running.<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; {</span>
     const code = <span class="cstat-no" title="statement not covered" >getAgentCode(a.type, a.model);</span>
     const <span class="cstat-no" title="statement not covered" >color = getModelTierColor(a.model);</span>
 <span class="cstat-no" title="statement not covered" >    return `${color}${code}${RESET}`;</span>
@@ -1448,7 +1448,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
  * Format: agents:O(2m)es
  */
 export function <span class="fstat-no" title="function not covered" >renderAgentsCodedWithDuration(a</span>gents: ActiveAgent[]): string | null {
-  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running')</span>);</span>
+  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -1457,7 +1457,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
   const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
   // Build coded string with colors and durations
-  const codes = <span class="cstat-no" title="statement not covered" >running.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; {</span>
+  const codes = <span class="cstat-no" title="statement not covered" >running.<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; {</span>
     const code = <span class="cstat-no" title="statement not covered" >getAgentCode(a.type, a.model);</span>
     const durationMs = <span class="cstat-no" title="statement not covered" >now - a.startTime.getTime();</span>
     const duration = <span class="cstat-no" title="statement not covered" >formatDuration(durationMs);</span>
@@ -1469,7 +1469,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
       // Alert case - show exclamation in duration color
       const <span class="cstat-no" title="statement not covered" >durationColor = getDurationColor(durationMs);</span>
 <span class="cstat-no" title="statement not covered" >      return `${modelColor}${code}${durationColor}!${RESET}`;</span>
-<span class="cstat-no" title="statement not covered" >    } else if (duration) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >duration) {</span>
       // Normal duration - dim the time portion
 <span class="cstat-no" title="statement not covered" >      return `${modelColor}${code}${dim(duration)}${RESET}`;</span>
     } else {
@@ -1487,7 +1487,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
  * Format: agents:[architect(2m),explore,exec]
  */
 export function <span class="fstat-no" title="function not covered" >renderAgentsDetailed(a</span>gents: ActiveAgent[]): string | null {
-  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running')</span>);</span>
+  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -1496,7 +1496,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
   const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
   // Extract short agent type names with duration
-  const names = <span class="cstat-no" title="statement not covered" >running.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; {</span>
+  const names = <span class="cstat-no" title="statement not covered" >running.<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; {</span>
     // Extract last part of agent type (e.g., "ultrapower:explore" -&gt; "explore")
     const parts = <span class="cstat-no" title="statement not covered" >a.type.split(':');</span>
     let name = <span class="cstat-no" title="statement not covered" >parts[parts.length - 1] || a.type;</span>
@@ -1596,7 +1596,7 @@ function <span class="fstat-no" title="function not covered" >getShortAgentName(
  * Format: O:analyzing code | e:searching files
  */
 export function <span class="fstat-no" title="function not covered" >renderAgentsWithDescriptions(a</span>gents: ActiveAgent[]): string | null {
-  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running')</span>);</span>
+  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -1605,7 +1605,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
   const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
   // Build agent entries with descriptions
-  const entries = <span class="cstat-no" title="statement not covered" >running.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; {</span>
+  const entries = <span class="cstat-no" title="statement not covered" >running.<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; {</span>
     const code = <span class="cstat-no" title="statement not covered" >getAgentCode(a.type, a.model);</span>
     const <span class="cstat-no" title="statement not covered" >color = getModelTierColor(a.model);</span>
     const desc = <span class="cstat-no" title="statement not covered" >truncateDescription(a.description, 25);</span>
@@ -1616,7 +1616,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
     let entry = <span class="cstat-no" title="statement not covered" >`${color}${code}${RESET}:${dim(desc)}`;</span>
 <span class="cstat-no" title="statement not covered" >    if (duration &amp;&amp; duration !== '!') {</span>
 <span class="cstat-no" title="statement not covered" >      entry += dim(duration);</span>
-<span class="cstat-no" title="statement not covered" >    } else if (duration === '!') {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >duration === '!') {</span>
       const <span class="cstat-no" title="statement not covered" >durationColor = getDurationColor(durationMs);</span>
 <span class="cstat-no" title="statement not covered" >      entry += `${durationColor}!${RESET}`;</span>
     }
@@ -1634,7 +1634,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
  * Format: [analyzing code, searching files]
  */
 export function <span class="fstat-no" title="function not covered" >renderAgentsDescOnly(a</span>gents: ActiveAgent[]): string | null {
-  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running')</span>);</span>
+  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -1643,7 +1643,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
   const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
   // Build descriptions
-  const descriptions = <span class="cstat-no" title="statement not covered" >running.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; {</span>
+  const descriptions = <span class="cstat-no" title="statement not covered" >running.<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; {</span>
     const <span class="cstat-no" title="statement not covered" >color = getModelTierColor(a.model);</span>
     const shortName = <span class="cstat-no" title="statement not covered" >getShortAgentName(a.type);</span>
     const desc = <span class="cstat-no" title="statement not covered" >a.description ? truncateDescription(a.description, 20) : shortName;</span>
@@ -1653,7 +1653,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
 <span class="cstat-no" title="statement not covered" >    if (duration === '!') {</span>
       const <span class="cstat-no" title="statement not covered" >durationColor = getDurationColor(durationMs);</span>
 <span class="cstat-no" title="statement not covered" >      return `${color}${desc}${durationColor}!${RESET}`;</span>
-<span class="cstat-no" title="statement not covered" >    } else if (duration) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >duration) {</span>
 <span class="cstat-no" title="statement not covered" >      return `${color}${desc}${dim(duration)}${RESET}`;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return `${color}${desc}${RESET}`;</span>
@@ -1671,9 +1671,9 @@ function <span class="fstat-no" title="function not covered" >formatDurationPadd
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (seconds &lt; 10) {</span>
 <span class="cstat-no" title="statement not covered" >    return '    '; // No duration for very short</span>
-<span class="cstat-no" title="statement not covered" >  } else if (seconds &lt; 60) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >seconds &lt; 60) {</span>
 <span class="cstat-no" title="statement not covered" >    return `${seconds}s`.padStart(4);</span>
-<span class="cstat-no" title="statement not covered" >  } else if (minutes &lt; 10) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >minutes &lt; 10) {</span>
 <span class="cstat-no" title="statement not covered" >    return `${minutes}m`.padStart(4);</span>
   } else {
 <span class="cstat-no" title="statement not covered" >    return `${minutes}m`.padStart(4);</span>
@@ -1701,7 +1701,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
   agents: ActiveAgent[],
   maxLines: number = <span class="branch-0 cbranch-no" title="branch not covered" >5</span>
 ): MultiLineRenderResult {
-  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running')</span>);</span>
+  const running = <span class="cstat-no" title="statement not covered" >sortByFreshest(agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === 'running'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (running.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return { headerPart: null, detailLines: [] };</span>
@@ -1715,7 +1715,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
   const detailLines: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
   const displayCount = <span class="cstat-no" title="statement not covered" >Math.min(running.length, maxLines);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  running.slice(0, maxLines).forEach(<span class="fstat-no" title="function not covered" >(a</span>, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  running.slice(0, maxLines).<span class="fstat-no" title="function not covered" >forEach((a</span>, index) =&gt; {</span>
     const isLast = <span class="cstat-no" title="statement not covered" >index === displayCount - 1 &amp;&amp; running.length &lt;= maxLines;</span>
     const prefix = <span class="cstat-no" title="statement not covered" >isLast ? '└─' : '├─';</span>
 &nbsp;
@@ -1780,7 +1780,7 @@ export function <span class="fstat-no" title="function not covered" >renderAgent
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -2149,7 +2149,7 @@ function <span class="fstat-no" title="function not covered" >syncMarketplaceClo
   }
 &nbsp;
   // Ensure we're on main (ignore errors for older clones on different branches)
-<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >execSync(`git -C "${marketplacePath}" checkout main`, { ...execOpts, timeout: 15000 }); }</span> catch { /* ignore checkout errors on older clones */ }</span>
+<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >execSync(`git -C "${marketplacePath}" checkout main`, { ...execOpts, timeout: 15000 }); } catch {</span> /* ignore checkout errors on older clones */ }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    execSync(`git -C "${marketplacePath}" pull --ff-only origin main`, execOpts);</span>
@@ -2161,7 +2161,7 @@ function <span class="fstat-no" title="function not covered" >syncMarketplaceClo
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >marketplacePackageJson = join(marketplacePath, 'package.json');</span>
 <span class="cstat-no" title="statement not covered" >    if (existsSync(marketplacePackageJson)) {</span>
-      const pkg = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(marketplacePackageJson, 'utf-8')) as { version?: string };</span>
+      const pkg = <span class="cstat-no" title="statement not covered" >JSON.parse(readFileSync(marketplacePackageJson, 'utf-8')) </span>as { version?: string };
 <span class="cstat-no" title="statement not covered" >      if (pkg.version) {</span>
 <span class="cstat-no" title="statement not covered" >        syncPluginRegistry({ newVersion: pkg.version });</span>
       }
@@ -2269,7 +2269,7 @@ export function <span class="fstat-no" title="function not covered" >getOMCConfi
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(CONFIG_FILE, 'utf-8');</span>
-    const config = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as OMCConfig;</span>
+    const config = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as OMCConfig;
 <span class="cstat-no" title="statement not covered" >    return {</span>
       silentAutoUpdate: config.silentAutoUpdate ?? false,
       configuredAt: config.configuredAt,
@@ -2413,7 +2413,7 @@ export function <span class="fstat-no" title="function not covered" >getInstalle
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(VERSION_FILE, 'utf-8');</span>
-    const metadata = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as VersionMetadata;</span>
+    const metadata = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as VersionMetadata;
 &nbsp;
     // Cross-check with actual runtime package version to detect stale VERSION_FILE.
     // This happens when npm updates the package but VERSION_FILE wasn't refreshed
@@ -2483,7 +2483,7 @@ export async function <span class="fstat-no" title="function not covered" >fetch
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (pkgResponse.ok) {</span>
-      const pkg = <span class="cstat-no" title="statement not covered" >await pkgResponse.json() as { version: string };</span>
+      const pkg = <span class="cstat-no" title="statement not covered" >await pkgResponse.json() </span>as { version: string };
 <span class="cstat-no" title="statement not covered" >      return {</span>
         tag_name: `v${pkg.version}`,
         name: `Version ${pkg.version}`,
@@ -2514,8 +2514,8 @@ export function <span class="fstat-no" title="function not covered" >compareVers
   const cleanA = <span class="cstat-no" title="statement not covered" >a.replace(/^v/, '');</span>
   const cleanB = <span class="cstat-no" title="statement not covered" >b.replace(/^v/, '');</span>
 &nbsp;
-  const partsA = <span class="cstat-no" title="statement not covered" >cleanA.split('.').map(<span class="fstat-no" title="function not covered" >n =&gt; <span class="cstat-no" title="statement not covered" >p</span>arseInt(n, 10) || 0)</span>;</span>
-  const partsB = <span class="cstat-no" title="statement not covered" >cleanB.split('.').map(<span class="fstat-no" title="function not covered" >n =&gt; <span class="cstat-no" title="statement not covered" >p</span>arseInt(n, 10) || 0)</span>;</span>
+  const partsA = <span class="cstat-no" title="statement not covered" >cleanA.split('.').<span class="fstat-no" title="function not covered" >map(n</span> =&gt; <span class="cstat-no" title="statement not covered" >parseInt(n, 10) || 0);</span></span>
+  const partsB = <span class="cstat-no" title="statement not covered" >cleanB.split('.').<span class="fstat-no" title="function not covered" >map(n</span> =&gt; <span class="cstat-no" title="statement not covered" >parseInt(n, 10) || 0);</span></span>
 &nbsp;
   const maxLength = <span class="cstat-no" title="statement not covered" >Math.max(partsA.length, partsB.length);</span>
 &nbsp;
@@ -2756,7 +2756,7 @@ export async function <span class="fstat-no" title="function not covered" >perfo
             previousVersion,
             newVersion,
             message: `Updated to ${newVersion}, but runtime reconciliation failed`,
-            errors: reconcileResult.errors?.map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >`</span>Reconciliation failed: ${e}`)</span>,
+            errors: reconcileResult.errors?.<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >`Reconciliation failed: ${e}`),</span>
           };
         }
 <span class="cstat-no" title="statement not covered" >        return {</span>
@@ -2812,7 +2812,7 @@ export function <span class="fstat-no" title="function not covered" >formatUpdat
 <span class="cstat-no" title="statement not covered" >  if (checkResult.releaseNotes &amp;&amp; checkResult.releaseNotes !== 'No release notes available.') {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push('  Release notes:');</span>
     const notes = <span class="cstat-no" title="statement not covered" >checkResult.releaseNotes.split('\n').slice(0, 5);</span>
-<span class="cstat-no" title="statement not covered" >    notes.forEach(<span class="fstat-no" title="function not covered" >line =&gt; <span class="cstat-no" title="statement not covered" >l</span>ines.push(`    ${line}`))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    notes.<span class="fstat-no" title="function not covered" >forEach(l</span>ine =&gt; <span class="cstat-no" title="statement not covered" >lines.push(`    ${line}`))</span>;</span>
 <span class="cstat-no" title="statement not covered" >    if (checkResult.releaseNotes.split('\n').length &gt; 5) {</span>
 <span class="cstat-no" title="statement not covered" >      lines.push('    ...');</span>
     }
@@ -2849,15 +2849,15 @@ export function <span class="fstat-no" title="function not covered" >backgroundU
 &nbsp;
   // Run the check asynchronously without blocking
 <span class="cstat-no" title="statement not covered" >  checkForUpdates()</span>
-    .then(<span class="fstat-no" title="function not covered" >result =&gt; {</span>
+    .<span class="fstat-no" title="function not covered" >then(r</span>esult =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (callback) {</span>
 <span class="cstat-no" title="statement not covered" >        callback(result);</span>
-<span class="cstat-no" title="statement not covered" >      } else if (result.updateAvailable) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >result.updateAvailable) {</span>
         // Default behavior: print notification to console
 <span class="cstat-no" title="statement not covered" >        console.log('\n' + formatUpdateNotification(result));</span>
       }
     })
-    .catch(<span class="fstat-no" title="function not covered" >error =&gt; {</span>
+    .<span class="fstat-no" title="function not covered" >catch(e</span>rror =&gt; {
       // Silently ignore errors in background checks
 <span class="cstat-no" title="statement not covered" >      if (process.env.OMC_DEBUG) {</span>
 <span class="cstat-no" title="statement not covered" >        console.error('Background update check failed:', error);</span>
@@ -2890,7 +2890,7 @@ export async function <span class="fstat-no" title="function not covered" >inter
     } else {
 <span class="cstat-no" title="statement not covered" >      console.error(`\n✗ ${result.message}`);</span>
 <span class="cstat-no" title="statement not covered" >      if (result.errors) {</span>
-<span class="cstat-no" title="statement not covered" >        result.errors.forEach(<span class="fstat-no" title="function not covered" >err =&gt; <span class="cstat-no" title="statement not covered" >c</span>onsole.error(`  - ${err}`))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        result.errors.<span class="fstat-no" title="function not covered" >forEach(e</span>rr =&gt; <span class="cstat-no" title="statement not covered" >console.error(`  - ${err}`))</span>;</span>
       }
 <span class="cstat-no" title="statement not covered" >      process.exit(1);</span>
     }
@@ -2954,7 +2954,7 @@ function <span class="fstat-no" title="function not covered" >saveSilentUpdateSt
  * Log message to silent update log file (if configured)
  */
 function <span class="fstat-no" title="function not covered" >silentLog(m</span>essage: string, logFile?: string): void {
-  const <span class="cstat-no" title="statement not covered" >timestamp = new Date().toISOString();</span>
+  const timestamp = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
   const logMessage = <span class="cstat-no" title="statement not covered" >`[${timestamp}] ${message}\n`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (logFile) {</span>
@@ -2986,7 +2986,7 @@ function <span class="fstat-no" title="function not covered" >silentLog(m</span>
  * @param config - Silent update configuration
  * @returns Promise resolving to update result or null if skipped
  */
-export async function <span class="fstat-no" title="function not covered" >silentAutoUpdate(c</span>onfig: SilentUpdateConfig = <span class="branch-0 cbranch-no" title="branch not covered" >{}): Promise&lt;UpdateResult | null&gt; {</span>
+export async function <span class="fstat-no" title="function not covered" >silentAutoUpdate(c</span>onfig: SilentUpdateConfig = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span>: Promise&lt;UpdateResult | null&gt; {
   const {
     checkIntervalHours = <span class="branch-0 cbranch-no" title="branch not covered" >24,</span>
     autoApply = <span class="branch-0 cbranch-no" title="branch not covered" >true,</span>
@@ -3010,7 +3010,7 @@ export async function <span class="fstat-no" title="function not covered" >silen
 &nbsp;
   // Check for consecutive failures and apply exponential backoff
 <span class="cstat-no" title="statement not covered" >  if (state.consecutiveFailures &gt;= maxRetries) {</span>
-    const backoffHours = <span class="cstat-no" title="statement not covered" >Math.min(24 * state.consecutiveFailures, 168); // Max 1 week</span>
+    const backoffHours = <span class="cstat-no" title="statement not covered" >Math.min(24 * state.consecutiveFailures, 168);</span> // Max 1 week
     const lastAttempt = <span class="cstat-no" title="statement not covered" >state.lastAttempt ? new Date(state.lastAttempt).getTime() : 0;</span>
     const <span class="cstat-no" title="statement not covered" >hoursSinceLastAttempt = (Date.now() - lastAttempt) / (1000 * 60 * 60);</span>
 &nbsp;
@@ -3111,9 +3111,9 @@ export function <span class="fstat-no" title="function not covered" >getPendingU
  *
  * @param config - Silent update configuration
  */
-export function <span class="fstat-no" title="function not covered" >initSilentAutoUpdate(c</span>onfig: SilentUpdateConfig = <span class="branch-0 cbranch-no" title="branch not covered" >{}): void {</span>
+export function <span class="fstat-no" title="function not covered" >initSilentAutoUpdate(c</span>onfig: SilentUpdateConfig = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span>: void {
   // Run update check in background without blocking
-<span class="cstat-no" title="statement not covered" >  silentAutoUpdate(config).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  silentAutoUpdate(config).<span class="fstat-no" title="function not covered" >catch(() =&gt; {</span></span>
     // Silently ignore any errors - they're already logged
   });
 }
@@ -3124,7 +3124,7 @@ export function <span class="fstat-no" title="function not covered" >initSilentA
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

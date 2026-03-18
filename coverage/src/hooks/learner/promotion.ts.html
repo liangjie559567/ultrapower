@@ -403,13 +403,13 @@ export interface PatternEntry {
 export async function <span class="fstat-no" title="function not covered" >getRecentPromotions(d</span>ays = <span class="branch-0 cbranch-no" title="branch not covered" >7, b</span>aseDir?: string): Promise&lt;PatternEntry[]&gt; {
   const file = <span class="cstat-no" title="statement not covered" >path.join(baseDir ?? process.cwd(), '.omc', 'axiom', 'evolution', 'pattern_library.md');</span>
   let text: string;
-<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >text = await fs.readFile(file, 'utf-8'); }</span> catch { <span class="cstat-no" title="statement not covered" >return []; }</span></span>
+<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >text = await fs.readFile(file, 'utf-8'); } catch {</span> <span class="cstat-no" title="statement not covered" >return []; }</span></span>
 &nbsp;
   const cutoff = <span class="cstat-no" title="statement not covered" >new Date(Date.now() - days * 24 * 60 * 60 * 1000);</span>
   const results: PatternEntry[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >  for (const line of text.split('\n')) {</span>
 <span class="cstat-no" title="statement not covered" >    if (!line.startsWith('|')) <span class="cstat-no" title="statement not covered" >continue;</span></span>
-    const parts = <span class="cstat-no" title="statement not covered" >line.split('|').map(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.trim())</span>;</span>
+    const parts = <span class="cstat-no" title="statement not covered" >line.split('|').<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.trim())</span>;</span>
     // | ID | Name | Category | Occurrences | Confidence | Status |
 <span class="cstat-no" title="statement not covered" >    if (parts.length &lt; 7 || parts[1] === 'ID' || parts[1]?.startsWith('-')) <span class="cstat-no" title="statement not covered" >continue;</span></span>
     const [, id, name, , , , status] = <span class="cstat-no" title="statement not covered" >parts;</span>
@@ -419,7 +419,7 @@ export async function <span class="fstat-no" title="function not covered" >getRe
 <span class="cstat-no" title="statement not covered" >    results.push({ id, name, status: status ?? 'active', created: '' });</span>
   }
   // Filter by created date if available
-<span class="cstat-no" title="statement not covered" >  return results.filter(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >!</span>e.created || new Date(e.created) &gt;= cutoff)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return results.<span class="fstat-no" title="function not covered" >filter(e</span> =&gt; <span class="cstat-no" title="statement not covered" >!e.created || new Date(e.created) &gt;= cutoff);</span></span>
 }
 &nbsp;
 export interface PromotionCandidate {
@@ -444,7 +444,7 @@ function <span class="fstat-no" title="function not covered" >extractTriggers(t<
   ];
 &nbsp;
   const textLower = <span class="cstat-no" title="statement not covered" >text.toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >  return technicalKeywords.filter(<span class="fstat-no" title="function not covered" >kw =&gt; <span class="cstat-no" title="statement not covered" >t</span>extLower.includes(kw))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return technicalKeywords.<span class="fstat-no" title="function not covered" >filter(k</span>w =&gt; <span class="cstat-no" title="statement not covered" >textLower.includes(kw))</span>;</span>
 }
 &nbsp;
 /**
@@ -479,7 +479,7 @@ export function <span class="fstat-no" title="function not covered" >getPromotio
   }
 &nbsp;
   // Sort by number of triggers (more specific = better candidate)
-<span class="cstat-no" title="statement not covered" >  return candidates.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.suggestedTriggers.length - a.suggestedTriggers.length)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return candidates.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.suggestedTriggers.length - a.suggestedTriggers.length);</span></span>
 }
 &nbsp;
 /**
@@ -519,7 +519,7 @@ export function <span class="fstat-no" title="function not covered" >listPromota
     '',
   ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  candidates.forEach(<span class="fstat-no" title="function not covered" >(c</span>andidate, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  candidates.<span class="fstat-no" title="function not covered" >forEach((c</span>andidate, index) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push(`## ${index + 1}. From ${candidate.storyId} (${candidate.timestamp})`);</span>
 <span class="cstat-no" title="statement not covered" >    lines.push('');</span>
 <span class="cstat-no" title="statement not covered" >    lines.push(candidate.learning);</span>
@@ -541,7 +541,7 @@ export function <span class="fstat-no" title="function not covered" >listPromota
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

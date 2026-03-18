@@ -1197,7 +1197,7 @@ async function <span class="fstat-no" title="function not covered" >detectTechSt
 <span class="cstat-no" title="statement not covered" >    if (exists) {</span>
       // Detect language
 <span class="cstat-no" title="statement not covered" >      if (pattern.indicates.language) {</span>
-        const existingLang = <span class="cstat-no" title="statement not covered" >languages.find(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.name === pattern.indicates.language)</span>;</span>
+        const existingLang = <span class="cstat-no" title="statement not covered" >languages.<span class="fstat-no" title="function not covered" >find(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.name === pattern.indicates.language);</span></span>
 <span class="cstat-no" title="statement not covered" >        if (!existingLang) {</span>
           const version = <span class="cstat-no" title="statement not covered" >await extractVersion(filePath, pattern.indicates.language);</span>
 <span class="cstat-no" title="statement not covered" >          languages.push({</span>
@@ -1220,7 +1220,7 @@ async function <span class="fstat-no" title="function not covered" >detectTechSt
 &nbsp;
   // Prioritize lockfile-based package managers over generic ones
   const lockfileManagers = <span class="cstat-no" title="statement not covered" >['pnpm', 'yarn', 'cargo', 'poetry', 'pipenv', 'bundler', 'composer', 'go'];</span>
-  const lockfileMatch = <span class="cstat-no" title="statement not covered" >packageManagerHints.find(<span class="fstat-no" title="function not covered" >pm =&gt; <span class="cstat-no" title="statement not covered" >l</span>ockfileManagers.includes(pm))</span>;</span>
+  const lockfileMatch = <span class="cstat-no" title="statement not covered" >packageManagerHints.<span class="fstat-no" title="function not covered" >find(p</span>m =&gt; <span class="cstat-no" title="statement not covered" >lockfileManagers.includes(pm))</span>;</span>
 <span class="cstat-no" title="statement not covered" >  packageManager = lockfileMatch || packageManagerHints[0] || null;</span>
 &nbsp;
   // Detect frameworks from package.json
@@ -1277,9 +1277,9 @@ async function <span class="fstat-no" title="function not covered" >detectBuildI
       let pm = <span class="cstat-no" title="statement not covered" >'npm';</span>
 <span class="cstat-no" title="statement not covered" >      if (await fileExists(path.join(projectRoot, 'pnpm-lock.yaml'))) {</span>
 <span class="cstat-no" title="statement not covered" >        pm = 'pnpm';</span>
-<span class="cstat-no" title="statement not covered" >      } else if (await fileExists(path.join(projectRoot, 'yarn.lock'))) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >await fileExists(path.join(projectRoot, 'yarn.lock'))) {</span>
 <span class="cstat-no" title="statement not covered" >        pm = 'yarn';</span>
-<span class="cstat-no" title="statement not covered" >      } else if (await fileExists(path.join(projectRoot, 'bun.lockb'))) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >await fileExists(path.join(projectRoot, 'bun.lockb'))) {</span>
 <span class="cstat-no" title="statement not covered" >        pm = 'bun';</span>
       }
 &nbsp;
@@ -1365,29 +1365,29 @@ async function <span class="fstat-no" title="function not covered" >detectConven
   // Analyze naming patterns
 <span class="cstat-no" title="statement not covered" >  if (sampleFiles.length &gt; 0) {</span>
     const contents = <span class="cstat-no" title="statement not covered" >await Promise.all(</span>
-      sampleFiles.map(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>s.readFile(f, 'utf-8').catch(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >'</span>')</span>)</span>
+      sampleFiles.<span class="fstat-no" title="function not covered" >map(f</span> =&gt; <span class="cstat-no" title="statement not covered" >fs.readFile(f, 'utf-8').<span class="fstat-no" title="function not covered" >catch(() =&gt; <span class="cstat-no" title="statement not covered" >'</span>'))</span></span>
     );
 &nbsp;
     // Detect naming style (simplified heuristic)
-    const camelCaseCount = <span class="cstat-no" title="statement not covered" >contents.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >/</span>\bfunction\s+[a-z][a-zA-Z]+/.test(c))</span>.length;</span>
-    const snakeCaseCount = <span class="cstat-no" title="statement not covered" >contents.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >/</span>\bdef\s+[a-z_]+/.test(c))</span>.length;</span>
-    const pascalCaseCount = <span class="cstat-no" title="statement not covered" >contents.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >/</span>\bclass\s+[A-Z][a-zA-Z]+/.test(c))</span>.length;</span>
+    const camelCaseCount = <span class="cstat-no" title="statement not covered" >contents.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >/\bfunction\s+[a-z][a-zA-Z]+/.test(c))</span>.length;</span>
+    const snakeCaseCount = <span class="cstat-no" title="statement not covered" >contents.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >/\bdef\s+[a-z_]+/.test(c))</span>.length;</span>
+    const pascalCaseCount = <span class="cstat-no" title="statement not covered" >contents.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >/\bclass\s+[A-Z][a-zA-Z]+/.test(c))</span>.length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (snakeCaseCount &gt; camelCaseCount) {</span>
 <span class="cstat-no" title="statement not covered" >      namingStyle = 'snake_case';</span>
-<span class="cstat-no" title="statement not covered" >    } else if (pascalCaseCount &gt; 0) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >pascalCaseCount &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      namingStyle = 'camelCase/PascalCase';</span>
-<span class="cstat-no" title="statement not covered" >    } else if (camelCaseCount &gt; 0) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >camelCaseCount &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      namingStyle = 'camelCase';</span>
     }
 &nbsp;
     // Detect import style
-    const esModuleCount = <span class="cstat-no" title="statement not covered" >contents.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >/</span>^import\s+.*from/.test(c))</span>.length;</span>
-    const commonJSCount = <span class="cstat-no" title="statement not covered" >contents.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >/</span>^const\s+.*=\s*require\(/.test(c))</span>.length;</span>
+    const esModuleCount = <span class="cstat-no" title="statement not covered" >contents.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >/^import\s+.*from/.test(c))</span>.length;</span>
+    const commonJSCount = <span class="cstat-no" title="statement not covered" >contents.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >/^const\s+.*=\s*require\(/.test(c))</span>.length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (esModuleCount &gt; commonJSCount) {</span>
 <span class="cstat-no" title="statement not covered" >      importStyle = 'ES modules';</span>
-<span class="cstat-no" title="statement not covered" >    } else if (commonJSCount &gt; 0) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >commonJSCount &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      importStyle = 'CommonJS';</span>
     }
   }
@@ -1399,11 +1399,11 @@ async function <span class="fstat-no" title="function not covered" >detectConven
 <span class="cstat-no" title="statement not covered" >    if (await fileExists(dirPath)) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const files = <span class="cstat-no" title="statement not covered" >await fs.readdir(dirPath);</span>
-        const testFile = <span class="cstat-no" title="statement not covered" >files.find(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >/</span>\.(test|spec)\.(ts|js|py)$/.test(f))</span>;</span>
+        const testFile = <span class="cstat-no" title="statement not covered" >files.<span class="fstat-no" title="function not covered" >find(f</span> =&gt; <span class="cstat-no" title="statement not covered" >/\.(test|spec)\.(ts|js|py)$/.test(f))</span>;</span>
 <span class="cstat-no" title="statement not covered" >        if (testFile) {</span>
-<span class="cstat-no" title="statement not covered" >          if (testFile.endsWith('.test.ts')) <span class="cstat-no" title="statement not covered" >testPattern = <span class="cstat-no" title="statement not covered" >'*.test.ts';</span></span></span>
-          else if (testFile.endsWith('.spec.ts')) <span class="cstat-no" title="statement not covered" >testPattern = <span class="cstat-no" title="statement not covered" >'*.spec.ts';</span></span>
-          else if (testFile.startsWith('test_')) <span class="cstat-no" title="statement not covered" >testPattern = 'test_*.py';</span>
+<span class="cstat-no" title="statement not covered" >          if (testFile.endsWith('.test.ts')) <span class="cstat-no" title="statement not covered" >testPattern = '*.test.ts';</span></span>
+          else if (<span class="cstat-no" title="statement not covered" >testFile.endsWith('.spec.ts')) <span class="cstat-no" title="statement not covered" >testPattern = '*.spec.ts';</span></span>
+          else if (<span class="cstat-no" title="statement not covered" >testFile.startsWith('test_')) <span class="cstat-no" title="statement not covered" >testPattern = 'test_*.py';</span></span>
 <span class="cstat-no" title="statement not covered" >          break;</span>
         }
       } catch (_error) {
@@ -1419,7 +1419,7 @@ async function <span class="fstat-no" title="function not covered" >detectConven
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (hasFeaturesDir) {</span>
 <span class="cstat-no" title="statement not covered" >    fileOrganization = 'feature-based';</span>
-<span class="cstat-no" title="statement not covered" >  } else if (hasComponentsDir || hasControllersDir) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >hasComponentsDir || hasControllersDir) {</span>
 <span class="cstat-no" title="statement not covered" >    fileOrganization = 'type-based';</span>
   }
 &nbsp;
@@ -1663,7 +1663,7 @@ async function <span class="fstat-no" title="function not covered" >detectGitBra
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

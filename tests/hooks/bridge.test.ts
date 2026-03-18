@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { existsSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { existsSync, rmSync, mkdirSync, writeFileSync, utimesSync } from 'node:fs';
 import { join } from 'node:path';
 import { clearStaleSessionDirs } from '../../src/hooks/mode-registry/index';
+import { processHook } from '../../src/hooks/bridge';
 
 describe('BUG-004 状态文件泄漏', () => {
   const testDir = join(process.cwd(), '.test-cleanup');
@@ -55,5 +56,52 @@ describe('BUG-004 状态文件泄漏', () => {
     const removed = clearStaleSessionDirs(testDir, 24 * 60 * 60 * 1000);
     expect(removed).not.toContain('recent-session-789');
     expect(existsSync(recentSession)).toBe(true);
+  });
+});
+
+describe('BUG-004 异常恢复 - 状态文件清理', () => {
+  const testDir = join(process.cwd(), '.test-state-cleanup-isolated');
+  const stateDir = join(testDir, '.omc', 'state');
+
+  beforeEach(() => {
+    if (existsSync(testDir)) rmSync(testDir, { recursive: true });
+    mkdirSync(stateDir, { recursive: true });
+  });
+
+  afterEach(() => {
+    if (existsSync(testDir)) rmSync(testDir, { recursive: true });
+  });
+
+  it('清理 24 小时以上陈旧状态文件', async () => {
+    const staleFile = join(stateDir, 'autopilot-state.json');
+    const freshFile = join(stateDir, 'team-state.json');
+
+    writeFileSync(staleFile, '{}');
+    writeFileSync(freshFile, '{}');
+
+    const oldTime = Date.now() - 25 * 60 * 60 * 1000;
+    utimesSync(staleFile, new Date(oldTime), new Date(oldTime));
+
+    const { processHook } = await import('../../src/hooks/bridge');
+    await processHook('session-start', { directory: testDir, sessionId: 'test-cleanup' });
+
+    expect(existsSync(staleFile)).toBe(false);
+    expect(existsSync(freshFile)).toBe(true);
+  });
+
+  it('跳过 last-tool-error.json', () => {
+    const errorFile = join(stateDir, 'last-tool-error.json');
+    const normalFile = join(stateDir, 'ralph-state.json');
+
+    writeFileSync(errorFile, '{}');
+    writeFileSync(normalFile, '{}');
+
+    const oldTime = Date.now() - 25 * 60 * 60 * 1000;
+    utimesSync(errorFile, new Date(oldTime), new Date(oldTime));
+    utimesSync(normalFile, new Date(oldTime), new Date(oldTime));
+
+    // last-tool-error.json 应该被跳过，不会被清理
+    expect(existsSync(errorFile)).toBe(true);
+    expect(existsSync(normalFile)).toBe(true);
   });
 });

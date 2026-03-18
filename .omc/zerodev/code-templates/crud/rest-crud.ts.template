@@ -1,0 +1,23 @@
+// Template: REST CRUD
+// Platform: {{platform}}
+// Dependencies: express
+
+import { Request, Response } from 'express';
+
+export class {{className}} {
+  async create(req: Request, res: Response) {
+    return res.json({ id: 1, ...req.body });
+  }
+
+  async read(req: Request, res: Response) {
+    return res.json({ id: req.params.id });
+  }
+
+  async update(req: Request, res: Response) {
+    return res.json({ id: req.params.id, ...req.body });
+  }
+
+  async delete(req: Request, res: Response) {
+    return res.json({ success: true });
+  }
+}

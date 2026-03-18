@@ -91,9 +91,14 @@ export class MCPClient {
       if (this.transport) {
         await this.client.close();
 
-        const proc = (this.transport as unknown as { _process?: { killed: boolean; kill: (signal: string) => void; once: (event: string, listener: () => void) => void } })._process;
+        const proc = (this.transport as unknown as { _process?: { exitCode: number | null; killed: boolean; kill: (signal: string) => void; once: (event: string, listener: () => void) => void } })._process;
         if (proc && !proc.killed) {
           proc.kill('SIGTERM');
+
+          // Check if already exited
+          if (proc.exitCode !== null || proc.killed) {
+            return;
+          }
 
           await Promise.race([
             new Promise<void>(resolve => proc.once('exit', () => resolve())),

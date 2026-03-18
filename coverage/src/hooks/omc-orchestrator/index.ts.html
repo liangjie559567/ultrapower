@@ -1315,14 +1315,14 @@ export function <span class="fstat-no" title="function not covered" >isAllowedPa
   // Reject explicit traversal that escapes (e.g. "../foo")
 <span class="cstat-no" title="statement not covered" >  if (normalized.startsWith('../') || normalized === '..') <span class="cstat-no" title="statement not covered" >return false;</span></span>
   // Fast path: check relative patterns
-<span class="cstat-no" title="statement not covered" >  if (ALLOWED_PATH_PATTERNS.some(<span class="fstat-no" title="function not covered" >pattern =&gt; <span class="cstat-no" title="statement not covered" >p</span>attern.test(normalized))</span>) <span class="cstat-no" title="statement not covered" >return true;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (ALLOWED_PATH_PATTERNS.<span class="fstat-no" title="function not covered" >some(p</span>attern =&gt; <span class="cstat-no" title="statement not covered" >pattern.test(normalized))</span>) <span class="cstat-no" title="statement not covered" >return true;</span></span>
   // Absolute path: strip worktree root, then re-check
 <span class="cstat-no" title="statement not covered" >  if (path.isAbsolute(filePath)) {</span>
     const root = <span class="cstat-no" title="statement not covered" >directory ? getWorktreeRoot(directory) : getWorktreeRoot();</span>
 <span class="cstat-no" title="statement not covered" >    if (root) {</span>
       const <span class="cstat-no" title="statement not covered" >rel = toForwardSlash(path.relative(root, filePath));</span>
 <span class="cstat-no" title="statement not covered" >      if (rel.startsWith('../') || rel === '..' || path.isAbsolute(rel)) <span class="cstat-no" title="statement not covered" >return false;</span></span>
-<span class="cstat-no" title="statement not covered" >      return ALLOWED_PATH_PATTERNS.some(<span class="fstat-no" title="function not covered" >pattern =&gt; <span class="cstat-no" title="statement not covered" >p</span>attern.test(rel))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      return ALLOWED_PATH_PATTERNS.<span class="fstat-no" title="function not covered" >some(p</span>attern =&gt; <span class="cstat-no" title="statement not covered" >pattern.test(rel))</span>;</span>
     }
   }
 <span class="cstat-no" title="statement not covered" >  return false;</span>
@@ -1362,7 +1362,7 @@ export function <span class="fstat-no" title="function not covered" >getGitDiffS
       const filePath = <span class="cstat-no" title="statement not covered" >line.substring(3);</span>
 <span class="cstat-no" title="statement not covered" >      if (status === 'A' || status === '??') {</span>
 <span class="cstat-no" title="statement not covered" >        statusMap.set(filePath, 'added');</span>
-<span class="cstat-no" title="statement not covered" >      } else if (status === 'D') {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >status === 'D') {</span>
 <span class="cstat-no" title="statement not covered" >        statusMap.set(filePath, 'deleted');</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        statusMap.set(filePath, 'modified');</span>
@@ -1398,9 +1398,9 @@ export function <span class="fstat-no" title="function not covered" >getGitDiffS
 export function <span class="fstat-no" title="function not covered" >formatFileChanges(s</span>tats: GitFileStat[]): string {
 <span class="cstat-no" title="statement not covered" >  if (stats.length === 0) <span class="cstat-no" title="statement not covered" >return '[FILE CHANGES SUMMARY]\nNo file changes detected.\n';</span></span>
 &nbsp;
-  const modified = <span class="cstat-no" title="statement not covered" >stats.filter(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.status === 'modified')</span>;</span>
-  const added = <span class="cstat-no" title="statement not covered" >stats.filter(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.status === 'added')</span>;</span>
-  const deleted = <span class="cstat-no" title="statement not covered" >stats.filter(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.status === 'deleted')</span>;</span>
+  const modified = <span class="cstat-no" title="statement not covered" >stats.<span class="fstat-no" title="function not covered" >filter((s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.status === 'modified');</span></span>
+  const added = <span class="cstat-no" title="statement not covered" >stats.<span class="fstat-no" title="function not covered" >filter((s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.status === 'added');</span></span>
+  const deleted = <span class="cstat-no" title="statement not covered" >stats.<span class="fstat-no" title="function not covered" >filter((s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.status === 'deleted');</span></span>
 &nbsp;
   const lines: string[] = <span class="cstat-no" title="statement not covered" >['[FILE CHANGES SUMMARY]'];</span>
 &nbsp;
@@ -1709,7 +1709,7 @@ export function <span class="fstat-no" title="function not covered" >createSisyp
     /**
      * Pre-tool execution handler
      */
-    preTool: <span class="fstat-no" title="function not covered" >(t</span>oolName: string, toolInput: Record&lt;string, unknown&gt;) =&gt; {
+<span class="fstat-no" title="function not covered" >    preTool: (t</span>oolName: string, toolInput: Record&lt;string, unknown&gt;) =&gt; {
 <span class="cstat-no" title="statement not covered" >      return processOrchestratorPreTool({</span>
         toolName,
         toolInput,
@@ -1720,7 +1720,7 @@ export function <span class="fstat-no" title="function not covered" >createSisyp
     /**
      * Post-tool execution handler
      */
-    postTool: <span class="fstat-no" title="function not covered" >(t</span>oolName: string, toolInput: Record&lt;string, unknown&gt;, output: string) =&gt; {
+<span class="fstat-no" title="function not covered" >    postTool: (t</span>oolName: string, toolInput: Record&lt;string, unknown&gt;, output: string) =&gt; {
 <span class="cstat-no" title="statement not covered" >      return processOrchestratorPostTool(</span>
         { toolName, toolInput, directory },
         output
@@ -1730,14 +1730,14 @@ export function <span class="fstat-no" title="function not covered" >createSisyp
     /**
      * Check for boulder continuation on session idle
      */
-    checkContinuation: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    checkContinuation: () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return checkBoulderContinuation(directory);</span>
     },
 &nbsp;
     /**
      * Get single task directive for subagent prompts
      */
-    getSingleTaskDirective: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >S</span>INGLE_TASK_DIRECTIVE,</span>
+<span class="fstat-no" title="function not covered" >    getSingleTaskDirective: () =&gt; <span class="cstat-no" title="statement not covered" >S</span>INGLE_TASK_DIRECTIVE,</span>
   };
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -1747,7 +1747,7 @@ export function <span class="fstat-no" title="function not covered" >createSisyp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

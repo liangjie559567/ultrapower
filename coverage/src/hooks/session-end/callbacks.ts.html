@@ -668,9 +668,9 @@ function <span class="fstat-no" title="function not covered" >normalizeDiscordTa
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return tagList</span>
-    .map(<span class="fstat-no" title="function not covered" >(t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.trim())</span>
-    .filter(<span class="fstat-no" title="function not covered" >(t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.length &gt; 0)</span>
-    .map(<span class="fstat-no" title="function not covered" >(t</span>ag) =&gt; {
+    .<span class="fstat-no" title="function not covered" >map((t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.trim())</span>
+    .<span class="fstat-no" title="function not covered" >filter((t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.length &gt; 0)</span>
+    .<span class="fstat-no" title="function not covered" >map((t</span>ag) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (tag === '@here' || tag === '@everyone') {</span>
 <span class="cstat-no" title="statement not covered" >        return tag;</span>
       }
@@ -694,9 +694,9 @@ function <span class="fstat-no" title="function not covered" >normalizeTelegramT
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return tagList</span>
-    .map(<span class="fstat-no" title="function not covered" >(t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.trim())</span>
-    .filter(<span class="fstat-no" title="function not covered" >(t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.length &gt; 0)</span>
-    .map(<span class="fstat-no" title="function not covered" >(t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.startsWith('@') ? tag : `@${tag}`)</span>;
+    .<span class="fstat-no" title="function not covered" >map((t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.trim())</span>
+    .<span class="fstat-no" title="function not covered" >filter((t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.length &gt; 0)</span>
+    .<span class="fstat-no" title="function not covered" >map((t</span>ag) =&gt; <span class="cstat-no" title="statement not covered" >tag.startsWith('@') ? tag : `@${tag}`);</span>
 }
 &nbsp;
 function <span class="fstat-no" title="function not covered" >prefixMessageWithTags(m</span>essage: string, tags: string[]): string {
@@ -713,7 +713,7 @@ function <span class="fstat-no" title="function not covered" >prefixMessageWithT
 export function <span class="fstat-no" title="function not covered" >interpolatePath(p</span>athTemplate: string, sessionId: string): string {
   const now = <span class="cstat-no" title="statement not covered" >new Date();</span>
   const date = <span class="cstat-no" title="statement not covered" >now.toISOString().split('T')[0]; // YYYY-MM-DD</span>
-  const time = <span class="cstat-no" title="statement not covered" >now.toISOString().split('T')[1].split('.')[0].replace(/:/g, '-'); // HH-MM-SS</span>
+  const time = <span class="cstat-no" title="statement not covered" >now.toISOString().split('T')[1].split('.')[0].replace(/:/g, '-');</span> // HH-MM-SS
 &nbsp;
   // Sanitize session_id: remove path separators and traversal sequences
   const safeSessionId = <span class="cstat-no" title="statement not covered" >sessionId.replace(/[/\\..]/g, '_');</span>
@@ -808,7 +808,7 @@ async function <span class="fstat-no" title="function not covered" >sendDiscord(
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const url = <span class="cstat-no" title="statement not covered" >new URL(config.webhookUrl);</span>
     const allowedHosts = <span class="cstat-no" title="statement not covered" >['discord.com', 'discordapp.com'];</span>
-<span class="cstat-no" title="statement not covered" >    if (!allowedHosts.some(<span class="fstat-no" title="function not covered" >host =&gt; <span class="cstat-no" title="statement not covered" >u</span>rl.hostname === host || url.hostname.endsWith(`.${host}`))</span>) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!allowedHosts.<span class="fstat-no" title="function not covered" >some(h</span>ost =&gt; <span class="cstat-no" title="statement not covered" >url.hostname === host || url.hostname.endsWith(`.${host}`))</span>) {</span>
 <span class="cstat-no" title="statement not covered" >      console.error('[stop-callback] Discord: webhook URL must be from discord.com or discordapp.com');</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -891,7 +891,7 @@ export async function <span class="fstat-no" title="function not covered" >trigg
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    await Promise.race([</span>
       Promise.allSettled(promises),
-      new Promise&lt;void&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 5000))</span>,
+      new <span class="fstat-no" title="function not covered" >Promise&lt;void&gt;((r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 5000))</span>,
     ]);
   } catch (error) {
     // Swallow any errors - callbacks should never block session end
@@ -904,7 +904,7 @@ export async function <span class="fstat-no" title="function not covered" >trigg
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

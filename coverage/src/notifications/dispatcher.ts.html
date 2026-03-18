@@ -1354,8 +1354,8 @@ function <span class="fstat-no" title="function not covered" >validateDiscordUrl
     const url = <span class="cstat-no" title="statement not covered" >new URL(webhookUrl);</span>
     const allowedHosts = <span class="cstat-no" title="statement not covered" >["discord.com", "discordapp.com"];</span>
 <span class="cstat-no" title="statement not covered" >    if (</span>
-      !allowedHosts.some(
-<span class="fstat-no" title="function not covered" >        (h</span>ost) =&gt; <span class="cstat-no" title="statement not covered" >url.hostname === host || url.hostname.endsWith(`.${host}`),</span>
+      !allowedHosts.<span class="fstat-no" title="function not covered" >some(</span>
+        (host) =&gt; <span class="cstat-no" title="statement not covered" >url.hostname === host || url.hostname.endsWith(`.${host}`),</span>
       )
     ) {
 <span class="cstat-no" title="statement not covered" >      return false;</span>
@@ -1506,7 +1506,7 @@ export async function <span class="fstat-no" title="function not covered" >sendD
     // NEW: Parse response to extract message ID
     let messageId: string | undefined;
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const data = (<span class="cstat-no" title="statement not covered" >await response.json()) as { id?: string };</span>
+      const data = (<span class="cstat-no" title="statement not covered" >await response.json())</span> as { id?: string };
 <span class="cstat-no" title="statement not covered" >      messageId = data?.id;</span>
     } catch {
       // Non-fatal: message was sent, we just can't track it
@@ -1549,7 +1549,7 @@ export async function <span class="fstat-no" title="function not covered" >sendT
       parse_mode: config.parseMode || "Markdown",
     });
 &nbsp;
-    const result = <span class="cstat-no" title="statement not covered" >await new Promise&lt;NotificationResult&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+    const result = <span class="cstat-no" title="statement not covered" >await new <span class="fstat-no" title="function not covered" >Promise&lt;NotificationResult&gt;((r</span>esolve) =&gt; {</span>
       const <span class="cstat-no" title="statement not covered" >req = httpsRequest(</span>
         {
           hostname: "api.telegram.org",
@@ -1561,12 +1561,12 @@ export async function <span class="fstat-no" title="function not covered" >sendT
             "Content-Length": Buffer.byteLength(body),
           },
           timeout: SEND_TIMEOUT_MS,
-        },
-<span class="fstat-no" title="function not covered" >        (r</span>es) =&gt; {
+        }<span class="fstat-no" title="function not covered" >,</span>
+        (res) =&gt; {
           // Collect response chunks to parse message_id
           const chunks: Buffer[] = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >          res.on("data", <span class="fstat-no" title="function not covered" >(c</span>hunk: Buffer) =&gt; <span class="cstat-no" title="statement not covered" >chunks.push(chunk))</span>;</span>
-<span class="cstat-no" title="statement not covered" >          res.on("end", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >          res.on(<span class="fstat-no" title="function not covered" >"data", (c</span>hunk: Buffer) =&gt; <span class="cstat-no" title="statement not covered" >chunks.push(chunk))</span>;</span>
+<span class="cstat-no" title="statement not covered" >          res.on(<span class="fstat-no" title="function not covered" >"end", () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >            if (res.statusCode &amp;&amp; res.statusCode &gt;= 200 &amp;&amp; res.statusCode &lt; 300) {</span>
               // Parse response to extract message_id
               let messageId: string | undefined;
@@ -1590,10 +1590,10 @@ export async function <span class="fstat-no" title="function not covered" >sendT
         },
       );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      req.on("error", <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      req.on(<span class="fstat-no" title="function not covered" >"error", (e</span>) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        resolve({ platform: "telegram", success: false, error: e.message });</span>
       });
-<span class="cstat-no" title="statement not covered" >      req.on("timeout", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      req.on(<span class="fstat-no" title="function not covered" >"timeout", () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        req.destroy();</span>
 <span class="cstat-no" title="statement not covered" >        resolve({</span>
           platform: "telegram",
@@ -1831,8 +1831,8 @@ export async function <span class="fstat-no" title="function not covered" >dispa
   let timer: ReturnType&lt;typeof setTimeout&gt; | undefined;
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const results = <span class="cstat-no" title="statement not covered" >await Promise.race([</span>
-      Promise.allSettled(promises).then(<span class="fstat-no" title="function not covered" >(s</span>ettled) =&gt;
-<span class="cstat-no" title="statement not covered" >        settled.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt;</span>
+      Promise.allSettled(promises).<span class="fstat-no" title="function not covered" >then((s</span>ettled) =&gt;
+<span class="cstat-no" title="statement not covered" >        settled.<span class="fstat-no" title="function not covered" >map((s</span>) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >          s.status === "fulfilled"</span>
             ? s.value
             : {
@@ -1842,9 +1842,9 @@ export async function <span class="fstat-no" title="function not covered" >dispa
               },
         ),
       ),
-      new Promise&lt;NotificationResult[]&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {
-<span class="cstat-no" title="statement not covered" >        timer = setTimeout(</span>
-<span class="fstat-no" title="function not covered" >          () =&gt;</span>
+      new <span class="fstat-no" title="function not covered" >Promise&lt;NotificationResult[]&gt;((r</span>esolve) =&gt; {
+<span class="cstat-no" title="statement not covered" >        timer = <span class="fstat-no" title="function not covered" >setTimeout(</span></span>
+          () =&gt;
 <span class="cstat-no" title="statement not covered" >            resolve([</span>
               {
                 platform: "unknown" as NotificationPlatform,
@@ -1860,7 +1860,7 @@ export async function <span class="fstat-no" title="function not covered" >dispa
 <span class="cstat-no" title="statement not covered" >    return {</span>
       event,
       results,
-      anySuccess: results.some(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.success)</span>,
+      anySuccess: results.<span class="fstat-no" title="function not covered" >some((r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.success),</span>
     };
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -1885,7 +1885,7 @@ export async function <span class="fstat-no" title="function not covered" >dispa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

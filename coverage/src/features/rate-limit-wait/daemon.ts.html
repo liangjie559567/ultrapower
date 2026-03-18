@@ -1650,7 +1650,7 @@ export function <span class="fstat-no" title="function not covered" >readDaemonS
     }
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(cfg.stateFilePath, 'utf-8');</span>
-    const state = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as DaemonState;</span>
+    const state = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as DaemonState;
 &nbsp;
     // Restore Date objects
 <span class="cstat-no" title="statement not covered" >    if (state.startedAt) <span class="cstat-no" title="statement not covered" >state.startedAt = new Date(state.startedAt);</span></span>
@@ -1767,7 +1767,7 @@ function <span class="fstat-no" title="function not covered" >log(m</span>essage
     // Rotate log if needed (prevents unbounded growth)
 <span class="cstat-no" title="statement not covered" >    rotateLogIfNeeded(config.logFilePath);</span>
 &nbsp;
-    const <span class="cstat-no" title="statement not covered" >timestamp = new Date().toISOString();</span>
+    const timestamp = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
     const logLine = <span class="cstat-no" title="statement not covered" >`[${timestamp}] ${message}\n`;</span>
 &nbsp;
     // Append to log file with secure permissions
@@ -1830,7 +1830,7 @@ async function <span class="fstat-no" title="function not covered" >pollLoop(c</
 &nbsp;
         // Add newly detected blocked panes
 <span class="cstat-no" title="statement not covered" >        for (const pane of blockedPanes) {</span>
-          const existing = <span class="cstat-no" title="statement not covered" >state.blockedPanes.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === pane.id)</span>;</span>
+          const existing = <span class="cstat-no" title="statement not covered" >state.blockedPanes.<span class="fstat-no" title="function not covered" >find((p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === pane.id);</span></span>
 <span class="cstat-no" title="statement not covered" >          if (!existing) {</span>
 <span class="cstat-no" title="statement not covered" >            state.blockedPanes.push(pane);</span>
 <span class="cstat-no" title="statement not covered" >            log(`Detected blocked pane: ${pane.id} in ${pane.session}:${pane.windowIndex}`, config);</span>
@@ -1838,8 +1838,8 @@ async function <span class="fstat-no" title="function not covered" >pollLoop(c</
         }
 &nbsp;
         // Remove panes that are no longer blocked
-<span class="cstat-no" title="statement not covered" >        state.blockedPanes = state.blockedPanes.filter(<span class="fstat-no" title="function not covered" >(t</span>racked) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          blockedPanes.some(<span class="fstat-no" title="function not covered" >(c</span>urrent) =&gt; <span class="cstat-no" title="statement not covered" >current.id === tracked.id)</span></span>
+<span class="cstat-no" title="statement not covered" >        state.blockedPanes = state.blockedPanes.<span class="fstat-no" title="function not covered" >filter((t</span>racked) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >          blockedPanes.<span class="fstat-no" title="function not covered" >some((c</span>urrent) =&gt; <span class="cstat-no" title="statement not covered" >current.id === tracked.id)</span></span>
         );
       }
 &nbsp;
@@ -1888,7 +1888,7 @@ async function <span class="fstat-no" title="function not covered" >pollLoop(c</
     }
 &nbsp;
     // Wait for next poll
-<span class="cstat-no" title="statement not covered" >    await new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, config.pollIntervalMs))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    await new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, config.pollIntervalMs))</span>;</span>
   }
 }
 &nbsp;
@@ -1976,7 +1976,7 @@ export function <span class="fstat-no" title="function not covered" >startDaemon
     };
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    if (configFilePath) {</span>
-<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >unlinkSync(configFilePath); }</span> catch (_e) { /* Ignore cleanup errors */ }</span>
+<span class="cstat-no" title="statement not covered" >      try { <span class="cstat-no" title="statement not covered" >unlinkSync(configFilePath); } catch (_</span>e) { /* Ignore cleanup errors */ }</span>
     }
 <span class="cstat-no" title="statement not covered" >    return {</span>
       success: false,
@@ -2002,7 +2002,7 @@ export async function <span class="fstat-no" title="function not covered" >runDa
 <span class="cstat-no" title="statement not covered" >  writePidFile(process.pid, cfg);</span>
 &nbsp;
   // Handle shutdown
-  const shutdown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >shutdown = () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    console.log('\nShutting down daemon...');</span>
 <span class="cstat-no" title="statement not covered" >    removePidFile(cfg);</span>
     const state = <span class="cstat-no" title="statement not covered" >readDaemonState(cfg);</span>
@@ -2197,7 +2197,7 @@ export { pollLoop };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

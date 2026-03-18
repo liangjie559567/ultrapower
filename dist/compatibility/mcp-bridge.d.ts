@@ -44,11 +44,11 @@ export declare class McpBridge extends EventEmitter {
     /**
      * Disconnect from an MCP server
      */
-    disconnect(serverName: string): void;
+    disconnect(serverName: string): Promise<void>;
     /**
      * Disconnect from all servers
      */
-    disconnectAll(): void;
+    disconnectAll(): Promise<void>;
     /**
      * Check if connected to a server
      */
@@ -125,7 +125,7 @@ export declare function getMcpBridge(): McpBridge;
 /**
  * Reset bridge instance (for testing)
  */
-export declare function resetMcpBridge(): void;
+export declare function resetMcpBridge(): Promise<void>;
 /**
  * Quick access to invoke a tool
  */

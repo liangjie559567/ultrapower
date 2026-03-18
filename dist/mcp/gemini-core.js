@@ -158,8 +158,10 @@ export function executeGemini(prompt, model, cwd) {
                 reject(new Error(`Stdin write error: ${err.message}`));
             }
         });
-        child.stdin.write(prompt);
-        child.stdin.end();
+        if (child.stdin && !child.stdin.destroyed) {
+            child.stdin.write(prompt);
+            child.stdin.end();
+        }
     });
 }
 /**

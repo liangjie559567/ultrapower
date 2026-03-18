@@ -655,7 +655,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'explicit-model-specified',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx) =&gt; <span class="cstat-no" title="statement not covered" >ctx.explicitModel !== undefined,</span>
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx) =&gt; <span class="cstat-no" title="statement not covered" >ctx.explicitModel !== undefined,</span>
     action: { tier: 'EXPLICIT' as ComplexityTier | 'EXPLICIT', reason: 'User specified model explicitly' },
     priority: 100,
   },
@@ -669,7 +669,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
   // Higher priority (85) to override generic rules like short-local-change
   {
     name: 'architect-complex-debugging',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'architect' &amp;&amp;</span>
       (signals.lexical.hasDebuggingKeywords ||
        signals.lexical.hasArchitectureKeywords ||
@@ -680,7 +680,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'architect-simple-lookup',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'architect' &amp;&amp;</span>
       signals.lexical.hasSimpleKeywords &amp;&amp;
       !signals.lexical.hasDebuggingKeywords &amp;&amp;
@@ -693,7 +693,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
   // Planner: Simple breakdown → LOW, moderate planning → MEDIUM, cross-domain → HIGH
   {
     name: 'planner-simple-breakdown',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'planner' &amp;&amp;</span>
       signals.structural.estimatedSubtasks &lt;= 3 &amp;&amp;
       !signals.lexical.hasRiskKeywords &amp;&amp;
@@ -704,7 +704,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'planner-strategic-planning',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'planner' &amp;&amp;</span>
       (signals.structural.impactScope === 'system-wide' ||
        signals.lexical.hasArchitectureKeywords ||
@@ -716,7 +716,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
   // Critic: Checklist → LOW, gap analysis → MEDIUM, adversarial review → HIGH
   {
     name: 'critic-checklist-review',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'critic' &amp;&amp;</span>
       signals.lexical.wordCount &lt; 30 &amp;&amp;
       !signals.lexical.hasRiskKeywords,
@@ -726,7 +726,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'critic-adversarial-review',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'critic' &amp;&amp;</span>
       (signals.lexical.hasRiskKeywords || signals.structural.impactScope === 'system-wide'),
     action: { tier: 'HIGH', reason: 'Critic: Adversarial review for critical system' },
@@ -736,7 +736,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
   // Analyst: Simple impact → LOW, dependency mapping → MEDIUM, risk analysis → HIGH
   {
     name: 'analyst-simple-impact',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'analyst' &amp;&amp;</span>
       signals.structural.impactScope === 'local' &amp;&amp;
       !signals.lexical.hasRiskKeywords,
@@ -746,7 +746,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'analyst-risk-analysis',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      ctx.agentType === 'analyst' &amp;&amp;</span>
       (signals.lexical.hasRiskKeywords || signals.structural.impactScope === 'system-wide'),
     action: { tier: 'HIGH', reason: 'Analyst: Risk analysis and unknown-unknowns detection' },
@@ -757,7 +757,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'architecture-system-wide',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.lexical.hasArchitectureKeywords &amp;&amp;</span>
       signals.structural.impactScope === 'system-wide',
     action: { tier: 'HIGH', reason: 'Architectural decisions with system-wide impact' },
@@ -766,7 +766,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'security-domain',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.structural.domainSpecificity === 'security',</span>
     action: { tier: 'HIGH', reason: 'Security-related tasks require careful reasoning' },
     priority: 70,
@@ -774,7 +774,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'difficult-reversibility-risk',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.structural.reversibility === 'difficult' &amp;&amp;</span>
       signals.lexical.hasRiskKeywords,
     action: { tier: 'HIGH', reason: 'High-risk, difficult-to-reverse changes' },
@@ -783,7 +783,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'deep-debugging',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.lexical.hasDebuggingKeywords &amp;&amp;</span>
       signals.lexical.questionDepth === 'why',
     action: { tier: 'HIGH', reason: 'Root cause analysis requires deep reasoning' },
@@ -792,7 +792,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'complex-multi-step',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.structural.estimatedSubtasks &gt; 5 &amp;&amp;</span>
       signals.structural.crossFileDependencies,
     action: { tier: 'HIGH', reason: 'Complex multi-step task with cross-file changes' },
@@ -801,7 +801,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'simple-search-query',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.lexical.hasSimpleKeywords &amp;&amp;</span>
       signals.structural.estimatedSubtasks &lt;= 1 &amp;&amp;
       signals.structural.impactScope === 'local' &amp;&amp;
@@ -813,7 +813,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'short-local-change',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.lexical.wordCount &lt; 50 &amp;&amp;</span>
       signals.structural.impactScope === 'local' &amp;&amp;
       signals.structural.reversibility === 'easy' &amp;&amp;
@@ -824,7 +824,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'moderate-complexity',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.structural.estimatedSubtasks &gt; 1 &amp;&amp;</span>
       signals.structural.estimatedSubtasks &lt;= 5,
     action: { tier: 'MEDIUM', reason: 'Moderate complexity with multiple subtasks' },
@@ -833,7 +833,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'module-level-work',
-    condition: <span class="fstat-no" title="function not covered" >(c</span>tx, signals) =&gt;
+<span class="fstat-no" title="function not covered" >    condition: (c</span>tx, signals) =&gt;
 <span class="cstat-no" title="statement not covered" >      signals.structural.impactScope === 'module',</span>
     action: { tier: 'MEDIUM', reason: 'Module-level changes' },
     priority: 45,
@@ -843,7 +843,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = <span class="cstat-no" title
 &nbsp;
   {
     name: 'default-medium',
-    condition: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue,</span>
+<span class="fstat-no" title="function not covered" >    condition: () =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue,</span>
     action: { tier: 'MEDIUM', reason: 'Default tier for unclassified tasks' },
     priority: 0,
   },
@@ -858,7 +858,7 @@ export function <span class="fstat-no" title="function not covered" >evaluateRul
   rules: RoutingRule[] = <span class="branch-0 cbranch-no" title="branch not covered" >DEFAULT_ROUTING_RULES</span>
 ): { tier: ComplexityTier | 'EXPLICIT'; reason: string; ruleName: string } {
   // Sort rules by priority (highest first)
-  const sortedRules = <span class="cstat-no" title="statement not covered" >[...rules].sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.priority - a.priority)</span>;</span>
+  const sortedRules = <span class="cstat-no" title="statement not covered" >[...rules].<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.priority - a.priority);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (const rule of sortedRules) {</span>
 <span class="cstat-no" title="statement not covered" >    if (rule.condition(context, signals)) {</span>
@@ -886,7 +886,7 @@ export function <span class="fstat-no" title="function not covered" >getMatching
   signals: ComplexitySignals,
   rules: RoutingRule[] = <span class="branch-0 cbranch-no" title="branch not covered" >DEFAULT_ROUTING_RULES</span>
 ): RoutingRule[] {
-<span class="cstat-no" title="statement not covered" >  return rules.filter(<span class="fstat-no" title="function not covered" >rule =&gt; <span class="cstat-no" title="statement not covered" >r</span>ule.condition(context, signals))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return rules.<span class="fstat-no" title="function not covered" >filter(r</span>ule =&gt; <span class="cstat-no" title="statement not covered" >rule.condition(context, signals))</span>;</span>
 }
 &nbsp;
 /**
@@ -912,9 +912,9 @@ export function <span class="fstat-no" title="function not covered" >createRule(
  */
 export function <span class="fstat-no" title="function not covered" >mergeRules(c</span>ustomRules: RoutingRule[]): RoutingRule[] {
   // Custom rules override defaults with the same name
-  const customNames = <span class="cstat-no" title="statement not covered" >new Set(customRules.map(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.name)</span>);</span>
-  const filteredDefaults = <span class="cstat-no" title="statement not covered" >DEFAULT_ROUTING_RULES.filter(</span>
-<span class="fstat-no" title="function not covered" >    r =&gt; <span class="cstat-no" title="statement not covered" >!</span>customNames.has(r.name)</span>
+  const customNames = <span class="cstat-no" title="statement not covered" >new Set(customRules.<span class="fstat-no" title="function not covered" >map(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.name))</span>;</span>
+  const filteredDefaults = <span class="cstat-no" title="statement not covered" >DEFAULT_ROUTING_RULES.<span class="fstat-no" title="function not covered" >filter(</span></span>
+    r =&gt; <span class="cstat-no" title="statement not covered" >!customNames.has(r.name)</span>
   );
 <span class="cstat-no" title="statement not covered" >  return [...customRules, ...filteredDefaults];</span>
 }
@@ -925,7 +925,7 @@ export function <span class="fstat-no" title="function not covered" >mergeRules(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

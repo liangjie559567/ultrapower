@@ -35,6 +35,13 @@ function decrypt(encrypted) {
         throw new Error('Decryption failed: data may be corrupted or tampered');
     }
 }
+/**
+ * Process specified fields in an object using a transformation function.
+ * @param obj - Object or array to process
+ * @param fields - Field names to transform
+ * @param fn - Transformation function for string values
+ * @returns Processed object with same structure
+ */
 function processFields(obj, fields, fn) {
     if (!obj || typeof obj !== 'object')
         return obj;
@@ -51,9 +58,21 @@ function processFields(obj, fields, fn) {
     }
     return result;
 }
+/**
+ * Encrypt specified string fields in an object.
+ * @param data - Object containing fields to encrypt
+ * @param fields - Array of field names to encrypt
+ * @returns Object with encrypted fields
+ */
 export function encryptSensitiveFields(data, fields) {
     return processFields(data, fields, encrypt);
 }
+/**
+ * Decrypt specified string fields in an object.
+ * @param data - Object containing fields to decrypt
+ * @param fields - Array of field names to decrypt
+ * @returns Object with decrypted fields
+ */
 export function decryptSensitiveFields(data, fields) {
     return processFields(data, fields, decrypt);
 }

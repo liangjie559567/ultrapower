@@ -575,7 +575,7 @@ function <span class="fstat-no" title="function not covered" >getWisdomFilePath(
  * Initialize notepad directory for a plan
  * Creates .omc/notepads/{plan-name}/ with 4 empty markdown files
  */
-export function <span class="fstat-no" title="function not covered" >initPlanNotepad(p</span>lanName: string, directory: string = <span class="branch-0 cbranch-no" title="branch not covered" >process.cwd()): boolean {</span>
+export function <span class="fstat-no" title="function not covered" >initPlanNotepad(p</span>lanName: string, directory: string = <span class="branch-0 cbranch-no" title="branch not covered" >process.cwd())</span>: boolean {
   const notepadDir = <span class="cstat-no" title="statement not covered" >getNotepadDir(planName, directory);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
@@ -643,7 +643,7 @@ function <span class="fstat-no" title="function not covered" >readWisdomCategory
  * Read all wisdom from a plan's notepad
  * Returns concatenated wisdom from all 4 categories
  */
-export function <span class="fstat-no" title="function not covered" >readPlanWisdom(p</span>lanName: string, directory: string = <span class="branch-0 cbranch-no" title="branch not covered" >process.cwd()): PlanWisdom {</span>
+export function <span class="fstat-no" title="function not covered" >readPlanWisdom(p</span>lanName: string, directory: string = <span class="branch-0 cbranch-no" title="branch not covered" >process.cwd())</span>: PlanWisdom {
 <span class="cstat-no" title="statement not covered" >  return {</span>
     planName,
     learnings: readWisdomCategory(planName, 'learnings', directory),
@@ -670,7 +670,7 @@ function <span class="fstat-no" title="function not covered" >addWisdomEntry(</s
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const <span class="cstat-no" title="statement not covered" >timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];</span>
+    const timestamp = <span class="cstat-no" title="statement not covered" >new Date().toISOString().replace('T', ' ').split('.')[0];</span>
     const entry = <span class="cstat-no" title="statement not covered" >`\n## ${timestamp}\n\n${content}\n`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    appendFileSync(filePath, entry, 'utf-8');</span>
@@ -728,24 +728,24 @@ export function <span class="fstat-no" title="function not covered" >addProblem(
 /**
  * Get a formatted string of all wisdom for a plan
  */
-export function <span class="fstat-no" title="function not covered" >getWisdomSummary(p</span>lanName: string, directory: string = <span class="branch-0 cbranch-no" title="branch not covered" >process.cwd()): string {</span>
+export function <span class="fstat-no" title="function not covered" >getWisdomSummary(p</span>lanName: string, directory: string = <span class="branch-0 cbranch-no" title="branch not covered" >process.cwd())</span>: string {
   const wisdom = <span class="cstat-no" title="statement not covered" >readPlanWisdom(planName, directory);</span>
   const sections: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (wisdom.learnings.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    sections.push('# Learnings\n\n' + wisdom.learnings.map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >`</span>- [${e.timestamp}] ${e.content}`)</span>.join('\n'));</span>
+<span class="cstat-no" title="statement not covered" >    sections.push('# Learnings\n\n' + wisdom.learnings.<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >`- [${e.timestamp}] ${e.content}`).</span>join('\n'));</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (wisdom.decisions.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    sections.push('# Decisions\n\n' + wisdom.decisions.map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >`</span>- [${e.timestamp}] ${e.content}`)</span>.join('\n'));</span>
+<span class="cstat-no" title="statement not covered" >    sections.push('# Decisions\n\n' + wisdom.decisions.<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >`- [${e.timestamp}] ${e.content}`).</span>join('\n'));</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (wisdom.issues.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    sections.push('# Issues\n\n' + wisdom.issues.map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >`</span>- [${e.timestamp}] ${e.content}`)</span>.join('\n'));</span>
+<span class="cstat-no" title="statement not covered" >    sections.push('# Issues\n\n' + wisdom.issues.<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >`- [${e.timestamp}] ${e.content}`).</span>join('\n'));</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (wisdom.problems.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    sections.push('# Problems\n\n' + wisdom.problems.map(<span class="fstat-no" title="function not covered" >e =&gt; <span class="cstat-no" title="statement not covered" >`</span>- [${e.timestamp}] ${e.content}`)</span>.join('\n'));</span>
+<span class="cstat-no" title="statement not covered" >    sections.push('# Problems\n\n' + wisdom.problems.<span class="fstat-no" title="function not covered" >map(e</span> =&gt; <span class="cstat-no" title="statement not covered" >`- [${e.timestamp}] ${e.content}`).</span>join('\n'));</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return sections.join('\n\n');</span>
@@ -760,7 +760,7 @@ export type { WisdomEntry, WisdomCategory, PlanWisdom } from './types.js';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

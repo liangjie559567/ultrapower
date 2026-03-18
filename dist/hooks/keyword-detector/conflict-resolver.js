@@ -9,15 +9,8 @@ export function resolveConflict(keywords) {
     if (keywords.length < 2) {
         return { hasConflict: false, winner: null, loser: null, reason: '' };
     }
-    // ralph + ultrawork: ralph wins (ralph包含ultrawork)
-    if (keywords.includes('ralph') && keywords.includes('ultrawork')) {
-        return {
-            hasConflict: true,
-            winner: 'ralph',
-            loser: 'ultrawork',
-            reason: 'ralph模式已包含ultrawork的并行执行能力'
-        };
-    }
+    // ralph + ultrawork: 非互斥，可共存
+    // ralph 提供持久循环，ultrawork 提供并行执行
     // autopilot + ultrapilot: 互斥
     if (keywords.includes('autopilot') && keywords.includes('ultrapilot')) {
         return {

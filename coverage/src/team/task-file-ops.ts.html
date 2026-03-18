@@ -888,7 +888,7 @@ export function <span class="fstat-no" title="function not covered" >acquireTask
 <span class="cstat-no" title="statement not covered" >      if (err &amp;&amp; typeof err === 'object' &amp;&amp; 'code' in err &amp;&amp; (err as { code: string }).code === 'EEXIST') {</span>
         // Lock file exists — check if stale
 <span class="cstat-no" title="statement not covered" >        if (attempt === 0 &amp;&amp; isLockStale(lockPath, staleLockMs)) {</span>
-<span class="cstat-no" title="statement not covered" >          try { <span class="cstat-no" title="statement not covered" >unlinkSync(lockPath); }</span> catch { /* another worker reaped it */ }</span>
+<span class="cstat-no" title="statement not covered" >          try { <span class="cstat-no" title="statement not covered" >unlinkSync(lockPath); } catch {</span> /* another worker reaped it */ }</span>
 <span class="cstat-no" title="statement not covered" >          continue; // retry once</span>
         }
 <span class="cstat-no" title="statement not covered" >        return null; // held by a live worker</span>
@@ -904,8 +904,8 @@ export function <span class="fstat-no" title="function not covered" >acquireTask
  * Closes the file descriptor and removes the lock file.
  */
 export function <span class="fstat-no" title="function not covered" >releaseTaskLock(h</span>andle: LockHandle): void {
-<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >closeSync(handle.fd); }</span> catch { /* already closed */ }</span>
-<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >unlinkSync(handle.path); }</span> catch { /* already removed */ }</span>
+<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >closeSync(handle.fd); } catch {</span> /* already closed */ }</span>
+<span class="cstat-no" title="statement not covered" >  try { <span class="cstat-no" title="statement not covered" >unlinkSync(handle.path); } catch {</span> /* already removed */ }</span>
 }
 &nbsp;
 /**
@@ -940,7 +940,7 @@ function <span class="fstat-no" title="function not covered" >isLockStale(l</spa
     // Try to read PID from the lock payload
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const <span class="cstat-no" title="statement not covered" >raw = readFileSync(lockPath, 'utf-8');</span>
-      const payload = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) as { pid?: number };</span>
+      const payload = <span class="cstat-no" title="statement not covered" >JSON.parse(raw) </span>as { pid?: number };
 <span class="cstat-no" title="statement not covered" >      if (payload.pid &amp;&amp; isPidAlive(payload.pid)) <span class="cstat-no" title="statement not covered" >return false;</span></span>
     } catch {
       // Malformed or unreadable — treat as stale if old enough
@@ -1006,7 +1006,7 @@ export function <span class="fstat-no" title="function not covered" >updateTask(
 ): void {
   const useLock = <span class="cstat-no" title="statement not covered" >opts?.useLock ?? true;</span>
 &nbsp;
-  const doUpdate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >doUpdate = () =&gt; {</span></span>
     const filePath = <span class="cstat-no" title="statement not covered" >taskPath(teamName, taskId);</span>
     let task: Record&lt;string, unknown&gt;;
 <span class="cstat-no" title="statement not covered" >    try {</span>
@@ -1170,9 +1170,9 @@ export function <span class="fstat-no" title="function not covered" >listTaskIds
 <span class="cstat-no" title="statement not covered" >  if (!existsSync(dir)) <span class="cstat-no" title="statement not covered" >return [];</span></span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    return readdirSync(dir)</span>
-      .filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.endsWith('.json') &amp;&amp; !f.includes('.tmp.') &amp;&amp; !f.includes('.failure.'))</span>
-      .map(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.replace('.json', ''))</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {
+      .<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.endsWith('.json') &amp;&amp; !f.includes('.tmp.') &amp;&amp; !f.includes('.failure.'))</span>
+      .<span class="fstat-no" title="function not covered" >map(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.replace('.json', ''))</span>
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; {
         const numA = <span class="cstat-no" title="statement not covered" >parseInt(a, 10);</span>
         const numB = <span class="cstat-no" title="statement not covered" >parseInt(b, 10);</span>
 <span class="cstat-no" title="statement not covered" >        if (!isNaN(numA) &amp;&amp; !isNaN(numB)) <span class="cstat-no" title="statement not covered" >return numA - numB;</span></span>
@@ -1189,7 +1189,7 @@ export function <span class="fstat-no" title="function not covered" >listTaskIds
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -1457,7 +1457,7 @@ function <span class="fstat-no" title="function not covered" >mergeEnvIntoFileCo
   // Merge discord-bot: if file doesn't have it but env does, add it
 <span class="cstat-no" title="statement not covered" >  if (!merged["discord-bot"] &amp;&amp; envConfig["discord-bot"]) {</span>
 <span class="cstat-no" title="statement not covered" >    merged["discord-bot"] = envConfig["discord-bot"];</span>
-<span class="cstat-no" title="statement not covered" >  } else if (merged["discord-bot"] &amp;&amp; envConfig["discord-bot"]) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >merged["discord-bot"] &amp;&amp; envConfig["discord-bot"]) {</span>
     // Fill missing fields from env (e.g., mention from env when file lacks it)
 <span class="cstat-no" title="statement not covered" >    merged["discord-bot"] = {</span>
       ...merged["discord-bot"],
@@ -1468,7 +1468,7 @@ function <span class="fstat-no" title="function not covered" >mergeEnvIntoFileCo
           ? validateMention(merged["discord-bot"].mention)
           : envConfig["discord-bot"].mention,
     };
-<span class="cstat-no" title="statement not covered" >  } else if (merged["discord-bot"]) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >merged["discord-bot"]) {</span>
     // Validate mention in existing file config
 <span class="cstat-no" title="statement not covered" >    merged["discord-bot"] = {</span>
       ...merged["discord-bot"],
@@ -1479,7 +1479,7 @@ function <span class="fstat-no" title="function not covered" >mergeEnvIntoFileCo
   // Merge discord webhook: if file doesn't have it but env does, add it
 <span class="cstat-no" title="statement not covered" >  if (!merged.discord &amp;&amp; envConfig.discord) {</span>
 <span class="cstat-no" title="statement not covered" >    merged.discord = envConfig.discord;</span>
-<span class="cstat-no" title="statement not covered" >  } else if (merged.discord &amp;&amp; envConfig.discord) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >merged.discord &amp;&amp; envConfig.discord) {</span>
 <span class="cstat-no" title="statement not covered" >    merged.discord = {</span>
       ...merged.discord,
       webhookUrl: merged.discord.webhookUrl || envConfig.discord.webhookUrl,
@@ -1488,7 +1488,7 @@ function <span class="fstat-no" title="function not covered" >mergeEnvIntoFileCo
           ? validateMention(merged.discord.mention)
           : envConfig.discord.mention,
     };
-<span class="cstat-no" title="statement not covered" >  } else if (merged.discord) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >merged.discord) {</span>
     // Validate mention in existing file config
 <span class="cstat-no" title="statement not covered" >    merged.discord = {</span>
       ...merged.discord,
@@ -1653,7 +1653,7 @@ export function <span class="fstat-no" title="function not covered" >getEnabledP
   // If event is explicitly disabled
 <span class="cstat-no" title="statement not covered" >  if (eventConfig &amp;&amp; eventConfig.enabled === false) <span class="cstat-no" title="statement not covered" >return [];</span></span>
 &nbsp;
-  const checkPlatform = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>latform: NotificationPlatform) =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >checkPlatform = (p</span>latform: NotificationPlatform) =&gt; {</span>
     const eventPlatform =
 <span class="cstat-no" title="statement not covered" >      eventConfig?.[platform as keyof EventNotificationConfig];</span>
 <span class="cstat-no" title="statement not covered" >    if (</span>
@@ -1784,15 +1784,15 @@ function <span class="fstat-no" title="function not covered" >parseDiscordUserId
 <span class="cstat-no" title="statement not covered" >  if (envValue) {</span>
     const ids = <span class="cstat-no" title="statement not covered" >envValue</span>
       .split(",")
-      .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >id.trim())</span>
-      .filter(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >/^\d{17,20}$/.test(id))</span>;
+      .<span class="fstat-no" title="function not covered" >map((i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >id.trim())</span>
+      .<span class="fstat-no" title="function not covered" >filter((i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >/^\d{17,20}$/.test(id))</span>;
 <span class="cstat-no" title="statement not covered" >    if (ids.length &gt; 0) <span class="cstat-no" title="statement not covered" >return ids;</span></span>
   }
 &nbsp;
   // Try config array
 <span class="cstat-no" title="statement not covered" >  if (Array.isArray(configValue)) {</span>
     const ids = <span class="cstat-no" title="statement not covered" >configValue</span>
-      .filter(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >typeof id === "string" &amp;&amp; /^\d{17,20}$/.test(id))</span>;
+      .<span class="fstat-no" title="function not covered" >filter((i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >typeof id === "string" &amp;&amp; /^\d{17,20}$/.test(id))</span>;
 <span class="cstat-no" title="statement not covered" >    if (ids.length &gt; 0) <span class="cstat-no" title="statement not covered" >return ids;</span></span>
   }
 &nbsp;
@@ -1836,7 +1836,7 @@ export function <span class="fstat-no" title="function not covered" >getReplyCon
   // Read reply-specific config
   const raw = <span class="cstat-no" title="statement not covered" >readRawConfig();</span>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw config has dynamic shape
-  const replyRaw = (<span class="cstat-no" title="statement not covered" >raw?.notifications as any)?.reply;</span>
+  const <span class="cstat-no" title="statement not covered" >replyRaw = (raw?.notifications as any)?.reply;</span>
 &nbsp;
   const enabled = <span class="cstat-no" title="statement not covered" >process.env.OMC_REPLY_ENABLED === "true" || replyRaw?.enabled === true;</span>
 <span class="cstat-no" title="statement not covered" >  if (!enabled) <span class="cstat-no" title="statement not covered" >return null;</span></span>
@@ -1870,7 +1870,7 @@ export function <span class="fstat-no" title="function not covered" >getReplyCon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -37,9 +37,11 @@ export { productManagerAgent, uxResearcherAgent, informationArchitectAgent, prod
 // Specialized agents (Security, Build, Code Review, Git)
 export { securityReviewerAgent, buildFixerAgent, codeReviewerAgent, gitMasterAgent } from './definitions.js';
 // New Domain Specialists (v5.0+)
-export { databaseExpertAgent, devopsEngineerAgent, i18nSpecialistAgent, accessibilityAuditorAgent, apiDesignerAgent } from './definitions.js';
+export { databaseExpertAgent, devopsEngineerAgent, i18nSpecialistAgent, accessibilityAuditorAgent, apiDesignerAgent, deploymentManagerAgent, opensourceAnalyzerAgent, techSelectorAgent } from './definitions.js';
 // Axiom agents
 export { axiomRequirementAnalystAgent, axiomProductDesignerAgent, axiomReviewAggregatorAgent, axiomPrdCrafterAgent, axiomSystemArchitectAgent, axiomEvolutionEngineAgent, axiomContextManagerAgent, axiomWorkerAgent, axiomUxDirectorAgent, axiomProductDirectorAgent, axiomDomainExpertAgent, axiomTechLeadAgent, axiomCriticAgent, axiomSubPrdWriterAgent } from './definitions.js';
+// ZeroDev agents
+export { requirementClarifierAgent, codeGeneratorAgent } from './definitions.js';
 // Timeout protection
 export { getAgentTimeout, DEFAULT_TIMEOUT_CONFIG } from './timeout-config.js';
 export { TimeoutManager, timeoutManager } from './timeout-manager.js';

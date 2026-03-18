@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0.93% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/215</span>
+                <span class='fraction'>0/215</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0.98% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/204</span>
+                <span class='fraction'>0/204</span>
             </div>
         
             
@@ -673,10 +673,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1258,10 +1258,10 @@ import type {
 } from './types.js';
 &nbsp;
 /** Default task timeout: 30 minutes */
-const DEFAULT_TASK_TTL_MS = 30 * 60 * 1000;
+const DEFAULT_TASK_TTL_MS = <span class="cstat-no" title="statement not covered" >30 * 60 * 1000;</span>
 &nbsp;
 /** Storage directory for task state */
-const BACKGROUND_TASKS_DIR = join(getClaudeConfigDir(), '.omc', 'background-tasks');
+const <span class="cstat-no" title="statement not covered" >BACKGROUND_TASKS_DIR = join(getClaudeConfigDir(), '.omc', 'background-tasks');</span>
 &nbsp;
 /**
  * Manages background tasks for the Sisyphus system.
@@ -1284,7 +1284,7 @@ export class BackgroundManager {
   /**
    * Ensure storage directory exists
    */
-  private <span class="fstat-no" title="function not covered" >ensureStorageDir(): void {</span>
+<span class="fstat-no" title="function not covered" >  private e</span>nsureStorageDir(): void {
 <span class="cstat-no" title="statement not covered" >    if (!existsSync(BACKGROUND_TASKS_DIR)) {</span>
 <span class="cstat-no" title="statement not covered" >      mkdirSync(BACKGROUND_TASKS_DIR, { recursive: true });</span>
     }
@@ -1293,7 +1293,7 @@ export class BackgroundManager {
   /**
    * Generate a unique task ID
    */
-  private <span class="fstat-no" title="function not covered" >generateTaskId(): string {</span>
+<span class="fstat-no" title="function not covered" >  private g</span>enerateTaskId(): string {
     const timestamp = <span class="cstat-no" title="statement not covered" >Date.now().toString(36);</span>
     const random = <span class="cstat-no" title="statement not covered" >Math.random().toString(36).substring(2, 8);</span>
 <span class="cstat-no" title="statement not covered" >    return `bg_${timestamp}${random}`;</span>
@@ -1302,14 +1302,14 @@ export class BackgroundManager {
   /**
    * Get storage path for a task
    */
-  private <span class="fstat-no" title="function not covered" >getTaskPath(t</span>askId: string): string {
+<span class="fstat-no" title="function not covered" >  private g</span>etTaskPath(taskId: string): string {
 <span class="cstat-no" title="statement not covered" >    return join(BACKGROUND_TASKS_DIR, `${taskId}.json`);</span>
   }
 &nbsp;
   /**
    * Persist a task to disk
    */
-  private <span class="fstat-no" title="function not covered" >persistTask(t</span>ask: BackgroundTask): void {
+<span class="fstat-no" title="function not covered" >  private p</span>ersistTask(task: BackgroundTask): void {
     const path = <span class="cstat-no" title="statement not covered" >this.getTaskPath(task.id);</span>
 <span class="cstat-no" title="statement not covered" >    writeFileSync(path, JSON.stringify(task, null, 2));</span>
   }
@@ -1317,7 +1317,7 @@ export class BackgroundManager {
   /**
    * Remove persisted task from disk
    */
-  private <span class="fstat-no" title="function not covered" >unpersistTask(t</span>askId: string): void {
+<span class="fstat-no" title="function not covered" >  private u</span>npersistTask(taskId: string): void {
     const path = <span class="cstat-no" title="statement not covered" >this.getTaskPath(taskId);</span>
 <span class="cstat-no" title="statement not covered" >    if (existsSync(path)) {</span>
 <span class="cstat-no" title="statement not covered" >      unlinkSync(path);</span>
@@ -1327,11 +1327,11 @@ export class BackgroundManager {
   /**
    * Load persisted tasks from disk
    */
-  private <span class="fstat-no" title="function not covered" >loadPersistedTasks(): void {</span>
+<span class="fstat-no" title="function not covered" >  private l</span>oadPersistedTasks(): void {
 <span class="cstat-no" title="statement not covered" >    if (!existsSync(BACKGROUND_TASKS_DIR)) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const <span class="cstat-no" title="statement not covered" >files = readdirSync(BACKGROUND_TASKS_DIR) as string[];</span>
+      const <span class="cstat-no" title="statement not covered" >files = readdirSync(BACKGROUND_TASKS_DIR) </span>as string[];
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      for (const file of files) {</span>
 <span class="cstat-no" title="statement not covered" >        if (!file.endsWith('.json')) <span class="cstat-no" title="statement not covered" >continue;</span></span>
@@ -1339,7 +1339,7 @@ export class BackgroundManager {
 <span class="cstat-no" title="statement not covered" >        try {</span>
           const <span class="cstat-no" title="statement not covered" >path = join(BACKGROUND_TASKS_DIR, file);</span>
           const <span class="cstat-no" title="statement not covered" >content = readFileSync(path, 'utf-8');</span>
-          const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as BackgroundTask;</span>
+          const task = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as BackgroundTask;
 &nbsp;
           // Restore dates
 <span class="cstat-no" title="statement not covered" >          task.startedAt = new Date(task.startedAt);</span>
@@ -1369,10 +1369,10 @@ export class BackgroundManager {
   /**
    * Start periodic pruning of stale tasks
    */
-  private <span class="fstat-no" title="function not covered" >startPruning(): void {</span>
+<span class="fstat-no" title="function not covered" >  private s</span>tartPruning(): void {
 <span class="cstat-no" title="statement not covered" >    if (this.pruneInterval) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    this.pruneInterval = setInterval(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    this.pruneInterval = <span class="fstat-no" title="function not covered" >setInterval(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      this.pruneStaleTasksAndNotifications();</span>
     }, 60000); // Every minute
 &nbsp;
@@ -1385,7 +1385,7 @@ export class BackgroundManager {
   /**
    * Stop periodic pruning
    */
-  private <span class="fstat-no" title="function not covered" >stopPruning(): void {</span>
+<span class="fstat-no" title="function not covered" >  private s</span>topPruning(): void {
 <span class="cstat-no" title="statement not covered" >    if (this.pruneInterval) {</span>
 <span class="cstat-no" title="statement not covered" >      clearInterval(this.pruneInterval);</span>
 <span class="cstat-no" title="statement not covered" >      this.pruneInterval = undefined;</span>
@@ -1395,7 +1395,7 @@ export class BackgroundManager {
   /**
    * Remove stale tasks that have exceeded their TTL
    */
-  private <span class="fstat-no" title="function not covered" >pruneStaleTasksAndNotifications(): void {</span>
+<span class="fstat-no" title="function not covered" >  private p</span>runeStaleTasksAndNotifications(): void {
     const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
     const ttl = <span class="cstat-no" title="statement not covered" >this.config.taskTimeoutMs ?? DEFAULT_TASK_TTL_MS;</span>
 &nbsp;
@@ -1418,14 +1418,14 @@ export class BackgroundManager {
 &nbsp;
     // Prune old notifications
 <span class="cstat-no" title="statement not covered" >    for (const [sessionId, notifications] of this.notifications.entries()) {</span>
-      const validNotifications = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(t</span>ask) =&gt; {</span>
+      const validNotifications = <span class="cstat-no" title="statement not covered" >notifications.<span class="fstat-no" title="function not covered" >filter((t</span>ask) =&gt; {</span>
         const age = <span class="cstat-no" title="statement not covered" >now - task.startedAt.getTime();</span>
 <span class="cstat-no" title="statement not covered" >        return age &lt;= ttl;</span>
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (validNotifications.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >        this.notifications.delete(sessionId);</span>
-<span class="cstat-no" title="statement not covered" >      } else if (validNotifications.length !== notifications.length) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >validNotifications.length !== notifications.length) {</span>
 <span class="cstat-no" title="statement not covered" >        this.notifications.set(sessionId, validNotifications);</span>
       }
     }
@@ -1438,7 +1438,7 @@ export class BackgroundManager {
    * Detect sessions with no recent activity and handle them
    * Marks stale tasks as errored even without a callback configured (Bug #9 fix)
    */
-  private <span class="fstat-no" title="function not covered" >detectAndHandleStaleSessions(): void {</span>
+<span class="fstat-no" title="function not covered" >  private d</span>etectAndHandleStaleSessions(): void {
     const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
     const threshold = <span class="cstat-no" title="statement not covered" >this.config.staleThresholdMs ?? 5 * 60 * 1000; // 5 min default</span>
 &nbsp;
@@ -1481,11 +1481,11 @@ export class BackgroundManager {
     const concurrencyKey = <span class="cstat-no" title="statement not covered" >input.agent;</span>
 &nbsp;
     // Count running and queued tasks for capacity check
-    const runningTasks = <span class="cstat-no" title="statement not covered" >Array.from(this.tasks.values()).filter(</span>
-<span class="fstat-no" title="function not covered" >      (t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'running'</span>
+    const runningTasks = <span class="cstat-no" title="statement not covered" >Array.from(this.tasks.values()).<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (t) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'running'</span>
     );
-    const queuedTasks = <span class="cstat-no" title="statement not covered" >Array.from(this.tasks.values()).filter(</span>
-<span class="fstat-no" title="function not covered" >      (t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'queued'</span>
+    const queuedTasks = <span class="cstat-no" title="statement not covered" >Array.from(this.tasks.values()).<span class="fstat-no" title="function not covered" >filter(</span></span>
+      (t) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'queued'</span>
     );
     const runningCount = <span class="cstat-no" title="statement not covered" >runningTasks.length;</span>
     const queuedCount = <span class="cstat-no" title="statement not covered" >queuedTasks.length;</span>
@@ -1637,7 +1637,7 @@ export class BackgroundManager {
    * Get all running tasks
    */
 <span class="fstat-no" title="function not covered" >  getRunningTasks(): BackgroundTask[] {</span>
-<span class="cstat-no" title="statement not covered" >    return Array.from(this.tasks.values()).filter(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'running')</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return Array.from(this.tasks.values()).<span class="fstat-no" title="function not covered" >filter((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'running');</span></span>
   }
 &nbsp;
   /**
@@ -1710,9 +1710,9 @@ export class BackgroundManager {
   /**
    * Clear notifications for a specific task
    */
-  private <span class="fstat-no" title="function not covered" >clearNotificationsForTask(t</span>askId: string): void {
+<span class="fstat-no" title="function not covered" >  private c</span>learNotificationsForTask(taskId: string): void {
 <span class="cstat-no" title="statement not covered" >    for (const [sessionId, tasks] of this.notifications.entries()) {</span>
-      const filtered = <span class="cstat-no" title="statement not covered" >tasks.filter(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.id !== taskId)</span>;</span>
+      const filtered = <span class="cstat-no" title="statement not covered" >tasks.<span class="fstat-no" title="function not covered" >filter((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.id !== taskId);</span></span>
 <span class="cstat-no" title="statement not covered" >      if (filtered.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >        this.notifications.delete(sessionId);</span>
       } else {
@@ -1746,7 +1746,7 @@ export class BackgroundManager {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (hours &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return `${hours}h ${minutes % 60}m ${seconds % 60}s`;</span>
-<span class="cstat-no" title="statement not covered" >    } else if (minutes &gt; 0) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >minutes &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return `${minutes}m ${seconds % 60}s`;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return `${seconds}s`;</span>
@@ -1757,7 +1757,7 @@ export class BackgroundManager {
    */
 <span class="fstat-no" title="function not covered" >  getStatusSummary(): string {</span>
     const running = <span class="cstat-no" title="statement not covered" >this.getRunningTasks();</span>
-    const queued = <span class="cstat-no" title="statement not covered" >Array.from(this.tasks.values()).filter(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'queued')</span>;</span>
+    const queued = <span class="cstat-no" title="statement not covered" >Array.from(this.tasks.values()).<span class="fstat-no" title="function not covered" >filter((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.status === 'queued');</span></span>
     const all = <span class="cstat-no" title="statement not covered" >this.getAllTasks();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (all.length === 0) {</span>
@@ -1825,7 +1825,7 @@ export function <span class="fstat-no" title="function not covered" >resetBackgr
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

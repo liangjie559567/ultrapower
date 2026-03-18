@@ -11,7 +11,7 @@
  */
 import { z } from 'zod';
 import * as logger from '../lib/logger.js';
-import { auditLog } from '../lib/auditLog.js';
+import { logAuditEvent } from '../lib/auditLog.js';
 // --- Zod schemas for hook input validation ---
 /** Base schema fields */
 const baseSchemaFields = {
@@ -134,6 +134,21 @@ function isAlreadyCamelCase(obj) {
  * Handle fast-path normalization for already-camelCase input
  */
 function normalizeFastPath(rawObj, hookType) {
+    const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
+    // Block prototype pollution in fast path
+    checkPrototypePollution(rawObj, hookType);
+    // For sensitive hooks, validate types even in fast path
+    if (isSensitive) {
+        if (rawObj.sessionId !== undefined && typeof rawObj.sessionId !== 'string') {
+            throw new Error(`[bridge-normalize] Zod validation failed: sessionId - Expected string, received ${typeof rawObj.sessionId}`);
+        }
+        if (rawObj.toolName !== undefined && typeof rawObj.toolName !== 'string') {
+            throw new Error(`[bridge-normalize] Zod validation failed: toolName - Expected string, received ${typeof rawObj.toolName}`);
+        }
+        if (rawObj.directory !== undefined && typeof rawObj.directory !== 'string') {
+            throw new Error(`[bridge-normalize] Zod validation failed: directory - Expected string, received ${typeof rawObj.directory}`);
+        }
+    }
     const normalized = {
         sessionId: rawObj.sessionId,
         toolName: rawObj.toolName,
@@ -149,6 +164,33 @@ function normalizeFastPath(rawObj, hookType) {
         validateRequiredKeys(normalized, hookType);
     }
     return normalized;
+}
+/**
+ * Check for prototype pollution attempts (recursive, max depth 10)
+ */
+function checkPrototypePollution(obj, hookType) {
+    const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+    const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
+    function checkRecursive(target, path, depth) {
+        if (depth > 10 || !target || typeof target !== 'object')
+            return;
+        const targetObj = target;
+        for (const key of Object.keys(targetObj)) {
+            const fullPath = path ? `${path}.${key}` : key;
+            if (dangerousKeys.includes(key)) {
+                logAuditEvent('prototype_pollution_attempt', 'critical', { hookType, field: fullPath });
+                if (isSensitive) {
+                    throw new Error(`Prototype pollution attempt blocked in field: ${fullPath}`);
+                }
+                delete targetObj[key];
+                continue;
+            }
+            if (isSensitive && !Array.isArray(targetObj[key])) {
+                checkRecursive(targetObj[key], fullPath, depth + 1);
+            }
+        }
+    }
+    checkRecursive(obj, '', 0);
 }
 /**
  * Validate input with Zod schema
@@ -199,19 +241,27 @@ export function normalizeHookInput(raw, hookType) {
     }
     const rawObj = raw;
     const isSensitive = hookType != null && SENSITIVE_HOOKS.has(hookType);
-    // Fast path for already-camelCase non-sensitive input only
-    // Sensitive hooks MUST go through full Zod validation + whitelist filtering
-    if (!isSensitive && isAlreadyCamelCase(rawObj)) {
-        return normalizeFastPath(rawObj, hookType);
+    // Sensitive hooks must always use full validation (BUG-002 fix)
+    if (isSensitive) {
+        if (isAlreadyCamelCase(rawObj)) {
+            logAuditEvent('validation_failed', 'medium', {
+                event: 'suspicious_camelcase_input',
+                hookType,
+                fields: Object.keys(rawObj)
+            });
+        }
+        // Force full validation path for sensitive hooks
+        const inputToValidate = preFilterSensitiveInput(rawObj, hookType);
+        const input = validateWithZod(inputToValidate, true, hookType);
+        const normalized = mapFieldsToCamelCase(input, hookType);
+        if (REQUIRED_KEYS[hookType]) {
+            validateRequiredKeys(normalized, hookType);
+        }
+        return normalized;
     }
-    // Audit suspicious camelCase input on sensitive hooks
-    if (isSensitive && isAlreadyCamelCase(rawObj)) {
-        auditLog('security', {
-            timestamp: new Date().toISOString(),
-            event: 'validation_failed',
-            severity: 'medium',
-            details: { hookType, reason: 'camelCase input on sensitive hook bypassed fast-path' },
-        });
+    // Fast path for non-sensitive hooks only
+    if (isAlreadyCamelCase(rawObj)) {
+        return normalizeFastPath(rawObj, hookType);
     }
     // Pre-filter sensitive hooks before validation
     const inputToValidate = isSensitive
@@ -246,27 +296,17 @@ function validateRequiredKeys(normalized, hookType) {
  * Also blocks prototype pollution attempts.
  */
 function preFilterSensitiveInput(input, hookType) {
+    // Check for prototype pollution first
+    checkPrototypePollution(input, hookType);
     const whitelist = STRICT_WHITELIST[hookType] || [];
     const filtered = {};
     const droppedKeys = [];
-    const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
     // Include all base schema fields (both snake_case and camelCase)
     const allowedKeys = new Set([
         ...Object.keys(baseSchemaFields),
         ...whitelist,
     ]);
     for (const [key, value] of Object.entries(input)) {
-        // Block prototype pollution
-        if (dangerousKeys.includes(key)) {
-            auditLog('security', {
-                timestamp: new Date().toISOString(),
-                event: 'prototype_pollution_attempt',
-                severity: 'high',
-                details: { hookType, field: key },
-            });
-            droppedKeys.push(key);
-            continue;
-        }
         if (allowedKeys.has(key)) {
             filtered[key] = value;
         }

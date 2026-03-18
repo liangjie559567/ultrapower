@@ -1595,7 +1595,7 @@ function <span class="fstat-no" title="function not covered" >getSkillMetadataCa
         path: candidate.path,
         name,
         triggers,
-        triggersLower: triggers.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.toLowerCase())</span>,
+        triggersLower: triggers.<span class="fstat-no" title="function not covered" >map((t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.toLowerCase())</span>,
         matching: parsed.metadata.matching,
         content: parsed.content,
         scope: candidate.scope,
@@ -1785,7 +1785,7 @@ function <span class="fstat-no" title="function not covered" >findSkillFilesRecu
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (entry.isDirectory()) {</span>
 <span class="cstat-no" title="statement not covered" >        findSkillFilesRecursive(fullPath, results, depth + 1);</span>
-<span class="cstat-no" title="statement not covered" >      } else if (entry.isFile() &amp;&amp; entry.name.endsWith(SKILL_EXTENSION)) {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >entry.isFile() &amp;&amp; entry.name.endsWith(SKILL_EXTENSION)) {</span>
 <span class="cstat-no" title="statement not covered" >        results.push(fullPath);</span>
       }
     }
@@ -2008,7 +2008,7 @@ function <span class="fstat-no" title="function not covered" >parseArrayValue(</
 &nbsp;
     const items = <span class="cstat-no" title="statement not covered" >content</span>
       .split(",")
-      .map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >parseStringValue(s.trim()))</span>
+      .<span class="fstat-no" title="function not covered" >map((s</span>) =&gt; <span class="cstat-no" title="statement not covered" >parseStringValue(s.trim()))</span>
       .filter(Boolean);
 <span class="cstat-no" title="statement not covered" >    return { value: items, consumed: 1 };</span>
   }
@@ -2026,7 +2026,7 @@ function <span class="fstat-no" title="function not covered" >parseArrayValue(</
         const itemValue = <span class="cstat-no" title="statement not covered" >parseStringValue(arrayMatch[1].trim());</span>
 <span class="cstat-no" title="statement not covered" >        if (itemValue) <span class="cstat-no" title="statement not covered" >items.push(itemValue);</span></span>
 <span class="cstat-no" title="statement not covered" >        consumed++;</span>
-<span class="cstat-no" title="statement not covered" >      } else if (nextLine.trim() === "") {</span>
+      } else if (<span class="cstat-no" title="statement not covered" >nextLine.trim() === "") {</span>
 <span class="cstat-no" title="statement not covered" >        consumed++;</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        break;</span>
@@ -2084,7 +2084,7 @@ function <span class="fstat-no" title="function not covered" >levenshteinDistanc
  * Returns confidence score 0-100.
  */
 function <span class="fstat-no" title="function not covered" >fuzzyMatchTrigger(p</span>rompt: string, trigger: string): number {
-  const words = <span class="cstat-no" title="statement not covered" >prompt.split(/\s+/).filter(<span class="fstat-no" title="function not covered" >(w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.length &gt; 0)</span>;</span>
+  const words = <span class="cstat-no" title="statement not covered" >prompt.split(/\s+/).<span class="fstat-no" title="function not covered" >filter((w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.length &gt; 0);</span></span>
 &nbsp;
   // Exact word match
 <span class="cstat-no" title="statement not covered" >  for (const word of words) {</span>
@@ -2118,7 +2118,7 @@ export function <span class="fstat-no" title="function not covered" >matchSkills
   sessionId: string,
   options: { fuzzyThreshold?: number; maxResults?: number } = <span class="branch-0 cbranch-no" title="branch not covered" >{},</span>
 ): MatchedSkill[] {
-  const { fuzzyThreshold = <span class="branch-0 cbranch-no" title="branch not covered" >60, m</span>axResults = <span class="branch-0 cbranch-no" title="branch not covered" >5 }</span> = <span class="cstat-no" title="statement not covered" >options;</span>
+  const { fuzzyThreshold = <span class="branch-0 cbranch-no" title="branch not covered" >60, m</span>axResults = <span class="branch-0 cbranch-no" title="branch not covered" >5 } = <span class="cstat-no" title="statement not covered" >o</span>ptions;</span>
   const promptLower = <span class="cstat-no" title="statement not covered" >prompt.toLowerCase();</span>
 &nbsp;
   const alreadyInjected = <span class="cstat-no" title="statement not covered" >new Set(</span>
@@ -2163,7 +2163,7 @@ export function <span class="fstat-no" title="function not covered" >matchSkills
   }
 &nbsp;
   // Sort by score (descending) and limit
-<span class="cstat-no" title="statement not covered" >  matches.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.score - a.score)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  matches.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.score - a.score);</span></span>
 <span class="cstat-no" title="statement not covered" >  return matches.slice(0, maxResults);</span>
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -2173,7 +2173,7 @@ export function <span class="fstat-no" title="function not covered" >matchSkills
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -262,7 +262,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -435,20 +435,20 @@ export function <span class="fstat-no" title="function not covered" >dispatchAsk
 ): void {
   const input = <span class="cstat-no" title="statement not covered" >toolInput as { questions?: Array&lt;{ question?: string }&gt; } | undefined;</span>
   const questions = <span class="cstat-no" title="statement not covered" >input?.questions || [];</span>
-  const questionText = <span class="cstat-no" title="statement not covered" >questions.map(<span class="fstat-no" title="function not covered" >q =&gt; <span class="cstat-no" title="statement not covered" >q</span>.question || "")</span>.filter(Boolean).join("; ") || "User input requested";</span>
+  const questionText = <span class="cstat-no" title="statement not covered" >questions.<span class="fstat-no" title="function not covered" >map(q</span> =&gt; <span class="cstat-no" title="statement not covered" >q.question || "").</span>filter(Boolean).join("; ") || "User input requested";</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  import("../../notifications/index.js").then(<span class="fstat-no" title="function not covered" >({</span> notify }) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    notify("ask-user-question", {</span>
+<span class="cstat-no" title="statement not covered" >  import("../../notifications/index.js").<span class="fstat-no" title="function not covered" >then(({</span> <span class="cstat-no" title="statement not covered" >notify }) =&gt;</span></span>
+    notify("ask-user-question", {
       sessionId,
       projectPath: directory,
       question: questionText,
       profileName: process.env.OMC_NOTIFY_PROFILE,
-    }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
+    }).<span class="fstat-no" title="function not covered" >catch((e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (process.env.OMC_DEBUG) {</span>
 <span class="cstat-no" title="statement not covered" >        console.error(`[bridge] ask-user-question notification failed: ${err.message}`);</span>
       }
     })
-  ).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
+  ).<span class="fstat-no" title="function not covered" >catch((e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (process.env.OMC_DEBUG) {</span>
 <span class="cstat-no" title="statement not covered" >      console.error(`[bridge] notification import failed: ${err.message}`);</span>
     }
@@ -462,8 +462,8 @@ export const _notify = <span class="cstat-no" title="statement not covered" >{</
 export async function <span class="fstat-no" title="function not covered" >processPreToolUse(i</span>nput: HookInput): Promise&lt;HookOutput&gt; {
   const <span class="cstat-no" title="statement not covered" >directory = resolveToWorktreeRoot(input.directory);</span>
 &nbsp;
-  const enforcementResult = <span class="cstat-no" title="statement not covered" >await withTimeout(</span>
-<span class="fstat-no" title="function not covered" >    () =&gt; <span class="cstat-no" title="statement not covered" >P</span>romise.resolve(processOrchestratorPreTool({</span>
+  const enforcementResult = <span class="cstat-no" title="statement not covered" >await <span class="fstat-no" title="function not covered" >withTimeout(</span></span>
+    () =&gt; <span class="cstat-no" title="statement not covered" >Promise.resolve(processOrchestratorPreTool({</span>
       toolName: input.toolName || "",
       toolInput: (input.toolInput as Record&lt;string, unknown&gt;) || {},
       sessionId: input.sessionId,
@@ -472,7 +472,7 @@ export async function <span class="fstat-no" title="function not covered" >proce
     {
       timeoutMs: 3000,
       label: 'orchestrator-pre-tool',
-      fallback: <span class="fstat-no" title="function not covered" >() =&gt; (<span class="cstat-no" title="statement not covered" >{</span> continue: true })</span>
+<span class="fstat-no" title="function not covered" >      fallback: () =&gt; (<span class="cstat-no" title="statement not covered" >{</span> continue: true })</span>
     }
   ) || { continue: true };
 &nbsp;
@@ -598,7 +598,7 @@ export async function <span class="fstat-no" title="function not covered" >proce
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

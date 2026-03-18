@@ -1217,7 +1217,7 @@ export function <span class="fstat-no" title="function not covered" >createCheck
 <span class="cstat-no" title="statement not covered" >  return {</span>
     protocol,
     startedAt: new Date(),
-    checks: protocol.checks.map(<span class="fstat-no" title="function not covered" >check =&gt; (<span class="cstat-no" title="statement not covered" >{</span> ...check }))</span>,
+    checks: protocol.checks.<span class="fstat-no" title="function not covered" >map(c</span>heck =&gt; (<span class="cstat-no" title="statement not covered" >{ ...check })</span>),
     status: 'pending'
   };
 }
@@ -1229,7 +1229,7 @@ async function <span class="fstat-no" title="function not covered" >runSingleChe
   check: VerificationCheck,
   options: VerificationOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}</span>
 ): Promise&lt;VerificationEvidence&gt; {
-  const { cwd, timeout = <span class="branch-0 cbranch-no" title="branch not covered" >60000 }</span> = <span class="cstat-no" title="statement not covered" >options;</span>
+  const { cwd, timeout = <span class="branch-0 cbranch-no" title="branch not covered" >60000 } = <span class="cstat-no" title="statement not covered" >o</span>ptions;</span>
 &nbsp;
   // If check has a command, run it
 <span class="cstat-no" title="statement not covered" >  if (check.command) {</span>
@@ -1275,23 +1275,23 @@ export async function <span class="fstat-no" title="function not covered" >runVe
   checklist: VerificationChecklist,
   options: VerificationOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}</span>
 ): Promise&lt;VerificationChecklist&gt; {
-  const { parallel = <span class="branch-0 cbranch-no" title="branch not covered" >true, f</span>ailFast = <span class="branch-0 cbranch-no" title="branch not covered" >false, s</span>kipOptional = <span class="branch-0 cbranch-no" title="branch not covered" >false }</span> = <span class="cstat-no" title="statement not covered" >options;</span>
+  const { parallel = <span class="branch-0 cbranch-no" title="branch not covered" >true, f</span>ailFast = <span class="branch-0 cbranch-no" title="branch not covered" >false, s</span>kipOptional = <span class="branch-0 cbranch-no" title="branch not covered" >false } = <span class="cstat-no" title="statement not covered" >o</span>ptions;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  checklist.status = 'in_progress';</span>
 &nbsp;
   // Filter checks based on options
   const checksToRun = <span class="cstat-no" title="statement not covered" >skipOptional</span>
-    ? checklist.checks.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >c</span>.required)</span>
+    ? checklist.checks.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >c.required)</span>
     : checklist.checks;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (parallel &amp;&amp; !failFast) {</span>
     // Run all checks in parallel
     const results = <span class="cstat-no" title="statement not covered" >await Promise.allSettled(</span>
-      checksToRun.map(<span class="fstat-no" title="function not covered" >check =&gt; <span class="cstat-no" title="statement not covered" >r</span>unSingleCheck(check, options))</span>
+      checksToRun.<span class="fstat-no" title="function not covered" >map(c</span>heck =&gt; <span class="cstat-no" title="statement not covered" >runSingleCheck(check, options))</span>
     );
 &nbsp;
     // Update checklist with results
-<span class="cstat-no" title="statement not covered" >    checksToRun.forEach(<span class="fstat-no" title="function not covered" >(c</span>heck, idx) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    checksToRun.<span class="fstat-no" title="function not covered" >forEach((c</span>heck, idx) =&gt; {</span>
       const result = <span class="cstat-no" title="statement not covered" >results[idx];</span>
 <span class="cstat-no" title="statement not covered" >      if (result.status === 'fulfilled') {</span>
 <span class="cstat-no" title="statement not covered" >        check.evidence = result.value;</span>
@@ -1401,23 +1401,23 @@ export function <span class="fstat-no" title="function not covered" >checkEviden
  */
 function <span class="fstat-no" title="function not covered" >generateSummary(c</span>hecklist: VerificationChecklist): VerificationSummary {
   const total = <span class="cstat-no" title="statement not covered" >checklist.checks.length;</span>
-  const passed = <span class="cstat-no" title="statement not covered" >checklist.checks.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >c</span>.evidence?.passed)</span>.length;</span>
-  const failed = <span class="cstat-no" title="statement not covered" >checklist.checks.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >c</span>.completed &amp;&amp; !c.evidence?.passed)</span>.length;</span>
-  const skipped = <span class="cstat-no" title="statement not covered" >checklist.checks.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >!</span>c.completed)</span>.length;</span>
+  const passed = <span class="cstat-no" title="statement not covered" >checklist.checks.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >c.evidence?.passed).</span>length;</span>
+  const failed = <span class="cstat-no" title="statement not covered" >checklist.checks.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >c.completed &amp;&amp; !c.evidence?.passed).</span>length;</span>
+  const skipped = <span class="cstat-no" title="statement not covered" >checklist.checks.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >!c.completed).</span>length;</span>
 &nbsp;
-  const requiredChecks = <span class="cstat-no" title="statement not covered" >checklist.checks.filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >c</span>.required)</span>;</span>
-  const allRequiredPassed = <span class="cstat-no" title="statement not covered" >requiredChecks.every(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >c</span>.evidence?.passed)</span>;</span>
+  const requiredChecks = <span class="cstat-no" title="statement not covered" >checklist.checks.<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >c.required);</span></span>
+  const allRequiredPassed = <span class="cstat-no" title="statement not covered" >requiredChecks.<span class="fstat-no" title="function not covered" >every(c</span> =&gt; <span class="cstat-no" title="statement not covered" >c.evidence?.passed);</span></span>
 &nbsp;
   const failedChecks = <span class="cstat-no" title="statement not covered" >checklist.checks</span>
-    .filter(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >c</span>.completed &amp;&amp; !c.evidence?.passed)</span>
-    .map(<span class="fstat-no" title="function not covered" >c =&gt; <span class="cstat-no" title="statement not covered" >c</span>.id)</span>;
+    .<span class="fstat-no" title="function not covered" >filter(c</span> =&gt; <span class="cstat-no" title="statement not covered" >c.completed &amp;&amp; !c.evidence?.passed)</span>
+    .<span class="fstat-no" title="function not covered" >map(c</span> =&gt; <span class="cstat-no" title="statement not covered" >c.id);</span>
 &nbsp;
   let verdict: 'approved' | 'rejected' | 'incomplete';
 <span class="cstat-no" title="statement not covered" >  if (skipped &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    verdict = 'incomplete';</span>
-<span class="cstat-no" title="statement not covered" >  } else if (checklist.protocol.strictMode &amp;&amp; failed &gt; 0) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >checklist.protocol.strictMode &amp;&amp; failed &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    verdict = 'rejected';</span>
-<span class="cstat-no" title="statement not covered" >  } else if (allRequiredPassed) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >allRequiredPassed) {</span>
 <span class="cstat-no" title="statement not covered" >    verdict = 'approved';</span>
   } else {
 <span class="cstat-no" title="statement not covered" >    verdict = 'rejected';</span>
@@ -1633,7 +1633,7 @@ export type {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1555,7 +1555,7 @@ export class McpBridge extends EventEmitter {
 &nbsp;
     // Check if already connected
 <span class="cstat-no" title="statement not covered" >    if (this.connections.has(serverName)) {</span>
-      const conn = <span class="cstat-no" title="statement not covered" >this.connections.get(serverName)!;</span>
+      const conn = <span class="cstat-no" title="statement not covered" >this.connections.get(serverName)!</span>;
 <span class="cstat-no" title="statement not covered" >      return this.convertToExternalTools(serverName, conn.tools);</span>
     }
 &nbsp;
@@ -1569,7 +1569,7 @@ export class McpBridge extends EventEmitter {
     }
 &nbsp;
     // SECURITY: Filter out dangerous environment variables
-    const safeEnv: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{ ...process.env } as Record&lt;string, string&gt;;</span>
+    const safeEnv: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{ ...process.env } </span>as Record&lt;string, string&gt;;
 <span class="cstat-no" title="statement not covered" >    if (config.env) {</span>
 <span class="cstat-no" title="statement not covered" >      for (const [key, value] of Object.entries(config.env)) {</span>
 <span class="cstat-no" title="statement not covered" >        if (BLOCKED_ENV_VARS.has(key.toUpperCase())) {</span>
@@ -1602,7 +1602,7 @@ export class McpBridge extends EventEmitter {
 <span class="cstat-no" title="statement not covered" >    this.connections.set(serverName, connection);</span>
 &nbsp;
     // SECURITY: Set up error handler for spawn failures
-<span class="cstat-no" title="statement not covered" >    child.on('error', <span class="fstat-no" title="function not covered" >(e</span>rror: Error) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rror: Error) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.connections.delete(serverName);</span>
 <span class="cstat-no" title="statement not covered" >      this.emit('spawn-error', { server: serverName, error: error.message });</span>
       // Update registry with error state
@@ -1614,15 +1614,15 @@ export class McpBridge extends EventEmitter {
     });
 &nbsp;
     // Set up message handling
-<span class="cstat-no" title="statement not covered" >    child.stdout?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stdout?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.handleData(serverName, data);</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.stderr?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stderr?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.emit('server-error', { server: serverName, error: data.toString() });</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.on('exit', <span class="fstat-no" title="function not covered" >(c</span>ode) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'exit', (c</span>ode) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.connections.delete(serverName);</span>
 <span class="cstat-no" title="statement not covered" >      this.emit('server-disconnected', { server: serverName, code });</span>
 &nbsp;
@@ -1797,7 +1797,7 @@ export class McpBridge extends EventEmitter {
 <span class="cstat-no" title="statement not covered" >        return;</span>
       } catch {
         // Server not ready yet, wait and retry
-<span class="cstat-no" title="statement not covered" >        await new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, 100))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 100))</span>;</span>
       }
     }
 &nbsp;
@@ -1828,7 +1828,7 @@ export class McpBridge extends EventEmitter {
    * List available tools from server
    */
   private async <span class="fstat-no" title="function not covered" >listTools(s</span>erverName: string): Promise&lt;McpToolDefinition[]&gt; {
-    const result = <span class="cstat-no" title="statement not covered" >await this.sendRequest(serverName, 'tools/list', {}) as {</span>
+    const result = <span class="cstat-no" title="statement not covered" >await this.sendRequest(serverName, 'tools/list', {}) </span>as {
       tools: McpToolDefinition[];
     };
 <span class="cstat-no" title="statement not covered" >    return result.tools || [];</span>
@@ -1838,7 +1838,7 @@ export class McpBridge extends EventEmitter {
    * List available resources from server
    */
   private async <span class="fstat-no" title="function not covered" >listResources(s</span>erverName: string): Promise&lt;McpResourceDefinition[]&gt; {
-    const result = <span class="cstat-no" title="statement not covered" >await this.sendRequest(serverName, 'resources/list', {}) as {</span>
+    const result = <span class="cstat-no" title="statement not covered" >await this.sendRequest(serverName, 'resources/list', {}) </span>as {
       resources: McpResourceDefinition[];
     };
 <span class="cstat-no" title="statement not covered" >    return result.resources || [];</span>
@@ -1847,7 +1847,7 @@ export class McpBridge extends EventEmitter {
   /**
    * Send an MCP request and wait for response
    */
-  private <span class="fstat-no" title="function not covered" >sendRequest(</span>
+<span class="fstat-no" title="function not covered" >  private s</span>endRequest(
     serverName: string,
     method: string,
     params?: unknown,
@@ -1866,18 +1866,18 @@ export class McpBridge extends EventEmitter {
       params,
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
-      const timer = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    return new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve, reject) =&gt; {</span>
+      const timer = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        connection.pendingRequests.delete(id);</span>
 <span class="cstat-no" title="statement not covered" >        reject(new Error(`Request timeout: ${method}`));</span>
       }, timeout);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      connection.pendingRequests.set(id, {</span>
-        resolve: <span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {
+<span class="fstat-no" title="function not covered" >        resolve: (r</span>esult) =&gt; {
 <span class="cstat-no" title="statement not covered" >          clearTimeout(timer);</span>
 <span class="cstat-no" title="statement not covered" >          resolve(result);</span>
         },
-        reject: <span class="fstat-no" title="function not covered" >(e</span>rror) =&gt; {
+<span class="fstat-no" title="function not covered" >        reject: (e</span>rror) =&gt; {
 <span class="cstat-no" title="statement not covered" >          clearTimeout(timer);</span>
 <span class="cstat-no" title="statement not covered" >          reject(error);</span>
         },
@@ -1892,7 +1892,7 @@ export class McpBridge extends EventEmitter {
   /**
    * Send an MCP notification (no response expected)
    */
-  private <span class="fstat-no" title="function not covered" >sendNotification(s</span>erverName: string, method: string, params?: unknown): void {
+<span class="fstat-no" title="function not covered" >  private s</span>endNotification(serverName: string, method: string, params?: unknown): void {
     const connection = <span class="cstat-no" title="statement not covered" >this.connections.get(serverName);</span>
 <span class="cstat-no" title="statement not covered" >    if (!connection) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
@@ -1909,7 +1909,7 @@ export class McpBridge extends EventEmitter {
   /**
    * Handle incoming data from server
    */
-  private <span class="fstat-no" title="function not covered" >handleData(s</span>erverName: string, data: Buffer): void {
+<span class="fstat-no" title="function not covered" >  private h</span>andleData(serverName: string, data: Buffer): void {
     const connection = <span class="cstat-no" title="statement not covered" >this.connections.get(serverName);</span>
 <span class="cstat-no" title="statement not covered" >    if (!connection) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
@@ -1923,7 +1923,7 @@ export class McpBridge extends EventEmitter {
 <span class="cstat-no" title="statement not covered" >      if (!line.trim()) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      try {</span>
-        const message = <span class="cstat-no" title="statement not covered" >JSON.parse(line) as McpResponse;</span>
+        const message = <span class="cstat-no" title="statement not covered" >JSON.parse(line) </span>as McpResponse;
 <span class="cstat-no" title="statement not covered" >        this.handleMessage(serverName, message);</span>
       } catch {
 <span class="cstat-no" title="statement not covered" >        this.emit('parse-error', { server: serverName, data: line });</span>
@@ -1934,7 +1934,7 @@ export class McpBridge extends EventEmitter {
   /**
    * Handle a parsed MCP message
    */
-  private <span class="fstat-no" title="function not covered" >handleMessage(s</span>erverName: string, message: McpResponse): void {
+<span class="fstat-no" title="function not covered" >  private h</span>andleMessage(serverName: string, message: McpResponse): void {
     const connection = <span class="cstat-no" title="statement not covered" >this.connections.get(serverName);</span>
 <span class="cstat-no" title="statement not covered" >    if (!connection) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
@@ -1956,11 +1956,11 @@ export class McpBridge extends EventEmitter {
   /**
    * Convert MCP tools to ExternalTool format
    */
-  private <span class="fstat-no" title="function not covered" >convertToExternalTools(</span>
+<span class="fstat-no" title="function not covered" >  private c</span>onvertToExternalTools(
     serverName: string,
     tools: McpToolDefinition[]
   ): ExternalTool[] {
-<span class="cstat-no" title="statement not covered" >    return tools.map(<span class="fstat-no" title="function not covered" >tool =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span></span>
+<span class="cstat-no" title="statement not covered" >    return tools.<span class="fstat-no" title="function not covered" >map(t</span>ool =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       name: `mcp__${serverName}__${tool.name}`,
       type: 'mcp' as const,
       source: serverName,
@@ -1975,7 +1975,7 @@ export class McpBridge extends EventEmitter {
   /**
    * Infer capabilities from tool name and description
    */
-  private <span class="fstat-no" title="function not covered" >inferCapabilities(n</span>ame: string, description?: string): ToolCapability[] {
+<span class="fstat-no" title="function not covered" >  private i</span>nferCapabilities(name: string, description?: string): ToolCapability[] {
     const capabilities: ToolCapability[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const text = <span class="cstat-no" title="statement not covered" >`${name} ${description || ''}`.toLowerCase();</span>
 &nbsp;
@@ -2086,7 +2086,7 @@ export async function <span class="fstat-no" title="function not covered" >readM
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

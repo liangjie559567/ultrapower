@@ -499,14 +499,14 @@ export class BackupManager {
   /**
    * 获取备份目录路径
    */
-  private <span class="fstat-no" title="function not covered" >getBackupDir(): string {</span>
+<span class="fstat-no" title="function not covered" >  private g</span>etBackupDir(): string {
 <span class="cstat-no" title="statement not covered" >    return join(this.directory, '.omc', 'backups');</span>
   }
 &nbsp;
   /**
    * 确保备份目录存在
    */
-  private <span class="fstat-no" title="function not covered" >ensureBackupDir(): void {</span>
+<span class="fstat-no" title="function not covered" >  private e</span>nsureBackupDir(): void {
     const backupDir = <span class="cstat-no" title="statement not covered" >this.getBackupDir();</span>
 <span class="cstat-no" title="statement not covered" >    if (!existsSync(backupDir)) {</span>
 <span class="cstat-no" title="statement not covered" >      mkdirSync(backupDir, { recursive: true });</span>
@@ -516,7 +516,7 @@ export class BackupManager {
   /**
    * 获取状态文件路径
    */
-  private <span class="fstat-no" title="function not covered" >getStatePath(m</span>ode: ValidMode, sessionId?: string): string {
+<span class="fstat-no" title="function not covered" >  private g</span>etStatePath(mode: ValidMode, sessionId?: string): string {
     const <span class="cstat-no" title="statement not covered" >validMode = assertValidMode(mode);</span>
 <span class="cstat-no" title="statement not covered" >    if (sessionId) {</span>
 <span class="cstat-no" title="statement not covered" >      return join(this.directory, '.omc', 'state', 'sessions', sessionId, `${validMode}-state.json`);</span>
@@ -535,7 +535,7 @@ export class BackupManager {
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      this.ensureBackupDir();</span>
-      const <span class="cstat-no" title="statement not covered" >timestamp = new Date().toISOString().replace(/[:.]/g, '-');</span>
+      const timestamp = <span class="cstat-no" title="statement not covered" >new Date().toISOString().replace(/[:.]/g, '-');</span>
       const backupName = <span class="cstat-no" title="statement not covered" >sessionId</span>
         ? `${mode}-${sessionId}-${timestamp}.json`
         : `${mode}-${timestamp}.json`;
@@ -561,7 +561,7 @@ export class BackupManager {
 &nbsp;
       const prefix = <span class="cstat-no" title="statement not covered" >sessionId ? `${mode}-${sessionId}-` : `${mode}-`;</span>
       const <span class="cstat-no" title="statement not covered" >backups = readdirSync(backupDir)</span>
-        .filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.startsWith(prefix) &amp;&amp; f.endsWith('.json'))</span>
+        .<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.startsWith(prefix) &amp;&amp; f.endsWith('.json'))</span>
         .sort()
         .reverse();
 &nbsp;
@@ -571,7 +571,7 @@ export class BackupManager {
 &nbsp;
       let backupFile: string;
 <span class="cstat-no" title="statement not covered" >      if (timestamp) {</span>
-<span class="cstat-no" title="statement not covered" >        backupFile = backups.find(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.includes(timestamp))</span> || backups[0];</span>
+<span class="cstat-no" title="statement not covered" >        backupFile = backups.<span class="fstat-no" title="function not covered" >find(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.includes(timestamp))</span> || backups[0];</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        backupFile = backups[0]; // 最新备份</span>
       }
@@ -594,22 +594,22 @@ export class BackupManager {
   /**
    * 清理旧备份
    */
-  private <span class="fstat-no" title="function not covered" >cleanOldBackups(m</span>ode: ValidMode, sessionId?: string): void {
+<span class="fstat-no" title="function not covered" >  private c</span>leanOldBackups(mode: ValidMode, sessionId?: string): void {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const backupDir = <span class="cstat-no" title="statement not covered" >this.getBackupDir();</span>
       const prefix = <span class="cstat-no" title="statement not covered" >sessionId ? `${mode}-${sessionId}-` : `${mode}-`;</span>
 &nbsp;
       const <span class="cstat-no" title="statement not covered" >backups = readdirSync(backupDir)</span>
-        .filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.startsWith(prefix) &amp;&amp; f.endsWith('.json'))</span>
-        .map(<span class="fstat-no" title="function not covered" >f =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        .<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.startsWith(prefix) &amp;&amp; f.endsWith('.json'))</span>
+        .<span class="fstat-no" title="function not covered" >map(f</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
           name: f,
           path: join(backupDir, f),
           time: statSync(join(backupDir, f)).mtime.getTime()
         }))
-        .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.time - a.time)</span>;
+        .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.time - a.time);</span>
 &nbsp;
       // 删除超过最大数量的备份
-<span class="cstat-no" title="statement not covered" >      backups.slice(this.maxBackups).forEach(<span class="fstat-no" title="function not covered" >backup =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      backups.slice(this.maxBackups).<span class="fstat-no" title="function not covered" >forEach(b</span>ackup =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        unlinkSync(backup.path);</span>
       });
     } catch {
@@ -627,11 +627,11 @@ export class BackupManager {
 <span class="cstat-no" title="statement not covered" >        return [];</span>
       }
 &nbsp;
-      let <span class="cstat-no" title="statement not covered" >backups = readdirSync(backupDir).filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.endsWith('.json'))</span>;</span>
+      let <span class="cstat-no" title="statement not covered" >backups = readdirSync(backupDir).<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.endsWith('.json'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (mode) {</span>
         const prefix = <span class="cstat-no" title="statement not covered" >sessionId ? `${mode}-${sessionId}-` : `${mode}-`;</span>
-<span class="cstat-no" title="statement not covered" >        backups = backups.filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.startsWith(prefix))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        backups = backups.<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.startsWith(prefix))</span>;</span>
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return backups.sort().reverse();</span>
@@ -648,8 +648,8 @@ export class BackupManager {
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    this.backupTimer = setInterval(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >      modes.forEach(<span class="fstat-no" title="function not covered" >mode =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    this.backupTimer = <span class="fstat-no" title="function not covered" >setInterval(() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      modes.<span class="fstat-no" title="function not covered" >forEach(m</span>ode =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        this.backup(mode);</span>
       });
     }, this.backupInterval);
@@ -676,7 +676,7 @@ export function <span class="fstat-no" title="function not covered" >createBacku
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

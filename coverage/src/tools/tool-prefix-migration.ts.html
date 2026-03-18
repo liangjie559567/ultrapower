@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/16</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/5</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/15</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -191,7 +191,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -256,13 +256,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">35x</span>
-<span class="cline-any cline-yes">35x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">29x</span>
-<span class="cline-any cline-yes">29x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,21 +264,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">35x</span>
-<span class="cline-any cline-yes">35x</span>
-<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Tool Prefix Migration System
@@ -303,7 +303,7 @@ export interface DeprecationInfo {
   removalVersion: string;
 }
 &nbsp;
-const DEPRECATION_MAP: Record&lt;string, DeprecationInfo&gt; = {
+const DEPRECATION_MAP: Record&lt;string, DeprecationInfo&gt; = <span class="cstat-no" title="statement not covered" >{</span>
   // LSP Tools
   'lsp_hover': { oldName: 'lsp_hover', newName: 'ultrapower:lsp_hover', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
   'lsp_goto_definition': { oldName: 'lsp_goto_definition', newName: 'ultrapower:lsp_goto_definition', deprecatedSince: '5.6.0', removalVersion: '6.0.0' },
@@ -367,12 +367,12 @@ export function <span class="fstat-no" title="function not covered" >createDepre
          `Please use '${info.newName}' instead.\n\n`;
 }
 &nbsp;
-export function wrapWithDeprecation&lt;T extends GenericToolDefinition&gt;(tool: T): T {
-  const deprecationInfo = DEPRECATION_MAP[tool.name];
-  if (!deprecationInfo) return tool;
+export function <span class="fstat-no" title="function not covered" >wrapWithDeprecation&lt;T extends GenericToolDefinition&gt;(t</span>ool: T): T {
+  const deprecationInfo = <span class="cstat-no" title="statement not covered" >DEPRECATION_MAP[tool.name];</span>
+<span class="cstat-no" title="statement not covered" >  if (!deprecationInfo) <span class="cstat-no" title="statement not covered" >return tool;</span></span>
 &nbsp;
-  const originalHandler = tool.handler;
-  return {
+  const originalHandler = <span class="cstat-no" title="statement not covered" >tool.handler;</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
     ...tool,
     handler: <span class="fstat-no" title="function not covered" >async (a</span>rgs: unknown) =&gt; {
       const result = <span class="cstat-no" title="statement not covered" >await originalHandler(args);</span>
@@ -387,17 +387,17 @@ export function wrapWithDeprecation&lt;T extends GenericToolDefinition&gt;(tool:
   };
 }
 &nbsp;
-export function createPrefixedTool&lt;T extends GenericToolDefinition&gt;(tool: T): T {
-  return {
+export function <span class="fstat-no" title="function not covered" >createPrefixedTool&lt;T extends GenericToolDefinition&gt;(t</span>ool: T): T {
+<span class="cstat-no" title="statement not covered" >  return {</span>
     ...tool,
     name: `ultrapower:${tool.name}`
   };
 }
 &nbsp;
-export function registerToolWithBothNames&lt;T extends GenericToolDefinition&gt;(tool: T): T[] {
-  const prefixedTool = createPrefixedTool(tool);
-  const deprecatedTool = wrapWithDeprecation(tool);
-  return [prefixedTool, deprecatedTool];
+export function <span class="fstat-no" title="function not covered" >registerToolWithBothNames&lt;T extends GenericToolDefinition&gt;(t</span>ool: T): T[] {
+  const prefixedTool = <span class="cstat-no" title="statement not covered" >createPrefixedTool(tool);</span>
+  const deprecatedTool = <span class="cstat-no" title="statement not covered" >wrapWithDeprecation(tool);</span>
+<span class="cstat-no" title="statement not covered" >  return [prefixedTool, deprecatedTool];</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -406,7 +406,7 @@ export function registerToolWithBothNames&lt;T extends GenericToolDefinition&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

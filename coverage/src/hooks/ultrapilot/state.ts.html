@@ -909,7 +909,7 @@ export async function <span class="fstat-no" title="function not covered" >write
 <span class="cstat-no" title="statement not covered" >  ensureStateDir(directory, sessionId);</span>
   const stateFile = <span class="cstat-no" title="statement not covered" >getStateFilePath(directory, sessionId);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return await withFileLock(stateFile, <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  return await withFileLock(<span class="fstat-no" title="function not covered" >stateFile, () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    for (let attempt = <span class="cstat-no" title="statement not covered" >1; a</span>ttempt &lt;= 3; attempt++) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
 <span class="cstat-no" title="statement not covered" >        atomicWriteJsonSync(stateFile, state);</span>
@@ -968,7 +968,7 @@ export async function <span class="fstat-no" title="function not covered" >initU
   }
 &nbsp;
   const mergedConfig = <span class="cstat-no" title="statement not covered" >{ ...DEFAULT_CONFIG, ...config };</span>
-  const <span class="cstat-no" title="statement not covered" >now = new Date().toISOString();</span>
+  const now = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
 &nbsp;
   const state: UltrapilotState = <span class="cstat-no" title="statement not covered" >{</span>
     active: true,
@@ -1007,7 +1007,7 @@ export async function <span class="fstat-no" title="function not covered" >updat
   const state = <span class="cstat-no" title="statement not covered" >readUltrapilotState(directory, sessionId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!state) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 &nbsp;
-  const workerIndex = <span class="cstat-no" title="statement not covered" >state.workers.findIndex(<span class="fstat-no" title="function not covered" >(w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.id === workerId)</span>;</span>
+  const workerIndex = <span class="cstat-no" title="statement not covered" >state.workers.<span class="fstat-no" title="function not covered" >findIndex((w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.id === workerId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (workerIndex === -1) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  state.workers[workerIndex] = { ...state.workers[workerIndex], ...updates };</span>
@@ -1043,7 +1043,7 @@ export async function <span class="fstat-no" title="function not covered" >compl
   const state = <span class="cstat-no" title="statement not covered" >readUltrapilotState(directory, sessionId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!state) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 &nbsp;
-  const workerIndex = <span class="cstat-no" title="statement not covered" >state.workers.findIndex(<span class="fstat-no" title="function not covered" >(w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.id === workerId)</span>;</span>
+  const workerIndex = <span class="cstat-no" title="statement not covered" >state.workers.<span class="fstat-no" title="function not covered" >findIndex((w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.id === workerId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (workerIndex === -1) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  state.workers[workerIndex].status = 'complete';</span>
@@ -1062,7 +1062,7 @@ export async function <span class="fstat-no" title="function not covered" >failW
   const state = <span class="cstat-no" title="statement not covered" >readUltrapilotState(directory, sessionId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!state) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 &nbsp;
-  const workerIndex = <span class="cstat-no" title="statement not covered" >state.workers.findIndex(<span class="fstat-no" title="function not covered" >(w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.id === workerId)</span>;</span>
+  const workerIndex = <span class="cstat-no" title="statement not covered" >state.workers.<span class="fstat-no" title="function not covered" >findIndex((w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.id === workerId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (workerIndex === -1) <span class="cstat-no" title="statement not covered" >return false;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  state.workers[workerIndex].status = 'failed';</span>
@@ -1160,7 +1160,7 @@ export function <span class="fstat-no" title="function not covered" >getComplete
   const state = <span class="cstat-no" title="statement not covered" >readUltrapilotState(directory, sessionId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!state) <span class="cstat-no" title="statement not covered" >return [];</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return state.workers.filter(<span class="fstat-no" title="function not covered" >(w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.status === 'complete')</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return state.workers.<span class="fstat-no" title="function not covered" >filter((w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.status === 'complete');</span></span>
 }
 &nbsp;
 /**
@@ -1170,7 +1170,7 @@ export function <span class="fstat-no" title="function not covered" >getRunningW
   const state = <span class="cstat-no" title="statement not covered" >readUltrapilotState(directory, sessionId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!state) <span class="cstat-no" title="statement not covered" >return [];</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return state.workers.filter(<span class="fstat-no" title="function not covered" >(w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.status === 'running')</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return state.workers.<span class="fstat-no" title="function not covered" >filter((w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.status === 'running');</span></span>
 }
 &nbsp;
 /**
@@ -1180,7 +1180,7 @@ export function <span class="fstat-no" title="function not covered" >getFailedWo
   const state = <span class="cstat-no" title="statement not covered" >readUltrapilotState(directory, sessionId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!state) <span class="cstat-no" title="statement not covered" >return [];</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return state.workers.filter(<span class="fstat-no" title="function not covered" >(w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.status === 'failed')</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return state.workers.<span class="fstat-no" title="function not covered" >filter((w</span>) =&gt; <span class="cstat-no" title="statement not covered" >w.status === 'failed');</span></span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -1189,7 +1189,7 @@ export function <span class="fstat-no" title="function not covered" >getFailedWo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -379,7 +379,7 @@ export class ModuleLoopController {
 <span class="cstat-no" title="statement not covered" >    return modules;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >extractDependencies(c</span>ontent: string): string[] {
+<span class="fstat-no" title="function not covered" >  private e</span>xtractDependencies(content: string): string[] {
     const match = <span class="cstat-no" title="statement not covered" >content.match(/##\s*依赖关系[\s\S]*?(?=##|$)/i);</span>
 <span class="cstat-no" title="statement not covered" >    if (!match) <span class="cstat-no" title="statement not covered" >return [];</span></span>
 &nbsp;
@@ -387,9 +387,9 @@ export class ModuleLoopController {
 <span class="cstat-no" title="statement not covered" >    return deps;</span>
   }
 &nbsp;
-  private <span class="fstat-no" title="function not covered" >areDependenciesMet(m</span>odule: ModuleInfo, completed: ModuleLoopResult[]): boolean {
-    const completedNames = <span class="cstat-no" title="statement not covered" >new Set(completed.filter(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.success)</span>.map(<span class="fstat-no" title="function not covered" >r =&gt; <span class="cstat-no" title="statement not covered" >r</span>.moduleName)</span>);</span>
-<span class="cstat-no" title="statement not covered" >    return module.dependencies.every(<span class="fstat-no" title="function not covered" >dep =&gt; <span class="cstat-no" title="statement not covered" >c</span>ompletedNames.has(dep))</span>;</span>
+<span class="fstat-no" title="function not covered" >  private a</span>reDependenciesMet(module: ModuleInfo, completed: ModuleLoopResult[]): boolean {
+    const completedNames = <span class="cstat-no" title="statement not covered" >new Set(completed.<span class="fstat-no" title="function not covered" >filter(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.success).<span class="fstat-no" title="function not covered" ></span>map(r</span> =&gt; <span class="cstat-no" title="statement not covered" >r.moduleName))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return module.dependencies.<span class="fstat-no" title="function not covered" >every(d</span>ep =&gt; <span class="cstat-no" title="statement not covered" >completedNames.has(dep))</span>;</span>
   }
 &nbsp;
   private async <span class="fstat-no" title="function not covered" >executeModuleLoop(m</span>odule: ModuleInfo): Promise&lt;ModuleLoopResult&gt; {
@@ -404,7 +404,7 @@ export class ModuleLoopController {
 <span class="cstat-no" title="statement not covered" >      result.phases.review = await this.executeReviewPhase(module);</span>
 <span class="cstat-no" title="statement not covered" >      result.phases.optimization = await this.executeOptimizationPhase(module);</span>
 <span class="cstat-no" title="statement not covered" >      result.phases.testing = await this.executeTestingPhase(module);</span>
-<span class="cstat-no" title="statement not covered" >      result.success = Object.values(result.phases).every(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      result.success = Object.values(result.phases).<span class="fstat-no" title="function not covered" >every(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p);</span></span>
     } catch {
       // Phase failed
     }
@@ -432,10 +432,10 @@ export class ModuleLoopController {
     const config: LoopConfig = <span class="cstat-no" title="statement not covered" >{</span>
       maxRounds: 5,
       timeout: 30000,
-      convergenceCheck: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue</span>
+<span class="fstat-no" title="function not covered" >      convergenceCheck: () =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue</span>
     };
 &nbsp;
-    const result = <span class="cstat-no" title="statement not covered" >await this.loopController.execute(config, <span class="fstat-no" title="function not covered" >async () =&gt; (<span class="cstat-no" title="statement not covered" >{</span>}))</span>;</span>
+    const result = <span class="cstat-no" title="statement not covered" >await this.loopController.execute(config, <span class="fstat-no" title="function not covered" >async () =&gt; (<span class="cstat-no" title="statement not covered" >{</span>})</span>);</span>
 <span class="cstat-no" title="statement not covered" >    return result.completed;</span>
   }
 &nbsp;
@@ -443,10 +443,10 @@ export class ModuleLoopController {
     const config: LoopConfig = <span class="cstat-no" title="statement not covered" >{</span>
       maxRounds: 10,
       timeout: 30000,
-      convergenceCheck: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue</span>
+<span class="fstat-no" title="function not covered" >      convergenceCheck: () =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue</span>
     };
 &nbsp;
-    const result = <span class="cstat-no" title="statement not covered" >await this.loopController.execute(config, <span class="fstat-no" title="function not covered" >async () =&gt; (<span class="cstat-no" title="statement not covered" >{</span>}))</span>;</span>
+    const result = <span class="cstat-no" title="statement not covered" >await this.loopController.execute(config, <span class="fstat-no" title="function not covered" >async () =&gt; (<span class="cstat-no" title="statement not covered" >{</span>})</span>);</span>
 <span class="cstat-no" title="statement not covered" >    return result.completed;</span>
   }
 }
@@ -457,7 +457,7 @@ export class ModuleLoopController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

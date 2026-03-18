@@ -823,7 +823,7 @@ export function <span class="fstat-no" title="function not covered" >shouldAutoI
   }
 &nbsp;
   // Check if this skill was already invoked in this session
-  const alreadyInvoked = <span class="cstat-no" title="statement not covered" >invocations.some(<span class="fstat-no" title="function not covered" >inv =&gt; <span class="cstat-no" title="statement not covered" >i</span>nv.skillId === skillId)</span>;</span>
+  const alreadyInvoked = <span class="cstat-no" title="statement not covered" >invocations.<span class="fstat-no" title="function not covered" >some(i</span>nv =&gt; <span class="cstat-no" title="statement not covered" >inv.skillId === skillId);</span></span>
 <span class="cstat-no" title="statement not covered" >  if (alreadyInvoked) {</span>
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   }
@@ -856,7 +856,7 @@ export function <span class="fstat-no" title="function not covered" >updateInvoc
   // Update the most recent invocation of this skill
   const invocation = <span class="cstat-no" title="statement not covered" >[...state.invocations]</span>
     .reverse()
-    .find(<span class="fstat-no" title="function not covered" >inv =&gt; <span class="cstat-no" title="statement not covered" >i</span>nv.skillId === skillId)</span>;
+    .<span class="fstat-no" title="function not covered" >find(i</span>nv =&gt; <span class="cstat-no" title="statement not covered" >inv.skillId === skillId);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (invocation) {</span>
 <span class="cstat-no" title="statement not covered" >    invocation.wasSuccessful = wasSuccessful;</span>
@@ -899,12 +899,12 @@ export function <span class="fstat-no" title="function not covered" >getInvocati
 } {
   const { invocations } = <span class="cstat-no" title="statement not covered" >state;</span>
 &nbsp;
-  const successful = <span class="cstat-no" title="statement not covered" >invocations.filter(<span class="fstat-no" title="function not covered" >inv =&gt; <span class="cstat-no" title="statement not covered" >i</span>nv.wasSuccessful === true)</span>.length;</span>
-  const failed = <span class="cstat-no" title="statement not covered" >invocations.filter(<span class="fstat-no" title="function not covered" >inv =&gt; <span class="cstat-no" title="statement not covered" >i</span>nv.wasSuccessful === false)</span>.length;</span>
-  const unknown = <span class="cstat-no" title="statement not covered" >invocations.filter(<span class="fstat-no" title="function not covered" >inv =&gt; <span class="cstat-no" title="statement not covered" >i</span>nv.wasSuccessful === null)</span>.length;</span>
+  const successful = <span class="cstat-no" title="statement not covered" >invocations.<span class="fstat-no" title="function not covered" >filter(i</span>nv =&gt; <span class="cstat-no" title="statement not covered" >inv.wasSuccessful === true).</span>length;</span>
+  const failed = <span class="cstat-no" title="statement not covered" >invocations.<span class="fstat-no" title="function not covered" >filter(i</span>nv =&gt; <span class="cstat-no" title="statement not covered" >inv.wasSuccessful === false).</span>length;</span>
+  const unknown = <span class="cstat-no" title="statement not covered" >invocations.<span class="fstat-no" title="function not covered" >filter(i</span>nv =&gt; <span class="cstat-no" title="statement not covered" >inv.wasSuccessful === null).</span>length;</span>
 &nbsp;
   const averageConfidence = <span class="cstat-no" title="statement not covered" >invocations.length &gt; 0</span>
-    ? invocations.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, inv) =&gt; <span class="cstat-no" title="statement not covered" >sum + inv.confidence, 0</span>) / invocations.length
+    ? invocations.<span class="fstat-no" title="function not covered" >reduce((s</span>um, inv) =&gt; <span class="cstat-no" title="statement not covered" >sum + inv.confidence, 0</span>) / invocations.length
     : 0;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
@@ -929,7 +929,7 @@ export function <span class="fstat-no" title="function not covered" >saveInvocat
     config: state.config,
     invocations: state.invocations,
     stats: getInvocationStats(state),
-  }).catch(<span class="fstat-no" title="function not covered" >error =&gt; {</span>
+  }).<span class="fstat-no" title="function not covered" >catch(e</span>rror =&gt; {
 <span class="cstat-no" title="statement not covered" >    console.error('[auto-invoke] Failed to save invocation history:', error);</span>
   });
 }
@@ -959,7 +959,7 @@ export async function <span class="fstat-no" title="function not covered" >loadI
       config: data.config,
       invocations: data.invocations,
       lastInvokeTime: data.invocations.length &gt; 0
-        ? Math.max(...data.invocations.map(<span class="fstat-no" title="function not covered" >(i</span>nv: InvocationRecord) =&gt; <span class="cstat-no" title="statement not covered" >inv.timestamp)</span>)
+        ? Math.max(...data.invocations.<span class="fstat-no" title="function not covered" >map((i</span>nv: InvocationRecord) =&gt; <span class="cstat-no" title="statement not covered" >inv.timestamp))</span>
         : 0,
     };
   } catch (error) {
@@ -991,7 +991,7 @@ export async function <span class="fstat-no" title="function not covered" >getAg
       };
     }
 &nbsp;
-    const <span class="cstat-no" title="statement not covered" >files = (await fs.promises.readdir(historyDir)).filter(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >f</span>.endsWith('.json'))</span>;</span>
+    const <span class="cstat-no" title="statement not covered" >files = (await fs.promises.readdir(historyDir)).<span class="fstat-no" title="function not covered" >filter(f</span> =&gt; <span class="cstat-no" title="statement not covered" >f.endsWith('.json'))</span>;</span>
     const allInvocations: InvocationRecord[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const skillStats = <span class="cstat-no" title="statement not covered" >new Map&lt;string, { name: string; total: number; successful: number }&gt;();</span>
 &nbsp;
@@ -1009,17 +1009,17 @@ export async function <span class="fstat-no" title="function not covered" >getAg
       }
     }
 &nbsp;
-    const successful = <span class="cstat-no" title="statement not covered" >allInvocations.filter(<span class="fstat-no" title="function not covered" >inv =&gt; <span class="cstat-no" title="statement not covered" >i</span>nv.wasSuccessful === true)</span>.length;</span>
-    const withKnownStatus = <span class="cstat-no" title="statement not covered" >allInvocations.filter(<span class="fstat-no" title="function not covered" >inv =&gt; <span class="cstat-no" title="statement not covered" >i</span>nv.wasSuccessful !== null)</span>.length;</span>
+    const successful = <span class="cstat-no" title="statement not covered" >allInvocations.<span class="fstat-no" title="function not covered" >filter(i</span>nv =&gt; <span class="cstat-no" title="statement not covered" >inv.wasSuccessful === true).</span>length;</span>
+    const withKnownStatus = <span class="cstat-no" title="statement not covered" >allInvocations.<span class="fstat-no" title="function not covered" >filter(i</span>nv =&gt; <span class="cstat-no" title="statement not covered" >inv.wasSuccessful !== null).</span>length;</span>
 &nbsp;
     const topSkills = <span class="cstat-no" title="statement not covered" >Array.from(skillStats.entries())</span>
-      .map(<span class="fstat-no" title="function not covered" >([</span>skillId, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      .<span class="fstat-no" title="function not covered" >map(([</span>skillId, stats]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         skillId,
         skillName: stats.name,
         count: stats.total,
         successRate: stats.total &gt; 0 ? (stats.successful / stats.total) * 100 : 0,
       }))
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.count - a.count)</span>
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.count - a.count)</span>
       .slice(0, 10);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -1045,7 +1045,7 @@ export async function <span class="fstat-no" title="function not covered" >getAg
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

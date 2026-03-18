@@ -2201,7 +2201,7 @@ function <span class="fstat-no" title="function not covered" >log(m</span>essage
 <span class="cstat-no" title="statement not covered" >    ensureStateDir();</span>
 <span class="cstat-no" title="statement not covered" >    rotateLogIfNeeded(LOG_FILE_PATH);</span>
 &nbsp;
-    const <span class="cstat-no" title="statement not covered" >timestamp = new Date().toISOString();</span>
+    const timestamp = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
     const logLine = <span class="cstat-no" title="statement not covered" >`[${timestamp}] ${message}\n`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    appendFileSync(LOG_FILE_PATH, logLine, { mode: SECURE_FILE_MODE });</span>
@@ -2220,7 +2220,7 @@ function <span class="fstat-no" title="function not covered" >readDaemonState():
     }
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >content = readFileSync(STATE_FILE_PATH, 'utf-8');</span>
-    const state = <span class="cstat-no" title="statement not covered" >JSON.parse(content) as ReplyListenerState;</span>
+    const state = <span class="cstat-no" title="statement not covered" >JSON.parse(content) </span>as ReplyListenerState;
 <span class="cstat-no" title="statement not covered" >    return state;</span>
   } catch {
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -2345,12 +2345,12 @@ export class RateLimiter {
   private timestamps: number[] = <span class="cstat-no" title="statement not covered" >[];</span>
   private readonly windowMs = <span class="cstat-no" title="statement not covered" >60 * 1000; // 1 minute</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(private readonly <span class="cstat-no" title="statement not covered" >m</span>axPerMinute: number) {</span>}
+<span class="fstat-no" title="function not covered" >  constructor(p</span>rivate readonly <span class="cstat-no" title="statement not covered" >maxPerMinute: number) {</span>}
 &nbsp;
 <span class="fstat-no" title="function not covered" >  canProceed(): boolean {</span>
     const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
     // Remove timestamps outside the window
-<span class="cstat-no" title="statement not covered" >    this.timestamps = this.timestamps.filter(<span class="fstat-no" title="function not covered" >t =&gt; <span class="cstat-no" title="statement not covered" >n</span>ow - t &lt; this.windowMs)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    this.timestamps = this.timestamps.<span class="fstat-no" title="function not covered" >filter(t</span> =&gt; <span class="cstat-no" title="statement not covered" >now - t &lt; this.windowMs);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (this.timestamps.length &gt;= this.maxPerMinute) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
@@ -2466,7 +2466,7 @@ async function <span class="fstat-no" title="function not covered" >pollDiscord(
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    const messages = <span class="cstat-no" title="statement not covered" >await response.json() as Array&lt;{</span>
+    const messages = <span class="cstat-no" title="statement not covered" >await response.json() </span>as Array&lt;{
       id: string;
       author: { id: string };
       content: string;
@@ -2593,7 +2593,7 @@ async function <span class="fstat-no" title="function not covered" >pollTelegram
     const path = <span class="cstat-no" title="statement not covered" >`/bot${config.telegramBotToken}/getUpdates?offset=${offset}&amp;timeout=0`;</span>
 &nbsp;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https response body has dynamic shape
-    const updates = <span class="cstat-no" title="statement not covered" >await new Promise&lt;any[]&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
+    const updates = <span class="cstat-no" title="statement not covered" >await new <span class="fstat-no" title="function not covered" >Promise&lt;any[]&gt;((r</span>esolve, reject) =&gt; {</span>
       const <span class="cstat-no" title="statement not covered" >req = httpsRequest(</span>
         {
           hostname: 'api.telegram.org',
@@ -2601,11 +2601,11 @@ async function <span class="fstat-no" title="function not covered" >pollTelegram
           method: 'GET',
           family: 4, // Force IPv4
           timeout: 10000,
-        },
-<span class="fstat-no" title="function not covered" >        (r</span>es) =&gt; {
+        }<span class="fstat-no" title="function not covered" >,</span>
+        (res) =&gt; {
           const chunks: Buffer[] = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >          res.on('data', <span class="fstat-no" title="function not covered" >(c</span>hunk: Buffer) =&gt; <span class="cstat-no" title="statement not covered" >chunks.push(chunk))</span>;</span>
-<span class="cstat-no" title="statement not covered" >          res.on('end', <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >          res.on(<span class="fstat-no" title="function not covered" >'data', (c</span>hunk: Buffer) =&gt; <span class="cstat-no" title="statement not covered" >chunks.push(chunk))</span>;</span>
+<span class="cstat-no" title="statement not covered" >          res.on(<span class="fstat-no" title="function not covered" >'end', () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >            try {</span>
               const body = <span class="cstat-no" title="statement not covered" >JSON.parse(Buffer.concat(chunks).toString('utf-8'));</span>
 <span class="cstat-no" title="statement not covered" >              if (res.statusCode &amp;&amp; res.statusCode &gt;= 200 &amp;&amp; res.statusCode &lt; 300) {</span>
@@ -2621,7 +2621,7 @@ async function <span class="fstat-no" title="function not covered" >pollTelegram
       );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      req.on('error', reject);</span>
-<span class="cstat-no" title="statement not covered" >      req.on('timeout', <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      req.on(<span class="fstat-no" title="function not covered" >'timeout', () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        req.destroy();</span>
 <span class="cstat-no" title="statement not covered" >        reject(new Error('Request timeout'));</span>
       });
@@ -2693,7 +2693,7 @@ async function <span class="fstat-no" title="function not covered" >pollTelegram
             reply_to_message_id: msg.message_id,
           });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >          await new Promise&lt;void&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          await new <span class="fstat-no" title="function not covered" >Promise&lt;void&gt;((r</span>esolve) =&gt; {</span>
             const <span class="cstat-no" title="statement not covered" >replyReq = httpsRequest(</span>
               {
                 hostname: 'api.telegram.org',
@@ -2705,15 +2705,15 @@ async function <span class="fstat-no" title="function not covered" >pollTelegram
                   'Content-Length': Buffer.byteLength(replyBody),
                 },
                 timeout: 5000,
-              },
-<span class="fstat-no" title="function not covered" >              (r</span>es) =&gt; {
+              }<span class="fstat-no" title="function not covered" >,</span>
+              (res) =&gt; {
 <span class="cstat-no" title="statement not covered" >                res.resume(); // Drain response</span>
 <span class="cstat-no" title="statement not covered" >                resolve();</span>
               }
             );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            replyReq.on('error', <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve())</span>;</span>
-<span class="cstat-no" title="statement not covered" >            replyReq.on('timeout', <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >            replyReq.on(<span class="fstat-no" title="function not covered" >'error', () =&gt; <span class="cstat-no" title="statement not covered" >r</span>esolve())</span>;</span>
+<span class="cstat-no" title="statement not covered" >            replyReq.on(<span class="fstat-no" title="function not covered" >'timeout', () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >              replyReq.destroy();</span>
 <span class="cstat-no" title="statement not covered" >              resolve();</span>
             });
@@ -2773,7 +2773,7 @@ async function <span class="fstat-no" title="function not covered" >pollLoop(): 
   let lastPruneAt = <span class="cstat-no" title="statement not covered" >Date.now();</span>
 &nbsp;
   // Graceful shutdown handlers
-  const shutdown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >shutdown = () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    log('Shutdown signal received');</span>
 <span class="cstat-no" title="statement not covered" >    state.isRunning = false;</span>
 <span class="cstat-no" title="statement not covered" >    writeDaemonState(state);</span>
@@ -2814,7 +2814,7 @@ async function <span class="fstat-no" title="function not covered" >pollLoop(): 
 <span class="cstat-no" title="statement not covered" >      writeDaemonState(state);</span>
 &nbsp;
       // Wait for next poll
-<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, config.pollIntervalMs))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      await new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, config.pollIntervalMs))</span>;</span>
 &nbsp;
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      state.errors++;</span>
@@ -2823,7 +2823,7 @@ async function <span class="fstat-no" title="function not covered" >pollLoop(): 
 <span class="cstat-no" title="statement not covered" >      writeDaemonState(state);</span>
 &nbsp;
       // Back off on repeated errors
-<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, config.pollIntervalMs * 2))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      await new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, config.pollIntervalMs * 2))</span>;</span>
     }
   }
 &nbsp;
@@ -3007,7 +3007,7 @@ export { pollLoop };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

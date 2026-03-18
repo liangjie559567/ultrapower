@@ -13,4 +13,6 @@
 IDLE
 
 ## 转换历史
-（无）
+- 2026-03-18 11:01: ARCHIVING → IDLE (实施完成)
+- 2026-03-18 11:05: IDLE → ARCHIVING (反思开始)
+- 2026-03-18 11:06: ARCHIVING → IDLE (反思完成)

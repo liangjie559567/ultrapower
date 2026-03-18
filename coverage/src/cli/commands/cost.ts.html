@@ -230,12 +230,12 @@ export async function <span class="fstat-no" title="function not covered" >costC
 <span class="cstat-no" title="statement not covered" >  if (Object.keys(report.byAgent).length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    console.log(colors.bold('By Agent:'));</span>
     const agentData = <span class="cstat-no" title="statement not covered" >Object.entries(report.byAgent)</span>
-      .map(<span class="fstat-no" title="function not covered" >([</span>agent, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ agent, cost }))</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost)</span>;
+      .<span class="fstat-no" title="function not covered" >map(([</span>agent, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ agent, cost }))</span>
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost);</span>
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >agentTable = renderTable(agentData, [</span>
       { header: 'Agent', field: 'agent', width: 30 },
-      { header: 'Cost', field: 'cost', width: 12, align: 'right', format: <span class="fstat-no" title="function not covered" >(<span class="cstat-no" title="statement not covered" >v</span>: number) =&gt; formatCostWithColor(v) }</span>
+      { header: 'Cost', field: 'cost', width: 12, align: 'right', <span class="fstat-no" title="function not covered" >format: (<span class="cstat-no" title="statement not covered" >v</span>: number) =&gt; formatCostWithColor(v) }</span>
     ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    console.log(agentTable);</span>
@@ -246,12 +246,12 @@ export async function <span class="fstat-no" title="function not covered" >costC
 <span class="cstat-no" title="statement not covered" >  if (Object.keys(report.byModel).length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    console.log(colors.bold('By Model:'));</span>
     const modelData = <span class="cstat-no" title="statement not covered" >Object.entries(report.byModel)</span>
-      .map(<span class="fstat-no" title="function not covered" >([</span>model, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ model, cost }))</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost)</span>;
+      .<span class="fstat-no" title="function not covered" >map(([</span>model, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ model, cost }))</span>
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.cost - a.cost);</span>
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >modelTable = renderTable(modelData, [</span>
       { header: 'Model', field: 'model', width: 30 },
-      { header: 'Cost', field: 'cost', width: 12, align: 'right', format: <span class="fstat-no" title="function not covered" >(<span class="cstat-no" title="statement not covered" >v</span>: number) =&gt; formatCostWithColor(v) }</span>
+      { header: 'Cost', field: 'cost', width: 12, align: 'right', <span class="fstat-no" title="function not covered" >format: (<span class="cstat-no" title="statement not covered" >v</span>: number) =&gt; formatCostWithColor(v) }</span>
     ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    console.log(modelTable);</span>
@@ -262,12 +262,12 @@ export async function <span class="fstat-no" title="function not covered" >costC
 <span class="cstat-no" title="statement not covered" >  if (report.byDay &amp;&amp; Object.keys(report.byDay).length &gt; 0 &amp;&amp; period !== 'daily') {</span>
 <span class="cstat-no" title="statement not covered" >    console.log(colors.bold('By Day:'));</span>
     const dayData = <span class="cstat-no" title="statement not covered" >Object.entries(report.byDay)</span>
-      .map(<span class="fstat-no" title="function not covered" >([</span>day, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ day, cost }))</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.day.localeCompare(b.day))</span>;
+      .<span class="fstat-no" title="function not covered" >map(([</span>day, cost]) =&gt; (<span class="cstat-no" title="statement not covered" >{ day, cost }))</span>
+      .<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.day.localeCompare(b.day))</span>;
 &nbsp;
     const <span class="cstat-no" title="statement not covered" >dayTable = renderTable(dayData, [</span>
       { header: 'Date', field: 'day', width: 12 },
-      { header: 'Cost', field: 'cost', width: 12, align: 'right', format: <span class="fstat-no" title="function not covered" >(<span class="cstat-no" title="statement not covered" >v</span>: number) =&gt; formatCostWithColor(v) }</span>
+      { header: 'Cost', field: 'cost', width: 12, align: 'right', <span class="fstat-no" title="function not covered" >format: (<span class="cstat-no" title="statement not covered" >v</span>: number) =&gt; formatCostWithColor(v) }</span>
     ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    console.log(dayTable);</span>
@@ -289,7 +289,7 @@ export function <span class="fstat-no" title="function not covered" >createCostC
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -173,16 +173,39 @@ export class McpBridge extends EventEmitter {
     /**
      * Disconnect from an MCP server
      */
-    disconnect(serverName) {
+    async disconnect(serverName) {
         const connection = this.connections.get(serverName);
         if (!connection)
             return;
-        try {
-            connection.process.kill();
+        // Graceful shutdown: close stdin first
+        if (connection.process.stdin && !connection.process.stdin.destroyed) {
+            connection.process.stdin.end();
         }
-        catch {
-            // Ignore kill errors
-        }
+        // Wait briefly for process to exit gracefully
+        await new Promise((resolve) => {
+            // Check if already exited
+            if (connection.process.exitCode !== null || connection.process.killed) {
+                resolve();
+                return;
+            }
+            const timeout = setTimeout(() => {
+                // Force kill if still running
+                try {
+                    connection.process.kill();
+                }
+                catch (error) {
+                    this.emit('kill-error', {
+                        server: serverName,
+                        error: error instanceof Error ? error.message : String(error),
+                    });
+                }
+                resolve();
+            }, 1000);
+            connection.process.once('exit', () => {
+                clearTimeout(timeout);
+                resolve();
+            });
+        });
         this.connections.delete(serverName);
         // Update registry
         const registry = getRegistry();
@@ -191,9 +214,14 @@ export class McpBridge extends EventEmitter {
     /**
      * Disconnect from all servers
      */
-    disconnectAll() {
-        for (const serverName of this.connections.keys()) {
-            this.disconnect(serverName);
+    async disconnectAll() {
+        const serverNames = Array.from(this.connections.keys());
+        const results = await Promise.allSettled(serverNames.map(serverName => this.disconnect(serverName)));
+        // Log failures but don't throw
+        for (let i = 0; i < results.length; i++) {
+            if (results[i].status === 'rejected') {
+                console.warn(`MCP disconnectAll: failed to disconnect "${serverNames[i]}": ${results[i].reason}`);
+            }
         }
     }
     /**
@@ -356,7 +384,9 @@ export class McpBridge extends EventEmitter {
             });
             // Send the request
             const message = JSON.stringify(request) + '\n';
-            connection.process.stdin?.write(message);
+            if (connection.process.stdin && !connection.process.stdin.destroyed) {
+                connection.process.stdin.write(message);
+            }
         });
     }
     /**
@@ -372,7 +402,9 @@ export class McpBridge extends EventEmitter {
             params,
         };
         const message = JSON.stringify(notification) + '\n';
-        connection.process.stdin?.write(message);
+        if (connection.process.stdin && !connection.process.stdin.destroyed) {
+            connection.process.stdin.write(message);
+        }
     }
     /**
      * Handle incoming data from server
@@ -504,10 +536,14 @@ export function getMcpBridge() {
 /**
  * Reset bridge instance (for testing)
  */
-export function resetMcpBridge() {
+export async function resetMcpBridge() {
     if (bridgeInstance) {
-        bridgeInstance.disconnectAll();
-        bridgeInstance = null;
+        try {
+            await bridgeInstance.disconnectAll();
+        }
+        finally {
+            bridgeInstance = null;
+        }
     }
 }
 /**

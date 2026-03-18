@@ -1,0 +1,19 @@
+// Template: S3 Upload
+// Platform: {{platform}}
+// Dependencies: aws-sdk, multer
+
+import { S3 } from 'aws-sdk';
+
+export class {{className}} {
+  private s3 = new S3();
+  private bucket = '{{bucketName}}';
+
+  async upload(file: Express.Multer.File) {
+    const params = {
+      Bucket: this.bucket,
+      Key: file.originalname,
+      Body: file.buffer
+    };
+    return this.s3.upload(params).promise();
+  }
+}

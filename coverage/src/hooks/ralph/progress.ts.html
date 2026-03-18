@@ -1269,7 +1269,7 @@ export function <span class="fstat-no" title="function not covered" >parseProgre
         const item = <span class="cstat-no" title="statement not covered" >trimmed.slice(1).trim();</span>
 <span class="cstat-no" title="statement not covered" >        if (currentSection === 'learnings') {</span>
 <span class="cstat-no" title="statement not covered" >          currentEntry.learnings!.push(item);</span>
-<span class="cstat-no" title="statement not covered" >        } else if (currentSection === 'files') {</span>
+        } else if (<span class="cstat-no" title="statement not covered" >currentSection === 'files') {</span>
 <span class="cstat-no" title="statement not covered" >          currentEntry.filesChanged!.push(item);</span>
         } else {
 <span class="cstat-no" title="statement not covered" >          currentEntry.implementation!.push(item);</span>
@@ -1320,7 +1320,7 @@ export function <span class="fstat-no" title="function not covered" >initProgres
   }
 &nbsp;
   const progressPath = <span class="cstat-no" title="statement not covered" >getOmcProgressPath(directory);</span>
-  const <span class="cstat-no" title="statement not covered" >now = new Date().toISOString();</span>
+  const now = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
 &nbsp;
   const content = <span class="cstat-no" title="statement not covered" >`# Ralph Progress Log</span>
 Started: ${now}
@@ -1357,7 +1357,7 @@ export function <span class="fstat-no" title="function not covered" >appendProgr
 <span class="cstat-no" title="statement not covered" >    progressPath = getOmcProgressPath(directory);</span>
   }
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >now = new Date().toISOString();</span>
+  const now = <span class="cstat-no" title="statement not covered" >new Date().toISOString();</span>
   const dateStr = <span class="cstat-no" title="statement not covered" >now.split('T')[0];</span>
   const timeStr = <span class="cstat-no" title="statement not covered" >now.split('T')[1].slice(0, 5);</span>
 &nbsp;
@@ -1369,7 +1369,7 @@ export function <span class="fstat-no" title="function not covered" >appendProgr
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (entry.implementation.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push('**What was implemented:**');</span>
-<span class="cstat-no" title="statement not covered" >    entry.implementation.forEach(<span class="fstat-no" title="function not covered" >item =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    entry.implementation.<span class="fstat-no" title="function not covered" >forEach(i</span>tem =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      lines.push(`- ${item}`);</span>
     });
 <span class="cstat-no" title="statement not covered" >    lines.push('');</span>
@@ -1377,7 +1377,7 @@ export function <span class="fstat-no" title="function not covered" >appendProgr
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (entry.filesChanged.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push('**Files changed:**');</span>
-<span class="cstat-no" title="statement not covered" >    entry.filesChanged.forEach(<span class="fstat-no" title="function not covered" >file =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    entry.filesChanged.<span class="fstat-no" title="function not covered" >forEach(f</span>ile =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      lines.push(`- ${file}`);</span>
     });
 <span class="cstat-no" title="statement not covered" >    lines.push('');</span>
@@ -1385,7 +1385,7 @@ export function <span class="fstat-no" title="function not covered" >appendProgr
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (entry.learnings.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push('**Learnings for future iterations:**');</span>
-<span class="cstat-no" title="statement not covered" >    entry.learnings.forEach(<span class="fstat-no" title="function not covered" >learning =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    entry.learnings.<span class="fstat-no" title="function not covered" >forEach(l</span>earning =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      lines.push(`- ${learning}`);</span>
     });
 <span class="cstat-no" title="statement not covered" >    lines.push('');</span>
@@ -1461,7 +1461,7 @@ export function <span class="fstat-no" title="function not covered" >getPatterns
 <span class="cstat-no" title="statement not covered" >    return [];</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return progress.patterns.map(<span class="fstat-no" title="function not covered" >p =&gt; <span class="cstat-no" title="statement not covered" >p</span>.pattern)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return progress.patterns.<span class="fstat-no" title="function not covered" >map(p</span> =&gt; <span class="cstat-no" title="statement not covered" >p.pattern);</span></span>
 }
 &nbsp;
 /**
@@ -1504,7 +1504,7 @@ export function <span class="fstat-no" title="function not covered" >formatPatte
     ''
   ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  patterns.forEach(<span class="fstat-no" title="function not covered" >pattern =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  patterns.<span class="fstat-no" title="function not covered" >forEach(p</span>attern =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push(`- ${pattern}`);</span>
   });
 &nbsp;
@@ -1536,7 +1536,7 @@ export function <span class="fstat-no" title="function not covered" >formatProgr
 <span class="cstat-no" title="statement not covered" >  for (const entry of recent) {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push(`### ${entry.storyId} (${entry.timestamp})`);</span>
 <span class="cstat-no" title="statement not covered" >    if (entry.implementation.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      entry.implementation.forEach(<span class="fstat-no" title="function not covered" >item =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      entry.implementation.<span class="fstat-no" title="function not covered" >forEach(i</span>tem =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        lines.push(`- ${item}`);</span>
       });
     }
@@ -1568,7 +1568,7 @@ export function <span class="fstat-no" title="function not covered" >formatLearn
 &nbsp;
   // Deduplicate learnings
   const unique = <span class="cstat-no" title="statement not covered" >[...new Set(learnings)];</span>
-<span class="cstat-no" title="statement not covered" >  unique.forEach(<span class="fstat-no" title="function not covered" >learning =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  unique.<span class="fstat-no" title="function not covered" >forEach(l</span>earning =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    lines.push(`- ${learning}`);</span>
   });
 &nbsp;
@@ -1600,7 +1600,7 @@ export function <span class="fstat-no" title="function not covered" >getProgress
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

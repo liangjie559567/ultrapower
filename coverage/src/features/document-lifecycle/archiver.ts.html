@@ -328,20 +328,20 @@ export async function <span class="fstat-no" title="function not covered" >archi
       files.map(<span class="fstat-no" title="function not covered" >async (f</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         name: f,
         path: join(sourceDir, f),
-        stat: await fs.stat(join(sourceDir, f)).catch(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >n</span>ull)</span>,
+        stat: await fs.stat(join(sourceDir, f)).<span class="fstat-no" title="function not covered" >catch(() =&gt; <span class="cstat-no" title="statement not covered" >n</span>ull),</span>
       }))
     );
 &nbsp;
-    const docs = <span class="cstat-no" title="statement not covered" >stats.filter(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.stat?.isFile() &amp;&amp; s.name.endsWith('.md'))</span>;</span>
+    const docs = <span class="cstat-no" title="statement not covered" >stats.<span class="fstat-no" title="function not covered" >filter((s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.stat?.isFile() &amp;&amp; s.name.endsWith('.md'))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (docs.length &lt;= maxCount) <span class="cstat-no" title="statement not covered" >return { archived, errors };</span></span>
 &nbsp;
-    const sorted = <span class="cstat-no" title="statement not covered" >docs.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; (<span class="cstat-no" title="statement not covered" >a.stat!.mtime.getTime() - b.stat!.mtime.getTime()))</span>;</span>
+    const sorted = <span class="cstat-no" title="statement not covered" >docs.<span class="fstat-no" title="function not covered" >sort((a</span>, b) =&gt; (<span class="cstat-no" title="statement not covered" >a.stat!.mtime.getTime() - b.stat!.mtime.getTime())</span>);</span>
     const toArchive = <span class="cstat-no" title="statement not covered" >sorted.slice(0, docs.length - maxCount);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const doc of toArchive) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
-        const rule = <span class="cstat-no" title="statement not covered" >ARCHIVE_RULES.find(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.pattern.test(doc.name))</span>;</span>
+        const rule = <span class="cstat-no" title="statement not covered" >ARCHIVE_RULES.<span class="fstat-no" title="function not covered" >find((r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.pattern.test(doc.name))</span>;</span>
         const targetDir = <span class="cstat-no" title="statement not covered" >rule ? join(archiveBaseDir, rule.targetDir) : archiveBaseDir;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        await fs.mkdir(targetDir, { recursive: true });</span>
@@ -380,11 +380,11 @@ export async function <span class="fstat-no" title="function not covered" >archi
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const file of files) {</span>
       const <span class="cstat-no" title="statement not covered" >filePath = join(sourceDir, file);</span>
-      const stat = <span class="cstat-no" title="statement not covered" >await fs.stat(filePath).catch(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >n</span>ull)</span>;</span>
+      const stat = <span class="cstat-no" title="statement not covered" >await fs.stat(filePath).<span class="fstat-no" title="function not covered" >catch(() =&gt; <span class="cstat-no" title="statement not covered" >n</span>ull);</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!stat?.isFile() || !file.endsWith('.md')) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
-      const rule = <span class="cstat-no" title="statement not covered" >ARCHIVE_RULES.find(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.pattern.test(file))</span>;</span>
+      const rule = <span class="cstat-no" title="statement not covered" >ARCHIVE_RULES.<span class="fstat-no" title="function not covered" >find((r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.pattern.test(file))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (!rule) <span class="cstat-no" title="statement not covered" >continue;</span></span>
 &nbsp;
       const <span class="cstat-no" title="statement not covered" >ageDays = (now - stat.mtime.getTime()) / (1000 * 60 * 60 * 24);</span>
@@ -421,7 +421,7 @@ export async function <span class="fstat-no" title="function not covered" >archi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

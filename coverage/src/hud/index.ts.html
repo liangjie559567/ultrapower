@@ -1152,7 +1152,7 @@ async function <span class="fstat-no" title="function not covered" >recordTokenU
 &nbsp;
     // Get running agents from transcript
     const runningAgents =
-<span class="cstat-no" title="statement not covered" >      transcriptData.agents?.filter(<span class="fstat-no" title="function not covered" >(a</span>: { status: string }) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span> ?? [];</span>
+<span class="cstat-no" title="statement not covered" >      transcriptData.agents?.<span class="fstat-no" title="function not covered" >filter((a</span>: { status: string }) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running") </span>?? [];</span>
     const agentName =
 <span class="cstat-no" title="statement not covered" >      runningAgents.length &gt; 0 ? runningAgents[0].name : undefined;</span>
 &nbsp;
@@ -1296,7 +1296,7 @@ async function <span class="fstat-no" title="function not covered" >calculateSes
   let health: SessionHealth["health"] = <span class="cstat-no" title="statement not covered" >"healthy";</span>
 <span class="cstat-no" title="statement not covered" >  if (durationMinutes &gt; 120 || contextPercent &gt; 85) {</span>
 <span class="cstat-no" title="statement not covered" >    health = "critical";</span>
-<span class="cstat-no" title="statement not covered" >  } else if (durationMinutes &gt; 60 || contextPercent &gt; 70) {</span>
+  } else if (<span class="cstat-no" title="statement not covered" >durationMinutes &gt; 60 || contextPercent &gt; 70) {</span>
 <span class="cstat-no" title="statement not covered" >    health = "warning";</span>
   }
 &nbsp;
@@ -1357,7 +1357,7 @@ async function <span class="fstat-no" title="function not covered" >calculateSes
     const budgetWarning = <span class="cstat-no" title="statement not covered" >thresholds?.budgetWarning ?? 2.0;</span>
 <span class="cstat-no" title="statement not covered" >    if (sessionCost &gt; budgetCritical) {</span>
 <span class="cstat-no" title="statement not covered" >      health = "critical";</span>
-<span class="cstat-no" title="statement not covered" >    } else if (sessionCost &gt; budgetWarning &amp;&amp; health !== "critical") {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >sessionCost &gt; budgetWarning &amp;&amp; health !== "critical") {</span>
 <span class="cstat-no" title="statement not covered" >      health = "warning";</span>
     }
   } catch (error) {
@@ -1374,7 +1374,7 @@ async function <span class="fstat-no" title="function not covered" >calculateSes
 <span class="cstat-no" title="statement not covered" >    if (sessionId) {</span>
       const <span class="cstat-no" title="statement not covered" >tracker = getTokenTracker(sessionId);</span>
       const agents = <span class="cstat-no" title="statement not covered" >await tracker.getTopAgents(3);</span>
-<span class="cstat-no" title="statement not covered" >      topAgents = agents.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ agent: a.agent, cost: a.cost }))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      topAgents = agents.<span class="fstat-no" title="function not covered" >map((a</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ agent: a.agent, cost: a.cost }));</span></span>
     }
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    if (process.env.OMC_DEBUG) {</span>
@@ -1452,7 +1452,7 @@ async function <span class="fstat-no" title="function not covered" >main(): Prom
 <span class="cstat-no" title="statement not covered" >        sessionStart = persisted;</span>
       }
       // If invalid, fall through to transcript-derived sessionStart
-<span class="cstat-no" title="statement not covered" >    } else if (sessionStart) {</span>
+    } else if (<span class="cstat-no" title="statement not covered" >sessionStart) {</span>
       // First time seeing session start (or new session) - persist it
       const stateToWrite = <span class="cstat-no" title="statement not covered" >hudState || { timestamp: new Date().toISOString(), backgroundTasks: [] };</span>
 <span class="cstat-no" title="statement not covered" >      stateToWrite.sessionStartTimestamp = sessionStart.toISOString();</span>
@@ -1493,7 +1493,7 @@ async function <span class="fstat-no" title="function not covered" >main(): Prom
       stdin,
       config.thresholds,
     );
-    const activeAgents = <span class="cstat-no" title="statement not covered" >transcriptData.agents.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running")</span>;</span>
+    const activeAgents = <span class="cstat-no" title="statement not covered" >transcriptData.agents.<span class="fstat-no" title="function not covered" >filter((a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.status === "running");</span></span>
 &nbsp;
     // Generate smart suggestions based on current state
     const <span class="cstat-no" title="statement not covered" >smartSuggestions = generateSuggestions({</span>
@@ -1594,7 +1594,7 @@ async function <span class="fstat-no" title="function not covered" >main(): Prom
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

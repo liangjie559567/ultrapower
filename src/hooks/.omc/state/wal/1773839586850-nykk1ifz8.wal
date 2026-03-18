@@ -1,0 +1,132 @@
+{
+  "id": "1773839586850-nykk1ifz8",
+  "timestamp": 1773839586850,
+  "mode": "ultrawork",
+  "data": {
+    "sessionId": "5bae43281966a78f",
+    "totalInputTokens": 66,
+    "totalOutputTokens": 24,
+    "totalCacheCreation": 20194,
+    "totalCacheRead": 665078,
+    "totalCost": 0,
+    "byAgent": {
+      "(main session)": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:54.628Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:55.509Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:59.283Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:00.433Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:05.009Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:06.846Z"
+        }
+      ]
+    },
+    "byModel": {
+      "claude-sonnet-4.6": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:54.628Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:55.509Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:59.283Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:00.433Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:05.009Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:06.846Z"
+        }
+      ]
+    },
+    "startTime": "2026-03-18T13:12:54.628Z",
+    "lastUpdate": "2026-03-18T13:13:06.846Z"
+  },
+  "committed": true
+}

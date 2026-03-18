@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -302,7 +302,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,7 +484,7 @@ import { join } from "path";
 const fileCache = <span class="cstat-no" title="statement not covered" >new Map&lt;string, { content: string; mtime: number }&gt;();</span>
 &nbsp;
 async function <span class="fstat-no" title="function not covered" >readFileCached(p</span>ath: string): Promise&lt;string&gt; {
-  const stat = <span class="cstat-no" title="statement not covered" >await import("fs/promises").then(<span class="fstat-no" title="function not covered" >m =&gt; <span class="cstat-no" title="statement not covered" >m</span>.stat(path))</span>;</span>
+  const stat = <span class="cstat-no" title="statement not covered" >await import("fs/promises").<span class="fstat-no" title="function not covered" >then(m</span> =&gt; <span class="cstat-no" title="statement not covered" >m.stat(path))</span>;</span>
   const cached = <span class="cstat-no" title="statement not covered" >fileCache.get(path);</span>
 <span class="cstat-no" title="statement not covered" >  if (cached &amp;&amp; cached.mtime === stat.mtimeMs) {</span>
 <span class="cstat-no" title="statement not covered" >    return cached.content;</span>
@@ -499,7 +499,7 @@ export async function <span class="fstat-no" title="function not covered" >proce
   const sessionId = <span class="cstat-no" title="statement not covered" >input.sessionId || "";</span>
   const <span class="cstat-no" title="statement not covered" >directory = resolveToWorktreeRoot(input.directory);</span>
 &nbsp;
-  const { initSilentAutoUpdate } = <span class="cstat-no" title="statement not covered" >await import("../../features/auto-update.js")</span>;
+  const { initSilentAutoUpdate } = <span class="cstat-no" title="statement not covered" >await import("../../features/auto-update.js");</span>
   const { readAutopilotState } = <span class="cstat-no" title="statement not covered" >await import("../autopilot/index.js");</span>
   const { readUltraworkState } = <span class="cstat-no" title="statement not covered" >await import("../ultrawork/index.js");</span>
   const { checkIncompleteTodos } = <span class="cstat-no" title="statement not covered" >await import("../todo-continuation/index.js");</span>
@@ -507,17 +507,17 @@ export async function <span class="fstat-no" title="function not covered" >proce
 <span class="cstat-no" title="statement not covered" >  initSilentAutoUpdate();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (sessionId) {</span>
-<span class="cstat-no" title="statement not covered" >    import("../../notifications/index.js").then(<span class="fstat-no" title="function not covered" >({</span> notify }) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >      notify("session-start", {</span>
+<span class="cstat-no" title="statement not covered" >    import("../../notifications/index.js").<span class="fstat-no" title="function not covered" >then(({</span> <span class="cstat-no" title="statement not covered" >notify }) =&gt;</span></span>
+      notify("session-start", {
         sessionId,
         projectPath: directory,
         profileName: process.env.OMC_NOTIFY_PROFILE,
-      }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
+      }).<span class="fstat-no" title="function not covered" >catch((e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (process.env.OMC_DEBUG) {</span>
 <span class="cstat-no" title="statement not covered" >          console.error(`[bridge] session-start notification failed: ${err.message}`);</span>
         }
       })
-    ).catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
+    ).<span class="fstat-no" title="function not covered" >catch((e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (process.env.OMC_DEBUG) {</span>
 <span class="cstat-no" title="statement not covered" >        console.error(`[bridge] notification import failed: ${err.message}`);</span>
       }
@@ -528,8 +528,8 @@ export async function <span class="fstat-no" title="function not covered" >proce
 <span class="cstat-no" title="statement not covered" >    Promise.all([</span>
       import("../../notifications/reply-listener.js"),
       import("../../notifications/config.js"),
-    ]).then(
-<span class="fstat-no" title="function not covered" >      ([</span>
+    ]).<span class="fstat-no" title="function not covered" >then(</span>
+      ([
         { startReplyListener },
         { getReplyConfig, getNotificationConfig, getReplyListenerPlatformConfig },
       ]) =&gt; {
@@ -541,7 +541,7 @@ export async function <span class="fstat-no" title="function not covered" >proce
         ...replyConfig,
         ...platformConfig,
       });
-    }).catch(<span class="fstat-no" title="function not covered" >(e</span>rr: unknown) =&gt; {
+    }).<span class="fstat-no" title="function not covered" >catch((e</span>rr: unknown) =&gt; {
       const msg = <span class="cstat-no" title="statement not covered" >err instanceof Error ? err.message : String(err);</span>
 <span class="cstat-no" title="statement not covered" >      if (process.env.OMC_DEBUG) {</span>
 <span class="cstat-no" title="statement not covered" >        process.stderr.write(`[bridge] reply-listener setup error: ${msg}\n`);</span>
@@ -688,7 +688,7 @@ Please continue working on these tasks.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

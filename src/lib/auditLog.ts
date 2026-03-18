@@ -5,7 +5,8 @@ export type AuditEventType =
   | 'validation_failed'
   | 'prototype_pollution_attempt'
   | 'redos_detected'
-  | 'unauthorized_field';
+  | 'unauthorized_field'
+  | 'state_cleanup';
 
 export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
 

@@ -2,13 +2,28 @@
 
 ## [Unreleased]
 
+### Added
+- feat(zerodev): Add ZeroDev agent system (Sprint 1-3)
+  - 3 new agents: tech-selector, deployment-manager, opensource-analyzer
+  - 10 test files with 79 test cases (100% passing)
+  - Integration tests for complete workflows (e-commerce, mobile, API)
+  - Performance benchmarks (<100ms single, <1s batch)
+  - Error recovery mechanisms
+  - Codex-specific prompts for all agents
+  - Files: src/agents/zerodev/, tests/agents/zerodev/, agents/tech-selector.md, agents/deployment-manager.md, agents/opensource-analyzer.md
+
 ### Deprecated
 - Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
 - Users should migrate to new naming: `ultrapower:lsp_*`
 
-## 7.7.1 - 2026-03-17
+## 7.7.1 - 2026-03-18
 
 ### Security Fixes
+
+- fix(security): BUG-001 - State file race condition protection
+  - Implement atomic write operations with file locking
+  - Add concurrent write queue to prevent race conditions
+  - Files: src/lib/atomic-write.ts, src/lib/file-lock.ts
 
 - fix(security): BUG-002 - Enhance prototype pollution protection with recursive checking
   - Implement recursive 10-level deep prototype pollution detection in bridge-normalize
@@ -18,6 +33,37 @@
   - Add comprehensive test coverage for nested pollution attacks
   - Tests: 7269/7269 passing
   - Files: src/hooks/bridge-normalize.ts, tests/integration/hook-input-security.test.ts, tests/security/penetration.test.ts
+
+- fix(security): BUG-003 - ReDoS protection
+  - Add 50KB input length limit for all hook inputs
+  - Optimize regex patterns to eliminate backtracking
+  - Files: src/hooks/bridge-normalize.ts
+
+- fix(security): BUG-004 - State file cleanup
+  - Implement automatic cleanup of stale session states (24 hours)
+  - Add cleanup scheduler to prevent state file leakage
+  - Files: src/state/backup-manager.ts
+
+- fix(security): BUG-005 - Keyword conflict resolution
+  - Add conflict resolution rules for overlapping skill triggers
+  - Explicit mode keywords override defaults
+  - Files: src/hooks/keyword-detector/conflict-resolver.ts
+
+- fix(ux): BUG-006 - Empty input handling
+  - Return explicit error messages for empty/whitespace-only inputs
+  - Improve user feedback for invalid inputs
+  - Files: src/hooks/empty-message-sanitizer/index.ts
+
+### Added
+
+- feat(audit): Audit logging system
+  - Comprehensive security event logging to .omc/audit.log
+  - Track all security-sensitive operations
+  - Files: src/lib/auditLog.ts, src/audit/logger.ts
+
+- feat(feedback): User feedback mechanism
+  - Collect and store user feedback for system improvements
+  - Files: src/lib/userFeedback.ts
 
 ## 7.7.0 - 2026-03-16
 

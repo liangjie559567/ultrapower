@@ -2289,14 +2289,14 @@ export function <span class="fstat-no" title="function not covered" >computeBack
  * Sleep for the specified duration. Exported for test mockability.
  */
 export function <span class="fstat-no" title="function not covered" >sleep(m</span>s: number): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >resolve =&gt; <span class="cstat-no" title="statement not covered" >s</span>etTimeout(resolve, ms))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, ms))</span>;</span>
 }
 &nbsp;
 /**
  * Check if Codex JSONL output contains a model-not-found error
  */
 export function <span class="fstat-no" title="function not covered" >isModelError(o</span>utput: string): { isError: boolean; message: string } {
-  const lines = <span class="cstat-no" title="statement not covered" >output.trim().split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.trim())</span>;</span>
+  const lines = <span class="cstat-no" title="statement not covered" >output.trim().split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.trim())</span>;</span>
 <span class="cstat-no" title="statement not covered" >  for (const line of lines) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const event = <span class="cstat-no" title="statement not covered" >JSON.parse(line);</span>
@@ -2321,7 +2321,7 @@ export function <span class="fstat-no" title="function not covered" >isRateLimit
   // Check for 429 status codes and rate limit messages in both stdout and stderr
 <span class="cstat-no" title="statement not covered" >  if (/429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(combined)) {</span>
     // Extract a meaningful message
-    const lines = <span class="cstat-no" title="statement not covered" >combined.split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.trim())</span>;</span>
+    const lines = <span class="cstat-no" title="statement not covered" >combined.split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.trim())</span>;</span>
 <span class="cstat-no" title="statement not covered" >    for (const line of lines) {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const event = <span class="cstat-no" title="statement not covered" >JSON.parse(line);</span>
@@ -2367,7 +2367,7 @@ export function <span class="fstat-no" title="function not covered" >isRetryable
  * If it does, callers should prefer the file content over parsed stdout.
  */
 export function <span class="fstat-no" title="function not covered" >parseCodexOutput(o</span>utput: string): string {
-  const lines = <span class="cstat-no" title="statement not covered" >output.trim().split('\n').filter(<span class="fstat-no" title="function not covered" >l =&gt; <span class="cstat-no" title="statement not covered" >l</span>.trim())</span>;</span>
+  const lines = <span class="cstat-no" title="statement not covered" >output.trim().split('\n').<span class="fstat-no" title="function not covered" >filter(l</span> =&gt; <span class="cstat-no" title="statement not covered" >l.trim())</span>;</span>
   const messages: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (const line of lines) {</span>
@@ -2387,7 +2387,7 @@ export function <span class="fstat-no" title="function not covered" >parseCodexO
 <span class="cstat-no" title="statement not covered" >      if (event.type === 'message' &amp;&amp; event.content) {</span>
 <span class="cstat-no" title="statement not covered" >        if (typeof event.content === 'string') {</span>
 <span class="cstat-no" title="statement not covered" >          messages.push(event.content);</span>
-<span class="cstat-no" title="statement not covered" >        } else if (Array.isArray(event.content)) {</span>
+        } else if (<span class="cstat-no" title="statement not covered" >Array.isArray(event.content)) {</span>
 <span class="cstat-no" title="statement not covered" >          for (const part of event.content) {</span>
 <span class="cstat-no" title="statement not covered" >            if (part.type === 'text' &amp;&amp; part.text) {</span>
 <span class="cstat-no" title="statement not covered" >              messages.push(part.text);</span>
@@ -2412,7 +2412,7 @@ export function <span class="fstat-no" title="function not covered" >parseCodexO
  * Execute Codex CLI command and return the response
  */
 export function <span class="fstat-no" title="function not covered" >executeCodex(p</span>rompt: string, model: string, cwd?: string, reasoningEffort?: ReasoningEffort): Promise&lt;string&gt; {
-<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return new <span class="fstat-no" title="function not covered" >Promise((r</span>esolve, reject) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    validateModelName(model);</span>
     let settled = <span class="cstat-no" title="statement not covered" >false;</span>
     const args = <span class="cstat-no" title="statement not covered" >['exec', '-m', model, '--json', '--full-auto'];</span>
@@ -2430,7 +2430,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
     });
 &nbsp;
     // Manual timeout handling to ensure proper cleanup
-    const timeoutHandle = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+    const timeoutHandle = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        child.kill('SIGTERM');</span>
@@ -2441,15 +2441,15 @@ export function <span class="fstat-no" title="function not covered" >executeCode
     const <span class="cstat-no" title="statement not covered" >collector = createStdoutCollector(MAX_STDOUT_BYTES);</span>
     let stderr = <span class="cstat-no" title="statement not covered" >'';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.stdout.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stdout.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      collector.append(data.toString());</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.stderr.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stderr.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      stderr += data.toString();</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.on('close', <span class="fstat-no" title="function not covered" >(c</span>ode) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'close', (c</span>ode) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2473,7 +2473,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
       }
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    child.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2483,7 +2483,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
     });
 &nbsp;
     // Pipe prompt via stdin with error handling
-<span class="cstat-no" title="statement not covered" >    child.stdin.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    child.stdin.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2593,7 +2593,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
           : [effectiveModel, ...CODEX_MODEL_FALLBACKS]);
 &nbsp;
     // Helper to try spawning with a specific model
-    const trySpawnWithModel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>ryModel: string, remainingModels: string[], rateLimitAttempt: number = <span class="branch-0 cbranch-no" title="branch not covered" >0): { pid: number } | { error: string } =&gt; {</span></span>
+    const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >trySpawnWithModel = (t</span>ryModel: string, remainingModels: string[], rateLimitAttempt: number = <span class="branch-0 cbranch-no" title="branch not covered" >0): { pid: number } | { error: string } =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      validateModelName(tryModel);</span>
       const args = <span class="cstat-no" title="statement not covered" >['exec', '-m', tryModel, '--json', '--full-auto'];</span>
       // Per-call reasoning effort override for background execution
@@ -2635,7 +2635,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
       let stderr = <span class="cstat-no" title="statement not covered" >'';</span>
       let settled = <span class="cstat-no" title="statement not covered" >false;</span>
 &nbsp;
-      const timeoutHandle = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+      const timeoutHandle = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >setTimeout(() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        if (!settled) {</span>
 <span class="cstat-no" title="statement not covered" >          settled = true;</span>
 <span class="cstat-no" title="statement not covered" >          spawnedPids.delete(pid);</span>
@@ -2655,13 +2655,13 @@ export function <span class="fstat-no" title="function not covered" >executeCode
         }
       }, CODEX_TIMEOUT);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      child.stdout?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.stdout?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        collector.append(data.toString());</span>
       });
-<span class="cstat-no" title="statement not covered" >      child.stderr?.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata: Buffer) =&gt; { <span class="cstat-no" title="statement not covered" >stderr += data.toString(); }</span>);</span>
+<span class="cstat-no" title="statement not covered" >      child.stderr?.on(<span class="fstat-no" title="function not covered" >'data', (d</span>ata: Buffer) =&gt; { <span class="cstat-no" title="statement not covered" >stderr += data.toString(); });</span></span>
 &nbsp;
       // Update to running after stdin write
-<span class="cstat-no" title="statement not covered" >      child.stdin?.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr: Error) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.stdin?.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr: Error) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (settled) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2676,7 +2676,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
 <span class="cstat-no" title="statement not covered" >      child.stdin?.end();</span>
 <span class="cstat-no" title="statement not covered" >      writeJobStatus({ ...initialStatus, status: 'running' }, workingDirectory);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      child.on('close', <span class="fstat-no" title="function not covered" >(c</span>ode) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.on(<span class="fstat-no" title="function not covered" >'close', (c</span>ode) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (settled) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -2698,7 +2698,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
             // Rate limit with explicit model: retry same model with backoff
 <span class="cstat-no" title="statement not covered" >            if (isRateLimit &amp;&amp; modelExplicit &amp;&amp; rateLimitAttempt &lt; RATE_LIMIT_RETRY_COUNT) {</span>
               const delay = <span class="cstat-no" title="statement not covered" >computeBackoffDelay(rateLimitAttempt, RATE_LIMIT_INITIAL_DELAY, RATE_LIMIT_MAX_DELAY);</span>
-<span class="cstat-no" title="statement not covered" >              setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >              setTimeout(() =&gt; {</span></span>
                 const retryResult = <span class="cstat-no" title="statement not covered" >trySpawnWithModel(tryModel, remainingModels, rateLimitAttempt + 1);</span>
 <span class="cstat-no" title="statement not covered" >                if ('error' in retryResult) {</span>
 <span class="cstat-no" title="statement not covered" >                  writeJobStatus({</span>
@@ -2718,7 +2718,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
               const newRemainingModels = <span class="cstat-no" title="statement not covered" >remainingModels.slice(1);</span>
 <span class="cstat-no" title="statement not covered" >              if (isRateLimit) {</span>
                 const delay = <span class="cstat-no" title="statement not covered" >computeBackoffDelay(rateLimitAttempt, RATE_LIMIT_INITIAL_DELAY, RATE_LIMIT_MAX_DELAY);</span>
-<span class="cstat-no" title="statement not covered" >                setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                setTimeout(() =&gt; {</span></span>
                   const retryResult = <span class="cstat-no" title="statement not covered" >trySpawnWithModel(nextModel, newRemainingModels, rateLimitAttempt + 1);</span>
 <span class="cstat-no" title="statement not covered" >                  if ('error' in retryResult) {</span>
 <span class="cstat-no" title="statement not covered" >                    writeJobStatus({</span>
@@ -2783,7 +2783,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
             // Rate limit with explicit model: retry same model with backoff
 <span class="cstat-no" title="statement not covered" >            if (isRateLimit &amp;&amp; modelExplicit &amp;&amp; rateLimitAttempt &lt; RATE_LIMIT_RETRY_COUNT) {</span>
               const delay = <span class="cstat-no" title="statement not covered" >computeBackoffDelay(rateLimitAttempt, RATE_LIMIT_INITIAL_DELAY, RATE_LIMIT_MAX_DELAY);</span>
-<span class="cstat-no" title="statement not covered" >              setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >              setTimeout(() =&gt; {</span></span>
                 const retryResult = <span class="cstat-no" title="statement not covered" >trySpawnWithModel(tryModel, remainingModels, rateLimitAttempt + 1);</span>
 <span class="cstat-no" title="statement not covered" >                if ('error' in retryResult) {</span>
 <span class="cstat-no" title="statement not covered" >                  writeJobStatus({</span>
@@ -2803,7 +2803,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
               const newRemainingModels = <span class="cstat-no" title="statement not covered" >remainingModels.slice(1);</span>
 <span class="cstat-no" title="statement not covered" >              if (isRateLimit) {</span>
                 const delay = <span class="cstat-no" title="statement not covered" >computeBackoffDelay(rateLimitAttempt, RATE_LIMIT_INITIAL_DELAY, RATE_LIMIT_MAX_DELAY);</span>
-<span class="cstat-no" title="statement not covered" >                setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >                setTimeout(() =&gt; {</span></span>
                   const retryResult = <span class="cstat-no" title="statement not covered" >trySpawnWithModel(nextModel, newRemainingModels, rateLimitAttempt + 1);</span>
 <span class="cstat-no" title="statement not covered" >                  if ('error' in retryResult) {</span>
 <span class="cstat-no" title="statement not covered" >                    writeJobStatus({</span>
@@ -2837,7 +2837,7 @@ export function <span class="fstat-no" title="function not covered" >executeCode
         }
       });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      child.on('error', <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      child.on(<span class="fstat-no" title="function not covered" >'error', (e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (settled) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >        settled = true;</span>
 <span class="cstat-no" title="statement not covered" >        clearTimeout(timeoutHandle);</span>
@@ -3132,7 +3132,7 @@ ${resolvedPrompt}`;
   // Build file context
   let fileContext: string | undefined;
 <span class="cstat-no" title="statement not covered" >  if (context_files &amp;&amp; context_files.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    fileContext = context_files.map(<span class="fstat-no" title="function not covered" >f =&gt; <span class="cstat-no" title="statement not covered" >v</span>alidateAndReadFile(f, baseDir))</span>.join('\n\n');</span>
+<span class="cstat-no" title="statement not covered" >    fileContext = context_files.<span class="fstat-no" title="function not covered" >map(f</span> =&gt; <span class="cstat-no" title="statement not covered" >validateAndReadFile(f, baseDir))</span>.join('\n\n');</span>
   }
 &nbsp;
   // Combine: system prompt &gt; file context &gt; user prompt
@@ -3265,7 +3265,7 @@ ${resolvedPrompt}`;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-14T08:37:45.252Z
+                at 2026-03-18T09:23:55.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

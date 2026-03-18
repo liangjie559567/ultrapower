@@ -87,7 +87,10 @@ export {
   devopsEngineerAgent,
   i18nSpecialistAgent,
   accessibilityAuditorAgent,
-  apiDesignerAgent
+  apiDesignerAgent,
+  deploymentManagerAgent,
+  opensourceAnalyzerAgent,
+  techSelectorAgent
 } from './definitions.js';
 
 // Axiom agents
@@ -106,6 +109,12 @@ export {
   axiomTechLeadAgent,
   axiomCriticAgent,
   axiomSubPrdWriterAgent
+} from './definitions.js';
+
+// ZeroDev agents
+export {
+  requirementClarifierAgent,
+  codeGeneratorAgent
 } from './definitions.js';
 
 // Timeout protection

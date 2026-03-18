@@ -1,0 +1,258 @@
+{
+  "id": "1773839607776-nywgfzvoh",
+  "timestamp": 1773839607776,
+  "mode": "ultrawork",
+  "data": {
+    "sessionId": "5bae43281966a78f",
+    "totalInputTokens": 143,
+    "totalOutputTokens": 52,
+    "totalCacheCreation": 23715,
+    "totalCacheRead": 1471925,
+    "totalCost": 0,
+    "byAgent": {
+      "(main session)": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:54.628Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:55.509Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:59.283Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:00.433Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:05.009Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:06.846Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 195,
+          "cacheReadTokens": 114747,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:10.528Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 195,
+          "cacheReadTokens": 114747,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:11.121Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 673,
+          "cacheReadTokens": 114942,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:17.562Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 673,
+          "cacheReadTokens": 114942,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:18.197Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 624,
+          "cacheReadTokens": 115615,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:22.643Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 624,
+          "cacheReadTokens": 115615,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:23.140Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 537,
+          "cacheReadTokens": 116239,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:27.773Z"
+        }
+      ]
+    },
+    "byModel": {
+      "claude-sonnet-4.6": [
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:54.628Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 8695,
+          "cacheReadTokens": 104650,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:55.509Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:12:59.283Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 1199,
+          "cacheReadTokens": 113345,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:00.433Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:05.009Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 203,
+          "cacheReadTokens": 114544,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:06.846Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 195,
+          "cacheReadTokens": 114747,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:10.528Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 195,
+          "cacheReadTokens": 114747,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:11.121Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 673,
+          "cacheReadTokens": 114942,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:17.562Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 673,
+          "cacheReadTokens": 114942,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:18.197Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 624,
+          "cacheReadTokens": 115615,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:22.643Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 624,
+          "cacheReadTokens": 115615,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:23.140Z"
+        },
+        {
+          "modelName": "claude-sonnet-4.6",
+          "inputTokens": 11,
+          "outputTokens": 4,
+          "cacheCreationTokens": 537,
+          "cacheReadTokens": 116239,
+          "sessionId": "5bae43281966a78f",
+          "timestamp": "2026-03-18T13:13:27.773Z"
+        }
+      ]
+    },
+    "startTime": "2026-03-18T13:12:54.628Z",
+    "lastUpdate": "2026-03-18T13:13:27.773Z"
+  },
+  "committed": true
+}
