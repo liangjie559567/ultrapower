@@ -1,4 +1,4 @@
-<!-- ultrapower v7.7.2 | updated: 2026-03-02 -->
+<!-- ultrapower v7.8.0 | updated: 2026-03-02 -->
 
 # ultrapower Reference — v5.5.33
 
@@ -1161,7 +1161,7 @@ Available presets: `minimal`, `focused`, `full`, `dense`, `analytics`, `opencode
 
 ## Security Features
 
-ultrapower v7.7.2 includes comprehensive security hardening:
+ultrapower v7.8.0 includes comprehensive security hardening:
 
 ### Audit Logging
 
