@@ -157,12 +157,16 @@ export function withFileLockSync<T>(
   try {
     return fn();
   } finally {
-    try {
-      fs.rmSync(lockPath, { recursive: true, force: true });
-    } catch (err) {
-      const nodeErr = err as NodeJS.ErrnoException;
-      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
-        console.warn(`Failed to remove lock: ${nodeErr.message}`);
+    for (let i = 0; i < 3; i++) {
+      try {
+        fs.rmSync(lockPath, { recursive: true, force: true });
+        break;
+      } catch (err) {
+        const nodeErr = err as NodeJS.ErrnoException;
+        if (nodeErr.code === 'ENOENT') break;
+        if (i === 2 && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
+          console.warn(`Failed to remove lock: ${nodeErr.message}`);
+        }
       }
     }
   }
