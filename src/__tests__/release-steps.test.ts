@@ -83,11 +83,13 @@ describe('failure paths', () => {
   });
 
   it('runReleasePipeline: calls process.exit(1) when validate fails', async () => {
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {}) as (code?: string | number | null) => never);
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((code) => {
+      throw new Error(`process.exit(${code})`);
+    }) as (code?: string | number | null) => never);
     // @ts-expect-error - .mjs runtime script outside rootDir
     const { runReleasePipeline } = await import('../../../scripts/release-steps.mjs');
-    await runReleasePipeline({ dryRun: false });
+    await expect(runReleasePipeline({ dryRun: false })).rejects.toThrow('process.exit(1)');
     expect(exitSpy).toHaveBeenCalledWith(1);
     exitSpy.mockRestore();
-  }, 120000);
+  }, 30000);
 });
