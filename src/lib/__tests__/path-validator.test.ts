@@ -107,7 +107,7 @@ describe('validatePath', () => {
       // U+FF0E (fullwidth full stop) normalizes to .
       const result = validatePath('file\uFF0Etxt', testDir);
       // After normalization, fullwidth dot becomes ASCII dot
-      expect(fs.realpathSync(path.dirname(result)).toLowerCase()).toBe(fs.realpathSync(testDir).toLowerCase());
+      expect(fs.realpathSync.native(path.dirname(result)).toLowerCase()).toBe(fs.realpathSync.native(testDir).toLowerCase());
       expect(path.basename(result)).toBe('file.txt');
     });
 

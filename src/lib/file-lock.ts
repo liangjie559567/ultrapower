@@ -157,14 +157,20 @@ export function withFileLockSync<T>(
   try {
     return fn();
   } finally {
+    // On Windows, rmSync with recursive:true can fail with ENOTEMPTY.
+    // Manually delete lock.json first, then the directory.
+    try { fs.unlinkSync(lockFile); } catch { /* ignore */ }
     for (let i = 0; i < 3; i++) {
       try {
-        fs.rmSync(lockPath, { recursive: true, force: true });
+        fs.rmdirSync(lockPath);
         break;
       } catch (err) {
         const nodeErr = err as NodeJS.ErrnoException;
         if (nodeErr.code === 'ENOENT') break;
-        if (i === 2 && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
+        if (nodeErr.code === 'ENOTEMPTY' || nodeErr.code === 'EPERM') {
+          // Fallback to rmSync recursive
+          try { fs.rmSync(lockPath, { recursive: true, force: true }); break; } catch { /* ignore */ }
+        } else if (i === 2) {
           console.warn(`Failed to remove lock: ${nodeErr.message}`);
         }
       }
@@ -253,12 +259,19 @@ export async function withFileLock<T>(
   try {
     return await fn();
   } finally {
-    await fs.promises.rm(lockPath, { recursive: true, force: true }).catch((err) => {
+    // On Windows, rm recursive can fail with ENOTEMPTY.
+    // Manually delete lock.json first, then the directory.
+    await fs.promises.unlink(lockFile).catch(() => {});
+    await fs.promises.rmdir(lockPath).catch(async (err) => {
       const nodeErr = err as NodeJS.ErrnoException;
-      // Ignore ENOENT (already deleted), ENOTEMPTY (Windows race condition), and EPERM (Windows file locking)
-      if (nodeErr.code !== 'ENOENT' && nodeErr.code !== 'ENOTEMPTY' && nodeErr.code !== 'EPERM') {
-        throw err;
-      }
+      if (nodeErr.code === 'ENOENT') return;
+      // Fallback to recursive rm
+      await fs.promises.rm(lockPath, { recursive: true, force: true }).catch((e) => {
+        const e2 = e as NodeJS.ErrnoException;
+        if (e2.code !== 'ENOENT' && e2.code !== 'ENOTEMPTY' && e2.code !== 'EPERM') {
+          throw e;
+        }
+      });
     });
   }
 }

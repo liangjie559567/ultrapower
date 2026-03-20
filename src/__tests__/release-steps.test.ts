@@ -79,7 +79,7 @@ describe('failure paths', () => {
     const { publishNpm } = await import('../../../scripts/release-steps.mjs');
     const result = await publishNpm({ dryRun: false, version: '1.0.0' });
     expect(result.success).toBe(false);
-    expect(result.output).toContain('command failed');
+    expect(result.output.toLowerCase()).toContain('command failed');
   });
 
   it('runReleasePipeline: calls process.exit(1) when validate fails', async () => {
