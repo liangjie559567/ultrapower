@@ -19,7 +19,7 @@ jobs:
       - run: chmod +x scripts/measure-baseline.sh
       - run: ./scripts/measure-baseline.sh
       - name: Upload metrics
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: metrics
           path: .omc/metrics/baseline.json
