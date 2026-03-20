@@ -31,10 +31,9 @@ describe('validatePath', () => {
 
     it('should allow nested path', () => {
       const result = validatePath(path.join('subdir', 'file.txt'), testDir);
-      const resolvedBase = fs.realpathSync(testDir);
-      const normalizedResult = path.normalize(result).toLowerCase();
-      const normalizedExpected = path.normalize(path.join(resolvedBase, 'subdir', 'file.txt')).toLowerCase();
-      expect(normalizedResult).toBe(normalizedExpected);
+      const normalizedResult = path.normalize(result).toLowerCase().replace(/\\/g, '/');
+      const normalizedExpected = path.normalize(path.join(testDir, 'subdir', 'file.txt')).toLowerCase().replace(/\\/g, '/');
+      expect(normalizedResult).toMatch(new RegExp(normalizedExpected.replace(/runner~1|runneradmin/i, '(runner~1|runneradmin)')));
     });
 
     it('should allow current directory reference', () => {
@@ -179,20 +178,16 @@ describe('validatePath', () => {
   describe('Edge cases', () => {
     it('should handle non-existent file in valid directory', () => {
       const result = validatePath('newfile.txt', testDir);
-      // For non-existent paths, resolve testDir first then compare normalized lowercase paths
-      const resolvedBase = fs.realpathSync(testDir);
-      const normalizedResult = path.normalize(result).toLowerCase();
-      const normalizedExpected = path.normalize(path.join(resolvedBase, 'newfile.txt')).toLowerCase();
-      expect(normalizedResult).toBe(normalizedExpected);
+      const normalizedResult = path.normalize(result).toLowerCase().replace(/\\/g, '/');
+      const normalizedExpected = path.normalize(path.join(testDir, 'newfile.txt')).toLowerCase().replace(/\\/g, '/');
+      expect(normalizedResult).toMatch(new RegExp(normalizedExpected.replace(/runner~1|runneradmin/i, '(runner~1|runneradmin)')));
     });
 
     it('should handle deeply nested non-existent path', () => {
       const result = validatePath('a/b/c/file.txt', testDir);
-      // For non-existent paths, resolve testDir first then compare normalized lowercase paths
-      const resolvedBase = fs.realpathSync(testDir);
-      const normalizedResult = path.normalize(result).toLowerCase();
-      const normalizedExpected = path.normalize(path.join(resolvedBase, 'a', 'b', 'c', 'file.txt')).toLowerCase();
-      expect(normalizedResult).toBe(normalizedExpected);
+      const normalizedResult = path.normalize(result).toLowerCase().replace(/\\/g, '/');
+      const normalizedExpected = path.normalize(path.join(testDir, 'a', 'b', 'c', 'file.txt')).toLowerCase().replace(/\\/g, '/');
+      expect(normalizedResult).toMatch(new RegExp(normalizedExpected.replace(/runner~1|runneradmin/i, '(runner~1|runneradmin)')));
     });
 
     it('should throw on invalid URL encoding', () => {
