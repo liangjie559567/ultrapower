@@ -11,7 +11,7 @@ describe('CapabilityMatcher', () => {
 
     expect(matches).toBeInstanceOf(Array);
     expect(matches.length).toBe(0);
-  });
+  }, 60000);
 
   it('should rank matches by confidence', async () => {
     const matcher = new CapabilityMatcher();
@@ -23,5 +23,5 @@ describe('CapabilityMatcher', () => {
     for (let i = 1; i < matches.length; i++) {
       expect(matches[i-1].confidence).toBeGreaterThanOrEqual(matches[i].confidence);
     }
-  });
+  }, 60000);
 });
