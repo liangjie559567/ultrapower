@@ -1,0 +1,27 @@
+{
+  "sessionId": "test-session-cleanup",
+  "timestamp": "2026-03-20T17:14:13.259Z",
+  "directory": "/home/runner/work/ultrapower/ultrapower",
+  "toolCalls": [
+    {
+      "toolName": "Read",
+      "timestamp": 1774026849496
+    },
+    {
+      "toolName": "Bash",
+      "timestamp": 1774026849467
+    },
+    {
+      "toolName": "AskUserQuestion",
+      "timestamp": 1774026789548
+    }
+  ],
+  "agentsSpawned": 0,
+  "agentsCompleted": 0,
+  "modesUsed": [
+    "autopilot",
+    "ralph"
+  ],
+  "skillsInjected": [],
+  "patternsSeen": []
+}
