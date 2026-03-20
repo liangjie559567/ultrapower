@@ -86,7 +86,7 @@ async function validateCodeWithLSP(code: string): Promise<{
       warnings: warnings.map((w: any) => w.message)
     };
   } finally {
-    try { unlinkSync(tempFile); } catch {}
+    try { unlinkSync(tempFile); } catch { /* ignore cleanup errors */ }
   }
 }
 
