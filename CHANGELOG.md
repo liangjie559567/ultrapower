@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 
+## 7.8.0 - 2026-03-21
+
 ### Added
+
 - feat(zerodev): Add ZeroDev agent system (Sprint 1-3)
   - 3 new agents: tech-selector, deployment-manager, opensource-analyzer
   - 10 test files with 79 test cases (100% passing)
@@ -13,6 +16,7 @@
   - Files: src/agents/zerodev/, tests/agents/zerodev/, agents/tech-selector.md, agents/deployment-manager.md, agents/opensource-analyzer.md
 
 ### Deprecated
+
 - Old LSP tool naming (without `ultrapower:` prefix) will be removed in v8.0.0
 - Users should migrate to new naming: `ultrapower:lsp_*`
 

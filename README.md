@@ -1,4 +1,4 @@
-# ultrapower v7.7.2
+# ultrapower v7.8.0
 
 ultrapower 是 Claude Code 的智能多 Agent 编排层（OMC），在 superpowers 工作流基础上深度融合了 Axiom 框架，提供 **49 个专业 agents**、**71 个 skills** 和完整的 TypeScript hooks 系统。
 
@@ -79,7 +79,7 @@ autopilot "创建一个 hello world 函数"
 
 ### 安全加固
 
-ultrapower v7.7.2 包含全面的安全加固（2026-03-18）：
+ultrapower v7.8.0 包含全面的安全加固（2026-03-18）：
 
 - **状态文件保护**：原子写入 + 文件锁 + 并发队列，防止竞态条件（BUG-001）
 - **输入验证**：递归 10 层原型污染检测，拒绝 `__proto__`/`constructor`/`prototype`（BUG-002）

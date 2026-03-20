@@ -1,7 +1,6 @@
 .worktrees/
 .private-journal/
 .claude/
-node_modules/
 # dist/ - MUST be committed for plugin distribution
 .omc/state/
 .omc/logs/
@@ -10,10 +9,8 @@ node_modules/
 .test-ralph-*/
 
 # Temp lint/build scripts
-*.cjs
 fix_imports.py
 lint-output.json
-data/
 .test-job-state-db-*/
 
 # Build artifacts / tarballs
